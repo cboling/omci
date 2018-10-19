@@ -331,11 +331,11 @@ type CreateRequest struct {
 	padding    []byte
 }
 
-func (msg *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -345,11 +345,11 @@ type CreateResponse struct {
 	padding                      []byte
 }
 
-func (msg *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -357,19 +357,19 @@ func (msg *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 //
 type DeleteRequest struct{ Dummy byte }
 
-func (msg *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type DeleteResponse struct{ Dummy byte }
 
-func (msg *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -377,19 +377,19 @@ func (msg *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 //
 type SetRequest struct{ Dummy byte }
 
-func (msg *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type SetResponse struct{ Dummy byte }
 
-func (msg *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -397,19 +397,19 @@ func (msg *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 //
 type GetRequest struct{ Dummy byte }
 
-func (msg *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type GetResponse struct{ Dummy byte }
 
-func (msg *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -417,19 +417,19 @@ func (msg *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 //
 type GetAllAlarmsRequest struct{ Dummy byte }
 
-func (msg *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type GetAllAlarmsResponse struct{ Dummy byte }
 
-func (msg *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -437,19 +437,19 @@ func (msg *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts go
 //
 type GetAllAlarmsNextRequest struct{ Dummy byte }
 
-func (msg *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type GetAllAlarmsNextResponse struct{ Dummy byte }
 
-func (msg *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -457,19 +457,19 @@ func (msg *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 //
 type MibUploadRequest struct{ Dummy byte }
 
-func (msg *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type MibUploadResponse struct{ Dummy byte }
 
-func (msg *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -477,19 +477,19 @@ func (msg *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 //
 type MibUploadNextRequest struct{ Dummy byte }
 
-func (msg *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type MibUploadNextResponse struct{ Dummy byte }
 
-func (msg *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
-func (msg *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -499,11 +499,11 @@ type MibResetRequest struct {
 	padding []byte
 }
 
-func (msg *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -511,11 +511,11 @@ type MibResetResponse struct {
 	padding []byte
 }
 
-func (msg *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -523,21 +523,21 @@ func (msg *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 //
 type AlarmNotificationRequest struct{ Dummy byte }
 
-func (msg *AlarmNotificationRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg AlarmNotificationRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *AlarmNotificationRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg AlarmNotificationRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type AlarmNotificationResponse struct{ Dummy byte }
 
-func (msg *AlarmNotificationResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg AlarmNotificationResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *AlarmNotificationResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg AlarmNotificationResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -545,21 +545,21 @@ func (msg *AlarmNotificationResponse) SerializeTo(b gopacket.SerializeBuffer, op
 //
 type AttributeValueChangeRequest struct{ Dummy byte }
 
-func (msg *AttributeValueChangeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg AttributeValueChangeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *AttributeValueChangeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg AttributeValueChangeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type AttributeValueChangeResponse struct{ Dummy byte }
 
-func (msg *AttributeValueChangeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg AttributeValueChangeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *AttributeValueChangeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg AttributeValueChangeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -567,21 +567,21 @@ func (msg *AttributeValueChangeResponse) SerializeTo(b gopacket.SerializeBuffer,
 //
 type TestRequest struct{ Dummy byte }
 
-func (msg *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type TestResponse struct{ Dummy byte }
 
-func (msg *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -589,21 +589,21 @@ func (msg *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 //
 type StartSoftwareDownloadRequest struct{ Dummy byte }
 
-func (msg *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type StartSoftwareDownloadResponse struct{ Dummy byte }
 
-func (msg *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -611,21 +611,21 @@ func (msg *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer
 //
 type DownloadSectionRequest struct{ Dummy byte }
 
-func (msg *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type DownloadSectionResponse struct{ Dummy byte }
 
-func (msg *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -633,21 +633,21 @@ func (msg *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type EndSoftwareDownloadRequest struct{ Dummy byte }
 
-func (msg *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type EndSoftwareDownloadResponse struct{ Dummy byte }
 
-func (msg *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -655,21 +655,21 @@ func (msg *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, 
 //
 type ActivateSoftwareRequest struct{ Dummy byte }
 
-func (msg *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type ActivateSoftwareResponse struct{ Dummy byte }
 
-func (msg *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -677,21 +677,21 @@ func (msg *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 //
 type CommitSoftwareRequest struct{ Dummy byte }
 
-func (msg *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type CommitSoftwareResponse struct{ Dummy byte }
 
-func (msg *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -699,21 +699,21 @@ func (msg *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 //
 type SynchronizeTimeRequest struct{ Dummy byte }
 
-func (msg *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type SynchronizeTimeResponse struct{ Dummy byte }
 
-func (msg *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -721,21 +721,21 @@ func (msg *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type RebootRequest struct{ Dummy byte }
 
-func (msg *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type RebootResponse struct{ Dummy byte }
 
-func (msg *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -743,21 +743,21 @@ func (msg *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 //
 type GetNextRequest struct{ Dummy byte }
 
-func (msg *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type GetNextResponse struct{ Dummy byte }
 
-func (msg *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -765,21 +765,21 @@ func (msg *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 //
 type TestResultRequest struct{ Dummy byte }
 
-func (msg *TestResultRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg TestResultRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *TestResultRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg TestResultRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type TestResultResponse struct{ Dummy byte }
 
-func (msg *TestResultResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg TestResultResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *TestResultResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg TestResultResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -787,21 +787,21 @@ func (msg *TestResultResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 //
 type GetCurrentDataRequest struct{ Dummy byte }
 
-func (msg *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type GetCurrentDataResponse struct{ Dummy byte }
 
-func (msg *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
@@ -809,20 +809,20 @@ func (msg *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 //
 type SetTableRequest struct{ Dummy byte }
 
-func (msg *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
 type SetTableResponse struct{ Dummy byte }
 
-func (msg *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("TODO: Not yet implemented")
 }
 
-func (msg *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (msg SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	return errors.New("TODO: Not yet implemented")
 }

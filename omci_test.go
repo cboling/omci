@@ -48,6 +48,9 @@ func TestMibResetRequest(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateGalEthernetProfile(t *testing.T) {
@@ -61,6 +64,9 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestSetTCont(t *testing.T) {
@@ -74,6 +80,9 @@ func TestSetTCont(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestSetTCont2(t *testing.T) {
@@ -87,6 +96,9 @@ func TestSetTCont2(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreate8021pMapperService_profile(t *testing.T) {
@@ -100,6 +112,9 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreate_macBridgeService_profile(t *testing.T) {
@@ -113,6 +128,9 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateGemPortNetworkCtp(t *testing.T) {
@@ -126,6 +144,9 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestMulticastGemInterworkingTp(t *testing.T) {
@@ -139,6 +160,9 @@ func TestMulticastGemInterworkingTp(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateGemInteworkingTp(t *testing.T) {
@@ -152,6 +176,9 @@ func TestCreateGemInteworkingTp(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestSet8021pMapperServiceProfile(t *testing.T) {
@@ -165,6 +192,9 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateMacBridgePortConfigurationData(t *testing.T) {
@@ -178,6 +208,9 @@ func TestCreateMacBridgePortConfigurationData(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateVlanTaggingFilterData(t *testing.T) {
@@ -191,6 +224,9 @@ func TestCreateVlanTaggingFilterData(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateExtendedVlanTaggingOperationConfigurationData(t *testing.T) {
@@ -217,6 +253,9 @@ func TestSetExtendedVlanTagging_operationConfigurationData(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestSetExtendedVlanTagging1(t *testing.T) {
@@ -230,6 +269,9 @@ func TestSetExtendedVlanTagging1(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestSetExtendedVlanTagging2(t *testing.T) {
@@ -243,6 +285,9 @@ func TestSetExtendedVlanTagging2(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestCreateMacBridgePortConfigurationData2(t *testing.T) {
@@ -256,6 +301,9 @@ func TestCreateMacBridgePortConfigurationData2(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestMibUpload(t *testing.T) {
@@ -269,6 +317,9 @@ func TestMibUpload(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestEnhSecurityAvc(t *testing.T) {
@@ -281,6 +332,9 @@ func TestEnhSecurityAvc(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestAlarmMessage(t *testing.T) {
@@ -293,6 +347,9 @@ func TestAlarmMessage(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestOnuRebootRequest(t *testing.T) {
@@ -306,6 +363,9 @@ func TestOnuRebootRequest(t *testing.T) {
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
 }
 
 func TestMibResetNextSequence(t *testing.T) {
@@ -577,5 +637,8 @@ func TestMibResetNextSequence(t *testing.T) {
 
 		packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 		fmt.Printf("Packet: %v: %v", pkt, packet)
+
+		customLayer := packet.Layer(LayerTypeOMCI)
+		assert.NotNil(t, customLayer)
 	}
 }
