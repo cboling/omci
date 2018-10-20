@@ -171,7 +171,7 @@ func (omci *BaselineMessage) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 		return err
 	}
 	// Decode the message part
-	err = decoder.DecodeFromBytes(data, p)
+	err = decoder(data, p)
 
 	return p.NextDecoder(omci.NextLayerType())
 }
@@ -197,12 +197,13 @@ func (omci *BaselineMessage) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	}
 	copy(padding, lotsOfZeros[:])
 
-	encoder, err := MsgTypeToStructEncoder(omci.MessageType)
-	if err != nil {
-		return err
-	}
+	//encoder, err := MsgTypeToStructEncoder(omci.MessageType)
+	//if err != nil {
+	//	return err
+	//}
 	// Serialize the message type part
-	err = encoder.SerializeTo(b, opts)
+	//err = encoder.SerializeTo(b, opts)
+	// TODO: Implement serialization
 
 	// TODO: Calculate MIC
 

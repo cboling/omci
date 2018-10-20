@@ -21,8 +21,137 @@ import (
 	"testing"
 )
 
-// MibResetRequestTest tests decode/encode of a MIB Reset Request
-func TestSomething(t *testing.T) {
+var allMsgTypes = [...]MsgType{
+	Create,
+	Delete,
+	Set,
+	Get,
+	GetAllAlarms,
+	GetAllAlarmsNext,
+	MibUpload,
+	MibUploadNext,
+	MibReset,
+	AlarmNotification,
+	AttributeValueChange,
+	Test,
+	StartSoftwareDownload,
+	DownloadSection,
+	EndSoftwareDownload,
+	ActivateSoftware,
+	CommitSoftware,
+	SynchronizeTime,
+	Reboot,
+	GetNext,
+	TestResult,
+	GetCurrentData,
+	SetTable}
 
-	assert.Equal(t, 'a', 'a')
+var allResults = [...]Results{
+	Success,
+	ProcessingError,
+	NotSupported,
+	ParameterError,
+	UnknownEntity,
+	UnknownInstance,
+	DeviceBusy,
+	InstanceExists}
+
+var allNotificationTypes = [...]MsgType{
+	AlarmNotification,
+	AttributeValueChange,
+	TestResult,
+}
+
+func isAutonomousNotification(mt MsgType) bool {
+	for _, m := range allNotificationTypes {
+		if mt == m {
+			return true
+		}
+	}
+	return false
+}
+
+// MibResetRequestTest tests decode/encode of a MIB Reset Request
+func TestMsgTypeStrings(t *testing.T) {
+	for _, msg := range allMsgTypes {
+		strMsg := msg.String()
+		assert.NotEqual(t, len(strMsg), 0)
+	}
+}
+
+func TestResultsStrings(t *testing.T) {
+	for _, code := range allResults {
+		strMsg := code.String()
+		assert.NotEqual(t, len(strMsg), 0)
+	}
+}
+
+func TestAllDecoders(t *testing.T) {
+	var requestMask byte = 0
+	var responseMask byte = 0x20
+
+	for _, msg := range allMsgTypes {
+		// Test responses first since covers autonomous events
+		mtResponse := byte(msg) | responseMask
+		decoder, err := MsgTypeToStructDecoder(mtResponse)
+		assert.Nil(t, err)
+		assert.NotNil(t, decoder)
+
+		// Autonomous notifications do not map to requests
+		if isAutonomousNotification(msg) {
+			continue
+		}
+		mtRequest := byte(msg) | requestMask
+		decoder, err = MsgTypeToStructDecoder(mtRequest)
+		assert.Nil(t, err)
+		assert.NotNil(t, decoder)
+	}
+	// Unknown message type check
+	var mt byte = 123
+	decoder, err := MsgTypeToStructDecoder(mt)
+	assert.NotNil(t, err)
+	assert.Nil(t, decoder)
+
+	// No autonomous notification requests
+	for _, msg := range allNotificationTypes {
+		mtRequest := byte(msg) | requestMask
+		decoder, err = MsgTypeToStructDecoder(mtRequest)
+		assert.NotNil(t, err)
+		assert.Nil(t, decoder)
+	}
+}
+
+func TestAllEncoders(t *testing.T) {
+	var requestMask byte = 0
+	var responseMask byte = 0x20
+
+	for _, msg := range allMsgTypes {
+		// Test responses first since covers autonomous events
+		mtResponse := byte(msg) | responseMask
+		encoder, err := MsgTypeToStructEncoder(mtResponse)
+		assert.Nil(t, err)
+		assert.NotNil(t, encoder)
+
+		// Autonomous notifications do not map to requests
+		if isAutonomousNotification(msg) {
+			continue
+		}
+		mtRequest := byte(msg) | requestMask
+		encoder, err = MsgTypeToStructEncoder(mtRequest)
+		assert.Nil(t, err)
+		assert.NotNil(t, encoder)
+	}
+	// Unknown message type check
+	var mt byte = 123
+	encoder, err := MsgTypeToStructEncoder(mt)
+	assert.NotNil(t, err)
+	assert.Nil(t, encoder)
+
+	// No autonomous notification requests
+	for _, msg := range allNotificationTypes {
+		mtRequest := byte(msg) | requestMask
+		encoder, err = MsgTypeToStructEncoder(mtRequest)
+		assert.NotNil(t, err)
+		assert.Nil(t, encoder)
+	}
 }
