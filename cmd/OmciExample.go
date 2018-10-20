@@ -1,9 +1,9 @@
 package main
 
 import (
+	".."
 	"encoding/hex"
 	"fmt"
-	"github.com/cboling/omci"
 	"github.com/google/gopacket"
 )
 
@@ -25,7 +25,6 @@ func main() {
 		fmt.Println(customLayer)
 	}
 }
-
 
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte

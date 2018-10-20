@@ -35,7 +35,8 @@ var msgTypeDecoderMapping map[byte]interface{}
 var msgTypeEncoderMapping map[byte]interface{}
 
 func init() {
-
+	/////////////////////////////////////////////////////////////////////////
+	// Decoder mappings
 	msgTypeDecoderMapping = make(map[byte]interface{})
 	msgTypeDecoderMapping[byte(Create)|0x00] = CreateRequest.DecodeFromBytes
 	msgTypeDecoderMapping[byte(Create)|0x20] = CreateResponse.DecodeFromBytes
