@@ -56,21 +56,6 @@ var allResults = [...]Results{
 	DeviceBusy,
 	InstanceExists}
 
-var allNotificationTypes = [...]MsgType{
-	AlarmNotification,
-	AttributeValueChange,
-	TestResult,
-}
-
-func isAutonomousNotification(mt MsgType) bool {
-	for _, m := range allNotificationTypes {
-		if mt == m {
-			return true
-		}
-	}
-	return false
-}
-
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
 func TestMsgTypeStrings(t *testing.T) {
 	for _, msg := range allMsgTypes {
@@ -87,8 +72,8 @@ func TestResultsStrings(t *testing.T) {
 }
 
 func TestAllDecoders(t *testing.T) {
-	var requestMask byte = 0
-	var responseMask byte = 0x20
+	var requestMask byte = AR
+	var responseMask byte = AK
 
 	for _, msg := range allMsgTypes {
 		// Test responses first since covers autonomous events
@@ -122,8 +107,8 @@ func TestAllDecoders(t *testing.T) {
 }
 
 func TestAllEncoders(t *testing.T) {
-	var requestMask byte = 0
-	var responseMask byte = 0x20
+	var requestMask byte = AR
+	var responseMask byte = AK
 
 	for _, msg := range allMsgTypes {
 		// Test responses first since covers autonomous events
