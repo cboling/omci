@@ -158,11 +158,11 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		p.SetTruncated()
 		return errors.New("frame too small")
 	}
-	omci.TransactionID = binary.BigEndian.Uint16(data[0:2])
+	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
 	omci.MessageType = data[2]
 	omci.DeviceIdentifier = DeviceIdent(data[3])
-	//omci.EntityClass = binary.BigEndian.Uint16(data[4:6])
-	//omci.EntityInstance = binary.BigEndian.Uint16(data[6:8])
+	//omci.EntityClass = binary.BigEndian.Uint16(data[4:])
+	//omci.EntityInstance = binary.BigEndian.Uint16(data[6:])
 
 	// Decode length
 	var payloadOffset int

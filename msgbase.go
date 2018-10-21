@@ -42,15 +42,15 @@ func decodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBu
 }
 
 type msgBase struct {
-	layerType gopacket.LayerType
 	layers.BaseLayer
+	layerType      gopacket.LayerType
 	EntityClass    uint16
 	EntityInstance uint16
 }
 
 func (msg *msgBase) String() string {
 	// TODO: Lookup ClassID Name and add to output
-	return fmt.Sprintf("ClassID: %v (0x%x), EntityID: %v (0x%x)",
+	return fmt.Sprintf("ClassID: %v (%#x), EntityID: %v (%#x)",
 		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
 }
 func (msg *msgBase) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }

@@ -53,22 +53,23 @@ func TestMibResetRequest(t *testing.T) {
 	assert.NotNil(t, customLayer)
 }
 
+func TestCreateGalEthernetProfile(t *testing.T) {
+
+	createGalEthernetProfile := "0002440A011000010030000000000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createGalEthernetProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	fmt.Println(packet)
+
+	customLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, customLayer)
+}
+
 // TODO: Uncomment as encode/decode supported
-//func TestCreateGalEthernetProfile(t *testing.T) {
-//
-//	createGalEthernetProfile := "0002440A011000010030000000000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createGalEthernetProfile)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
 //
 //func TestSetTCont(t *testing.T) {
 //

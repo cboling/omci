@@ -16,10 +16,58 @@
  */
 package omci
 
+import (
+	"errors"
+	"fmt"
+	"github.com/google/gopacket"
+	"math/bits"
+)
+
 // Attribute represents a single specific Managed Entity attribute
-type Attribute interface {
+type IAttribute interface {
 	// Name is the attribute name
 	Name() string
-	Access() string // TODO: For now, just make these strings....
+	Access() AttributeAccess // TODO: For now, just make these strings....
 	Size() uint
+	Value() (interface{}, error)
+}
+
+// Attribute represents a single specific Managed Entity attribute
+type Attribute struct {
+	name   string
+	access AttributeAccess // TODO: For now, just make these strings....
+	size   int
+	value  interface{}
+}
+
+func (attr *Attribute) Name() string {
+	return attr.name
+}
+func (attr *Attribute) Access() AttributeAccess {
+	return attr.access
+}
+func (attr *Attribute) Size() int {
+	return attr.size
+}
+func (attr *Attribute) Value() (interface{}, error) {
+	// TODO: Better way to detect not-initialized and no default available?
+	return attr.value, nil
+}
+
+func decodeAttributes(classID uint16, mask uint16, data []byte, df gopacket.DecodeFeedback) ([]Attribute, error) {
+	managedEntity, err := LoadManagedEntityDefinition(classID)
+	if err != nil {
+		return nil, err
+	}
+	bitMask := bits.Len16(mask)
+	var attributes []Attribute
+
+	fmt.Println(managedEntity, bitMask)
+	//for index, bit := range bitMask {
+	//
+	//}
+	//	func ManagedEntityDecode(classID uint16, mask uint16, data []byte,
+	// 							 df gopacket.DecodeFeedback) (IManagedEntity, error) {
+
+	return attributes, errors.New("TODO: Need to perform decode")
 }
