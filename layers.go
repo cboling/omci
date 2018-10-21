@@ -72,12 +72,12 @@ var (
 )
 
 func mkReqLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
-	return gopacket.RegisterLayerType(1000+int(mt)|int(AR),
+	return gopacket.RegisterLayerType(1000+(int(mt)|int(AR)),
 		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
 }
 
 func mkRespLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
-	return gopacket.RegisterLayerType(1000+int(mt)|int(AK),
+	return gopacket.RegisterLayerType(1000+(int(mt)|int(AK)),
 		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
 }
 
@@ -114,7 +114,7 @@ func init() {
 	LayerTypeMibUploadNextResponse = mkRespLayer(MibUploadNext, "MibUploadNextResponse", gopacket.DecodeFunc(decodeMibUploadNextResponse))
 	LayerTypeMibResetResponse = mkRespLayer(MibReset, "MibResetResponse", gopacket.DecodeFunc(decodeMibResetResponse))
 	LayerTypeAlarmNotification = mkRespLayer(AlarmNotification, "AlarmNotification", gopacket.DecodeFunc(decodeAlarmNotification))
-	LayerTypeAttributeValueChange = mkRespLayer(MibReset, "AttributeValueChange", gopacket.DecodeFunc(decodeAttributeValueChange))
+	LayerTypeAttributeValueChange = mkRespLayer(AttributeValueChange, "AttributeValueChange", gopacket.DecodeFunc(decodeAttributeValueChange))
 	LayerTypeTestResponse = mkRespLayer(Test, "TestResponse", gopacket.DecodeFunc(decodeTestResponse))
 	LayerTypeStartSoftwareDownloadResponse = mkRespLayer(StartSoftwareDownload, "StartSoftwareDownloadResponse", gopacket.DecodeFunc(decodeStartSoftwareDownloadResponse))
 	LayerTypeDownloadSectionResponse = mkRespLayer(DownloadSection, "DownloadSectionResponse", gopacket.DecodeFunc(decodeDownloadSectionResponse))

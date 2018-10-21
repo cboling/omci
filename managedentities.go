@@ -28,34 +28,31 @@ import (
 
 type IManagedEntity interface {
 	Name() string
-	Attributes() []Attribute
+	AttributesMask() uint16
+	Attributes() []IAttribute
 	Decode(uint16, []byte, gopacket.DecodeFeedback) error
 }
 
 type baseManagedEntity struct {
 	name          string
 	attributeMask uint16
-	attributeList []Attribute
+	attributeList []IAttribute
 }
 
 func (bme *baseManagedEntity) Name() string {
 	return bme.name
 }
 
-func (bme *baseManagedEntity) Attributes() []Attribute {
+func (bme *baseManagedEntity) AttributesMask() uint16 {
+	return bme.attributeMask
+}
+
+func (bme *baseManagedEntity) Attributes() []IAttribute {
 	return bme.attributeList
 }
 
 func (bme *baseManagedEntity) Decode([]byte, gopacket.DecodeFeedback) error {
 	return errors.New("decode function was not implemented in derived type")
-}
-
-func ManagedEntityDecode(classID uint16, mask uint16, data []byte, df gopacket.DecodeFeedback) (IManagedEntity, error) {
-	newMe, err := LoadManagedEntityDefinition(classID)
-	if err != nil {
-		return nil, err
-	}
-	return newMe, newMe.Decode(mask, data, df)
 }
 
 func LoadManagedEntityDefinition(classID uint16) (IManagedEntity, error) {
@@ -65,11 +62,9 @@ func LoadManagedEntityDefinition(classID uint16) (IManagedEntity, error) {
 	// TODO: Need to implement as a lookup map (code-generated)
 	if classID == 0x0110 {
 		return NewGalEthernetProfile(), nil
-	} else {
-		// TODO: Support concept of a 'blob-ME' to wrap unknown MEs. Optional?
-		return nil, errors.New("unsupported Managed Entity")
 	}
-	//return newMe, err
+	// TODO: Support concept of a 'blob-ME' to wrap unknown MEs. Optional?
+	return nil, errors.New("unsupported Managed Entity class")
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -84,7 +79,7 @@ func NewGalEthernetProfile() *GalEthernetProfile {
 	base := baseManagedEntity{
 		name:          "GalEthernetProfile",
 		attributeMask: 0x8000, // Do not count 'Managed entity ID'
-		attributeList: make([]Attribute, 0, bits.OnesCount16(0x8000)),
+		attributeList: make([]IAttribute, 0, bits.OnesCount16(0x8000)),
 	}
 	return &GalEthernetProfile{baseManagedEntity: base}
 }
@@ -108,7 +103,7 @@ func (gal *GalEthernetProfile) Decode(mask uint16, data []byte, df gopacket.Deco
 	return errors.New("TODO: Need to implement")
 }
 
-func (gal *GalEthernetProfile) AttributeDecode(index int, data []byte, df gopacket.DecodeFeedback) (*Attribute, error) {
+func (gal *GalEthernetProfile) AttributeDecode(index int, data []byte, df gopacket.DecodeFeedback) (IAttribute, error) {
 	// NOTE: Index 0 is first attribute after the Entity Instance (uint16) in the ME definition
 	if index == 0 {
 		sizeNeeded := NewMaximumGEMPayloadSize(0).Size()
@@ -126,7 +121,7 @@ type MaximumGEMPayloadSize struct {
 	Attribute
 }
 
-func NewMaximumGEMPayloadSize(value uint16) *MaximumGEMPayloadSize {
+func NewMaximumGEMPayloadSize(value uint16) IAttribute {
 	base := Attribute{
 		name:   "MaximumGEMPayloadSize",
 		access: Read | SetByCreate,

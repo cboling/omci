@@ -27,7 +27,10 @@ import (
 // CreateRequest
 type CreateRequest struct {
 	msgBase
-	Attributes []Attribute // Set-by-create attributes
+	Attributes []IAttribute // Set-by-create attributes
+
+	// Cache any ME decoded from the request
+	cachedME IManagedEntity
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -36,15 +39,25 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
 
 	// Create attribute mask for all set-by-create entries
-	var sbcMask uint16 = 0xC000 // TODO: Hardcoded for first test case - GAL Ethernet Profile
-	// Attribute decode
 	var err error
-	omci.Attributes, err = decodeAttributes(omci.EntityClass, sbcMask, omci.Contents, p)
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass)
 	if err != nil {
 		return err
 	}
 	// TODO: Validate the ME supports the 'create' action
+
+	// TODO: Need function to get all attributes with a given access type
+	sbcMask := omci.cachedME.AttributesMask()
+
+	// Attribute decode
+	err = omci.cachedME.Decode(sbcMask, data, p)
+	// omci.Attributes,decodeAttributes(omci.EntityClass, sbcMask, omci.Contents, p)
+	if err != nil {
+		return err
+	}
+	omci.Attributes = omci.cachedME.Attributes()
 	// TODO: Validate all attributes have set-by-create access
+
 	return nil
 }
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
