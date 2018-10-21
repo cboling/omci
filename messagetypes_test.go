@@ -71,72 +71,73 @@ func TestResultsStrings(t *testing.T) {
 	}
 }
 
-func TestAllDecoders(t *testing.T) {
-	var requestMask byte = AR
-	var responseMask byte = AK
-
-	for _, msg := range allMsgTypes {
-		// Test responses first since covers autonomous events
-		mtResponse := byte(msg) | responseMask
-		decoder, err := MsgTypeToStructDecoder(mtResponse)
-		assert.Nil(t, err)
-		assert.NotNil(t, decoder)
-
-		// Autonomous notifications do not map to requests
-		if isAutonomousNotification(msg) {
-			continue
-		}
-		mtRequest := byte(msg) | requestMask
-		decoder, err = MsgTypeToStructDecoder(mtRequest)
-		assert.Nil(t, err)
-		assert.NotNil(t, decoder)
-	}
-	// Unknown message type check
-	var mt byte = 123
-	decoder, err := MsgTypeToStructDecoder(mt)
-	assert.NotNil(t, err)
-	assert.Nil(t, decoder)
-
-	// No autonomous notification requests
-	for _, msg := range allNotificationTypes {
-		mtRequest := byte(msg) | requestMask
-		decoder, err = MsgTypeToStructDecoder(mtRequest)
-		assert.NotNil(t, err)
-		assert.Nil(t, decoder)
-	}
-}
-
-func TestAllEncoders(t *testing.T) {
-	var requestMask byte = AR
-	var responseMask byte = AK
-
-	for _, msg := range allMsgTypes {
-		// Test responses first since covers autonomous events
-		mtResponse := byte(msg) | responseMask
-		encoder, err := MsgTypeToStructEncoder(mtResponse)
-		assert.Nil(t, err)
-		assert.NotNil(t, encoder)
-
-		// Autonomous notifications do not map to requests
-		if isAutonomousNotification(msg) {
-			continue
-		}
-		mtRequest := byte(msg) | requestMask
-		encoder, err = MsgTypeToStructEncoder(mtRequest)
-		assert.Nil(t, err)
-		assert.NotNil(t, encoder)
-	}
-	// Unknown message type check
-	var mt byte = 123
-	encoder, err := MsgTypeToStructEncoder(mt)
-	assert.NotNil(t, err)
-	assert.Nil(t, encoder)
-
-	// No autonomous notification requests
-	for _, msg := range allNotificationTypes {
-		mtRequest := byte(msg) | requestMask
-		encoder, err = MsgTypeToStructEncoder(mtRequest)
-		assert.NotNil(t, err)
-		assert.Nil(t, encoder)
-	}
-}
+//
+//func TestAllDecoders(t *testing.T) {
+//	var requestMask byte = AR
+//	var responseMask byte = AK
+//
+//	for _, msg := range allMsgTypes {
+//		// Test responses first since covers autonomous events
+//		mtResponse := byte(msg) | responseMask
+//		decoder, err := MsgTypeToStructDecoder(mtResponse)
+//		assert.Nil(t, err)
+//		assert.NotNil(t, decoder)
+//
+//		// Autonomous notifications do not map to requests
+//		if isAutonomousNotification(msg) {
+//			continue
+//		}
+//		mtRequest := byte(msg) | requestMask
+//		decoder, err = MsgTypeToStructDecoder(mtRequest)
+//		assert.Nil(t, err)
+//		assert.NotNil(t, decoder)
+//	}
+//	// Unknown message type check
+//	var mt byte = 123
+//	decoder, err := MsgTypeToStructDecoder(mt)
+//	assert.NotNil(t, err)
+//	assert.Nil(t, decoder)
+//
+//	// No autonomous notification requests
+//	for _, msg := range allNotificationTypes {
+//		mtRequest := byte(msg) | requestMask
+//		decoder, err = MsgTypeToStructDecoder(mtRequest)
+//		assert.NotNil(t, err)
+//		assert.Nil(t, decoder)
+//	}
+//}
+//
+//func TestAllEncoders(t *testing.T) {
+//	var requestMask byte = AR
+//	var responseMask byte = AK
+//
+//	for _, msg := range allMsgTypes {
+//		// Test responses first since covers autonomous events
+//		mtResponse := byte(msg) | responseMask
+//		encoder, err := MsgTypeToStructEncoder(mtResponse)
+//		assert.Nil(t, err)
+//		assert.NotNil(t, encoder)
+//
+//		// Autonomous notifications do not map to requests
+//		if isAutonomousNotification(msg) {
+//			continue
+//		}
+//		mtRequest := byte(msg) | requestMask
+//		encoder, err = MsgTypeToStructEncoder(mtRequest)
+//		assert.Nil(t, err)
+//		assert.NotNil(t, encoder)
+//	}
+//	// Unknown message type check
+//	var mt byte = 123
+//	encoder, err := MsgTypeToStructEncoder(mt)
+//	assert.NotNil(t, err)
+//	assert.Nil(t, encoder)
+//
+//	// No autonomous notification requests
+//	for _, msg := range allNotificationTypes {
+//		mtRequest := byte(msg) | requestMask
+//		encoder, err = MsgTypeToStructEncoder(mtRequest)
+//		assert.NotNil(t, err)
+//		assert.Nil(t, encoder)
+//	}
+//}

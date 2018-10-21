@@ -23,186 +23,6 @@ import (
 	layers "github.com/google/gopacket/layers"
 )
 
-// NOTE: All encoder/decoders here work
-
-// Decoder is an interface for logic to decode a packet layer.  Users may
-// implement a Decoder to handle their own strange packet types, or may use one
-// of the many decoders available in the 'layers' subpackage to decode things
-// for them.
-type Decoder interface {
-	// Decode decodes the bytes of a packet, sending decoded values and other
-	// information to PacketBuilder, and returning an error if unsuccessful.  See
-	// the PacketBuilder documentation for more details.
-	Decode(*OMCI, []byte, gopacket.PacketBuilder) error
-}
-
-// DecodeFunc wraps a function to make it a Decoder.
-type DecodeFunc func(*OMCI, []byte, gopacket.PacketBuilder) error
-
-// Encoder is an interface for logic to serialize an objct to a packet.
-type Encoder interface {
-	// Name is the attribute name
-	SerializeTo(gopacket.SerializeBuffer, gopacket.SerializeOptions) error
-}
-
-// EncodeFunc wraps a function to make it a Encoder.
-//type EncodeFunc func(gopacket.SerializeBuffer, gopacket.SerializeOptions) error
-//
-//var msgTypeDecoderMapping map[byte]DecodeFunc
-//var msgTypeEncoderMapping map[byte]EncodeFunc
-//
-//var nextLayerMapping map[byte]gopacket.LayerType
-
-var LayerTypeMibResetRequest gopacket.LayerType
-
-func init() {
-	LayerTypeMibResetRequest = gopacket.RegisterLayerType(1000+int(MibReset)|int(AR),
-		gopacket.LayerTypeMetadata{
-			Name:    "MibResetRequest",
-			Decoder: gopacket.DecodeFunc(decodeMibResetRequest),
-		})
-
-	//nextLayerMapping = make(map[byte]gopacket.LayerType)
-	//nextLayerMapping[byte(MibReset)|AR] = LayerTypeMibResetRequest
-	//
-	///////////////////////////////////////////////////////////////////////////
-	//// Decoder mappings
-	//msgTypeDecoderMapping = make(map[byte]DecodeFunc)
-	//msgTypeDecoderMapping[byte(Create)|AR] = DecodeFunc(CreateRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Create)|AK] = DecodeFunc(CreateResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(Delete)|AR] = DecodeFunc(DeleteRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Delete)|AK] = DecodeFunc(DeleteResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(Set)|AR] = DecodeFunc(SetRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Set)|AK] = DecodeFunc(SetResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(Get)|AR] = DecodeFunc(GetRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Get)|AK] = DecodeFunc(GetResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(GetAllAlarms)|AR] = DecodeFunc(GetAllAlarmsRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(GetAllAlarms)|AK] = DecodeFunc(GetAllAlarmsResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(GetAllAlarmsNext)|AR] = DecodeFunc(GetAllAlarmsNextRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(GetAllAlarmsNext)|AK] = DecodeFunc(GetAllAlarmsNextResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(MibUpload)|AR] = DecodeFunc(MibUploadRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(MibUpload)|AK] = DecodeFunc(MibUploadResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(MibUploadNext)|AR] = DecodeFunc(MibUploadNextRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(MibUploadNext)|AK] = DecodeFunc(MibUploadNextResponseDecodeFromBytes)
-	//
-	////msgTypeDecoderMapping[byte(MibReset)|AR] = DecodeFunc(MibResetRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(MibReset)|AK] = DecodeFunc(MibResetResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(Test)|AR] = DecodeFunc(TestRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Test)|AK] = DecodeFunc(TestRequestDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(StartSoftwareDownload)|AR] = DecodeFunc(StartSoftwareDownloadRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(StartSoftwareDownload)|AK] = DecodeFunc(StartSoftwareDownloadResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(DownloadSection)|AR] = DecodeFunc(DownloadSectionRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(DownloadSection)|AK] = DecodeFunc(DownloadSectionResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(EndSoftwareDownload)|AR] = DecodeFunc(EndSoftwareDownloadRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(EndSoftwareDownload)|AK] = DecodeFunc(EndSoftwareDownloadResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(ActivateSoftware)|AR] = DecodeFunc(ActivateSoftwareRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(ActivateSoftware)|AK] = DecodeFunc(ActivateSoftwareResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(CommitSoftware)|AR] = DecodeFunc(CommitSoftwareRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(CommitSoftware)|AK] = DecodeFunc(CommitSoftwareResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(SynchronizeTime)|AR] = DecodeFunc(SynchronizeTimeRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(SynchronizeTime)|AK] = DecodeFunc(SynchronizeTimeResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(Reboot)|AR] = DecodeFunc(RebootRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(Reboot)|AK] = DecodeFunc(RebootResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(GetNext)|AR] = DecodeFunc(GetNextRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(GetNext)|AK] = DecodeFunc(GetNextResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(GetCurrentData)|AR] = DecodeFunc(GetCurrentDataRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(GetCurrentData)|AK] = DecodeFunc(GetCurrentDataResponseDecodeFromBytes)
-	//
-	//msgTypeDecoderMapping[byte(SetTable)|AR] = DecodeFunc(SetTableRequestDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(SetTable)|AK] = DecodeFunc(SetTableResponseDecodeFromBytes)
-	//
-	//// Autonomous notifications
-	//msgTypeDecoderMapping[byte(AlarmNotification)|AK] = DecodeFunc(AlarmNotificationMsgDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(AttributeValueChange)|AK] = DecodeFunc(AttributeValueChangeMsgDecodeFromBytes)
-	//msgTypeDecoderMapping[byte(TestResult)|AK] = DecodeFunc(TestResultMsgDecodeFromBytes)
-	//
-	//////////////////////////////////////////////////////////////////////////
-	//// Encoder mappings
-	//msgTypeEncoderMapping = make(map[byte]EncodeFunc)
-	//
-	//msgTypeEncoderMapping[byte(Create)|AR] = EncodeFunc(CreateRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Create)|AK] = EncodeFunc(CreateResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(Delete)|AR] = EncodeFunc(DeleteRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Delete)|AK] = EncodeFunc(DeleteResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(Set)|AR] = EncodeFunc(SetRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Set)|AK] = EncodeFunc(SetResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(Get)|AR] = EncodeFunc(GetRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Get)|AK] = EncodeFunc(GetResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(GetAllAlarms)|AR] = EncodeFunc(GetAllAlarmsRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(GetAllAlarms)|AK] = EncodeFunc(GetAllAlarmsResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(GetAllAlarmsNext)|AR] = EncodeFunc(GetAllAlarmsNextRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(GetAllAlarmsNext)|AK] = EncodeFunc(GetAllAlarmsNextResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(MibUpload)|AR] = EncodeFunc(MibUploadRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(MibUpload)|AK] = EncodeFunc(MibUploadResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(MibUploadNext)|AR] = EncodeFunc(MibUploadNextRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(MibUploadNext)|AK] = EncodeFunc(MibUploadNextResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(MibReset)|AR] = EncodeFunc(MibResetRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(MibReset)|AK] = EncodeFunc(MibResetResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(Test)|AR] = EncodeFunc(TestRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Test)|AK] = EncodeFunc(TestResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(StartSoftwareDownload)|AR] = EncodeFunc(StartSoftwareDownloadRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(StartSoftwareDownload)|AK] = EncodeFunc(StartSoftwareDownloadResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(DownloadSection)|AR] = EncodeFunc(DownloadSectionRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(DownloadSection)|AK] = EncodeFunc(DownloadSectionResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(EndSoftwareDownload)|AR] = EncodeFunc(EndSoftwareDownloadRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(EndSoftwareDownload)|AK] = EncodeFunc(EndSoftwareDownloadResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(ActivateSoftware)|AR] = EncodeFunc(ActivateSoftwareRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(ActivateSoftware)|AK] = EncodeFunc(ActivateSoftwareResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(CommitSoftware)|AR] = EncodeFunc(CommitSoftwareRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(CommitSoftware)|AK] = EncodeFunc(CommitSoftwareResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(SynchronizeTime)|AR] = EncodeFunc(SynchronizeTimeRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(SynchronizeTime)|AK] = EncodeFunc(SynchronizeTimeResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(Reboot)|AR] = EncodeFunc(RebootRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(Reboot)|AK] = EncodeFunc(RebootResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(GetNext)|AR] = EncodeFunc(GetNextRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(GetNext)|AK] = EncodeFunc(GetNextResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(GetCurrentData)|AR] = EncodeFunc(GetCurrentDataRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(GetCurrentData)|AK] = EncodeFunc(GetCurrentDataResponseSerializeTo)
-	//
-	//msgTypeEncoderMapping[byte(SetTable)|AR] = EncodeFunc(SetTableRequestSerializeTo)
-	//msgTypeEncoderMapping[byte(SetTable)|AK] = EncodeFunc(SetTableResponseSerializeTo)
-	//
-	//// Autonomous notifications
-	//msgTypeEncoderMapping[byte(AlarmNotification)|AK] = EncodeFunc(AlarmNotificationMsgSerializeTo)
-	//msgTypeEncoderMapping[byte(AttributeValueChange)|AK] = EncodeFunc(AttributeValueChangeMsgSerializeTo)
-	//msgTypeEncoderMapping[byte(TestResult)|AK] = EncodeFunc(TestResultMsgSerializeTo)
-}
-
 type Results byte
 
 // MsgType represents a OMCI message-type
@@ -320,6 +140,158 @@ const (
 	AttributeFailure         = 9 // Attribute(s) failed or unknown
 )
 
+var nextLayerMapping map[byte]gopacket.LayerType
+
+var (
+	LayerTypeCreateRequest                gopacket.LayerType
+	LayerTypeDeleteRequest                gopacket.LayerType
+	LayerTypeSetRequest                   gopacket.LayerType
+	LayerTypeGetRequest                   gopacket.LayerType
+	LayerTypeGetAllAlarmsRequest          gopacket.LayerType
+	LayerTypeGetAllAlarmsNextRequest      gopacket.LayerType
+	LayerTypeMibUploadRequest             gopacket.LayerType
+	LayerTypeMibUploadNextRequest         gopacket.LayerType
+	LayerTypeMibResetRequest              gopacket.LayerType
+	LayerTypeTestRequest                  gopacket.LayerType
+	LayerTypeStartSoftwareDownloadRequest gopacket.LayerType
+	LayerTypeDownloadSectionRequest       gopacket.LayerType
+	LayerTypeEndSoftwareDownloadRequest   gopacket.LayerType
+	LayerTypeActivateSoftwareRequest      gopacket.LayerType
+	LayerTypeCommitSoftwareRequest        gopacket.LayerType
+	LayerTypeSynchronizeTimeRequest       gopacket.LayerType
+	LayerTypeRebootRequest                gopacket.LayerType
+	LayerTypeGetNextRequest               gopacket.LayerType
+	LayerTypeGetCurrentDataRequest        gopacket.LayerType
+	LayerTypeSetTableRequest              gopacket.LayerType
+)
+var (
+	LayerTypeCreateResponse                gopacket.LayerType
+	LayerTypeDeleteResponse                gopacket.LayerType
+	LayerTypeSetResponse                   gopacket.LayerType
+	LayerTypeGetResponse                   gopacket.LayerType
+	LayerTypeGetAllAlarmsResponse          gopacket.LayerType
+	LayerTypeGetAllAlarmsNextResponse      gopacket.LayerType
+	LayerTypeMibUploadResponse             gopacket.LayerType
+	LayerTypeMibUploadNextResponse         gopacket.LayerType
+	LayerTypeMibResetResponse              gopacket.LayerType
+	LayerTypeAlarmNotification             gopacket.LayerType
+	LayerTypeAttributeValueChange          gopacket.LayerType
+	LayerTypeTestResponse                  gopacket.LayerType
+	LayerTypeStartSoftwareDownloadResponse gopacket.LayerType
+	LayerTypeDownloadSectionResponse       gopacket.LayerType
+	LayerTypeEndSoftwareDownloadResponse   gopacket.LayerType
+	LayerTypeActivateSoftwareResponse      gopacket.LayerType
+	LayerTypeCommitSoftwareResponse        gopacket.LayerType
+	LayerTypeSynchronizeTimeResponse       gopacket.LayerType
+	LayerTypeRebootResponse                gopacket.LayerType
+	LayerTypeGetNextResponse               gopacket.LayerType
+	LayerTypeTestResult                    gopacket.LayerType
+	LayerTypeGetCurrentDataResponse        gopacket.LayerType
+	LayerTypeSetTableResponse              gopacket.LayerType
+)
+
+func mkReqLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
+	return gopacket.RegisterLayerType(1000+int(mt)|int(AR),
+		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
+}
+
+func mkRespLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
+	return gopacket.RegisterLayerType(1000+int(mt)|int(AK),
+		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
+}
+
+func init() {
+	LayerTypeCreateRequest = mkReqLayer(Create, "CreateRequest", gopacket.DecodeFunc(decodeCreateRequest))
+	LayerTypeDeleteRequest = mkReqLayer(Delete, "DeleteRequest", gopacket.DecodeFunc(decodeDeleteRequest))
+	LayerTypeSetRequest = mkReqLayer(Set, "SetRequest", gopacket.DecodeFunc(decodeSetRequest))
+	LayerTypeGetRequest = mkReqLayer(Get, "GetRequest", gopacket.DecodeFunc(decodeGetRequest))
+	LayerTypeGetAllAlarmsRequest = mkReqLayer(GetAllAlarms, "GetAllAlarmsRequest", gopacket.DecodeFunc(decodeGetAllAlarmsRequest))
+	LayerTypeGetAllAlarmsNextRequest = mkReqLayer(GetAllAlarmsNext, "GetAllAlarmsNextRequest", gopacket.DecodeFunc(decodeGetAllAlarmsNextRequest))
+	LayerTypeMibUploadRequest = mkReqLayer(MibUpload, "MibUploadRequest", gopacket.DecodeFunc(decodeMibUploadRequest))
+	LayerTypeMibUploadNextRequest = mkReqLayer(MibUploadNext, "MibUploadNextRequest", gopacket.DecodeFunc(decodeMibUploadNextRequest))
+	LayerTypeMibResetRequest = mkReqLayer(MibReset, "MibResetRequest", gopacket.DecodeFunc(decodeMibResetRequest))
+	LayerTypeTestRequest = mkReqLayer(Test, "TestRequest", gopacket.DecodeFunc(decodeTestRequest))
+	LayerTypeStartSoftwareDownloadRequest = mkReqLayer(StartSoftwareDownload, "StartSoftwareDownloadRequest", gopacket.DecodeFunc(decodeStartSoftwareDownloadRequest))
+	LayerTypeDownloadSectionRequest = mkReqLayer(DownloadSection, "DownloadSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
+	LayerTypeEndSoftwareDownloadRequest = mkReqLayer(EndSoftwareDownload, "EndSoftwareDownloadRequest", gopacket.DecodeFunc(decodeEndSoftwareDownloadRequest))
+	LayerTypeActivateSoftwareRequest = mkReqLayer(ActivateSoftware, "ActivateSoftwareRequest", gopacket.DecodeFunc(decodeActivateSoftwareRequest))
+	LayerTypeCommitSoftwareRequest = mkReqLayer(CommitSoftware, "CommitSoftwareRequest", gopacket.DecodeFunc(decodeCommitSoftwareRequest))
+	LayerTypeSynchronizeTimeRequest = mkReqLayer(SynchronizeTime, "SynchronizeTimeRequest", gopacket.DecodeFunc(decodeSynchronizeTimeRequest))
+	LayerTypeRebootRequest = mkReqLayer(Reboot, "RebootRequest", gopacket.DecodeFunc(decodeRebootRequest))
+	LayerTypeGetNextRequest = mkReqLayer(GetNext, "GetNextRequest", gopacket.DecodeFunc(decodeGetNextRequest))
+	LayerTypeGetCurrentDataRequest = mkReqLayer(GetCurrentData, "GetCurrentDataRequest", gopacket.DecodeFunc(decodeGetCurrentDataRequest))
+	LayerTypeSetTableRequest = mkReqLayer(SetTable, "SetTableRequest", gopacket.DecodeFunc(decodeSetTableRequest))
+
+	LayerTypeCreateResponse = mkRespLayer(Create, "CreateResponse", gopacket.DecodeFunc(decodeCreateResponse))
+	LayerTypeDeleteResponse = mkRespLayer(Delete, "DeleteResponse", gopacket.DecodeFunc(decodeDeleteResponse))
+	LayerTypeSetResponse = mkRespLayer(Set, "SetResponse", gopacket.DecodeFunc(decodeSetResponse))
+	LayerTypeGetResponse = mkRespLayer(Get, "GetResponse", gopacket.DecodeFunc(decodeGetResponse))
+	LayerTypeGetAllAlarmsResponse = mkRespLayer(GetAllAlarms, "GetAllAlarmsResponse", gopacket.DecodeFunc(decodeGetAllAlarmsResponse))
+	LayerTypeGetAllAlarmsNextResponse = mkRespLayer(GetAllAlarmsNext, "GetAllAlarmsNextResponse", gopacket.DecodeFunc(decodeGetAllAlarmsNextResponse))
+	LayerTypeMibUploadResponse = mkRespLayer(MibUpload, "MibUploadResponse", gopacket.DecodeFunc(decodeMibUploadResponse))
+	LayerTypeMibUploadNextResponse = mkRespLayer(MibUploadNext, "MibUploadNextResponse", gopacket.DecodeFunc(decodeMibUploadNextResponse))
+	LayerTypeMibResetResponse = mkRespLayer(MibReset, "MibResetResponse", gopacket.DecodeFunc(decodeMibResetResponse))
+	LayerTypeAlarmNotification = mkRespLayer(AlarmNotification, "AlarmNotification", gopacket.DecodeFunc(decodeAlarmNotification))
+	LayerTypeAttributeValueChange = mkRespLayer(MibReset, "AttributeValueChange", gopacket.DecodeFunc(decodeAttributeValueChange))
+	LayerTypeTestResponse = mkRespLayer(Test, "TestResponse", gopacket.DecodeFunc(decodeTestResponse))
+	LayerTypeStartSoftwareDownloadResponse = mkRespLayer(StartSoftwareDownload, "StartSoftwareDownloadResponse", gopacket.DecodeFunc(decodeStartSoftwareDownloadResponse))
+	LayerTypeDownloadSectionResponse = mkRespLayer(DownloadSection, "DownloadSectionResponse", gopacket.DecodeFunc(decodeDownloadSectionResponse))
+	LayerTypeEndSoftwareDownloadResponse = mkRespLayer(EndSoftwareDownload, "EndSoftwareDownloadResponse", gopacket.DecodeFunc(decodeEndSoftwareDownloadResponse))
+	LayerTypeActivateSoftwareResponse = mkRespLayer(ActivateSoftware, "ActivateSoftwareResponse", gopacket.DecodeFunc(decodeActivateSoftwareResponse))
+	LayerTypeCommitSoftwareResponse = mkRespLayer(CommitSoftware, "CommitSoftwareResponse", gopacket.DecodeFunc(decodeCommitSoftwareResponse))
+	LayerTypeSynchronizeTimeResponse = mkRespLayer(SynchronizeTime, "SynchronizeTimeResponse", gopacket.DecodeFunc(decodeSynchronizeTimeResponse))
+	LayerTypeRebootResponse = mkRespLayer(Reboot, "RebootResponse", gopacket.DecodeFunc(decodeRebootResponse))
+	LayerTypeGetNextResponse = mkRespLayer(GetNext, "GetNextResponse", gopacket.DecodeFunc(decodeGetNextResponse))
+	LayerTypeTestResult = mkRespLayer(TestResult, "TestResult", gopacket.DecodeFunc(decodeTestResult))
+	LayerTypeGetCurrentDataResponse = mkRespLayer(GetCurrentData, "GetCurrentDataResponse", gopacket.DecodeFunc(decodeGetCurrentDataResponse))
+	LayerTypeSetTableResponse = mkRespLayer(SetTable, "SetTableResponse", gopacket.DecodeFunc(decodeSetTableResponse))
+
+	nextLayerMapping = make(map[byte]gopacket.LayerType)
+
+	nextLayerMapping[byte(Create)|AR] = LayerTypeCreateRequest
+	nextLayerMapping[byte(Delete)|AR] = LayerTypeDeleteRequest
+	nextLayerMapping[byte(Set)|AR] = LayerTypeSetRequest
+	nextLayerMapping[byte(Get)|AR] = LayerTypeGetRequest
+	nextLayerMapping[byte(GetAllAlarms)|AR] = LayerTypeGetAllAlarmsRequest
+	nextLayerMapping[byte(GetAllAlarmsNext)|AR] = LayerTypeGetAllAlarmsNextRequest
+	nextLayerMapping[byte(MibUpload)|AR] = LayerTypeMibUploadRequest
+	nextLayerMapping[byte(MibUploadNext)|AR] = LayerTypeMibUploadNextRequest
+	nextLayerMapping[byte(MibReset)|AR] = LayerTypeMibResetRequest
+	nextLayerMapping[byte(Test)|AR] = LayerTypeTestRequest
+	nextLayerMapping[byte(StartSoftwareDownload)|AR] = LayerTypeStartSoftwareDownloadRequest
+	nextLayerMapping[byte(DownloadSection)|AR] = LayerTypeDownloadSectionRequest
+	nextLayerMapping[byte(EndSoftwareDownload)|AR] = LayerTypeEndSoftwareDownloadRequest
+	nextLayerMapping[byte(ActivateSoftware)|AR] = LayerTypeActivateSoftwareRequest
+	nextLayerMapping[byte(CommitSoftware)|AR] = LayerTypeCommitSoftwareRequest
+	nextLayerMapping[byte(SynchronizeTime)|AR] = LayerTypeSynchronizeTimeRequest
+	nextLayerMapping[byte(Reboot)|AR] = LayerTypeRebootRequest
+	nextLayerMapping[byte(GetNext)|AR] = LayerTypeGetNextRequest
+	nextLayerMapping[byte(GetCurrentData)|AR] = LayerTypeGetCurrentDataRequest
+	nextLayerMapping[byte(SetTable)|AR] = LayerTypeSetTableRequest
+
+	nextLayerMapping[byte(Create)|AK] = LayerTypeCreateResponse
+	nextLayerMapping[byte(Delete)|AK] = LayerTypeDeleteResponse
+	nextLayerMapping[byte(Set)|AK] = LayerTypeSetResponse
+	nextLayerMapping[byte(Get)|AK] = LayerTypeGetResponse
+	nextLayerMapping[byte(GetAllAlarms)|AK] = LayerTypeGetAllAlarmsResponse
+	nextLayerMapping[byte(GetAllAlarmsNext)|AK] = LayerTypeGetAllAlarmsNextResponse
+	nextLayerMapping[byte(MibUpload)|AK] = LayerTypeMibUploadResponse
+	nextLayerMapping[byte(MibUploadNext)|AK] = LayerTypeMibUploadNextResponse
+	nextLayerMapping[byte(MibReset)|AK] = LayerTypeMibResetResponse
+	nextLayerMapping[byte(Test)|AK] = LayerTypeTestResponse
+	nextLayerMapping[byte(StartSoftwareDownload)|AK] = LayerTypeStartSoftwareDownloadResponse
+	nextLayerMapping[byte(DownloadSection)|AK] = LayerTypeDownloadSectionResponse
+	nextLayerMapping[byte(EndSoftwareDownload)|AK] = LayerTypeEndSoftwareDownloadResponse
+	nextLayerMapping[byte(ActivateSoftware)|AK] = LayerTypeActivateSoftwareResponse
+	nextLayerMapping[byte(CommitSoftware)|AK] = LayerTypeCommitSoftwareResponse
+	nextLayerMapping[byte(SynchronizeTime)|AK] = LayerTypeSynchronizeTimeResponse
+	nextLayerMapping[byte(Reboot)|AK] = LayerTypeRebootResponse
+	nextLayerMapping[byte(GetNext)|AK] = LayerTypeGetNextResponse
+	nextLayerMapping[byte(GetCurrentData)|AK] = LayerTypeGetCurrentDataResponse
+	nextLayerMapping[byte(TestResult)|AK] = LayerTypeTestResult
+	nextLayerMapping[byte(SetTable)|AK] = LayerTypeSetTableResponse
+}
+
 var allNotificationTypes = [...]MsgType{
 	AlarmNotification,
 	AttributeValueChange,
@@ -360,201 +332,316 @@ func (rc Results) String() string {
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-//func MsgTypeToStructDecoder(mt byte) (DecodeFunc, error) {
-//	decoder, ok := msgTypeDecoderMapping[mt]
-//	if ok {
-//		return decoder, nil
-//	}
-//	return nil, errors.New("unknown message type")
-//}
-//
-//func MsgTypeToStructEncoder(mt byte) (interface{}, error) {
-//	encoder, ok := msgTypeEncoderMapping[mt]
-//	if ok {
-//		return encoder, nil
-//	}
-//	return nil, errors.New("unknown message type")
-//}
-//
-//func MsgTypeToNextLayer(mt byte) (gopacket.LayerType, error) {
-//	nextLayer, ok := nextLayerMapping[mt]
-//	if ok {
-//		return nextLayer, nil
-//	}
-//	return gopacket.LayerTypeZero, errors.New("unknown message type")
-//}
+func MsgTypeToNextLayer(mt byte) (gopacket.LayerType, error) {
+	nextLayer, ok := nextLayerMapping[mt]
+	if ok {
+		return nextLayer, nil
+	}
+	return gopacket.LayerTypeZero, errors.New("unknown message type")
+}
 
 /////////////////////////////////////////////////////////////////////////////
-//
+// CreateRequest
 type CreateRequest struct {
-	// Attributes for a create are the set-by-create values for the ME in the
-	// order that they are defined for the ME
-	Attributes []Attribute
-	padding    []byte
+	msgBase
+	// TODO: implement
 }
 
-func CreateRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CreateRequest{}
+	omci.layerType = LayerTypeCreateRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
-func CreateRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
+/////////////////////////////////////////////////////////////////////////////
+// CreateResponse
 type CreateResponse struct {
-	Results                      byte
-	ParameterErrorAttributesMask uint16
-	padding                      []byte
+	msgBase
+	// TODO: implement
 }
 
-func CreateResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CreateResponse{}
+	omci.layerType = LayerTypeCreateResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
-func CreateResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+/////////////////////////////////////////////////////////////////////////////
+// DeleteRequest
+type DeleteRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &DeleteRequest{}
+	omci.layerType = LayerTypeDeleteRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// DeleteResponse
+type DeleteResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &DeleteResponse{}
+	omci.layerType = LayerTypeDeleteResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// SetRequest
+type SetRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SetRequest{}
+	omci.layerType = LayerTypeDeleteRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// SetResponse
+type SetResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SetResponse{}
+	omci.layerType = LayerTypeDeleteResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetRequest
+type GetRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetRequest{}
+	omci.layerType = LayerTypeDeleteRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetResponse
+type GetResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetResponse{}
+	omci.layerType = LayerTypeDeleteResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetAllAlarms
+type GetAllAlarmsRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsRequest{}
+	omci.layerType = LayerTypeGetAllAlarmsRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetAllAlarms
+type GetAllAlarmsResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsResponse{}
+	omci.layerType = LayerTypeGetAllAlarmsResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetAllAlarms
+type GetAllAlarmsNextRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsNextRequest{}
+	omci.layerType = LayerTypeGetAllAlarmsRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// GetAllAlarms
+type GetAllAlarmsNextResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsNextResponse{}
+	omci.layerType = LayerTypeGetAllAlarmsResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// MibUploadRequest
+type MibUploadRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadRequest{}
+	omci.layerType = LayerTypeMibUploadNextRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// MibUploadResponse
+type MibUploadResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadResponse{}
+	omci.layerType = LayerTypeMibUploadNextResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type DeleteRequest struct{ Dummy byte }
-
-func DeleteRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func DeleteRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+type MibUploadNextRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-type DeleteResponse struct{ Dummy byte }
-
-func DeleteResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-func DeleteResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type SetRequest struct{ Dummy byte }
-
-func SetRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func SetRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type SetResponse struct{ Dummy byte }
-
-func SetResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func SetResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadNextRequest{}
+	omci.layerType = LayerTypeMibUploadNextRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type GetRequest struct{ Dummy byte }
-
-func GetRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func GetRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+type MibUploadNextResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-type GetResponse struct{ Dummy byte }
-
-func GetResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-func GetResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type GetAllAlarmsRequest struct{ Dummy byte }
-
-func GetAllAlarmsRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func GetAllAlarmsRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type GetAllAlarmsResponse struct{ Dummy byte }
-
-func GetAllAlarmsResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func GetAllAlarmsResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type GetAllAlarmsNextRequest struct{ Dummy byte }
-
-func GetAllAlarmsNextRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func GetAllAlarmsNextRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type GetAllAlarmsNextResponse struct{ Dummy byte }
-
-func GetAllAlarmsNextResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func GetAllAlarmsNextResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type MibUploadRequest struct{ Dummy byte }
-
-func MibUploadRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func MibUploadRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type MibUploadResponse struct{ Dummy byte }
-
-func MibUploadResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func MibUploadResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type MibUploadNextRequest struct{ Dummy byte }
-
-func MibUploadNextRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func MibUploadNextRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type MibUploadNextResponse struct{ Dummy byte }
-
-func MibUploadNextResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-func MibUploadNextResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadNextResponse{}
+	omci.layerType = LayerTypeMibUploadNextResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -562,10 +649,6 @@ func MibUploadNextResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.
 type MibResetRequest struct {
 	msgBase
 }
-
-//func (omci *MibResetRequest) LayerType() gopacket.LayerType { return LayerTypeMibResetRequest }
-//func (omci *MibResetRequest) CanDecode() gopacket.LayerClass {return LayerTypeMibResetRequest }
-//func (omci *MibResetRequest) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
 
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
@@ -589,306 +672,521 @@ func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
-//func MibResetRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-//
-//	//omci.EntityClass = binary.BigEndian.Uint16(data[4:6])
-//	//omci.EntityInstance = binary.BigEndian.Uint16(data[6:8])
-//
-//	return errors.New("TODO: Not yet implemented")
-//}
-
-func MibResetRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
+/////////////////////////////////////////////////////////////////////////////
+// MibResetResponse
 type MibResetResponse struct {
-	padding []byte
+	msgBase
 }
 
-func MibResetResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+
+	// MIB Reset Response Entity Class always ONU DATA (2) and
+	// Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Reset Response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Reset Response")
+	}
+	return nil
 }
 
-func MibResetResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeMibResetResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibResetResponse{}
+	omci.layerType = LayerTypeMibResetResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// AlarmNotificationMsg
+type AlarmNotificationMsg struct {
+	msgBase
+}
+
+func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+
+	// MIB Reset Response Entity Class always ONU DATA (2) and
+	// Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Reset Response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Reset Response")
+	}
+	return nil
+}
+
+func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
+	omci := &AlarmNotificationMsg{}
+	omci.layerType = LayerTypeAlarmNotification
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// AlarmNotificationMsg
+type AttributeValueChangeMsg struct {
+	msgBase
+}
+
+func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+
+	// MIB Reset Response Entity Class always ONU DATA (2) and
+	// Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Reset Response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Reset Response")
+	}
+	return nil
+}
+
+func decodeAttributeValueChange(data []byte, p gopacket.PacketBuilder) error {
+	omci := &AttributeValueChangeMsg{}
+	omci.layerType = LayerTypeAlarmNotification
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-
-type AlarmNotificationMsg struct{ Dummy byte }
-
-func AlarmNotificationMsgDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type TestRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func AlarmNotificationMsgSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-
-type AttributeValueChangeMsg struct{ Dummy byte }
-
-func AttributeValueChangeMsgDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func AttributeValueChangeMsgSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &TestRequest{}
+	omci.layerType = LayerTypeTestRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type TestRequest struct{ Dummy byte }
-
-func TestRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type TestResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func TestRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type TestResponse struct{ Dummy byte }
-
-func TestResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func TestResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &TestResponse{}
+	omci.layerType = LayerTypeTestResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type StartSoftwareDownloadRequest struct{ Dummy byte }
-
-func StartSoftwareDownloadRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type StartSoftwareDownloadRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func StartSoftwareDownloadRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type StartSoftwareDownloadResponse struct{ Dummy byte }
-
-func StartSoftwareDownloadResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func StartSoftwareDownloadResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &StartSoftwareDownloadRequest{}
+	omci.layerType = LayerTypeStartSoftwareDownloadRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type DownloadSectionRequest struct{ Dummy byte }
-
-func DownloadSectionRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type StartSoftwareDownloadResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func DownloadSectionRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type DownloadSectionResponse struct{ Dummy byte }
-
-func DownloadSectionResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func DownloadSectionResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &StartSoftwareDownloadResponse{}
+	omci.layerType = LayerTypeStartSoftwareDownloadResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type EndSoftwareDownloadRequest struct{ Dummy byte }
-
-func EndSoftwareDownloadRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type DownloadSectionRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func EndSoftwareDownloadRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type EndSoftwareDownloadResponse struct{ Dummy byte }
-
-func EndSoftwareDownloadResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func EndSoftwareDownloadResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &DownloadSectionRequest{}
+	omci.layerType = LayerTypeDownloadSectionRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type ActivateSoftwareRequest struct{ Dummy byte }
-
-func ActivateSoftwareRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type DownloadSectionResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func ActivateSoftwareRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type ActivateSoftwareResponse struct{ Dummy byte }
-
-func ActivateSoftwareResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func ActivateSoftwareResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &DownloadSectionResponse{}
+	omci.layerType = LayerTypeDownloadSectionResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type CommitSoftwareRequest struct{ Dummy byte }
-
-func CommitSoftwareRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type EndSoftwareDownloadRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func CommitSoftwareRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type CommitSoftwareResponse struct{ Dummy byte }
-
-func CommitSoftwareResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func CommitSoftwareResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &EndSoftwareDownloadRequest{}
+	omci.layerType = LayerTypeEndSoftwareDownloadRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type SynchronizeTimeRequest struct{ Dummy byte }
-
-func SynchronizeTimeRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type EndSoftwareDownloadResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func SynchronizeTimeRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type SynchronizeTimeResponse struct{ Dummy byte }
-
-func SynchronizeTimeResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func SynchronizeTimeResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &EndSoftwareDownloadResponse{}
+	omci.layerType = LayerTypeEndSoftwareDownloadResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type RebootRequest struct{ Dummy byte }
-
-func RebootRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type ActivateSoftwareRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func RebootRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type RebootResponse struct{ Dummy byte }
-
-func RebootResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func RebootResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &ActivateSoftwareRequest{}
+	omci.layerType = LayerTypeActivateSoftwareRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type GetNextRequest struct{ Dummy byte }
-
-func GetNextRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type ActivateSoftwareResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func GetNextRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-type GetNextResponse struct{ Dummy byte }
-
-func GetNextResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func GetNextResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &ActivateSoftwareResponse{}
+	omci.layerType = LayerTypeActivateSoftwareResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type TestResultMsg struct{ Dummy byte }
-
-func TestResultMsgDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type CommitSoftwareRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func TestResultMsgSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//
-type GetCurrentDataRequest struct{ Dummy byte }
-
-func GetCurrentDataRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func GetCurrentDataRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-type GetCurrentDataResponse struct{ Dummy byte }
-
-func GetCurrentDataResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
-}
-
-func GetCurrentDataResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CommitSoftwareRequest{}
+	omci.layerType = LayerTypeCommitSoftwareRequest
+	return decodingLayerDecoder(omci, data, p)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type SetTableRequest struct{ Dummy byte }
-
-func SetTableRequestDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+type CommitSoftwareResponse struct {
+	msgBase
+	// TODO: implement
 }
 
-func SetTableRequestSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CommitSoftwareResponse{}
+	omci.layerType = LayerTypeCommitSoftwareResponse
+	return decodingLayerDecoder(omci, data, p)
 }
 
-type SetTableResponse struct{ Dummy byte }
-
-func SetTableResponseDecodeFromBytes(omci *OMCI, data []byte, p gopacket.PacketBuilder) error {
-	return errors.New("TODO: Not yet implemented")
+/////////////////////////////////////////////////////////////////////////////
+//
+type SynchronizeTimeRequest struct {
+	msgBase
+	// TODO: implement
 }
 
-func SetTableResponseSerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Not yet implemented")
+func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SynchronizeTimeRequest{}
+	omci.layerType = LayerTypeSynchronizeTimeRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type SynchronizeTimeResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SynchronizeTimeResponse{}
+	omci.layerType = LayerTypeSynchronizeTimeResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type RebootRequest struct {
+	msgBase
+}
+
+func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &RebootRequest{}
+	omci.layerType = LayerTypeRebootRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type RebootResponse struct {
+	msgBase
+}
+
+func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &RebootResponse{}
+	omci.layerType = LayerTypeRebootResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type GetNextRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetNextRequest{}
+	omci.layerType = LayerTypeGetNextRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type GetNextResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetNextResponse{}
+	omci.layerType = LayerTypeGetNextResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type TestResultMsg struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
+	omci := &TestResultMsg{}
+	omci.layerType = LayerTypeTestResult
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type GetCurrentDataRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetCurrentDataRequest{}
+	omci.layerType = LayerTypeGetCurrentDataRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type GetCurrentDataResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetCurrentDataResponse{}
+	omci.layerType = LayerTypeGetCurrentDataResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type SetTableRequest struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SetTableRequest{}
+	omci.layerType = LayerTypeSetTableRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type SetTableResponse struct {
+	msgBase
+	// TODO: implement
+}
+
+func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
+	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	omci.BaseLayer = layers.BaseLayer{data[:4], nil}
+	return errors.New("TODO: Need to implement") // return nil
+}
+func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
+	omci := &SetTableResponse{}
+	omci.layerType = LayerTypeSetTableResponse
+	return decodingLayerDecoder(omci, data, p)
 }
