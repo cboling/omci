@@ -29,37 +29,40 @@ type CreateRequest struct {
 	msgBase
 	Attributes []IAttribute // Set-by-create attributes
 
-	// Cache any ME decoded from the request
+	// Cache any ME decoded from the request  (TODO: Should be public?)
 	cachedME IManagedEntity
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
 	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	omci.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
 
 	// Create attribute mask for all set-by-create entries
 	var err error
-	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass)
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
 	if err != nil {
 		return err
 	}
-	// TODO: Validate the ME supports the 'create' action
-
-	// TODO: Need function to get all attributes with a given access type
-	sbcMask := omci.cachedME.AttributesMask()
-
+	// ME needs to support Create
+	if !SupportsMsgType(omci.cachedME, Create) {
+		return errors.New("managed entity does not support Create Message-Type")
+	}
+	var sbcMask uint16
+	for index, attr := range omci.cachedME.Attributes() {
+		if SupportsAttributeAccess(attr, SetByCreate) {
+			sbcMask |= 1 << (15 - uint(index))
+		}
+	}
 	// Attribute decode
-	err = omci.cachedME.Decode(sbcMask, data, p)
-	// omci.Attributes,decodeAttributes(omci.EntityClass, sbcMask, omci.Contents, p)
+	err = omci.cachedME.Decode(sbcMask, data[4:], p)
 	if err != nil {
 		return err
 	}
 	omci.Attributes = omci.cachedME.Attributes()
-	// TODO: Validate all attributes have set-by-create access
-
 	return nil
 }
+
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateRequest{}
 	omci.layerType = LayerTypeCreateRequest

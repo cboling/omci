@@ -17,8 +17,8 @@
 package omci
 
 import (
-	"encoding/binary"
 	"errors"
+	"fmt"
 	"github.com/google/gopacket"
 	"math/bits"
 )
@@ -28,6 +28,9 @@ import (
 
 type IManagedEntity interface {
 	Name() string
+	ClassID() uint16
+	EntityID() uint16
+	MessageTypes() []MsgType
 	AttributesMask() uint16
 	Attributes() []IAttribute
 	Decode(uint16, []byte, gopacket.DecodeFeedback) error
@@ -35,33 +38,61 @@ type IManagedEntity interface {
 
 type baseManagedEntity struct {
 	name          string
+	classID       uint16
+	entityID      uint16
+	msgTypes      []MsgType
 	attributeMask uint16
 	attributeList []IAttribute
 }
 
-func (bme *baseManagedEntity) Name() string {
-	return bme.name
+func (bme *baseManagedEntity) Name() string             { return bme.name }
+func (bme *baseManagedEntity) ClassID() uint16          { return bme.classID }
+func (bme *baseManagedEntity) EntityID() uint16         { return bme.entityID }
+func (bme *baseManagedEntity) MessageTypes() []MsgType  { return bme.msgTypes }
+func (bme *baseManagedEntity) AttributesMask() uint16   { return bme.attributeMask }
+func (bme *baseManagedEntity) Attributes() []IAttribute { return bme.attributeList }
+
+func (bme *baseManagedEntity) String() string {
+	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
+		bme.Name(), bme.ClassID(), bme.ClassID(), bme.EntityID(), bme.EntityID(),
+		bme.Attributes())
 }
 
-func (bme *baseManagedEntity) AttributesMask() uint16 {
-	return bme.attributeMask
+func (bme *baseManagedEntity) Decode(mask uint16, data []byte, df gopacket.DecodeFeedback) error {
+	// Validate attribute mask passed in
+	if mask&^bme.attributeMask > 0 {
+		return errors.New("invalid attribute mask specified") // Unsupported bits set
+	}
+	// Loop over possible attributes
+	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
+		// If bit is set, decode that attribute
+		if mask&uint16(1<<(15-uint(index))) > 0 {
+			// Pull from list
+			attribute := bme.attributeList[index]
+
+			// decode & advance data slice if success
+			err := attribute.DecodeFromBytes(data, df)
+			if err != nil {
+				return err
+			}
+			data = data[attribute.Size():]
+		}
+	}
+	return nil
+}
+func (bme *baseManagedEntity) computeAttributeMask() {
+	for index := range bme.Attributes() {
+		bme.attributeMask |= 1 << (15 - uint(index))
+	}
 }
 
-func (bme *baseManagedEntity) Attributes() []IAttribute {
-	return bme.attributeList
-}
-
-func (bme *baseManagedEntity) Decode([]byte, gopacket.DecodeFeedback) error {
-	return errors.New("decode function was not implemented in derived type")
-}
-
-func LoadManagedEntityDefinition(classID uint16) (IManagedEntity, error) {
+func LoadManagedEntityDefinition(classID uint16, entityID uint16) (IManagedEntity, error) {
 	//var newMe IManagedEntity
 	//var err error
 
 	// TODO: Need to implement as a lookup map (code-generated)
 	if classID == 0x0110 {
-		return NewGalEthernetProfile(), nil
+		return NewGalEthernetProfile(entityID), nil
 	}
 	// TODO: Support concept of a 'blob-ME' to wrap unknown MEs. Optional?
 	return nil, errors.New("unsupported Managed Entity class")
@@ -75,58 +106,15 @@ type GalEthernetProfile struct {
 	baseManagedEntity
 }
 
-func NewGalEthernetProfile() *GalEthernetProfile {
-	base := baseManagedEntity{
-		name:          "GalEthernetProfile",
-		attributeMask: 0x8000, // Do not count 'Managed entity ID'
-		attributeList: make([]IAttribute, 0, bits.OnesCount16(0x8000)),
+func NewGalEthernetProfile(entityID uint16) *GalEthernetProfile {
+	entity := baseManagedEntity{
+		name:     "GalEthernetProfile",
+		classID:  0x0110,
+		entityID: entityID,
+		msgTypes: []MsgType{Create, Delete, Get, Set},
+		attributeList: []IAttribute{
+			NewUint16Field("MaximumGEMPayloadSize", 0, Read|SetByCreate)},
 	}
-	return &GalEthernetProfile{baseManagedEntity: base}
-}
-
-func (gal *GalEthernetProfile) Decode(mask uint16, data []byte, df gopacket.DecodeFeedback) error {
-	// TODO: Implement decode as more generalized so code-generated MEs can call
-
-	if mask&^gal.attributeMask > 0 {
-		return errors.New("invalid attribute mask") // Unsupported bits set
-	}
-	for index := 0; index < bits.OnesCount16(gal.attributeMask); index++ {
-		if mask&uint16(1<<(15-uint(index))) > 0 {
-			attribute, err := gal.AttributeDecode(index, data, df) // TODO: Do something
-			if err != nil {
-				return err
-			}
-			gal.attributeList = append(gal.attributeList, attribute)
-			data = data[attribute.Size():]
-		}
-	}
-	return errors.New("TODO: Need to implement")
-}
-
-func (gal *GalEthernetProfile) AttributeDecode(index int, data []byte, df gopacket.DecodeFeedback) (IAttribute, error) {
-	// NOTE: Index 0 is first attribute after the Entity Instance (uint16) in the ME definition
-	if index == 0 {
-		sizeNeeded := NewMaximumGEMPayloadSize(0).Size()
-		if len(data) < sizeNeeded {
-			df.SetTruncated()
-			return nil, errors.New("frame too small")
-		}
-		return NewMaximumGEMPayloadSize(binary.BigEndian.Uint16(data[0:])), nil
-	}
-	return nil, errors.New("TODO: Implement me")
-}
-
-// TODO: Is there a way to do something similar to python/scapy and put this inside the GAL struct?
-type MaximumGEMPayloadSize struct {
-	Attribute
-}
-
-func NewMaximumGEMPayloadSize(value uint16) IAttribute {
-	base := Attribute{
-		name:   "MaximumGEMPayloadSize",
-		access: Read | SetByCreate,
-		size:   2,
-		value:  value,
-	}
-	return &MaximumGEMPayloadSize{Attribute: base}
+	entity.computeAttributeMask()
+	return &GalEthernetProfile{entity}
 }

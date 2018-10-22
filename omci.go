@@ -161,8 +161,6 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
 	omci.MessageType = data[2]
 	omci.DeviceIdentifier = DeviceIdent(data[3])
-	//omci.EntityClass = binary.BigEndian.Uint16(data[4:])
-	//omci.EntityInstance = binary.BigEndian.Uint16(data[6:])
 
 	// Decode length
 	var payloadOffset int
@@ -194,12 +192,6 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	}
 	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:]}
 	p.AddLayer(omci)
-	//decoder, err := MsgTypeToStructDecoder(omci.MessageType)
-	//if err != nil {
-	//	return err
-	//}
-	//// Decode the message part
-	//err = decoder(omci, data[3:micOffset], p)
 	nextLayer, err := MsgTypeToNextLayer(omci.MessageType)
 	if err != nil {
 		return err
@@ -241,67 +233,6 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	binary.BigEndian.PutUint32(bytes[MaxBaselineLength-4:], omci.MIC)
 	return nil
 }
-
-/////////////////////////////////////////////////////////////////////////////
-//   Extended Message encode / decode
-//
-//func (omci *ExtendedMessage) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-//	if len(data) < 10 {
-//		return errors.New("frame too small")
-//	}
-//	omci.TransactionID = binary.BigEndian.Uint16(data[0:2])
-//	omci.MessageType = data[2]
-//	omci.DeviceIdentifier = DeviceIdent(data[3])
-//	omci.EntityClass = binary.BigEndian.Uint16(data[4:6])
-//	omci.EntityInstance = binary.BigEndian.Uint16(data[6:8])
-//	omci.Length = binary.BigEndian.Uint16(data[8:10])
-//
-//	if len(data) < int(omci.Length)+10 {
-//		// TODO: Set truncated?
-//		return errors.New("frame too small")
-//	}
-//	if len(data) >= int(omci.Length)+10+4 {
-//		offset := 10 + int(omci.Length)
-//		omci.MIC = binary.BigEndian.Uint32(data[offset : offset+4])
-//
-//		//if omci.MIC != calculateMic(data[0:offset]) {
-//		//	return errors.New("invalid MIC")
-//		//}
-//	}
-//	// TODO: Add payload decode
-//
-//	return p.NextDecoder(omci.NextLayerType())
-//}
-//
-//// SerializeTo writes the serialized form of this layer into the
-//// SerializationBuffer, implementing gopacket.SerializableLayer.
-//// See the docs for gopacket.SerializableLayer for more info.
-//func (omci *ExtendedMessage) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-//	// Basic (common) OMCI Header is 8 octets, 10
-//	bytes, err := b.PrependBytes(10)
-//	if err != nil {
-//		return err
-//	}
-//	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
-//	bytes[2] = byte(omci.MessageType)
-//	bytes[3] = byte(omci.DeviceIdentifier)
-//	binary.BigEndian.PutUint16(bytes[4:], omci.EntityClass)
-//	binary.BigEndian.PutUint16(bytes[6:], omci.EntityInstance)
-//	binary.BigEndian.PutUint16(bytes[8:], omci.Length)
-//
-//	length := int(omci.Length)
-//	padding, err := b.AppendBytes(length + 4)
-//	if err != nil {
-//		return err
-//	}
-//	copy(padding, lotsOfZeros[:])
-//
-//	// TODO: Serialize Payload
-//
-//	// TODO: Calculate MIC
-//	binary.BigEndian.PutUint32(bytes[length:], omci.MIC)
-//	return nil
-//}
 
 // hacky way to zero out memory... there must be a better way?
 var lotsOfZeros [MaxExtendedLength]byte // Extended OMCI messages may be up to 1980 bytes long, including headers

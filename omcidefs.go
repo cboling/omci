@@ -138,6 +138,17 @@ var allNotificationTypes = [...]MsgType{
 	TestResult,
 }
 
+// SupportsMsgType returns true if the managed entity supports the desired
+// Message Type / action
+func SupportsMsgType(entity IManagedEntity, msgType MsgType) bool {
+	for _, msg := range entity.MessageTypes() {
+		if msgType == msg {
+			return true
+		}
+	}
+	return false
+}
+
 func isAutonomousNotification(mt MsgType) bool {
 	for _, m := range allNotificationTypes {
 		if mt == m {
@@ -212,4 +223,10 @@ func (access AttributeAccess) String() string {
 	case Read | Write | SetByCreate:
 		return "Read/Write/SetByCreate"
 	}
+}
+
+// SupportsAttributeAccess returns true if the managed entity attribute
+// supports the desired access
+func SupportsAttributeAccess(attr IAttribute, acc AttributeAccess) bool {
+	return attr.Access()&acc == acc
 }

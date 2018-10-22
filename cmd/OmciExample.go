@@ -41,8 +41,9 @@ func main() {
 		omciLayer := packet.Layer(omci.LayerTypeOMCI)
 		fmt.Println(omciLayer)
 
-		msgLayer := packet.Layer(omci.LayerTypeMibResetRequest)
+		msgLayer := packet.Layer(omci.LayerTypeCreateRequest)
 		fmt.Println(msgLayer)
+		// TODO: Dump attributes....   Look at gopacket 'dump' options if any
 	}
 }
 
