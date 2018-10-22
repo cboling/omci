@@ -69,6 +69,10 @@ func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	return errors.New("TODO: Implement me")
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CreateResponse
 type CreateResponse struct {
@@ -380,6 +384,43 @@ func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibResetRequest{}
 	omci.layerType = LayerTypeMibResetRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	length := MaxBaselineLength - 8 - 4 - 4
+	if opts.FixLengths {
+		length += 4
+
+		if opts.ComputeChecksums {
+			length += 4
+		}
+	}
+	padding, err := b.AppendBytes(MaxBaselineLength - 8)
+	if err != nil {
+		return err
+	}
+	copy(padding, lotsOfZeros[:])
+
+	//encoder, err := MsgTypeToStructEncoder(omci.MessageType)
+	//if err != nil {
+	//	return err
+	//}
+	// Serialize the message type part
+	//err = encoder.SerializeTo(b, opts)
+	// TODO: Implement serialization
+
+	if opts.FixLengths {
+		buffer := b.Bytes()
+		binary.BigEndian.PutUint32(buffer[MaxBaselineLength-8:], 40)
+
+		if opts.ComputeChecksums {
+			// TODO: Calculate MIC
+			buffer := b.Bytes()
+			mic := calculateMic(buffer[length-4:])
+			binary.BigEndian.PutUint32(buffer[length-4:], mic)
+		}
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -57,3 +57,5 @@ func (msg *msgBase) NextLayerType() gopacket.LayerType { return gopacket.LayerTy
 func (msg *msgBase) LayerType() gopacket.LayerType     { return msg.layerType }
 func (msg *msgBase) CanDecode() gopacket.LayerClass    { return msg.layerType }
 func (msg *msgBase) LayerPayload() []byte              { return nil }
+
+// TODO: See if we can move the common decode and serialize operations for the Class and Entity ID here

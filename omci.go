@@ -133,10 +133,9 @@ func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	}
 }
 
-//func calculateMic(data []byte) uint32 {
-//	// TODO: Implement this if needed.
-//	return 0
-//}
+func calculateMic([]byte) uint32 {
+	return 0 // TODO: Implement this if needed.
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //   Baseline Message encode / decode
@@ -192,33 +191,13 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 // See the docs for gopacket.SerializableLayer for more info.
 func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	bytes, err := b.PrependBytes(8)
+	bytes, err := b.PrependBytes(4)
 	if err != nil {
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
 	bytes[2] = byte(omci.MessageType)
 	bytes[3] = byte(omci.DeviceIdentifier)
-	//binary.BigEndian.PutUint16(bytes[4:], omci.EntityClass)
-	//binary.BigEndian.PutUint16(bytes[6:], omci.EntityInstance)
-
-	padding, err := b.AppendBytes(MaxBaselineLength - 8)
-	if err != nil {
-		return err
-	}
-	copy(padding, lotsOfZeros[:])
-
-	//encoder, err := MsgTypeToStructEncoder(omci.MessageType)
-	//if err != nil {
-	//	return err
-	//}
-	// Serialize the message type part
-	//err = encoder.SerializeTo(b, opts)
-	// TODO: Implement serialization
-
-	// TODO: Calculate MIC
-
-	binary.BigEndian.PutUint32(bytes[MaxBaselineLength-4:], omci.MIC)
 	return nil
 }
 

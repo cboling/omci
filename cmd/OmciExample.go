@@ -24,8 +24,26 @@ func main() {
 		omciLayer := packet.Layer(omci.LayerTypeOMCI)
 		fmt.Println(omciLayer)
 
+		omciObj, _ := omciLayer.(*omci.OMCI)
+		fmt.Println(omciObj)
+
 		msgLayer := packet.Layer(omci.LayerTypeMibResetRequest)
 		fmt.Println(msgLayer)
+
+		msgObj, _ := msgLayer.(*omci.MibResetRequest)
+		fmt.Println(msgObj)
+
+		// Test serialization back to form
+		// TODO: Turn on computeChecksums and handle that with a MIC calculation
+		var options gopacket.SerializeOptions
+		options.FixLengths = true
+
+		buffer := gopacket.NewSerializeBuffer()
+		err = gopacket.SerializeLayers(buffer, options, omciObj, msgObj)
+		outgoingPacket := buffer.Bytes()
+
+		reconstituted := packetToString(outgoingPacket)
+		fmt.Println(reconstituted)
 	}
 	createGalEthernetProfile := "0002440A011000010030000000000000" +
 		"00000000000000000000000000000000" +
@@ -40,10 +58,11 @@ func main() {
 
 		omciLayer := packet.Layer(omci.LayerTypeOMCI)
 		fmt.Println(omciLayer)
+		fmt.Println(omciLayer.(*omci.OMCI))
 
 		msgLayer := packet.Layer(omci.LayerTypeCreateRequest)
 		fmt.Println(msgLayer)
-		// TODO: Dump attributes....   Look at gopacket 'dump' options if any
+		fmt.Println(msgLayer.(*omci.CreateRequest))
 	}
 }
 
@@ -56,4 +75,8 @@ func stringToPacket(input string) ([]byte, error) {
 		return nil, err
 	}
 	return p, nil
+}
+
+func packetToString(input []byte) string {
+	return hex.EncodeToString(input)
 }

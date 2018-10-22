@@ -36,6 +36,10 @@ func stringToPacket(input string) ([]byte, error) {
 	return p, nil
 }
 
+func packetToString(input []byte) string {
+	return hex.EncodeToString(input)
+}
+
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
 func TestMibResetRequest(t *testing.T) {
 
@@ -64,6 +68,18 @@ func TestMibResetRequest(t *testing.T) {
 	assert.True(t, ok2)
 	assert.Equal(t, omciMsg2.EntityClass, uint16(2)) // TODO: Use classIDs from auto-gen code later
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, mibResetRequest, reconstituted)
 }
 
 func TestCreateGalEthernetProfile(t *testing.T) {
