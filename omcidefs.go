@@ -55,28 +55,28 @@ const (
 	// Message Types
 	_                             = iota
 	Create                MsgType = 4
-	Delete                        = 6
-	Set                           = 8
-	Get                           = 9
-	GetAllAlarms                  = 11
-	GetAllAlarmsNext              = 12
-	MibUpload                     = 13
-	MibUploadNext                 = 14
-	MibReset                      = 15
-	AlarmNotification             = 16
-	AttributeValueChange          = 17
-	Test                          = 18
-	StartSoftwareDownload         = 19
-	DownloadSection               = 20
-	EndSoftwareDownload           = 21
-	ActivateSoftware              = 22
-	CommitSoftware                = 23
-	SynchronizeTime               = 24
-	Reboot                        = 25
-	GetNext                       = 26
-	TestResult                    = 27
-	GetCurrentData                = 28
-	SetTable                      = 29 // Defined in Extended Message Set Only
+	Delete                MsgType = 6
+	Set                   MsgType = 8
+	Get                   MsgType = 9
+	GetAllAlarms          MsgType = 11
+	GetAllAlarmsNext      MsgType = 12
+	MibUpload             MsgType = 13
+	MibUploadNext         MsgType = 14
+	MibReset              MsgType = 15
+	AlarmNotification     MsgType = 16
+	AttributeValueChange  MsgType = 17
+	Test                  MsgType = 18
+	StartSoftwareDownload MsgType = 19
+	DownloadSection       MsgType = 20
+	EndSoftwareDownload   MsgType = 21
+	ActivateSoftware      MsgType = 22
+	CommitSoftware        MsgType = 23
+	SynchronizeTime       MsgType = 24
+	Reboot                MsgType = 25
+	GetNext               MsgType = 26
+	TestResult            MsgType = 27
+	GetCurrentData        MsgType = 28
+	SetTable              MsgType = 29 // Defined in Extended Message Set Only
 )
 
 func (mt MsgType) String() string {
@@ -162,14 +162,14 @@ const (
 	// Response status codes
 	_                        = iota
 	Success          Results = 0 // command processed successfully
-	ProcessingError          = 1 // command processing error
-	NotSupported             = 2 // command not supported
-	ParameterError           = 3 // parameter error
-	UnknownEntity            = 4 // unknown managed entity
-	UnknownInstance          = 5 // unknown managed entity instance
-	DeviceBusy               = 6 // device busy
-	InstanceExists           = 7 // instance exists
-	AttributeFailure         = 9 // Attribute(s) failed or unknown
+	ProcessingError  Results = 1 // command processing error
+	NotSupported     Results = 2 // command not supported
+	ParameterError   Results = 3 // parameter error
+	UnknownEntity    Results = 4 // unknown managed entity
+	UnknownInstance  Results = 5 // unknown managed entity instance
+	DeviceBusy       Results = 6 // device busy
+	InstanceExists   Results = 7 // instance exists
+	AttributeFailure Results = 9 // Attribute(s) failed or unknown
 )
 
 func (rc Results) String() string {

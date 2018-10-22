@@ -15,18 +15,18 @@ func main() {
 		"000000000000000000000028"
 
 	data, err := stringToPacket(mibResetRequest)
-	//if err != nil {
-	//	fmt.Println(err)
-	//} else {
-	//	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
-	//	fmt.Println(packet)
-	//
-	//	omciLayer := packet.Layer(omci.LayerTypeOMCI)
-	//	fmt.Println(omciLayer)
-	//
-	//	msgLayer := packet.Layer(omci.LayerTypeMibResetRequest)
-	//	fmt.Println(msgLayer)
-	//}
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+		fmt.Println(packet)
+
+		omciLayer := packet.Layer(omci.LayerTypeOMCI)
+		fmt.Println(omciLayer)
+
+		msgLayer := packet.Layer(omci.LayerTypeMibResetRequest)
+		fmt.Println(msgLayer)
+	}
 	createGalEthernetProfile := "0002440A011000010030000000000000" +
 		"00000000000000000000000000000000" +
 		"000000000000000000000028"

@@ -80,18 +80,6 @@ type OMCI struct {
 	MIC              uint32
 }
 
-//type BaselineMessage struct {
-//	OMCI
-//	MIC     uint32 // Octets 44:47 (baseline)
-//}
-//
-//type ExtendedMessage struct {
-//	OMCI
-//	Length  uint16 // Octets (8:10)
-//	Payload []byte // 10:++ (extended)
-//	MIC     uint32
-//}
-
 func (omci *OMCI) String() string {
 	msgType := MsgType(omci.MessageType & MsgTypeMask)
 	if isAutonomousNotification(msgType) {

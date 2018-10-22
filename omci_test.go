@@ -47,10 +47,23 @@ func TestMibResetRequest(t *testing.T) {
 	assert.NoError(t, err)
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	fmt.Println(packet)
 
-	customLayer := packet.Layer(LayerTypeOMCI)
-	assert.NotNil(t, customLayer)
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(1))
+	assert.Equal(t, omciMsg.MessageType, byte(MibReset)|AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibResetRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*MibResetRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, omciMsg2.EntityClass, uint16(2)) // TODO: Use classIDs from auto-gen code later
+	assert.Equal(t, omciMsg2.EntityInstance, uint16(0))
 }
 
 func TestCreateGalEthernetProfile(t *testing.T) {
@@ -63,10 +76,25 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 	assert.NoError(t, err)
 
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	fmt.Println(packet)
+	assert.NotNil(t, packet)
 
-	customLayer := packet.Layer(LayerTypeOMCI)
-	assert.NotNil(t, customLayer)
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(2))
+	assert.Equal(t, omciMsg.MessageType, byte(Create)|AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, omciMsg2.EntityClass, uint16(0x0110)) // TODO: Use classIDs from auto-gen code later
+	assert.Equal(t, omciMsg2.EntityInstance, uint16(1))
+
 }
 
 // TODO: Uncomment as encode/decode supported
