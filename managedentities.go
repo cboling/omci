@@ -34,6 +34,7 @@ type IManagedEntity interface {
 	AttributesMask() uint16
 	Attributes() []IAttribute
 	Decode(uint16, []byte, gopacket.DecodeFeedback) error
+	SerializeTo(uint16, gopacket.SerializeBuffer) error
 }
 
 type baseManagedEntity struct {
@@ -80,6 +81,16 @@ func (bme *baseManagedEntity) Decode(mask uint16, data []byte, df gopacket.Decod
 	}
 	return nil
 }
+
+func (bme *baseManagedEntity) SerializeTo(mask uint16, b gopacket.SerializeBuffer) error {
+	// Validate attribute mask passed in
+	if mask&^bme.attributeMask > 0 {
+		return errors.New("invalid attribute mask specified") // Unsupported bits set
+	}
+
+	return nil
+}
+
 func (bme *baseManagedEntity) computeAttributeMask() {
 	for index := range bme.Attributes() {
 		bme.attributeMask |= 1 << (15 - uint(index))

@@ -17,6 +17,7 @@
 package omci
 
 import (
+	"encoding/binary"
 	"fmt"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -58,4 +59,10 @@ func (msg *msgBase) LayerType() gopacket.LayerType     { return msg.layerType }
 func (msg *msgBase) CanDecode() gopacket.LayerClass    { return msg.layerType }
 func (msg *msgBase) LayerPayload() []byte              { return nil }
 
-// TODO: See if we can move the common decode and serialize operations for the Class and Entity ID here
+func (msg *msgBase) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	// Note: Base OMCI frame already checked for frame with at least 10 octets
+	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
+	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
+	return nil
+}

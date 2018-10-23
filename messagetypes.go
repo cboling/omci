@@ -20,7 +20,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"github.com/google/gopacket"
-	layers "github.com/google/gopacket/layers"
 )
 
 /////////////////////////////////////////////////////////////////////////////
@@ -34,12 +33,12 @@ type CreateRequest struct {
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
-
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	// Create attribute mask for all set-by-create entries
-	var err error
 	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
 	if err != nil {
 		return err
@@ -70,7 +69,26 @@ func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Implement me")
+	// Basic (common) OMCI Header is 8 octets, 10
+	bytes, err := b.PrependBytes(4)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.EntityClass)
+	binary.BigEndian.PutUint16(bytes[2:], omci.EntityInstance)
+
+	var sbcMask uint16
+	for index, attr := range omci.cachedME.Attributes() {
+		if SupportsAttributeAccess(attr, SetByCreate) {
+			sbcMask |= 1 << (15 - uint(index))
+		}
+	}
+	// Attribute serialization
+	err = omci.cachedME.SerializeTo(sbcMask, b)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -81,9 +99,11 @@ type CreateResponse struct {
 }
 
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -100,9 +120,11 @@ type DeleteRequest struct {
 }
 
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -119,9 +141,11 @@ type DeleteResponse struct {
 }
 
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -138,9 +162,11 @@ type SetRequest struct {
 }
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -157,9 +183,11 @@ type SetResponse struct {
 }
 
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -176,9 +204,11 @@ type GetRequest struct {
 }
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -195,9 +225,11 @@ type GetResponse struct {
 }
 
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -214,9 +246,11 @@ type GetAllAlarmsRequest struct {
 }
 
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -233,9 +267,11 @@ type GetAllAlarmsResponse struct {
 }
 
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -252,9 +288,11 @@ type GetAllAlarmsNextRequest struct {
 }
 
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -271,9 +309,11 @@ type GetAllAlarmsNextResponse struct {
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -290,9 +330,11 @@ type MibUploadRequest struct {
 }
 
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -309,9 +351,11 @@ type MibUploadResponse struct {
 }
 
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -328,9 +372,11 @@ type MibUploadNextRequest struct {
 }
 
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -347,9 +393,11 @@ type MibUploadNextResponse struct {
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -365,10 +413,11 @@ type MibResetRequest struct {
 }
 
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
-
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	// MIB Reset request Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
 	if omci.EntityClass != 2 {
@@ -387,33 +436,33 @@ func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	length := MaxBaselineLength - 8 - 4 - 4
-	if opts.FixLengths {
-		length += 4
-
-		if opts.ComputeChecksums {
-			length += 4
-		}
-	}
-	padding, err := b.AppendBytes(MaxBaselineLength - 8)
-	if err != nil {
-		return err
-	}
-	copy(padding, lotsOfZeros[:])
-
 	//encoder, err := MsgTypeToStructEncoder(omci.MessageType)
 	//if err != nil {
 	//	return err
 	//}
 	// Serialize the message type part
 	//err = encoder.SerializeTo(b, opts)
-	// TODO: Implement serialization
+
+	// Pad out to end of frame
+	padding, err := b.AppendBytes(MaxBaselineLength - 8)
+	if err != nil {
+		return err
+	}
+	copy(padding, lotsOfZeros[:]) // TODO: Implement serialization
 
 	if opts.FixLengths {
+		padding, err := b.AppendBytes(4)
+		if err != nil {
+			return err
+		}
 		buffer := b.Bytes()
 		binary.BigEndian.PutUint32(buffer[MaxBaselineLength-8:], 40)
 
 		if opts.ComputeChecksums {
+			padding, err := b.AppendBytes(4)
+			if err != nil {
+				return err
+			}
 			// TODO: Calculate MIC
 			buffer := b.Bytes()
 			mic := calculateMic(buffer[length-4:])
@@ -430,10 +479,11 @@ type MibResetResponse struct {
 }
 
 func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
-
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
 	if omci.EntityClass != 2 {
@@ -458,10 +508,11 @@ type AlarmNotificationMsg struct {
 }
 
 func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
-
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
 	if omci.EntityClass != 2 {
@@ -486,10 +537,11 @@ type AttributeValueChangeMsg struct {
 }
 
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
-
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
 	if omci.EntityClass != 2 {
@@ -515,9 +567,11 @@ type TestRequest struct {
 }
 
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -534,9 +588,11 @@ type TestResponse struct {
 }
 
 func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -553,9 +609,11 @@ type StartSoftwareDownloadRequest struct {
 }
 
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -572,9 +630,11 @@ type StartSoftwareDownloadResponse struct {
 }
 
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -591,9 +651,11 @@ type DownloadSectionRequest struct {
 }
 
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -610,9 +672,11 @@ type DownloadSectionResponse struct {
 }
 
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -629,9 +693,11 @@ type EndSoftwareDownloadRequest struct {
 }
 
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -648,9 +714,11 @@ type EndSoftwareDownloadResponse struct {
 }
 
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -667,9 +735,11 @@ type ActivateSoftwareRequest struct {
 }
 
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -686,9 +756,11 @@ type ActivateSoftwareResponse struct {
 }
 
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -705,9 +777,11 @@ type CommitSoftwareRequest struct {
 }
 
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -724,9 +798,11 @@ type CommitSoftwareResponse struct {
 }
 
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -743,9 +819,11 @@ type SynchronizeTimeRequest struct {
 }
 
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -762,9 +840,11 @@ type SynchronizeTimeResponse struct {
 }
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -780,9 +860,11 @@ type RebootRequest struct {
 }
 
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -798,9 +880,11 @@ type RebootResponse struct {
 }
 
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -817,9 +901,11 @@ type GetNextRequest struct {
 }
 
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -836,9 +922,11 @@ type GetNextResponse struct {
 }
 
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -855,9 +943,11 @@ type TestResultMsg struct {
 }
 
 func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
@@ -874,9 +964,11 @@ type GetCurrentDataRequest struct {
 }
 
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -893,9 +985,11 @@ type GetCurrentDataResponse struct {
 }
 
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -912,9 +1006,11 @@ type SetTableRequest struct {
 }
 
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -931,9 +1027,11 @@ type SetTableResponse struct {
 }
 
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	omci.EntityClass = binary.BigEndian.Uint16(data[0:])
-	omci.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	omci.BaseLayer = layers.BaseLayer{Contents: data[:4]}
+	// Common ClassID/EntityID decode in msgBase
+	err := omci.msgBase.DecodeFromBytes(data, p)
+	if err != nil {
+		return err
+	}
 	return errors.New("TODO: Need to implement") // return nil
 }
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {

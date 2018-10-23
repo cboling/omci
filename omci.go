@@ -191,7 +191,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 // See the docs for gopacket.SerializableLayer for more info.
 func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	bytes, err := b.PrependBytes(4)
+	bytes, err := b.AppendBytes(4)
 	if err != nil {
 		return err
 	}
