@@ -32,7 +32,7 @@ type IAttribute interface {
 	Access() AttributeAccess
 	Value() (interface{}, error)
 	DecodeFromBytes([]byte, gopacket.DecodeFeedback) error
-	SerializeTo(gopacket.SerializeBuffer, gopacket.SerializeOptions) error
+	SerializeTo(gopacket.SerializeBuffer) error
 }
 
 // Attribute represents a single specific Managed Entity attribute
@@ -104,8 +104,24 @@ func (attr *Attribute) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) 
 	}
 }
 
-func (attr *Attribute) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return errors.New("TODO: Implement this")
+func (attr *Attribute) SerializeTo(b gopacket.SerializeBuffer) error {
+	bytes, err := b.AppendBytes(attr.Size())
+	if err != nil {
+		return err
+	}
+	switch attr.Size() {
+	default:
+		return errors.New("unknown attribute size")
+	case 1:
+		bytes[0] = attr.value.(byte)
+	case 2:
+		binary.BigEndian.PutUint16(bytes, attr.value.(uint16))
+	case 4:
+		binary.BigEndian.PutUint32(bytes, attr.value.(uint32))
+	case 8:
+		binary.BigEndian.PutUint64(bytes, attr.value.(uint64))
+	}
+	return nil
 }
 
 ///////////////////////////////////////////////////////////////////////

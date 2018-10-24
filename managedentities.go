@@ -87,7 +87,20 @@ func (bme *baseManagedEntity) SerializeTo(mask uint16, b gopacket.SerializeBuffe
 	if mask&^bme.attributeMask > 0 {
 		return errors.New("invalid attribute mask specified") // Unsupported bits set
 	}
+	// Loop over possible attributes
+	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
+		// If bit is set, decode that attribute
+		if mask&uint16(1<<(15-uint(index))) > 0 {
+			// Pull from list
+			attribute := bme.attributeList[index]
 
+			// encode
+			err := attribute.SerializeTo(b)
+			if err != nil {
+				return err
+			}
+		}
+	}
 	return nil
 }
 

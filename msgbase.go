@@ -66,3 +66,13 @@ func (msg *msgBase) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error
 	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
 	return nil
 }
+func (msg *msgBase) SerializeTo(b gopacket.SerializeBuffer) error {
+	// Add class ID and entity ID
+	bytes, err := b.PrependBytes(4)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, msg.EntityClass)
+	binary.BigEndian.PutUint16(bytes, msg.EntityInstance)
+	return nil
+}
