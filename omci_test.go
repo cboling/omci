@@ -112,6 +112,17 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 	assert.Equal(t, omciMsg2.EntityClass, uint16(0x0110)) // TODO: Use classIDs from auto-gen code later
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(1))
 
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, createGalEthernetProfile, reconstituted)
 }
 
 // TODO: Uncomment as encode/decode supported

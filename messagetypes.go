@@ -27,8 +27,7 @@ type CreateRequest struct {
 	msgBase
 	Attributes []IAttribute // Set-by-create attributes
 
-	// Cache any ME decoded from the request  (TODO: Should be public?)
-	cachedME IManagedEntity
+	cachedME IManagedEntity // Cache any ME decoded from the request  (TODO: Should these be public?)
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -104,6 +103,15 @@ func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // DeleteRequest
 type DeleteRequest struct {
@@ -119,10 +127,20 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteRequest{}
 	omci.layerType = LayerTypeDeleteRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -140,10 +158,20 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteResponse{}
 	omci.layerType = LayerTypeDeleteResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -161,10 +189,20 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetRequest{}
 	omci.layerType = LayerTypeDeleteRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -182,10 +220,20 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetResponse{}
 	omci.layerType = LayerTypeDeleteResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -203,10 +251,20 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetRequest{}
 	omci.layerType = LayerTypeDeleteRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -224,10 +282,20 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetResponse{}
 	omci.layerType = LayerTypeDeleteResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -245,10 +313,20 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsRequest{}
 	omci.layerType = LayerTypeGetAllAlarmsRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -266,10 +344,20 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsResponse{}
 	omci.layerType = LayerTypeGetAllAlarmsResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -287,10 +375,20 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextRequest{}
 	omci.layerType = LayerTypeGetAllAlarmsRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -308,10 +406,20 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextResponse{}
 	omci.layerType = LayerTypeGetAllAlarmsResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -329,10 +437,20 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadRequest{}
 	omci.layerType = LayerTypeMibUploadNextRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -350,10 +468,20 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadResponse{}
 	omci.layerType = LayerTypeMibUploadNextResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -371,10 +499,20 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextRequest{}
 	omci.layerType = LayerTypeMibUploadNextRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -392,16 +530,27 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextResponse{}
 	omci.layerType = LayerTypeMibUploadNextResponse
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // MibResetRequest
 type MibResetRequest struct {
 	msgBase
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -410,8 +559,16 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	// MIB Reset request Entity Class always ONU DATA (2) and
-	// Entity Instance of 0
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB reset
+	if !SupportsMsgType(omci.cachedME, MibReset) {
+		return errors.New("managed entity does not support Create Message-Type")
+	}
+	// MIB Reset request Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != 2 {
 		return errors.New("invalid Entity Class for MIB Reset request")
 	}
@@ -461,6 +618,15 @@ func decodeMibResetResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // AlarmNotificationMsg
 type AlarmNotificationMsg struct {
@@ -488,6 +654,15 @@ func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
 	omci := &AlarmNotificationMsg{}
 	omci.layerType = LayerTypeAlarmNotification
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -519,6 +694,15 @@ func decodeAttributeValueChange(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+}
+
 /////////////////////////////////////////////////////////////////////////////
 //
 type TestRequest struct {
@@ -534,10 +718,20 @@ func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestRequest{}
 	omci.layerType = LayerTypeTestRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -555,10 +749,20 @@ func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder)
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResponse{}
 	omci.layerType = LayerTypeTestResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -576,10 +780,20 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadRequest{}
 	omci.layerType = LayerTypeStartSoftwareDownloadRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -597,10 +811,20 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadResponse{}
 	omci.layerType = LayerTypeStartSoftwareDownloadResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -618,10 +842,20 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionRequest{}
 	omci.layerType = LayerTypeDownloadSectionRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -639,10 +873,20 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionResponse{}
 	omci.layerType = LayerTypeDownloadSectionResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -660,10 +904,20 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadRequest{}
 	omci.layerType = LayerTypeEndSoftwareDownloadRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -681,10 +935,20 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadResponse{}
 	omci.layerType = LayerTypeEndSoftwareDownloadResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -702,10 +966,20 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareRequest{}
 	omci.layerType = LayerTypeActivateSoftwareRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -723,10 +997,20 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareResponse{}
 	omci.layerType = LayerTypeActivateSoftwareResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -744,10 +1028,20 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareRequest{}
 	omci.layerType = LayerTypeCommitSoftwareRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -765,10 +1059,20 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareResponse{}
 	omci.layerType = LayerTypeCommitSoftwareResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -786,10 +1090,20 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeRequest{}
 	omci.layerType = LayerTypeSynchronizeTimeRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -807,10 +1121,20 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeResponse{}
 	omci.layerType = LayerTypeSynchronizeTimeResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -827,10 +1151,20 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootRequest{}
 	omci.layerType = LayerTypeRebootRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -847,10 +1181,20 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootResponse{}
 	omci.layerType = LayerTypeRebootResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -868,10 +1212,20 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextRequest{}
 	omci.layerType = LayerTypeGetNextRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -889,10 +1243,20 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextResponse{}
 	omci.layerType = LayerTypeGetNextResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -910,10 +1274,20 @@ func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResultMsg{}
 	omci.layerType = LayerTypeTestResult
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -931,10 +1305,20 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataRequest{}
 	omci.layerType = LayerTypeGetCurrentDataRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -952,10 +1336,20 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataResponse{}
 	omci.layerType = LayerTypeGetCurrentDataResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -973,10 +1367,20 @@ func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableRequest{}
 	omci.layerType = LayerTypeSetTableRequest
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -994,8 +1398,18 @@ func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	}
 	return errors.New("TODO: Need to implement") // return nil
 }
+
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableResponse{}
 	omci.layerType = LayerTypeSetTableResponse
 	return decodingLayerDecoder(omci, data, p)
+}
+
+func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.msgBase.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }

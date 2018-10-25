@@ -73,6 +73,6 @@ func (msg *msgBase) SerializeTo(b gopacket.SerializeBuffer) error {
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, msg.EntityClass)
-	binary.BigEndian.PutUint16(bytes, msg.EntityInstance)
+	binary.BigEndian.PutUint16(bytes[2:], msg.EntityInstance)
 	return nil
 }
