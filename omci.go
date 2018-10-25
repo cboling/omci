@@ -190,14 +190,34 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 // SerializationBuffer, implementing gopacket.SerializableLayer.
 // See the docs for gopacket.SerializableLayer for more info.
 func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	// Basic (common) OMCI Header is 8 octets, 10
-	bytes, err := b.AppendBytes(4)
+	// TODO: Hardcoded for baseline message format for now. Will eventually need to support
+	//       the extended message format.
+	bytes, err := b.PrependBytes(4)
 	if err != nil {
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
 	bytes[2] = byte(omci.MessageType)
 	bytes[3] = byte(omci.DeviceIdentifier)
+	b.PushLayer(LayerTypeOMCI)
+
+	bufLen := len(b.Bytes())
+	padSize := int(omci.Length) - bufLen + 4
+	padding, err := b.AppendBytes(padSize)
+	copy(padding, lotsOfZeros[:])
+
+	// For baseline, always provide the length
+	binary.BigEndian.PutUint32(b.Bytes()[MaxBaselineLength-8:], 40)
+
+	if opts.ComputeChecksums {
+		micBytes, err := b.AppendBytes(4)
+		if err != nil {
+			return err
+		}
+		// TODO: Look up MIC definition and see if it includes the length
+		omci.MIC = calculateMic(bytes[:MaxBaselineLength-4])
+		binary.BigEndian.PutUint32(micBytes, omci.MIC)
+	}
 	return nil
 }
 

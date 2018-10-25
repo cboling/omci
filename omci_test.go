@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
+	"strings"
 	"testing"
 )
 
@@ -37,7 +38,7 @@ func stringToPacket(input string) ([]byte, error) {
 }
 
 func packetToString(input []byte) string {
-	return hex.EncodeToString(input)
+	return strings.ToUpper(hex.EncodeToString(input))
 }
 
 // MibResetRequestTest tests decode/encode of a MIB Reset Request

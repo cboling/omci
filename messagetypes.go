@@ -17,7 +17,6 @@
 package omci
 
 import (
-	"encoding/binary"
 	"errors"
 	"github.com/google/gopacket"
 )
@@ -70,13 +69,10 @@ func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 
 func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	bytes, err := b.PrependBytes(4)
+	err := omci.msgBase.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, omci.EntityClass)
-	binary.BigEndian.PutUint16(bytes[2:], omci.EntityInstance)
-
 	var sbcMask uint16
 	for index, attr := range omci.cachedME.Attributes() {
 		if SupportsAttributeAccess(attr, SetByCreate) {
@@ -84,11 +80,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		}
 	}
 	// Attribute serialization
-	err = omci.cachedME.SerializeTo(sbcMask, b)
-	if err != nil {
-		return err
-	}
-	return nil
+	return omci.cachedME.SerializeTo(sbcMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -436,40 +428,8 @@ func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	//encoder, err := MsgTypeToStructEncoder(omci.MessageType)
-	//if err != nil {
-	//	return err
-	//}
-	// Serialize the message type part
-	//err = encoder.SerializeTo(b, opts)
-
-	// Pad out to end of frame
-	padding, err := b.AppendBytes(MaxBaselineLength - 8)
-	if err != nil {
-		return err
-	}
-	copy(padding, lotsOfZeros[:]) // TODO: Implement serialization
-
-	if opts.FixLengths {
-		padding, err := b.AppendBytes(4)
-		if err != nil {
-			return err
-		}
-		buffer := b.Bytes()
-		binary.BigEndian.PutUint32(buffer[MaxBaselineLength-8:], 40)
-
-		if opts.ComputeChecksums {
-			padding, err := b.AppendBytes(4)
-			if err != nil {
-				return err
-			}
-			// TODO: Calculate MIC
-			buffer := b.Bytes()
-			mic := calculateMic(buffer[length-4:])
-			binary.BigEndian.PutUint32(buffer[length-4:], mic)
-		}
-	}
-	return nil
+	// Add class ID and entity ID
+	return omci.msgBase.SerializeTo(b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
