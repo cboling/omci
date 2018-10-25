@@ -17,7 +17,9 @@
 package omci
 
 import (
+	"encoding/binary"
 	"errors"
+	"fmt"
 	"github.com/google/gopacket"
 )
 
@@ -86,7 +88,8 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 // CreateResponse
 type CreateResponse struct {
 	msgBase
-	// TODO: implement
+	Result    				Results
+	AttributeExecutionMask	byte
 }
 
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -95,7 +98,18 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Create
+	if !SupportsMsgType(entity, Create) {
+		return errors.New("managed entity does not support the Create Message-Type")
+	}
+	omci.Result = Results(data[4])
+	omci.AttributeExecutionMask = data[5]
+	return nil
 }
 func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateResponse{}
@@ -109,14 +123,28 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Create
+	if !SupportsMsgType(entity, Create) {
+		return errors.New("managed entity does not support the Create Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	bytes[1] = omci.AttributeExecutionMask
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // DeleteRequest
 type DeleteRequest struct {
 	msgBase
-	// TODO: implement
 }
 
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -125,7 +153,16 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Delete
+	if !SupportsMsgType(entity, Delete) {
+		return errors.New("managed entity does not support the Delete Message-Type")
+	}
+	return nil
 }
 
 func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -140,14 +177,23 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Delete
+	if !SupportsMsgType(entity, Delete) {
+		return errors.New("managed entity does not support the Delete Message-Type")
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // DeleteResponse
 type DeleteResponse struct {
 	msgBase
-	// TODO: implement
+	Result  Results
 }
 
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -156,7 +202,17 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Delete
+	if !SupportsMsgType(entity, Delete) {
+		return errors.New("managed entity does not support the Delete Message-Type")
+	}
+	omci.Result = Results(data[4])
+	return nil
 }
 
 func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -171,14 +227,31 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Delete
+	if !SupportsMsgType(entity, Delete) {
+		return errors.New("managed entity does not support the Delete Message-Type")
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // SetRequest
 type SetRequest struct {
 	msgBase
-	// TODO: implement
+	AttributeMask	uint16
+	Attributes 		[]IAttribute // Write attributes
+
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -187,7 +260,31 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !SupportsMsgType(omci.cachedME, Set) {
+		return errors.New("managed entity does not support Set Message-Type")
+	}
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+
+	// Attribute decode
+	err = omci.cachedME.Decode(omci.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	// Validate all attributes support write
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Write) {
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	omci.Attributes = omci.cachedME.Attributes()
+	return nil
 }
 
 func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -202,6 +299,10 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
+
+	TODO:   Start here next....
+
+
 	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
