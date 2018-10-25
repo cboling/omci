@@ -105,6 +105,7 @@ func (attr *Attribute) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) 
 }
 
 func (attr *Attribute) SerializeTo(b gopacket.SerializeBuffer) error {
+	// TODO: Check to see if space in buffer here !!!!
 	bytes, err := b.AppendBytes(attr.Size())
 	if err != nil {
 		return err

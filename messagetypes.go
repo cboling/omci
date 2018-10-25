@@ -88,8 +88,8 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 // CreateResponse
 type CreateResponse struct {
 	msgBase
-	Result    				Results
-	AttributeExecutionMask	byte
+	Result                 Results
+	AttributeExecutionMask byte
 }
 
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -193,7 +193,7 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 // DeleteResponse
 type DeleteResponse struct {
 	msgBase
-	Result  Results
+	Result Results
 }
 
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -248,8 +248,8 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 // SetRequest
 type SetRequest struct {
 	msgBase
-	AttributeMask	uint16
-	Attributes 		[]IAttribute // Write attributes
+	AttributeMask uint16
+	Attributes    []IAttribute // Write attributes
 
 	cachedME IManagedEntity // Cache any ME decoded from the request
 }
@@ -299,18 +299,39 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !SupportsMsgType(omci.cachedME, Set) {
+		return errors.New("managed entity does not support Set Message-Type")
+	}
+	// Validate all attributes support write
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Write) {
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
-	TODO:   Start here next....
-
-
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	// Attribute serialization
+	return omci.cachedME.SerializeTo(omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // SetResponse
 type SetResponse struct {
 	msgBase
-	// TODO: implement
+	Results                  Results
+	UnsupportedAttributeMask uint16
+	FailedAttributeMask      uint16 // TODO: Use this for no-space-left?
 }
 
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
