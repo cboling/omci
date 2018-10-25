@@ -201,18 +201,22 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	bytes[3] = byte(omci.DeviceIdentifier)
 	b.PushLayer(LayerTypeOMCI)
 
-	padSize := int(omci.Length) - len(bytes)
+	bufLen := len(b.Bytes())
+	padSize := int(omci.Length) - bufLen + 4
 	padding, err := b.AppendBytes(padSize)
 	copy(padding, lotsOfZeros[:])
 
-	if len(bytes) >= MaxBaselineLength-4 {
-		binary.BigEndian.PutUint32(bytes[:MaxBaselineLength-8], 40)
+	// For baseline, always provide the length
+	binary.BigEndian.PutUint32(b.Bytes()[MaxBaselineLength-8:], 40)
 
-		if len(bytes) >= MaxBaselineLength {
-			// TODO: Check to see if MIC covers length field as well
-			omci.MIC = calculateMic(bytes[:MaxBaselineLength-4])
-			binary.BigEndian.PutUint32(bytes[:MaxBaselineLength-4], omci.MIC)
+	if opts.ComputeChecksums {
+		micBytes, err := b.AppendBytes(4)
+		if err != nil {
+			return err
 		}
+		// TODO: Look up MIC definition and see if it includes the length
+		omci.MIC = calculateMic(bytes[:MaxBaselineLength-4])
+		binary.BigEndian.PutUint32(micBytes, omci.MIC)
 	}
 	return nil
 }
