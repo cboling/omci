@@ -84,19 +84,19 @@ func (attr *Attribute) DecodeFromBytes(data []byte, df gopacket.DecodeFeedback) 
 		}
 		return err
 	case 2:
-		attr.value = binary.BigEndian.Uint16(data[0:])
+		attr.value = binary.BigEndian.Uint16(data[0:2])
 		if attr.constraint != nil {
 			err = attr.constraint(attr.value)
 		}
 		return err
 	case 4:
-		attr.value = binary.BigEndian.Uint32(data[0:])
+		attr.value = binary.BigEndian.Uint32(data[0:4])
 		if attr.constraint != nil {
 			err = attr.constraint(attr.value)
 		}
 		return err
 	case 8:
-		attr.value = binary.BigEndian.Uint64(data[0:])
+		attr.value = binary.BigEndian.Uint64(data[0:8])
 		if attr.constraint != nil {
 			err = attr.constraint(attr.value)
 		}

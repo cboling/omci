@@ -260,7 +260,6 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
 	if err != nil {
 		return err
@@ -299,7 +298,6 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
 	if err != nil {
 		return err
@@ -329,7 +327,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 // SetResponse
 type SetResponse struct {
 	msgBase
-	Results                  Results
+	Result                   Results
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16 // TODO: Use this for no-space-left?
 }
@@ -340,7 +338,19 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Delete
+	if !SupportsMsgType(entity, Delete) {
+		return errors.New("managed entity does not support the Delete Message-Type")
+	}
+	omci.Result = Results(data[4])
+	omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(data[5:7])
+	omci.FailedAttributeMask = binary.BigEndian.Uint16(data[7:9])
+	return nil
 }
 
 func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -355,14 +365,33 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !SupportsMsgType(entity, Set) {
+		return errors.New("managed entity does not support the Set Message-Type")
+	}
+	bytes, err := b.AppendBytes(5)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	binary.BigEndian.PutUint16(bytes[1:3], omci.UnsupportedAttributeMask)
+	binary.BigEndian.PutUint16(bytes[3:5], omci.FailedAttributeMask)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetRequest
 type GetRequest struct {
 	msgBase
-	// TODO: implement
+	AttributeMask uint16
+	Attributes    []IAttribute // Read attributes
+
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -371,7 +400,30 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !SupportsMsgType(omci.cachedME, Get) {
+		return errors.New("managed entity does not support Get Message-Type")
+	}
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+
+	// Attribute decode
+	err = omci.cachedME.Decode(omci.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	// Validate all attributes support Read
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	omci.Attributes = omci.cachedME.Attributes()
+	return nil
 }
 
 func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -386,14 +438,42 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !SupportsMsgType(omci.cachedME, Get) {
+		return errors.New("managed entity does not support Get Message-Type")
+	}
+	// Validate all attributes support read
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
+
+	// Attribute serialization
+	return omci.cachedME.SerializeTo(omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetResponse
 type GetResponse struct {
 	msgBase
-	// TODO: implement
+	Result                   Results
+	AttributeMask            uint16
+	Attributes               []IAttribute // Read attributes
+	UnsupportedAttributeMask uint16
+	FailedAttributeMask      uint16
+
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -402,7 +482,36 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !SupportsMsgType(omci.cachedME, Get) {
+		return errors.New("managed entity does not support Get Message-Type")
+	}
+	omci.Result = Results(data[4])
+	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
+
+	// Attribute decode
+	err = omci.cachedME.Decode(omci.AttributeMask, data[7:32], p)
+	if err != nil {
+		return err
+	}
+	// If Attribute failed or Unknown, decode optional attribute mask
+	if omci.Result == AttributeFailure {
+		omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(data[32:34])
+		omci.FailedAttributeMask = binary.BigEndian.Uint16(data[34:36])
+	}
+	// Validate all attributes support read
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	omci.Attributes = omci.cachedME.Attributes()
+	return nil
 }
 
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -417,14 +526,55 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !SupportsMsgType(entity, Get) {
+		return errors.New("managed entity does not support the Get Message-Type")
+	}
+	bytes, err := b.AppendBytes(3)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
+
+	// Validate all attributes support read
+	for _, attr := range omci.cachedME.Attributes() {
+		if !SupportsAttributeAccess(attr, Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+			return errors.New(msg)
+		}
+	}
+	// Attribute serialization
+	err = omci.cachedME.SerializeTo(omci.AttributeMask, b)
+	if err != nil {
+		return err
+	}
+	// If Attribute failed or Unknown, decode optional attribute mask
+	if omci.Result == AttributeFailure {
+		bytesLeft := 36 - len(b.Bytes())
+		bytes, err = b.AppendBytes(bytesLeft)
+		if err != nil {
+			return err
+		}
+		copy(bytes, lotsOfZeros[:])
+		omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(bytes[bytesLeft-4 : bytesLeft-2])
+		omci.FailedAttributeMask = binary.BigEndian.Uint16(bytes[bytesLeft-2 : bytesLeft])
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
 type GetAllAlarmsRequest struct {
 	msgBase
-	// TODO: implement
+	AlarmRetrievalMode byte
+
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -433,7 +583,24 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+		return errors.New("managed entity does not support GetAllAlarms Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Reset request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Reset request")
+	}
+	omci.AlarmRetrievalMode = data[4]
+	return nil
 }
 
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -448,7 +615,12 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = omci.AlarmRetrievalMode
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
