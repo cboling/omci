@@ -473,7 +473,7 @@ type GetResponse struct {
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 
-	cachedME IManagedEntity // Cache any ME decoded from the request
+	cachedME IManagedEntity // Cache any ME decoded from the response
 }
 
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -562,8 +562,8 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 			return err
 		}
 		copy(bytes, lotsOfZeros[:])
-		omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(bytes[bytesLeft-4 : bytesLeft-2])
-		omci.FailedAttributeMask = binary.BigEndian.Uint16(bytes[bytesLeft-2 : bytesLeft])
+		binary.BigEndian.PutUint16(bytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
+		binary.BigEndian.PutUint16(bytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
 	}
 	return nil
 }
@@ -573,8 +573,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 type GetAllAlarmsRequest struct {
 	msgBase
 	AlarmRetrievalMode byte
-
-	cachedME IManagedEntity // Cache any ME decoded from the request
+	cachedME           IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -590,14 +589,14 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	}
 	// ME needs to support Get All Alarms
 	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
-		return errors.New("managed entity does not support GetAllAlarms Message-Type")
+		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != 2 {
-		return errors.New("invalid Entity Class for MIB Reset request")
+		return errors.New("invalid Entity Class for Get All Alarms request")
 	}
 	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for MIB Reset request")
+		return errors.New("invalid Entity Instance for Get All Alarms request")
 	}
 	omci.AlarmRetrievalMode = data[4]
 	return nil
@@ -615,6 +614,15 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 	if err != nil {
 		return err
 	}
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(entity, GetAllAlarms) {
+		return errors.New("managed entity does not support the Get All Alarms Message-Type")
+	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
 		return err
@@ -627,7 +635,8 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 // GetAllAlarms
 type GetAllAlarmsResponse struct {
 	msgBase
-	// TODO: implement
+	NumberOfCommands uint16
+	cachedME         IManagedEntity // Cache any ME decoded from the response
 }
 
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -636,7 +645,24 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+		return errors.New("managed entity does not support Get All Alarms Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for Get All Alarms response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Get All Alarms response")
+	}
+	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
+	return nil
 }
 
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -651,14 +677,30 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(entity, GetAllAlarms) {
+		return errors.New("managed entity does not support the Get All Alarms Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.NumberOfCommands)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
 type GetAllAlarmsNextRequest struct {
 	msgBase
-	// TODO: implement
+
+	CommandSequenceNumber uint16
+	cachedME              IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -667,7 +709,23 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+		return errors.New("managed entity does not support Get All Alarms Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for Get All Alarms request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Get All Alarms request")
+	}
+	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
+	return nil
 }
 
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -682,14 +740,29 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms Next
+	if !SupportsMsgType(entity, GetAllAlarmsNext) {
+		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.CommandSequenceNumber)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	msgBase
-	// TODO: implement
+	AlarmBitMap [28]byte       // 224 bits
+	cachedME    IManagedEntity // Cache any ME decoded from the response
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -698,7 +771,23 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms Next
+	if !SupportsMsgType(omci.cachedME, GetAllAlarmsNext) {
+		return errors.New("managed entity does not support Get All Alarms Next Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for Get All Alarms Next response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Get All Alarms Next response")
+	}
+	copy(omci.AlarmBitMap[:], data[4:32])
+	return nil
 }
 
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -713,14 +802,28 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms Next
+	if !SupportsMsgType(entity, GetAllAlarmsNext) {
+		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
+	}
+	bytes, err := b.AppendBytes(28)
+	if err != nil {
+		return err
+	}
+	copy(bytes, omci.AlarmBitMap[:])
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // MibUploadRequest
 type MibUploadRequest struct {
 	msgBase
-	// TODO: implement
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -729,7 +832,18 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// ME needs to support MIB Upload
+	if !SupportsMsgType(omci.cachedME, MibUpload) {
+		return errors.New("managed entity does not support MIB Upload Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Upload request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Upload request")
+	}
+	return nil
 }
 
 func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -744,14 +858,24 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !SupportsMsgType(entity, MibUpload) {
+		return errors.New("managed entity does not support the MIB Upload Message-Type")
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // MibUploadResponse
 type MibUploadResponse struct {
 	msgBase
-	// TODO: implement
+	NumberOfCommands uint16
+	cachedME         IManagedEntity // Cache any ME decoded from the response
 }
 
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -760,7 +884,24 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB Upload
+	if !SupportsMsgType(omci.cachedME, MibUpload) {
+		return errors.New("managed entity does not support MIB Upload Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Upload response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Upload response")
+	}
+	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
+	return nil
 }
 
 func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -775,14 +916,30 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB Upload
+	if !SupportsMsgType(entity, MibUpload) {
+		return errors.New("managed entity does not support the MIB Upload Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.NumberOfCommands)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type MibUploadNextRequest struct {
 	msgBase
-	// TODO: implement
+	CommandSequenceNumber uint16
+
+	cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -791,7 +948,24 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(omci.cachedME, MibUploadNext) {
+		return errors.New("managed entity does not support MIB Upload Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Upload request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Upload request")
+	}
+	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
+	return nil
 }
 
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -806,14 +980,30 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity IManagedEntity
+	entity, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB upload
+	if !SupportsMsgType(entity, MibUploadNext) {
+		return errors.New("managed entity does not support the MIB Upload Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.CommandSequenceNumber)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type MibUploadNextResponse struct {
 	msgBase
-	// TODO: implement
+	cachedME IManagedEntity // Cache any ME decoded from the response
+
+	uploadedME IManagedEntity
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -822,7 +1012,35 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	omci.cachedME, err = LoadManagedEntityDefinition(omci.EntityClass, omci.EntityInstance)
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get All Alarms
+	if !SupportsMsgType(omci.cachedME, MibUploadNext) {
+		return errors.New("managed entity does not support MIB Upload Next Message-Type")
+	}
+	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != 2 {
+		return errors.New("invalid Entity Class for MIB Upload Next response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for MIB Upload Next response")
+	}
+	// Create ME to hold uploaded information
+
+	// TODO: Work on best way to decode the uploaded ME
+
+	//classID := binary.BigEndian.Uint16(data[4:6])
+	//entityID := binary.BigEndian.Uint16(data[6:8])
+	//omci.uploadedME, err := LoadManagedEntityDefinition(classID, entityIDe)
+	//if err != nil {
+	//	return err
+	//}
+	//omci.uploadedME..AttributeMask = binary.BigEndian.Uint16(data[8:10])
+	//omci.Attributes = omci.cachedME.Attributes()
+	//
+	return nil
 }
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
