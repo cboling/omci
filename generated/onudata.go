@@ -30,23 +30,26 @@ type OnuData struct {
 
 func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	if eid != 0 {
-		return nil, errors.New("invalid entity ID for ONU Data")
-	}
 	entity := BaseManagedEntity{
 		name:     "OnuData",
 		classID:  2,
 		entityID: eid,
 		msgTypes: []omci.MsgType{
-			omci.Get,
-			omci.Set,
-			omci.GetAllAlarms,
-			omci.GetAllAlarmsNext,
-			omci.MibReset,
-			omci.MibUpload,
-			omci.MibUploadNext},
+            
+        omci.Set,
+        omci.Get,
+        omci.GetAllAlarms,
+        omci.GetAllAlarmsNext,
+        omci.MibUpload,
+        omci.MibUploadNext,
+        omci.MibReset,
+            
+        },
 		attributeList: []omci.IAttribute{
-			omci.NewUint16Field("MIBDataSync", 0, omci.Read|omci.Write)},
+            
+        omci.Managed Entity Id,
+        omci.Mib Data Sync,
+		},
 	}
 	entity.computeAttributeMask()
 	return &OnuData{entity}, nil
