@@ -1,198 +1,200 @@
-/*
- * Copyright (c) 2018 - present.  Boling Consulting Solutions (bcsw.net)
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+//
+// * Copyright (c) 2018 - present.  Boling Consulting Solutions (bcsw.net)
+// *
+// * Licensed under the Apache License, Version 2.0 (the "License");
+// * you may not use this file except in compliance with the License.
+// * You may obtain a copy of the License at
+// *
+// * http://www.apache.org/licenses/LICENSE-2.0
+// *
+// * Unless required by applicable law or agreed to in writing, software
+// * distributed under the License is distributed on an "AS IS" BASIS,
+// * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// * See the License for the specific language governing permissions and
+// * limitations under the License.
+// *
+// */
 package omci
 
-import (
-	"errors"
-	"fmt"
-	"github.com/google/gopacket"
-	"math/bits"
-)
-
-// NOTE: This probably deserves to be in subdirectory and focused on ManagedEntity creation
-//       and most packet parsing in parent directory if appropriate.
-
-type IManagedEntity interface {
-	Name() string
-	ClassID() uint16
-	EntityID() uint16
-	MessageTypes() []MsgType
-	AttributesMask() uint16
-	Attributes() []IAttribute
-	Decode(uint16, []byte, gopacket.DecodeFeedback) error
-	SerializeTo(uint16, gopacket.SerializeBuffer) error
-}
-
-type baseManagedEntity struct {
-	name          string
-	classID       uint16
-	entityID      uint16
-	msgTypes      []MsgType
-	attributeMask uint16
-	attributeList []IAttribute
-}
-
-func (bme *baseManagedEntity) Name() string             { return bme.name }
-func (bme *baseManagedEntity) ClassID() uint16          { return bme.classID }
-func (bme *baseManagedEntity) EntityID() uint16         { return bme.entityID }
-func (bme *baseManagedEntity) MessageTypes() []MsgType  { return bme.msgTypes }
-func (bme *baseManagedEntity) AttributesMask() uint16   { return bme.attributeMask }
-func (bme *baseManagedEntity) Attributes() []IAttribute { return bme.attributeList }
-
-func (bme *baseManagedEntity) String() string {
-	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
-		bme.Name(), bme.ClassID(), bme.ClassID(), bme.EntityID(), bme.EntityID(),
-		bme.Attributes())
-}
-
-func (bme *baseManagedEntity) Decode(mask uint16, data []byte, df gopacket.DecodeFeedback) error {
-	// Validate attribute mask passed in
-	if mask&^bme.attributeMask > 0 {
-		return errors.New("invalid attribute mask specified") // Unsupported bits set
-	}
-	// Loop over possible attributes
-	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
-		// If bit is set, decode that attribute
-		if mask&uint16(1<<(15-uint(index))) > 0 {
-			// Pull from list
-			attribute := bme.attributeList[index]
-
-			// decode & advance data slice if success
-			err := attribute.DecodeFromBytes(data, df)
-			if err != nil {
-				return err
-			}
-			data = data[attribute.Size():]
-		}
-	}
-	return nil
-}
-
-func (bme *baseManagedEntity) SerializeTo(mask uint16, b gopacket.SerializeBuffer) error {
-	// Validate attribute mask passed in
-	if mask&^bme.attributeMask > 0 {
-		return errors.New("invalid attribute mask specified") // Unsupported bits set
-	}
-	// Loop over possible attributes
-	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
-		// If bit is set, decode that attribute
-		if mask&uint16(1<<(15-uint(index))) > 0 {
-			// Pull from list
-			attribute := bme.attributeList[index]
-
-			// encode
-			err := attribute.SerializeTo(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-func (bme *baseManagedEntity) computeAttributeMask() {
-	for index := range bme.Attributes() {
-		bme.attributeMask |= 1 << (15 - uint(index))
-	}
-}
-
-func LoadManagedEntityDefinition(classID uint16, entityID uint16) (IManagedEntity, error) {
-	//var newMe IManagedEntity
-	//var err error
-
-	// TODO: Need to implement as a lookup map (code-generated)
-	switch classID {
-	default:
-		// TODO: Support concept of a 'blob-ME' to wrap unknown MEs. Optional?
-		return nil, errors.New("unsupported Managed Entity class")
-
-	case 0x0002:
-		return NewOnuData()
-
-	case 0x0110:
-		return NewGalEthernetProfile(entityID)
-	}
-}
-
+//
+//import (
+//	gen "./generated"
+//	"errors"
+//	"fmt"
+//	"github.com/google/gopacket"
+//	"math/bits"
+//)
+//
+//// NOTE: This probably deserves to be in subdirectory and focused on ManagedEntity creation
+////       and most packet parsing in parent directory if appropriate.
+//
+//type IManagedEntity interface {
+//	Name() string
+//	ClassID() uint16
+//	EntityID() uint16
+//	MessageTypes() []MsgType
+//	AttributesMask() uint16
+//	Attributes() []IAttribute
+//	Decode(uint16, []byte, gopacket.DecodeFeedback) error
+//	SerializeTo(uint16, gopacket.SerializeBuffer) error
+//}
+//
+//type BaseManagedEntity struct {
+//	name          string
+//	classID       uint16
+//	entityID      uint16
+//	msgTypes      []MsgType
+//	attributeMask uint16
+//	attributeList []IAttribute
+//}
+//
+//func (bme *BaseManagedEntity) Name() string             { return bme.name }
+//func (bme *BaseManagedEntity) ClassID() uint16          { return bme.classID }
+//func (bme *BaseManagedEntity) EntityID() uint16         { return bme.entityID }
+//func (bme *BaseManagedEntity) MessageTypes() []MsgType  { return bme.msgTypes }
+//func (bme *BaseManagedEntity) AttributesMask() uint16   { return bme.attributeMask }
+//func (bme *BaseManagedEntity) Attributes() []IAttribute { return bme.attributeList }
+//
+//func (bme *BaseManagedEntity) String() string {
+//	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
+//		bme.Name(), bme.ClassID(), bme.ClassID(), bme.EntityID(), bme.EntityID(),
+//		bme.Attributes())
+//}
+//
+//func (bme *BaseManagedEntity) Decode(mask uint16, data []byte, df gopacket.DecodeFeedback) error {
+//	// Validate attribute mask passed in
+//	if mask&^bme.attributeMask > 0 {
+//		return errors.New("invalid attribute mask specified") // Unsupported bits set
+//	}
+//	// Loop over possible attributes
+//	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
+//		// If bit is set, decode that attribute
+//		if mask&uint16(1<<(15-uint(index))) > 0 {
+//			// Pull from list
+//			attribute := bme.attributeList[index]
+//
+//			// decode & advance data slice if success
+//			err := attribute.DecodeFromBytes(data, df)
+//			if err != nil {
+//				return err
+//			}
+//			data = data[attribute.Size():]
+//		}
+//	}
+//	return nil
+//}
+//
+//func (bme *BaseManagedEntity) SerializeTo(mask uint16, b gopacket.SerializeBuffer) error {
+//	// Validate attribute mask passed in
+//	if mask&^bme.attributeMask > 0 {
+//		return errors.New("invalid attribute mask specified") // Unsupported bits set
+//	}
+//	// Loop over possible attributes
+//	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
+//		// If bit is set, decode that attribute
+//		if mask&uint16(1<<(15-uint(index))) > 0 {
+//			// Pull from list
+//			attribute := bme.attributeList[index]
+//
+//			// encode
+//			err := attribute.SerializeTo(b)
+//			if err != nil {
+//				return err
+//			}
+//		}
+//	}
+//	return nil
+//}
+//
+//func (bme *BaseManagedEntity) computeAttributeMask() {
+//	for index := range bme.Attributes() {
+//		bme.attributeMask |= 1 << (15 - uint(index))
+//	}
+//}
+//
+//func LoadManagedEntityDefinition(classID uint16, entityID uint16) (IManagedEntity, error) {
+//	//var newMe IManagedEntity
+//	//var err error
+//
+//	// TODO: Need to implement as a lookup map (code-generated)
+//	switch classID {
+//	default:
+//		// TODO: Support concept of a 'blob-ME' to wrap unknown MEs. Optional?
+//		return nil, errors.New("unsupported Managed Entity class")
+//
+//	case 0x0002:
+//		return NewOnuData()
+//
+//	//case 0x0110:
+//	//	return NewGalEthernetProfile(entityID)
+//	}
+//}
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 // Example MEs.  Oothers will eventually be 'mostly' auto-generated by the OMCI parser.
 // Doing a few by hand to see what functions and properties we need
-func decodeEntityID(params ...ParamData) uint16 {
-	if len(params) > 0 {
-		return params[0].EntityID
-	}
-	return 0
-}
-
-type OnuData struct {
-	baseManagedEntity
-}
-
-func NewOnuData2(params ...ParamData) (IManagedEntity, error) {
-	eid := decodeEntityID(params...)
-	if eid != 0 {
-		return nil, errors.New("invalid entity ID for ONU Data")
-	}
-	entity := baseManagedEntity{
-		name:     "OnuData",
-		classID:  2,
-		entityID: eid,
-		msgTypes: []MsgType{Get, Set, GetAllAlarms, GetAllAlarmsNext, MibReset, MibUpload, MibUploadNext},
-		attributeList: []IAttribute{
-			NewUint16Field("MIBDataSync", 0, Read|Write)},
-	}
-	entity.computeAttributeMask()
-	return &OnuData{entity}, nil
-}
-
-func NewOnuData(entityID ...uint16) (*OnuData, error) {
-	// TODO: Code generated constraints would be helpful
-	eid := decodeEntityID(entityID...)
-	if eid != 0 {
-		return nil, errors.New("invalid entity ID for ONU Data")
-	}
-	entity := baseManagedEntity{
-		name:     "OnuData",
-		classID:  2,
-		entityID: eid,
-		msgTypes: []MsgType{Get, Set, GetAllAlarms, GetAllAlarmsNext, MibReset, MibUpload, MibUploadNext},
-		attributeList: []IAttribute{
-			NewUint16Field("MIBDataSync", 0, Read|Write)},
-	}
-	entity.computeAttributeMask()
-	return &OnuData{entity}, nil
-}
-
+//func decodeEntityID(params ...gen.ParamData) uint16 {
+//	if len(params) > 0 {
+//		return params[0].EntityID
+//	}
+//	return 0
+//}
+//
+//type OnuData struct {
+//	BaseManagedEntity
+//}
+//
+//func NewOnuData(params ...gen.ParamData) (IManagedEntity, error) {
+//	eid := decodeEntityID(params...)
+//	if eid != 0 {
+//		return nil, errors.New("invalid entity ID for ONU Data")
+//	}
+//	entity := BaseManagedEntity{
+//		name:     "OnuData",
+//		classID:  2,
+//		entityID: eid,
+//		msgTypes: []MsgType{Get, Set, GetAllAlarms, GetAllAlarmsNext, MibReset, MibUpload, MibUploadNext},
+//		attributeList: []IAttribute{
+//			NewUint16Field("MIBDataSync", 0, Read|Write)},
+//	}
+//	entity.computeAttributeMask()
+//	return &OnuData{entity}, nil
+//}
+//
+//func NewOnuData(entityID ...uint16) (*OnuData, error) {
+//	// TODO: Code generated constraints would be helpful
+//	eid := decodeEntityID(entityID...)
+//	if eid != 0 {
+//		return nil, errors.New("invalid entity ID for ONU Data")
+//	}
+//	entity := BaseManagedEntity{
+//		name:     "OnuData",
+//		classID:  2,
+//		entityID: eid,
+//		msgTypes: []MsgType{Get, Set, GetAllAlarms, GetAllAlarmsNext, MibReset, MibUpload, MibUploadNext},
+//		attributeList: []IAttribute{
+//			NewUint16Field("MIBDataSync", 0, Read|Write)},
+//	}
+//	entity.computeAttributeMask()
+//	return &OnuData{entity}, nil
+//}
+//
 ///////////////////////////////////////////////////////////////////////////////////////////////////
-
-type GalEthernetProfile struct {
-	baseManagedEntity
-}
-
-func NewGalEthernetProfile(entityID ...uint16) (*GalEthernetProfile, error) {
-	eid := decodeEntityID(entityID...)
-	entity := baseManagedEntity{
-		name:     "GalEthernetProfile",
-		classID:  0x0110,
-		entityID: eid,
-		msgTypes: []MsgType{Create, Delete, Get, Set},
-		attributeList: []IAttribute{
-			NewUint16Field("MaximumGEMPayloadSize", 0, Read|SetByCreate)},
-	}
-	entity.computeAttributeMask()
-	return &GalEthernetProfile{entity}, nil
-}
+//
+//type GalEthernetProfile struct {
+//	BaseManagedEntity
+//}
+//
+//func NewGalEthernetProfile(entityID ...uint16) (*GalEthernetProfile, error) {
+//	eid := decodeEntityID(entityID...)
+//	entity := BaseManagedEntity{
+//		name:     "GalEthernetProfile",
+//		classID:  0x0110,
+//		entityID: eid,
+//		msgTypes: []MsgType{Create, Delete, Get, Set},
+//		attributeList: []IAttribute{
+//			NewUint16Field("MaximumGEMPayloadSize", 0, Read|SetByCreate)},
+//	}
+//	entity.computeAttributeMask()
+//	return &GalEthernetProfile{entity}, nil
+//}
