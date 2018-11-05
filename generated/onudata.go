@@ -21,7 +21,6 @@ package generated
 
 import (
 	"../../omci"
-	"errors"
 )
 
 type OnuData struct {
@@ -35,20 +34,17 @@ func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 		classID:  2,
 		entityID: eid,
 		msgTypes: []omci.MsgType{
-            
-        omci.Set,
-        omci.Get,
-        omci.GetAllAlarms,
-        omci.GetAllAlarmsNext,
-        omci.MibUpload,
-        omci.MibUploadNext,
-        omci.MibReset,
-            
-        },
+			omci.Set,
+			omci.Get,
+			omci.GetAllAlarms,
+			omci.GetAllAlarmsNext,
+			omci.MibUpload,
+			omci.MibUploadNext,
+			omci.MibReset,
+		},
 		attributeList: []omci.IAttribute{
-            
-        omci.Managed Entity Id,
-        omci.Mib Data Sync,
+			// ManagedEntityId,
+			// MibDataSync,
 		},
 	}
 	entity.computeAttributeMask()

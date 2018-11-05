@@ -30,7 +30,7 @@ import (
 // ManagedEntityInfo provides ManagedEntity information
 type ManagedEntityInfo struct {
 	//Interface  IManagedEntity
-	New        func(params ...ParamData)(IManagedEntity, error)
+	New func(params ...ParamData) (IManagedEntity, error)
 }
 
 // ParamData can be passed to the 'New' function to dictate how the returned
@@ -47,19 +47,19 @@ type ManagedEntityInfo struct {
 // persistent database, or some other similar purpose.
 //
 type ParamData struct {
-	EntityID 	uint16
-	Attributes  []omci.IAttribute
+	EntityID   uint16
+	Attributes []omci.IAttribute
 }
 
 // CreateME wraps a function that makes it a creator of a Managed Entity
-type CreateME func(params ...ParamData)(IManagedEntity, error)
+type CreateME func(params ...ParamData) (IManagedEntity, error)
 
 var classToManagedEntityMap map[uint16]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
 	classToManagedEntityMap = make(map[uint16]CreateME, 61)
- 
+
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
 	classToManagedEntityMap[6] = NewCircuitPack
@@ -123,7 +123,6 @@ func init() {
 	classToManagedEntityMap[346] = NewXgPonUpstreamManagementPerformanceMonitoringHistoryData
 }
 
-
 func decodeEntityID(params ...ParamData) uint16 {
 	if len(params) > 0 {
 		return params[0].EntityID
@@ -151,12 +150,12 @@ type BaseManagedEntity struct {
 	attributeList []omci.IAttribute
 }
 
-func (bme *BaseManagedEntity) Name() string             	{ return bme.name }
-func (bme *BaseManagedEntity) ClassID() uint16          	{ return bme.classID }
-func (bme *BaseManagedEntity) EntityID() uint16         	{ return bme.entityID }
-func (bme *BaseManagedEntity) MessageTypes() []omci.MsgType { return bme.msgTypes }
-func (bme *BaseManagedEntity) AttributesMask() uint16   	{ return bme.attributeMask }
-func (bme *BaseManagedEntity) Attributes() []omci.IAttribute{ return bme.attributeList }
+func (bme *BaseManagedEntity) Name() string                  { return bme.name }
+func (bme *BaseManagedEntity) ClassID() uint16               { return bme.classID }
+func (bme *BaseManagedEntity) EntityID() uint16              { return bme.entityID }
+func (bme *BaseManagedEntity) MessageTypes() []omci.MsgType  { return bme.msgTypes }
+func (bme *BaseManagedEntity) AttributesMask() uint16        { return bme.attributeMask }
+func (bme *BaseManagedEntity) Attributes() []omci.IAttribute { return bme.attributeList }
 
 func (bme *BaseManagedEntity) String() string {
 	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
