@@ -151,7 +151,7 @@ type Uint32Field struct {
 	Attribute
 }
 
-func NewSUint32Field(name string, defVal uint16, access AttributeAccess) *Uint32Field {
+func NewUint32Field(name string, defVal uint16, access AttributeAccess) *Uint32Field {
 	return &Uint32Field{
 		Attribute: Attribute{name: name, defValue: defVal, size: 4, access: access},
 	}
