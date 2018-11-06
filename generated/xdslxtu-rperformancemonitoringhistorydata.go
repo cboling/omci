@@ -50,7 +50,7 @@ func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			omci.NewUint16Field("SeverelyErroredSeconds", 0, omci.Read),
 			omci.NewUint16Field("FecSeconds", 0, omci.Read),
 			omci.NewUint16Field("UnavailableSeconds", 0, omci.Read),
-			omci.NewUint16Field(""Leftr"DefectSeconds", 0, omci.Read),
+			omci.NewUint16Field("LeftrDefectSeconds", 0, omci.Read),
 			omci.NewUint32Field("ErrorFreeBitsCounter", 0, omci.Read),
 			omci.NewUint32Field("MinimumErrorFreeThroughputMineftr", 0, omci.Read),
 		},

@@ -43,7 +43,7 @@ func NewXdslXtuCPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IMan
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field(""Leftr"DefectSeconds", 0, omci.Read),
+			omci.NewUint16Field("LeftrDefectSeconds", 0, omci.Read),
 			omci.NewUint32Field("ErrorFreeBitsCounter", 0, omci.Read),
 			omci.NewUint32Field("MinimumErrorFreeThroughputMineftr", 0, omci.Read),
 		},
