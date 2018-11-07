@@ -27,19 +27,20 @@ type XdslChannelConfigurationProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+func NewXdslChannelConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslChannelConfigurationProfile",
-		classID:  107,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslChannelConfigurationProfile",
+		ClassID:  107,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint32Field("MinimumDataRate", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint32Field("MaximumDataRate", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -58,6 +59,6 @@ func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, er
 			omci.NewUint32Field("MinimumSosBitRateUpstream", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslChannelConfigurationProfile{entity}, nil
 }

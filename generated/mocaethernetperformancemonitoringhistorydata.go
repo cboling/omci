@@ -27,19 +27,20 @@ type MocaEthernetPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MocaEthernetPerformanceMonitoringHistoryData",
-		classID:  163,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MocaEthernetPerformanceMonitoringHistoryData",
+		ClassID:  163,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -59,6 +60,6 @@ func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IMana
 			omci.NewUint32Field("OutgoingOctets", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MocaEthernetPerformanceMonitoringHistoryData{entity}, nil
 }

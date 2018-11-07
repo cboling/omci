@@ -27,17 +27,18 @@ type PhysicalPathTerminationPointXdslUniPart2 struct {
 	omci.BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PhysicalPathTerminationPointXdslUniPart2",
-		classID:  99,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PhysicalPathTerminationPointXdslUniPart2",
+		ClassID:  99,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, omci.Read|omci.Write),
 			omci.NewUint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, omci.Read|omci.Write),
@@ -49,6 +50,6 @@ func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (IManagedE
 			omci.NewUint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PhysicalPathTerminationPointXdslUniPart2{entity}, nil
 }

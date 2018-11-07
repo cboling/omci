@@ -27,17 +27,18 @@ type PhysicalPathTerminationPointCesUni struct {
 	omci.BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PhysicalPathTerminationPointCesUni",
-		classID:  12,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PhysicalPathTerminationPointCesUni",
+		ClassID:  12,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ExpectedType", 0, omci.Read|omci.Write),
 			omci.NewByteField("SensedType", 0, omci.Read),
@@ -53,6 +54,6 @@ func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity,
 			omci.NewByteField("LineType", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PhysicalPathTerminationPointCesUni{entity}, nil
 }

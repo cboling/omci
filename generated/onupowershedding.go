@@ -27,17 +27,18 @@ type OnuPowerShedding struct {
 	omci.BaseManagedEntity
 }
 
-func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
+func NewOnuPowerShedding(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "OnuPowerShedding",
-		classID:  133,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "OnuPowerShedding",
+		ClassID:  133,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("RestorePowerTimerResetInterval", 0, omci.Read|omci.Write),
 			omci.NewUint16Field("DataClassSheddingInterval", 0, omci.Read|omci.Write),
@@ -52,6 +53,6 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("SheddingStatus", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &OnuPowerShedding{entity}, nil
 }

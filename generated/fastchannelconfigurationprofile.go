@@ -27,19 +27,20 @@ type FastChannelConfigurationProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+func NewFastChannelConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "FastChannelConfigurationProfile",
-		classID:  432,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "FastChannelConfigurationProfile",
+		ClassID:  432,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint32Field("MaximumNetDataRateMaxndr", 0, omci.Read|omci.Write),
 			omci.NewUint32Field("MinimumExpectedThroughputMinetr", 0, omci.Read|omci.Write),
 			omci.NewUint32Field("MaximumGammaDataRateMaxgdr", 0, omci.Read|omci.Write),
@@ -53,6 +54,6 @@ func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntity, er
 			omci.NewByteField("RtxTcTestmodeRtxTestmode", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &FastChannelConfigurationProfile{entity}, nil
 }

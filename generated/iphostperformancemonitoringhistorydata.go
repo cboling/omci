@@ -27,19 +27,20 @@ type IpHostPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "IpHostPerformanceMonitoringHistoryData",
-		classID:  135,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "IpHostPerformanceMonitoringHistoryData",
+		ClassID:  135,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			omci.NewUint16Field("InternalError", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &IpHostPerformanceMonitoringHistoryData{entity}, nil
 }

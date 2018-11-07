@@ -27,16 +27,17 @@ type TwdmChannelManagedEntity struct {
 	omci.BaseManagedEntity
 }
 
-func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
+func NewTwdmChannelManagedEntity(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TwdmChannelManagedEntity",
-		classID:  443,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TwdmChannelManagedEntity",
+		ClassID:  443,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ActiveChannelIndication", 0, omci.Read),
 			omci.NewByteField("OperationalChannelIndication", 0, omci.Read),
@@ -44,6 +45,6 @@ func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("UpstreamWavelengthChannel", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TwdmChannelManagedEntity{entity}, nil
 }

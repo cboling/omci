@@ -27,17 +27,18 @@ type XdslLineInventoryAndStatusDataPart8 struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslLineInventoryAndStatusDataPart8",
-		classID:  414,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslLineInventoryAndStatusDataPart8",
+		ClassID:  414,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("RetransmissionUsedDownstreamRtxUsedds", 0, omci.Read),
 			omci.NewByteField("RetransmissionUsedUpstreamRtxUsedus", 0, omci.Read),
@@ -47,6 +48,6 @@ func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity
 			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart8{entity}, nil
 }

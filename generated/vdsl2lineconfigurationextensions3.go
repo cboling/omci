@@ -27,19 +27,20 @@ type Vdsl2LineConfigurationExtensions3 struct {
 	omci.BaseManagedEntity
 }
 
-func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, error) {
+func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Vdsl2LineConfigurationExtensions3",
-		classID:  410,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Vdsl2LineConfigurationExtensions3",
+		ClassID:  410,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("Ripolicyds", 0, omci.Read|omci.Write),
 			omci.NewByteField("Ripolicyus", 0, omci.Read|omci.Write),
@@ -55,6 +56,6 @@ func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, 
 			omci.NewByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Vdsl2LineConfigurationExtensions3{entity}, nil
 }

@@ -27,19 +27,20 @@ type VlanTaggingOperationConfigurationData struct {
 	omci.BaseManagedEntity
 }
 
-func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
+func NewVlanTaggingOperationConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VlanTaggingOperationConfigurationData",
-		classID:  78,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VlanTaggingOperationConfigurationData",
+		ClassID:  78,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("UpstreamVlanTaggingOperationMode", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("UpstreamVlanTagTciValue", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -48,6 +49,6 @@ func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEnti
 			omci.NewUint16Field("AssociatedMePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VlanTaggingOperationConfigurationData{entity}, nil
 }

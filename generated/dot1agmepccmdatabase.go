@@ -27,17 +27,18 @@ type Dot1AgMepCcmDatabase struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgMepCcmDatabase(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1AgMepCcmDatabase",
-		classID:  304,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1AgMepCcmDatabase",
+		ClassID:  304,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("Rmep1DatabaseTable", 0, omci.Read),
 			omci.NewUnknownField("Rmep2DatabaseTable", 0, omci.Read),
@@ -53,6 +54,6 @@ func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUnknownField("Rmep12DatabaseTable", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1AgMepCcmDatabase{entity}, nil
 }

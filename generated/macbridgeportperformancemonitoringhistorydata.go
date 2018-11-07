@@ -27,19 +27,20 @@ type MacBridgePortPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgePortPerformanceMonitoringHistoryData",
-		classID:  52,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgePortPerformanceMonitoringHistoryData",
+		ClassID:  52,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -50,6 +51,6 @@ func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IMan
 			omci.NewUint32Field("ReceivedAndDiscardedCounter", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgePortPerformanceMonitoringHistoryData{entity}, nil
 }

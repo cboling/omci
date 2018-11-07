@@ -27,17 +27,18 @@ type PhysicalPathTerminationPointEthernetUni struct {
 	omci.BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PhysicalPathTerminationPointEthernetUni",
-		classID:  11,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PhysicalPathTerminationPointEthernetUni",
+		ClassID:  11,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
 			omci.NewByteField("ExpectedType", 0, omci.Read|omci.Write),
 			omci.NewByteField("SensedType", 0, omci.Read),
@@ -56,6 +57,6 @@ func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEn
 			omci.NewByteField("PowerControl", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PhysicalPathTerminationPointEthernetUni{entity}, nil
 }

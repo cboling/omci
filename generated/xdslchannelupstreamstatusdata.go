@@ -27,16 +27,17 @@ type XdslChannelUpstreamStatusData struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntity, error) {
+func NewXdslChannelUpstreamStatusData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslChannelUpstreamStatusData",
-		classID:  103,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslChannelUpstreamStatusData",
+		ClassID:  103,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ActualInterleavingDelay", 0, omci.Read),
 			omci.NewUint32Field("ActualDataRate", 0, omci.Read),
@@ -51,6 +52,6 @@ func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntity, erro
 			omci.NewByteField("ActualLatencyPath", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslChannelUpstreamStatusData{entity}, nil
 }

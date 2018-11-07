@@ -27,19 +27,20 @@ type Vdsl2LineInventoryAndStatusDataPart4 struct {
 	omci.BaseManagedEntity
 }
 
-func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
+func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Vdsl2LineInventoryAndStatusDataPart4",
-		classID:  415,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
+		ClassID:  415,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Vdsl2LineInventoryAndStatusDataPart4{entity}, nil
 }

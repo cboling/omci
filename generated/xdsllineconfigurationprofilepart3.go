@@ -27,19 +27,20 @@ type XdslLineConfigurationProfilePart3 struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntity, error) {
+func NewXdslLineConfigurationProfilePart3(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslLineConfigurationProfilePart3",
-		classID:  106,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslLineConfigurationProfilePart3",
+		ClassID:  106,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("LoopDiagnosticsModeForcedLdsf", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("AutomodeColdStartForced", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -59,6 +60,6 @@ func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntity, 
 			omci.NewByteField("InmEquivalentInpModeDownstream", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslLineConfigurationProfilePart3{entity}, nil
 }

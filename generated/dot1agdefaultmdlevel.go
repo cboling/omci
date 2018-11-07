@@ -27,18 +27,19 @@ type Dot1AgDefaultMdLevel struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgDefaultMdLevel(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1AgDefaultMdLevel",
-		classID:  301,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1AgDefaultMdLevel",
+		ClassID:  301,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("Layer2Type", 0, omci.Read),
 			omci.NewByteField("CatchallLevel", 0, omci.Read|omci.Write),
@@ -47,6 +48,6 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("DefaultMdLevelTable", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1AgDefaultMdLevel{entity}, nil
 }

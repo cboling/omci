@@ -27,17 +27,18 @@ type Cardholder struct {
 	omci.BaseManagedEntity
 }
 
-func NewCardholder(params ...ParamData) (IManagedEntity, error) {
+func NewCardholder(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Cardholder",
-		classID:  5,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Cardholder",
+		ClassID:  5,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ActualPlugInUnitType", 0, omci.Read),
 			omci.NewByteField("ExpectedPlugInUnitType", 0, omci.Read|omci.Write),
@@ -50,6 +51,6 @@ func NewCardholder(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Cardholder{entity}, nil
 }

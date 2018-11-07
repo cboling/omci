@@ -27,17 +27,18 @@ type XdslLineInventoryAndStatusDataPart5 struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslLineInventoryAndStatusDataPart5",
-		classID:  325,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslLineInventoryAndStatusDataPart5",
+		ClassID:  325,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("FextDownstreamSnrMargin", 0, omci.Read),
 			omci.NewUint16Field("NextDownstreamSnrMargin", 0, omci.Read),
@@ -57,6 +58,6 @@ func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity
 			omci.NewUint16Field("NextUpstreamActualAggregateTransmitPower", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart5{entity}, nil
 }

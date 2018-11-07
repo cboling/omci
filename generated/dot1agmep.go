@@ -27,19 +27,20 @@ type Dot1AgMep struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1AgMep(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgMep(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1AgMep",
-		classID:  302,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1AgMep",
+		ClassID:  302,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("Layer2EntityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("Layer2Type", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -57,6 +58,6 @@ func NewDot1AgMep(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("AlarmClearSoakTime", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1AgMep{entity}, nil
 }

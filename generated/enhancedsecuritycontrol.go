@@ -27,18 +27,19 @@ type EnhancedSecurityControl struct {
 	omci.BaseManagedEntity
 }
 
-func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
+func NewEnhancedSecurityControl(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "EnhancedSecurityControl",
-		classID:  332,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "EnhancedSecurityControl",
+		ClassID:  332,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("OltCryptoCapabilities", 0, omci.Write),
 			omci.NewUnknownField("OltRandomChallengeTable", 0, omci.Read|omci.Write),
@@ -54,6 +55,6 @@ func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("EffectiveKeyLength", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &EnhancedSecurityControl{entity}, nil
 }

@@ -27,19 +27,20 @@ type MplsPseudowireTerminationPoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewMplsPseudowireTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MplsPseudowireTerminationPoint",
-		classID:  333,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MplsPseudowireTerminationPoint",
+		ClassID:  333,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("TpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -58,6 +59,6 @@ func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, err
 			omci.NewByteField("OperationalState", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MplsPseudowireTerminationPoint{entity}, nil
 }

@@ -27,19 +27,20 @@ type Ieee8021PMapperServiceProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
+func NewIeee8021PMapperServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Ieee8021PMapperServiceProfile",
-		classID:  130,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Ieee8021PMapperServiceProfile",
+		ClassID:  130,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("TpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("InterworkTpPointerForPBitPriority0", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -56,6 +57,6 @@ func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, erro
 			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Ieee8021PMapperServiceProfile{entity}, nil
 }

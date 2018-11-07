@@ -27,19 +27,20 @@ type GemPortNetworkCtp struct {
 	omci.BaseManagedEntity
 }
 
-func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
+func NewGemPortNetworkCtp(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "GemPortNetworkCtp",
-		classID:  268,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "GemPortNetworkCtp",
+		ClassID:  268,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("PortId", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("TContPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -53,6 +54,6 @@ func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("EncryptionKeyRing", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &GemPortNetworkCtp{entity}, nil
 }

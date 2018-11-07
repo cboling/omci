@@ -27,19 +27,20 @@ type GemPortNetworkCtpPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "GemPortNetworkCtpPerformanceMonitoringHistoryData",
-		classID:  341,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "GemPortNetworkCtpPerformanceMonitoringHistoryData",
+		ClassID:  341,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -50,6 +51,6 @@ func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (
 			omci.NewUint32Field("EncryptionKeyErrors", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &GemPortNetworkCtpPerformanceMonitoringHistoryData{entity}, nil
 }

@@ -27,19 +27,20 @@ type VpNetworkCtp struct {
 	omci.BaseManagedEntity
 }
 
-func NewVpNetworkCtp(params ...ParamData) (IManagedEntity, error) {
+func NewVpNetworkCtp(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VpNetworkCtp",
-		classID:  269,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VpNetworkCtp",
+		ClassID:  269,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("VpiValue", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("UniPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -50,6 +51,6 @@ func NewVpNetworkCtp(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("Deprecated4", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VpNetworkCtp{entity}, nil
 }

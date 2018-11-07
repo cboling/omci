@@ -27,17 +27,18 @@ type OnuDynamicPowerManagementControl struct {
 	omci.BaseManagedEntity
 }
 
-func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, error) {
+func NewOnuDynamicPowerManagementControl(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "OnuDynamicPowerManagementControl",
-		classID:  336,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "OnuDynamicPowerManagementControl",
+		ClassID:  336,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("PowerReductionManagementCapability", 0, omci.Read),
 			omci.NewByteField("PowerReductionManagementMode", 0, omci.Read|omci.Write),
@@ -53,6 +54,6 @@ func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, e
 			omci.NewUint32Field("MissingConsecutiveBurstsThreshold", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &OnuDynamicPowerManagementControl{entity}, nil
 }

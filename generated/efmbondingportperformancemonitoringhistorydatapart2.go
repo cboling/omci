@@ -27,19 +27,20 @@ type EfmBondingPortPerformanceMonitoringHistoryDataPart2 struct {
 	omci.BaseManagedEntity
 }
 
-func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
+func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "EfmBondingPortPerformanceMonitoringHistoryDataPart2",
-		classID:  425,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "EfmBondingPortPerformanceMonitoringHistoryDataPart2",
+		ClassID:  425,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -57,6 +58,6 @@ func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData)
 			omci.NewUint32Field("TxMulticastBytes", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &EfmBondingPortPerformanceMonitoringHistoryDataPart2{entity}, nil
 }

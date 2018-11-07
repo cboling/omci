@@ -27,19 +27,20 @@ type VoipFeatureAccessCodes struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
+func NewVoipFeatureAccessCodes(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipFeatureAccessCodes",
-		classID:  147,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipFeatureAccessCodes",
+		ClassID:  147,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("CancelCallWaiting", 0, omci.Read|omci.Write),
 			omci.NewUnknownField("CallHold", 0, omci.Read|omci.Write),
@@ -55,6 +56,6 @@ func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUnknownField("AttendedCallTransfer", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipFeatureAccessCodes{entity}, nil
 }

@@ -27,17 +27,18 @@ type PhysicalPathTerminationPointVideoUni struct {
 	omci.BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PhysicalPathTerminationPointVideoUni",
-		classID:  82,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PhysicalPathTerminationPointVideoUni",
+		ClassID:  82,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
 			omci.NewByteField("OperationalState", 0, omci.Read),
@@ -46,6 +47,6 @@ func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntit
 			omci.NewByteField("PowerControl", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PhysicalPathTerminationPointVideoUni{entity}, nil
 }

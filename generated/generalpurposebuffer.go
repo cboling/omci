@@ -27,24 +27,25 @@ type GeneralPurposeBuffer struct {
 	omci.BaseManagedEntity
 }
 
-func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntity, error) {
+func NewGeneralPurposeBuffer(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "GeneralPurposeBuffer",
-		classID:  308,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "GeneralPurposeBuffer",
+		ClassID:  308,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint32Field("MaximumSize", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUnknownField("BufferTable", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &GeneralPurposeBuffer{entity}, nil
 }

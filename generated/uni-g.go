@@ -27,17 +27,18 @@ type UniG struct {
 	omci.BaseManagedEntity
 }
 
-func NewUniG(params ...ParamData) (IManagedEntity, error) {
+func NewUniG(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "UniG",
-		classID:  264,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "UniG",
+		ClassID:  264,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("Deprecated", 0, omci.Read|omci.Write),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
@@ -46,6 +47,6 @@ func NewUniG(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("RelayAgentOptions", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &UniG{entity}, nil
 }

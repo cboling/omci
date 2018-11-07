@@ -27,17 +27,18 @@ type ReCommonAmplifierParameters struct {
 	omci.BaseManagedEntity
 }
 
-func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {
+func NewReCommonAmplifierParameters(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "ReCommonAmplifierParameters",
-		classID:  328,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "ReCommonAmplifierParameters",
+		ClassID:  328,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("Gain", 0, omci.Read),
 			omci.NewByteField("LowerGainThreshold", 0, omci.Read|omci.Write),
@@ -52,6 +53,6 @@ func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error)
 			omci.NewByteField("AmplifierSaturationGain", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &ReCommonAmplifierParameters{entity}, nil
 }

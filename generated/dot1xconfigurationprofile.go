@@ -27,17 +27,18 @@ type Dot1XConfigurationProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+func NewDot1XConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1XConfigurationProfile",
-		classID:  291,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1XConfigurationProfile",
+		ClassID:  291,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
 			omci.NewUint16Field("CircuitIdPrefix", 0, omci.Read|omci.Write),
 			omci.NewByteField("FallbackPolicy", 0, omci.Read|omci.Write),
@@ -51,6 +52,6 @@ func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("CallingStationIdFormat", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1XConfigurationProfile{entity}, nil
 }

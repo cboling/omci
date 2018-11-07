@@ -27,16 +27,17 @@ type VoipLineStatus struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipLineStatus(params ...ParamData) (IManagedEntity, error) {
+func NewVoipLineStatus(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipLineStatus",
-		classID:  141,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipLineStatus",
+		ClassID:  141,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("VoipCodecUsed", 0, omci.Read),
 			omci.NewByteField("VoipVoiceServerStatus", 0, omci.Read),
@@ -49,6 +50,6 @@ func NewVoipLineStatus(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("EmergencyCallStatus", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipLineStatus{entity}, nil
 }

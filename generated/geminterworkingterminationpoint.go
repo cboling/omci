@@ -27,19 +27,20 @@ type GemInterworkingTerminationPoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewGemInterworkingTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "GemInterworkingTerminationPoint",
-		classID:  266,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "GemInterworkingTerminationPoint",
+		ClassID:  266,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("GemPortNetworkCtpConnectivityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("InterworkingOption", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, er
 			omci.NewByteField("GalLoopbackConfiguration", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &GemInterworkingTerminationPoint{entity}, nil
 }

@@ -27,16 +27,17 @@ type FastLineInventoryAndStatusData struct {
 	omci.BaseManagedEntity
 }
 
-func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, error) {
+func NewFastLineInventoryAndStatusData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "FastLineInventoryAndStatusData",
-		classID:  435,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "FastLineInventoryAndStatusData",
+		ClassID:  435,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ItuTG9701ProfileProfile", 0, omci.Read),
 			omci.NewUnknownField("GammaDataRAteGdr", 0, omci.Read),
@@ -47,6 +48,6 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, err
 			omci.NewUnknownField("NtSerialNumberNtSystemSerialnr", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &FastLineInventoryAndStatusData{entity}, nil
 }

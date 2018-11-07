@@ -27,18 +27,19 @@ type AniG struct {
 	omci.BaseManagedEntity
 }
 
-func NewAniG(params ...ParamData) (IManagedEntity, error) {
+func NewAniG(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "AniG",
-		classID:  263,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "AniG",
+		ClassID:  263,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Test,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("SrIndication", 0, omci.Read),
 			omci.NewUint16Field("TotalTcontNumber", 0, omci.Read),
@@ -58,6 +59,6 @@ func NewAniG(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("UpperTransmitPowerThreshold", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &AniG{entity}, nil
 }

@@ -27,19 +27,20 @@ type TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 struct {
 	omci.BaseManagedEntity
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart1",
-		classID:  449,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart1",
+		ClassID:  449,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -58,6 +59,6 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamDa
 			omci.NewUint32Field("TuningControlRequestsFailedWithOnuReactivation", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TwdmChannelTuningPerformanceMonitoringHistoryDataPart1{entity}, nil
 }

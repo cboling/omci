@@ -27,19 +27,20 @@ type Dot1AgMaintenanceAssociation struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgMaintenanceAssociation(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1AgMaintenanceAssociation",
-		classID:  300,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1AgMaintenanceAssociation",
+		ClassID:  300,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("MdPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("ShortMaNameFormat", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -50,6 +51,6 @@ func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error
 			omci.NewByteField("SenderIdPermission", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1AgMaintenanceAssociation{entity}, nil
 }

@@ -27,19 +27,20 @@ type SipUserData struct {
 	omci.BaseManagedEntity
 }
 
-func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
+func NewSipUserData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "SipUserData",
-		classID:  153,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "SipUserData",
+		ClassID:  153,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("SipAgentPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("UserPartAor", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -55,6 +56,6 @@ func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("ReceiverOffHookRohTimer", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &SipUserData{entity}, nil
 }

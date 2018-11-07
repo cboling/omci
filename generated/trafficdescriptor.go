@@ -27,19 +27,20 @@ type TrafficDescriptor struct {
 	omci.BaseManagedEntity
 }
 
-func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
+func NewTrafficDescriptor(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TrafficDescriptor",
-		classID:  280,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TrafficDescriptor",
+		ClassID:  280,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint32Field("Cir", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint32Field("Pir", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("MeterType", 0, omci.Read|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TrafficDescriptor{entity}, nil
 }

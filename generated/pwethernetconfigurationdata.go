@@ -27,25 +27,26 @@ type PwEthernetConfigurationData struct {
 	omci.BaseManagedEntity
 }
 
-func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error) {
+func NewPwEthernetConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PwEthernetConfigurationData",
-		classID:  339,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PwEthernetConfigurationData",
+		ClassID:  339,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("MplsPseudowireTpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("UniPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PwEthernetConfigurationData{entity}, nil
 }

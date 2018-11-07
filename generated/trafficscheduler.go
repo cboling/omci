@@ -27,17 +27,18 @@ type TrafficScheduler struct {
 	omci.BaseManagedEntity
 }
 
-func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
+func NewTrafficScheduler(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TrafficScheduler",
-		classID:  278,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TrafficScheduler",
+		ClassID:  278,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
 			omci.NewUint16Field("TContPointer", 0, omci.Read|omci.Write),
 			omci.NewUint16Field("TrafficSchedulerPointer", 0, omci.Read),
@@ -45,6 +46,6 @@ func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("PriorityWeight", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TrafficScheduler{entity}, nil
 }

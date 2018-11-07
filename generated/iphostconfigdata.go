@@ -27,17 +27,18 @@ type IpHostConfigData struct {
 	omci.BaseManagedEntity
 }
 
-func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
+func NewIpHostConfigData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "IpHostConfigData",
-		classID:  134,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "IpHostConfigData",
+		ClassID:  134,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("IpOptions", 0, omci.Read|omci.Write),
 			omci.NewUnknownField("MacAddress", 0, omci.Read),
@@ -57,6 +58,6 @@ func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("RelayAgentOptions", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &IpHostConfigData{entity}, nil
 }

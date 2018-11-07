@@ -27,19 +27,20 @@ type TcpUdpConfigData struct {
 	omci.BaseManagedEntity
 }
 
-func NewTcpUdpConfigData(params ...ParamData) (IManagedEntity, error) {
+func NewTcpUdpConfigData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TcpUdpConfigData",
-		classID:  136,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TcpUdpConfigData",
+		ClassID:  136,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("PortId", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("Protocol", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -47,6 +48,6 @@ func NewTcpUdpConfigData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("IpHostPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TcpUdpConfigData{entity}, nil
 }

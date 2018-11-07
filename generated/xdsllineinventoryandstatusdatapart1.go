@@ -27,16 +27,17 @@ type XdslLineInventoryAndStatusDataPart1 struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslLineInventoryAndStatusDataPart1",
-		classID:  100,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslLineInventoryAndStatusDataPart1",
+		ClassID:  100,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint64Field("XtuCG9941VendorId", 0, omci.Read),
 			omci.NewUint64Field("XtuRG9941VendorId", 0, omci.Read),
@@ -55,6 +56,6 @@ func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity
 			omci.NewByteField("InitializationSuccessFailureCause", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart1{entity}, nil
 }

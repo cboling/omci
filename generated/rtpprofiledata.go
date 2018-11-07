@@ -27,19 +27,20 @@ type RtpProfileData struct {
 	omci.BaseManagedEntity
 }
 
-func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
+func NewRtpProfileData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "RtpProfileData",
-		classID:  143,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "RtpProfileData",
+		ClassID:  143,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("LocalPortMin", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("LocalPortMax", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("IpHostConfigPointer", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &RtpProfileData{entity}, nil
 }

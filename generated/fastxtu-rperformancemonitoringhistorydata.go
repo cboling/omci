@@ -27,19 +27,20 @@ type FastXtuRPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "FastXtuRPerformanceMonitoringHistoryData",
-		classID:  438,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "FastXtuRPerformanceMonitoringHistoryData",
+		ClassID:  438,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -47,6 +48,6 @@ func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			omci.NewUint32Field("SuccessfulRpaCounter", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &FastXtuRPerformanceMonitoringHistoryData{entity}, nil
 }

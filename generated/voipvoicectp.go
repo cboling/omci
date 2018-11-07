@@ -27,19 +27,20 @@ type VoipVoiceCtp struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {
+func NewVoipVoiceCtp(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipVoiceCtp",
-		classID:  139,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipVoiceCtp",
+		ClassID:  139,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("UserProtocolPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("PptpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -47,6 +48,6 @@ func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("SignallingCode", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipVoiceCtp{entity}, nil
 }

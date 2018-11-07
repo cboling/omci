@@ -27,19 +27,20 @@ type Dot1RateLimiter struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
+func NewDot1RateLimiter(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1RateLimiter",
-		classID:  298,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1RateLimiter",
+		ClassID:  298,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("ParentMePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -48,6 +49,6 @@ func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("UpstreamMulticastPayloadRatePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1RateLimiter{entity}, nil
 }

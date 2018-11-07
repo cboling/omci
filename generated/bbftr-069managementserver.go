@@ -27,23 +27,24 @@ type BbfTr069ManagementServer struct {
 	omci.BaseManagedEntity
 }
 
-func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntity, error) {
+func NewBbfTr069ManagementServer(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "BbfTr069ManagementServer",
-		classID:  340,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "BbfTr069ManagementServer",
+		ClassID:  340,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
 			omci.NewUint16Field("AcsNetworkAddress", 0, omci.Read|omci.Write),
 			omci.NewUint16Field("AssociatedTag", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &BbfTr069ManagementServer{entity}, nil
 }

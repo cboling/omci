@@ -27,24 +27,25 @@ type FastVectoringLineConfigurationExtensions struct {
 	omci.BaseManagedEntity
 }
 
-func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedEntity, error) {
+func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "FastVectoringLineConfigurationExtensions",
-		classID:  434,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "FastVectoringLineConfigurationExtensions",
+		ClassID:  434,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, omci.Read|omci.Write),
 			omci.NewByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &FastVectoringLineConfigurationExtensions{entity}, nil
 }

@@ -27,19 +27,20 @@ type InterworkingVccTerminationPoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewInterworkingVccTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "InterworkingVccTerminationPoint",
-		classID:  14,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "InterworkingVccTerminationPoint",
+		ClassID:  14,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("VciValue", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("VpNetworkCtpConnectivityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -52,6 +53,6 @@ func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, er
 			omci.NewByteField("OperationalState", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &InterworkingVccTerminationPoint{entity}, nil
 }

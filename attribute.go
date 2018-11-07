@@ -166,3 +166,14 @@ func NewSUint64Field(name string, defVal uint16, access AttributeAccess) *Uint64
 		Attribute: Attribute{name: name, defValue: defVal, size: 8, access: access},
 	}
 }
+
+// TODO: UnknownField is just a placeholder to catch unhandled Attribute sizes/structs
+type UnknownField struct {
+	Attribute
+}
+
+func NewUnknownField(name string, defVal uint16, access AttributeAccess) *UnknownField {
+	return &UnknownField{
+		Attribute: Attribute{name: name, defValue: defVal, size: 99999999, access: access},
+	}
+}

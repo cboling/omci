@@ -27,19 +27,20 @@ type EthernetPerformanceMonitoringHistoryData3 struct {
 	omci.BaseManagedEntity
 }
 
-func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "EthernetPerformanceMonitoringHistoryData3",
-		classID:  296,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "EthernetPerformanceMonitoringHistoryData3",
+		ClassID:  296,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -59,6 +60,6 @@ func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (IManaged
 			omci.NewUint32Field("Packets1024To1518Octets", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &EthernetPerformanceMonitoringHistoryData3{entity}, nil
 }

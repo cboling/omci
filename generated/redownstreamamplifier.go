@@ -27,18 +27,19 @@ type ReDownstreamAmplifier struct {
 	omci.BaseManagedEntity
 }
 
-func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
+func NewReDownstreamAmplifier(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "ReDownstreamAmplifier",
-		classID:  316,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "ReDownstreamAmplifier",
+		ClassID:  316,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Test,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
 			omci.NewByteField("OperationalState", 0, omci.Read),
@@ -54,6 +55,6 @@ func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("R'S'SplitterCouplingRatio", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &ReDownstreamAmplifier{entity}, nil
 }

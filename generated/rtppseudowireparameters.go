@@ -27,19 +27,20 @@ type RtpPseudowireParameters struct {
 	omci.BaseManagedEntity
 }
 
-func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
+func NewRtpPseudowireParameters(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "RtpPseudowireParameters",
-		classID:  283,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "RtpPseudowireParameters",
+		ClassID:  283,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("ClockReference", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("RtpTimestampMode", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -49,6 +50,6 @@ func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint64Field("ExpectedSsrc", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &RtpPseudowireParameters{entity}, nil
 }

@@ -27,22 +27,23 @@ type Omci struct {
 	omci.BaseManagedEntity
 }
 
-func NewOmci(params ...ParamData) (IManagedEntity, error) {
+func NewOmci(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Omci",
-		classID:  287,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Omci",
+		ClassID:  287,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint16Field("MeTypeTable", 0, omci.Read),
 			omci.NewByteField("MessageTypeTable", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Omci{entity}, nil
 }

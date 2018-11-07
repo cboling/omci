@@ -27,17 +27,18 @@ type SoftwareImage struct {
 	omci.BaseManagedEntity
 }
 
-func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
+func NewSoftwareImage(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "SoftwareImage",
-		classID:  7,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "SoftwareImage",
+		ClassID:  7,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.DownloadSection,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("Version", 0, omci.Read),
 			omci.NewByteField("IsCommitted", 0, omci.Read),
@@ -47,6 +48,6 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUnknownField("ImageHash", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &SoftwareImage{entity}, nil
 }

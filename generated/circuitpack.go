@@ -27,18 +27,19 @@ type CircuitPack struct {
 	omci.BaseManagedEntity
 }
 
-func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
+func NewCircuitPack(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "CircuitPack",
-		classID:  6,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "CircuitPack",
+		ClassID:  6,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("Type", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("NumberOfPorts", 0, omci.Read),
@@ -56,6 +57,6 @@ func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint32Field("PowerShedOverride", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &CircuitPack{entity}, nil
 }

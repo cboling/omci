@@ -27,16 +27,17 @@ type MacBridgeConfigurationData struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgeConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgeConfigurationData",
-		classID:  46,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgeConfigurationData",
+		ClassID:  46,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("BridgeMacAddress", 0, omci.Read),
 			omci.NewUint16Field("BridgePriority", 0, omci.Read),
@@ -48,6 +49,6 @@ func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) 
 			omci.NewUint16Field("ForwardDelay", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgeConfigurationData{entity}, nil
 }

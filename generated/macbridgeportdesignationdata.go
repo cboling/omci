@@ -27,21 +27,22 @@ type MacBridgePortDesignationData struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgePortDesignationData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgePortDesignationData",
-		classID:  48,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgePortDesignationData",
+		ClassID:  48,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("DesignatedBridgeRootCostPort", 0, omci.Read),
 			omci.NewByteField("PortState", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgePortDesignationData{entity}, nil
 }

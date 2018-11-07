@@ -27,17 +27,18 @@ type Dot1XPortExtensionPackage struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {
+func NewDot1XPortExtensionPackage(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1XPortExtensionPackage",
-		classID:  290,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1XPortExtensionPackage",
+		ClassID:  290,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
 			omci.NewByteField("Dot1XEnable", 0, omci.Read|omci.Write),
 			omci.NewByteField("ActionRegister", 0, omci.Write),
@@ -53,6 +54,6 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("KeyTransmissionEnabled", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1XPortExtensionPackage{entity}, nil
 }

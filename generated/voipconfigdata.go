@@ -27,17 +27,18 @@ type VoipConfigData struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
+func NewVoipConfigData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipConfigData",
-		classID:  138,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipConfigData",
+		ClassID:  138,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("AvailableSignallingProtocols", 0, omci.Read),
 			omci.NewByteField("SignallingProtocolUsed", 0, omci.Read|omci.Write),
@@ -49,6 +50,6 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUnknownField("ProfileVersion", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipConfigData{entity}, nil
 }

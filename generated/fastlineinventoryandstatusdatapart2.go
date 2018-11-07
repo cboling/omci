@@ -27,16 +27,17 @@ type FastLineInventoryAndStatusDataPart2 struct {
 	omci.BaseManagedEntity
 }
 
-func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {
+func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "FastLineInventoryAndStatusDataPart2",
-		classID:  436,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "FastLineInventoryAndStatusDataPart2",
+		ClassID:  436,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, omci.Read),
 			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, omci.Read),
@@ -45,6 +46,6 @@ func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &FastLineInventoryAndStatusDataPart2{entity}, nil
 }

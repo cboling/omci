@@ -27,23 +27,24 @@ type TCont struct {
 	omci.BaseManagedEntity
 }
 
-func NewTCont(params ...ParamData) (IManagedEntity, error) {
+func NewTCont(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "TCont",
-		classID:  262,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "TCont",
+		ClassID:  262,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
 			omci.NewUint16Field("AllocId", 0, omci.Read|omci.Write),
 			omci.NewByteField("Deprecated", 0, omci.Read),
 			omci.NewByteField("Policy", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &TCont{entity}, nil
 }

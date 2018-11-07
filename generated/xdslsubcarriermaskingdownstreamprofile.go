@@ -27,19 +27,20 @@ type XdslSubcarrierMaskingDownstreamProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEntity, error) {
+func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslSubcarrierMaskingDownstreamProfile",
-		classID:  108,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslSubcarrierMaskingDownstreamProfile",
+		ClassID:  108,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUnknownField("DownstreamSubcarrierMask1", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUnknownField("DownstreamSubcarrierMask2", 0, omci.Read|omci.Write),
@@ -48,6 +49,6 @@ func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEnt
 			omci.NewByteField("MaskValid", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslSubcarrierMaskingDownstreamProfile{entity}, nil
 }

@@ -27,17 +27,18 @@ type PhysicalPathTerminationPointMocaUni struct {
 	omci.BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PhysicalPathTerminationPointMocaUni",
-		classID:  162,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PhysicalPathTerminationPointMocaUni",
+		ClassID:  162,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("LoopbackConfiguration", 0, omci.Read|omci.Write),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
@@ -55,6 +56,6 @@ func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity
 			omci.NewUint16Field("LastOperationalFrequency", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PhysicalPathTerminationPointMocaUni{entity}, nil
 }

@@ -21,6 +21,10 @@ package generated
 
 import (
 	"../../omci"
+	"errors"
+	"fmt"
+	"github.com/google/gopacket"
+	"math/bits"
 )
 
 // ManagedEntityInfo provides ManagedEntity information
@@ -222,4 +226,12 @@ func init() {
 	classToManagedEntityMap[450] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[451] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
+}
+
+func LoadManagedEntityDefinition(classID uint16, params ...ParamData) (omci.IManagedEntity, error) {
+	definition, ok := classToManagedEntityMap[classID]
+	if ok {
+		return definition, nil
+	}
+	return nil, errors.New("managed entity definition not found")
 }

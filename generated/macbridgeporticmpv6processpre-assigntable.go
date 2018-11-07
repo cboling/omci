@@ -27,16 +27,17 @@ type MacBridgePortIcmpv6ProcessPreAssignTable struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
-		classID:  348,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
+		ClassID:  348,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("Icmpv6ErrorMessagesProcessing", 0, omci.Read|omci.Write),
 			omci.NewByteField("Icmpv6InformationalMessagesProcessing", 0, omci.Read|omci.Write),
@@ -49,6 +50,6 @@ func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedE
 			omci.NewByteField("UnknownIcmpv6Processing", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgePortIcmpv6ProcessPreAssignTable{entity}, nil
 }

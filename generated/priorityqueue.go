@@ -27,17 +27,18 @@ type PriorityQueue struct {
 	omci.BaseManagedEntity
 }
 
-func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
+func NewPriorityQueue(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "PriorityQueue",
-		classID:  277,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "PriorityQueue",
+		ClassID:  277,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("QueueConfigurationOption", 0, omci.Read),
 			omci.NewUint16Field("MaximumQueueSize", 0, omci.Read),
@@ -57,6 +58,6 @@ func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("DropPrecedenceColourMarking", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &PriorityQueue{entity}, nil
 }

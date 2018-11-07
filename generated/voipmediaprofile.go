@@ -27,19 +27,20 @@ type VoipMediaProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
+func NewVoipMediaProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipMediaProfile",
-		classID:  142,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipMediaProfile",
+		ClassID:  142,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("FaxMode", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("VoiceServiceProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -59,6 +60,6 @@ func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("RtpProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipMediaProfile{entity}, nil
 }

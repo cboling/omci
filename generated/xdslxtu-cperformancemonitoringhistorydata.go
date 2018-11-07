@@ -27,19 +27,20 @@ type XdslXtuCPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslXtuCPerformanceMonitoringHistoryData",
-		classID:  112,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslXtuCPerformanceMonitoringHistoryData",
+		ClassID:  112,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -59,6 +60,6 @@ func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			omci.NewUint16Field("SosSuccessCount,FarEnd", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslXtuCPerformanceMonitoringHistoryData{entity}, nil
 }

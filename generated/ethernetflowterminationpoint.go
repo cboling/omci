@@ -27,19 +27,20 @@ type EthernetFlowTerminationPoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetFlowTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "EthernetFlowTerminationPoint",
-		classID:  286,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "EthernetFlowTerminationPoint",
+		ClassID:  286,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUnknownField("DestinationMac", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUnknownField("SourceMac", 0, omci.Read),
@@ -48,6 +49,6 @@ func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error
 			omci.NewByteField("Loopback", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &EthernetFlowTerminationPoint{entity}, nil
 }

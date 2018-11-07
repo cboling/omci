@@ -27,17 +27,18 @@ type MacBridgePortFilterPreAssignTable struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgePortFilterPreAssignTable",
-		classID:  79,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgePortFilterPreAssignTable",
+		ClassID:  79,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("Ipv4MulticastFiltering", 0, omci.Read|omci.Write),
 			omci.NewByteField("Ipv6MulticastFiltering", 0, omci.Read|omci.Write),
@@ -51,6 +52,6 @@ func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, 
 			omci.NewByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgePortFilterPreAssignTable{entity}, nil
 }

@@ -27,19 +27,20 @@ type SnmpConfigurationData struct {
 	omci.BaseManagedEntity
 }
 
-func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
+func NewSnmpConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "SnmpConfigurationData",
-		classID:  335,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "SnmpConfigurationData",
+		ClassID:  335,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("SnmpVersion", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("SnmpAgentAddress", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("SysNamePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &SnmpConfigurationData{entity}, nil
 }

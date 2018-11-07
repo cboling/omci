@@ -27,20 +27,21 @@ type MulticastGemInterworkingTerminationPoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MulticastGemInterworkingTerminationPoint",
-		classID:  281,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MulticastGemInterworkingTerminationPoint",
+		ClassID:  281,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.GetNext,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("GemPortNetworkCtpConnectivityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("InterworkingOption", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -51,6 +52,6 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 			omci.NewUnknownField("Ipv6MulticastAddressTable", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MulticastGemInterworkingTerminationPoint{entity}, nil
 }

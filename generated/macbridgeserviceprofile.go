@@ -27,19 +27,20 @@ type MacBridgeServiceProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgeServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "MacBridgeServiceProfile",
-		classID:  45,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "MacBridgeServiceProfile",
+		ClassID:  45,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("SpanningTreeInd", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("LearningInd", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -53,6 +54,6 @@ func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint32Field("DynamicFilteringAgeingTime", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &MacBridgeServiceProfile{entity}, nil
 }

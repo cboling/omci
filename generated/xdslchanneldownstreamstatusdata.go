@@ -27,16 +27,17 @@ type XdslChannelDownstreamStatusData struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, error) {
+func NewXdslChannelDownstreamStatusData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslChannelDownstreamStatusData",
-		classID:  102,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslChannelDownstreamStatusData",
+		ClassID:  102,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("ActualInterleavingDelay", 0, omci.Read),
 			omci.NewUint32Field("ActualDataRate", 0, omci.Read),
@@ -51,6 +52,6 @@ func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, er
 			omci.NewByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslChannelDownstreamStatusData{entity}, nil
 }

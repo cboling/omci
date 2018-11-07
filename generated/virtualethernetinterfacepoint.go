@@ -27,17 +27,18 @@ type VirtualEthernetInterfacePoint struct {
 	omci.BaseManagedEntity
 }
 
-func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, error) {
+func NewVirtualEthernetInterfacePoint(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VirtualEthernetInterfacePoint",
-		classID:  329,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VirtualEthernetInterfacePoint",
+		ClassID:  329,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
 			omci.NewByteField("OperationalState", 0, omci.Read),
@@ -46,6 +47,6 @@ func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, erro
 			omci.NewUint16Field("IanaAssignedPort", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VirtualEthernetInterfacePoint{entity}, nil
 }

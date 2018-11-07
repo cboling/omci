@@ -27,13 +27,13 @@ type OnuData struct {
 	omci.BaseManagedEntity
 }
 
-func NewOnuData(params ...ParamData) (IManagedEntity, error) {
+func NewOnuData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "OnuData",
-		classID:  2,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "OnuData",
+		ClassID:  2,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.GetAllAlarms,
@@ -42,11 +42,12 @@ func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 			omci.MibUploadNext,
 			omci.MibReset,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("MibDataSync", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &OnuData{entity}, nil
 }

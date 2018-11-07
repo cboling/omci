@@ -27,19 +27,20 @@ type SipAgentConfigData struct {
 	omci.BaseManagedEntity
 }
 
-func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
+func NewSipAgentConfigData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "SipAgentConfigData",
-		classID:  150,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "SipAgentConfigData",
+		ClassID:  150,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("ProxyServerAddressPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint16Field("OutboundProxyAddressPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -58,6 +59,6 @@ func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUint16Field("RedundantSipAgentPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &SipAgentConfigData{entity}, nil
 }

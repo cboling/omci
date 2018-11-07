@@ -27,20 +27,21 @@ type NetworkDialPlanTable struct {
 	omci.BaseManagedEntity
 }
 
-func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntity, error) {
+func NewNetworkDialPlanTable(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "NetworkDialPlanTable",
-		classID:  145,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "NetworkDialPlanTable",
+		ClassID:  145,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.GetNext,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("DialPlanNumber", 0, omci.Read),
 			omci.NewUint16Field("DialPlanTableMaxSize", 0, omci.Read|omci.SetByCreate),
@@ -50,6 +51,6 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntity, error) {
 			omci.NewByteField("DialPlanTable", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &NetworkDialPlanTable{entity}, nil
 }

@@ -27,25 +27,26 @@ type GalEthernetPerformanceMonitoringHistoryData struct {
 	omci.BaseManagedEntity
 }
 
-func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "GalEthernetPerformanceMonitoringHistoryData",
-		classID:  276,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "GalEthernetPerformanceMonitoringHistoryData",
+		ClassID:  276,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("IntervalEndTime", 0, omci.Read),
 			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewUint32Field("DiscardedFrames", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &GalEthernetPerformanceMonitoringHistoryData{entity}, nil
 }

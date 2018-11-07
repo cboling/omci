@@ -27,17 +27,18 @@ type OltG struct {
 	omci.BaseManagedEntity
 }
 
-func NewOltG(params ...ParamData) (IManagedEntity, error) {
+func NewOltG(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "OltG",
-		classID:  131,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "OltG",
+		ClassID:  131,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewUint32Field("OltVendorId", 0, omci.Read|omci.Write),
 			omci.NewUnknownField("EquipmentId", 0, omci.Read|omci.Write),
@@ -45,6 +46,6 @@ func NewOltG(params ...ParamData) (IManagedEntity, error) {
 			omci.NewUnknownField("TimeOfDayInformation", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &OltG{entity}, nil
 }

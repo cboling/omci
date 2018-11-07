@@ -27,19 +27,20 @@ type VoipApplicationServiceProfile struct {
 	omci.BaseManagedEntity
 }
 
-func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, error) {
+func NewVoipApplicationServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "VoipApplicationServiceProfile",
-		classID:  146,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "VoipApplicationServiceProfile",
+		ClassID:  146,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewByteField("CidFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
 			omci.NewByteField("CallWaitingFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
@@ -52,6 +53,6 @@ func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, erro
 			omci.NewUint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &VoipApplicationServiceProfile{entity}, nil
 }

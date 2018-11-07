@@ -27,19 +27,20 @@ type XdslChannelConfigurationProfilePart2 struct {
 	omci.BaseManagedEntity
 }
 
-func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {
+func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "XdslChannelConfigurationProfilePart2",
-		classID:  412,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "XdslChannelConfigurationProfilePart2",
+		ClassID:  412,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, omci.Read|omci.Write),
 			omci.NewUint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, omci.Read|omci.Write),
@@ -56,6 +57,6 @@ func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntit
 			omci.NewUint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, omci.Read|omci.Write),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &XdslChannelConfigurationProfilePart2{entity}, nil
 }

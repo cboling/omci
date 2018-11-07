@@ -27,23 +27,24 @@ type EthernetPseudowireParameters struct {
 	omci.BaseManagedEntity
 }
 
-func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetPseudowireParameters(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "EthernetPseudowireParameters",
-		classID:  400,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "EthernetPseudowireParameters",
+		ClassID:  400,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Set,
 			omci.Get,
 			omci.Create,
 			omci.Delete,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
 			omci.NewUint16Field("Mtu", 0, omci.Read|omci.Write|omci.SetByCreate),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &EthernetPseudowireParameters{entity}, nil
 }

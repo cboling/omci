@@ -27,23 +27,24 @@ type Dot1AgCfmStack struct {
 	omci.BaseManagedEntity
 }
 
-func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgCfmStack(params ...ParamData) (omci.IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		name:     "Dot1AgCfmStack",
-		classID:  305,
-		entityID: eid,
-		msgTypes: []omci.MsgType{
+	entity := omci.BaseManagedEntity{
+		Name:     "Dot1AgCfmStack",
+		ClassID:  305,
+		EntityID: eid,
+		MessageTypes: []omci.MsgType{
 			omci.Get,
 			omci.GetNext,
 		},
-		attributeList: []omci.IAttribute{
+		AttributeMask: 0,
+		Attributes: []omci.IAttribute{
 			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
 			omci.NewByteField("Layer2Type", 0, omci.Read),
 			omci.NewUnknownField("MpStatusTable", 0, omci.Read),
 			omci.NewUnknownField("ConfigurationErrorListTable", 0, omci.Read),
 		},
 	}
-	entity.computeAttributeMask()
+	entity.ComputeAttributeMask()
 	return &Dot1AgCfmStack{entity}, nil
 }
