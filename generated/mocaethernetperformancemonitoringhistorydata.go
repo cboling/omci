@@ -24,7 +24,7 @@ import (
 )
 
 type MocaEthernetPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type VoipFeatureAccessCodes struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {

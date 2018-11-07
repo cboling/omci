@@ -24,7 +24,7 @@ import (
 )
 
 type Aal5Profile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewAal5Profile(params ...ParamData) (IManagedEntity, error) {

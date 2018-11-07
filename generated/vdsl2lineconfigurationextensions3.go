@@ -24,7 +24,7 @@ import (
 )
 
 type Vdsl2LineConfigurationExtensions3 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type FastDataPathConfigurationProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntity, error) {

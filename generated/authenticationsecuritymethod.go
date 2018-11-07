@@ -24,7 +24,7 @@ import (
 )
 
 type AuthenticationSecurityMethod struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type OnuDynamicPowerManagementControl struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, error) {

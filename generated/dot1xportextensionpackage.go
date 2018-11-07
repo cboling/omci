@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1XPortExtensionPackage struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {

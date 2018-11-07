@@ -24,7 +24,7 @@ import (
 )
 
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

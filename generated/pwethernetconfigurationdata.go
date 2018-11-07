@@ -24,7 +24,7 @@ import (
 )
 
 type PwEthernetConfigurationData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error) {

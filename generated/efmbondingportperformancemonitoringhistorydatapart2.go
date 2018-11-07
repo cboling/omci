@@ -24,7 +24,7 @@ import (
 )
 
 type EfmBondingPortPerformanceMonitoringHistoryDataPart2 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {

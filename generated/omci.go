@@ -24,7 +24,7 @@ import (
 )
 
 type Omci struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOmci(params ...ParamData) (IManagedEntity, error) {

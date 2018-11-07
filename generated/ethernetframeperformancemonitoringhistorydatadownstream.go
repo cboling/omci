@@ -24,7 +24,7 @@ import (
 )
 
 type EthernetFramePerformanceMonitoringHistoryDataDownstream struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (IManagedEntity, error) {

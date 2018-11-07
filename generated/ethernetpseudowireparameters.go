@@ -24,7 +24,7 @@ import (
 )
 
 type EthernetPseudowireParameters struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntity, error) {

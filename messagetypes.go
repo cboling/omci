@@ -29,7 +29,7 @@ type CreateRequest struct {
 	msgBase
 	Attributes []IAttribute // Set-by-create attributes
 
-	cachedME IManagedEntity // Cache any ME decoded from the request  (TODO: Should these be public?)
+	cachedME generated.IManagedEntity // Cache any ME decoded from the request  (TODO: Should these be public?)
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {

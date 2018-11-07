@@ -24,7 +24,7 @@ import (
 )
 
 type RtpPseudowireParameters struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntity, error) {

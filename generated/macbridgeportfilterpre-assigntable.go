@@ -24,7 +24,7 @@ import (
 )
 
 type MacBridgePortFilterPreAssignTable struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, error) {

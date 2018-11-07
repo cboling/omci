@@ -24,7 +24,7 @@ import (
 )
 
 type FastLineInventoryAndStatusDataPart2 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {

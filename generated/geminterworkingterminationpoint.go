@@ -24,7 +24,7 @@ import (
 )
 
 type GemInterworkingTerminationPoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {

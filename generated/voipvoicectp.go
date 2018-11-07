@@ -24,7 +24,7 @@ import (
 )
 
 type VoipVoiceCtp struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {

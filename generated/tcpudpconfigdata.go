@@ -24,7 +24,7 @@ import (
 )
 
 type TcpUdpConfigData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTcpUdpConfigData(params ...ParamData) (IManagedEntity, error) {

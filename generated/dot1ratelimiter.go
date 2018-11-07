@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1RateLimiter struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {

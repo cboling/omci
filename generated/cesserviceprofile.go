@@ -24,7 +24,7 @@ import (
 )
 
 type CesServiceProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewCesServiceProfile(params ...ParamData) (IManagedEntity, error) {

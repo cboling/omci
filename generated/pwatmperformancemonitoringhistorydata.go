@@ -24,7 +24,7 @@ import (
 )
 
 type PwAtmPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

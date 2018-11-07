@@ -24,7 +24,7 @@ import (
 )
 
 type BbfTr069ManagementServer struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntity, error) {

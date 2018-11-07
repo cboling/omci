@@ -24,7 +24,7 @@ import (
 )
 
 type RadiusPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

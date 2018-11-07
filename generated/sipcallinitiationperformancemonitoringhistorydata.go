@@ -24,7 +24,7 @@ import (
 )
 
 type SipCallInitiationPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

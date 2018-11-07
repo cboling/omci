@@ -24,7 +24,7 @@ import (
 )
 
 type OnuRemoteDebug struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {

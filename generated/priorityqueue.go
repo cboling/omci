@@ -24,7 +24,7 @@ import (
 )
 
 type PriorityQueue struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {

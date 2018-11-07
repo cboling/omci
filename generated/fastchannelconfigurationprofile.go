@@ -24,7 +24,7 @@ import (
 )
 
 type FastChannelConfigurationProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {

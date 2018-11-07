@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1AgMepCcmDatabase struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {

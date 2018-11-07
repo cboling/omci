@@ -24,7 +24,7 @@ import (
 )
 
 type VoipLineStatus struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipLineStatus(params ...ParamData) (IManagedEntity, error) {

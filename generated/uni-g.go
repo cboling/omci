@@ -24,7 +24,7 @@ import (
 )
 
 type UniG struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewUniG(params ...ParamData) (IManagedEntity, error) {

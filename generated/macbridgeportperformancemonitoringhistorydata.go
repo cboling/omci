@@ -24,7 +24,7 @@ import (
 )
 
 type MacBridgePortPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

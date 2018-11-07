@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1AgDefaultMdLevel struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type RtpProfileData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {

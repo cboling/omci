@@ -24,7 +24,7 @@ import (
 )
 
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {

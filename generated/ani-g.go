@@ -24,7 +24,7 @@ import (
 )
 
 type AniG struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewAniG(params ...ParamData) (IManagedEntity, error) {

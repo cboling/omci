@@ -24,7 +24,7 @@ import (
 )
 
 type IpHostPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

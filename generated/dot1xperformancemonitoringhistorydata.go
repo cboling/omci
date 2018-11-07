@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1XPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

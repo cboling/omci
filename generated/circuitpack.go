@@ -24,7 +24,7 @@ import (
 )
 
 type CircuitPack struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {

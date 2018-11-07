@@ -24,7 +24,7 @@ import (
 )
 
 type FileTransferController struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {

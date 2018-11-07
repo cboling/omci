@@ -24,7 +24,7 @@ import (
 )
 
 type CallControlPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type EfmBondingLink struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEfmBondingLink(params ...ParamData) (IManagedEntity, error) {

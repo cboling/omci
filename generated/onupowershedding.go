@@ -24,7 +24,7 @@ import (
 )
 
 type OnuPowerShedding struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {

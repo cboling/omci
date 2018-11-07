@@ -24,7 +24,7 @@ import (
 )
 
 type VoipApplicationServiceProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, error) {

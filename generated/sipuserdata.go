@@ -24,7 +24,7 @@ import (
 )
 
 type SipUserData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSipUserData(params ...ParamData) (IManagedEntity, error) {

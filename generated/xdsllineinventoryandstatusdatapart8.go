@@ -24,7 +24,7 @@ import (
 )
 
 type XdslLineInventoryAndStatusDataPart8 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity, error) {

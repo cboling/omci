@@ -24,7 +24,7 @@ import (
 )
 
 type XdslLineConfigurationProfilePart2 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {

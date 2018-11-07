@@ -24,7 +24,7 @@ import (
 )
 
 type MacBridgePortConfigurationData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntity, error) {

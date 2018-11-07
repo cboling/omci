@@ -24,7 +24,7 @@ import (
 )
 
 type Ieee8021PMapperServiceProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {

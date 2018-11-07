@@ -24,7 +24,7 @@ import (
 )
 
 type VoipConfigData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {

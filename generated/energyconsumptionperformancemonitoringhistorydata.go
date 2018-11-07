@@ -24,7 +24,7 @@ import (
 )
 
 type EnergyConsumptionPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

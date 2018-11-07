@@ -24,7 +24,7 @@ import (
 )
 
 type EthernetFlowTerminationPoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {

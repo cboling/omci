@@ -24,7 +24,7 @@ import (
 )
 
 type FastVectoringLineConfigurationExtensions struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedEntity, error) {

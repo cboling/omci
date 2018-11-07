@@ -24,7 +24,7 @@ import (
 )
 
 type FastXtuRPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

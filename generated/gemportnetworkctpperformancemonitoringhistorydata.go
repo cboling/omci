@@ -24,7 +24,7 @@ import (
 )
 
 type GemPortNetworkCtpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

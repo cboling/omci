@@ -24,7 +24,7 @@ import (
 )
 
 type MgcConfigData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type XdslChannelDownstreamStatusData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, error) {

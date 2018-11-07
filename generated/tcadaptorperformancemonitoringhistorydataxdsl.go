@@ -24,7 +24,7 @@ import (
 )
 
 type TcAdaptorPerformanceMonitoringHistoryDataXdsl struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IManagedEntity, error) {

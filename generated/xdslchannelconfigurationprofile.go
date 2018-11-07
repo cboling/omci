@@ -24,7 +24,7 @@ import (
 )
 
 type XdslChannelConfigurationProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {

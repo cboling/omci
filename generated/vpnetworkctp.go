@@ -24,7 +24,7 @@ import (
 )
 
 type VpNetworkCtp struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVpNetworkCtp(params ...ParamData) (IManagedEntity, error) {

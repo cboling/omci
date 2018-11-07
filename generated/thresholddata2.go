@@ -24,7 +24,7 @@ import (
 )
 
 type ThresholdData2 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewThresholdData2(params ...ParamData) (IManagedEntity, error) {

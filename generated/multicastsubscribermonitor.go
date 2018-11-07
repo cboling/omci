@@ -24,7 +24,7 @@ import (
 )
 
 type MulticastSubscriberMonitor struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) {

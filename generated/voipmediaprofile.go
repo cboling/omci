@@ -24,7 +24,7 @@ import (
 )
 
 type VoipMediaProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {

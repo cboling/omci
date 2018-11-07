@@ -24,7 +24,7 @@ import (
 )
 
 type NetworkAddress struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewNetworkAddress(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type OltG struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOltG(params ...ParamData) (IManagedEntity, error) {

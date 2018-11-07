@@ -24,7 +24,7 @@ import (
 )
 
 type TwdmChannelOmciPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

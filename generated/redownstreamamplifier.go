@@ -24,7 +24,7 @@ import (
 )
 
 type ReDownstreamAmplifier struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {

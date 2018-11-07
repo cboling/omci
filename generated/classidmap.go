@@ -21,16 +21,12 @@ package generated
 
 import (
 	"../../omci"
-	"errors"
-	"fmt"
-	"github.com/google/gopacket"
-	"math/bits"
 )
 
 // ManagedEntityInfo provides ManagedEntity information
 type ManagedEntityInfo struct {
 	//Interface  IManagedEntity
-	New func(params ...ParamData) (IManagedEntity, error)
+	New func(params ...ParamData) (omci.IManagedEntity, error)
 }
 
 // ParamData can be passed to the 'New' function to dictate how the returned
@@ -51,8 +47,15 @@ type ParamData struct {
 	Attributes []omci.IAttribute
 }
 
+func decodeEntityID(params ...ParamData) uint16 {
+	if len(params) > 0 {
+		return params[0].EntityID
+	}
+	return 0
+}
+
 // CreateME wraps a function that makes it a creator of a Managed Entity
-type CreateME func(params ...ParamData) (IManagedEntity, error)
+type CreateME func(params ...ParamData) (omci.IManagedEntity, error)
 
 var classToManagedEntityMap map[uint16]CreateME
 
@@ -219,95 +222,4 @@ func init() {
 	classToManagedEntityMap[450] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[451] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
-}
-
-func decodeEntityID(params ...ParamData) uint16 {
-	if len(params) > 0 {
-		return params[0].EntityID
-	}
-	return 0
-}
-
-type IManagedEntity interface {
-	Name() string
-	ClassID() uint16
-	EntityID() uint16
-	MessageTypes() []omci.MsgType
-	AttributesMask() uint16
-	Attributes() []omci.IAttribute
-	Decode(uint16, []byte, gopacket.DecodeFeedback) error
-	SerializeTo(uint16, gopacket.SerializeBuffer) error
-}
-
-type BaseManagedEntity struct {
-	name          string
-	classID       uint16
-	entityID      uint16
-	msgTypes      []omci.MsgType
-	attributeMask uint16
-	attributeList []omci.IAttribute
-}
-
-func (bme *BaseManagedEntity) Name() string                  { return bme.name }
-func (bme *BaseManagedEntity) ClassID() uint16               { return bme.classID }
-func (bme *BaseManagedEntity) EntityID() uint16              { return bme.entityID }
-func (bme *BaseManagedEntity) MessageTypes() []omci.MsgType  { return bme.msgTypes }
-func (bme *BaseManagedEntity) AttributesMask() uint16        { return bme.attributeMask }
-func (bme *BaseManagedEntity) Attributes() []omci.IAttribute { return bme.attributeList }
-
-func (bme *BaseManagedEntity) String() string {
-	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
-		bme.Name(), bme.ClassID(), bme.ClassID(), bme.EntityID(), bme.EntityID(),
-		bme.Attributes())
-}
-
-func (bme *BaseManagedEntity) Decode(mask uint16, data []byte, df gopacket.DecodeFeedback) error {
-	// Validate attribute mask passed in
-	if mask&^bme.attributeMask > 0 {
-		return errors.New("invalid attribute mask specified") // Unsupported bits set
-	}
-	// Loop over possible attributes
-	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
-		// If bit is set, decode that attribute
-		if mask&uint16(1<<(15-uint(index))) > 0 {
-			// Pull from list
-			attribute := bme.attributeList[index]
-
-			// decode & advance data slice if success
-			err := attribute.DecodeFromBytes(data, df)
-			if err != nil {
-				return err
-			}
-			data = data[attribute.Size():]
-		}
-	}
-	return nil
-}
-
-func (bme *BaseManagedEntity) SerializeTo(mask uint16, b gopacket.SerializeBuffer) error {
-	// Validate attribute mask passed in
-	if mask&^bme.attributeMask > 0 {
-		return errors.New("invalid attribute mask specified") // Unsupported bits set
-	}
-	// Loop over possible attributes
-	for index := 0; index < bits.OnesCount16(bme.attributeMask); index++ {
-		// If bit is set, decode that attribute
-		if mask&uint16(1<<(15-uint(index))) > 0 {
-			// Pull from list
-			attribute := bme.attributeList[index]
-
-			// encode
-			err := attribute.SerializeTo(b)
-			if err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-func (bme *BaseManagedEntity) computeAttributeMask() {
-	for index := range bme.Attributes() {
-		bme.attributeMask |= 1 << (15 - uint(index))
-	}
 }

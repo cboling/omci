@@ -24,7 +24,7 @@ import (
 )
 
 type SnmpConfigurationData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {

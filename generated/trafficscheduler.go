@@ -24,7 +24,7 @@ import (
 )
 
 type TrafficScheduler struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {

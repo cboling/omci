@@ -24,7 +24,7 @@ import (
 )
 
 type TCont struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTCont(params ...ParamData) (IManagedEntity, error) {

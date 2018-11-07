@@ -24,7 +24,7 @@ import (
 )
 
 type MgcPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type EthernetFrameExtendedPm struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntity, error) {

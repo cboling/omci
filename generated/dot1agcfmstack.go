@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1AgCfmStack struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {

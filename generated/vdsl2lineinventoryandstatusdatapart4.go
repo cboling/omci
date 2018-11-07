@@ -24,7 +24,7 @@ import (
 )
 
 type Vdsl2LineInventoryAndStatusDataPart4 struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {

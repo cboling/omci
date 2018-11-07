@@ -24,7 +24,7 @@ import (
 )
 
 type SipAgentPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

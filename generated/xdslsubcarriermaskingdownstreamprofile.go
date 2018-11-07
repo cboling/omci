@@ -24,7 +24,7 @@ import (
 )
 
 type XdslSubcarrierMaskingDownstreamProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEntity, error) {

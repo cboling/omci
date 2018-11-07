@@ -24,7 +24,7 @@ import (
 )
 
 type IpHostConfigData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {

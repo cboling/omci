@@ -24,7 +24,7 @@ import (
 )
 
 type ReAniG struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewReAniG(params ...ParamData) (IManagedEntity, error) {

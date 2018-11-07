@@ -24,7 +24,7 @@ import (
 )
 
 type MulticastGemInterworkingTerminationPoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {

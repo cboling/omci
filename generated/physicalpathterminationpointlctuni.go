@@ -24,7 +24,7 @@ import (
 )
 
 type PhysicalPathTerminationPointLctUni struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntity, error) {

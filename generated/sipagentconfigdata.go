@@ -24,7 +24,7 @@ import (
 )
 
 type SipAgentConfigData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {

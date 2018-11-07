@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1XConfigurationProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {

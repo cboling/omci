@@ -24,7 +24,7 @@ import (
 )
 
 type SoftwareImage struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {

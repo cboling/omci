@@ -24,7 +24,7 @@ import (
 )
 
 type TrafficDescriptor struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {

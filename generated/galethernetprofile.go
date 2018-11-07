@@ -24,7 +24,7 @@ import (
 )
 
 type GalEthernetProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGalEthernetProfile(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type PseudowirePerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

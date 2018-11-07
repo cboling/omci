@@ -24,7 +24,7 @@ import (
 )
 
 type MplsPseudowireTerminationPoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {

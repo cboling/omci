@@ -24,7 +24,7 @@ import (
 )
 
 type XdslXtuRPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

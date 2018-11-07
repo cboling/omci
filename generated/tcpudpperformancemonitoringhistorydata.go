@@ -24,7 +24,7 @@ import (
 )
 
 type TcpUdpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

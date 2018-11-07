@@ -24,7 +24,7 @@ import (
 )
 
 type PhysicalPathTerminationPointMocaUni struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {

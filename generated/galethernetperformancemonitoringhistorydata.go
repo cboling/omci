@@ -24,7 +24,7 @@ import (
 )
 
 type GalEthernetPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

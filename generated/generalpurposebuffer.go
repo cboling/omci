@@ -24,7 +24,7 @@ import (
 )
 
 type GeneralPurposeBuffer struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntity, error) {

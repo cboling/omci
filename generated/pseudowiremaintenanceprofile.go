@@ -24,7 +24,7 @@ import (
 )
 
 type PseudowireMaintenanceProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntity, error) {

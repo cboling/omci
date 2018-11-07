@@ -24,7 +24,7 @@ import (
 )
 
 type EnhancedSecurityControl struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {

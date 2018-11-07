@@ -24,7 +24,7 @@ import (
 )
 
 type NetworkDialPlanTable struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntity, error) {

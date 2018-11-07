@@ -24,7 +24,7 @@ import (
 )
 
 type RtpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

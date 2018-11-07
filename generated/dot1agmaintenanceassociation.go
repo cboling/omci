@@ -24,7 +24,7 @@ import (
 )
 
 type Dot1AgMaintenanceAssociation struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error) {

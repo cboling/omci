@@ -24,7 +24,7 @@ import (
 )
 
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {

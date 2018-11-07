@@ -24,7 +24,7 @@ import (
 )
 
 type InterworkingVccTerminationPoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, error) {

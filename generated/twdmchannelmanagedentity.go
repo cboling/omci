@@ -24,7 +24,7 @@ import (
 )
 
 type TwdmChannelManagedEntity struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {

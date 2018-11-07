@@ -24,7 +24,7 @@ import (
 )
 
 type OnuData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewOnuData(params ...ParamData) (IManagedEntity, error) {
@@ -43,8 +43,8 @@ func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 			omci.MibReset,
 		},
 		attributeList: []omci.IAttribute{
-			// ManagedEntityId,
-			// MibDataSync,
+			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
+			omci.NewByteField("MibDataSync", 0, omci.Read|omci.Write),
 		},
 	}
 	entity.computeAttributeMask()

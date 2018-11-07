@@ -24,7 +24,7 @@ import (
 )
 
 type Cardholder struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewCardholder(params ...ParamData) (IManagedEntity, error) {

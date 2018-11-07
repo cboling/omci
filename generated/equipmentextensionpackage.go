@@ -24,7 +24,7 @@ import (
 )
 
 type EquipmentExtensionPackage struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntity, error) {

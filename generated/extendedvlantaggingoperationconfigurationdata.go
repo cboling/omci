@@ -24,7 +24,7 @@ import (
 )
 
 type ExtendedVlanTaggingOperationConfigurationData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {

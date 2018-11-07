@@ -24,7 +24,7 @@ import (
 )
 
 type VirtualEthernetInterfacePoint struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, error) {

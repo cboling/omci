@@ -24,7 +24,7 @@ import (
 )
 
 type ReCommonAmplifierParameters struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {

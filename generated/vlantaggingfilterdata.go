@@ -24,7 +24,7 @@ import (
 )
 
 type VlanTaggingFilterData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntity, error) {

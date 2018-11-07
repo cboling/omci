@@ -24,7 +24,7 @@ import (
 )
 
 type Aal5PerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

@@ -24,7 +24,7 @@ import (
 )
 
 type GemPortNetworkCtp struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {

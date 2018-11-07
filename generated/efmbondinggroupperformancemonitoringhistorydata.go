@@ -24,7 +24,7 @@ import (
 )
 
 type EfmBondingGroupPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

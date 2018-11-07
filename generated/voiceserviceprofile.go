@@ -24,7 +24,7 @@ import (
 )
 
 type VoiceServiceProfile struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVoiceServiceProfile(params ...ParamData) (IManagedEntity, error) {

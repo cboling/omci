@@ -24,7 +24,7 @@ import (
 )
 
 type VpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {

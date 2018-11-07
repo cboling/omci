@@ -24,7 +24,7 @@ import (
 )
 
 type PhysicalPathTerminationPointVideoAni struct {
-	BaseManagedEntity
+	omci.BaseManagedEntity
 }
 
 func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntity, error) {
