@@ -20,47 +20,45 @@
 package generated
 
 import (
-	"encoding/binary"
-	"errors"
 	"fmt"
 )
 
 // Attribute represents a single specific Managed Entity attribute
 type IAttribute interface {
 	// Name is the attribute name
-	Name() string
-	Size() int
-	Default() interface{}
-	Access() AttributeAccess
-	Value() (interface{}, error)
+	GetName() string
+	GetSize() int
+	GetDefault() interface{}
+	GetAccess() AttributeAccess
+	GetValue() (interface{}, error)
 }
 
 // Attribute represents a single specific Managed Entity attribute
 type Attribute struct {
-	name       string
-	defValue   interface{}
-	size       int
-	access     AttributeAccess
-	value      interface{}
-	constraint func(interface{}) error
-	avc        bool // If true, an AVC notification can occur for the attribute
-	tca        bool // If true, a threshold crossing alert alarm notification can occur for the attribute
-	counter    bool // If true, this attribute is a PM counter
-	optional   bool // If true, attribute is option, else mandatory
-	deprecated bool //  If true, this attribute is deprecated and only 'read' operations (if-any) performed
+	Name       string
+	DefValue   interface{}
+	Size       int
+	Access     AttributeAccess
+	Value      interface{}
+	Constraint func(interface{}) error
+	Avc        bool // If true, an AVC notification can occur for the attribute
+	Tca        bool // If true, a threshold crossing alert alarm notification can occur for the attribute
+	Counter    bool // If true, this attribute is a PM counter
+	Optional   bool // If true, attribute is option, else mandatory
+	Deprecated bool //  If true, this attribute is deprecated and only 'read' operations (if-any) performed
 }
 
 func (attr *Attribute) String() string {
 	return fmt.Sprintf("%v: Size: %v, Default: %v, Access: %v",
-		attr.Name(), attr.Size(), attr.Default(), attr.Access())
+		attr.GetName(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *Attribute) Name() string            { return attr.name }
-func (attr *Attribute) Default() interface{}    { return attr.defValue }
-func (attr *Attribute) Size() int               { return attr.size }
-func (attr *Attribute) Access() AttributeAccess { return attr.access }
-func (attr *Attribute) Value() (interface{}, error) {
+func (attr *Attribute) GetName() string            { return attr.Name }
+func (attr *Attribute) GetDefault() interface{}    { return attr.DefValue }
+func (attr *Attribute) GetSize() int               { return attr.Size }
+func (attr *Attribute) GetAccess() AttributeAccess { return attr.Access }
+func (attr *Attribute) GetValue() (interface{}, error) {
 	// TODO: Better way to detect not-initialized and no default available?
-	return attr.value, nil
+	return attr.Value, nil
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -71,7 +69,7 @@ type ByteField struct {
 
 func NewByteField(name string, defVal uint16, access AttributeAccess) *ByteField {
 	return &ByteField{
-		Attribute: Attribute{name: name, defValue: defVal, size: 1, access: access},
+		Attribute: Attribute{Name: name, DefValue: defVal, Size: 1, Access: access},
 	}
 }
 
@@ -81,7 +79,7 @@ type Uint16Field struct {
 
 func NewUint16Field(name string, defVal uint16, access AttributeAccess) *Uint16Field {
 	return &Uint16Field{
-		Attribute: Attribute{name: name, defValue: defVal, size: 2, access: access},
+		Attribute: Attribute{Name: name, DefValue: defVal, Size: 2, Access: access},
 	}
 }
 
@@ -91,7 +89,7 @@ type Uint32Field struct {
 
 func NewUint32Field(name string, defVal uint16, access AttributeAccess) *Uint32Field {
 	return &Uint32Field{
-		Attribute: Attribute{name: name, defValue: defVal, size: 4, access: access},
+		Attribute: Attribute{Name: name, DefValue: defVal, Size: 4, Access: access},
 	}
 }
 
@@ -99,9 +97,9 @@ type Uint64Field struct {
 	Attribute
 }
 
-func NewSUint64Field(name string, defVal uint16, access AttributeAccess) *Uint64Field {
+func NewUint64Field(name string, defVal uint16, access AttributeAccess) *Uint64Field {
 	return &Uint64Field{
-		Attribute: Attribute{name: name, defValue: defVal, size: 8, access: access},
+		Attribute: Attribute{Name: name, DefValue: defVal, Size: 8, Access: access},
 	}
 }
 
@@ -112,6 +110,6 @@ type UnknownField struct {
 
 func NewUnknownField(name string, defVal uint16, access AttributeAccess) *UnknownField {
 	return &UnknownField{
-		Attribute: Attribute{name: name, defValue: defVal, size: 99999999, access: access},
+		Attribute: Attribute{Name: name, DefValue: defVal, Size: 999999999, Access: access},
 	}
 }

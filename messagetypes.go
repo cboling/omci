@@ -28,7 +28,7 @@ import (
 // CreateRequest
 type CreateRequestPacket struct {
 	generated.CreateRequest
-
+	cachedME
 	cachedME generated.IManagedEntity // Cache any ME decoded from the request  (TODO: Should these be public?)
 }
 
@@ -49,13 +49,13 @@ func (omci *CreateRequestPacket) DecodeFromBytes(data []byte, p gopacket.PacketB
 		return errors.New("managed entity does not support Create Message-Type")
 	}
 	var sbcMask uint16
-	for index, attr := range omci.cachedME.GetAttributes() {
+	for index, attr := range omci.GetAttributes() {
 		if generated.SupportsAttributeAccess(attr, generated.SetByCreate) {
 			sbcMask |= 1 << (15 - uint(index))
 		}
 	}
 	// Attribute decode
-	err = omci.cachedME.Decode(sbcMask, data[4:], p)
+	err = omci.Decode(sbcMask, data[4:], p)
 	if err != nil {
 		return err
 	}
