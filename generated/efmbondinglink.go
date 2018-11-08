@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EfmBondingLink struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEfmBondingLink(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEfmBondingLink(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EfmBondingLink",
 		ClassID:  420,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("AssociatedGroupMeId", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("LinkAlarmEnable", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
+			NewByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EfmBondingLink{entity}, nil
 }

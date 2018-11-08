@@ -19,40 +19,36 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type OnuPowerShedding struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOnuPowerShedding(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "OnuPowerShedding",
 		ClassID:  133,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("RestorePowerTimerResetInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("DataClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("VoiceClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("VideoOverlayClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("VideoReturnClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("DigitalSubscriberLineClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("AtmClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("CesClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("FrameClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("SdhSonetClassSheddingInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("SheddingStatus", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("RestorePowerTimerResetInterval", 0, Read|Write),
+			NewUint16Field("DataClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("VoiceClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("AtmClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("CesClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("FrameClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("SdhSonetClassSheddingInterval", 0, Read|Write),
+			NewUint16Field("SheddingStatus", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &OnuPowerShedding{entity}, nil
 }

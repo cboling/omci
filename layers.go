@@ -17,6 +17,7 @@
 package omci
 
 import (
+	gen "./generated"
 	"errors"
 	"github.com/google/gopacket"
 )
@@ -71,111 +72,111 @@ var (
 	LayerTypeSetTableResponse              gopacket.LayerType
 )
 
-func mkReqLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
-	return gopacket.RegisterLayerType(1000+(int(mt)|int(AR)),
+func mkReqLayer(mt gen.MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
+	return gopacket.RegisterLayerType(1000+(int(mt)|int(gen.AR)),
 		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
 }
 
-func mkRespLayer(mt MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
-	return gopacket.RegisterLayerType(1000+(int(mt)|int(AK)),
+func mkRespLayer(mt gen.MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
+	return gopacket.RegisterLayerType(1000+(int(mt)|int(gen.AK)),
 		gopacket.LayerTypeMetadata{Name: mts, Decoder: decode})
 }
 
 func init() {
 	// Create layers for message_type & action
-	LayerTypeCreateRequest = mkReqLayer(Create, "CreateRequest", gopacket.DecodeFunc(decodeCreateRequest))
-	LayerTypeDeleteRequest = mkReqLayer(Delete, "DeleteRequest", gopacket.DecodeFunc(decodeDeleteRequest))
-	LayerTypeSetRequest = mkReqLayer(Set, "SetRequest", gopacket.DecodeFunc(decodeSetRequest))
-	LayerTypeGetRequest = mkReqLayer(Get, "GetRequest", gopacket.DecodeFunc(decodeGetRequest))
-	LayerTypeGetAllAlarmsRequest = mkReqLayer(GetAllAlarms, "GetAllAlarmsRequest", gopacket.DecodeFunc(decodeGetAllAlarmsRequest))
-	LayerTypeGetAllAlarmsNextRequest = mkReqLayer(GetAllAlarmsNext, "GetAllAlarmsNextRequest", gopacket.DecodeFunc(decodeGetAllAlarmsNextRequest))
-	LayerTypeMibUploadRequest = mkReqLayer(MibUpload, "MibUploadRequest", gopacket.DecodeFunc(decodeMibUploadRequest))
-	LayerTypeMibUploadNextRequest = mkReqLayer(MibUploadNext, "MibUploadNextRequest", gopacket.DecodeFunc(decodeMibUploadNextRequest))
-	LayerTypeMibResetRequest = mkReqLayer(MibReset, "MibResetRequest", gopacket.DecodeFunc(decodeMibResetRequest))
-	LayerTypeTestRequest = mkReqLayer(Test, "TestRequest", gopacket.DecodeFunc(decodeTestRequest))
-	LayerTypeStartSoftwareDownloadRequest = mkReqLayer(StartSoftwareDownload, "StartSoftwareDownloadRequest", gopacket.DecodeFunc(decodeStartSoftwareDownloadRequest))
-	LayerTypeDownloadSectionRequest = mkReqLayer(DownloadSection, "DownloadSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
-	LayerTypeEndSoftwareDownloadRequest = mkReqLayer(EndSoftwareDownload, "EndSoftwareDownloadRequest", gopacket.DecodeFunc(decodeEndSoftwareDownloadRequest))
-	LayerTypeActivateSoftwareRequest = mkReqLayer(ActivateSoftware, "ActivateSoftwareRequest", gopacket.DecodeFunc(decodeActivateSoftwareRequest))
-	LayerTypeCommitSoftwareRequest = mkReqLayer(CommitSoftware, "CommitSoftwareRequest", gopacket.DecodeFunc(decodeCommitSoftwareRequest))
+	LayerTypeCreateRequest = mkReqLayer(gen.Create, "CreateRequest", gopacket.DecodeFunc(decodeCreateRequest))
+	LayerTypeDeleteRequest = mkReqLayer(gen.Delete, "DeleteRequest", gopacket.DecodeFunc(decodeDeleteRequest))
+	LayerTypeSetRequest = mkReqLayer(gen.Set, "SetRequest", gopacket.DecodeFunc(decodeSetRequest))
+	LayerTypeGetRequest = mkReqLayer(gen.Get, "GetRequest", gopacket.DecodeFunc(decodeGetRequest))
+	LayerTypeGetAllAlarmsRequest = mkReqLayer(gen.GetAllAlarms, "GetAllAlarmsRequest", gopacket.DecodeFunc(decodeGetAllAlarmsRequest))
+	LayerTypeGetAllAlarmsNextRequest = mkReqLayer(gen.GetAllAlarmsNext, "GetAllAlarmsNextRequest", gopacket.DecodeFunc(decodeGetAllAlarmsNextRequest))
+	LayerTypeMibUploadRequest = mkReqLayer(gen.MibUpload, "MibUploadRequest", gopacket.DecodeFunc(decodeMibUploadRequest))
+	LayerTypeMibUploadNextRequest = mkReqLayer(gen.MibUploadNext, "MibUploadNextRequest", gopacket.DecodeFunc(decodeMibUploadNextRequest))
+	LayerTypeMibResetRequest = mkReqLayer(gen.MibReset, "MibResetRequest", gopacket.DecodeFunc(decodeMibResetRequest))
+	LayerTypeTestRequest = mkReqLayer(gen.Test, "TestRequest", gopacket.DecodeFunc(decodeTestRequest))
+	LayerTypeStartSoftwareDownloadRequest = mkReqLayer(gen.StartSoftwareDownload, "StartSoftwareDownloadRequest", gopacket.DecodeFunc(decodeStartSoftwareDownloadRequest))
+	LayerTypeDownloadSectionRequest = mkReqLayer(gen.DownloadSection, "DownloadSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
+	LayerTypeEndSoftwareDownloadRequest = mkReqLayer(gen.EndSoftwareDownload, "EndSoftwareDownloadRequest", gopacket.DecodeFunc(decodeEndSoftwareDownloadRequest))
+	LayerTypeActivateSoftwareRequest = mkReqLayer(gen.ActivateSoftware, "ActivateSoftwareRequest", gopacket.DecodeFunc(decodeActivateSoftwareRequest))
+	LayerTypeCommitSoftwareRequest = mkReqLayer(gen.CommitSoftware, "CommitSoftwareRequest", gopacket.DecodeFunc(decodeCommitSoftwareRequest))
 	LayerTypeSynchronizeTimeRequest = mkReqLayer(SynchronizeTime, "SynchronizeTimeRequest", gopacket.DecodeFunc(decodeSynchronizeTimeRequest))
-	LayerTypeRebootRequest = mkReqLayer(Reboot, "RebootRequest", gopacket.DecodeFunc(decodeRebootRequest))
-	LayerTypeGetNextRequest = mkReqLayer(GetNext, "GetNextRequest", gopacket.DecodeFunc(decodeGetNextRequest))
-	LayerTypeGetCurrentDataRequest = mkReqLayer(GetCurrentData, "GetCurrentDataRequest", gopacket.DecodeFunc(decodeGetCurrentDataRequest))
-	LayerTypeSetTableRequest = mkReqLayer(SetTable, "SetTableRequest", gopacket.DecodeFunc(decodeSetTableRequest))
+	LayerTypeRebootRequest = mkReqLayer(gen.Reboot, "RebootRequest", gopacket.DecodeFunc(decodeRebootRequest))
+	LayerTypeGetNextRequest = mkReqLayer(gen.GetNext, "GetNextRequest", gopacket.DecodeFunc(decodeGetNextRequest))
+	LayerTypeGetCurrentDataRequest = mkReqLayer(gen.GetCurrentData, "GetCurrentDataRequest", gopacket.DecodeFunc(decodeGetCurrentDataRequest))
+	LayerTypeSetTableRequest = mkReqLayer(gen.SetTable, "SetTableRequest", gopacket.DecodeFunc(decodeSetTableRequest))
 
-	LayerTypeCreateResponse = mkRespLayer(Create, "CreateResponse", gopacket.DecodeFunc(decodeCreateResponse))
-	LayerTypeDeleteResponse = mkRespLayer(Delete, "DeleteResponse", gopacket.DecodeFunc(decodeDeleteResponse))
-	LayerTypeSetResponse = mkRespLayer(Set, "SetResponse", gopacket.DecodeFunc(decodeSetResponse))
-	LayerTypeGetResponse = mkRespLayer(Get, "GetResponse", gopacket.DecodeFunc(decodeGetResponse))
-	LayerTypeGetAllAlarmsResponse = mkRespLayer(GetAllAlarms, "GetAllAlarmsResponse", gopacket.DecodeFunc(decodeGetAllAlarmsResponse))
-	LayerTypeGetAllAlarmsNextResponse = mkRespLayer(GetAllAlarmsNext, "GetAllAlarmsNextResponse", gopacket.DecodeFunc(decodeGetAllAlarmsNextResponse))
-	LayerTypeMibUploadResponse = mkRespLayer(MibUpload, "MibUploadResponse", gopacket.DecodeFunc(decodeMibUploadResponse))
-	LayerTypeMibUploadNextResponse = mkRespLayer(MibUploadNext, "MibUploadNextResponse", gopacket.DecodeFunc(decodeMibUploadNextResponse))
-	LayerTypeMibResetResponse = mkRespLayer(MibReset, "MibResetResponse", gopacket.DecodeFunc(decodeMibResetResponse))
-	LayerTypeAlarmNotification = mkRespLayer(AlarmNotification, "AlarmNotification", gopacket.DecodeFunc(decodeAlarmNotification))
-	LayerTypeAttributeValueChange = mkRespLayer(AttributeValueChange, "AttributeValueChange", gopacket.DecodeFunc(decodeAttributeValueChange))
-	LayerTypeTestResponse = mkRespLayer(Test, "TestResponse", gopacket.DecodeFunc(decodeTestResponse))
-	LayerTypeStartSoftwareDownloadResponse = mkRespLayer(StartSoftwareDownload, "StartSoftwareDownloadResponse", gopacket.DecodeFunc(decodeStartSoftwareDownloadResponse))
-	LayerTypeDownloadSectionResponse = mkRespLayer(DownloadSection, "DownloadSectionResponse", gopacket.DecodeFunc(decodeDownloadSectionResponse))
-	LayerTypeEndSoftwareDownloadResponse = mkRespLayer(EndSoftwareDownload, "EndSoftwareDownloadResponse", gopacket.DecodeFunc(decodeEndSoftwareDownloadResponse))
-	LayerTypeActivateSoftwareResponse = mkRespLayer(ActivateSoftware, "ActivateSoftwareResponse", gopacket.DecodeFunc(decodeActivateSoftwareResponse))
-	LayerTypeCommitSoftwareResponse = mkRespLayer(CommitSoftware, "CommitSoftwareResponse", gopacket.DecodeFunc(decodeCommitSoftwareResponse))
-	LayerTypeSynchronizeTimeResponse = mkRespLayer(SynchronizeTime, "SynchronizeTimeResponse", gopacket.DecodeFunc(decodeSynchronizeTimeResponse))
-	LayerTypeRebootResponse = mkRespLayer(Reboot, "RebootResponse", gopacket.DecodeFunc(decodeRebootResponse))
-	LayerTypeGetNextResponse = mkRespLayer(GetNext, "GetNextResponse", gopacket.DecodeFunc(decodeGetNextResponse))
-	LayerTypeTestResult = mkRespLayer(TestResult, "TestResult", gopacket.DecodeFunc(decodeTestResult))
-	LayerTypeGetCurrentDataResponse = mkRespLayer(GetCurrentData, "GetCurrentDataResponse", gopacket.DecodeFunc(decodeGetCurrentDataResponse))
-	LayerTypeSetTableResponse = mkRespLayer(SetTable, "SetTableResponse", gopacket.DecodeFunc(decodeSetTableResponse))
+	LayerTypeCreateResponse = mkRespLayer(gen.Create, "CreateResponse", gopacket.DecodeFunc(decodeCreateResponse))
+	LayerTypeDeleteResponse = mkRespLayer(gen.Delete, "DeleteResponse", gopacket.DecodeFunc(decodeDeleteResponse))
+	LayerTypeSetResponse = mkRespLayer(gen.Set, "SetResponse", gopacket.DecodeFunc(decodeSetResponse))
+	LayerTypeGetResponse = mkRespLayer(gen.Get, "GetResponse", gopacket.DecodeFunc(decodeGetResponse))
+	LayerTypeGetAllAlarmsResponse = mkRespLayer(gen.GetAllAlarms, "GetAllAlarmsResponse", gopacket.DecodeFunc(decodeGetAllAlarmsResponse))
+	LayerTypeGetAllAlarmsNextResponse = mkRespLayer(gen.GetAllAlarmsNext, "GetAllAlarmsNextResponse", gopacket.DecodeFunc(decodeGetAllAlarmsNextResponse))
+	LayerTypeMibUploadResponse = mkRespLayer(gen.MibUpload, "MibUploadResponse", gopacket.DecodeFunc(decodeMibUploadResponse))
+	LayerTypeMibUploadNextResponse = mkRespLayer(gen.MibUploadNext, "MibUploadNextResponse", gopacket.DecodeFunc(decodeMibUploadNextResponse))
+	LayerTypeMibResetResponse = mkRespLayer(gen.MibReset, "MibResetResponse", gopacket.DecodeFunc(decodeMibResetResponse))
+	LayerTypeAlarmNotification = mkRespLayer(gen.AlarmNotification, "AlarmNotification", gopacket.DecodeFunc(decodeAlarmNotification))
+	LayerTypeAttributeValueChange = mkRespLayer(gen.AttributeValueChange, "AttributeValueChange", gopacket.DecodeFunc(decodeAttributeValueChange))
+	LayerTypeTestResponse = mkRespLayer(gen.Test, "TestResponse", gopacket.DecodeFunc(decodeTestResponse))
+	LayerTypeStartSoftwareDownloadResponse = mkRespLayer(gen.StartSoftwareDownload, "StartSoftwareDownloadResponse", gopacket.DecodeFunc(decodeStartSoftwareDownloadResponse))
+	LayerTypeDownloadSectionResponse = mkRespLayer(gen.DownloadSection, "DownloadSectionResponse", gopacket.DecodeFunc(decodeDownloadSectionResponse))
+	LayerTypeEndSoftwareDownloadResponse = mkRespLayer(gen.EndSoftwareDownload, "EndSoftwareDownloadResponse", gopacket.DecodeFunc(decodeEndSoftwareDownloadResponse))
+	LayerTypeActivateSoftwareResponse = mkRespLayer(gen.ActivateSoftware, "ActivateSoftwareResponse", gopacket.DecodeFunc(decodeActivateSoftwareResponse))
+	LayerTypeCommitSoftwareResponse = mkRespLayer(gen.CommitSoftware, "CommitSoftwareResponse", gopacket.DecodeFunc(decodeCommitSoftwareResponse))
+	LayerTypeSynchronizeTimeResponse = mkRespLayer(gen.SynchronizeTime, "SynchronizeTimeResponse", gopacket.DecodeFunc(decodeSynchronizeTimeResponse))
+	LayerTypeRebootResponse = mkRespLayer(gen.Reboot, "RebootResponse", gopacket.DecodeFunc(decodeRebootResponse))
+	LayerTypeGetNextResponse = mkRespLayer(gen.GetNext, "GetNextResponse", gopacket.DecodeFunc(decodeGetNextResponse))
+	LayerTypeTestResult = mkRespLayer(gen.TestResult, "TestResult", gopacket.DecodeFunc(decodeTestResult))
+	LayerTypeGetCurrentDataResponse = mkRespLayer(gen.GetCurrentData, "GetCurrentDataResponse", gopacket.DecodeFunc(decodeGetCurrentDataResponse))
+	LayerTypeSetTableResponse = mkRespLayer(gen.SetTable, "SetTableResponse", gopacket.DecodeFunc(decodeSetTableResponse))
 
 	// Map message_type and action to layer
 	nextLayerMapping = make(map[byte]gopacket.LayerType)
 
-	nextLayerMapping[byte(Create)|AR] = LayerTypeCreateRequest
-	nextLayerMapping[byte(Delete)|AR] = LayerTypeDeleteRequest
-	nextLayerMapping[byte(Set)|AR] = LayerTypeSetRequest
-	nextLayerMapping[byte(Get)|AR] = LayerTypeGetRequest
-	nextLayerMapping[byte(GetAllAlarms)|AR] = LayerTypeGetAllAlarmsRequest
-	nextLayerMapping[byte(GetAllAlarmsNext)|AR] = LayerTypeGetAllAlarmsNextRequest
-	nextLayerMapping[byte(MibUpload)|AR] = LayerTypeMibUploadRequest
-	nextLayerMapping[byte(MibUploadNext)|AR] = LayerTypeMibUploadNextRequest
-	nextLayerMapping[byte(MibReset)|AR] = LayerTypeMibResetRequest
-	nextLayerMapping[byte(Test)|AR] = LayerTypeTestRequest
-	nextLayerMapping[byte(StartSoftwareDownload)|AR] = LayerTypeStartSoftwareDownloadRequest
-	nextLayerMapping[byte(DownloadSection)|AR] = LayerTypeDownloadSectionRequest
-	nextLayerMapping[byte(EndSoftwareDownload)|AR] = LayerTypeEndSoftwareDownloadRequest
-	nextLayerMapping[byte(ActivateSoftware)|AR] = LayerTypeActivateSoftwareRequest
-	nextLayerMapping[byte(CommitSoftware)|AR] = LayerTypeCommitSoftwareRequest
-	nextLayerMapping[byte(SynchronizeTime)|AR] = LayerTypeSynchronizeTimeRequest
-	nextLayerMapping[byte(Reboot)|AR] = LayerTypeRebootRequest
-	nextLayerMapping[byte(GetNext)|AR] = LayerTypeGetNextRequest
-	nextLayerMapping[byte(GetCurrentData)|AR] = LayerTypeGetCurrentDataRequest
-	nextLayerMapping[byte(SetTable)|AR] = LayerTypeSetTableRequest
+	nextLayerMapping[byte(gen.Create)|gen.AR] = LayerTypeCreateRequest
+	nextLayerMapping[byte(gen.Delete)|gen.AR] = LayerTypeDeleteRequest
+	nextLayerMapping[byte(gen.Set)|gen.AR] = LayerTypeSetRequest
+	nextLayerMapping[byte(gen.Get)|gen.AR] = LayerTypeGetRequest
+	nextLayerMapping[byte(gen.GetAllAlarms)|gen.AR] = LayerTypeGetAllAlarmsRequest
+	nextLayerMapping[byte(gen.GetAllAlarmsNext)|gen.AR] = LayerTypeGetAllAlarmsNextRequest
+	nextLayerMapping[byte(gen.MibUpload)|gen.AR] = LayerTypeMibUploadRequest
+	nextLayerMapping[byte(gen.MibUploadNext)|gen.AR] = LayerTypeMibUploadNextRequest
+	nextLayerMapping[byte(gen.MibReset)|gen.AR] = LayerTypeMibResetRequest
+	nextLayerMapping[byte(gen.Test)|gen.AR] = LayerTypeTestRequest
+	nextLayerMapping[byte(gen.StartSoftwareDownload)|gen.AR] = LayerTypeStartSoftwareDownloadRequest
+	nextLayerMapping[byte(gen.DownloadSection)|gen.AR] = LayerTypeDownloadSectionRequest
+	nextLayerMapping[byte(gen.EndSoftwareDownload)|gen.AR] = LayerTypeEndSoftwareDownloadRequest
+	nextLayerMapping[byte(gen.ActivateSoftware)|gen.AR] = LayerTypeActivateSoftwareRequest
+	nextLayerMapping[byte(gen.CommitSoftware)|gen.AR] = LayerTypeCommitSoftwareRequest
+	nextLayerMapping[byte(gen.SynchronizeTime)|gen.AR] = LayerTypeSynchronizeTimeRequest
+	nextLayerMapping[byte(gen.Reboot)|gen.AR] = LayerTypeRebootRequest
+	nextLayerMapping[byte(gen.GetNext)|gen.AR] = LayerTypeGetNextRequest
+	nextLayerMapping[byte(gen.GetCurrentData)|gen.AR] = LayerTypeGetCurrentDataRequest
+	nextLayerMapping[byte(gen.SetTable)|gen.AR] = LayerTypeSetTableRequest
 
-	nextLayerMapping[byte(Create)|AK] = LayerTypeCreateResponse
-	nextLayerMapping[byte(Delete)|AK] = LayerTypeDeleteResponse
-	nextLayerMapping[byte(Set)|AK] = LayerTypeSetResponse
-	nextLayerMapping[byte(Get)|AK] = LayerTypeGetResponse
-	nextLayerMapping[byte(GetAllAlarms)|AK] = LayerTypeGetAllAlarmsResponse
-	nextLayerMapping[byte(GetAllAlarmsNext)|AK] = LayerTypeGetAllAlarmsNextResponse
-	nextLayerMapping[byte(MibUpload)|AK] = LayerTypeMibUploadResponse
-	nextLayerMapping[byte(MibUploadNext)|AK] = LayerTypeMibUploadNextResponse
-	nextLayerMapping[byte(MibReset)|AK] = LayerTypeMibResetResponse
-	nextLayerMapping[byte(Test)|AK] = LayerTypeTestResponse
-	nextLayerMapping[byte(StartSoftwareDownload)|AK] = LayerTypeStartSoftwareDownloadResponse
-	nextLayerMapping[byte(DownloadSection)|AK] = LayerTypeDownloadSectionResponse
-	nextLayerMapping[byte(EndSoftwareDownload)|AK] = LayerTypeEndSoftwareDownloadResponse
-	nextLayerMapping[byte(ActivateSoftware)|AK] = LayerTypeActivateSoftwareResponse
-	nextLayerMapping[byte(CommitSoftware)|AK] = LayerTypeCommitSoftwareResponse
-	nextLayerMapping[byte(SynchronizeTime)|AK] = LayerTypeSynchronizeTimeResponse
-	nextLayerMapping[byte(Reboot)|AK] = LayerTypeRebootResponse
-	nextLayerMapping[byte(GetNext)|AK] = LayerTypeGetNextResponse
-	nextLayerMapping[byte(GetCurrentData)|AK] = LayerTypeGetCurrentDataResponse
-	nextLayerMapping[byte(TestResult)|AK] = LayerTypeTestResult
-	nextLayerMapping[byte(SetTable)|AK] = LayerTypeSetTableResponse
+	nextLayerMapping[byte(gen.Create)|gen.AK] = LayerTypeCreateResponse
+	nextLayerMapping[byte(gen.Delete)|gen.AK] = LayerTypeDeleteResponse
+	nextLayerMapping[byte(gen.Set)|gen.AK] = LayerTypeSetResponse
+	nextLayerMapping[byte(gen.Get)|gen.AK] = LayerTypeGetResponse
+	nextLayerMapping[byte(gen.GetAllAlarms)|gen.AK] = LayerTypeGetAllAlarmsResponse
+	nextLayerMapping[byte(gen.GetAllAlarmsNext)|gen.AK] = LayerTypeGetAllAlarmsNextResponse
+	nextLayerMapping[byte(gen.MibUpload)|gen.AK] = LayerTypeMibUploadResponse
+	nextLayerMapping[byte(gen.MibUploadNext)|gen.AK] = LayerTypeMibUploadNextResponse
+	nextLayerMapping[byte(gen.MibReset)|gen.AK] = LayerTypeMibResetResponse
+	nextLayerMapping[byte(gen.Test)|gen.AK] = LayerTypeTestResponse
+	nextLayerMapping[byte(gen.StartSoftwareDownload)|gen.AK] = LayerTypeStartSoftwareDownloadResponse
+	nextLayerMapping[byte(gen.DownloadSection)|gen.AK] = LayerTypeDownloadSectionResponse
+	nextLayerMapping[byte(gen.EndSoftwareDownload)|gen.AK] = LayerTypeEndSoftwareDownloadResponse
+	nextLayerMapping[byte(gen.ActivateSoftware)|gen.AK] = LayerTypeActivateSoftwareResponse
+	nextLayerMapping[byte(gen.CommitSoftware)|gen.AK] = LayerTypeCommitSoftwareResponse
+	nextLayerMapping[byte(gen.SynchronizeTime)|gen.AK] = LayerTypeSynchronizeTimeResponse
+	nextLayerMapping[byte(gen.Reboot)|gen.AK] = LayerTypeRebootResponse
+	nextLayerMapping[byte(gen.GetNext)|gen.AK] = LayerTypeGetNextResponse
+	nextLayerMapping[byte(gen.GetCurrentData)|gen.AK] = LayerTypeGetCurrentDataResponse
+	nextLayerMapping[byte(gen.TestResult)|gen.AK] = LayerTypeTestResult
+	nextLayerMapping[byte(gen.SetTable)|gen.AK] = LayerTypeSetTableResponse
 }
 
-func MsgTypeToNextLayer(mt byte) (gopacket.LayerType, error) {
+func gen.MsgTypeToNextLayer(mt byte) (gopacket.LayerType, error) {
 	nextLayer, ok := nextLayerMapping[mt]
 	if ok {
 		return nextLayer, nil

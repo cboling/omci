@@ -19,44 +19,40 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineInventoryAndStatusDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineInventoryAndStatusDataPart2",
 		ClassID:  101,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("XdslTransmissionSystem", 0, omci.Read),
-			omci.NewByteField("LinePowerManagementState", 0, omci.Read),
-			omci.NewUint16Field("DownstreamLineAttenuation", 0, omci.Read),
-			omci.NewUint16Field("UpstreamLineAttenuation", 0, omci.Read),
-			omci.NewUint16Field("DownstreamSignalAttenuation", 0, omci.Read),
-			omci.NewUint16Field("UpstreamSignalAttenuation", 0, omci.Read),
-			omci.NewUint16Field("DownstreamSnrRatioMargin", 0, omci.Read),
-			omci.NewUint16Field("UpstreamSnrMargin", 0, omci.Read),
-			omci.NewUint32Field("DownstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint32Field("UpstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint16Field("DownstreamActualPowerSpectrumDensity", 0, omci.Read),
-			omci.NewUint16Field("UpstreamActualPowerSpectrumDensity", 0, omci.Read),
-			omci.NewUint16Field("DownstreamActualAggregateTransmitPower", 0, omci.Read),
-			omci.NewUint16Field("UpstreamActualAggregateTransmitPower", 0, omci.Read),
-			omci.NewByteField("InitializationLastStateTransmittedDownstream", 0, omci.Read),
-			omci.NewByteField("InitializationLastStateTransmittedUpstream", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("XdslTransmissionSystem", 0, Read),
+			NewByteField("LinePowerManagementState", 0, Read),
+			NewUint16Field("DownstreamLineAttenuation", 0, Read),
+			NewUint16Field("UpstreamLineAttenuation", 0, Read),
+			NewUint16Field("DownstreamSignalAttenuation", 0, Read),
+			NewUint16Field("UpstreamSignalAttenuation", 0, Read),
+			NewUint16Field("DownstreamSnrRatioMargin", 0, Read),
+			NewUint16Field("UpstreamSnrMargin", 0, Read),
+			NewUint32Field("DownstreamMaximumAttainableDataRate", 0, Read),
+			NewUint32Field("UpstreamMaximumAttainableDataRate", 0, Read),
+			NewUint16Field("DownstreamActualPowerSpectrumDensity", 0, Read),
+			NewUint16Field("UpstreamActualPowerSpectrumDensity", 0, Read),
+			NewUint16Field("DownstreamActualAggregateTransmitPower", 0, Read),
+			NewUint16Field("UpstreamActualAggregateTransmitPower", 0, Read),
+			NewByteField("InitializationLastStateTransmittedDownstream", 0, Read),
+			NewByteField("InitializationLastStateTransmittedUpstream", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart2{entity}, nil
 }

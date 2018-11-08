@@ -19,28 +19,17 @@
  */
 package generated
 
-type FastDataPathConfigurationProfile struct {
-	BaseManagedEntity
+import (
+	"fmt"
+)
+
+type MsgBase struct {
+	EntityClass    uint16
+	EntityInstance uint16
 }
 
-func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
-		Name:     "FastDataPathConfigurationProfile",
-		ClassID:  433,
-		EntityID: eid,
-		MessageTypes: []MsgType{
-			Set,
-			Get,
-			Create,
-			Delete,
-		},
-		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
-		},
-	}
-	entity.computeAttributeMask()
-	return &FastDataPathConfigurationProfile{entity}, nil
+func (msg *MsgBase) String() string {
+	// TODO: Lookup ClassID Name and add to output
+	return fmt.Sprintf("ClassID: %v (%#x), EntityID: %v (%#x)",
+		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
 }

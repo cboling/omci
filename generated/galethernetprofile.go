@@ -19,32 +19,28 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type GalEthernetProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewGalEthernetProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewGalEthernetProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "GalEthernetProfile",
 		ClassID:  272,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("MaximumGemPayloadSize", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("MaximumGemPayloadSize", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &GalEthernetProfile{entity}, nil
 }

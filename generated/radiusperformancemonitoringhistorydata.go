@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type RadiusPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "RadiusPerformanceMonitoringHistoryData",
 		ClassID:  293,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("AccessRequestPacketsTransmitted", 0, omci.Read),
-			omci.NewUint32Field("AccessRequestRetransmissionCount", 0, omci.Read),
-			omci.NewUint32Field("AccessChallengePacketsReceived", 0, omci.Read),
-			omci.NewUint32Field("AccessAcceptPacketsReceived", 0, omci.Read),
-			omci.NewUint32Field("AccessRejectPacketsReceived", 0, omci.Read),
-			omci.NewUint32Field("InvalidRadiusPacketsReceived", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("AccessRequestPacketsTransmitted", 0, Read),
+			NewUint32Field("AccessRequestRetransmissionCount", 0, Read),
+			NewUint32Field("AccessChallengePacketsReceived", 0, Read),
+			NewUint32Field("AccessAcceptPacketsReceived", 0, Read),
+			NewUint32Field("AccessRejectPacketsReceived", 0, Read),
+			NewUint32Field("InvalidRadiusPacketsReceived", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &RadiusPerformanceMonitoringHistoryData{entity}, nil
 }

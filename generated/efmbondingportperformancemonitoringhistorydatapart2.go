@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EfmBondingPortPerformanceMonitoringHistoryDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EfmBondingPortPerformanceMonitoringHistoryDataPart2",
 		ClassID:  425,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("RxUnicastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxUnicastFrames", 0, omci.Read),
-			omci.NewUint32Field("RxUnicastBytes", 0, omci.Read),
-			omci.NewUint32Field("TxUnicastBytes", 0, omci.Read),
-			omci.NewUint32Field("RxBroadcastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxBroadcastFrames", 0, omci.Read),
-			omci.NewUint32Field("RxBroadcastBytes", 0, omci.Read),
-			omci.NewUint32Field("TxBroadcastBytes", 0, omci.Read),
-			omci.NewUint32Field("RxMulticastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxMulticastFrames", 0, omci.Read),
-			omci.NewUint32Field("RxMulticastBytes", 0, omci.Read),
-			omci.NewUint32Field("TxMulticastBytes", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("RxUnicastFrames", 0, Read),
+			NewUint32Field("TxUnicastFrames", 0, Read),
+			NewUint32Field("RxUnicastBytes", 0, Read),
+			NewUint32Field("TxUnicastBytes", 0, Read),
+			NewUint32Field("RxBroadcastFrames", 0, Read),
+			NewUint32Field("TxBroadcastFrames", 0, Read),
+			NewUint32Field("RxBroadcastBytes", 0, Read),
+			NewUint32Field("TxBroadcastBytes", 0, Read),
+			NewUint32Field("RxMulticastFrames", 0, Read),
+			NewUint32Field("TxMulticastFrames", 0, Read),
+			NewUint32Field("RxMulticastBytes", 0, Read),
+			NewUint32Field("TxMulticastBytes", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EfmBondingPortPerformanceMonitoringHistoryDataPart2{entity}, nil
 }

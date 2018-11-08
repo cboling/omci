@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type FastLineInventoryAndStatusDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "FastLineInventoryAndStatusDataPart2",
 		ClassID:  436,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &FastLineInventoryAndStatusDataPart2{entity}, nil
 }

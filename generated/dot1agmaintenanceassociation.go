@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1AgMaintenanceAssociation struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1AgMaintenanceAssociation(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1AgMaintenanceAssociation",
 		ClassID:  300,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("MdPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ShortMaNameFormat", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("ShortMaName1,ShortMaName2", 0, omci.Read|omci.Write),
-			omci.NewByteField("ContinuityCheckMessageCcmInterval", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("AssociatedVlans", 0, omci.Read|omci.Write),
-			omci.NewByteField("MhfCreation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SenderIdPermission", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("MdPointer", 0, Read|Write|SetByCreate),
+			NewByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
+			NewUnknownField("ShortMaName1,ShortMaName2", 0, Read|Write),
+			NewByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
+			NewUnknownField("AssociatedVlans", 0, Read|Write),
+			NewByteField("MhfCreation", 0, Read|Write|SetByCreate),
+			NewByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1AgMaintenanceAssociation{entity}, nil
 }

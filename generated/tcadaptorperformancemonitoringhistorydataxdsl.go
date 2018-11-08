@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TcAdaptorPerformanceMonitoringHistoryDataXdsl struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TcAdaptorPerformanceMonitoringHistoryDataXdsl",
 		ClassID:  116,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("NearEndHecViolationCount", 0, omci.Read),
-			omci.NewUint32Field("NearEndDelineatedTotalCellCountCdP", 0, omci.Read),
-			omci.NewUint32Field("NearEndUserTotalCellCountCuP", 0, omci.Read),
-			omci.NewUint16Field("NearEndIdleCellBitErrorCount", 0, omci.Read),
-			omci.NewUint16Field("FarEndHecViolationCount", 0, omci.Read),
-			omci.NewUint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, omci.Read),
-			omci.NewUint32Field("FarEndUserTotalCellCountCuPfe", 0, omci.Read),
-			omci.NewUint16Field("FarEndIdleCellBitErrorCount", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint16Field("NearEndHecViolationCount", 0, Read),
+			NewUint32Field("NearEndDelineatedTotalCellCountCdP", 0, Read),
+			NewUint32Field("NearEndUserTotalCellCountCuP", 0, Read),
+			NewUint16Field("NearEndIdleCellBitErrorCount", 0, Read),
+			NewUint16Field("FarEndHecViolationCount", 0, Read),
+			NewUint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, Read),
+			NewUint32Field("FarEndUserTotalCellCountCuPfe", 0, Read),
+			NewUint16Field("FarEndIdleCellBitErrorCount", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TcAdaptorPerformanceMonitoringHistoryDataXdsl{entity}, nil
 }

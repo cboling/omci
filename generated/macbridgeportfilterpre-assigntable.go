@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgePortFilterPreAssignTable struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgePortFilterPreAssignTable",
 		ClassID:  79,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("Ipv4MulticastFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("Ipv6MulticastFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("Ipv4BroadcastFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("RarpFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("IpxFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("NetbeuiFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("AppletalkFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("BridgeManagementInformationFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArpFiltering", 0, omci.Read|omci.Write),
-			omci.NewByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("Ipv4MulticastFiltering", 0, Read|Write),
+			NewByteField("Ipv6MulticastFiltering", 0, Read|Write),
+			NewByteField("Ipv4BroadcastFiltering", 0, Read|Write),
+			NewByteField("RarpFiltering", 0, Read|Write),
+			NewByteField("IpxFiltering", 0, Read|Write),
+			NewByteField("NetbeuiFiltering", 0, Read|Write),
+			NewByteField("AppletalkFiltering", 0, Read|Write),
+			NewByteField("BridgeManagementInformationFiltering", 0, Read|Write),
+			NewByteField("ArpFiltering", 0, Read|Write),
+			NewByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgePortFilterPreAssignTable{entity}, nil
 }

@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart3 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart3",
 		ClassID:  451,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("TuningControlRequestsRollbackDsAlbl", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackDsLktp", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsAlbl", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsVoid", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsTunr", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsLktp", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsLnrt", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsLncd", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			NewUint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackDsLktp", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsVoid", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsTunr", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsLktp", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsLncd", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelTuningPerformanceMonitoringHistoryDataPart3{entity}, nil
 }

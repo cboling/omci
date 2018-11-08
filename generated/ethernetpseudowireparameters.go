@@ -19,32 +19,28 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EthernetPseudowireParameters struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEthernetPseudowireParameters(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EthernetPseudowireParameters",
 		ClassID:  400,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("Mtu", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("Mtu", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EthernetPseudowireParameters{entity}, nil
 }

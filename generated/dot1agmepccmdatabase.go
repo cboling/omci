@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1AgMepCcmDatabase struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1AgMepCcmDatabase(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1AgMepCcmDatabase",
 		ClassID:  304,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("Rmep1DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep2DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep3DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep4DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep5DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep6DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep7DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep8DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep9DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep10DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep11DatabaseTable", 0, omci.Read),
-			omci.NewUnknownField("Rmep12DatabaseTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("Rmep1DatabaseTable", 0, Read),
+			NewUnknownField("Rmep2DatabaseTable", 0, Read),
+			NewUnknownField("Rmep3DatabaseTable", 0, Read),
+			NewUnknownField("Rmep4DatabaseTable", 0, Read),
+			NewUnknownField("Rmep5DatabaseTable", 0, Read),
+			NewUnknownField("Rmep6DatabaseTable", 0, Read),
+			NewUnknownField("Rmep7DatabaseTable", 0, Read),
+			NewUnknownField("Rmep8DatabaseTable", 0, Read),
+			NewUnknownField("Rmep9DatabaseTable", 0, Read),
+			NewUnknownField("Rmep10DatabaseTable", 0, Read),
+			NewUnknownField("Rmep11DatabaseTable", 0, Read),
+			NewUnknownField("Rmep12DatabaseTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1AgMepCcmDatabase{entity}, nil
 }

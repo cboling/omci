@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type RtpProfileData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewRtpProfileData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "RtpProfileData",
 		ClassID:  143,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("LocalPortMin", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("LocalPortMax", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("DscpMark", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PiggybackEvents", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ToneEvents", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("DtmfEvents", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CasEvents", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("IpHostConfigPointer", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("LocalPortMin", 0, Read|Write|SetByCreate),
+			NewUint16Field("LocalPortMax", 0, Read|Write|SetByCreate),
+			NewByteField("DscpMark", 0, Read|Write|SetByCreate),
+			NewByteField("PiggybackEvents", 0, Read|Write|SetByCreate),
+			NewByteField("ToneEvents", 0, Read|Write|SetByCreate),
+			NewByteField("DtmfEvents", 0, Read|Write|SetByCreate),
+			NewByteField("CasEvents", 0, Read|Write|SetByCreate),
+			NewUint16Field("IpHostConfigPointer", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &RtpProfileData{entity}, nil
 }

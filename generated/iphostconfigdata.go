@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type IpHostConfigData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewIpHostConfigData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "IpHostConfigData",
 		ClassID:  134,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("IpOptions", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("MacAddress", 0, omci.Read),
-			omci.NewUnknownField("OnuIdentifier", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("IpAddress", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("Mask", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("Gateway", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("PrimaryDns", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("SecondaryDns", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("CurrentAddress", 0, omci.Read),
-			omci.NewUint32Field("CurrentMask", 0, omci.Read),
-			omci.NewUint32Field("CurrentGateway", 0, omci.Read),
-			omci.NewUint32Field("CurrentPrimaryDns", 0, omci.Read),
-			omci.NewUint32Field("CurrentSecondaryDns", 0, omci.Read),
-			omci.NewUnknownField("DomainName", 0, omci.Read),
-			omci.NewUnknownField("HostName", 0, omci.Read),
-			omci.NewUint16Field("RelayAgentOptions", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("IpOptions", 0, Read|Write),
+			NewUnknownField("MacAddress", 0, Read),
+			NewUnknownField("OnuIdentifier", 0, Read|Write),
+			NewUint32Field("IpAddress", 0, Read|Write),
+			NewUint32Field("Mask", 0, Read|Write),
+			NewUint32Field("Gateway", 0, Read|Write),
+			NewUint32Field("PrimaryDns", 0, Read|Write),
+			NewUint32Field("SecondaryDns", 0, Read|Write),
+			NewUint32Field("CurrentAddress", 0, Read),
+			NewUint32Field("CurrentMask", 0, Read),
+			NewUint32Field("CurrentGateway", 0, Read),
+			NewUint32Field("CurrentPrimaryDns", 0, Read),
+			NewUint32Field("CurrentSecondaryDns", 0, Read),
+			NewUnknownField("DomainName", 0, Read),
+			NewUnknownField("HostName", 0, Read),
+			NewUint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &IpHostConfigData{entity}, nil
 }

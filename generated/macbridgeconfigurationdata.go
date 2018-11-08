@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgeConfigurationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgeConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgeConfigurationData",
 		ClassID:  46,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("BridgeMacAddress", 0, omci.Read),
-			omci.NewUint16Field("BridgePriority", 0, omci.Read),
-			omci.NewUint64Field("DesignatedRoot", 0, omci.Read),
-			omci.NewUint32Field("RootPathCost", 0, omci.Read),
-			omci.NewByteField("BridgePortCount", 0, omci.Read),
-			omci.NewUint16Field("RootPortNum", 0, omci.Read),
-			omci.NewUint16Field("HelloTime", 0, omci.Read),
-			omci.NewUint16Field("ForwardDelay", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("BridgeMacAddress", 0, Read),
+			NewUint16Field("BridgePriority", 0, Read),
+			NewUint64Field("DesignatedRoot", 0, Read),
+			NewUint32Field("RootPathCost", 0, Read),
+			NewByteField("BridgePortCount", 0, Read),
+			NewUint16Field("RootPortNum", 0, Read),
+			NewUint16Field("HelloTime", 0, Read),
+			NewUint16Field("ForwardDelay", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgeConfigurationData{entity}, nil
 }

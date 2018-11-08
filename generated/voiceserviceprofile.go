@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoiceServiceProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoiceServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoiceServiceProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoiceServiceProfile",
 		ClassID:  58,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("AnnouncementType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("JitterTarget", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("JitterBufferMax", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("EchoCancelInd", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PstnProtocolVariant", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DtmfDigitLevels", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DtmfDigitDuration", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("HookFlashMinimumTime", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("HookFlashMaximumTime", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("TonePatternTable", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("ToneEventTable", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("RingingPatternTable", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("RingingEventTable", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("NetworkSpecificExtensionsPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("AnnouncementType", 0, Read|Write|SetByCreate),
+			NewUint16Field("JitterTarget", 0, Read|Write|SetByCreate),
+			NewUint16Field("JitterBufferMax", 0, Read|Write|SetByCreate),
+			NewByteField("EchoCancelInd", 0, Read|Write|SetByCreate),
+			NewUint16Field("PstnProtocolVariant", 0, Read|Write|SetByCreate),
+			NewUint16Field("DtmfDigitLevels", 0, Read|Write|SetByCreate),
+			NewUint16Field("DtmfDigitDuration", 0, Read|Write|SetByCreate),
+			NewUint16Field("HookFlashMinimumTime", 0, Read|Write|SetByCreate),
+			NewUint16Field("HookFlashMaximumTime", 0, Read|Write|SetByCreate),
+			NewUnknownField("TonePatternTable", 0, Read|Write),
+			NewUnknownField("ToneEventTable", 0, Read|Write),
+			NewUnknownField("RingingPatternTable", 0, Read|Write),
+			NewUnknownField("RingingEventTable", 0, Read|Write),
+			NewUint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoiceServiceProfile{entity}, nil
 }

@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointMocaUni struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointMocaUni",
 		ClassID:  162,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("LoopbackConfiguration", 0, omci.Read|omci.Write),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewUint16Field("MaxFrameSize", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("PppoeFilter", 0, omci.Read|omci.Write),
-			omci.NewByteField("NetworkStatus", 0, omci.Read),
-			omci.NewUnknownField("Password", 0, omci.Read|omci.Write),
-			omci.NewByteField("PrivacyEnabled", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("MinimumBandwidthAlarmThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("FrequencyMask", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("RfChannel", 0, omci.Read),
-			omci.NewUint16Field("LastOperationalFrequency", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("LoopbackConfiguration", 0, Read|Write),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewUint16Field("MaxFrameSize", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("PppoeFilter", 0, Read|Write),
+			NewByteField("NetworkStatus", 0, Read),
+			NewUnknownField("Password", 0, Read|Write),
+			NewByteField("PrivacyEnabled", 0, Read|Write),
+			NewUint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
+			NewUint32Field("FrequencyMask", 0, Read|Write),
+			NewUint16Field("RfChannel", 0, Read),
+			NewUint16Field("LastOperationalFrequency", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointMocaUni{entity}, nil
 }

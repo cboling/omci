@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslChannelConfigurationProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslChannelConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslChannelConfigurationProfile",
 		ClassID:  107,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("MinimumDataRate", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MaximumDataRate", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("RateAdaptationRatio", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MaximumInterleavingDelay", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("DataRateThresholdUpshift", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("DataRateThresholdDownshift", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MinimumReservedDataRate", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MinimumDataRateInLowPowerState", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MinimumImpulseNoiseProtection", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MaximumBitErrorRatio", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MinimumImpulseNoiseProtection8Khz", 0, omci.Read|omci.Write),
-			omci.NewByteField("MaximumDelayVariation", 0, omci.Read|omci.Write),
-			omci.NewByteField("ChannelInitializationPolicySelection", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MinimumSosBitRateDownstream", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MinimumSosBitRateUpstream", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("MinimumDataRate", 0, Read|Write|SetByCreate),
+			NewUint32Field("MaximumDataRate", 0, Read|Write|SetByCreate),
+			NewByteField("RateAdaptationRatio", 0, Read|Write|SetByCreate),
+			NewByteField("MaximumInterleavingDelay", 0, Read|Write|SetByCreate),
+			NewUint32Field("DataRateThresholdUpshift", 0, Read|Write|SetByCreate),
+			NewUint32Field("DataRateThresholdDownshift", 0, Read|Write|SetByCreate),
+			NewUint32Field("MinimumReservedDataRate", 0, Read|Write|SetByCreate),
+			NewUint32Field("MinimumDataRateInLowPowerState", 0, Read|Write|SetByCreate),
+			NewByteField("MinimumImpulseNoiseProtection", 0, Read|Write|SetByCreate),
+			NewByteField("MaximumBitErrorRatio", 0, Read|Write|SetByCreate),
+			NewByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write),
+			NewByteField("MaximumDelayVariation", 0, Read|Write),
+			NewByteField("ChannelInitializationPolicySelection", 0, Read|Write),
+			NewUint32Field("MinimumSosBitRateDownstream", 0, Read|Write),
+			NewUint32Field("MinimumSosBitRateUpstream", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslChannelConfigurationProfile{entity}, nil
 }

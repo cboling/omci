@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MplsPseudowireTerminationPoint struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMplsPseudowireTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MplsPseudowireTerminationPoint",
 		ClassID:  333,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MplsLabelIndicator", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MplsPwDirection", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MplsPwUplinkLabel", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MplsPwDownlinkLabel", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MplsPwTc", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MplsTunnelDirection", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MplsTunnelUplinkLabel", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("MplsTunnelDownlinkLabel", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MplsTunnelTc", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PseudowireType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PseudowireControlWordPreference", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("TpType", 0, Read|Write|SetByCreate),
+			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			NewByteField("MplsLabelIndicator", 0, Read|Write|SetByCreate),
+			NewByteField("MplsPwDirection", 0, Read|Write|SetByCreate),
+			NewUint32Field("MplsPwUplinkLabel", 0, Read|Write|SetByCreate),
+			NewUint32Field("MplsPwDownlinkLabel", 0, Read|Write|SetByCreate),
+			NewByteField("MplsPwTc", 0, Read|Write|SetByCreate),
+			NewByteField("MplsTunnelDirection", 0, Read|Write|SetByCreate),
+			NewUint32Field("MplsTunnelUplinkLabel", 0, Read|Write|SetByCreate),
+			NewUint32Field("MplsTunnelDownlinkLabel", 0, Read|Write|SetByCreate),
+			NewByteField("MplsTunnelTc", 0, Read|Write|SetByCreate),
+			NewUint16Field("PseudowireType", 0, Read|Write|SetByCreate),
+			NewByteField("PseudowireControlWordPreference", 0, Read|Write|SetByCreate),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MplsPseudowireTerminationPoint{entity}, nil
 }

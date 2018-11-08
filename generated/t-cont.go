@@ -19,32 +19,28 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TCont struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTCont(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTCont(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TCont",
 		ClassID:  262,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
-			omci.NewUint16Field("AllocId", 0, omci.Read|omci.Write),
-			omci.NewByteField("Deprecated", 0, omci.Read),
-			omci.NewByteField("Policy", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read),
+			NewUint16Field("AllocId", 0, Read|Write),
+			NewByteField("Deprecated", 0, Read),
+			NewByteField("Policy", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TCont{entity}, nil
 }

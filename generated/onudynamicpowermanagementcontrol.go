@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type OnuDynamicPowerManagementControl struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOnuDynamicPowerManagementControl(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "OnuDynamicPowerManagementControl",
 		ClassID:  336,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("PowerReductionManagementCapability", 0, omci.Read),
-			omci.NewByteField("PowerReductionManagementMode", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("Itransinit", 0, omci.Read),
-			omci.NewUint16Field("Itxinit", 0, omci.Read),
-			omci.NewUint32Field("MaximumSleepInterval", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MaximumReceiverOffInterval", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MinimumAwareInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("MinimumActiveHeldInterval", 0, omci.Read|omci.Write),
-			omci.NewUint64Field("MaximumSleepIntervalExtension", 0, omci.Read|omci.Write),
-			omci.NewByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, omci.Read),
-			omci.NewByteField("EponSetupExtension", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MissingConsecutiveBurstsThreshold", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("PowerReductionManagementCapability", 0, Read),
+			NewByteField("PowerReductionManagementMode", 0, Read|Write),
+			NewUint16Field("Itransinit", 0, Read),
+			NewUint16Field("Itxinit", 0, Read),
+			NewUint32Field("MaximumSleepInterval", 0, Read|Write),
+			NewUint32Field("MaximumReceiverOffInterval", 0, Read|Write),
+			NewUint32Field("MinimumAwareInterval", 0, Read|Write),
+			NewUint16Field("MinimumActiveHeldInterval", 0, Read|Write),
+			NewUint64Field("MaximumSleepIntervalExtension", 0, Read|Write),
+			NewByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read),
+			NewByteField("EponSetupExtension", 0, Read|Write),
+			NewUint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &OnuDynamicPowerManagementControl{entity}, nil
 }

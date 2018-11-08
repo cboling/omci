@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type GemPortNetworkCtpPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "GemPortNetworkCtpPerformanceMonitoringHistoryData",
 		ClassID:  341,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("TransmittedGemFrames", 0, omci.Read),
-			omci.NewUint32Field("ReceivedGemFrames", 0, omci.Read),
-			omci.NewUint64Field("ReceivedPayloadBytes", 0, omci.Read),
-			omci.NewUint64Field("TransmittedPayloadBytes", 0, omci.Read),
-			omci.NewUint32Field("EncryptionKeyErrors", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			NewUint32Field("TransmittedGemFrames", 0, Read),
+			NewUint32Field("ReceivedGemFrames", 0, Read),
+			NewUint64Field("ReceivedPayloadBytes", 0, Read),
+			NewUint64Field("TransmittedPayloadBytes", 0, Read),
+			NewUint32Field("EncryptionKeyErrors", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &GemPortNetworkCtpPerformanceMonitoringHistoryData{entity}, nil
 }

@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart2",
 		ClassID:  450,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsAlbl", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsVoid", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsPart", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsTunr", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsLnrt", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsLncd", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsAlbl", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsVoid", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsTunr", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsClbr", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsLktp", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsLnrt", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsLncd", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("TuningControlRequestsRejectedDsAlbl", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsVoid", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsPart", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsTunr", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsLnrt", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsLncd", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsAlbl", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsVoid", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsTunr", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsClbr", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsLktp", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsLnrt", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsLncd", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelTuningPerformanceMonitoringHistoryDataPart2{entity}, nil
 }

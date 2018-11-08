@@ -19,32 +19,28 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelManagedEntity struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelManagedEntity(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelManagedEntity",
 		ClassID:  443,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("ActiveChannelIndication", 0, omci.Read),
-			omci.NewByteField("OperationalChannelIndication", 0, omci.Read),
-			omci.NewByteField("DownstreamWavelengthChannel", 0, omci.Read),
-			omci.NewByteField("UpstreamWavelengthChannel", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("ActiveChannelIndication", 0, Read),
+			NewByteField("OperationalChannelIndication", 0, Read),
+			NewByteField("DownstreamWavelengthChannel", 0, Read),
+			NewByteField("UpstreamWavelengthChannel", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelManagedEntity{entity}, nil
 }

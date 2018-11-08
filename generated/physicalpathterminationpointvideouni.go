@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointVideoUni struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointVideoUni",
 		ClassID:  82,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("PowerControl", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("PowerControl", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointVideoUni{entity}, nil
 }

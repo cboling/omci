@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslChannelUpstreamStatusData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslChannelUpstreamStatusData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslChannelUpstreamStatusData",
 		ClassID:  103,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("ActualInterleavingDelay", 0, omci.Read),
-			omci.NewUint32Field("ActualDataRate", 0, omci.Read),
-			omci.NewUint32Field("PreviousDataRate", 0, omci.Read),
-			omci.NewByteField("ActualImpulseNoiseProtection", 0, omci.Read),
-			omci.NewByteField("ImpulseNoiseProtectionReportingMode", 0, omci.Read),
-			omci.NewByteField("ActualSizeOfReedSolomonCodeword", 0, omci.Read),
-			omci.NewByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, omci.Read),
-			omci.NewUint16Field("ActualNumberOfBitsPerSymbol", 0, omci.Read),
-			omci.NewUint16Field("ActualInterleavingDepth", 0, omci.Read),
-			omci.NewByteField("ActualInterleavingBlockLength", 0, omci.Read),
-			omci.NewByteField("ActualLatencyPath", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("ActualInterleavingDelay", 0, Read),
+			NewUint32Field("ActualDataRate", 0, Read),
+			NewUint32Field("PreviousDataRate", 0, Read),
+			NewByteField("ActualImpulseNoiseProtection", 0, Read),
+			NewByteField("ImpulseNoiseProtectionReportingMode", 0, Read),
+			NewByteField("ActualSizeOfReedSolomonCodeword", 0, Read),
+			NewByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read),
+			NewUint16Field("ActualNumberOfBitsPerSymbol", 0, Read),
+			NewUint16Field("ActualInterleavingDepth", 0, Read),
+			NewByteField("ActualInterleavingBlockLength", 0, Read),
+			NewByteField("ActualLatencyPath", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslChannelUpstreamStatusData{entity}, nil
 }

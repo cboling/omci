@@ -19,44 +19,40 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgePortConfigurationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgePortConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgePortConfigurationData",
 		ClassID:  47,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("BridgeIdPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PortNum", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PortPriority", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PortPathCost", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PortSpanningTreeInd", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Deprecated1", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Deprecated2", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("PortMacAddress", 0, omci.Read),
-			omci.NewUint16Field("OutboundTdPointer", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("InboundTdPointer", 0, omci.Read|omci.Write),
-			omci.NewByteField("MacLearningDepth", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("BridgeIdPointer", 0, Read|Write|SetByCreate),
+			NewByteField("PortNum", 0, Read|Write|SetByCreate),
+			NewByteField("TpType", 0, Read|Write|SetByCreate),
+			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("PortPriority", 0, Read|Write|SetByCreate),
+			NewUint16Field("PortPathCost", 0, Read|Write|SetByCreate),
+			NewByteField("PortSpanningTreeInd", 0, Read|Write|SetByCreate),
+			NewByteField("Deprecated1", 0, Read|Write|SetByCreate),
+			NewByteField("Deprecated2", 0, Read|Write|SetByCreate),
+			NewUnknownField("PortMacAddress", 0, Read),
+			NewUint16Field("OutboundTdPointer", 0, Read|Write),
+			NewUint16Field("InboundTdPointer", 0, Read|Write),
+			NewByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgePortConfigurationData{entity}, nil
 }

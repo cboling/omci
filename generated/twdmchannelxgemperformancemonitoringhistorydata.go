@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelXgemPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelXgemPerformanceMonitoringHistoryData",
 		ClassID:  445,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData64BItId", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint64Field("TotalTransmittedXgemFrames", 0, omci.Read),
-			omci.NewUint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, omci.Read),
-			omci.NewUint64Field("TotalReceivedXgemFrames", 0, omci.Read),
-			omci.NewUint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, omci.Read),
-			omci.NewUint64Field("FsWordsLostToXgemHeaderHecErrors", 0, omci.Read),
-			omci.NewUint64Field("XgemEncryptionKeyErrors", 0, omci.Read),
-			omci.NewUint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, omci.Read),
-			omci.NewUint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
+			NewUint64Field("TotalTransmittedXgemFrames", 0, Read),
+			NewUint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
+			NewUint64Field("TotalReceivedXgemFrames", 0, Read),
+			NewUint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
+			NewUint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),
+			NewUint64Field("XgemEncryptionKeyErrors", 0, Read),
+			NewUint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read),
+			NewUint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelXgemPerformanceMonitoringHistoryData{entity}, nil
 }

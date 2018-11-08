@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type FastVectoringLineConfigurationExtensions struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (omci.IManagedEntity, error) {
+func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "FastVectoringLineConfigurationExtensions",
 		ClassID:  434,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, omci.Read|omci.Write),
-			omci.NewByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
+			NewByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &FastVectoringLineConfigurationExtensions{entity}, nil
 }

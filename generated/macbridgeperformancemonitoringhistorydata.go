@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgePerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgePerformanceMonitoringHistoryData",
 		ClassID:  51,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("BridgeLearningEntryDiscardCount", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("BridgeLearningEntryDiscardCount", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgePerformanceMonitoringHistoryData{entity}, nil
 }

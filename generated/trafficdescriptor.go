@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TrafficDescriptor struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTrafficDescriptor(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TrafficDescriptor",
 		ClassID:  280,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("Cir", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("Pir", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("Cbs", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("Pbs", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ColourMode", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("IngressColourMarking", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("EgressColourMarking", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MeterType", 0, omci.Read|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("Cir", 0, Read|Write|SetByCreate),
+			NewUint32Field("Pir", 0, Read|Write|SetByCreate),
+			NewUint32Field("Cbs", 0, Read|Write|SetByCreate),
+			NewUint32Field("Pbs", 0, Read|Write|SetByCreate),
+			NewByteField("ColourMode", 0, Read|Write|SetByCreate),
+			NewByteField("IngressColourMarking", 0, Read|Write|SetByCreate),
+			NewByteField("EgressColourMarking", 0, Read|Write|SetByCreate),
+			NewByteField("MeterType", 0, Read|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TrafficDescriptor{entity}, nil
 }

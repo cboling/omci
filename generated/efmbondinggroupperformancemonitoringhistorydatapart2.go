@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EfmBondingGroupPerformanceMonitoringHistoryDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
 		ClassID:  422,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("RxUnicastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxUnicastFrames", 0, omci.Read),
-			omci.NewUint64Field("RxUnicastBytes", 0, omci.Read),
-			omci.NewUint64Field("TxUnicastBytes", 0, omci.Read),
-			omci.NewUint32Field("RxBroadcastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxBroadcastFrames", 0, omci.Read),
-			omci.NewUint64Field("RxBroadcastBytes", 0, omci.Read),
-			omci.NewUint64Field("TxBroadcastBytes", 0, omci.Read),
-			omci.NewUint32Field("RxMulticastFrames", 0, omci.Read),
-			omci.NewUint32Field("TxMulticastFrames", 0, omci.Read),
-			omci.NewUint64Field("RxMulticastBytes", 0, omci.Read),
-			omci.NewUint64Field("TxMulticastBytes", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("RxUnicastFrames", 0, Read),
+			NewUint32Field("TxUnicastFrames", 0, Read),
+			NewUint64Field("RxUnicastBytes", 0, Read),
+			NewUint64Field("TxUnicastBytes", 0, Read),
+			NewUint32Field("RxBroadcastFrames", 0, Read),
+			NewUint32Field("TxBroadcastFrames", 0, Read),
+			NewUint64Field("RxBroadcastBytes", 0, Read),
+			NewUint64Field("TxBroadcastBytes", 0, Read),
+			NewUint32Field("RxMulticastFrames", 0, Read),
+			NewUint32Field("TxMulticastFrames", 0, Read),
+			NewUint64Field("RxMulticastBytes", 0, Read),
+			NewUint64Field("TxMulticastBytes", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EfmBondingGroupPerformanceMonitoringHistoryDataPart2{entity}, nil
 }

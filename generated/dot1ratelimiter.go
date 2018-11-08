@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1RateLimiter struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1RateLimiter(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1RateLimiter",
 		ClassID:  298,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("ParentMePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamUnicastFloodRatePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamBroadcastRatePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamMulticastPayloadRatePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("ParentMePointer", 0, Read|Write|SetByCreate),
+			NewByteField("TpType", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamUnicastFloodRatePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamBroadcastRatePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1RateLimiter{entity}, nil
 }

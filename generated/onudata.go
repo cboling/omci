@@ -19,35 +19,31 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type OnuData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOnuData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "OnuData",
 		ClassID:  2,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.GetAllAlarms,
-			omci.GetAllAlarmsNext,
-			omci.MibUpload,
-			omci.MibUploadNext,
-			omci.MibReset,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			GetAllAlarms,
+			GetAllAlarmsNext,
+			MibUpload,
+			MibUploadNext,
+			MibReset,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("MibDataSync", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("MibDataSync", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &OnuData{entity}, nil
 }

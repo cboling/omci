@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type OltG struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOltG(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOltG(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "OltG",
 		ClassID:  131,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint32Field("OltVendorId", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("EquipmentId", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("Version", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("TimeOfDayInformation", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint32Field("OltVendorId", 0, Read|Write),
+			NewUnknownField("EquipmentId", 0, Read|Write),
+			NewUnknownField("Version", 0, Read|Write),
+			NewUnknownField("TimeOfDayInformation", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &OltG{entity}, nil
 }

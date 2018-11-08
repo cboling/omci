@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineInventoryAndStatusDataPart1 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineInventoryAndStatusDataPart1",
 		ClassID:  100,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint64Field("XtuCG9941VendorId", 0, omci.Read),
-			omci.NewUint64Field("XtuRG9941VendorId", 0, omci.Read),
-			omci.NewUint64Field("XtuCSystemVendorId", 0, omci.Read),
-			omci.NewUint64Field("XtuRSystemVendorId", 0, omci.Read),
-			omci.NewUnknownField("XtuCVersionNumber", 0, omci.Read),
-			omci.NewUnknownField("XtuRVersionNumber", 0, omci.Read),
-			omci.NewUnknownField("XtuCSerialNumberPart1", 0, omci.Read),
-			omci.NewUnknownField("XtuCSerialNumberPart2", 0, omci.Read),
-			omci.NewUnknownField("XtuRSerialNumberPart1", 0, omci.Read),
-			omci.NewUnknownField("XtuRSerialNumberPart2", 0, omci.Read),
-			omci.NewUint32Field("XtuCSelfTestResults", 0, omci.Read),
-			omci.NewUint32Field("XtuRSelfTestResults", 0, omci.Read),
-			omci.NewUnknownField("XtuCTransmissionSystemCapability", 0, omci.Read),
-			omci.NewUnknownField("XtuRTransmissionSystemCapability", 0, omci.Read),
-			omci.NewByteField("InitializationSuccessFailureCause", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint64Field("XtuCG9941VendorId", 0, Read),
+			NewUint64Field("XtuRG9941VendorId", 0, Read),
+			NewUint64Field("XtuCSystemVendorId", 0, Read),
+			NewUint64Field("XtuRSystemVendorId", 0, Read),
+			NewUnknownField("XtuCVersionNumber", 0, Read),
+			NewUnknownField("XtuRVersionNumber", 0, Read),
+			NewUnknownField("XtuCSerialNumberPart1", 0, Read),
+			NewUnknownField("XtuCSerialNumberPart2", 0, Read),
+			NewUnknownField("XtuRSerialNumberPart1", 0, Read),
+			NewUnknownField("XtuRSerialNumberPart2", 0, Read),
+			NewUint32Field("XtuCSelfTestResults", 0, Read),
+			NewUint32Field("XtuRSelfTestResults", 0, Read),
+			NewUnknownField("XtuCTransmissionSystemCapability", 0, Read),
+			NewUnknownField("XtuRTransmissionSystemCapability", 0, Read),
+			NewByteField("InitializationSuccessFailureCause", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart1{entity}, nil
 }

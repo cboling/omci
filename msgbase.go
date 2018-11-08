@@ -17,8 +17,8 @@
 package omci
 
 import (
+	"./generated"
 	"encoding/binary"
-	"fmt"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 )
@@ -42,31 +42,30 @@ func decodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBu
 	return p.NextDecoder(next)
 }
 
-type msgBase struct {
+type msgBasePacket struct {
+	generated.MsgBase
 	layers.BaseLayer
-	layerType      gopacket.LayerType
-	EntityClass    uint16
-	EntityInstance uint16
+	layerType gopacket.LayerType
 }
 
-func (msg *msgBase) String() string {
-	// TODO: Lookup ClassID Name and add to output
-	return fmt.Sprintf("ClassID: %v (%#x), EntityID: %v (%#x)",
-		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
-}
-func (msg *msgBase) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
-func (msg *msgBase) LayerType() gopacket.LayerType     { return msg.layerType }
-func (msg *msgBase) CanDecode() gopacket.LayerClass    { return msg.layerType }
-func (msg *msgBase) LayerPayload() []byte              { return nil }
+//func (msg *msgBase) String() string {
+//	// TODO: Lookup ClassID Name and add to output
+//	return fmt.Sprintf("ClassID: %v (%#x), EntityID: %v (%#x)",
+//		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
+//}
+func (msg *msgBasePacket) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
+func (msg *msgBasePacket) LayerType() gopacket.LayerType     { return msg.layerType }
+func (msg *msgBasePacket) CanDecode() gopacket.LayerClass    { return msg.layerType }
+func (msg *msgBasePacket) LayerPayload() []byte              { return nil }
 
-func (msg *msgBase) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (msg *msgBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Note: Base OMCI frame already checked for frame with at least 10 octets
 	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
 	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
 	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
 	return nil
 }
-func (msg *msgBase) SerializeTo(b gopacket.SerializeBuffer) error {
+func (msg *msgBasePacket) SerializeTo(b gopacket.SerializeBuffer) error {
 	// Add class ID and entity ID
 	bytes, err := b.PrependBytes(4)
 	if err != nil {

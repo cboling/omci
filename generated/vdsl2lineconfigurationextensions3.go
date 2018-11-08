@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Vdsl2LineConfigurationExtensions3 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Vdsl2LineConfigurationExtensions3",
 		ClassID:  410,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("Ripolicyds", 0, omci.Read|omci.Write),
-			omci.NewByteField("Ripolicyus", 0, omci.Read|omci.Write),
-			omci.NewByteField("ReinitTimeThresholdds", 0, omci.Read|omci.Write),
-			omci.NewByteField("ReinitTimeThresholdus", 0, omci.Read|omci.Write),
-			omci.NewByteField("Rxrefvnsfus", 0, omci.Read|omci.Write),
-			omci.NewByteField("Txrefvnsfds", 0, omci.Read|omci.Write),
-			omci.NewByteField("RtxModeds", 0, omci.Read|omci.Write),
-			omci.NewByteField("RtxModeus", 0, omci.Read|omci.Write),
-			omci.NewByteField("LeftrThresh", 0, omci.Read|omci.Write),
-			omci.NewByteField("MaxdelayoctetSplitParameterMdosplit", 0, omci.Read|omci.Write),
-			omci.NewByteField("AttndrMethodAttndrMethod", 0, omci.Read|omci.Write),
-			omci.NewByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("Ripolicyds", 0, Read|Write),
+			NewByteField("Ripolicyus", 0, Read|Write),
+			NewByteField("ReinitTimeThresholdds", 0, Read|Write),
+			NewByteField("ReinitTimeThresholdus", 0, Read|Write),
+			NewByteField("Rxrefvnsfus", 0, Read|Write),
+			NewByteField("Txrefvnsfds", 0, Read|Write),
+			NewByteField("RtxModeds", 0, Read|Write),
+			NewByteField("RtxModeus", 0, Read|Write),
+			NewByteField("LeftrThresh", 0, Read|Write),
+			NewByteField("MaxdelayoctetSplitParameterMdosplit", 0, Read|Write),
+			NewByteField("AttndrMethodAttndrMethod", 0, Read|Write),
+			NewByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Vdsl2LineConfigurationExtensions3{entity}, nil
 }

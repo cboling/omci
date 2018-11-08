@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EthernetPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEthernetPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EthernetPerformanceMonitoringHistoryData",
 		ClassID:  24,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("FcsErrors", 0, omci.Read),
-			omci.NewUint32Field("ExcessiveCollisionCounter", 0, omci.Read),
-			omci.NewUint32Field("LateCollisionCounter", 0, omci.Read),
-			omci.NewUint32Field("FramesTooLong", 0, omci.Read),
-			omci.NewUint32Field("BufferOverflowsOnReceive", 0, omci.Read),
-			omci.NewUint32Field("BufferOverflowsOnTransmit", 0, omci.Read),
-			omci.NewUint32Field("SingleCollisionFrameCounter", 0, omci.Read),
-			omci.NewUint32Field("MultipleCollisionsFrameCounter", 0, omci.Read),
-			omci.NewUint32Field("SqeCounter", 0, omci.Read),
-			omci.NewUint32Field("DeferredTransmissionCounter", 0, omci.Read),
-			omci.NewUint32Field("InternalMacTransmitErrorCounter", 0, omci.Read),
-			omci.NewUint32Field("CarrierSenseErrorCounter", 0, omci.Read),
-			omci.NewUint32Field("AlignmentErrorCounter", 0, omci.Read),
-			omci.NewUint32Field("InternalMacReceiveErrorCounter", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("FcsErrors", 0, Read),
+			NewUint32Field("ExcessiveCollisionCounter", 0, Read),
+			NewUint32Field("LateCollisionCounter", 0, Read),
+			NewUint32Field("FramesTooLong", 0, Read),
+			NewUint32Field("BufferOverflowsOnReceive", 0, Read),
+			NewUint32Field("BufferOverflowsOnTransmit", 0, Read),
+			NewUint32Field("SingleCollisionFrameCounter", 0, Read),
+			NewUint32Field("MultipleCollisionsFrameCounter", 0, Read),
+			NewUint32Field("SqeCounter", 0, Read),
+			NewUint32Field("DeferredTransmissionCounter", 0, Read),
+			NewUint32Field("InternalMacTransmitErrorCounter", 0, Read),
+			NewUint32Field("CarrierSenseErrorCounter", 0, Read),
+			NewUint32Field("AlignmentErrorCounter", 0, Read),
+			NewUint32Field("InternalMacReceiveErrorCounter", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EthernetPerformanceMonitoringHistoryData{entity}, nil
 }

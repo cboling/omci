@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslSubcarrierMaskingDownstreamProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslSubcarrierMaskingDownstreamProfile",
 		ClassID:  108,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUnknownField("DownstreamSubcarrierMask1", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("DownstreamSubcarrierMask2", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DownstreamSubcarrierMask3", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DownstreamSubcarrierMask4", 0, omci.Read|omci.Write),
-			omci.NewByteField("MaskValid", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUnknownField("DownstreamSubcarrierMask1", 0, Read|Write|SetByCreate),
+			NewUnknownField("DownstreamSubcarrierMask2", 0, Read|Write),
+			NewUnknownField("DownstreamSubcarrierMask3", 0, Read|Write),
+			NewUnknownField("DownstreamSubcarrierMask4", 0, Read|Write),
+			NewByteField("MaskValid", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslSubcarrierMaskingDownstreamProfile{entity}, nil
 }

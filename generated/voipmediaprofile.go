@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipMediaProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipMediaProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipMediaProfile",
 		ClassID:  142,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("FaxMode", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("VoiceServiceProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CodecSelection1StOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PacketPeriodSelection1StOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SilenceSuppression1StOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CodecSelection2NdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PacketPeriodSelection2NdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SilenceSuppression2NdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CodecSelection3RdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PacketPeriodSelection3RdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SilenceSuppression3RdOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CodecSelection4ThOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PacketPeriodSelection4ThOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SilenceSuppression4ThOrder", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("OobDtmf", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("RtpProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("FaxMode", 0, Read|Write|SetByCreate),
+			NewUint16Field("VoiceServiceProfilePointer", 0, Read|Write|SetByCreate),
+			NewByteField("CodecSelection1StOrder", 0, Read|Write|SetByCreate),
+			NewByteField("PacketPeriodSelection1StOrder", 0, Read|Write|SetByCreate),
+			NewByteField("SilenceSuppression1StOrder", 0, Read|Write|SetByCreate),
+			NewByteField("CodecSelection2NdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("PacketPeriodSelection2NdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("SilenceSuppression2NdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("CodecSelection3RdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("PacketPeriodSelection3RdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("SilenceSuppression3RdOrder", 0, Read|Write|SetByCreate),
+			NewByteField("CodecSelection4ThOrder", 0, Read|Write|SetByCreate),
+			NewByteField("PacketPeriodSelection4ThOrder", 0, Read|Write|SetByCreate),
+			NewByteField("SilenceSuppression4ThOrder", 0, Read|Write|SetByCreate),
+			NewByteField("OobDtmf", 0, Read|Write|SetByCreate),
+			NewUint16Field("RtpProfilePointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipMediaProfile{entity}, nil
 }

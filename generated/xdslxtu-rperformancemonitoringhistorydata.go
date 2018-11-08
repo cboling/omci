@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslXtuRPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslXtuRPerformanceMonitoringHistoryData",
 		ClassID:  113,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("LossOfFrameSeconds", 0, omci.Read),
-			omci.NewUint16Field("LossOfSignalSeconds", 0, omci.Read),
-			omci.NewUint16Field("LossOfPowerSeconds", 0, omci.Read),
-			omci.NewUint16Field("ErroredSeconds", 0, omci.Read),
-			omci.NewUint16Field("SeverelyErroredSeconds", 0, omci.Read),
-			omci.NewUint16Field("FecSeconds", 0, omci.Read),
-			omci.NewUint16Field("UnavailableSeconds", 0, omci.Read),
-			omci.NewUint16Field("LeftrDefectSeconds", 0, omci.Read),
-			omci.NewUint32Field("ErrorFreeBitsCounter", 0, omci.Read),
-			omci.NewUint32Field("MinimumErrorFreeThroughputMineftr", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint16Field("LossOfFrameSeconds", 0, Read),
+			NewUint16Field("LossOfSignalSeconds", 0, Read),
+			NewUint16Field("LossOfPowerSeconds", 0, Read),
+			NewUint16Field("ErroredSeconds", 0, Read),
+			NewUint16Field("SeverelyErroredSeconds", 0, Read),
+			NewUint16Field("FecSeconds", 0, Read),
+			NewUint16Field("UnavailableSeconds", 0, Read),
+			NewUint16Field("LeftrDefectSeconds", 0, Read),
+			NewUint32Field("ErrorFreeBitsCounter", 0, Read),
+			NewUint32Field("MinimumErrorFreeThroughputMineftr", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslXtuRPerformanceMonitoringHistoryData{entity}, nil
 }

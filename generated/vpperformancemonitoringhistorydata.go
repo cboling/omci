@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VpPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VpPerformanceMonitoringHistoryData",
 		ClassID:  62,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("LostC01Cells", 0, omci.Read),
-			omci.NewUint16Field("LostC=0Cells", 0, omci.Read),
-			omci.NewUint16Field("MisinsertedCells", 0, omci.Read),
-			omci.NewUnknownField("TransmittedC=01Cells", 0, omci.Read),
-			omci.NewUnknownField("TransmittedC=0Cells", 0, omci.Read),
-			omci.NewUint16Field("ImpairedBlock", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint16Field("LostC01Cells", 0, Read),
+			NewUint16Field("LostC=0Cells", 0, Read),
+			NewUint16Field("MisinsertedCells", 0, Read),
+			NewUnknownField("TransmittedC=01Cells", 0, Read),
+			NewUnknownField("TransmittedC=0Cells", 0, Read),
+			NewUint16Field("ImpairedBlock", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VpPerformanceMonitoringHistoryData{entity}, nil
 }

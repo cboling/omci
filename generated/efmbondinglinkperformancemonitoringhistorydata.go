@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EfmBondingLinkPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EfmBondingLinkPerformanceMonitoringHistoryData",
 		ClassID:  423,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("RxErroredFragments", 0, omci.Read),
-			omci.NewUint32Field("RxSmallFragments", 0, omci.Read),
-			omci.NewUint32Field("RxLargeFragments", 0, omci.Read),
-			omci.NewUint32Field("RxDiscardedFragments", 0, omci.Read),
-			omci.NewUint32Field("RxFcsErrors", 0, omci.Read),
-			omci.NewUint32Field("RxCodingErrors", 0, omci.Read),
-			omci.NewUint32Field("RxFragments", 0, omci.Read),
-			omci.NewUint32Field("TxFragments", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("RxErroredFragments", 0, Read),
+			NewUint32Field("RxSmallFragments", 0, Read),
+			NewUint32Field("RxLargeFragments", 0, Read),
+			NewUint32Field("RxDiscardedFragments", 0, Read),
+			NewUint32Field("RxFcsErrors", 0, Read),
+			NewUint32Field("RxCodingErrors", 0, Read),
+			NewUint32Field("RxFragments", 0, Read),
+			NewUint32Field("TxFragments", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EfmBondingLinkPerformanceMonitoringHistoryData{entity}, nil
 }

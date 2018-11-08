@@ -19,37 +19,33 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipConfigData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipConfigData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipConfigData",
 		ClassID:  138,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AvailableSignallingProtocols", 0, omci.Read),
-			omci.NewByteField("SignallingProtocolUsed", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("AvailableVoipConfigurationMethods", 0, omci.Read),
-			omci.NewByteField("VoipConfigurationMethodUsed", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("VoipConfigurationAddressPointer", 0, omci.Read|omci.Write),
-			omci.NewByteField("VoipConfigurationState", 0, omci.Read),
-			omci.NewByteField("RetrieveProfile", 0, omci.Write),
-			omci.NewUnknownField("ProfileVersion", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AvailableSignallingProtocols", 0, Read),
+			NewByteField("SignallingProtocolUsed", 0, Read|Write),
+			NewUint32Field("AvailableVoipConfigurationMethods", 0, Read),
+			NewByteField("VoipConfigurationMethodUsed", 0, Read|Write),
+			NewUint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
+			NewByteField("VoipConfigurationState", 0, Read),
+			NewByteField("RetrieveProfile", 0, Write),
+			NewUnknownField("ProfileVersion", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipConfigData{entity}, nil
 }

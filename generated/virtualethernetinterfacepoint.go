@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VirtualEthernetInterfacePoint struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVirtualEthernetInterfacePoint(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VirtualEthernetInterfacePoint",
 		ClassID:  329,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewUnknownField("InterdomainName", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("TcpUdpPointer", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("IanaAssignedPort", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewUnknownField("InterdomainName", 0, Read|Write),
+			NewUint16Field("TcpUdpPointer", 0, Read|Write),
+			NewUint16Field("IanaAssignedPort", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VirtualEthernetInterfacePoint{entity}, nil
 }

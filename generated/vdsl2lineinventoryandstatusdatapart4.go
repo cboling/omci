@@ -19,28 +19,24 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Vdsl2LineInventoryAndStatusDataPart4 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
 		ClassID:  415,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Vdsl2LineInventoryAndStatusDataPart4{entity}, nil
 }

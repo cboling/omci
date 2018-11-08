@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type AuthenticationSecurityMethod struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewAuthenticationSecurityMethod(params ...ParamData) (omci.IManagedEntity, error) {
+func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "AuthenticationSecurityMethod",
 		ClassID:  148,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("ValidationScheme", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("Username1", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("Password", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("Realm", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("Username2", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("ValidationScheme", 0, Read|Write),
+			NewUnknownField("Username1", 0, Read|Write),
+			NewUnknownField("Password", 0, Read|Write),
+			NewUnknownField("Realm", 0, Read|Write),
+			NewUnknownField("Username2", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &AuthenticationSecurityMethod{entity}, nil
 }

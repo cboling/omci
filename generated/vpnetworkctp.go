@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VpNetworkCtp struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVpNetworkCtp(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVpNetworkCtp(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VpNetworkCtp",
 		ClassID:  269,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("VpiValue", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UniPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Direction", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("Deprecated1", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("Deprecated2", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("Deprecated3", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Deprecated4", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("VpiValue", 0, Read|Write|SetByCreate),
+			NewUint16Field("UniPointer", 0, Read|Write|SetByCreate),
+			NewByteField("Direction", 0, Read|Write|SetByCreate),
+			NewUint16Field("Deprecated1", 0, Read|Write|SetByCreate),
+			NewUint16Field("Deprecated2", 0, Read|Write|SetByCreate),
+			NewUint16Field("Deprecated3", 0, Read|Write|SetByCreate),
+			NewByteField("Deprecated4", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VpNetworkCtp{entity}, nil
 }

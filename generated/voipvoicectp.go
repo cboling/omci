@@ -19,35 +19,31 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipVoiceCtp struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipVoiceCtp(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipVoiceCtp",
 		ClassID:  139,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("UserProtocolPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PptpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("VOIpMediaProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SignallingCode", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("UserProtocolPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("PptpPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("VOIpMediaProfilePointer", 0, Read|Write|SetByCreate),
+			NewByteField("SignallingCode", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipVoiceCtp{entity}, nil
 }

@@ -19,40 +19,36 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type FileTransferController struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewFileTransferController(params ...ParamData) (omci.IManagedEntity, error) {
+func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "FileTransferController",
 		ClassID:  318,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("SupportedTransferProtocols", 0, omci.Read),
-			omci.NewUint16Field("FileType", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("FileInstance", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("LocalFileNamePointer", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("NetworkAddressPointer", 0, omci.Read|omci.Write),
-			omci.NewByteField("FileTransferTrigger", 0, omci.Read|omci.Write),
-			omci.NewByteField("FileTransferStatus", 0, omci.Read),
-			omci.NewUint16Field("GemIwtpPointer", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("Vlan", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("FileSize", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DirectoryListingTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("SupportedTransferProtocols", 0, Read),
+			NewUint16Field("FileType", 0, Read|Write),
+			NewUint16Field("FileInstance", 0, Read|Write),
+			NewUint16Field("LocalFileNamePointer", 0, Read|Write),
+			NewUint16Field("NetworkAddressPointer", 0, Read|Write),
+			NewByteField("FileTransferTrigger", 0, Read|Write),
+			NewByteField("FileTransferStatus", 0, Read),
+			NewUint16Field("GemIwtpPointer", 0, Read|Write),
+			NewUint16Field("Vlan", 0, Read|Write),
+			NewUint32Field("FileSize", 0, Read|Write),
+			NewUnknownField("DirectoryListingTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &FileTransferController{entity}, nil
 }

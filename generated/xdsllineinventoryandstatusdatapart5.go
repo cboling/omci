@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineInventoryAndStatusDataPart5 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineInventoryAndStatusDataPart5",
 		ClassID:  325,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("FextDownstreamSnrMargin", 0, omci.Read),
-			omci.NewUint16Field("NextDownstreamSnrMargin", 0, omci.Read),
-			omci.NewUint16Field("FextUpstreamSnrMargin", 0, omci.Read),
-			omci.NewUint16Field("NextUpstreamSnrMargin", 0, omci.Read),
-			omci.NewUint32Field("FextDownstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint32Field("NextDownstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint32Field("FextUpstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint32Field("NextUpstreamMaximumAttainableDataRate", 0, omci.Read),
-			omci.NewUint16Field("FextDownstreamActualPowerSpectralDensity", 0, omci.Read),
-			omci.NewUint16Field("NextDownstreamActualPowerSpectralDensity", 0, omci.Read),
-			omci.NewUint16Field("FextUpstreamActualPowerSpectralDensity", 0, omci.Read),
-			omci.NewUint16Field("NextUpstreamActualPowerSpectralDensity", 0, omci.Read),
-			omci.NewUint16Field("FextDownstreamActualAggregateTransmitPower", 0, omci.Read),
-			omci.NewUint16Field("NextDownstreamActualAggregateTransmitPower", 0, omci.Read),
-			omci.NewUint16Field("FextUpstreamActualAggregateTransmitPower", 0, omci.Read),
-			omci.NewUint16Field("NextUpstreamActualAggregateTransmitPower", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("FextDownstreamSnrMargin", 0, Read),
+			NewUint16Field("NextDownstreamSnrMargin", 0, Read),
+			NewUint16Field("FextUpstreamSnrMargin", 0, Read),
+			NewUint16Field("NextUpstreamSnrMargin", 0, Read),
+			NewUint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read),
+			NewUint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read),
+			NewUint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read),
+			NewUint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read),
+			NewUint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read),
+			NewUint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read),
+			NewUint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read),
+			NewUint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read),
+			NewUint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read),
+			NewUint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read),
+			NewUint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read),
+			NewUint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart5{entity}, nil
 }

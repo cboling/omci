@@ -19,35 +19,31 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type FastLineInventoryAndStatusData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewFastLineInventoryAndStatusData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "FastLineInventoryAndStatusData",
 		ClassID:  435,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("ItuTG9701ProfileProfile", 0, omci.Read),
-			omci.NewUnknownField("GammaDataRAteGdr", 0, omci.Read),
-			omci.NewUnknownField("AttainableGammaDataRaTeAttgdr", 0, omci.Read),
-			omci.NewUint64Field("DpuSystemVendorIdDpuSystemVendor", 0, omci.Read),
-			omci.NewUint64Field("NtSystemVendorIdNtSystemVendor", 0, omci.Read),
-			omci.NewUnknownField("DpuSerialNumberDpuSystemSerialnr", 0, omci.Read),
-			omci.NewUnknownField("NtSerialNumberNtSystemSerialnr", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("ItuTG9701ProfileProfile", 0, Read),
+			NewUnknownField("GammaDataRAteGdr", 0, Read),
+			NewUnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
+			NewUint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
+			NewUint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
+			NewUnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
+			NewUnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &FastLineInventoryAndStatusData{entity}, nil
 }

@@ -19,48 +19,44 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart2",
 		ClassID:  447,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("SystemProfileMessageCount", 0, omci.Read),
-			omci.NewUint32Field("ChannelProfileMessageCount", 0, omci.Read),
-			omci.NewUint32Field("BurstProfileMessageCount", 0, omci.Read),
-			omci.NewUint32Field("AssignOnuIdMessageCount", 0, omci.Read),
-			omci.NewUint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, omci.Read),
-			omci.NewUint32Field("DeactivateOnuIdMessageCount", 0, omci.Read),
-			omci.NewUint32Field("DisableSerialNumberMessageCount", 0, omci.Read),
-			omci.NewUint32Field("RequestRegistrationMessageCount", 0, omci.Read),
-			omci.NewUint32Field("AssignAllocIdMessageCount", 0, omci.Read),
-			omci.NewUint32Field("KeyControlMessageCount", 0, omci.Read),
-			omci.NewUint32Field("SleepAllowMessageCount", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestMessageCount", 0, omci.Read),
-			omci.NewUint32Field("TuningControlCompleteDMessageCount", 0, omci.Read),
-			omci.NewUint32Field("CalibrationRequestMessageCount", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("SystemProfileMessageCount", 0, Read),
+			NewUint32Field("ChannelProfileMessageCount", 0, Read),
+			NewUint32Field("BurstProfileMessageCount", 0, Read),
+			NewUint32Field("AssignOnuIdMessageCount", 0, Read),
+			NewUint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, Read),
+			NewUint32Field("DeactivateOnuIdMessageCount", 0, Read),
+			NewUint32Field("DisableSerialNumberMessageCount", 0, Read),
+			NewUint32Field("RequestRegistrationMessageCount", 0, Read),
+			NewUint32Field("AssignAllocIdMessageCount", 0, Read),
+			NewUint32Field("KeyControlMessageCount", 0, Read),
+			NewUint32Field("SleepAllowMessageCount", 0, Read),
+			NewUint32Field("TuningControlRequestMessageCount", 0, Read),
+			NewUint32Field("TuningControlCompleteDMessageCount", 0, Read),
+			NewUint32Field("CalibrationRequestMessageCount", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelPloamPerformanceMonitoringHistoryDataPart2{entity}, nil
 }

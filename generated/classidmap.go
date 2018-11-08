@@ -20,7 +20,6 @@
 package generated
 
 import (
-	"../../omci"
 	"errors"
 	"fmt"
 	"github.com/google/gopacket"
@@ -30,7 +29,7 @@ import (
 // ManagedEntityInfo provides ManagedEntity information
 type ManagedEntityInfo struct {
 	//Interface  IManagedEntity
-	New func(params ...ParamData) (omci.IManagedEntity, error)
+	New func(params ...ParamData) (IManagedEntity, error)
 }
 
 // ParamData can be passed to the 'New' function to dictate how the returned
@@ -48,7 +47,7 @@ type ManagedEntityInfo struct {
 //
 type ParamData struct {
 	EntityID   uint16
-	Attributes []omci.IAttribute
+	Attributes []IAttribute
 }
 
 func decodeEntityID(params ...ParamData) uint16 {
@@ -59,7 +58,7 @@ func decodeEntityID(params ...ParamData) uint16 {
 }
 
 // CreateME wraps a function that makes it a creator of a Managed Entity
-type CreateME func(params ...ParamData) (omci.IManagedEntity, error)
+type CreateME func(params ...ParamData) (IManagedEntity, error)
 
 var classToManagedEntityMap map[uint16]CreateME
 
@@ -228,7 +227,7 @@ func init() {
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
 }
 
-func LoadManagedEntityDefinition(classID uint16, params ...ParamData) (omci.IManagedEntity, error) {
+func LoadManagedEntityDefinition(classID uint16, params ...ParamData) (IManagedEntity, error) {
 	definition, ok := classToManagedEntityMap[classID]
 	if ok {
 		return definition, nil

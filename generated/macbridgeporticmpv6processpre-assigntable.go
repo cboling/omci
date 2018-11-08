@@ -19,37 +19,33 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
 		ClassID:  348,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("Icmpv6ErrorMessagesProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("Icmpv6InformationalMessagesProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("RouterSolicitationProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("RouterAdvertisementProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("NeighbourSolicitationProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("NeighbourAdvertisementProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("RedirectProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("MulticastListenerQueryProcessing", 0, omci.Read|omci.Write),
-			omci.NewByteField("UnknownIcmpv6Processing", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write),
+			NewByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write),
+			NewByteField("RouterSolicitationProcessing", 0, Read|Write),
+			NewByteField("RouterAdvertisementProcessing", 0, Read|Write),
+			NewByteField("NeighbourSolicitationProcessing", 0, Read|Write),
+			NewByteField("NeighbourAdvertisementProcessing", 0, Read|Write),
+			NewByteField("RedirectProcessing", 0, Read|Write),
+			NewByteField("MulticastListenerQueryProcessing", 0, Read|Write),
+			NewByteField("UnknownIcmpv6Processing", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgePortIcmpv6ProcessPreAssignTable{entity}, nil
 }

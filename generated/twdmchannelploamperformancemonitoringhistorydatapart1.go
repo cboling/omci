@@ -19,40 +19,36 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart1 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart1",
 		ClassID:  446,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("PloamMicErrors", 0, omci.Read),
-			omci.NewUint32Field("DownstreamPloamMessageCount", 0, omci.Read),
-			omci.NewUint32Field("RangingTimeMessageCount", 0, omci.Read),
-			omci.NewUint32Field("ProtectionControlMessageCount", 0, omci.Read),
-			omci.NewUint32Field("AdjustTxWavelengthMessageCount", 0, omci.Read),
-			omci.NewUint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			NewUint32Field("PloamMicErrors", 0, Read),
+			NewUint32Field("DownstreamPloamMessageCount", 0, Read),
+			NewUint32Field("RangingTimeMessageCount", 0, Read),
+			NewUint32Field("ProtectionControlMessageCount", 0, Read),
+			NewUint32Field("AdjustTxWavelengthMessageCount", 0, Read),
+			NewUint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelPloamPerformanceMonitoringHistoryDataPart1{entity}, nil
 }

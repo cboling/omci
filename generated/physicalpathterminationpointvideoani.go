@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointVideoAni struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointVideoAni",
 		ClassID:  90,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("FrequencyRangeLow", 0, omci.Read),
-			omci.NewByteField("FrequencyRangeHigh", 0, omci.Read),
-			omci.NewByteField("SignalCapability", 0, omci.Read),
-			omci.NewByteField("OpticalSignalLevel", 0, omci.Read),
-			omci.NewByteField("PilotSignalLevel", 0, omci.Read),
-			omci.NewByteField("SignalLevelMin", 0, omci.Read),
-			omci.NewByteField("SignalLevelMax", 0, omci.Read),
-			omci.NewUint32Field("PilotFrequency", 0, omci.Read|omci.Write),
-			omci.NewByteField("AgcMode", 0, omci.Read|omci.Write),
-			omci.NewByteField("AgcSetting", 0, omci.Read|omci.Write),
-			omci.NewByteField("VideoLowerOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("VideoUpperOpticalThreshold", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("FrequencyRangeLow", 0, Read),
+			NewByteField("FrequencyRangeHigh", 0, Read),
+			NewByteField("SignalCapability", 0, Read),
+			NewByteField("OpticalSignalLevel", 0, Read),
+			NewByteField("PilotSignalLevel", 0, Read),
+			NewByteField("SignalLevelMin", 0, Read),
+			NewByteField("SignalLevelMax", 0, Read),
+			NewUint32Field("PilotFrequency", 0, Read|Write),
+			NewByteField("AgcMode", 0, Read|Write),
+			NewByteField("AgcSetting", 0, Read|Write),
+			NewByteField("VideoLowerOpticalThreshold", 0, Read|Write),
+			NewByteField("VideoUpperOpticalThreshold", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointVideoAni{entity}, nil
 }

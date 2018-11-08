@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PwEthernetConfigurationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPwEthernetConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PwEthernetConfigurationData",
 		ClassID:  339,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("MplsPseudowireTpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UniPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("MplsPseudowireTpPointer", 0, Read|Write|SetByCreate),
+			NewByteField("TpType", 0, Read|Write|SetByCreate),
+			NewUint16Field("UniPointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PwEthernetConfigurationData{entity}, nil
 }

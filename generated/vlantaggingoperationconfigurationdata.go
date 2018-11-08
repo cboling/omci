@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VlanTaggingOperationConfigurationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVlanTaggingOperationConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VlanTaggingOperationConfigurationData",
 		ClassID:  78,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("UpstreamVlanTaggingOperationMode", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamVlanTagTciValue", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("DownstreamVlanTaggingOperationMode", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("AssociationType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("AssociatedMePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
+			NewByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			NewByteField("AssociationType", 0, Read|Write|SetByCreate),
+			NewUint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VlanTaggingOperationConfigurationData{entity}, nil
 }

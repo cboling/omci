@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EnhancedSecurityControl struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEnhancedSecurityControl(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EnhancedSecurityControl",
 		ClassID:  332,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("OltCryptoCapabilities", 0, omci.Write),
-			omci.NewUnknownField("OltRandomChallengeTable", 0, omci.Read|omci.Write),
-			omci.NewByteField("OltChallengeStatus", 0, omci.Read|omci.Write),
-			omci.NewByteField("OnuSelectedCryptoCapabilities", 0, omci.Read),
-			omci.NewUnknownField("OnuRandomChallengeTable", 0, omci.Read),
-			omci.NewUnknownField("OnuAuthenticationResultTable", 0, omci.Read),
-			omci.NewUnknownField("OltAuthenticationResultTable", 0, omci.Write),
-			omci.NewByteField("OltResultStatus", 0, omci.Read|omci.Write),
-			omci.NewByteField("OnuAuthenticationStatus", 0, omci.Read),
-			omci.NewUnknownField("MasterSessionKeyName", 0, omci.Read),
-			omci.NewUnknownField("BroadcastKeyTable", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("EffectiveKeyLength", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("OltCryptoCapabilities", 0, Write),
+			NewUnknownField("OltRandomChallengeTable", 0, Read|Write),
+			NewByteField("OltChallengeStatus", 0, Read|Write),
+			NewByteField("OnuSelectedCryptoCapabilities", 0, Read),
+			NewUnknownField("OnuRandomChallengeTable", 0, Read),
+			NewUnknownField("OnuAuthenticationResultTable", 0, Read),
+			NewUnknownField("OltAuthenticationResultTable", 0, Write),
+			NewByteField("OltResultStatus", 0, Read|Write),
+			NewByteField("OnuAuthenticationStatus", 0, Read),
+			NewUnknownField("MasterSessionKeyName", 0, Read),
+			NewUnknownField("BroadcastKeyTable", 0, Read|Write),
+			NewUint16Field("EffectiveKeyLength", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EnhancedSecurityControl{entity}, nil
 }

@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineConfigurationProfilePart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineConfigurationProfilePart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineConfigurationProfilePart2",
 		ClassID:  105,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DownstreamDownshiftNoiseMargin", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamDownshiftNoiseMargin", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("XtuImpedanceStateForced", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("L0Time", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("L2Time", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UpstreamMaximumAggregateReceivePower", 0, omci.Read),
-			omci.NewByteField("Vdsl2TransmissionSystemEnabling", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			NewUint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			NewUint16Field("DownstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
+			NewUint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			NewByteField("XtuImpedanceStateForced", 0, Read|Write|SetByCreate),
+			NewByteField("L0Time", 0, Read|Write|SetByCreate),
+			NewByteField("L2Time", 0, Read|Write|SetByCreate),
+			NewUint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
+			NewByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
+			NewByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
+			NewUint16Field("UpstreamMaximumAggregateReceivePower", 0, Read),
+			NewByteField("Vdsl2TransmissionSystemEnabling", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineConfigurationProfilePart2{entity}, nil
 }

@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type CallControlPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "CallControlPerformanceMonitoringHistoryData",
 		ClassID:  140,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("CallSetupFailures", 0, omci.Read),
-			omci.NewUint32Field("CallSetupTimer", 0, omci.Read),
-			omci.NewUint32Field("CallTerminateFailures", 0, omci.Read),
-			omci.NewUint32Field("AnalogPortReleases", 0, omci.Read),
-			omci.NewUint32Field("AnalogPortOffHookTimer", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("CallSetupFailures", 0, Read),
+			NewUint32Field("CallSetupTimer", 0, Read),
+			NewUint32Field("CallTerminateFailures", 0, Read),
+			NewUint32Field("AnalogPortReleases", 0, Read),
+			NewUint32Field("AnalogPortOffHookTimer", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &CallControlPerformanceMonitoringHistoryData{entity}, nil
 }

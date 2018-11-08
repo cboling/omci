@@ -19,44 +19,40 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type CircuitPack struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewCircuitPack(params ...ParamData) (omci.IManagedEntity, error) {
+func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "CircuitPack",
 		ClassID:  6,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("Type", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("NumberOfPorts", 0, omci.Read),
-			omci.NewUint64Field("SerialNumber", 0, omci.Read),
-			omci.NewUnknownField("Version", 0, omci.Read),
-			omci.NewUint32Field("VendorId:", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("BridgedOrIpInd", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("EquipmentId", 0, omci.Read),
-			omci.NewByteField("CardConfiguration", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TotalTContBufferNumber", 0, omci.Read),
-			omci.NewByteField("TotalPriorityQueueNumber", 0, omci.Read),
-			omci.NewByteField("TotalTrafficSchedulerNumber", 0, omci.Read),
-			omci.NewUint32Field("PowerShedOverride", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("Type", 0, Read|SetByCreate),
+			NewByteField("NumberOfPorts", 0, Read),
+			NewUint64Field("SerialNumber", 0, Read),
+			NewUnknownField("Version", 0, Read),
+			NewUint32Field("VendorId:", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("BridgedOrIpInd", 0, Read|Write),
+			NewUnknownField("EquipmentId", 0, Read),
+			NewByteField("CardConfiguration", 0, Read|Write|SetByCreate),
+			NewByteField("TotalTContBufferNumber", 0, Read),
+			NewByteField("TotalPriorityQueueNumber", 0, Read),
+			NewByteField("TotalTrafficSchedulerNumber", 0, Read),
+			NewUint32Field("PowerShedOverride", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &CircuitPack{entity}, nil
 }

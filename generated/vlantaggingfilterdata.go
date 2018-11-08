@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VlanTaggingFilterData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVlanTaggingFilterData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VlanTaggingFilterData",
 		ClassID:  84,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUnknownField("VlanFilterList", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ForwardOperation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("NumberOfEntries", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUnknownField("VlanFilterList", 0, Read|Write|SetByCreate),
+			NewByteField("ForwardOperation", 0, Read|Write|SetByCreate),
+			NewByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VlanTaggingFilterData{entity}, nil
 }

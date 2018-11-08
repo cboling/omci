@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XgPonTcPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XgPonTcPerformanceMonitoringHistoryData",
 		ClassID:  344,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("PsbdHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("XgtcHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("UnknownProfileCount", 0, omci.Read),
-			omci.NewUint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, omci.Read),
-			omci.NewUint32Field("FragmentXgemFrames", 0, omci.Read),
-			omci.NewUint32Field("XgemHecLostWordsCount", 0, omci.Read),
-			omci.NewUint32Field("XgemKeyErrors", 0, omci.Read),
-			omci.NewUint32Field("XgemHecErrorCount", 0, omci.Read),
-			omci.NewUint64Field("TransmittedBytesInNonIdleXgemFrames", 0, omci.Read),
-			omci.NewUint64Field("ReceivedBytesInNonIdleXgemFrames", 0, omci.Read),
-			omci.NewUint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, omci.Read),
-			omci.NewUint32Field("LodsEventRestoredCount", 0, omci.Read),
-			omci.NewUint32Field("OnuReactivationByLodsEvents", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("PsbdHecErrorCount", 0, Read),
+			NewUint32Field("XgtcHecErrorCount", 0, Read),
+			NewUint32Field("UnknownProfileCount", 0, Read),
+			NewUint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read),
+			NewUint32Field("FragmentXgemFrames", 0, Read),
+			NewUint32Field("XgemHecLostWordsCount", 0, Read),
+			NewUint32Field("XgemKeyErrors", 0, Read),
+			NewUint32Field("XgemHecErrorCount", 0, Read),
+			NewUint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read),
+			NewUint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read),
+			NewUint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read),
+			NewUint32Field("LodsEventRestoredCount", 0, Read),
+			NewUint32Field("OnuReactivationByLodsEvents", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XgPonTcPerformanceMonitoringHistoryData{entity}, nil
 }

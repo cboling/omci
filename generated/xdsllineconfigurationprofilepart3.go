@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineConfigurationProfilePart3 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineConfigurationProfilePart3(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineConfigurationProfilePart3",
 		ClassID:  106,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("LoopDiagnosticsModeForcedLdsf", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("AutomodeColdStartForced", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("L2Atpr", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("L2Atprt", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ForceInpDownstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("ForceInpUpstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpdateRequestFlagForNearEndTestParameters", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpdateRequestFlagForFarEndTestParameters", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("InmInterArrivalTimeOffsetUpstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmInterArrivalTimeStepUpstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmClusterContinuationValueUpstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmEquivalentInpModeUpstream", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("InmInterArrivalTimeOffsetDownstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmInterArrivalTimeStepDownstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmClusterContinuationValueDownstream", 0, omci.Read|omci.Write),
-			omci.NewByteField("InmEquivalentInpModeDownstream", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|Write|SetByCreate),
+			NewByteField("AutomodeColdStartForced", 0, Read|Write|SetByCreate),
+			NewByteField("L2Atpr", 0, Read|Write|SetByCreate),
+			NewByteField("L2Atprt", 0, Read|Write|SetByCreate),
+			NewByteField("ForceInpDownstream", 0, Read|Write),
+			NewByteField("ForceInpUpstream", 0, Read|Write),
+			NewByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write),
+			NewByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write),
+			NewUint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write),
+			NewByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write),
+			NewByteField("InmClusterContinuationValueUpstream", 0, Read|Write),
+			NewByteField("InmEquivalentInpModeUpstream", 0, Read|Write),
+			NewUint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write),
+			NewByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write),
+			NewByteField("InmClusterContinuationValueDownstream", 0, Read|Write),
+			NewByteField("InmEquivalentInpModeDownstream", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineConfigurationProfilePart3{entity}, nil
 }

@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MulticastSubscriberMonitor struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMulticastSubscriberMonitor(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MulticastSubscriberMonitor",
 		ClassID:  311,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.GetNext,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			GetNext,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("MeType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("CurrentMulticastBandwidth", 0, omci.Read),
-			omci.NewUint32Field("JoinMessagesCounter", 0, omci.Read),
-			omci.NewUint32Field("BandwidthExceededCounter", 0, omci.Read),
-			omci.NewUnknownField("Ipv4ActiveGroupListTable", 0, omci.Read),
-			omci.NewUnknownField("Ipv6ActiveGroupListTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("MeType", 0, Read|Write|SetByCreate),
+			NewUint32Field("CurrentMulticastBandwidth", 0, Read),
+			NewUint32Field("JoinMessagesCounter", 0, Read),
+			NewUint32Field("BandwidthExceededCounter", 0, Read),
+			NewUnknownField("Ipv4ActiveGroupListTable", 0, Read),
+			NewUnknownField("Ipv6ActiveGroupListTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MulticastSubscriberMonitor{entity}, nil
 }

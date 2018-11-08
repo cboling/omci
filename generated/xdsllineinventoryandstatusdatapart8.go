@@ -19,35 +19,31 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslLineInventoryAndStatusDataPart8 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslLineInventoryAndStatusDataPart8",
 		ClassID:  414,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("RetransmissionUsedDownstreamRtxUsedds", 0, omci.Read),
-			omci.NewByteField("RetransmissionUsedUpstreamRtxUsedus", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, omci.Read),
-			omci.NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
+			NewByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
+			NewUnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
+			NewUnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
+			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslLineInventoryAndStatusDataPart8{entity}, nil
 }

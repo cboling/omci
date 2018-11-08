@@ -19,31 +19,27 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Omci struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOmci(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOmci(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Omci",
 		ClassID:  287,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("MeTypeTable", 0, omci.Read),
-			omci.NewByteField("MessageTypeTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("MeTypeTable", 0, Read),
+			NewByteField("MessageTypeTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Omci{entity}, nil
 }

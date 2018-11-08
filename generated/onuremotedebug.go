@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type OnuRemoteDebug struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewOnuRemoteDebug(params ...ParamData) (omci.IManagedEntity, error) {
+func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "OnuRemoteDebug",
 		ClassID:  158,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("CommandFormat", 0, omci.Read),
-			omci.NewUnknownField("Command", 0, omci.Write),
-			omci.NewUnknownField("ReplyTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("CommandFormat", 0, Read),
+			NewUnknownField("Command", 0, Write),
+			NewUnknownField("ReplyTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &OnuRemoteDebug{entity}, nil
 }

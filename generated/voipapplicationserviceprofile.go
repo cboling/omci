@@ -19,40 +19,36 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipApplicationServiceProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipApplicationServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipApplicationServiceProfile",
 		ClassID:  146,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("CidFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CallWaitingFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("CallProgressOrTransferFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("CallPresentationFeatures", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("DirectConnectFeature", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DirectConnectUriPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("BridgedLineAgentUriPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("ConferenceFactoryUriPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("CidFeatures", 0, Read|Write|SetByCreate),
+			NewByteField("CallWaitingFeatures", 0, Read|Write|SetByCreate),
+			NewUint16Field("CallProgressOrTransferFeatures", 0, Read|Write|SetByCreate),
+			NewUint16Field("CallPresentationFeatures", 0, Read|Write|SetByCreate),
+			NewByteField("DirectConnectFeature", 0, Read|Write|SetByCreate),
+			NewUint16Field("DirectConnectUriPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("BridgedLineAgentUriPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("ConferenceFactoryUriPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipApplicationServiceProfile{entity}, nil
 }

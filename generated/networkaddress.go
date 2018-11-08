@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type NetworkAddress struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewNetworkAddress(params ...ParamData) (omci.IManagedEntity, error) {
+func NewNetworkAddress(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "NetworkAddress",
 		ClassID:  137,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("SecurityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("AddressPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("SecurityPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("AddressPointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &NetworkAddress{entity}, nil
 }

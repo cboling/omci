@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PriorityQueue struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPriorityQueue(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PriorityQueue",
 		ClassID:  277,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("QueueConfigurationOption", 0, omci.Read),
-			omci.NewUint16Field("MaximumQueueSize", 0, omci.Read),
-			omci.NewUint16Field("AllocatedQueueSize", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("DiscardBlockCounterResetInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("RelatedPort", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("TrafficSchedulerPointer", 0, omci.Read|omci.Write),
-			omci.NewByteField("Weight", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("BackPressureOperation", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("BackPressureTime", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("BackPressureOccurQueueThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("BackPressureClearQueueThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint64Field("PacketDropQueueThresholds", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("PacketDropMaxP", 0, omci.Read|omci.Write),
-			omci.NewByteField("QueueDropWQ", 0, omci.Read|omci.Write),
-			omci.NewByteField("DropPrecedenceColourMarking", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("QueueConfigurationOption", 0, Read),
+			NewUint16Field("MaximumQueueSize", 0, Read),
+			NewUint16Field("AllocatedQueueSize", 0, Read|Write),
+			NewUint16Field("DiscardBlockCounterResetInterval", 0, Read|Write),
+			NewUint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write),
+			NewUint32Field("RelatedPort", 0, Read|Write),
+			NewUint16Field("TrafficSchedulerPointer", 0, Read|Write),
+			NewByteField("Weight", 0, Read|Write),
+			NewUint16Field("BackPressureOperation", 0, Read|Write),
+			NewUint32Field("BackPressureTime", 0, Read|Write),
+			NewUint16Field("BackPressureOccurQueueThreshold", 0, Read|Write),
+			NewUint16Field("BackPressureClearQueueThreshold", 0, Read|Write),
+			NewUint64Field("PacketDropQueueThresholds", 0, Read|Write),
+			NewUint16Field("PacketDropMaxP", 0, Read|Write),
+			NewByteField("QueueDropWQ", 0, Read|Write),
+			NewByteField("DropPrecedenceColourMarking", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PriorityQueue{entity}, nil
 }

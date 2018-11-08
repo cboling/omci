@@ -19,30 +19,26 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgePortDesignationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgePortDesignationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgePortDesignationData",
 		ClassID:  48,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("DesignatedBridgeRootCostPort", 0, omci.Read),
-			omci.NewByteField("PortState", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("DesignatedBridgeRootCostPort", 0, Read),
+			NewByteField("PortState", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgePortDesignationData{entity}, nil
 }

@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointXdslUniPart1 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointXdslUniPart1",
 		ClassID:  98,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("LoopbackConfiguration", 0, omci.Read|omci.Write),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewUint16Field("XdslLineConfigurationProfile", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("XdslDownstreamRfiBandsProfile", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("ModemType", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("UpstreamPsdMaskProfile", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("NetworkSpecificExtensionsPointer", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("LoopbackConfiguration", 0, Read|Write),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewUint16Field("XdslLineConfigurationProfile", 0, Read|Write),
+			NewUint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write),
+			NewUint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write),
+			NewUint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write),
+			NewUint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("ModemType", 0, Read|Write),
+			NewUint16Field("UpstreamPsdMaskProfile", 0, Read|Write),
+			NewUint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointXdslUniPart1{entity}, nil
 }

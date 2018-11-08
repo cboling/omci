@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1XPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1XPerformanceMonitoringHistoryData",
 		ClassID:  292,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("EapolFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapolFramesTransmitted", 0, omci.Read),
-			omci.NewUint32Field("EapolStartFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapolLogoffFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("InvalidEapolFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapRespIdFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapResponseFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapInitialRequestFramesTransmitted", 0, omci.Read),
-			omci.NewUint32Field("EapRequestFramesTransmitted", 0, omci.Read),
-			omci.NewUint32Field("EapLengthErrorFramesReceived", 0, omci.Read),
-			omci.NewUint32Field("EapSuccessFramesGeneratedAutonomously", 0, omci.Read),
-			omci.NewUint32Field("EapFailureFramesGeneratedAutonomously", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("EapolFramesReceived", 0, Read),
+			NewUint32Field("EapolFramesTransmitted", 0, Read),
+			NewUint32Field("EapolStartFramesReceived", 0, Read),
+			NewUint32Field("EapolLogoffFramesReceived", 0, Read),
+			NewUint32Field("InvalidEapolFramesReceived", 0, Read),
+			NewUint32Field("EapRespIdFramesReceived", 0, Read),
+			NewUint32Field("EapResponseFramesReceived", 0, Read),
+			NewUint32Field("EapInitialRequestFramesTransmitted", 0, Read),
+			NewUint32Field("EapRequestFramesTransmitted", 0, Read),
+			NewUint32Field("EapLengthErrorFramesReceived", 0, Read),
+			NewUint32Field("EapSuccessFramesGeneratedAutonomously", 0, Read),
+			NewUint32Field("EapFailureFramesGeneratedAutonomously", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1XPerformanceMonitoringHistoryData{entity}, nil
 }

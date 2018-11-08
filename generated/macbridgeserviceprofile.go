@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MacBridgeServiceProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMacBridgeServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MacBridgeServiceProfile",
 		ClassID:  45,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("SpanningTreeInd", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("LearningInd", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PortBridgingInd", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("Priority", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("MaxAge", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("HelloTime", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("ForwardDelay", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("UnknownMacAddressDiscard", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MacLearningDepth", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("DynamicFilteringAgeingTime", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("SpanningTreeInd", 0, Read|Write|SetByCreate),
+			NewByteField("LearningInd", 0, Read|Write|SetByCreate),
+			NewByteField("PortBridgingInd", 0, Read|Write|SetByCreate),
+			NewUint16Field("Priority", 0, Read|Write|SetByCreate),
+			NewUint16Field("MaxAge", 0, Read|Write|SetByCreate),
+			NewUint16Field("HelloTime", 0, Read|Write|SetByCreate),
+			NewUint16Field("ForwardDelay", 0, Read|Write|SetByCreate),
+			NewByteField("UnknownMacAddressDiscard", 0, Read|Write|SetByCreate),
+			NewByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
+			NewUint32Field("DynamicFilteringAgeingTime", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MacBridgeServiceProfile{entity}, nil
 }

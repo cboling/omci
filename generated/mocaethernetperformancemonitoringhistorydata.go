@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MocaEthernetPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MocaEthernetPerformanceMonitoringHistoryData",
 		ClassID:  163,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id:", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("IncomingUnicastPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingDiscardedPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingErroredPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingUnknownPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingMulticastPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingBroadcastPackets", 0, omci.Read),
-			omci.NewUint32Field("IncomingOctets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingUnicastPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingDiscardedPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingErroredPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingUnknownPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingMulticastPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingBroadcastPackets", 0, omci.Read),
-			omci.NewUint32Field("OutgoingOctets", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			NewUint32Field("IncomingUnicastPackets", 0, Read),
+			NewUint32Field("IncomingDiscardedPackets", 0, Read),
+			NewUint32Field("IncomingErroredPackets", 0, Read),
+			NewUint32Field("IncomingUnknownPackets", 0, Read),
+			NewUint32Field("IncomingMulticastPackets", 0, Read),
+			NewUint32Field("IncomingBroadcastPackets", 0, Read),
+			NewUint32Field("IncomingOctets", 0, Read),
+			NewUint32Field("OutgoingUnicastPackets", 0, Read),
+			NewUint32Field("OutgoingDiscardedPackets", 0, Read),
+			NewUint32Field("OutgoingErroredPackets", 0, Read),
+			NewUint32Field("OutgoingUnknownPackets", 0, Read),
+			NewUint32Field("OutgoingMulticastPackets", 0, Read),
+			NewUint32Field("OutgoingBroadcastPackets", 0, Read),
+			NewUint32Field("OutgoingOctets", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MocaEthernetPerformanceMonitoringHistoryData{entity}, nil
 }

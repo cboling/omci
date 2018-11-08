@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type SipUserData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewSipUserData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "SipUserData",
 		ClassID:  153,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("SipAgentPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("UserPartAor", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("SipDisplayName", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("UsernameAndPassword", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("VoicemailServerSipUri", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("VoicemailSubscriptionExpirationTime", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("NetworkDialPlanPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("ApplicationServicesProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("FeatureCodePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PptpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ReleaseTimer", 0, omci.Read|omci.Write),
-			omci.NewByteField("ReceiverOffHookRohTimer", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("UserPartAor", 0, Read|Write|SetByCreate),
+			NewUnknownField("SipDisplayName", 0, Read|Write),
+			NewUint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
+			NewUint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
+			NewUint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),
+			NewUint16Field("NetworkDialPlanPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("ApplicationServicesProfilePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("FeatureCodePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("PptpPointer", 0, Read|Write|SetByCreate),
+			NewByteField("ReleaseTimer", 0, Read|Write),
+			NewByteField("ReceiverOffHookRohTimer", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &SipUserData{entity}, nil
 }

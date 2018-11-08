@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Cardholder struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewCardholder(params ...ParamData) (omci.IManagedEntity, error) {
+func NewCardholder(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Cardholder",
 		ClassID:  5,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("ActualPlugInUnitType", 0, omci.Read),
-			omci.NewByteField("ExpectedPlugInUnitType", 0, omci.Read|omci.Write),
-			omci.NewByteField("ExpectedPortCount", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("ExpectedEquipmentId", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("ActualEquipmentId", 0, omci.Read),
-			omci.NewByteField("ProtectionProfilePointer", 0, omci.Read),
-			omci.NewByteField("InvokeProtectionSwitch", 0, omci.Read|omci.Write),
-			omci.NewByteField("AlarmReportingControl", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("ActualPlugInUnitType", 0, Read),
+			NewByteField("ExpectedPlugInUnitType", 0, Read|Write),
+			NewByteField("ExpectedPortCount", 0, Read|Write),
+			NewUnknownField("ExpectedEquipmentId", 0, Read|Write),
+			NewUnknownField("ActualEquipmentId", 0, Read),
+			NewByteField("ProtectionProfilePointer", 0, Read),
+			NewByteField("InvokeProtectionSwitch", 0, Read|Write),
+			NewByteField("AlarmReportingControl", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Cardholder{entity}, nil
 }

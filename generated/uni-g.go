@@ -19,34 +19,30 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type UniG struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewUniG(params ...ParamData) (omci.IManagedEntity, error) {
+func NewUniG(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "UniG",
 		ClassID:  264,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("Deprecated", 0, omci.Read|omci.Write),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("ManagementCapability", 0, omci.Read),
-			omci.NewUint16Field("NonOmciManagementIdentifier", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("RelayAgentOptions", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("Deprecated", 0, Read|Write),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("ManagementCapability", 0, Read),
+			NewUint16Field("NonOmciManagementIdentifier", 0, Read|Write),
+			NewUint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &UniG{entity}, nil
 }

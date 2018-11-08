@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EthernetFrameExtendedPm struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEthernetFrameExtendedPm(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EthernetFrameExtendedPm",
 		ClassID:  334,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUnknownField("ControlBlock", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("DropEvents", 0, omci.Read),
-			omci.NewUint32Field("Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames", 0, omci.Read),
-			omci.NewUint32Field("BroadcastFrames", 0, omci.Read),
-			omci.NewUint32Field("MulticastFrames", 0, omci.Read),
-			omci.NewUint32Field("CrcErroredFrames", 0, omci.Read),
-			omci.NewUint32Field("UndersizeFrames", 0, omci.Read),
-			omci.NewUint32Field("OversizeFrames", 0, omci.Read),
-			omci.NewUint32Field("Frames64Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames65To127Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames128To255Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames256To511Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames512To1023Octets", 0, omci.Read),
-			omci.NewUint32Field("Frames1024To1518Octets", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUnknownField("ControlBlock", 0, Read|Write|SetByCreate),
+			NewUint32Field("DropEvents", 0, Read),
+			NewUint32Field("Octets", 0, Read),
+			NewUint32Field("Frames", 0, Read),
+			NewUint32Field("BroadcastFrames", 0, Read),
+			NewUint32Field("MulticastFrames", 0, Read),
+			NewUint32Field("CrcErroredFrames", 0, Read),
+			NewUint32Field("UndersizeFrames", 0, Read),
+			NewUint32Field("OversizeFrames", 0, Read),
+			NewUint32Field("Frames64Octets", 0, Read),
+			NewUint32Field("Frames65To127Octets", 0, Read),
+			NewUint32Field("Frames128To255Octets", 0, Read),
+			NewUint32Field("Frames256To511Octets", 0, Read),
+			NewUint32Field("Frames512To1023Octets", 0, Read),
+			NewUint32Field("Frames1024To1518Octets", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EthernetFrameExtendedPm{entity}, nil
 }

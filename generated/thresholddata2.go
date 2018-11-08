@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type ThresholdData2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewThresholdData2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewThresholdData2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "ThresholdData2",
 		ClassID:  274,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue8", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue9", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue10", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue11", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue12", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue13", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue14", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("ThresholdValue8", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue9", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue10", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue11", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue12", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue13", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue14", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &ThresholdData2{entity}, nil
 }

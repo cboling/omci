@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EthernetFramePerformanceMonitoringHistoryDataDownstream struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EthernetFramePerformanceMonitoringHistoryDataDownstream",
 		ClassID:  321,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("DropEvents", 0, omci.Read),
-			omci.NewUint32Field("Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets", 0, omci.Read),
-			omci.NewUint32Field("BroadcastPackets", 0, omci.Read),
-			omci.NewUint32Field("MulticastPackets", 0, omci.Read),
-			omci.NewUint32Field("CrcErroredPackets", 0, omci.Read),
-			omci.NewUint32Field("UndersizePackets", 0, omci.Read),
-			omci.NewUint32Field("OversizePackets", 0, omci.Read),
-			omci.NewUint32Field("Packets64Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets65To127Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets128To255Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets256To511Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets512To1023Octets", 0, omci.Read),
-			omci.NewUint32Field("Packets1024To1518Octets", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("DropEvents", 0, Read),
+			NewUint32Field("Octets", 0, Read),
+			NewUint32Field("Packets", 0, Read),
+			NewUint32Field("BroadcastPackets", 0, Read),
+			NewUint32Field("MulticastPackets", 0, Read),
+			NewUint32Field("CrcErroredPackets", 0, Read),
+			NewUint32Field("UndersizePackets", 0, Read),
+			NewUint32Field("OversizePackets", 0, Read),
+			NewUint32Field("Packets64Octets", 0, Read),
+			NewUint32Field("Packets65To127Octets", 0, Read),
+			NewUint32Field("Packets128To255Octets", 0, Read),
+			NewUint32Field("Packets256To511Octets", 0, Read),
+			NewUint32Field("Packets512To1023Octets", 0, Read),
+			NewUint32Field("Packets1024To1518Octets", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EthernetFramePerformanceMonitoringHistoryDataDownstream{entity}, nil
 }

@@ -19,35 +19,31 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type SoftwareImage struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewSoftwareImage(params ...ParamData) (omci.IManagedEntity, error) {
+func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "SoftwareImage",
 		ClassID:  7,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.DownloadSection,
+		MessageTypes: []MsgType{
+			Get,
+			DownloadSection,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("Version", 0, omci.Read),
-			omci.NewByteField("IsCommitted", 0, omci.Read),
-			omci.NewByteField("IsActive", 0, omci.Read),
-			omci.NewByteField("IsValid", 0, omci.Read),
-			omci.NewUnknownField("ProductCode", 0, omci.Read),
-			omci.NewUnknownField("ImageHash", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("Version", 0, Read),
+			NewByteField("IsCommitted", 0, Read),
+			NewByteField("IsActive", 0, Read),
+			NewByteField("IsValid", 0, Read),
+			NewUnknownField("ProductCode", 0, Read),
+			NewUnknownField("ImageHash", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &SoftwareImage{entity}, nil
 }

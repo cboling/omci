@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type SipAgentPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "SipAgentPerformanceMonitoringHistoryData",
 		ClassID:  151,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("Transactions", 0, omci.Read),
-			omci.NewUint32Field("RxInviteReqs", 0, omci.Read),
-			omci.NewUint32Field("RxInviteRetrans", 0, omci.Read),
-			omci.NewUint32Field("RxNoninviteReqs", 0, omci.Read),
-			omci.NewUint32Field("RxNoninviteRetrans", 0, omci.Read),
-			omci.NewUint32Field("RxResponse", 0, omci.Read),
-			omci.NewUint32Field("RxResponseRetransmissions", 0, omci.Read),
-			omci.NewUint32Field("TxInviteReqs", 0, omci.Read),
-			omci.NewUint32Field("TxInviteRetrans", 0, omci.Read),
-			omci.NewUint32Field("TxNoninviteReqs", 0, omci.Read),
-			omci.NewUint32Field("TxNoninviteRetrans", 0, omci.Read),
-			omci.NewUint32Field("TxResponse", 0, omci.Read),
-			omci.NewUint32Field("TxResponseRetransmissions", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("Transactions", 0, Read),
+			NewUint32Field("RxInviteReqs", 0, Read),
+			NewUint32Field("RxInviteRetrans", 0, Read),
+			NewUint32Field("RxNoninviteReqs", 0, Read),
+			NewUint32Field("RxNoninviteRetrans", 0, Read),
+			NewUint32Field("RxResponse", 0, Read),
+			NewUint32Field("RxResponseRetransmissions", 0, Read),
+			NewUint32Field("TxInviteReqs", 0, Read),
+			NewUint32Field("TxInviteRetrans", 0, Read),
+			NewUint32Field("TxNoninviteReqs", 0, Read),
+			NewUint32Field("TxNoninviteRetrans", 0, Read),
+			NewUint32Field("TxResponse", 0, Read),
+			NewUint32Field("TxResponseRetransmissions", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &SipAgentPerformanceMonitoringHistoryData{entity}, nil
 }

@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type ReAniG struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewReAniG(params ...ParamData) (omci.IManagedEntity, error) {
+func NewReAniG(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "ReAniG",
 		ClassID:  313,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("OpticalSignalLevel", 0, omci.Read),
-			omci.NewByteField("LowerOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("TransmitOpticalLevel", 0, omci.Read),
-			omci.NewByteField("LowerTransmitPowerThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperTransmitPowerThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UsageMode", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("TargetUpstreamFrequency", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("TargetDownstreamFrequency", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpstreamSignalTransmissionMode", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewUint16Field("OpticalSignalLevel", 0, Read),
+			NewByteField("LowerOpticalThreshold", 0, Read|Write),
+			NewByteField("UpperOpticalThreshold", 0, Read|Write),
+			NewUint16Field("TransmitOpticalLevel", 0, Read),
+			NewByteField("LowerTransmitPowerThreshold", 0, Read|Write),
+			NewByteField("UpperTransmitPowerThreshold", 0, Read|Write),
+			NewByteField("UsageMode", 0, Read|Write),
+			NewUint32Field("TargetUpstreamFrequency", 0, Read|Write),
+			NewUint32Field("TargetDownstreamFrequency", 0, Read|Write),
+			NewByteField("UpstreamSignalTransmissionMode", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &ReAniG{entity}, nil
 }

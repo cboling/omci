@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type GeneralPurposeBuffer struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewGeneralPurposeBuffer(params ...ParamData) (omci.IManagedEntity, error) {
+func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "GeneralPurposeBuffer",
 		ClassID:  308,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("MaximumSize", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("BufferTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("MaximumSize", 0, Read|Write|SetByCreate),
+			NewUnknownField("BufferTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &GeneralPurposeBuffer{entity}, nil
 }

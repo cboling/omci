@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointPotsUni struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointPotsUni",
 		ClassID:  53,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Test,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Test,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("Deprecated", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("Impedance", 0, omci.Read|omci.Write),
-			omci.NewByteField("TransmissionPath", 0, omci.Read|omci.Write),
-			omci.NewByteField("RxGain", 0, omci.Read|omci.Write),
-			omci.NewByteField("TxGain", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("HookState", 0, omci.Read),
-			omci.NewUint16Field("PotsHoldoverTime", 0, omci.Read|omci.Write),
-			omci.NewByteField("NominalFeedVoltage", 0, omci.Read|omci.Write),
-			omci.NewByteField("LossOfSoftswitch", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewUint16Field("Deprecated", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("Impedance", 0, Read|Write),
+			NewByteField("TransmissionPath", 0, Read|Write),
+			NewByteField("RxGain", 0, Read|Write),
+			NewByteField("TxGain", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("HookState", 0, Read),
+			NewUint16Field("PotsHoldoverTime", 0, Read|Write),
+			NewByteField("NominalFeedVoltage", 0, Read|Write),
+			NewByteField("LossOfSoftswitch", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointPotsUni{entity}, nil
 }

@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MulticastGemInterworkingTerminationPoint struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MulticastGemInterworkingTerminationPoint",
 		ClassID:  281,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.GetNext,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			GetNext,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("GemPortNetworkCtpConnectivityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("InterworkingOption", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("ServiceProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PptpCounter", 0, omci.Read),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewUint16Field("GalProfilePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("Ipv6MulticastAddressTable", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			NewByteField("InterworkingOption", 0, Read|Write|SetByCreate),
+			NewUint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
+			NewByteField("PptpCounter", 0, Read),
+			NewByteField("OperationalState", 0, Read),
+			NewUint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
+			NewUnknownField("Ipv6MulticastAddressTable", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MulticastGemInterworkingTerminationPoint{entity}, nil
 }

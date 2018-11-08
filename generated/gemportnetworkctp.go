@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type GemPortNetworkCtp struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewGemPortNetworkCtp(params ...ParamData) (omci.IManagedEntity, error) {
+func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "GemPortNetworkCtp",
 		ClassID:  268,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("PortId", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TContPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Direction", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TrafficManagementPointerForUpstream", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TrafficDescriptorProfilePointerForUpstream", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("UniCounter", 0, omci.Read),
-			omci.NewUint16Field("PriorityQueuePointerForDownStream", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("EncryptionState", 0, omci.Read),
-			omci.NewUint16Field("TrafficDescriptorProfilePointerForDownstream", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("EncryptionKeyRing", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("PortId", 0, Read|Write|SetByCreate),
+			NewUint16Field("TContPointer", 0, Read|Write|SetByCreate),
+			NewByteField("Direction", 0, Read|Write|SetByCreate),
+			NewUint16Field("TrafficManagementPointerForUpstream", 0, Read|Write|SetByCreate),
+			NewUint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|Write|SetByCreate),
+			NewByteField("UniCounter", 0, Read),
+			NewUint16Field("PriorityQueuePointerForDownStream", 0, Read|Write|SetByCreate),
+			NewByteField("EncryptionState", 0, Read),
+			NewUint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|Write|SetByCreate),
+			NewByteField("EncryptionKeyRing", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &GemPortNetworkCtp{entity}, nil
 }

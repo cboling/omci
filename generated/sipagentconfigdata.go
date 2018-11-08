@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type SipAgentConfigData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewSipAgentConfigData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "SipAgentConfigData",
 		ClassID:  150,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("ProxyServerAddressPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("OutboundProxyAddressPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("PrimarySipDns", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("SecondarySipDns", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TcpUdpPointer", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("SipRegExpTime", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("SipReregHeadStartTime", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("HostPartUri", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SipStatus", 0, omci.Read),
-			omci.NewUint16Field("SipRegistrar", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("Softswitch", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("SipResponseTable", 0, omci.Read|omci.Write),
-			omci.NewByteField("SipOptionTransmitControl", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SipUriFormat", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("RedundantSipAgentPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("ProxyServerAddressPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("OutboundProxyAddressPointer", 0, Read|Write|SetByCreate),
+			NewUint32Field("PrimarySipDns", 0, Read|Write|SetByCreate),
+			NewUint32Field("SecondarySipDns", 0, Read|Write|SetByCreate),
+			NewUint16Field("TcpUdpPointer", 0, Read|Write),
+			NewUint32Field("SipRegExpTime", 0, Read|Write),
+			NewUint32Field("SipReregHeadStartTime", 0, Read|Write),
+			NewUint16Field("HostPartUri", 0, Read|Write|SetByCreate),
+			NewByteField("SipStatus", 0, Read),
+			NewUint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
+			NewUint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			NewUnknownField("SipResponseTable", 0, Read|Write),
+			NewByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
+			NewByteField("SipUriFormat", 0, Read|Write|SetByCreate),
+			NewUint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &SipAgentConfigData{entity}, nil
 }

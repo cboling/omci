@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PseudowireMaintenanceProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPseudowireMaintenanceProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PseudowireMaintenanceProfile",
 		ClassID:  284,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("JitterBufferMaximumDepth", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("JitterBufferDesiredDepth", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("FillPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MisconnectedPacketsDeclarationPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MisconnectedPacketsClearPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("LossOfPacketsDeclarationPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("LossOfPacketsClearPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("BufferOverrunUnderrunDeclarationPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("BufferOverrunUnderrunClearPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MalformedPacketsDeclarationPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MalformedPacketsClearPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("RBitTransmitSetPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("RBitTransmitClearPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("RBitReceivePolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("LBitReceivePolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SesThreshold", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("JitterBufferMaximumDepth", 0, Read|Write|SetByCreate),
+			NewUint16Field("JitterBufferDesiredDepth", 0, Read|Write|SetByCreate),
+			NewByteField("FillPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("MisconnectedPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("LossOfPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("LossOfPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("BufferOverrunUnderrunClearPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("MalformedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("MalformedPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("RBitTransmitSetPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("RBitTransmitClearPolicy", 0, Read|Write|SetByCreate),
+			NewByteField("RBitReceivePolicy", 0, Read|Write|SetByCreate),
+			NewByteField("LBitReceivePolicy", 0, Read|Write|SetByCreate),
+			NewUint16Field("SesThreshold", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PseudowireMaintenanceProfile{entity}, nil
 }

@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart3",
 		ClassID:  448,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("UpstreamPloamMessageCount", 0, omci.Read),
-			omci.NewUint32Field("SerialNumberOnuInBandMessageCount", 0, omci.Read),
-			omci.NewUint32Field("SerialNumberOnuAmccMessageCount", 0, omci.Read),
-			omci.NewUint32Field("RegistrationMessageCount", 0, omci.Read),
-			omci.NewUint32Field("KeyReportMessageCount", 0, omci.Read),
-			omci.NewUint32Field("AcknowledgementMessageCount", 0, omci.Read),
-			omci.NewUint32Field("SleepRequestMessageCount", 0, omci.Read),
-			omci.NewUint32Field("TuningResponseAckNackMessageCount", 0, omci.Read),
-			omci.NewUint32Field("TuningResponseCompleteURollbackMessageCount", 0, omci.Read),
-			omci.NewUint32Field("PowerConsumptionReportMessageCount", 0, omci.Read),
-			omci.NewUint32Field("ChangePowerLevelParameterErrorCount", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("UpstreamPloamMessageCount", 0, Read),
+			NewUint32Field("SerialNumberOnuInBandMessageCount", 0, Read),
+			NewUint32Field("SerialNumberOnuAmccMessageCount", 0, Read),
+			NewUint32Field("RegistrationMessageCount", 0, Read),
+			NewUint32Field("KeyReportMessageCount", 0, Read),
+			NewUint32Field("AcknowledgementMessageCount", 0, Read),
+			NewUint32Field("SleepRequestMessageCount", 0, Read),
+			NewUint32Field("TuningResponseAckNackMessageCount", 0, Read),
+			NewUint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read),
+			NewUint32Field("PowerConsumptionReportMessageCount", 0, Read),
+			NewUint32Field("ChangePowerLevelParameterErrorCount", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelPloamPerformanceMonitoringHistoryDataPart3{entity}, nil
 }

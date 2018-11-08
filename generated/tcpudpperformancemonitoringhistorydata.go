@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TcpUdpPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TcpUdpPerformanceMonitoringHistoryData",
 		ClassID:  342,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SocketFailed", 0, omci.Read),
-			omci.NewUint16Field("ListenFailed", 0, omci.Read),
-			omci.NewUint16Field("BindFailed", 0, omci.Read),
-			omci.NewUint16Field("AcceptFailed", 0, omci.Read),
-			omci.NewUint16Field("SelectFailed", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint16Field("SocketFailed", 0, Read),
+			NewUint16Field("ListenFailed", 0, Read),
+			NewUint16Field("BindFailed", 0, Read),
+			NewUint16Field("AcceptFailed", 0, Read),
+			NewUint16Field("SelectFailed", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TcpUdpPerformanceMonitoringHistoryData{entity}, nil
 }

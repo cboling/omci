@@ -19,33 +19,29 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TrafficScheduler struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTrafficScheduler(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TrafficScheduler",
 		ClassID:  278,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
-			omci.NewUint16Field("TContPointer", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("TrafficSchedulerPointer", 0, omci.Read),
-			omci.NewByteField("Policy", 0, omci.Read|omci.Write),
-			omci.NewByteField("PriorityWeight", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read),
+			NewUint16Field("TContPointer", 0, Read|Write),
+			NewUint16Field("TrafficSchedulerPointer", 0, Read),
+			NewByteField("Policy", 0, Read|Write),
+			NewByteField("PriorityWeight", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TrafficScheduler{entity}, nil
 }

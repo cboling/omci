@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type FastChannelConfigurationProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewFastChannelConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "FastChannelConfigurationProfile",
 		ClassID:  432,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint32Field("MaximumNetDataRateMaxndr", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MinimumExpectedThroughputMinetr", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MaximumGammaDataRateMaxgdr", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MinimumGammaDataRateMingdr", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MaximumDelayDelaymax", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, omci.Read|omci.Write),
-			omci.NewByteField("ShineRatioShineratio", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, omci.Read|omci.Write),
-			omci.NewByteField("ReinInterArrivalTimeIatRein", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, omci.Read|omci.Write),
-			omci.NewByteField("RtxTcTestmodeRtxTestmode", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint32Field("MaximumNetDataRateMaxndr", 0, Read|Write),
+			NewUint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write),
+			NewUint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write),
+			NewUint32Field("MinimumGammaDataRateMingdr", 0, Read|Write),
+			NewUint32Field("MaximumDelayDelaymax", 0, Read|Write),
+			NewUint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write),
+			NewByteField("ShineRatioShineratio", 0, Read|Write),
+			NewByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write),
+			NewByteField("ReinInterArrivalTimeIatRein", 0, Read|Write),
+			NewByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write),
+			NewByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &FastChannelConfigurationProfile{entity}, nil
 }

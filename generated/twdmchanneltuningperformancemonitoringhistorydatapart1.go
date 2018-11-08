@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart1",
 		ClassID:  449,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("TuningControlRequestsForRxOnlyOrRxAndTx", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsForTxOnly", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedIntSfc", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedDsXxx", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRejectedUsXxx", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsFulfilledWithOnuReacquiredAtTargetChannel", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsFailedDueToTargetDsWavelengthChannelNotFound", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsFailedDueToNoFeedbackInTargetDsWavelengthChannel", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsResolvedWithOnuReacquiredAtDiscretionaryChannel", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackComDs", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackDsXxx", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsRollbackUsXxx", 0, omci.Read),
-			omci.NewUint32Field("TuningControlRequestsFailedWithOnuReactivation", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("TuningControlRequestsForRxOnlyOrRxAndTx", 0, Read),
+			NewUint32Field("TuningControlRequestsForTxOnly", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedIntSfc", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedDsXxx", 0, Read),
+			NewUint32Field("TuningControlRequestsRejectedUsXxx", 0, Read),
+			NewUint32Field("TuningControlRequestsFulfilledWithOnuReacquiredAtTargetChannel", 0, Read),
+			NewUint32Field("TuningControlRequestsFailedDueToTargetDsWavelengthChannelNotFound", 0, Read),
+			NewUint32Field("TuningControlRequestsFailedDueToNoFeedbackInTargetDsWavelengthChannel", 0, Read),
+			NewUint32Field("TuningControlRequestsResolvedWithOnuReacquiredAtDiscretionaryChannel", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackComDs", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackDsXxx", 0, Read),
+			NewUint32Field("TuningControlRequestsRollbackUsXxx", 0, Read),
+			NewUint32Field("TuningControlRequestsFailedWithOnuReactivation", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelTuningPerformanceMonitoringHistoryDataPart1{entity}, nil
 }

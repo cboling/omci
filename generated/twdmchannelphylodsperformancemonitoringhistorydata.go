@@ -19,47 +19,43 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type TwdmChannelPhyLodsPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "TwdmChannelPhyLodsPerformanceMonitoringHistoryData",
 		ClassID:  444,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.GetCurrentData,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			GetCurrentData,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, omci.Read),
-			omci.NewUint32Field("Bip32BitErrorCount", 0, omci.Read),
-			omci.NewUint32Field("CorrectedPsbdHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("UncorrectablePsbdHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, omci.Read),
-			omci.NewUint32Field("TotalNumberOfLodsEvents", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsResultingInReactivation", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, omci.Read),
-			omci.NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read),
+			NewUint32Field("Bip32BitErrorCount", 0, Read),
+			NewUint32Field("CorrectedPsbdHecErrorCount", 0, Read),
+			NewUint32Field("UncorrectablePsbdHecErrorCount", 0, Read),
+			NewUint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read),
+			NewUint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read),
+			NewUint32Field("TotalNumberOfLodsEvents", 0, Read),
+			NewUint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read),
+			NewUint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read),
+			NewUint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read),
+			NewUint32Field("LodsEventsResultingInReactivation", 0, Read),
+			NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read),
+			NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &TwdmChannelPhyLodsPerformanceMonitoringHistoryData{entity}, nil
 }

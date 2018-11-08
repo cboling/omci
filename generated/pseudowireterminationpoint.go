@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PseudowireTerminationPoint struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPseudowireTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PseudowireTerminationPoint",
 		ClassID:  282,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("UnderlyingTransport", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("ServiceType", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Signalling", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TdmUniPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("NorthSidePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("FarEndIpInfo", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PayloadSize", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("PayloadEncapsulationDelay", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TimingMode", 0, omci.Read|omci.Write),
-			omci.NewUint64Field("TransmitCircuitId", 0, omci.Read|omci.Write),
-			omci.NewUint64Field("ExpectedCircuitId", 0, omci.Read|omci.Write),
-			omci.NewUint64Field("ReceivedCircuitId", 0, omci.Read),
-			omci.NewUint16Field("ExceptionPolicy", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("UnderlyingTransport", 0, Read|Write|SetByCreate),
+			NewByteField("ServiceType", 0, Read|Write|SetByCreate),
+			NewByteField("Signalling", 0, Read|Write|SetByCreate),
+			NewUint16Field("TdmUniPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("NorthSidePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("FarEndIpInfo", 0, Read|Write|SetByCreate),
+			NewUint16Field("PayloadSize", 0, Read|Write|SetByCreate),
+			NewByteField("PayloadEncapsulationDelay", 0, Read|Write|SetByCreate),
+			NewByteField("TimingMode", 0, Read|Write),
+			NewUint64Field("TransmitCircuitId", 0, Read|Write),
+			NewUint64Field("ExpectedCircuitId", 0, Read|Write),
+			NewUint64Field("ReceivedCircuitId", 0, Read),
+			NewUint16Field("ExceptionPolicy", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PseudowireTerminationPoint{entity}, nil
 }

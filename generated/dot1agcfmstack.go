@@ -19,32 +19,28 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1AgCfmStack struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1AgCfmStack(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1AgCfmStack",
 		ClassID:  305,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
-			omci.GetNext,
+		MessageTypes: []MsgType{
+			Get,
+			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("Layer2Type", 0, omci.Read),
-			omci.NewUnknownField("MpStatusTable", 0, omci.Read),
-			omci.NewUnknownField("ConfigurationErrorListTable", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("Layer2Type", 0, Read),
+			NewUnknownField("MpStatusTable", 0, Read),
+			NewUnknownField("ConfigurationErrorListTable", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1AgCfmStack{entity}, nil
 }

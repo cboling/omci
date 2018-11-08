@@ -19,44 +19,40 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type XdslChannelConfigurationProfilePart2 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (omci.IManagedEntity, error) {
+func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "XdslChannelConfigurationProfilePart2",
 		ClassID:  412,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumDelayForRetransmissionDelayminRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("ShineratioRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, omci.Read|omci.Write),
-			omci.NewByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("TargetNetDataRateTargetNdr", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, Read|Write),
+			NewUint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, Read|Write),
+			NewUint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, Read|Write),
+			NewByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, Read|Write),
+			NewByteField("MinimumDelayForRetransmissionDelayminRtx", 0, Read|Write),
+			NewByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, Read|Write),
+			NewByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, Read|Write),
+			NewByteField("ShineratioRtx", 0, Read|Write),
+			NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, Read|Write),
+			NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, Read|Write),
+			NewByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, Read|Write),
+			NewUint32Field("TargetNetDataRateTargetNdr", 0, Read|Write),
+			NewUint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &XdslChannelConfigurationProfilePart2{entity}, nil
 }

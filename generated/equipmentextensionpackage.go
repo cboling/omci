@@ -19,31 +19,27 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EquipmentExtensionPackage struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEquipmentExtensionPackage(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EquipmentExtensionPackage",
 		ClassID:  160,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
-			omci.NewUint16Field("EnvironmentalSense", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("ContactClosureOutput", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read),
+			NewUint16Field("EnvironmentalSense", 0, Read|Write),
+			NewUint16Field("ContactClosureOutput", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EquipmentExtensionPackage{entity}, nil
 }

@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type AniG struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewAniG(params ...ParamData) (omci.IManagedEntity, error) {
+func NewAniG(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "AniG",
 		ClassID:  263,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Test,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Test,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("SrIndication", 0, omci.Read),
-			omci.NewUint16Field("TotalTcontNumber", 0, omci.Read),
-			omci.NewUint16Field("GemBlockLength", 0, omci.Read|omci.Write),
-			omci.NewByteField("PiggybackDbaReporting", 0, omci.Read),
-			omci.NewByteField("Deprecated", 0, omci.Read),
-			omci.NewByteField("SignalFailThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("SignalDegradeSdThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("OpticalSignalLevel", 0, omci.Read),
-			omci.NewByteField("LowerOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("OnuResponseTime", 0, omci.Read),
-			omci.NewUint16Field("TransmitOpticalLevel", 0, omci.Read),
-			omci.NewByteField("LowerTransmitPowerThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperTransmitPowerThreshold", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("SrIndication", 0, Read),
+			NewUint16Field("TotalTcontNumber", 0, Read),
+			NewUint16Field("GemBlockLength", 0, Read|Write),
+			NewByteField("PiggybackDbaReporting", 0, Read),
+			NewByteField("Deprecated", 0, Read),
+			NewByteField("SignalFailThreshold", 0, Read|Write),
+			NewByteField("SignalDegradeSdThreshold", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewUint16Field("OpticalSignalLevel", 0, Read),
+			NewByteField("LowerOpticalThreshold", 0, Read|Write),
+			NewByteField("UpperOpticalThreshold", 0, Read|Write),
+			NewUint16Field("OnuResponseTime", 0, Read),
+			NewUint16Field("TransmitOpticalLevel", 0, Read),
+			NewByteField("LowerTransmitPowerThreshold", 0, Read|Write),
+			NewByteField("UpperTransmitPowerThreshold", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &AniG{entity}, nil
 }

@@ -19,38 +19,34 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type ThresholdData1 struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewThresholdData1(params ...ParamData) (omci.IManagedEntity, error) {
+func NewThresholdData1(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "ThresholdData1",
 		ClassID:  273,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue1", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue2", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue3", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue4", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue5", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue6", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ThresholdValue7", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint32Field("ThresholdValue1", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue2", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue3", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue4", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue5", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue6", 0, Read|Write|SetByCreate),
+			NewUint32Field("ThresholdValue7", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &ThresholdData1{entity}, nil
 }

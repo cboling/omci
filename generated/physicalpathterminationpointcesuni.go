@@ -19,41 +19,37 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PhysicalPathTerminationPointCesUni struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PhysicalPathTerminationPointCesUni",
 		ClassID:  12,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("ExpectedType", 0, omci.Read|omci.Write),
-			omci.NewByteField("SensedType", 0, omci.Read),
-			omci.NewByteField("CesLoopbackConfiguration", 0, omci.Read|omci.Write),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("Framing", 0, omci.Read|omci.Write),
-			omci.NewByteField("Encoding", 0, omci.Read|omci.Write),
-			omci.NewByteField("LineLength", 0, omci.Read|omci.Write),
-			omci.NewByteField("Ds1Mode", 0, omci.Read|omci.Write),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("LineType", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("ExpectedType", 0, Read|Write),
+			NewByteField("SensedType", 0, Read),
+			NewByteField("CesLoopbackConfiguration", 0, Read|Write),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("Framing", 0, Read|Write),
+			NewByteField("Encoding", 0, Read|Write),
+			NewByteField("LineLength", 0, Read|Write),
+			NewByteField("Ds1Mode", 0, Read|Write),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("LineType", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PhysicalPathTerminationPointCesUni{entity}, nil
 }

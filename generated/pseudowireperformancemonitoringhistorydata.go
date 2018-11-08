@@ -19,46 +19,42 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type PseudowirePerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "PseudowirePerformanceMonitoringHistoryData",
 		ClassID:  285,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ReceivedPackets", 0, omci.Read),
-			omci.NewUint32Field("TransmittedPackets", 0, omci.Read),
-			omci.NewUint32Field("MissingPackets", 0, omci.Read),
-			omci.NewUint32Field("MisorderedPackets,Usable", 0, omci.Read),
-			omci.NewUint32Field("MisorderedPacketsDropped", 0, omci.Read),
-			omci.NewUint32Field("PlayoutBufferUnderrunsOverruns", 0, omci.Read),
-			omci.NewUint32Field("MalformedPackets", 0, omci.Read),
-			omci.NewUint32Field("StrayPackets", 0, omci.Read),
-			omci.NewUint32Field("RemotePacketLoss", 0, omci.Read),
-			omci.NewUint32Field("TdmLBitPacketsTransmitted", 0, omci.Read),
-			omci.NewUint32Field("Es", 0, omci.Read),
-			omci.NewUint32Field("Ses", 0, omci.Read),
-			omci.NewUint32Field("Uas", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("ReceivedPackets", 0, Read),
+			NewUint32Field("TransmittedPackets", 0, Read),
+			NewUint32Field("MissingPackets", 0, Read),
+			NewUint32Field("MisorderedPackets,Usable", 0, Read),
+			NewUint32Field("MisorderedPacketsDropped", 0, Read),
+			NewUint32Field("PlayoutBufferUnderrunsOverruns", 0, Read),
+			NewUint32Field("MalformedPackets", 0, Read),
+			NewUint32Field("StrayPackets", 0, Read),
+			NewUint32Field("RemotePacketLoss", 0, Read),
+			NewUint32Field("TdmLBitPacketsTransmitted", 0, Read),
+			NewUint32Field("Es", 0, Read),
+			NewUint32Field("Ses", 0, Read),
+			NewUint32Field("Uas", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &PseudowirePerformanceMonitoringHistoryData{entity}, nil
 }

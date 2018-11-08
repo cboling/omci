@@ -19,43 +19,39 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipFeatureAccessCodes struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipFeatureAccessCodes(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipFeatureAccessCodes",
 		ClassID:  147,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUnknownField("CancelCallWaiting", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("CallHold", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("CallPark", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("CallerIdActivate", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("CallerIdDeactivate", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DoNotDisturbActivation", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DoNotDisturbDeactivation", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("DoNotDisturbPinChange", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("EmergencyServiceNumber", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("IntercomService", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("UnattendedBlindCallTransfer", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("AttendedCallTransfer", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUnknownField("CancelCallWaiting", 0, Read|Write),
+			NewUnknownField("CallHold", 0, Read|Write),
+			NewUnknownField("CallPark", 0, Read|Write),
+			NewUnknownField("CallerIdActivate", 0, Read|Write),
+			NewUnknownField("CallerIdDeactivate", 0, Read|Write),
+			NewUnknownField("DoNotDisturbActivation", 0, Read|Write),
+			NewUnknownField("DoNotDisturbDeactivation", 0, Read|Write),
+			NewUnknownField("DoNotDisturbPinChange", 0, Read|Write),
+			NewUnknownField("EmergencyServiceNumber", 0, Read|Write),
+			NewUnknownField("IntercomService", 0, Read|Write),
+			NewUnknownField("UnattendedBlindCallTransfer", 0, Read|Write),
+			NewUnknownField("AttendedCallTransfer", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipFeatureAccessCodes{entity}, nil
 }

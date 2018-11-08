@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type SnmpConfigurationData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewSnmpConfigurationData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "SnmpConfigurationData",
 		ClassID:  335,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("SnmpVersion", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SnmpAgentAddress", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("SnmpServerAddress", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SnmpServerPort", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SecurityNamePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("CommunityForRead", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("CommunityForWrite", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SysNamePointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("SnmpVersion", 0, Read|Write|SetByCreate),
+			NewUint16Field("SnmpAgentAddress", 0, Read|Write|SetByCreate),
+			NewUint32Field("SnmpServerAddress", 0, Read|Write|SetByCreate),
+			NewUint16Field("SnmpServerPort", 0, Read|Write|SetByCreate),
+			NewUint16Field("SecurityNamePointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("CommunityForRead", 0, Read|Write|SetByCreate),
+			NewUint16Field("CommunityForWrite", 0, Read|Write|SetByCreate),
+			NewUint16Field("SysNamePointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &SnmpConfigurationData{entity}, nil
 }

@@ -19,37 +19,33 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type VoipLineStatus struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewVoipLineStatus(params ...ParamData) (omci.IManagedEntity, error) {
+func NewVoipLineStatus(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "VoipLineStatus",
 		ClassID:  141,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Get,
+		MessageTypes: []MsgType{
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewUint16Field("VoipCodecUsed", 0, omci.Read),
-			omci.NewByteField("VoipVoiceServerStatus", 0, omci.Read),
-			omci.NewByteField("VoipPortSessionType", 0, omci.Read),
-			omci.NewUint16Field("VoipCall1PacketPeriod", 0, omci.Read),
-			omci.NewUint16Field("VoipCall2PacketPeriod", 0, omci.Read),
-			omci.NewUnknownField("VoipCall1DestAddr", 0, omci.Read),
-			omci.NewUnknownField("VoipCall2DestAddr", 0, omci.Read),
-			omci.NewByteField("VoipLineState", 0, omci.Read),
-			omci.NewByteField("EmergencyCallStatus", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewUint16Field("VoipCodecUsed", 0, Read),
+			NewByteField("VoipVoiceServerStatus", 0, Read),
+			NewByteField("VoipPortSessionType", 0, Read),
+			NewUint16Field("VoipCall1PacketPeriod", 0, Read),
+			NewUint16Field("VoipCall2PacketPeriod", 0, Read),
+			NewUnknownField("VoipCall1DestAddr", 0, Read),
+			NewUnknownField("VoipCall2DestAddr", 0, Read),
+			NewByteField("VoipLineState", 0, Read),
+			NewByteField("EmergencyCallStatus", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &VoipLineStatus{entity}, nil
 }

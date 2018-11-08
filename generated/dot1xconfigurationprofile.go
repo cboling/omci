@@ -19,39 +19,35 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1XConfigurationProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1XConfigurationProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1XConfigurationProfile",
 		ClassID:  291,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId:", 0, omci.Read),
-			omci.NewUint16Field("CircuitIdPrefix", 0, omci.Read|omci.Write),
-			omci.NewByteField("FallbackPolicy", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("AuthServer1", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("SharedSecretAuth1", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("AuthServer2", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("SharedSecretAuth2", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("AuthServer3", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("SharedSecretAuth3", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("OltProxyAddress", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("CallingStationIdFormat", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId:", 0, Read),
+			NewUint16Field("CircuitIdPrefix", 0, Read|Write),
+			NewByteField("FallbackPolicy", 0, Read|Write),
+			NewUint16Field("AuthServer1", 0, Read|Write),
+			NewUnknownField("SharedSecretAuth1", 0, Read|Write),
+			NewUint16Field("AuthServer2", 0, Read|Write),
+			NewUnknownField("SharedSecretAuth2", 0, Read|Write),
+			NewUint16Field("AuthServer3", 0, Read|Write),
+			NewUnknownField("SharedSecretAuth3", 0, Read|Write),
+			NewUint32Field("OltProxyAddress", 0, Read|Write),
+			NewUint16Field("CallingStationIdFormat", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1XConfigurationProfile{entity}, nil
 }

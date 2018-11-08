@@ -19,40 +19,36 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type ReCommonAmplifierParameters struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewReCommonAmplifierParameters(params ...ParamData) (omci.IManagedEntity, error) {
+func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "ReCommonAmplifierParameters",
 		ClassID:  328,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("Gain", 0, omci.Read),
-			omci.NewByteField("LowerGainThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperGainThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("TargetGain", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("DeviceTemperature", 0, omci.Read),
-			omci.NewByteField("LowerDeviceTemperatureThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperDeviceTemperatureThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("DeviceBiasCurrent", 0, omci.Read),
-			omci.NewUint16Field("AmplifierSaturationOutputPower", 0, omci.Read),
-			omci.NewByteField("AmplifierNoiseFigure", 0, omci.Read),
-			omci.NewByteField("AmplifierSaturationGain", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("Gain", 0, Read),
+			NewByteField("LowerGainThreshold", 0, Read|Write),
+			NewByteField("UpperGainThreshold", 0, Read|Write),
+			NewByteField("TargetGain", 0, Read|Write),
+			NewUint16Field("DeviceTemperature", 0, Read),
+			NewByteField("LowerDeviceTemperatureThreshold", 0, Read|Write),
+			NewByteField("UpperDeviceTemperatureThreshold", 0, Read|Write),
+			NewByteField("DeviceBiasCurrent", 0, Read),
+			NewUint16Field("AmplifierSaturationOutputPower", 0, Read),
+			NewByteField("AmplifierNoiseFigure", 0, Read),
+			NewByteField("AmplifierSaturationGain", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &ReCommonAmplifierParameters{entity}, nil
 }

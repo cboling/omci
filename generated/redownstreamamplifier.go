@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type ReDownstreamAmplifier struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewReDownstreamAmplifier(params ...ParamData) (omci.IManagedEntity, error) {
+func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "ReDownstreamAmplifier",
 		ClassID:  316,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Test,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Test,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalState", 0, omci.Read),
-			omci.NewByteField("Arc", 0, omci.Read|omci.Write),
-			omci.NewByteField("ArcInterval", 0, omci.Read|omci.Write),
-			omci.NewByteField("OperationalMode", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("InputOpticalSignalLevel", 0, omci.Read),
-			omci.NewByteField("LowerInputOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperInputOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("OutputOpticalSignalLevel", 0, omci.Read),
-			omci.NewByteField("LowerOutputOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("UpperOutputOpticalThreshold", 0, omci.Read|omci.Write),
-			omci.NewByteField("R'S'SplitterCouplingRatio", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read),
+			NewByteField("AdministrativeState", 0, Read|Write),
+			NewByteField("OperationalState", 0, Read),
+			NewByteField("Arc", 0, Read|Write),
+			NewByteField("ArcInterval", 0, Read|Write),
+			NewByteField("OperationalMode", 0, Read|Write),
+			NewUint16Field("InputOpticalSignalLevel", 0, Read),
+			NewByteField("LowerInputOpticalThreshold", 0, Read|Write),
+			NewByteField("UpperInputOpticalThreshold", 0, Read|Write),
+			NewUint16Field("OutputOpticalSignalLevel", 0, Read),
+			NewByteField("LowerOutputOpticalThreshold", 0, Read|Write),
+			NewByteField("UpperOutputOpticalThreshold", 0, Read|Write),
+			NewByteField("R'S'SplitterCouplingRatio", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &ReDownstreamAmplifier{entity}, nil
 }

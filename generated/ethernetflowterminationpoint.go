@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type EthernetFlowTerminationPoint struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewEthernetFlowTerminationPoint(params ...ParamData) (omci.IManagedEntity, error) {
+func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "EthernetFlowTerminationPoint",
 		ClassID:  286,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUnknownField("DestinationMac", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("SourceMac", 0, omci.Read),
-			omci.NewByteField("TagPolicy", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("Tci", 0, omci.Read|omci.Write),
-			omci.NewByteField("Loopback", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUnknownField("DestinationMac", 0, Read|Write|SetByCreate),
+			NewUnknownField("SourceMac", 0, Read),
+			NewByteField("TagPolicy", 0, Read|Write|SetByCreate),
+			NewUint16Field("Tci", 0, Read|Write),
+			NewByteField("Loopback", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &EthernetFlowTerminationPoint{entity}, nil
 }

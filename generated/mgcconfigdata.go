@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MgcConfigData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMgcConfigData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MgcConfigData",
 		ClassID:  155,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("PrimaryMgc", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("SecondaryMgc", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("TcpUdpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Version", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MessageFormat", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("MaximumRetryTime", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("MaximumRetryAttempts", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("ServiceChangeDelay", 0, omci.Read|omci.Write),
-			omci.NewUnknownField("TerminationIdBase", 0, omci.Read|omci.Write),
-			omci.NewUint32Field("Softswitch", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("MessageIdPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("PrimaryMgc", 0, Read|Write|SetByCreate),
+			NewUint16Field("SecondaryMgc", 0, Read|Write|SetByCreate),
+			NewUint16Field("TcpUdpPointer", 0, Read|Write|SetByCreate),
+			NewByteField("Version", 0, Read|Write|SetByCreate),
+			NewByteField("MessageFormat", 0, Read|Write|SetByCreate),
+			NewUint16Field("MaximumRetryTime", 0, Read|Write),
+			NewUint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
+			NewUint16Field("ServiceChangeDelay", 0, Read|Write),
+			NewUnknownField("TerminationIdBase", 0, Read|Write),
+			NewUint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			NewUint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MgcConfigData{entity}, nil
 }

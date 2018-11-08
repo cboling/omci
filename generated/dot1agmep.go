@@ -19,45 +19,41 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1AgMep struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1AgMep(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1AgMep(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1AgMep",
 		ClassID:  302,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("Layer2EntityPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("Layer2Type", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("MaPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("MepId", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MepControl", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("PrimaryVlan", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("AdministrativeState", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("CcmAndLtmPriority", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint64Field("EgressIdentifier", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("PeerMepIds", 0, omci.Read|omci.Write),
-			omci.NewByteField("EthAisControl", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("FaultAlarmThreshold", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("AlarmDeclarationSoakTime", 0, omci.Read|omci.Write),
-			omci.NewUint16Field("AlarmClearSoakTime", 0, omci.Read|omci.Write),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("Layer2EntityPointer", 0, Read|Write|SetByCreate),
+			NewByteField("Layer2Type", 0, Read|Write|SetByCreate),
+			NewUint16Field("MaPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("MepId", 0, Read|Write|SetByCreate),
+			NewByteField("MepControl", 0, Read|Write|SetByCreate),
+			NewUint16Field("PrimaryVlan", 0, Read|Write|SetByCreate),
+			NewByteField("AdministrativeState", 0, Read|Write|SetByCreate),
+			NewByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
+			NewUint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
+			NewUnknownField("PeerMepIds", 0, Read|Write),
+			NewByteField("EthAisControl", 0, Read|Write|SetByCreate),
+			NewByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
+			NewUint16Field("AlarmDeclarationSoakTime", 0, Read|Write),
+			NewUint16Field("AlarmClearSoakTime", 0, Read|Write),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1AgMep{entity}, nil
 }

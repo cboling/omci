@@ -19,42 +19,38 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type MgcPerformanceMonitoringHistoryData struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (omci.IManagedEntity, error) {
+func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "MgcPerformanceMonitoringHistoryData",
 		ClassID:  156,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("IntervalEndTime", 0, omci.Read),
-			omci.NewUint16Field("ThresholdData12Id", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint32Field("ReceivedMessages", 0, omci.Read),
-			omci.NewUint32Field("ReceivedOctets", 0, omci.Read),
-			omci.NewUint32Field("SentMessages", 0, omci.Read),
-			omci.NewUint32Field("SentOctets", 0, omci.Read),
-			omci.NewUint32Field("ProtocolErrors", 0, omci.Read),
-			omci.NewUint32Field("TransportLosses", 0, omci.Read),
-			omci.NewByteField("LastDetectedEvent", 0, omci.Read),
-			omci.NewUint32Field("LastDetectedEventTime", 0, omci.Read),
-			omci.NewUint32Field("LastDetectedResetTime", 0, omci.Read),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("IntervalEndTime", 0, Read),
+			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			NewUint32Field("ReceivedMessages", 0, Read),
+			NewUint32Field("ReceivedOctets", 0, Read),
+			NewUint32Field("SentMessages", 0, Read),
+			NewUint32Field("SentOctets", 0, Read),
+			NewUint32Field("ProtocolErrors", 0, Read),
+			NewUint32Field("TransportLosses", 0, Read),
+			NewByteField("LastDetectedEvent", 0, Read),
+			NewUint32Field("LastDetectedEventTime", 0, Read),
+			NewUint32Field("LastDetectedResetTime", 0, Read),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &MgcPerformanceMonitoringHistoryData{entity}, nil
 }

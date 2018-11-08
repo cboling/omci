@@ -19,44 +19,40 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Ieee8021PMapperServiceProfile struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewIeee8021PMapperServiceProfile(params ...ParamData) (omci.IManagedEntity, error) {
+func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Ieee8021PMapperServiceProfile",
 		ClassID:  130,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewUint16Field("TpPointer", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority0", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority1", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority2", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority3", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority4", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority5", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority6", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUint16Field("InterworkTpPointerForPBitPriority7", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("UnmarkedFrameOption", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("DscpToPBitMapping", 0, omci.Read|omci.Write),
-			omci.NewByteField("DefaultPBitAssumption", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("TpType", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority0", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority1", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority2", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority3", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority4", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority5", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority6", 0, Read|Write|SetByCreate),
+			NewUint16Field("InterworkTpPointerForPBitPriority7", 0, Read|Write|SetByCreate),
+			NewByteField("UnmarkedFrameOption", 0, Read|Write|SetByCreate),
+			NewUnknownField("DscpToPBitMapping", 0, Read|Write),
+			NewByteField("DefaultPBitAssumption", 0, Read|Write|SetByCreate),
+			NewByteField("TpType", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Ieee8021PMapperServiceProfile{entity}, nil
 }

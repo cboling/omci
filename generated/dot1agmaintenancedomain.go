@@ -19,36 +19,32 @@
  */
 package generated
 
-import (
-	"../../omci"
-)
-
 type Dot1AgMaintenanceDomain struct {
-	omci.BaseManagedEntity
+	BaseManagedEntity
 }
 
-func NewDot1AgMaintenanceDomain(params ...ParamData) (omci.IManagedEntity, error) {
+func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntity, error) {
 	eid := decodeEntityID(params...)
-	entity := omci.BaseManagedEntity{
+	entity := BaseManagedEntity{
 		Name:     "Dot1AgMaintenanceDomain",
 		ClassID:  299,
 		EntityID: eid,
-		MessageTypes: []omci.MsgType{
-			omci.Set,
-			omci.Get,
-			omci.Create,
-			omci.Delete,
+		MessageTypes: []MsgType{
+			Set,
+			Get,
+			Create,
+			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []omci.IAttribute{
-			omci.NewUint16Field("ManagedEntityId", 0, omci.Read|omci.SetByCreate),
-			omci.NewByteField("MdLevel", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("MdNameFormat", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewUnknownField("MdName1MdName2", 0, omci.Read|omci.Write),
-			omci.NewByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, omci.Read|omci.Write|omci.SetByCreate),
-			omci.NewByteField("SenderIdPermission", 0, omci.Read|omci.Write|omci.SetByCreate),
+		Attributes: []IAttribute{
+			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			NewByteField("MdLevel", 0, Read|Write|SetByCreate),
+			NewByteField("MdNameFormat", 0, Read|Write|SetByCreate),
+			NewUnknownField("MdName1MdName2", 0, Read|Write),
+			NewByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|Write|SetByCreate),
+			NewByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
-	entity.ComputeAttributeMask()
+	entity.computeAttributeMask()
 	return &Dot1AgMaintenanceDomain{entity}, nil
 }
