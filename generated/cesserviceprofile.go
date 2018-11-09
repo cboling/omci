@@ -19,13 +19,19 @@
  */
 package generated
 
+// CesServiceProfile (class ID 21 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type CesServiceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewCesServiceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewCesServiceProfile (class ID 21 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCesServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "CesServiceProfile",
 		ClassID:  21,
 		EntityID: eid,
@@ -36,10 +42,10 @@ func NewCesServiceProfile(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("CesBufferedCdvTolerance", 0, Read|Write|SetByCreate),
-			NewByteField("ChannelAssociatedSignallingCas", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("CesBufferedCdvTolerance", 0, Read|Write|SetByCreate),
+			ByteField("ChannelAssociatedSignallingCas", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

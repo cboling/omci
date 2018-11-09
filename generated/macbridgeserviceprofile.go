@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgeServiceProfile (class ID 45 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgeServiceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgeServiceProfile (class ID 45 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgeServiceProfile",
 		ClassID:  45,
 		EntityID: eid,
@@ -36,18 +42,18 @@ func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("SpanningTreeInd", 0, Read|Write|SetByCreate),
-			NewByteField("LearningInd", 0, Read|Write|SetByCreate),
-			NewByteField("PortBridgingInd", 0, Read|Write|SetByCreate),
-			NewUint16Field("Priority", 0, Read|Write|SetByCreate),
-			NewUint16Field("MaxAge", 0, Read|Write|SetByCreate),
-			NewUint16Field("HelloTime", 0, Read|Write|SetByCreate),
-			NewUint16Field("ForwardDelay", 0, Read|Write|SetByCreate),
-			NewByteField("UnknownMacAddressDiscard", 0, Read|Write|SetByCreate),
-			NewByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
-			NewUint32Field("DynamicFilteringAgeingTime", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("SpanningTreeInd", 0, Read|Write|SetByCreate),
+			ByteField("LearningInd", 0, Read|Write|SetByCreate),
+			ByteField("PortBridgingInd", 0, Read|Write|SetByCreate),
+			Uint16Field("Priority", 0, Read|Write|SetByCreate),
+			Uint16Field("MaxAge", 0, Read|Write|SetByCreate),
+			Uint16Field("HelloTime", 0, Read|Write|SetByCreate),
+			Uint16Field("ForwardDelay", 0, Read|Write|SetByCreate),
+			ByteField("UnknownMacAddressDiscard", 0, Read|Write|SetByCreate),
+			ByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
+			Uint32Field("DynamicFilteringAgeingTime", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

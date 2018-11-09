@@ -145,7 +145,7 @@ var allNotificationTypes = [...]MsgType{
 
 // SupportsMsgType returns true if the managed entity supports the desired
 // Message Type / action
-func SupportsMsgType(entity IManagedEntity, msgType MsgType) bool {
+func SupportsMsgType(entity IManagedEntityDefinition, msgType MsgType) bool {
 	for _, msg := range entity.GetMessageTypes() {
 		if msgType == msg {
 			return true
@@ -232,43 +232,47 @@ func (access AttributeAccess) String() string {
 
 // SupportsAttributeAccess returns true if the managed entity attribute
 // supports the desired access
-func SupportsAttributeAccess(attr IAttribute, acc AttributeAccess) bool {
+func SupportsAttributeAccess(attr IAttributeDefinition, acc AttributeAccess) bool {
 	return attr.GetAccess()&acc == acc
 }
 
-type IManagedEntity interface {
+type IManagedEntityDefinition interface {
 	GetName() string
 	GetClassID() uint16
 	GetEntityID() uint16
 	GetMessageTypes() []MsgType
 	GetAttributeMask() uint16
-	GetAttributes() []IAttribute
+	GetAttributes() []*AttributeDefinition
 }
 
-type BaseManagedEntity struct {
+type BaseManagedEntityDefinition struct {
 	Name          string
 	ClassID       uint16
 	EntityID      uint16
 	MessageTypes  []MsgType
 	AttributeMask uint16
-	Attributes    []IAttribute
+	Attributes    []*AttributeDefinition
 }
 
-func (bme *BaseManagedEntity) GetName() string             { return bme.Name }
-func (bme *BaseManagedEntity) GetClassID() uint16          { return bme.ClassID }
-func (bme *BaseManagedEntity) GetEntityID() uint16         { return bme.EntityID }
-func (bme *BaseManagedEntity) GetMessageTypes() []MsgType  { return bme.MessageTypes }
-func (bme *BaseManagedEntity) GetAttributeMask() uint16    { return bme.AttributeMask }
-func (bme *BaseManagedEntity) GetAttributes() []IAttribute { return bme.Attributes }
+func (bme *BaseManagedEntityDefinition) GetName() string                       { return bme.Name }
+func (bme *BaseManagedEntityDefinition) GetClassID() uint16                    { return bme.ClassID }
+func (bme *BaseManagedEntityDefinition) GetEntityID() uint16                   { return bme.EntityID }
+func (bme *BaseManagedEntityDefinition) GetMessageTypes() []MsgType            { return bme.MessageTypes }
+func (bme *BaseManagedEntityDefinition) GetAttributeMask() uint16              { return bme.AttributeMask }
+func (bme *BaseManagedEntityDefinition) GetAttributes() []*AttributeDefinition { return bme.Attributes }
 
-func (bme *BaseManagedEntity) String() string {
+func (bme *BaseManagedEntityDefinition) String() string {
 	return fmt.Sprintf("%v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
 		bme.Name, bme.ClassID, bme.ClassID, bme.EntityID, bme.EntityID,
 		bme.Attributes)
 }
 
-func (bme *BaseManagedEntity) computeAttributeMask() {
+func (bme *BaseManagedEntityDefinition) computeAttributeMask() {
 	for index := range bme.Attributes {
 		bme.AttributeMask |= 1 << (15 - uint(index))
 	}
+}
+
+type IManagedEntityInstance interface {
+	IManagedEntityDefinition
 }

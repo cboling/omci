@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePortFilterPreAssignTable (class ID 79 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePortFilterPreAssignTable struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePortFilterPreAssignTable (class ID 79 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePortFilterPreAssignTable",
 		ClassID:  79,
 		EntityID: eid,
@@ -34,18 +40,18 @@ func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, 
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("Ipv4MulticastFiltering", 0, Read|Write),
-			NewByteField("Ipv6MulticastFiltering", 0, Read|Write),
-			NewByteField("Ipv4BroadcastFiltering", 0, Read|Write),
-			NewByteField("RarpFiltering", 0, Read|Write),
-			NewByteField("IpxFiltering", 0, Read|Write),
-			NewByteField("NetbeuiFiltering", 0, Read|Write),
-			NewByteField("AppletalkFiltering", 0, Read|Write),
-			NewByteField("BridgeManagementInformationFiltering", 0, Read|Write),
-			NewByteField("ArpFiltering", 0, Read|Write),
-			NewByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("Ipv4MulticastFiltering", 0, Read|Write),
+			ByteField("Ipv6MulticastFiltering", 0, Read|Write),
+			ByteField("Ipv4BroadcastFiltering", 0, Read|Write),
+			ByteField("RarpFiltering", 0, Read|Write),
+			ByteField("IpxFiltering", 0, Read|Write),
+			ByteField("NetbeuiFiltering", 0, Read|Write),
+			ByteField("AppletalkFiltering", 0, Read|Write),
+			ByteField("BridgeManagementInformationFiltering", 0, Read|Write),
+			ByteField("ArpFiltering", 0, Read|Write),
+			ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

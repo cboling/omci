@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePortPerformanceMonitoringHistoryData (class ID 52 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePortPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePortPerformanceMonitoringHistoryData (class ID 52 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePortPerformanceMonitoringHistoryData",
 		ClassID:  52,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IMan
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("ForwardedFrameCounter", 0, Read),
-			NewUint32Field("DelayExceededDiscardCounter", 0, Read),
-			NewUint32Field("MaximumTransmissionUNitMtuExceededDiscardCounter", 0, Read),
-			NewUint32Field("ReceivedFrameCounter", 0, Read),
-			NewUint32Field("ReceivedAndDiscardedCounter", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("ForwardedFrameCounter", 0, Read),
+			Uint32Field("DelayExceededDiscardCounter", 0, Read),
+			Uint32Field("MaximumTransmissionUNitMtuExceededDiscardCounter", 0, Read),
+			Uint32Field("ReceivedFrameCounter", 0, Read),
+			Uint32Field("ReceivedAndDiscardedCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

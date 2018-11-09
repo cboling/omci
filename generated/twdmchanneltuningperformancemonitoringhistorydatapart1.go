@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID 449 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID 449 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart1",
 		ClassID:  449,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamDa
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("TuningControlRequestsForRxOnlyOrRxAndTx", 0, Read),
-			NewUint32Field("TuningControlRequestsForTxOnly", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedIntSfc", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsXxx", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsXxx", 0, Read),
-			NewUint32Field("TuningControlRequestsFulfilledWithOnuReacquiredAtTargetChannel", 0, Read),
-			NewUint32Field("TuningControlRequestsFailedDueToTargetDsWavelengthChannelNotFound", 0, Read),
-			NewUint32Field("TuningControlRequestsFailedDueToNoFeedbackInTargetDsWavelengthChannel", 0, Read),
-			NewUint32Field("TuningControlRequestsResolvedWithOnuReacquiredAtDiscretionaryChannel", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackComDs", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackDsXxx", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsXxx", 0, Read),
-			NewUint32Field("TuningControlRequestsFailedWithOnuReactivation", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("TuningControlRequestsForRxOnlyOrRxAndTx", 0, Read),
+			Uint32Field("TuningControlRequestsForTxOnly", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedIntSfc", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsXxx", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsXxx", 0, Read),
+			Uint32Field("TuningControlRequestsFulfilledWithOnuReacquiredAtTargetChannel", 0, Read),
+			Uint32Field("TuningControlRequestsFailedDueToTargetDsWavelengthChannelNotFound", 0, Read),
+			Uint32Field("TuningControlRequestsFailedDueToNoFeedbackInTargetDsWavelengthChannel", 0, Read),
+			Uint32Field("TuningControlRequestsResolvedWithOnuReacquiredAtDiscretionaryChannel", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackComDs", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackDsXxx", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsXxx", 0, Read),
+			Uint32Field("TuningControlRequestsFailedWithOnuReactivation", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

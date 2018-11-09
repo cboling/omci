@@ -19,13 +19,19 @@
  */
 package generated
 
+// XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID 346 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID 346 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XgPonUpstreamManagementPerformanceMonitoringHistoryData",
 		ClassID:  346,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamD
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("UpstreamPloamMessageCount", 0, Read),
-			NewUint32Field("SerialNumberOnuMessageCount", 0, Read),
-			NewUint32Field("RegistrationMessageCount", 0, Read),
-			NewUint32Field("KeyReportMessageCount", 0, Read),
-			NewUint32Field("AcknowledgeMessageCount", 0, Read),
-			NewUint32Field("SleepRequestMessageCount", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("UpstreamPloamMessageCount", 0, Read),
+			Uint32Field("SerialNumberOnuMessageCount", 0, Read),
+			Uint32Field("RegistrationMessageCount", 0, Read),
+			Uint32Field("KeyReportMessageCount", 0, Read),
+			Uint32Field("AcknowledgeMessageCount", 0, Read),
+			Uint32Field("SleepRequestMessageCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

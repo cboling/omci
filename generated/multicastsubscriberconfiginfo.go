@@ -19,13 +19,19 @@
  */
 package generated
 
+// MulticastSubscriberConfigInfo (class ID 310 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MulticastSubscriberConfigInfo struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntity, error) {
+// NewMulticastSubscriberConfigInfo (class ID 310 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MulticastSubscriberConfigInfo",
 		ClassID:  310,
 		EntityID: eid,
@@ -37,14 +43,14 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntity, erro
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("MeType", 0, Read|Write|SetByCreate),
-			NewUint16Field("MulticastOperationsProfilePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("MaxSimultaneousGroups", 0, Read|Write|SetByCreate),
-			NewUint32Field("MaxMulticastBandwidth", 0, Read|Write|SetByCreate),
-			NewByteField("BandwidthEnforcement", 0, Read|Write|SetByCreate),
-			NewUnknownField("MulticastServicePackageTable", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("MeType", 0, Read|Write|SetByCreate),
+			Uint16Field("MulticastOperationsProfilePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("MaxSimultaneousGroups", 0, Read|Write|SetByCreate),
+			Uint32Field("MaxMulticastBandwidth", 0, Read|Write|SetByCreate),
+			ByteField("BandwidthEnforcement", 0, Read|Write|SetByCreate),
+			UnknownField("MulticastServicePackageTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// TCont (class ID 262 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TCont struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTCont(params ...ParamData) (IManagedEntity, error) {
+// NewTCont (class ID 262 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTCont(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TCont",
 		ClassID:  262,
 		EntityID: eid,
@@ -34,11 +40,11 @@ func NewTCont(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewUint16Field("AllocId", 0, Read|Write),
-			NewByteField("Deprecated", 0, Read),
-			NewByteField("Policy", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			Uint16Field("AllocId", 0, Read|Write),
+			ByteField("Deprecated", 0, Read),
+			ByteField("Policy", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

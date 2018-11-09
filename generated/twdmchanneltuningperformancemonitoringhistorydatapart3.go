@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelTuningPerformanceMonitoringHistoryDataPart3 (class ID 451 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart3 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3 (class ID 451 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart3",
 		ClassID:  451,
 		EntityID: eid,
@@ -37,18 +43,18 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamDa
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			NewUint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackDsLktp", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsVoid", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsTunr", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsLktp", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read),
-			NewUint32Field("TuningControlRequestsRollbackUsLncd", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			Uint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackDsLktp", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsVoid", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsTunr", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsLktp", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read),
+			Uint32Field("TuningControlRequestsRollbackUsLncd", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

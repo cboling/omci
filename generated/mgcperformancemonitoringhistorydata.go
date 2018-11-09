@@ -19,13 +19,19 @@
  */
 package generated
 
+// MgcPerformanceMonitoringHistoryData (class ID 156 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MgcPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewMgcPerformanceMonitoringHistoryData (class ID 156 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MgcPerformanceMonitoringHistoryData",
 		ClassID:  156,
 		EntityID: eid,
@@ -36,19 +42,19 @@ func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("ReceivedMessages", 0, Read),
-			NewUint32Field("ReceivedOctets", 0, Read),
-			NewUint32Field("SentMessages", 0, Read),
-			NewUint32Field("SentOctets", 0, Read),
-			NewUint32Field("ProtocolErrors", 0, Read),
-			NewUint32Field("TransportLosses", 0, Read),
-			NewByteField("LastDetectedEvent", 0, Read),
-			NewUint32Field("LastDetectedEventTime", 0, Read),
-			NewUint32Field("LastDetectedResetTime", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("ReceivedMessages", 0, Read),
+			Uint32Field("ReceivedOctets", 0, Read),
+			Uint32Field("SentMessages", 0, Read),
+			Uint32Field("SentOctets", 0, Read),
+			Uint32Field("ProtocolErrors", 0, Read),
+			Uint32Field("TransportLosses", 0, Read),
+			ByteField("LastDetectedEvent", 0, Read),
+			Uint32Field("LastDetectedEventTime", 0, Read),
+			Uint32Field("LastDetectedResetTime", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

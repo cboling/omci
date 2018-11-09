@@ -19,13 +19,19 @@
  */
 package generated
 
+// PwEthernetConfigurationData (class ID 339 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PwEthernetConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewPwEthernetConfigurationData (class ID 339 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PwEthernetConfigurationData",
 		ClassID:  339,
 		EntityID: eid,
@@ -36,11 +42,11 @@ func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error)
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("MplsPseudowireTpPointer", 0, Read|Write|SetByCreate),
-			NewByteField("TpType", 0, Read|Write|SetByCreate),
-			NewUint16Field("UniPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("MplsPseudowireTpPointer", 0, Read|Write|SetByCreate),
+			ByteField("TpType", 0, Read|Write|SetByCreate),
+			Uint16Field("UniPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

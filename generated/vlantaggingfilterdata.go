@@ -19,13 +19,19 @@
  */
 package generated
 
+// VlanTaggingFilterData (class ID 84 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VlanTaggingFilterData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntity, error) {
+// NewVlanTaggingFilterData (class ID 84 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VlanTaggingFilterData",
 		ClassID:  84,
 		EntityID: eid,
@@ -36,11 +42,11 @@ func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUnknownField("VlanFilterList", 0, Read|Write|SetByCreate),
-			NewByteField("ForwardOperation", 0, Read|Write|SetByCreate),
-			NewByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			UnknownField("VlanFilterList", 0, Read|Write|SetByCreate),
+			ByteField("ForwardOperation", 0, Read|Write|SetByCreate),
+			ByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

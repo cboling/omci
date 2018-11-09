@@ -19,13 +19,19 @@
  */
 package generated
 
+// SnmpConfigurationData (class ID 335 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SnmpConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewSnmpConfigurationData (class ID 335 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSnmpConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SnmpConfigurationData",
 		ClassID:  335,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("SnmpVersion", 0, Read|Write|SetByCreate),
-			NewUint16Field("SnmpAgentAddress", 0, Read|Write|SetByCreate),
-			NewUint32Field("SnmpServerAddress", 0, Read|Write|SetByCreate),
-			NewUint16Field("SnmpServerPort", 0, Read|Write|SetByCreate),
-			NewUint16Field("SecurityNamePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("CommunityForRead", 0, Read|Write|SetByCreate),
-			NewUint16Field("CommunityForWrite", 0, Read|Write|SetByCreate),
-			NewUint16Field("SysNamePointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("SnmpVersion", 0, Read|Write|SetByCreate),
+			Uint16Field("SnmpAgentAddress", 0, Read|Write|SetByCreate),
+			Uint32Field("SnmpServerAddress", 0, Read|Write|SetByCreate),
+			Uint16Field("SnmpServerPort", 0, Read|Write|SetByCreate),
+			Uint16Field("SecurityNamePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("CommunityForRead", 0, Read|Write|SetByCreate),
+			Uint16Field("CommunityForWrite", 0, Read|Write|SetByCreate),
+			Uint16Field("SysNamePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

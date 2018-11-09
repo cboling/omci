@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslLineConfigurationProfilePart3 (class ID 106 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslLineConfigurationProfilePart3 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntity, error) {
+// NewXdslLineConfigurationProfilePart3 (class ID 106 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslLineConfigurationProfilePart3",
 		ClassID:  106,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntity, 
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|Write|SetByCreate),
-			NewByteField("AutomodeColdStartForced", 0, Read|Write|SetByCreate),
-			NewByteField("L2Atpr", 0, Read|Write|SetByCreate),
-			NewByteField("L2Atprt", 0, Read|Write|SetByCreate),
-			NewByteField("ForceInpDownstream", 0, Read|Write),
-			NewByteField("ForceInpUpstream", 0, Read|Write),
-			NewByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write),
-			NewByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write),
-			NewUint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write),
-			NewByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write),
-			NewByteField("InmClusterContinuationValueUpstream", 0, Read|Write),
-			NewByteField("InmEquivalentInpModeUpstream", 0, Read|Write),
-			NewUint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write),
-			NewByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write),
-			NewByteField("InmClusterContinuationValueDownstream", 0, Read|Write),
-			NewByteField("InmEquivalentInpModeDownstream", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|Write|SetByCreate),
+			ByteField("AutomodeColdStartForced", 0, Read|Write|SetByCreate),
+			ByteField("L2Atpr", 0, Read|Write|SetByCreate),
+			ByteField("L2Atprt", 0, Read|Write|SetByCreate),
+			ByteField("ForceInpDownstream", 0, Read|Write),
+			ByteField("ForceInpUpstream", 0, Read|Write),
+			ByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write),
+			ByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write),
+			Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write),
+			ByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write),
+			ByteField("InmClusterContinuationValueUpstream", 0, Read|Write),
+			ByteField("InmEquivalentInpModeUpstream", 0, Read|Write),
+			Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write),
+			ByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write),
+			ByteField("InmClusterContinuationValueDownstream", 0, Read|Write),
+			ByteField("InmEquivalentInpModeDownstream", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

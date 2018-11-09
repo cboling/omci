@@ -19,13 +19,19 @@
  */
 package generated
 
+// NetworkDialPlanTable (class ID 145 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type NetworkDialPlanTable struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntity, error) {
+// NewNetworkDialPlanTable (class ID 145 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "NetworkDialPlanTable",
 		ClassID:  145,
 		EntityID: eid,
@@ -37,14 +43,14 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("DialPlanNumber", 0, Read),
-			NewUint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate),
-			NewUint16Field("CriticalDialTimeout", 0, Read|Write|SetByCreate),
-			NewUint16Field("PartialDialTimeout", 0, Read|Write|SetByCreate),
-			NewByteField("DialPlanFormat", 0, Read|Write|SetByCreate),
-			NewByteField("DialPlanTable", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("DialPlanNumber", 0, Read),
+			Uint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate),
+			Uint16Field("CriticalDialTimeout", 0, Read|Write|SetByCreate),
+			Uint16Field("PartialDialTimeout", 0, Read|Write|SetByCreate),
+			ByteField("DialPlanFormat", 0, Read|Write|SetByCreate),
+			ByteField("DialPlanTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

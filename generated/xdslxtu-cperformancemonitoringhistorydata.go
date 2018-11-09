@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslXtuCPerformanceMonitoringHistoryData (class ID 112 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslXtuCPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXdslXtuCPerformanceMonitoringHistoryData (class ID 112 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslXtuCPerformanceMonitoringHistoryData",
 		ClassID:  112,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint16Field("LossOfFrameSeconds", 0, Read),
-			NewUint16Field("LossOfSignalSeconds", 0, Read),
-			NewUint16Field("LossOfLinkSeconds", 0, Read),
-			NewUint16Field("LossOfPowerSeconds", 0, Read),
-			NewUint16Field("ErroredSecondsEs", 0, Read),
-			NewUint16Field("SeverelyErroredSeconds", 0, Read),
-			NewUint16Field("LineInitializations", 0, Read),
-			NewUint16Field("FailedLineInitializations", 0, Read),
-			NewUint16Field("ShortInitializations", 0, Read),
-			NewUint16Field("FailedShortInitializations", 0, Read),
-			NewUint16Field("FecSeconds", 0, Read),
-			NewUint16Field("UnavailableSeconds", 0, Read),
-			NewUint16Field("SosSuccessCount,NearEnd", 0, Read),
-			NewUint16Field("SosSuccessCount,FarEnd", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint16Field("LossOfFrameSeconds", 0, Read),
+			Uint16Field("LossOfSignalSeconds", 0, Read),
+			Uint16Field("LossOfLinkSeconds", 0, Read),
+			Uint16Field("LossOfPowerSeconds", 0, Read),
+			Uint16Field("ErroredSecondsEs", 0, Read),
+			Uint16Field("SeverelyErroredSeconds", 0, Read),
+			Uint16Field("LineInitializations", 0, Read),
+			Uint16Field("FailedLineInitializations", 0, Read),
+			Uint16Field("ShortInitializations", 0, Read),
+			Uint16Field("FailedShortInitializations", 0, Read),
+			Uint16Field("FecSeconds", 0, Read),
+			Uint16Field("UnavailableSeconds", 0, Read),
+			Uint16Field("SosSuccessCount,NearEnd", 0, Read),
+			Uint16Field("SosSuccessCount,FarEnd", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

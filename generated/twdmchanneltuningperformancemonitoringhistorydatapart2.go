@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart2",
 		ClassID:  450,
 		EntityID: eid,
@@ -37,23 +43,23 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamDa
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("TuningControlRequestsRejectedDsAlbl", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsVoid", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsPart", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsTunr", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsLnrt", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedDsLncd", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsAlbl", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsVoid", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsTunr", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsClbr", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsLktp", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsLnrt", 0, Read),
-			NewUint32Field("TuningControlRequestsRejectedUsLncd", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("TuningControlRequestsRejectedDsAlbl", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsVoid", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsPart", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsTunr", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsLnrt", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedDsLncd", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsAlbl", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsVoid", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsTunr", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsClbr", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsLktp", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsLnrt", 0, Read),
+			Uint32Field("TuningControlRequestsRejectedUsLncd", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

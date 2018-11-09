@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePortConfigurationData (class ID 47 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePortConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePortConfigurationData (class ID 47 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePortConfigurationData",
 		ClassID:  47,
 		EntityID: eid,
@@ -36,21 +42,21 @@ func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntity, err
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("BridgeIdPointer", 0, Read|Write|SetByCreate),
-			NewByteField("PortNum", 0, Read|Write|SetByCreate),
-			NewByteField("TpType", 0, Read|Write|SetByCreate),
-			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("PortPriority", 0, Read|Write|SetByCreate),
-			NewUint16Field("PortPathCost", 0, Read|Write|SetByCreate),
-			NewByteField("PortSpanningTreeInd", 0, Read|Write|SetByCreate),
-			NewByteField("Deprecated1", 0, Read|Write|SetByCreate),
-			NewByteField("Deprecated2", 0, Read|Write|SetByCreate),
-			NewUnknownField("PortMacAddress", 0, Read),
-			NewUint16Field("OutboundTdPointer", 0, Read|Write),
-			NewUint16Field("InboundTdPointer", 0, Read|Write),
-			NewByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("BridgeIdPointer", 0, Read|Write|SetByCreate),
+			ByteField("PortNum", 0, Read|Write|SetByCreate),
+			ByteField("TpType", 0, Read|Write|SetByCreate),
+			Uint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("PortPriority", 0, Read|Write|SetByCreate),
+			Uint16Field("PortPathCost", 0, Read|Write|SetByCreate),
+			ByteField("PortSpanningTreeInd", 0, Read|Write|SetByCreate),
+			ByteField("Deprecated1", 0, Read|Write|SetByCreate),
+			ByteField("Deprecated2", 0, Read|Write|SetByCreate),
+			UnknownField("PortMacAddress", 0, Read),
+			Uint16Field("OutboundTdPointer", 0, Read|Write),
+			Uint16Field("InboundTdPointer", 0, Read|Write),
+			ByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

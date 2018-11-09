@@ -19,13 +19,19 @@
  */
 package generated
 
+// TcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID 116 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TcAdaptorPerformanceMonitoringHistoryDataXdsl struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IManagedEntity, error) {
+// NewTcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID 116 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TcAdaptorPerformanceMonitoringHistoryDataXdsl",
 		ClassID:  116,
 		EntityID: eid,
@@ -36,18 +42,18 @@ func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IMan
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint16Field("NearEndHecViolationCount", 0, Read),
-			NewUint32Field("NearEndDelineatedTotalCellCountCdP", 0, Read),
-			NewUint32Field("NearEndUserTotalCellCountCuP", 0, Read),
-			NewUint16Field("NearEndIdleCellBitErrorCount", 0, Read),
-			NewUint16Field("FarEndHecViolationCount", 0, Read),
-			NewUint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, Read),
-			NewUint32Field("FarEndUserTotalCellCountCuPfe", 0, Read),
-			NewUint16Field("FarEndIdleCellBitErrorCount", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint16Field("NearEndHecViolationCount", 0, Read),
+			Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, Read),
+			Uint32Field("NearEndUserTotalCellCountCuP", 0, Read),
+			Uint16Field("NearEndIdleCellBitErrorCount", 0, Read),
+			Uint16Field("FarEndHecViolationCount", 0, Read),
+			Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, Read),
+			Uint32Field("FarEndUserTotalCellCountCuPfe", 0, Read),
+			Uint16Field("FarEndIdleCellBitErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

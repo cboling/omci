@@ -19,13 +19,19 @@
  */
 package generated
 
+// XgPonTcPerformanceMonitoringHistoryData (class ID 344 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XgPonTcPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXgPonTcPerformanceMonitoringHistoryData (class ID 344 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XgPonTcPerformanceMonitoringHistoryData",
 		ClassID:  344,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEn
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("PsbdHecErrorCount", 0, Read),
-			NewUint32Field("XgtcHecErrorCount", 0, Read),
-			NewUint32Field("UnknownProfileCount", 0, Read),
-			NewUint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read),
-			NewUint32Field("FragmentXgemFrames", 0, Read),
-			NewUint32Field("XgemHecLostWordsCount", 0, Read),
-			NewUint32Field("XgemKeyErrors", 0, Read),
-			NewUint32Field("XgemHecErrorCount", 0, Read),
-			NewUint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read),
-			NewUint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read),
-			NewUint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read),
-			NewUint32Field("LodsEventRestoredCount", 0, Read),
-			NewUint32Field("OnuReactivationByLodsEvents", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("PsbdHecErrorCount", 0, Read),
+			Uint32Field("XgtcHecErrorCount", 0, Read),
+			Uint32Field("UnknownProfileCount", 0, Read),
+			Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read),
+			Uint32Field("FragmentXgemFrames", 0, Read),
+			Uint32Field("XgemHecLostWordsCount", 0, Read),
+			Uint32Field("XgemKeyErrors", 0, Read),
+			Uint32Field("XgemHecErrorCount", 0, Read),
+			Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read),
+			Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read),
+			Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read),
+			Uint32Field("LodsEventRestoredCount", 0, Read),
+			Uint32Field("OnuReactivationByLodsEvents", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

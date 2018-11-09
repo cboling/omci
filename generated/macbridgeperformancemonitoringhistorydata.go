@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePerformanceMonitoringHistoryData (class ID 51 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePerformanceMonitoringHistoryData (class ID 51 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePerformanceMonitoringHistoryData",
 		ClassID:  51,
 		EntityID: eid,
@@ -36,11 +42,11 @@ func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (IManaged
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("BridgeLearningEntryDiscardCount", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("BridgeLearningEntryDiscardCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointVideoUni (class ID 82 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointVideoUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointVideoUni (class ID 82 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointVideoUni",
 		ClassID:  82,
 		EntityID: eid,
@@ -34,13 +40,13 @@ func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntit
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("PowerControl", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("PowerControl", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// FastLineInventoryAndStatusDataPart2 (class ID 436 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FastLineInventoryAndStatusDataPart2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {
+// NewFastLineInventoryAndStatusDataPart2 (class ID 436 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FastLineInventoryAndStatusDataPart2",
 		ClassID:  436,
 		EntityID: eid,
@@ -33,13 +39,13 @@ func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

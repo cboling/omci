@@ -19,13 +19,19 @@
  */
 package generated
 
+// PseudowireMaintenanceProfile (class ID 284 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PseudowireMaintenanceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewPseudowireMaintenanceProfile (class ID 284 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PseudowireMaintenanceProfile",
 		ClassID:  284,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntity, error
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("JitterBufferMaximumDepth", 0, Read|Write|SetByCreate),
-			NewUint16Field("JitterBufferDesiredDepth", 0, Read|Write|SetByCreate),
-			NewByteField("FillPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("MisconnectedPacketsClearPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("LossOfPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("LossOfPacketsClearPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("BufferOverrunUnderrunClearPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("MalformedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("MalformedPacketsClearPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("RBitTransmitSetPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("RBitTransmitClearPolicy", 0, Read|Write|SetByCreate),
-			NewByteField("RBitReceivePolicy", 0, Read|Write|SetByCreate),
-			NewByteField("LBitReceivePolicy", 0, Read|Write|SetByCreate),
-			NewUint16Field("SesThreshold", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("JitterBufferMaximumDepth", 0, Read|Write|SetByCreate),
+			Uint16Field("JitterBufferDesiredDepth", 0, Read|Write|SetByCreate),
+			ByteField("FillPolicy", 0, Read|Write|SetByCreate),
+			ByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			ByteField("MisconnectedPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			ByteField("LossOfPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			ByteField("LossOfPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|Write|SetByCreate),
+			ByteField("BufferOverrunUnderrunClearPolicy", 0, Read|Write|SetByCreate),
+			ByteField("MalformedPacketsDeclarationPolicy", 0, Read|Write|SetByCreate),
+			ByteField("MalformedPacketsClearPolicy", 0, Read|Write|SetByCreate),
+			ByteField("RBitTransmitSetPolicy", 0, Read|Write|SetByCreate),
+			ByteField("RBitTransmitClearPolicy", 0, Read|Write|SetByCreate),
+			ByteField("RBitReceivePolicy", 0, Read|Write|SetByCreate),
+			ByteField("LBitReceivePolicy", 0, Read|Write|SetByCreate),
+			Uint16Field("SesThreshold", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

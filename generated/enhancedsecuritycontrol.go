@@ -19,13 +19,19 @@
  */
 package generated
 
+// EnhancedSecurityControl (class ID 332 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EnhancedSecurityControl struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
+// NewEnhancedSecurityControl (class ID 332 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EnhancedSecurityControl",
 		ClassID:  332,
 		EntityID: eid,
@@ -35,20 +41,20 @@ func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("OltCryptoCapabilities", 0, Write),
-			NewUnknownField("OltRandomChallengeTable", 0, Read|Write),
-			NewByteField("OltChallengeStatus", 0, Read|Write),
-			NewByteField("OnuSelectedCryptoCapabilities", 0, Read),
-			NewUnknownField("OnuRandomChallengeTable", 0, Read),
-			NewUnknownField("OnuAuthenticationResultTable", 0, Read),
-			NewUnknownField("OltAuthenticationResultTable", 0, Write),
-			NewByteField("OltResultStatus", 0, Read|Write),
-			NewByteField("OnuAuthenticationStatus", 0, Read),
-			NewUnknownField("MasterSessionKeyName", 0, Read),
-			NewUnknownField("BroadcastKeyTable", 0, Read|Write),
-			NewUint16Field("EffectiveKeyLength", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("OltCryptoCapabilities", 0, Write),
+			UnknownField("OltRandomChallengeTable", 0, Read|Write),
+			ByteField("OltChallengeStatus", 0, Read|Write),
+			ByteField("OnuSelectedCryptoCapabilities", 0, Read),
+			UnknownField("OnuRandomChallengeTable", 0, Read),
+			UnknownField("OnuAuthenticationResultTable", 0, Read),
+			UnknownField("OltAuthenticationResultTable", 0, Write),
+			ByteField("OltResultStatus", 0, Read|Write),
+			ByteField("OnuAuthenticationStatus", 0, Read),
+			UnknownField("MasterSessionKeyName", 0, Read),
+			UnknownField("BroadcastKeyTable", 0, Read|Write),
+			Uint16Field("EffectiveKeyLength", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

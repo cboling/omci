@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelPloamPerformanceMonitoringHistoryDataPart1 (class ID 446 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart1 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1 (class ID 446 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart1",
 		ClassID:  446,
 		EntityID: eid,
@@ -37,16 +43,16 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamDat
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			NewUint32Field("PloamMicErrors", 0, Read),
-			NewUint32Field("DownstreamPloamMessageCount", 0, Read),
-			NewUint32Field("RangingTimeMessageCount", 0, Read),
-			NewUint32Field("ProtectionControlMessageCount", 0, Read),
-			NewUint32Field("AdjustTxWavelengthMessageCount", 0, Read),
-			NewUint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			Uint32Field("PloamMicErrors", 0, Read),
+			Uint32Field("DownstreamPloamMessageCount", 0, Read),
+			Uint32Field("RangingTimeMessageCount", 0, Read),
+			Uint32Field("ProtectionControlMessageCount", 0, Read),
+			Uint32Field("AdjustTxWavelengthMessageCount", 0, Read),
+			Uint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

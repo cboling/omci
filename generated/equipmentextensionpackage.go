@@ -19,13 +19,19 @@
  */
 package generated
 
+// EquipmentExtensionPackage (class ID 160 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EquipmentExtensionPackage struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntity, error) {
+// NewEquipmentExtensionPackage (class ID 160 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EquipmentExtensionPackage",
 		ClassID:  160,
 		EntityID: eid,
@@ -34,10 +40,10 @@ func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewUint16Field("EnvironmentalSense", 0, Read|Write),
-			NewUint16Field("ContactClosureOutput", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			Uint16Field("EnvironmentalSense", 0, Read|Write),
+			Uint16Field("ContactClosureOutput", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

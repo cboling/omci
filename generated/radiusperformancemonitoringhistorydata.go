@@ -19,13 +19,19 @@
  */
 package generated
 
+// RadiusPerformanceMonitoringHistoryData (class ID 293 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type RadiusPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewRadiusPerformanceMonitoringHistoryData (class ID 293 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "RadiusPerformanceMonitoringHistoryData",
 		ClassID:  293,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("AccessRequestPacketsTransmitted", 0, Read),
-			NewUint32Field("AccessRequestRetransmissionCount", 0, Read),
-			NewUint32Field("AccessChallengePacketsReceived", 0, Read),
-			NewUint32Field("AccessAcceptPacketsReceived", 0, Read),
-			NewUint32Field("AccessRejectPacketsReceived", 0, Read),
-			NewUint32Field("InvalidRadiusPacketsReceived", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("AccessRequestPacketsTransmitted", 0, Read),
+			Uint32Field("AccessRequestRetransmissionCount", 0, Read),
+			Uint32Field("AccessChallengePacketsReceived", 0, Read),
+			Uint32Field("AccessAcceptPacketsReceived", 0, Read),
+			Uint32Field("AccessRejectPacketsReceived", 0, Read),
+			Uint32Field("InvalidRadiusPacketsReceived", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

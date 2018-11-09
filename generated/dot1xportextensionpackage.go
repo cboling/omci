@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1XPortExtensionPackage (class ID 290 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1XPortExtensionPackage struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {
+// NewDot1XPortExtensionPackage (class ID 290 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1XPortExtensionPackage",
 		ClassID:  290,
 		EntityID: eid,
@@ -34,20 +40,20 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewByteField("Dot1XEnable", 0, Read|Write),
-			NewByteField("ActionRegister", 0, Write),
-			NewByteField("AuthenticatorPaeState", 0, Read),
-			NewByteField("BackendAuthenticationState", 0, Read),
-			NewByteField("AdminControlledDirections", 0, Read|Write),
-			NewByteField("OperationalControlledDirections", 0, Read),
-			NewByteField("AuthenticatorControlledPortStatus", 0, Read),
-			NewUint16Field("QuietPeriod", 0, Read|Write),
-			NewUint16Field("ServerTimeoutPeriod", 0, Read|Write),
-			NewUint16Field("ReAuthenticationPeriod", 0, Read),
-			NewByteField("ReAuthenticationEnabled", 0, Read),
-			NewByteField("KeyTransmissionEnabled", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			ByteField("Dot1XEnable", 0, Read|Write),
+			ByteField("ActionRegister", 0, Write),
+			ByteField("AuthenticatorPaeState", 0, Read),
+			ByteField("BackendAuthenticationState", 0, Read),
+			ByteField("AdminControlledDirections", 0, Read|Write),
+			ByteField("OperationalControlledDirections", 0, Read),
+			ByteField("AuthenticatorControlledPortStatus", 0, Read),
+			Uint16Field("QuietPeriod", 0, Read|Write),
+			Uint16Field("ServerTimeoutPeriod", 0, Read|Write),
+			Uint16Field("ReAuthenticationPeriod", 0, Read),
+			ByteField("ReAuthenticationEnabled", 0, Read),
+			ByteField("KeyTransmissionEnabled", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

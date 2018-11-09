@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelPhyLodsPerformanceMonitoringHistoryData (class ID 444 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelPhyLodsPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData (class ID 444 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelPhyLodsPerformanceMonitoringHistoryData",
 		ClassID:  444,
 		EntityID: eid,
@@ -37,23 +43,23 @@ func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) 
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read),
-			NewUint32Field("Bip32BitErrorCount", 0, Read),
-			NewUint32Field("CorrectedPsbdHecErrorCount", 0, Read),
-			NewUint32Field("UncorrectablePsbdHecErrorCount", 0, Read),
-			NewUint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read),
-			NewUint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read),
-			NewUint32Field("TotalNumberOfLodsEvents", 0, Read),
-			NewUint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read),
-			NewUint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read),
-			NewUint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read),
-			NewUint32Field("LodsEventsResultingInReactivation", 0, Read),
-			NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read),
-			NewUint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read),
+			Uint32Field("Bip32BitErrorCount", 0, Read),
+			Uint32Field("CorrectedPsbdHecErrorCount", 0, Read),
+			Uint32Field("UncorrectablePsbdHecErrorCount", 0, Read),
+			Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read),
+			Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read),
+			Uint32Field("TotalNumberOfLodsEvents", 0, Read),
+			Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read),
+			Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read),
+			Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read),
+			Uint32Field("LodsEventsResultingInReactivation", 0, Read),
+			Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read),
+			Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

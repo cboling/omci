@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1XConfigurationProfile (class ID 291 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1XConfigurationProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+// NewDot1XConfigurationProfile (class ID 291 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1XConfigurationProfile",
 		ClassID:  291,
 		EntityID: eid,
@@ -34,18 +40,18 @@ func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewUint16Field("CircuitIdPrefix", 0, Read|Write),
-			NewByteField("FallbackPolicy", 0, Read|Write),
-			NewUint16Field("AuthServer1", 0, Read|Write),
-			NewUnknownField("SharedSecretAuth1", 0, Read|Write),
-			NewUint16Field("AuthServer2", 0, Read|Write),
-			NewUnknownField("SharedSecretAuth2", 0, Read|Write),
-			NewUint16Field("AuthServer3", 0, Read|Write),
-			NewUnknownField("SharedSecretAuth3", 0, Read|Write),
-			NewUint32Field("OltProxyAddress", 0, Read|Write),
-			NewUint16Field("CallingStationIdFormat", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			Uint16Field("CircuitIdPrefix", 0, Read|Write),
+			ByteField("FallbackPolicy", 0, Read|Write),
+			Uint16Field("AuthServer1", 0, Read|Write),
+			UnknownField("SharedSecretAuth1", 0, Read|Write),
+			Uint16Field("AuthServer2", 0, Read|Write),
+			UnknownField("SharedSecretAuth2", 0, Read|Write),
+			Uint16Field("AuthServer3", 0, Read|Write),
+			UnknownField("SharedSecretAuth3", 0, Read|Write),
+			Uint32Field("OltProxyAddress", 0, Read|Write),
+			Uint16Field("CallingStationIdFormat", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

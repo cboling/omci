@@ -19,13 +19,19 @@
  */
 package generated
 
+// TcpUdpConfigData (class ID 136 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TcpUdpConfigData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTcpUdpConfigData(params ...ParamData) (IManagedEntity, error) {
+// NewTcpUdpConfigData (class ID 136 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTcpUdpConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TcpUdpConfigData",
 		ClassID:  136,
 		EntityID: eid,
@@ -36,12 +42,12 @@ func NewTcpUdpConfigData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("PortId", 0, Read|Write|SetByCreate),
-			NewByteField("Protocol", 0, Read|Write|SetByCreate),
-			NewByteField("TosDiffservField", 0, Read|Write|SetByCreate),
-			NewUint16Field("IpHostPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("PortId", 0, Read|Write|SetByCreate),
+			ByteField("Protocol", 0, Read|Write|SetByCreate),
+			ByteField("TosDiffservField", 0, Read|Write|SetByCreate),
+			Uint16Field("IpHostPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

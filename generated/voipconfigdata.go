@@ -19,13 +19,19 @@
  */
 package generated
 
+// VoipConfigData (class ID 138 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VoipConfigData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
+// NewVoipConfigData (class ID 138 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VoipConfigData",
 		ClassID:  138,
 		EntityID: eid,
@@ -34,16 +40,16 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AvailableSignallingProtocols", 0, Read),
-			NewByteField("SignallingProtocolUsed", 0, Read|Write),
-			NewUint32Field("AvailableVoipConfigurationMethods", 0, Read),
-			NewByteField("VoipConfigurationMethodUsed", 0, Read|Write),
-			NewUint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
-			NewByteField("VoipConfigurationState", 0, Read),
-			NewByteField("RetrieveProfile", 0, Write),
-			NewUnknownField("ProfileVersion", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AvailableSignallingProtocols", 0, Read),
+			ByteField("SignallingProtocolUsed", 0, Read|Write),
+			Uint32Field("AvailableVoipConfigurationMethods", 0, Read),
+			ByteField("VoipConfigurationMethodUsed", 0, Read|Write),
+			Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
+			ByteField("VoipConfigurationState", 0, Read),
+			ByteField("RetrieveProfile", 0, Write),
+			UnknownField("ProfileVersion", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

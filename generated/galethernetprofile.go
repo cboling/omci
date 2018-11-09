@@ -19,13 +19,19 @@
  */
 package generated
 
+// GalEthernetProfile (class ID 272 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type GalEthernetProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewGalEthernetProfile(params ...ParamData) (IManagedEntity, error) {
+// NewGalEthernetProfile (class ID 272 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGalEthernetProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "GalEthernetProfile",
 		ClassID:  272,
 		EntityID: eid,
@@ -36,9 +42,9 @@ func NewGalEthernetProfile(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("MaximumGemPayloadSize", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("MaximumGemPayloadSize", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

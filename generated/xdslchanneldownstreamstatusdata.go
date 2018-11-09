@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslChannelDownstreamStatusData (class ID 102 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslChannelDownstreamStatusData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, error) {
+// NewXdslChannelDownstreamStatusData (class ID 102 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslChannelDownstreamStatusData",
 		ClassID:  102,
 		EntityID: eid,
@@ -33,19 +39,19 @@ func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, er
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("ActualInterleavingDelay", 0, Read),
-			NewUint32Field("ActualDataRate", 0, Read),
-			NewUint32Field("PreviousDataRate", 0, Read),
-			NewByteField("ActualImpulseNoiseProtection", 0, Read),
-			NewByteField("ActualSizeOfReedSolomonCodeword", 0, Read),
-			NewByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read),
-			NewUint16Field("ActualNumberOfBitsPerSymbol", 0, Read),
-			NewUint16Field("ActualInterleavingDepth", 0, Read),
-			NewByteField("ActualInterleavingBlockLength", 0, Read),
-			NewByteField("ActualLatencyPath", 0, Read),
-			NewByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("ActualInterleavingDelay", 0, Read),
+			Uint32Field("ActualDataRate", 0, Read),
+			Uint32Field("PreviousDataRate", 0, Read),
+			ByteField("ActualImpulseNoiseProtection", 0, Read),
+			ByteField("ActualSizeOfReedSolomonCodeword", 0, Read),
+			ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read),
+			Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read),
+			Uint16Field("ActualInterleavingDepth", 0, Read),
+			ByteField("ActualInterleavingBlockLength", 0, Read),
+			ByteField("ActualLatencyPath", 0, Read),
+			ByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

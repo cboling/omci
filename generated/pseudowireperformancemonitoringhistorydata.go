@@ -19,13 +19,19 @@
  */
 package generated
 
+// PseudowirePerformanceMonitoringHistoryData (class ID 285 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PseudowirePerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewPseudowirePerformanceMonitoringHistoryData (class ID 285 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PseudowirePerformanceMonitoringHistoryData",
 		ClassID:  285,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManage
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("ReceivedPackets", 0, Read),
-			NewUint32Field("TransmittedPackets", 0, Read),
-			NewUint32Field("MissingPackets", 0, Read),
-			NewUint32Field("MisorderedPackets,Usable", 0, Read),
-			NewUint32Field("MisorderedPacketsDropped", 0, Read),
-			NewUint32Field("PlayoutBufferUnderrunsOverruns", 0, Read),
-			NewUint32Field("MalformedPackets", 0, Read),
-			NewUint32Field("StrayPackets", 0, Read),
-			NewUint32Field("RemotePacketLoss", 0, Read),
-			NewUint32Field("TdmLBitPacketsTransmitted", 0, Read),
-			NewUint32Field("Es", 0, Read),
-			NewUint32Field("Ses", 0, Read),
-			NewUint32Field("Uas", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("ReceivedPackets", 0, Read),
+			Uint32Field("TransmittedPackets", 0, Read),
+			Uint32Field("MissingPackets", 0, Read),
+			Uint32Field("MisorderedPackets,Usable", 0, Read),
+			Uint32Field("MisorderedPacketsDropped", 0, Read),
+			Uint32Field("PlayoutBufferUnderrunsOverruns", 0, Read),
+			Uint32Field("MalformedPackets", 0, Read),
+			Uint32Field("StrayPackets", 0, Read),
+			Uint32Field("RemotePacketLoss", 0, Read),
+			Uint32Field("TdmLBitPacketsTransmitted", 0, Read),
+			Uint32Field("Es", 0, Read),
+			Uint32Field("Ses", 0, Read),
+			Uint32Field("Uas", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

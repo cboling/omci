@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1RateLimiter (class ID 298 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1RateLimiter struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
+// NewDot1RateLimiter (class ID 298 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1RateLimiter(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1RateLimiter",
 		ClassID:  298,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("ParentMePointer", 0, Read|Write|SetByCreate),
-			NewByteField("TpType", 0, Read|Write|SetByCreate),
-			NewUint16Field("UpstreamUnicastFloodRatePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("UpstreamBroadcastRatePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("ParentMePointer", 0, Read|Write|SetByCreate),
+			ByteField("TpType", 0, Read|Write|SetByCreate),
+			Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("UpstreamBroadcastRatePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointEthernetUni (class ID 11 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointEthernetUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointEthernetUni (class ID 11 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointEthernetUni",
 		ClassID:  11,
 		EntityID: eid,
@@ -34,23 +40,23 @@ func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEn
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewByteField("ExpectedType", 0, Read|Write),
-			NewByteField("SensedType", 0, Read),
-			NewByteField("AutoDetectionConfiguration", 0, Read|Write),
-			NewByteField("EthernetLoopbackConfiguration", 0, Read|Write),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("ConfigurationInd", 0, Read),
-			NewUint16Field("MaxFrameSize", 0, Read|Write),
-			NewByteField("DteOrDceInd", 0, Read|Write),
-			NewUint16Field("PauseTime", 0, Read|Write),
-			NewByteField("BridgedOrIpInd", 0, Read|Write),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("PppoeFilter", 0, Read|Write),
-			NewByteField("PowerControl", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			ByteField("ExpectedType", 0, Read|Write),
+			ByteField("SensedType", 0, Read),
+			ByteField("AutoDetectionConfiguration", 0, Read|Write),
+			ByteField("EthernetLoopbackConfiguration", 0, Read|Write),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("ConfigurationInd", 0, Read),
+			Uint16Field("MaxFrameSize", 0, Read|Write),
+			ByteField("DteOrDceInd", 0, Read|Write),
+			Uint16Field("PauseTime", 0, Read|Write),
+			ByteField("BridgedOrIpInd", 0, Read|Write),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("PppoeFilter", 0, Read|Write),
+			ByteField("PowerControl", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

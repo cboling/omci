@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgDefaultMdLevel (class ID 301 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgDefaultMdLevel struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgDefaultMdLevel (class ID 301 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgDefaultMdLevel",
 		ClassID:  301,
 		EntityID: eid,
@@ -35,13 +41,13 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("Layer2Type", 0, Read),
-			NewByteField("CatchallLevel", 0, Read|Write),
-			NewByteField("CatchallMhfCreation", 0, Read|Write),
-			NewByteField("CatchallSenderIdPermission", 0, Read|Write),
-			NewByteField("DefaultMdLevelTable", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("Layer2Type", 0, Read),
+			ByteField("CatchallLevel", 0, Read|Write),
+			ByteField("CatchallMhfCreation", 0, Read|Write),
+			ByteField("CatchallSenderIdPermission", 0, Read|Write),
+			ByteField("DefaultMdLevelTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

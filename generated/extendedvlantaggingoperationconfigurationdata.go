@@ -19,13 +19,19 @@
  */
 package generated
 
+// ExtendedVlanTaggingOperationConfigurationData (class ID 171 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type ExtendedVlanTaggingOperationConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "ExtendedVlanTaggingOperationConfigurationData",
 		ClassID:  171,
 		EntityID: eid,
@@ -37,16 +43,16 @@ func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IMan
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("AssociationType", 0, Read|Write|SetByCreate),
-			NewUint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, Read),
-			NewUint16Field("InputTpid", 0, Read|Write),
-			NewUint16Field("OutputTpid", 0, Read|Write),
-			NewByteField("DownstreamMode", 0, Read|Write),
-			NewUnknownField("ReceivedFrameVlanTaggingOperationTable", 0, Read|Write),
-			NewUint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
-			NewUnknownField("DscpToPBitMapping", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("AssociationType", 0, Read|Write|SetByCreate),
+			Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, Read),
+			Uint16Field("InputTpid", 0, Read|Write),
+			Uint16Field("OutputTpid", 0, Read|Write),
+			ByteField("DownstreamMode", 0, Read|Write),
+			UnknownField("ReceivedFrameVlanTaggingOperationTable", 0, Read|Write),
+			Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
+			UnknownField("DscpToPBitMapping", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// EthernetFrameExtendedPm (class ID 334 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EthernetFrameExtendedPm struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntity, error) {
+// NewEthernetFrameExtendedPm (class ID 334 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EthernetFrameExtendedPm",
 		ClassID:  334,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUnknownField("ControlBlock", 0, Read|Write|SetByCreate),
-			NewUint32Field("DropEvents", 0, Read),
-			NewUint32Field("Octets", 0, Read),
-			NewUint32Field("Frames", 0, Read),
-			NewUint32Field("BroadcastFrames", 0, Read),
-			NewUint32Field("MulticastFrames", 0, Read),
-			NewUint32Field("CrcErroredFrames", 0, Read),
-			NewUint32Field("UndersizeFrames", 0, Read),
-			NewUint32Field("OversizeFrames", 0, Read),
-			NewUint32Field("Frames64Octets", 0, Read),
-			NewUint32Field("Frames65To127Octets", 0, Read),
-			NewUint32Field("Frames128To255Octets", 0, Read),
-			NewUint32Field("Frames256To511Octets", 0, Read),
-			NewUint32Field("Frames512To1023Octets", 0, Read),
-			NewUint32Field("Frames1024To1518Octets", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			UnknownField("ControlBlock", 0, Read|Write|SetByCreate),
+			Uint32Field("DropEvents", 0, Read),
+			Uint32Field("Octets", 0, Read),
+			Uint32Field("Frames", 0, Read),
+			Uint32Field("BroadcastFrames", 0, Read),
+			Uint32Field("MulticastFrames", 0, Read),
+			Uint32Field("CrcErroredFrames", 0, Read),
+			Uint32Field("UndersizeFrames", 0, Read),
+			Uint32Field("OversizeFrames", 0, Read),
+			Uint32Field("Frames64Octets", 0, Read),
+			Uint32Field("Frames65To127Octets", 0, Read),
+			Uint32Field("Frames128To255Octets", 0, Read),
+			Uint32Field("Frames256To511Octets", 0, Read),
+			Uint32Field("Frames512To1023Octets", 0, Read),
+			Uint32Field("Frames1024To1518Octets", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

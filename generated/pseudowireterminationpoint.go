@@ -19,13 +19,19 @@
  */
 package generated
 
+// PseudowireTerminationPoint (class ID 282 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PseudowireTerminationPoint struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+// NewPseudowireTerminationPoint (class ID 282 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PseudowireTerminationPoint",
 		ClassID:  282,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) 
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("UnderlyingTransport", 0, Read|Write|SetByCreate),
-			NewByteField("ServiceType", 0, Read|Write|SetByCreate),
-			NewByteField("Signalling", 0, Read|Write|SetByCreate),
-			NewUint16Field("TdmUniPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("NorthSidePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("FarEndIpInfo", 0, Read|Write|SetByCreate),
-			NewUint16Field("PayloadSize", 0, Read|Write|SetByCreate),
-			NewByteField("PayloadEncapsulationDelay", 0, Read|Write|SetByCreate),
-			NewByteField("TimingMode", 0, Read|Write),
-			NewUint64Field("TransmitCircuitId", 0, Read|Write),
-			NewUint64Field("ExpectedCircuitId", 0, Read|Write),
-			NewUint64Field("ReceivedCircuitId", 0, Read),
-			NewUint16Field("ExceptionPolicy", 0, Read|Write),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("UnderlyingTransport", 0, Read|Write|SetByCreate),
+			ByteField("ServiceType", 0, Read|Write|SetByCreate),
+			ByteField("Signalling", 0, Read|Write|SetByCreate),
+			Uint16Field("TdmUniPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("NorthSidePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("FarEndIpInfo", 0, Read|Write|SetByCreate),
+			Uint16Field("PayloadSize", 0, Read|Write|SetByCreate),
+			ByteField("PayloadEncapsulationDelay", 0, Read|Write|SetByCreate),
+			ByteField("TimingMode", 0, Read|Write),
+			Uint64Field("TransmitCircuitId", 0, Read|Write),
+			Uint64Field("ExpectedCircuitId", 0, Read|Write),
+			Uint64Field("ReceivedCircuitId", 0, Read),
+			Uint16Field("ExceptionPolicy", 0, Read|Write),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

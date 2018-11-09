@@ -19,13 +19,19 @@
  */
 package generated
 
+// FastVectoringLineConfigurationExtensions (class ID 434 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FastVectoringLineConfigurationExtensions struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedEntity, error) {
+// NewFastVectoringLineConfigurationExtensions (class ID 434 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FastVectoringLineConfigurationExtensions",
 		ClassID:  434,
 		EntityID: eid,
@@ -36,10 +42,10 @@ func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
-			NewByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
+			ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

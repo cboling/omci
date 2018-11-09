@@ -19,13 +19,19 @@
  */
 package generated
 
+// Omci (class ID 287 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Omci struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewOmci(params ...ParamData) (IManagedEntity, error) {
+// NewOmci (class ID 287 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOmci(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Omci",
 		ClassID:  287,
 		EntityID: eid,
@@ -34,10 +40,10 @@ func NewOmci(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUint16Field("MeTypeTable", 0, Read),
-			NewByteField("MessageTypeTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			Uint16Field("MeTypeTable", 0, Read),
+			ByteField("MessageTypeTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

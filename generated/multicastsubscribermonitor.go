@@ -19,13 +19,19 @@
  */
 package generated
 
+// MulticastSubscriberMonitor (class ID 311 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MulticastSubscriberMonitor struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) {
+// NewMulticastSubscriberMonitor (class ID 311 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MulticastSubscriberMonitor",
 		ClassID:  311,
 		EntityID: eid,
@@ -37,14 +43,14 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) 
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("MeType", 0, Read|Write|SetByCreate),
-			NewUint32Field("CurrentMulticastBandwidth", 0, Read),
-			NewUint32Field("JoinMessagesCounter", 0, Read),
-			NewUint32Field("BandwidthExceededCounter", 0, Read),
-			NewUnknownField("Ipv4ActiveGroupListTable", 0, Read),
-			NewUnknownField("Ipv6ActiveGroupListTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("MeType", 0, Read|Write|SetByCreate),
+			Uint32Field("CurrentMulticastBandwidth", 0, Read),
+			Uint32Field("JoinMessagesCounter", 0, Read),
+			Uint32Field("BandwidthExceededCounter", 0, Read),
+			UnknownField("Ipv4ActiveGroupListTable", 0, Read),
+			UnknownField("Ipv6ActiveGroupListTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgMep (class ID 302 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgMep struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgMep(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgMep (class ID 302 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMep(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgMep",
 		ClassID:  302,
 		EntityID: eid,
@@ -36,22 +42,22 @@ func NewDot1AgMep(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("Layer2EntityPointer", 0, Read|Write|SetByCreate),
-			NewByteField("Layer2Type", 0, Read|Write|SetByCreate),
-			NewUint16Field("MaPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("MepId", 0, Read|Write|SetByCreate),
-			NewByteField("MepControl", 0, Read|Write|SetByCreate),
-			NewUint16Field("PrimaryVlan", 0, Read|Write|SetByCreate),
-			NewByteField("AdministrativeState", 0, Read|Write|SetByCreate),
-			NewByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
-			NewUint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
-			NewUnknownField("PeerMepIds", 0, Read|Write),
-			NewByteField("EthAisControl", 0, Read|Write|SetByCreate),
-			NewByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
-			NewUint16Field("AlarmDeclarationSoakTime", 0, Read|Write),
-			NewUint16Field("AlarmClearSoakTime", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("Layer2EntityPointer", 0, Read|Write|SetByCreate),
+			ByteField("Layer2Type", 0, Read|Write|SetByCreate),
+			Uint16Field("MaPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("MepId", 0, Read|Write|SetByCreate),
+			ByteField("MepControl", 0, Read|Write|SetByCreate),
+			Uint16Field("PrimaryVlan", 0, Read|Write|SetByCreate),
+			ByteField("AdministrativeState", 0, Read|Write|SetByCreate),
+			ByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
+			Uint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
+			UnknownField("PeerMepIds", 0, Read|Write),
+			ByteField("EthAisControl", 0, Read|Write|SetByCreate),
+			ByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
+			Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write),
+			Uint16Field("AlarmClearSoakTime", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

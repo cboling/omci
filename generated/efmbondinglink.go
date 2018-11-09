@@ -19,13 +19,19 @@
  */
 package generated
 
+// EfmBondingLink (class ID 420 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EfmBondingLink struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEfmBondingLink(params ...ParamData) (IManagedEntity, error) {
+// NewEfmBondingLink (class ID 420 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEfmBondingLink(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EfmBondingLink",
 		ClassID:  420,
 		EntityID: eid,
@@ -36,10 +42,10 @@ func NewEfmBondingLink(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
-			NewByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
+			ByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

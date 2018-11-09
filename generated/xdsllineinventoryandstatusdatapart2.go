@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslLineInventoryAndStatusDataPart2 (class ID 101 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity, error) {
+// NewXdslLineInventoryAndStatusDataPart2 (class ID 101 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslLineInventoryAndStatusDataPart2",
 		ClassID:  101,
 		EntityID: eid,
@@ -33,24 +39,24 @@ func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("XdslTransmissionSystem", 0, Read),
-			NewByteField("LinePowerManagementState", 0, Read),
-			NewUint16Field("DownstreamLineAttenuation", 0, Read),
-			NewUint16Field("UpstreamLineAttenuation", 0, Read),
-			NewUint16Field("DownstreamSignalAttenuation", 0, Read),
-			NewUint16Field("UpstreamSignalAttenuation", 0, Read),
-			NewUint16Field("DownstreamSnrRatioMargin", 0, Read),
-			NewUint16Field("UpstreamSnrMargin", 0, Read),
-			NewUint32Field("DownstreamMaximumAttainableDataRate", 0, Read),
-			NewUint32Field("UpstreamMaximumAttainableDataRate", 0, Read),
-			NewUint16Field("DownstreamActualPowerSpectrumDensity", 0, Read),
-			NewUint16Field("UpstreamActualPowerSpectrumDensity", 0, Read),
-			NewUint16Field("DownstreamActualAggregateTransmitPower", 0, Read),
-			NewUint16Field("UpstreamActualAggregateTransmitPower", 0, Read),
-			NewByteField("InitializationLastStateTransmittedDownstream", 0, Read),
-			NewByteField("InitializationLastStateTransmittedUpstream", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("XdslTransmissionSystem", 0, Read),
+			ByteField("LinePowerManagementState", 0, Read),
+			Uint16Field("DownstreamLineAttenuation", 0, Read),
+			Uint16Field("UpstreamLineAttenuation", 0, Read),
+			Uint16Field("DownstreamSignalAttenuation", 0, Read),
+			Uint16Field("UpstreamSignalAttenuation", 0, Read),
+			Uint16Field("DownstreamSnrRatioMargin", 0, Read),
+			Uint16Field("UpstreamSnrMargin", 0, Read),
+			Uint32Field("DownstreamMaximumAttainableDataRate", 0, Read),
+			Uint32Field("UpstreamMaximumAttainableDataRate", 0, Read),
+			Uint16Field("DownstreamActualPowerSpectrumDensity", 0, Read),
+			Uint16Field("UpstreamActualPowerSpectrumDensity", 0, Read),
+			Uint16Field("DownstreamActualAggregateTransmitPower", 0, Read),
+			Uint16Field("UpstreamActualAggregateTransmitPower", 0, Read),
+			ByteField("InitializationLastStateTransmittedDownstream", 0, Read),
+			ByteField("InitializationLastStateTransmittedUpstream", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// RtpPerformanceMonitoringHistoryData (class ID 144 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type RtpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewRtpPerformanceMonitoringHistoryData (class ID 144 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "RtpPerformanceMonitoringHistoryData",
 		ClassID:  144,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("RtpErrors", 0, Read),
-			NewUint32Field("PacketLoss", 0, Read),
-			NewUint32Field("MaximumJitter", 0, Read),
-			NewUint32Field("MaximumTimeBetweenRealTimeTransportControlProtocolRtcpPackets", 0, Read),
-			NewUint32Field("BufferUnderflows", 0, Read),
-			NewUint32Field("BufferOverflows", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("RtpErrors", 0, Read),
+			Uint32Field("PacketLoss", 0, Read),
+			Uint32Field("MaximumJitter", 0, Read),
+			Uint32Field("MaximumTimeBetweenRealTimeTransportControlProtocolRtcpPackets", 0, Read),
+			Uint32Field("BufferUnderflows", 0, Read),
+			Uint32Field("BufferOverflows", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// SipCallInitiationPerformanceMonitoringHistoryData (class ID 152 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SipCallInitiationPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewSipCallInitiationPerformanceMonitoringHistoryData (class ID 152 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SipCallInitiationPerformanceMonitoringHistoryData",
 		ClassID:  152,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("FailedToConnectCounter", 0, Read),
-			NewUint32Field("FailedToValidateCounter", 0, Read),
-			NewUint32Field("TimeoutCounter", 0, Read),
-			NewUint32Field("FailureReceivedCounter", 0, Read),
-			NewUint32Field("FailedToAuthenticateCounter", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("FailedToConnectCounter", 0, Read),
+			Uint32Field("FailedToValidateCounter", 0, Read),
+			Uint32Field("TimeoutCounter", 0, Read),
+			Uint32Field("FailureReceivedCounter", 0, Read),
+			Uint32Field("FailedToAuthenticateCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

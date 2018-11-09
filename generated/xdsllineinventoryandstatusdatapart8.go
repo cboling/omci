@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslLineInventoryAndStatusDataPart8 (class ID 414 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart8 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity, error) {
+// NewXdslLineInventoryAndStatusDataPart8 (class ID 414 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslLineInventoryAndStatusDataPart8",
 		ClassID:  414,
 		EntityID: eid,
@@ -34,14 +40,14 @@ func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
-			NewByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
-			NewUnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
-			NewUnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
-			NewUnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
+			ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
+			UnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
+			UnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
+			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

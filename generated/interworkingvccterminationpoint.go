@@ -19,13 +19,19 @@
  */
 package generated
 
+// InterworkingVccTerminationPoint (class ID 14 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type InterworkingVccTerminationPoint struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+// NewInterworkingVccTerminationPoint (class ID 14 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "InterworkingVccTerminationPoint",
 		ClassID:  14,
 		EntityID: eid,
@@ -36,17 +42,17 @@ func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, er
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("VciValue", 0, Read|Write|SetByCreate),
-			NewUint16Field("VpNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
-			NewByteField("Deprecated1", 0, Read|Write|SetByCreate),
-			NewUint16Field("Deprecated2", 0, Read|Write|SetByCreate),
-			NewUint16Field("Aal5ProfilePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("Deprecated3", 0, Read|Write|SetByCreate),
-			NewByteField("AalLoopbackConfiguration", 0, Read|Write),
-			NewByteField("PptpCounter", 0, Read),
-			NewByteField("OperationalState", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("VciValue", 0, Read|Write|SetByCreate),
+			Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			ByteField("Deprecated1", 0, Read|Write|SetByCreate),
+			Uint16Field("Deprecated2", 0, Read|Write|SetByCreate),
+			Uint16Field("Aal5ProfilePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("Deprecated3", 0, Read|Write|SetByCreate),
+			ByteField("AalLoopbackConfiguration", 0, Read|Write),
+			ByteField("PptpCounter", 0, Read),
+			ByteField("OperationalState", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

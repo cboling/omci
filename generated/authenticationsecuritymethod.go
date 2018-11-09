@@ -19,13 +19,19 @@
  */
 package generated
 
+// AuthenticationSecurityMethod (class ID 148 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type AuthenticationSecurityMethod struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntity, error) {
+// NewAuthenticationSecurityMethod (class ID 148 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "AuthenticationSecurityMethod",
 		ClassID:  148,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntity, error
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("ValidationScheme", 0, Read|Write),
-			NewUnknownField("Username1", 0, Read|Write),
-			NewUnknownField("Password", 0, Read|Write),
-			NewUnknownField("Realm", 0, Read|Write),
-			NewUnknownField("Username2", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("ValidationScheme", 0, Read|Write),
+			UnknownField("Username1", 0, Read|Write),
+			UnknownField("Password", 0, Read|Write),
+			UnknownField("Realm", 0, Read|Write),
+			UnknownField("Username2", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

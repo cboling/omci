@@ -19,13 +19,19 @@
  */
 package generated
 
+// TrafficDescriptor (class ID 280 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TrafficDescriptor struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
+// NewTrafficDescriptor (class ID 280 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTrafficDescriptor(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TrafficDescriptor",
 		ClassID:  280,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint32Field("Cir", 0, Read|Write|SetByCreate),
-			NewUint32Field("Pir", 0, Read|Write|SetByCreate),
-			NewUint32Field("Cbs", 0, Read|Write|SetByCreate),
-			NewUint32Field("Pbs", 0, Read|Write|SetByCreate),
-			NewByteField("ColourMode", 0, Read|Write|SetByCreate),
-			NewByteField("IngressColourMarking", 0, Read|Write|SetByCreate),
-			NewByteField("EgressColourMarking", 0, Read|Write|SetByCreate),
-			NewByteField("MeterType", 0, Read|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint32Field("Cir", 0, Read|Write|SetByCreate),
+			Uint32Field("Pir", 0, Read|Write|SetByCreate),
+			Uint32Field("Cbs", 0, Read|Write|SetByCreate),
+			Uint32Field("Pbs", 0, Read|Write|SetByCreate),
+			ByteField("ColourMode", 0, Read|Write|SetByCreate),
+			ByteField("IngressColourMarking", 0, Read|Write|SetByCreate),
+			ByteField("EgressColourMarking", 0, Read|Write|SetByCreate),
+			ByteField("MeterType", 0, Read|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

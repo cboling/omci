@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgCfmStack (class ID 305 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgCfmStack struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgCfmStack (class ID 305 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgCfmStack(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgCfmStack",
 		ClassID:  305,
 		EntityID: eid,
@@ -34,11 +40,11 @@ func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("Layer2Type", 0, Read),
-			NewUnknownField("MpStatusTable", 0, Read),
-			NewUnknownField("ConfigurationErrorListTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("Layer2Type", 0, Read),
+			UnknownField("MpStatusTable", 0, Read),
+			UnknownField("ConfigurationErrorListTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

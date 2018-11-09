@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgMaintenanceAssociation (class ID 300 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgMaintenanceAssociation struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgMaintenanceAssociation",
 		ClassID:  300,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("MdPointer", 0, Read|Write|SetByCreate),
-			NewByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
-			NewUnknownField("ShortMaName1,ShortMaName2", 0, Read|Write),
-			NewByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
-			NewUnknownField("AssociatedVlans", 0, Read|Write),
-			NewByteField("MhfCreation", 0, Read|Write|SetByCreate),
-			NewByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("MdPointer", 0, Read|Write|SetByCreate),
+			ByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
+			UnknownField("ShortMaName1,ShortMaName2", 0, Read|Write),
+			ByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
+			UnknownField("AssociatedVlans", 0, Read|Write),
+			ByteField("MhfCreation", 0, Read|Write|SetByCreate),
+			ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// UniG (class ID 264 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type UniG struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewUniG(params ...ParamData) (IManagedEntity, error) {
+// NewUniG (class ID 264 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewUniG(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "UniG",
 		ClassID:  264,
 		EntityID: eid,
@@ -34,13 +40,13 @@ func NewUniG(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUint16Field("Deprecated", 0, Read|Write),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("ManagementCapability", 0, Read),
-			NewUint16Field("NonOmciManagementIdentifier", 0, Read|Write),
-			NewUint16Field("RelayAgentOptions", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			Uint16Field("Deprecated", 0, Read|Write),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("ManagementCapability", 0, Read),
+			Uint16Field("NonOmciManagementIdentifier", 0, Read|Write),
+			Uint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

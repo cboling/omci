@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointCesUni (class ID 12 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointCesUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointCesUni (class ID 12 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointCesUni",
 		ClassID:  12,
 		EntityID: eid,
@@ -34,20 +40,20 @@ func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity,
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("ExpectedType", 0, Read|Write),
-			NewByteField("SensedType", 0, Read),
-			NewByteField("CesLoopbackConfiguration", 0, Read|Write),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("Framing", 0, Read|Write),
-			NewByteField("Encoding", 0, Read|Write),
-			NewByteField("LineLength", 0, Read|Write),
-			NewByteField("Ds1Mode", 0, Read|Write),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("LineType", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("ExpectedType", 0, Read|Write),
+			ByteField("SensedType", 0, Read),
+			ByteField("CesLoopbackConfiguration", 0, Read|Write),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("Framing", 0, Read|Write),
+			ByteField("Encoding", 0, Read|Write),
+			ByteField("LineLength", 0, Read|Write),
+			ByteField("Ds1Mode", 0, Read|Write),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("LineType", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

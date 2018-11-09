@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart3",
 		ClassID:  448,
 		EntityID: eid,
@@ -37,21 +43,21 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamDat
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("UpstreamPloamMessageCount", 0, Read),
-			NewUint32Field("SerialNumberOnuInBandMessageCount", 0, Read),
-			NewUint32Field("SerialNumberOnuAmccMessageCount", 0, Read),
-			NewUint32Field("RegistrationMessageCount", 0, Read),
-			NewUint32Field("KeyReportMessageCount", 0, Read),
-			NewUint32Field("AcknowledgementMessageCount", 0, Read),
-			NewUint32Field("SleepRequestMessageCount", 0, Read),
-			NewUint32Field("TuningResponseAckNackMessageCount", 0, Read),
-			NewUint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read),
-			NewUint32Field("PowerConsumptionReportMessageCount", 0, Read),
-			NewUint32Field("ChangePowerLevelParameterErrorCount", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("UpstreamPloamMessageCount", 0, Read),
+			Uint32Field("SerialNumberOnuInBandMessageCount", 0, Read),
+			Uint32Field("SerialNumberOnuAmccMessageCount", 0, Read),
+			Uint32Field("RegistrationMessageCount", 0, Read),
+			Uint32Field("KeyReportMessageCount", 0, Read),
+			Uint32Field("AcknowledgementMessageCount", 0, Read),
+			Uint32Field("SleepRequestMessageCount", 0, Read),
+			Uint32Field("TuningResponseAckNackMessageCount", 0, Read),
+			Uint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read),
+			Uint32Field("PowerConsumptionReportMessageCount", 0, Read),
+			Uint32Field("ChangePowerLevelParameterErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

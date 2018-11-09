@@ -19,13 +19,19 @@
  */
 package generated
 
+// ThresholdData1 (class ID 273 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type ThresholdData1 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewThresholdData1(params ...ParamData) (IManagedEntity, error) {
+// NewThresholdData1 (class ID 273 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewThresholdData1(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "ThresholdData1",
 		ClassID:  273,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewThresholdData1(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint32Field("ThresholdValue1", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue2", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue3", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue4", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue5", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue6", 0, Read|Write|SetByCreate),
-			NewUint32Field("ThresholdValue7", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint32Field("ThresholdValue1", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue2", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue3", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue4", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue5", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue6", 0, Read|Write|SetByCreate),
+			Uint32Field("ThresholdValue7", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

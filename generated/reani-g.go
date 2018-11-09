@@ -19,13 +19,19 @@
  */
 package generated
 
+// ReAniG (class ID 313 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type ReAniG struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewReAniG(params ...ParamData) (IManagedEntity, error) {
+// NewReAniG (class ID 313 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewReAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "ReAniG",
 		ClassID:  313,
 		EntityID: eid,
@@ -34,22 +40,22 @@ func NewReAniG(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewUint16Field("OpticalSignalLevel", 0, Read),
-			NewByteField("LowerOpticalThreshold", 0, Read|Write),
-			NewByteField("UpperOpticalThreshold", 0, Read|Write),
-			NewUint16Field("TransmitOpticalLevel", 0, Read),
-			NewByteField("LowerTransmitPowerThreshold", 0, Read|Write),
-			NewByteField("UpperTransmitPowerThreshold", 0, Read|Write),
-			NewByteField("UsageMode", 0, Read|Write),
-			NewUint32Field("TargetUpstreamFrequency", 0, Read|Write),
-			NewUint32Field("TargetDownstreamFrequency", 0, Read|Write),
-			NewByteField("UpstreamSignalTransmissionMode", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			Uint16Field("OpticalSignalLevel", 0, Read),
+			ByteField("LowerOpticalThreshold", 0, Read|Write),
+			ByteField("UpperOpticalThreshold", 0, Read|Write),
+			Uint16Field("TransmitOpticalLevel", 0, Read),
+			ByteField("LowerTransmitPowerThreshold", 0, Read|Write),
+			ByteField("UpperTransmitPowerThreshold", 0, Read|Write),
+			ByteField("UsageMode", 0, Read|Write),
+			Uint32Field("TargetUpstreamFrequency", 0, Read|Write),
+			Uint32Field("TargetDownstreamFrequency", 0, Read|Write),
+			ByteField("UpstreamSignalTransmissionMode", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

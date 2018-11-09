@@ -19,13 +19,19 @@
  */
 package generated
 
+// ReDownstreamAmplifier (class ID 316 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type ReDownstreamAmplifier struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
+// NewReDownstreamAmplifier (class ID 316 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "ReDownstreamAmplifier",
 		ClassID:  316,
 		EntityID: eid,
@@ -35,20 +41,20 @@ func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
 			Test,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("OperationalMode", 0, Read|Write),
-			NewUint16Field("InputOpticalSignalLevel", 0, Read),
-			NewByteField("LowerInputOpticalThreshold", 0, Read|Write),
-			NewByteField("UpperInputOpticalThreshold", 0, Read|Write),
-			NewUint16Field("OutputOpticalSignalLevel", 0, Read),
-			NewByteField("LowerOutputOpticalThreshold", 0, Read|Write),
-			NewByteField("UpperOutputOpticalThreshold", 0, Read|Write),
-			NewByteField("R'S'SplitterCouplingRatio", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("OperationalMode", 0, Read|Write),
+			Uint16Field("InputOpticalSignalLevel", 0, Read),
+			ByteField("LowerInputOpticalThreshold", 0, Read|Write),
+			ByteField("UpperInputOpticalThreshold", 0, Read|Write),
+			Uint16Field("OutputOpticalSignalLevel", 0, Read),
+			ByteField("LowerOutputOpticalThreshold", 0, Read|Write),
+			ByteField("UpperOutputOpticalThreshold", 0, Read|Write),
+			ByteField("R'S'SplitterCouplingRatio", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

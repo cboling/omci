@@ -19,13 +19,19 @@
  */
 package generated
 
+// FastDataPathConfigurationProfile (class ID 433 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FastDataPathConfigurationProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+// NewFastDataPathConfigurationProfile (class ID 433 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FastDataPathConfigurationProfile",
 		ClassID:  433,
 		EntityID: eid,
@@ -36,9 +42,9 @@ func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntity, e
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

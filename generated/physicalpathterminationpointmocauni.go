@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointMocaUni (class ID 162 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointMocaUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointMocaUni (class ID 162 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointMocaUni",
 		ClassID:  162,
 		EntityID: eid,
@@ -34,22 +40,22 @@ func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("LoopbackConfiguration", 0, Read|Write),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewUint16Field("MaxFrameSize", 0, Read|Write),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("PppoeFilter", 0, Read|Write),
-			NewByteField("NetworkStatus", 0, Read),
-			NewUnknownField("Password", 0, Read|Write),
-			NewByteField("PrivacyEnabled", 0, Read|Write),
-			NewUint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
-			NewUint32Field("FrequencyMask", 0, Read|Write),
-			NewUint16Field("RfChannel", 0, Read),
-			NewUint16Field("LastOperationalFrequency", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("LoopbackConfiguration", 0, Read|Write),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			Uint16Field("MaxFrameSize", 0, Read|Write),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("PppoeFilter", 0, Read|Write),
+			ByteField("NetworkStatus", 0, Read),
+			UnknownField("Password", 0, Read|Write),
+			ByteField("PrivacyEnabled", 0, Read|Write),
+			Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
+			Uint32Field("FrequencyMask", 0, Read|Write),
+			Uint16Field("RfChannel", 0, Read),
+			Uint16Field("LastOperationalFrequency", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// Vdsl2LineInventoryAndStatusDataPart4 (class ID 415 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Vdsl2LineInventoryAndStatusDataPart4 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
+// NewVdsl2LineInventoryAndStatusDataPart4 (class ID 415 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
 		ClassID:  415,
 		EntityID: eid,
@@ -33,8 +39,8 @@ func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntit
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

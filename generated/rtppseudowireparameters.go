@@ -19,13 +19,19 @@
  */
 package generated
 
+// RtpPseudowireParameters (class ID 283 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type RtpPseudowireParameters struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
+// NewRtpPseudowireParameters (class ID 283 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "RtpPseudowireParameters",
 		ClassID:  283,
 		EntityID: eid,
@@ -36,14 +42,14 @@ func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("ClockReference", 0, Read|Write|SetByCreate),
-			NewByteField("RtpTimestampMode", 0, Read|Write|SetByCreate),
-			NewUint16Field("Ptype", 0, Read|Write|SetByCreate),
-			NewUint64Field("Ssrc", 0, Read|Write|SetByCreate),
-			NewUint16Field("ExpectedPtype", 0, Read|Write|SetByCreate),
-			NewUint64Field("ExpectedSsrc", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("ClockReference", 0, Read|Write|SetByCreate),
+			ByteField("RtpTimestampMode", 0, Read|Write|SetByCreate),
+			Uint16Field("Ptype", 0, Read|Write|SetByCreate),
+			Uint64Field("Ssrc", 0, Read|Write|SetByCreate),
+			Uint16Field("ExpectedPtype", 0, Read|Write|SetByCreate),
+			Uint64Field("ExpectedSsrc", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

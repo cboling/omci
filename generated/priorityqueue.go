@@ -19,13 +19,19 @@
  */
 package generated
 
+// PriorityQueue (class ID 277 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PriorityQueue struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
+// NewPriorityQueue (class ID 277 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPriorityQueue(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PriorityQueue",
 		ClassID:  277,
 		EntityID: eid,
@@ -34,24 +40,24 @@ func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("QueueConfigurationOption", 0, Read),
-			NewUint16Field("MaximumQueueSize", 0, Read),
-			NewUint16Field("AllocatedQueueSize", 0, Read|Write),
-			NewUint16Field("DiscardBlockCounterResetInterval", 0, Read|Write),
-			NewUint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write),
-			NewUint32Field("RelatedPort", 0, Read|Write),
-			NewUint16Field("TrafficSchedulerPointer", 0, Read|Write),
-			NewByteField("Weight", 0, Read|Write),
-			NewUint16Field("BackPressureOperation", 0, Read|Write),
-			NewUint32Field("BackPressureTime", 0, Read|Write),
-			NewUint16Field("BackPressureOccurQueueThreshold", 0, Read|Write),
-			NewUint16Field("BackPressureClearQueueThreshold", 0, Read|Write),
-			NewUint64Field("PacketDropQueueThresholds", 0, Read|Write),
-			NewUint16Field("PacketDropMaxP", 0, Read|Write),
-			NewByteField("QueueDropWQ", 0, Read|Write),
-			NewByteField("DropPrecedenceColourMarking", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("QueueConfigurationOption", 0, Read),
+			Uint16Field("MaximumQueueSize", 0, Read),
+			Uint16Field("AllocatedQueueSize", 0, Read|Write),
+			Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write),
+			Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write),
+			Uint32Field("RelatedPort", 0, Read|Write),
+			Uint16Field("TrafficSchedulerPointer", 0, Read|Write),
+			ByteField("Weight", 0, Read|Write),
+			Uint16Field("BackPressureOperation", 0, Read|Write),
+			Uint32Field("BackPressureTime", 0, Read|Write),
+			Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write),
+			Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write),
+			Uint64Field("PacketDropQueueThresholds", 0, Read|Write),
+			Uint16Field("PacketDropMaxP", 0, Read|Write),
+			ByteField("QueueDropWQ", 0, Read|Write),
+			ByteField("DropPrecedenceColourMarking", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

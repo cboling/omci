@@ -19,13 +19,19 @@
  */
 package generated
 
+// MplsPseudowireTerminationPoint (class ID 333 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MplsPseudowireTerminationPoint struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+// NewMplsPseudowireTerminationPoint (class ID 333 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MplsPseudowireTerminationPoint",
 		ClassID:  333,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, err
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("TpType", 0, Read|Write|SetByCreate),
-			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
-			NewByteField("MplsLabelIndicator", 0, Read|Write|SetByCreate),
-			NewByteField("MplsPwDirection", 0, Read|Write|SetByCreate),
-			NewUint32Field("MplsPwUplinkLabel", 0, Read|Write|SetByCreate),
-			NewUint32Field("MplsPwDownlinkLabel", 0, Read|Write|SetByCreate),
-			NewByteField("MplsPwTc", 0, Read|Write|SetByCreate),
-			NewByteField("MplsTunnelDirection", 0, Read|Write|SetByCreate),
-			NewUint32Field("MplsTunnelUplinkLabel", 0, Read|Write|SetByCreate),
-			NewUint32Field("MplsTunnelDownlinkLabel", 0, Read|Write|SetByCreate),
-			NewByteField("MplsTunnelTc", 0, Read|Write|SetByCreate),
-			NewUint16Field("PseudowireType", 0, Read|Write|SetByCreate),
-			NewByteField("PseudowireControlWordPreference", 0, Read|Write|SetByCreate),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("TpType", 0, Read|Write|SetByCreate),
+			Uint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			ByteField("MplsLabelIndicator", 0, Read|Write|SetByCreate),
+			ByteField("MplsPwDirection", 0, Read|Write|SetByCreate),
+			Uint32Field("MplsPwUplinkLabel", 0, Read|Write|SetByCreate),
+			Uint32Field("MplsPwDownlinkLabel", 0, Read|Write|SetByCreate),
+			ByteField("MplsPwTc", 0, Read|Write|SetByCreate),
+			ByteField("MplsTunnelDirection", 0, Read|Write|SetByCreate),
+			Uint32Field("MplsTunnelUplinkLabel", 0, Read|Write|SetByCreate),
+			Uint32Field("MplsTunnelDownlinkLabel", 0, Read|Write|SetByCreate),
+			ByteField("MplsTunnelTc", 0, Read|Write|SetByCreate),
+			Uint16Field("PseudowireType", 0, Read|Write|SetByCreate),
+			ByteField("PseudowireControlWordPreference", 0, Read|Write|SetByCreate),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

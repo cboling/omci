@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointLctUni (class ID 83 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointLctUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointLctUni (class ID 83 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointLctUni",
 		ClassID:  83,
 		EntityID: eid,
@@ -34,9 +40,9 @@ func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntity,
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

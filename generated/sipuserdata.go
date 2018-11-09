@@ -19,13 +19,19 @@
  */
 package generated
 
+// SipUserData (class ID 153 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SipUserData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
+// NewSipUserData (class ID 153 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipUserData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SipUserData",
 		ClassID:  153,
 		EntityID: eid,
@@ -36,20 +42,20 @@ func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("UserPartAor", 0, Read|Write|SetByCreate),
-			NewUnknownField("SipDisplayName", 0, Read|Write),
-			NewUint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
-			NewUint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
-			NewUint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),
-			NewUint16Field("NetworkDialPlanPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("ApplicationServicesProfilePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("FeatureCodePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("PptpPointer", 0, Read|Write|SetByCreate),
-			NewByteField("ReleaseTimer", 0, Read|Write),
-			NewByteField("ReceiverOffHookRohTimer", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("UserPartAor", 0, Read|Write|SetByCreate),
+			UnknownField("SipDisplayName", 0, Read|Write),
+			Uint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
+			Uint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
+			Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),
+			Uint16Field("NetworkDialPlanPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("ApplicationServicesProfilePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("FeatureCodePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
+			ByteField("ReleaseTimer", 0, Read|Write),
+			ByteField("ReceiverOffHookRohTimer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

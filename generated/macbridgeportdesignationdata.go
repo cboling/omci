@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePortDesignationData (class ID 48 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePortDesignationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePortDesignationData (class ID 48 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePortDesignationData",
 		ClassID:  48,
 		EntityID: eid,
@@ -33,10 +39,10 @@ func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntity, error
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("DesignatedBridgeRootCostPort", 0, Read),
-			NewByteField("PortState", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("DesignatedBridgeRootCostPort", 0, Read),
+			ByteField("PortState", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

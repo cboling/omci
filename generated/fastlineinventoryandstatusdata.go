@@ -19,13 +19,19 @@
  */
 package generated
 
+// FastLineInventoryAndStatusData (class ID 435 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FastLineInventoryAndStatusData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, error) {
+// NewFastLineInventoryAndStatusData (class ID 435 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FastLineInventoryAndStatusData",
 		ClassID:  435,
 		EntityID: eid,
@@ -33,15 +39,15 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, err
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("ItuTG9701ProfileProfile", 0, Read),
-			NewUnknownField("GammaDataRAteGdr", 0, Read),
-			NewUnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
-			NewUint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
-			NewUint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
-			NewUnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
-			NewUnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("ItuTG9701ProfileProfile", 0, Read),
+			UnknownField("GammaDataRAteGdr", 0, Read),
+			UnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
+			Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
+			Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
+			UnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
+			UnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

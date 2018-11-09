@@ -19,13 +19,19 @@
  */
 package generated
 
+// PwAtmPerformanceMonitoringHistoryData (class ID 338 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PwAtmPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewPwAtmPerformanceMonitoringHistoryData (class ID 338 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PwAtmPerformanceMonitoringHistoryData",
 		ClassID:  338,
 		EntityID: eid,
@@ -36,17 +42,17 @@ func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("DownstreamMissingPacketsCounter", 0, Read),
-			NewUint32Field("DownstreamReorderedPacketsCounter", 0, Read),
-			NewUint32Field("DownstreamMisorderedPacketsCounter", 0, Read),
-			NewUint32Field("UpstreamTimeoutPacketsCounter", 0, Read),
-			NewUint32Field("UpstreamTransmittedCellsCounter", 0, Read),
-			NewUint32Field("UpstreamDroppedCellsCounter", 0, Read),
-			NewUint32Field("UpstreamReceivedCellsCounter", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("DownstreamMissingPacketsCounter", 0, Read),
+			Uint32Field("DownstreamReorderedPacketsCounter", 0, Read),
+			Uint32Field("DownstreamMisorderedPacketsCounter", 0, Read),
+			Uint32Field("UpstreamTimeoutPacketsCounter", 0, Read),
+			Uint32Field("UpstreamTransmittedCellsCounter", 0, Read),
+			Uint32Field("UpstreamDroppedCellsCounter", 0, Read),
+			Uint32Field("UpstreamReceivedCellsCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

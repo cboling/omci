@@ -19,13 +19,19 @@
  */
 package generated
 
+// EthernetPerformanceMonitoringHistoryData2 (class ID 89 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EthernetPerformanceMonitoringHistoryData2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManagedEntity, error) {
+// NewEthernetPerformanceMonitoringHistoryData2 (class ID 89 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EthernetPerformanceMonitoringHistoryData2",
 		ClassID:  89,
 		EntityID: eid,
@@ -36,11 +42,11 @@ func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManaged
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("PppoeFilteredFrameCounter", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("PppoeFilteredFrameCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

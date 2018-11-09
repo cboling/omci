@@ -19,13 +19,19 @@
  */
 package generated
 
+// EfmBondingGroupPerformanceMonitoringHistoryData (class ID 421 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EfmBondingGroupPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewEfmBondingGroupPerformanceMonitoringHistoryData (class ID 421 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EfmBondingGroupPerformanceMonitoringHistoryData",
 		ClassID:  421,
 		EntityID: eid,
@@ -36,20 +42,20 @@ func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("RxBadFragments", 0, Read),
-			NewUint32Field("RxLostFragments", 0, Read),
-			NewUint32Field("RxLostStarts", 0, Read),
-			NewUint32Field("RxLostEnds", 0, Read),
-			NewUint32Field("RxFrames", 0, Read),
-			NewUint32Field("TxFrames", 0, Read),
-			NewUint64Field("RxBytes", 0, Read),
-			NewUint64Field("TxBytes", 0, Read),
-			NewUint32Field("TxDiscardedFrames", 0, Read),
-			NewUint32Field("TxDiscardedBytes", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("RxBadFragments", 0, Read),
+			Uint32Field("RxLostFragments", 0, Read),
+			Uint32Field("RxLostStarts", 0, Read),
+			Uint32Field("RxLostEnds", 0, Read),
+			Uint32Field("RxFrames", 0, Read),
+			Uint32Field("TxFrames", 0, Read),
+			Uint64Field("RxBytes", 0, Read),
+			Uint64Field("TxBytes", 0, Read),
+			Uint32Field("TxDiscardedFrames", 0, Read),
+			Uint32Field("TxDiscardedBytes", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

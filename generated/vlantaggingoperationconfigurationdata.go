@@ -19,13 +19,19 @@
  */
 package generated
 
+// VlanTaggingOperationConfigurationData (class ID 78 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VlanTaggingOperationConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewVlanTaggingOperationConfigurationData (class ID 78 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VlanTaggingOperationConfigurationData",
 		ClassID:  78,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			NewUint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
-			NewByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			NewByteField("AssociationType", 0, Read|Write|SetByCreate),
-			NewUint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			Uint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
+			ByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			ByteField("AssociationType", 0, Read|Write|SetByCreate),
+			Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

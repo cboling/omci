@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslSubcarrierMaskingUpstreamProfile (class ID 109 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslSubcarrierMaskingUpstreamProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntity, error) {
+// NewXdslSubcarrierMaskingUpstreamProfile (class ID 109 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslSubcarrierMaskingUpstreamProfile",
 		ClassID:  109,
 		EntityID: eid,
@@ -36,9 +42,9 @@ func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntit
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint64Field("UpstreamSubcarrierMask", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint64Field("UpstreamSubcarrierMask", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

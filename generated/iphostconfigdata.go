@@ -19,13 +19,19 @@
  */
 package generated
 
+// IpHostConfigData (class ID 134 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type IpHostConfigData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
+// NewIpHostConfigData (class ID 134 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewIpHostConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "IpHostConfigData",
 		ClassID:  134,
 		EntityID: eid,
@@ -34,24 +40,24 @@ func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("IpOptions", 0, Read|Write),
-			NewUnknownField("MacAddress", 0, Read),
-			NewUnknownField("OnuIdentifier", 0, Read|Write),
-			NewUint32Field("IpAddress", 0, Read|Write),
-			NewUint32Field("Mask", 0, Read|Write),
-			NewUint32Field("Gateway", 0, Read|Write),
-			NewUint32Field("PrimaryDns", 0, Read|Write),
-			NewUint32Field("SecondaryDns", 0, Read|Write),
-			NewUint32Field("CurrentAddress", 0, Read),
-			NewUint32Field("CurrentMask", 0, Read),
-			NewUint32Field("CurrentGateway", 0, Read),
-			NewUint32Field("CurrentPrimaryDns", 0, Read),
-			NewUint32Field("CurrentSecondaryDns", 0, Read),
-			NewUnknownField("DomainName", 0, Read),
-			NewUnknownField("HostName", 0, Read),
-			NewUint16Field("RelayAgentOptions", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("IpOptions", 0, Read|Write),
+			UnknownField("MacAddress", 0, Read),
+			UnknownField("OnuIdentifier", 0, Read|Write),
+			Uint32Field("IpAddress", 0, Read|Write),
+			Uint32Field("Mask", 0, Read|Write),
+			Uint32Field("Gateway", 0, Read|Write),
+			Uint32Field("PrimaryDns", 0, Read|Write),
+			Uint32Field("SecondaryDns", 0, Read|Write),
+			Uint32Field("CurrentAddress", 0, Read),
+			Uint32Field("CurrentMask", 0, Read),
+			Uint32Field("CurrentGateway", 0, Read),
+			Uint32Field("CurrentPrimaryDns", 0, Read),
+			Uint32Field("CurrentSecondaryDns", 0, Read),
+			UnknownField("DomainName", 0, Read),
+			UnknownField("HostName", 0, Read),
+			Uint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

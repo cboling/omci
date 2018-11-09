@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgMaintenanceDomain (class ID 299 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgMaintenanceDomain struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgMaintenanceDomain (class ID 299 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgMaintenanceDomain",
 		ClassID:  299,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("MdLevel", 0, Read|Write|SetByCreate),
-			NewByteField("MdNameFormat", 0, Read|Write|SetByCreate),
-			NewUnknownField("MdName1MdName2", 0, Read|Write),
-			NewByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|Write|SetByCreate),
-			NewByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("MdLevel", 0, Read|Write|SetByCreate),
+			ByteField("MdNameFormat", 0, Read|Write|SetByCreate),
+			UnknownField("MdName1MdName2", 0, Read|Write),
+			ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|Write|SetByCreate),
+			ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

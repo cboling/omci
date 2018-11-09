@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslChannelConfigurationProfilePart2 (class ID 412 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslChannelConfigurationProfilePart2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {
+// NewXdslChannelConfigurationProfilePart2 (class ID 412 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslChannelConfigurationProfilePart2",
 		ClassID:  412,
 		EntityID: eid,
@@ -36,21 +42,21 @@ func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntit
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, Read|Write),
-			NewUint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, Read|Write),
-			NewUint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, Read|Write),
-			NewByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, Read|Write),
-			NewByteField("MinimumDelayForRetransmissionDelayminRtx", 0, Read|Write),
-			NewByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, Read|Write),
-			NewByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, Read|Write),
-			NewByteField("ShineratioRtx", 0, Read|Write),
-			NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, Read|Write),
-			NewByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, Read|Write),
-			NewByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, Read|Write),
-			NewUint32Field("TargetNetDataRateTargetNdr", 0, Read|Write),
-			NewUint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, Read|Write),
+			Uint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, Read|Write),
+			Uint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, Read|Write),
+			ByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, Read|Write),
+			ByteField("MinimumDelayForRetransmissionDelayminRtx", 0, Read|Write),
+			ByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, Read|Write),
+			ByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, Read|Write),
+			ByteField("ShineratioRtx", 0, Read|Write),
+			ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, Read|Write),
+			ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, Read|Write),
+			ByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, Read|Write),
+			Uint32Field("TargetNetDataRateTargetNdr", 0, Read|Write),
+			Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

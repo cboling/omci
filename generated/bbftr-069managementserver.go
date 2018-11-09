@@ -19,13 +19,19 @@
  */
 package generated
 
+// BbfTr069ManagementServer (class ID 340 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type BbfTr069ManagementServer struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntity, error) {
+// NewBbfTr069ManagementServer (class ID 340 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "BbfTr069ManagementServer",
 		ClassID:  340,
 		EntityID: eid,
@@ -34,11 +40,11 @@ func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewUint16Field("AcsNetworkAddress", 0, Read|Write),
-			NewUint16Field("AssociatedTag", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			Uint16Field("AcsNetworkAddress", 0, Read|Write),
+			Uint16Field("AssociatedTag", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

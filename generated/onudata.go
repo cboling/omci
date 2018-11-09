@@ -19,13 +19,19 @@
  */
 package generated
 
+// OnuData (class ID 2 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type OnuData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewOnuData(params ...ParamData) (IManagedEntity, error) {
+// NewOnuData (class ID 2 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "OnuData",
 		ClassID:  2,
 		EntityID: eid,
@@ -39,9 +45,9 @@ func NewOnuData(params ...ParamData) (IManagedEntity, error) {
 			MibReset,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("MibDataSync", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("MibDataSync", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

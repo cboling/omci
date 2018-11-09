@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelOmciPerformanceMonitoringHistoryData (class ID 452 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelOmciPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelOmciPerformanceMonitoringHistoryData (class ID 452 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelOmciPerformanceMonitoringHistoryData",
 		ClassID:  452,
 		EntityID: eid,
@@ -37,13 +43,13 @@ func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("OmciBaselineMessageCount", 0, Read),
-			NewUint32Field("OmciExtendedMessageCount", 0, Read),
-			NewUint32Field("OmciMicErrorCount:", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("OmciBaselineMessageCount", 0, Read),
+			Uint32Field("OmciExtendedMessageCount", 0, Read),
+			Uint32Field("OmciMicErrorCount:", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

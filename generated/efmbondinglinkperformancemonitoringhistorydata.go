@@ -19,13 +19,19 @@
  */
 package generated
 
+// EfmBondingLinkPerformanceMonitoringHistoryData (class ID 423 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EfmBondingLinkPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewEfmBondingLinkPerformanceMonitoringHistoryData (class ID 423 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EfmBondingLinkPerformanceMonitoringHistoryData",
 		ClassID:  423,
 		EntityID: eid,
@@ -36,18 +42,18 @@ func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (IMa
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("RxErroredFragments", 0, Read),
-			NewUint32Field("RxSmallFragments", 0, Read),
-			NewUint32Field("RxLargeFragments", 0, Read),
-			NewUint32Field("RxDiscardedFragments", 0, Read),
-			NewUint32Field("RxFcsErrors", 0, Read),
-			NewUint32Field("RxCodingErrors", 0, Read),
-			NewUint32Field("RxFragments", 0, Read),
-			NewUint32Field("TxFragments", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("RxErroredFragments", 0, Read),
+			Uint32Field("RxSmallFragments", 0, Read),
+			Uint32Field("RxLargeFragments", 0, Read),
+			Uint32Field("RxDiscardedFragments", 0, Read),
+			Uint32Field("RxFcsErrors", 0, Read),
+			Uint32Field("RxCodingErrors", 0, Read),
+			Uint32Field("RxFragments", 0, Read),
+			Uint32Field("TxFragments", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

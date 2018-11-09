@@ -19,13 +19,19 @@
  */
 package generated
 
+// FileTransferController (class ID 318 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FileTransferController struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {
+// NewFileTransferController (class ID 318 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FileTransferController",
 		ClassID:  318,
 		EntityID: eid,
@@ -34,19 +40,19 @@ func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUint16Field("SupportedTransferProtocols", 0, Read),
-			NewUint16Field("FileType", 0, Read|Write),
-			NewUint16Field("FileInstance", 0, Read|Write),
-			NewUint16Field("LocalFileNamePointer", 0, Read|Write),
-			NewUint16Field("NetworkAddressPointer", 0, Read|Write),
-			NewByteField("FileTransferTrigger", 0, Read|Write),
-			NewByteField("FileTransferStatus", 0, Read),
-			NewUint16Field("GemIwtpPointer", 0, Read|Write),
-			NewUint16Field("Vlan", 0, Read|Write),
-			NewUint32Field("FileSize", 0, Read|Write),
-			NewUnknownField("DirectoryListingTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			Uint16Field("SupportedTransferProtocols", 0, Read),
+			Uint16Field("FileType", 0, Read|Write),
+			Uint16Field("FileInstance", 0, Read|Write),
+			Uint16Field("LocalFileNamePointer", 0, Read|Write),
+			Uint16Field("NetworkAddressPointer", 0, Read|Write),
+			ByteField("FileTransferTrigger", 0, Read|Write),
+			ByteField("FileTransferStatus", 0, Read),
+			Uint16Field("GemIwtpPointer", 0, Read|Write),
+			Uint16Field("Vlan", 0, Read|Write),
+			Uint32Field("FileSize", 0, Read|Write),
+			UnknownField("DirectoryListingTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

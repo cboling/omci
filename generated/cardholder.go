@@ -19,13 +19,19 @@
  */
 package generated
 
+// Cardholder (class ID 5 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Cardholder struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewCardholder(params ...ParamData) (IManagedEntity, error) {
+// NewCardholder (class ID 5 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCardholder(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Cardholder",
 		ClassID:  5,
 		EntityID: eid,
@@ -34,17 +40,17 @@ func NewCardholder(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("ActualPlugInUnitType", 0, Read),
-			NewByteField("ExpectedPlugInUnitType", 0, Read|Write),
-			NewByteField("ExpectedPortCount", 0, Read|Write),
-			NewUnknownField("ExpectedEquipmentId", 0, Read|Write),
-			NewUnknownField("ActualEquipmentId", 0, Read),
-			NewByteField("ProtectionProfilePointer", 0, Read),
-			NewByteField("InvokeProtectionSwitch", 0, Read|Write),
-			NewByteField("AlarmReportingControl", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("ActualPlugInUnitType", 0, Read),
+			ByteField("ExpectedPlugInUnitType", 0, Read|Write),
+			ByteField("ExpectedPortCount", 0, Read|Write),
+			UnknownField("ExpectedEquipmentId", 0, Read|Write),
+			UnknownField("ActualEquipmentId", 0, Read),
+			ByteField("ProtectionProfilePointer", 0, Read),
+			ByteField("InvokeProtectionSwitch", 0, Read|Write),
+			ByteField("AlarmReportingControl", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

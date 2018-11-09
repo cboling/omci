@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1XPerformanceMonitoringHistoryData (class ID 292 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1XPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewDot1XPerformanceMonitoringHistoryData (class ID 292 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1XPerformanceMonitoringHistoryData",
 		ClassID:  292,
 		EntityID: eid,
@@ -36,22 +42,22 @@ func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("EapolFramesReceived", 0, Read),
-			NewUint32Field("EapolFramesTransmitted", 0, Read),
-			NewUint32Field("EapolStartFramesReceived", 0, Read),
-			NewUint32Field("EapolLogoffFramesReceived", 0, Read),
-			NewUint32Field("InvalidEapolFramesReceived", 0, Read),
-			NewUint32Field("EapRespIdFramesReceived", 0, Read),
-			NewUint32Field("EapResponseFramesReceived", 0, Read),
-			NewUint32Field("EapInitialRequestFramesTransmitted", 0, Read),
-			NewUint32Field("EapRequestFramesTransmitted", 0, Read),
-			NewUint32Field("EapLengthErrorFramesReceived", 0, Read),
-			NewUint32Field("EapSuccessFramesGeneratedAutonomously", 0, Read),
-			NewUint32Field("EapFailureFramesGeneratedAutonomously", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("EapolFramesReceived", 0, Read),
+			Uint32Field("EapolFramesTransmitted", 0, Read),
+			Uint32Field("EapolStartFramesReceived", 0, Read),
+			Uint32Field("EapolLogoffFramesReceived", 0, Read),
+			Uint32Field("InvalidEapolFramesReceived", 0, Read),
+			Uint32Field("EapRespIdFramesReceived", 0, Read),
+			Uint32Field("EapResponseFramesReceived", 0, Read),
+			Uint32Field("EapInitialRequestFramesTransmitted", 0, Read),
+			Uint32Field("EapRequestFramesTransmitted", 0, Read),
+			Uint32Field("EapLengthErrorFramesReceived", 0, Read),
+			Uint32Field("EapSuccessFramesGeneratedAutonomously", 0, Read),
+			Uint32Field("EapFailureFramesGeneratedAutonomously", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

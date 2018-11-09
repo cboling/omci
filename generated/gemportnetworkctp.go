@@ -19,13 +19,19 @@
  */
 package generated
 
+// GemPortNetworkCtp (class ID 268 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type GemPortNetworkCtp struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
+// NewGemPortNetworkCtp (class ID 268 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "GemPortNetworkCtp",
 		ClassID:  268,
 		EntityID: eid,
@@ -36,18 +42,18 @@ func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("PortId", 0, Read|Write|SetByCreate),
-			NewUint16Field("TContPointer", 0, Read|Write|SetByCreate),
-			NewByteField("Direction", 0, Read|Write|SetByCreate),
-			NewUint16Field("TrafficManagementPointerForUpstream", 0, Read|Write|SetByCreate),
-			NewUint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|Write|SetByCreate),
-			NewByteField("UniCounter", 0, Read),
-			NewUint16Field("PriorityQueuePointerForDownStream", 0, Read|Write|SetByCreate),
-			NewByteField("EncryptionState", 0, Read),
-			NewUint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|Write|SetByCreate),
-			NewByteField("EncryptionKeyRing", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("PortId", 0, Read|Write|SetByCreate),
+			Uint16Field("TContPointer", 0, Read|Write|SetByCreate),
+			ByteField("Direction", 0, Read|Write|SetByCreate),
+			Uint16Field("TrafficManagementPointerForUpstream", 0, Read|Write|SetByCreate),
+			Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|Write|SetByCreate),
+			ByteField("UniCounter", 0, Read),
+			Uint16Field("PriorityQueuePointerForDownStream", 0, Read|Write|SetByCreate),
+			ByteField("EncryptionState", 0, Read),
+			Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|Write|SetByCreate),
+			ByteField("EncryptionKeyRing", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

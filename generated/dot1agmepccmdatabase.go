@@ -19,13 +19,19 @@
  */
 package generated
 
+// Dot1AgMepCcmDatabase (class ID 304 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Dot1AgMepCcmDatabase struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
+// NewDot1AgMepCcmDatabase (class ID 304 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Dot1AgMepCcmDatabase",
 		ClassID:  304,
 		EntityID: eid,
@@ -34,20 +40,20 @@ func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("Rmep1DatabaseTable", 0, Read),
-			NewUnknownField("Rmep2DatabaseTable", 0, Read),
-			NewUnknownField("Rmep3DatabaseTable", 0, Read),
-			NewUnknownField("Rmep4DatabaseTable", 0, Read),
-			NewUnknownField("Rmep5DatabaseTable", 0, Read),
-			NewUnknownField("Rmep6DatabaseTable", 0, Read),
-			NewUnknownField("Rmep7DatabaseTable", 0, Read),
-			NewUnknownField("Rmep8DatabaseTable", 0, Read),
-			NewUnknownField("Rmep9DatabaseTable", 0, Read),
-			NewUnknownField("Rmep10DatabaseTable", 0, Read),
-			NewUnknownField("Rmep11DatabaseTable", 0, Read),
-			NewUnknownField("Rmep12DatabaseTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("Rmep1DatabaseTable", 0, Read),
+			UnknownField("Rmep2DatabaseTable", 0, Read),
+			UnknownField("Rmep3DatabaseTable", 0, Read),
+			UnknownField("Rmep4DatabaseTable", 0, Read),
+			UnknownField("Rmep5DatabaseTable", 0, Read),
+			UnknownField("Rmep6DatabaseTable", 0, Read),
+			UnknownField("Rmep7DatabaseTable", 0, Read),
+			UnknownField("Rmep8DatabaseTable", 0, Read),
+			UnknownField("Rmep9DatabaseTable", 0, Read),
+			UnknownField("Rmep10DatabaseTable", 0, Read),
+			UnknownField("Rmep11DatabaseTable", 0, Read),
+			UnknownField("Rmep12DatabaseTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// SipAgentPerformanceMonitoringHistoryData (class ID 151 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SipAgentPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewSipAgentPerformanceMonitoringHistoryData (class ID 151 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SipAgentPerformanceMonitoringHistoryData",
 		ClassID:  151,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("Transactions", 0, Read),
-			NewUint32Field("RxInviteReqs", 0, Read),
-			NewUint32Field("RxInviteRetrans", 0, Read),
-			NewUint32Field("RxNoninviteReqs", 0, Read),
-			NewUint32Field("RxNoninviteRetrans", 0, Read),
-			NewUint32Field("RxResponse", 0, Read),
-			NewUint32Field("RxResponseRetransmissions", 0, Read),
-			NewUint32Field("TxInviteReqs", 0, Read),
-			NewUint32Field("TxInviteRetrans", 0, Read),
-			NewUint32Field("TxNoninviteReqs", 0, Read),
-			NewUint32Field("TxNoninviteRetrans", 0, Read),
-			NewUint32Field("TxResponse", 0, Read),
-			NewUint32Field("TxResponseRetransmissions", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("Transactions", 0, Read),
+			Uint32Field("RxInviteReqs", 0, Read),
+			Uint32Field("RxInviteRetrans", 0, Read),
+			Uint32Field("RxNoninviteReqs", 0, Read),
+			Uint32Field("RxNoninviteRetrans", 0, Read),
+			Uint32Field("RxResponse", 0, Read),
+			Uint32Field("RxResponseRetransmissions", 0, Read),
+			Uint32Field("TxInviteReqs", 0, Read),
+			Uint32Field("TxInviteRetrans", 0, Read),
+			Uint32Field("TxNoninviteReqs", 0, Read),
+			Uint32Field("TxNoninviteRetrans", 0, Read),
+			Uint32Field("TxResponse", 0, Read),
+			Uint32Field("TxResponseRetransmissions", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointVideoAni (class ID 90 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointVideoAni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointVideoAni (class ID 90 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointVideoAni",
 		ClassID:  90,
 		EntityID: eid,
@@ -34,24 +40,24 @@ func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntit
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("FrequencyRangeLow", 0, Read),
-			NewByteField("FrequencyRangeHigh", 0, Read),
-			NewByteField("SignalCapability", 0, Read),
-			NewByteField("OpticalSignalLevel", 0, Read),
-			NewByteField("PilotSignalLevel", 0, Read),
-			NewByteField("SignalLevelMin", 0, Read),
-			NewByteField("SignalLevelMax", 0, Read),
-			NewUint32Field("PilotFrequency", 0, Read|Write),
-			NewByteField("AgcMode", 0, Read|Write),
-			NewByteField("AgcSetting", 0, Read|Write),
-			NewByteField("VideoLowerOpticalThreshold", 0, Read|Write),
-			NewByteField("VideoUpperOpticalThreshold", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("FrequencyRangeLow", 0, Read),
+			ByteField("FrequencyRangeHigh", 0, Read),
+			ByteField("SignalCapability", 0, Read),
+			ByteField("OpticalSignalLevel", 0, Read),
+			ByteField("PilotSignalLevel", 0, Read),
+			ByteField("SignalLevelMin", 0, Read),
+			ByteField("SignalLevelMax", 0, Read),
+			Uint32Field("PilotFrequency", 0, Read|Write),
+			ByteField("AgcMode", 0, Read|Write),
+			ByteField("AgcSetting", 0, Read|Write),
+			ByteField("VideoLowerOpticalThreshold", 0, Read|Write),
+			ByteField("VideoUpperOpticalThreshold", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

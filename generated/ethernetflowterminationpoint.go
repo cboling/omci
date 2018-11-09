@@ -19,13 +19,19 @@
  */
 package generated
 
+// EthernetFlowTerminationPoint (class ID 286 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EthernetFlowTerminationPoint struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+// NewEthernetFlowTerminationPoint (class ID 286 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EthernetFlowTerminationPoint",
 		ClassID:  286,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUnknownField("DestinationMac", 0, Read|Write|SetByCreate),
-			NewUnknownField("SourceMac", 0, Read),
-			NewByteField("TagPolicy", 0, Read|Write|SetByCreate),
-			NewUint16Field("Tci", 0, Read|Write),
-			NewByteField("Loopback", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			UnknownField("DestinationMac", 0, Read|Write|SetByCreate),
+			UnknownField("SourceMac", 0, Read),
+			ByteField("TagPolicy", 0, Read|Write|SetByCreate),
+			Uint16Field("Tci", 0, Read|Write),
+			ByteField("Loopback", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

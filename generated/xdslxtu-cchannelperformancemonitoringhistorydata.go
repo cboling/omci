@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslXtuCChannelPerformanceMonitoringHistoryData (class ID 114 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslXtuCChannelPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXdslXtuCChannelPerformanceMonitoringHistoryData (class ID 114 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslXtuCChannelPerformanceMonitoringHistoryData",
 		ClassID:  114,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("CorrectedBlocks", 0, Read),
-			NewUint32Field("UncorrectedBlocks", 0, Read),
-			NewUint32Field("TransmittedBlocks", 0, Read),
-			NewUint32Field("ReceivedBlocks", 0, Read),
-			NewUint16Field("CodeViolations", 0, Read),
-			NewUint16Field("ForwardErrorCorrections", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("CorrectedBlocks", 0, Read),
+			Uint32Field("UncorrectedBlocks", 0, Read),
+			Uint32Field("TransmittedBlocks", 0, Read),
+			Uint32Field("ReceivedBlocks", 0, Read),
+			Uint16Field("CodeViolations", 0, Read),
+			Uint16Field("ForwardErrorCorrections", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

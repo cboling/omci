@@ -19,13 +19,19 @@
  */
 package generated
 
+// MgcConfigData (class ID 155 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MgcConfigData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {
+// NewMgcConfigData (class ID 155 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMgcConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MgcConfigData",
 		ClassID:  155,
 		EntityID: eid,
@@ -36,19 +42,19 @@ func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("PrimaryMgc", 0, Read|Write|SetByCreate),
-			NewUint16Field("SecondaryMgc", 0, Read|Write|SetByCreate),
-			NewUint16Field("TcpUdpPointer", 0, Read|Write|SetByCreate),
-			NewByteField("Version", 0, Read|Write|SetByCreate),
-			NewByteField("MessageFormat", 0, Read|Write|SetByCreate),
-			NewUint16Field("MaximumRetryTime", 0, Read|Write),
-			NewUint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
-			NewUint16Field("ServiceChangeDelay", 0, Read|Write),
-			NewUnknownField("TerminationIdBase", 0, Read|Write),
-			NewUint32Field("Softswitch", 0, Read|Write|SetByCreate),
-			NewUint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("PrimaryMgc", 0, Read|Write|SetByCreate),
+			Uint16Field("SecondaryMgc", 0, Read|Write|SetByCreate),
+			Uint16Field("TcpUdpPointer", 0, Read|Write|SetByCreate),
+			ByteField("Version", 0, Read|Write|SetByCreate),
+			ByteField("MessageFormat", 0, Read|Write|SetByCreate),
+			Uint16Field("MaximumRetryTime", 0, Read|Write),
+			Uint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
+			Uint16Field("ServiceChangeDelay", 0, Read|Write),
+			UnknownField("TerminationIdBase", 0, Read|Write),
+			Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			Uint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

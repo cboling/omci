@@ -19,13 +19,19 @@
  */
 package generated
 
+// CircuitPack (class ID 6 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type CircuitPack struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
+// NewCircuitPack (class ID 6 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "CircuitPack",
 		ClassID:  6,
 		EntityID: eid,
@@ -35,22 +41,22 @@ func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
 			Create,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("Type", 0, Read|SetByCreate),
-			NewByteField("NumberOfPorts", 0, Read),
-			NewUint64Field("SerialNumber", 0, Read),
-			NewUnknownField("Version", 0, Read),
-			NewUint32Field("VendorId:", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("BridgedOrIpInd", 0, Read|Write),
-			NewUnknownField("EquipmentId", 0, Read),
-			NewByteField("CardConfiguration", 0, Read|Write|SetByCreate),
-			NewByteField("TotalTContBufferNumber", 0, Read),
-			NewByteField("TotalPriorityQueueNumber", 0, Read),
-			NewByteField("TotalTrafficSchedulerNumber", 0, Read),
-			NewUint32Field("PowerShedOverride", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("Type", 0, Read|SetByCreate),
+			ByteField("NumberOfPorts", 0, Read),
+			Uint64Field("SerialNumber", 0, Read),
+			UnknownField("Version", 0, Read),
+			Uint32Field("VendorId:", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("BridgedOrIpInd", 0, Read|Write),
+			UnknownField("EquipmentId", 0, Read),
+			ByteField("CardConfiguration", 0, Read|Write|SetByCreate),
+			ByteField("TotalTContBufferNumber", 0, Read),
+			ByteField("TotalPriorityQueueNumber", 0, Read),
+			ByteField("TotalTrafficSchedulerNumber", 0, Read),
+			Uint32Field("PowerShedOverride", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

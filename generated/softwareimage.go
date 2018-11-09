@@ -19,13 +19,19 @@
  */
 package generated
 
+// SoftwareImage (class ID 7 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SoftwareImage struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
+// NewSoftwareImage (class ID 7 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SoftwareImage",
 		ClassID:  7,
 		EntityID: eid,
@@ -34,14 +40,14 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
 			DownloadSection,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("Version", 0, Read),
-			NewByteField("IsCommitted", 0, Read),
-			NewByteField("IsActive", 0, Read),
-			NewByteField("IsValid", 0, Read),
-			NewUnknownField("ProductCode", 0, Read),
-			NewUnknownField("ImageHash", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("Version", 0, Read),
+			ByteField("IsCommitted", 0, Read),
+			ByteField("IsActive", 0, Read),
+			ByteField("IsValid", 0, Read),
+			UnknownField("ProductCode", 0, Read),
+			UnknownField("ImageHash", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

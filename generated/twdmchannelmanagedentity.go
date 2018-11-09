@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelManagedEntity (class ID 443 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelManagedEntity struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelManagedEntity (class ID 443 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelManagedEntity",
 		ClassID:  443,
 		EntityID: eid,
@@ -33,12 +39,12 @@ func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("ActiveChannelIndication", 0, Read),
-			NewByteField("OperationalChannelIndication", 0, Read),
-			NewByteField("DownstreamWavelengthChannel", 0, Read),
-			NewByteField("UpstreamWavelengthChannel", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("ActiveChannelIndication", 0, Read),
+			ByteField("OperationalChannelIndication", 0, Read),
+			ByteField("DownstreamWavelengthChannel", 0, Read),
+			ByteField("UpstreamWavelengthChannel", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

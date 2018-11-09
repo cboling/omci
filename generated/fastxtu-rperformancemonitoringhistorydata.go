@@ -19,13 +19,19 @@
  */
 package generated
 
+// FastXtuRPerformanceMonitoringHistoryData (class ID 438 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type FastXtuRPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewFastXtuRPerformanceMonitoringHistoryData (class ID 438 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "FastXtuRPerformanceMonitoringHistoryData",
 		ClassID:  438,
 		EntityID: eid,
@@ -36,12 +42,12 @@ func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("SuccessfulFraCounter", 0, Read),
-			NewUint32Field("SuccessfulRpaCounter", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("SuccessfulFraCounter", 0, Read),
+			Uint32Field("SuccessfulRpaCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

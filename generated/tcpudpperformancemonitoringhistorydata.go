@@ -19,13 +19,19 @@
  */
 package generated
 
+// TcpUdpPerformanceMonitoringHistoryData (class ID 342 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TcpUdpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewTcpUdpPerformanceMonitoringHistoryData (class ID 342 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TcpUdpPerformanceMonitoringHistoryData",
 		ClassID:  342,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint16Field("SocketFailed", 0, Read),
-			NewUint16Field("ListenFailed", 0, Read),
-			NewUint16Field("BindFailed", 0, Read),
-			NewUint16Field("AcceptFailed", 0, Read),
-			NewUint16Field("SelectFailed", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint16Field("SocketFailed", 0, Read),
+			Uint16Field("ListenFailed", 0, Read),
+			Uint16Field("BindFailed", 0, Read),
+			Uint16Field("AcceptFailed", 0, Read),
+			Uint16Field("SelectFailed", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// OnuDynamicPowerManagementControl (class ID 336 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type OnuDynamicPowerManagementControl struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, error) {
+// NewOnuDynamicPowerManagementControl (class ID 336 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "OnuDynamicPowerManagementControl",
 		ClassID:  336,
 		EntityID: eid,
@@ -34,20 +40,20 @@ func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntity, e
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("PowerReductionManagementCapability", 0, Read),
-			NewByteField("PowerReductionManagementMode", 0, Read|Write),
-			NewUint16Field("Itransinit", 0, Read),
-			NewUint16Field("Itxinit", 0, Read),
-			NewUint32Field("MaximumSleepInterval", 0, Read|Write),
-			NewUint32Field("MaximumReceiverOffInterval", 0, Read|Write),
-			NewUint32Field("MinimumAwareInterval", 0, Read|Write),
-			NewUint16Field("MinimumActiveHeldInterval", 0, Read|Write),
-			NewUint64Field("MaximumSleepIntervalExtension", 0, Read|Write),
-			NewByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read),
-			NewByteField("EponSetupExtension", 0, Read|Write),
-			NewUint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("PowerReductionManagementCapability", 0, Read),
+			ByteField("PowerReductionManagementMode", 0, Read|Write),
+			Uint16Field("Itransinit", 0, Read),
+			Uint16Field("Itxinit", 0, Read),
+			Uint32Field("MaximumSleepInterval", 0, Read|Write),
+			Uint32Field("MaximumReceiverOffInterval", 0, Read|Write),
+			Uint32Field("MinimumAwareInterval", 0, Read|Write),
+			Uint16Field("MinimumActiveHeldInterval", 0, Read|Write),
+			Uint64Field("MaximumSleepIntervalExtension", 0, Read|Write),
+			ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read),
+			ByteField("EponSetupExtension", 0, Read|Write),
+			Uint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

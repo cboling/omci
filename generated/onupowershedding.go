@@ -19,13 +19,19 @@
  */
 package generated
 
+// OnuPowerShedding (class ID 133 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type OnuPowerShedding struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
+// NewOnuPowerShedding (class ID 133 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "OnuPowerShedding",
 		ClassID:  133,
 		EntityID: eid,
@@ -34,19 +40,19 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUint16Field("RestorePowerTimerResetInterval", 0, Read|Write),
-			NewUint16Field("DataClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("VoiceClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("AtmClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("CesClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("FrameClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("SdhSonetClassSheddingInterval", 0, Read|Write),
-			NewUint16Field("SheddingStatus", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			Uint16Field("RestorePowerTimerResetInterval", 0, Read|Write),
+			Uint16Field("DataClassSheddingInterval", 0, Read|Write),
+			Uint16Field("VoiceClassSheddingInterval", 0, Read|Write),
+			Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
+			Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
+			Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
+			Uint16Field("AtmClassSheddingInterval", 0, Read|Write),
+			Uint16Field("CesClassSheddingInterval", 0, Read|Write),
+			Uint16Field("FrameClassSheddingInterval", 0, Read|Write),
+			Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write),
+			Uint16Field("SheddingStatus", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

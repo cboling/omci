@@ -19,13 +19,19 @@
  */
 package generated
 
+// EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID 422 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EfmBondingGroupPerformanceMonitoringHistoryDataPart2 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
+// NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID 422 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
 		ClassID:  422,
 		EntityID: eid,
@@ -36,22 +42,22 @@ func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("RxUnicastFrames", 0, Read),
-			NewUint32Field("TxUnicastFrames", 0, Read),
-			NewUint64Field("RxUnicastBytes", 0, Read),
-			NewUint64Field("TxUnicastBytes", 0, Read),
-			NewUint32Field("RxBroadcastFrames", 0, Read),
-			NewUint32Field("TxBroadcastFrames", 0, Read),
-			NewUint64Field("RxBroadcastBytes", 0, Read),
-			NewUint64Field("TxBroadcastBytes", 0, Read),
-			NewUint32Field("RxMulticastFrames", 0, Read),
-			NewUint32Field("TxMulticastFrames", 0, Read),
-			NewUint64Field("RxMulticastBytes", 0, Read),
-			NewUint64Field("TxMulticastBytes", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("RxUnicastFrames", 0, Read),
+			Uint32Field("TxUnicastFrames", 0, Read),
+			Uint64Field("RxUnicastBytes", 0, Read),
+			Uint64Field("TxUnicastBytes", 0, Read),
+			Uint32Field("RxBroadcastFrames", 0, Read),
+			Uint32Field("TxBroadcastFrames", 0, Read),
+			Uint64Field("RxBroadcastBytes", 0, Read),
+			Uint64Field("TxBroadcastBytes", 0, Read),
+			Uint32Field("RxMulticastFrames", 0, Read),
+			Uint32Field("TxMulticastFrames", 0, Read),
+			Uint64Field("RxMulticastBytes", 0, Read),
+			Uint64Field("TxMulticastBytes", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

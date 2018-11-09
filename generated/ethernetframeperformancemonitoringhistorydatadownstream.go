@@ -19,13 +19,19 @@
  */
 package generated
 
+// EthernetFramePerformanceMonitoringHistoryDataDownstream (class ID 321 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type EthernetFramePerformanceMonitoringHistoryDataDownstream struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (IManagedEntity, error) {
+// NewEthernetFramePerformanceMonitoringHistoryDataDownstream (class ID 321 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "EthernetFramePerformanceMonitoringHistoryDataDownstream",
 		ClassID:  321,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamD
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("DropEvents", 0, Read),
-			NewUint32Field("Octets", 0, Read),
-			NewUint32Field("Packets", 0, Read),
-			NewUint32Field("BroadcastPackets", 0, Read),
-			NewUint32Field("MulticastPackets", 0, Read),
-			NewUint32Field("CrcErroredPackets", 0, Read),
-			NewUint32Field("UndersizePackets", 0, Read),
-			NewUint32Field("OversizePackets", 0, Read),
-			NewUint32Field("Packets64Octets", 0, Read),
-			NewUint32Field("Packets65To127Octets", 0, Read),
-			NewUint32Field("Packets128To255Octets", 0, Read),
-			NewUint32Field("Packets256To511Octets", 0, Read),
-			NewUint32Field("Packets512To1023Octets", 0, Read),
-			NewUint32Field("Packets1024To1518Octets", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("DropEvents", 0, Read),
+			Uint32Field("Octets", 0, Read),
+			Uint32Field("Packets", 0, Read),
+			Uint32Field("BroadcastPackets", 0, Read),
+			Uint32Field("MulticastPackets", 0, Read),
+			Uint32Field("CrcErroredPackets", 0, Read),
+			Uint32Field("UndersizePackets", 0, Read),
+			Uint32Field("OversizePackets", 0, Read),
+			Uint32Field("Packets64Octets", 0, Read),
+			Uint32Field("Packets65To127Octets", 0, Read),
+			Uint32Field("Packets128To255Octets", 0, Read),
+			Uint32Field("Packets256To511Octets", 0, Read),
+			Uint32Field("Packets512To1023Octets", 0, Read),
+			Uint32Field("Packets1024To1518Octets", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

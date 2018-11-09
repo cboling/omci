@@ -19,13 +19,19 @@
  */
 package generated
 
+// GemInterworkingTerminationPoint (class ID 266 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type GemInterworkingTerminationPoint struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+// NewGemInterworkingTerminationPoint (class ID 266 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "GemInterworkingTerminationPoint",
 		ClassID:  266,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, er
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
-			NewByteField("InterworkingOption", 0, Read|Write|SetByCreate),
-			NewUint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkingTerminationPointPointer", 0, Read|Write|SetByCreate),
-			NewByteField("PptpCounter", 0, Read),
-			NewByteField("OperationalState", 0, Read),
-			NewUint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
-			NewByteField("GalLoopbackConfiguration", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			ByteField("InterworkingOption", 0, Read|Write|SetByCreate),
+			Uint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkingTerminationPointPointer", 0, Read|Write|SetByCreate),
+			ByteField("PptpCounter", 0, Read),
+			ByteField("OperationalState", 0, Read),
+			Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
+			ByteField("GalLoopbackConfiguration", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

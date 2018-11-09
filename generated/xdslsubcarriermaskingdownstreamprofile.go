@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslSubcarrierMaskingDownstreamProfile (class ID 108 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslSubcarrierMaskingDownstreamProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEntity, error) {
+// NewXdslSubcarrierMaskingDownstreamProfile (class ID 108 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslSubcarrierMaskingDownstreamProfile",
 		ClassID:  108,
 		EntityID: eid,
@@ -36,13 +42,13 @@ func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUnknownField("DownstreamSubcarrierMask1", 0, Read|Write|SetByCreate),
-			NewUnknownField("DownstreamSubcarrierMask2", 0, Read|Write),
-			NewUnknownField("DownstreamSubcarrierMask3", 0, Read|Write),
-			NewUnknownField("DownstreamSubcarrierMask4", 0, Read|Write),
-			NewByteField("MaskValid", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			UnknownField("DownstreamSubcarrierMask1", 0, Read|Write|SetByCreate),
+			UnknownField("DownstreamSubcarrierMask2", 0, Read|Write),
+			UnknownField("DownstreamSubcarrierMask3", 0, Read|Write),
+			UnknownField("DownstreamSubcarrierMask4", 0, Read|Write),
+			ByteField("MaskValid", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

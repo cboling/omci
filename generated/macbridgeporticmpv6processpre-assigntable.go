@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
 		ClassID:  348,
 		EntityID: eid,
@@ -33,17 +39,17 @@ func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedE
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write),
-			NewByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write),
-			NewByteField("RouterSolicitationProcessing", 0, Read|Write),
-			NewByteField("RouterAdvertisementProcessing", 0, Read|Write),
-			NewByteField("NeighbourSolicitationProcessing", 0, Read|Write),
-			NewByteField("NeighbourAdvertisementProcessing", 0, Read|Write),
-			NewByteField("RedirectProcessing", 0, Read|Write),
-			NewByteField("MulticastListenerQueryProcessing", 0, Read|Write),
-			NewByteField("UnknownIcmpv6Processing", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write),
+			ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write),
+			ByteField("RouterSolicitationProcessing", 0, Read|Write),
+			ByteField("RouterAdvertisementProcessing", 0, Read|Write),
+			ByteField("NeighbourSolicitationProcessing", 0, Read|Write),
+			ByteField("NeighbourAdvertisementProcessing", 0, Read|Write),
+			ByteField("RedirectProcessing", 0, Read|Write),
+			ByteField("MulticastListenerQueryProcessing", 0, Read|Write),
+			ByteField("UnknownIcmpv6Processing", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

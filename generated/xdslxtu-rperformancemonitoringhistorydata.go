@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslXtuRPerformanceMonitoringHistoryData (class ID 113 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslXtuRPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXdslXtuRPerformanceMonitoringHistoryData (class ID 113 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslXtuRPerformanceMonitoringHistoryData",
 		ClassID:  113,
 		EntityID: eid,
@@ -36,20 +42,20 @@ func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint16Field("LossOfFrameSeconds", 0, Read),
-			NewUint16Field("LossOfSignalSeconds", 0, Read),
-			NewUint16Field("LossOfPowerSeconds", 0, Read),
-			NewUint16Field("ErroredSeconds", 0, Read),
-			NewUint16Field("SeverelyErroredSeconds", 0, Read),
-			NewUint16Field("FecSeconds", 0, Read),
-			NewUint16Field("UnavailableSeconds", 0, Read),
-			NewUint16Field("LeftrDefectSeconds", 0, Read),
-			NewUint32Field("ErrorFreeBitsCounter", 0, Read),
-			NewUint32Field("MinimumErrorFreeThroughputMineftr", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint16Field("LossOfFrameSeconds", 0, Read),
+			Uint16Field("LossOfSignalSeconds", 0, Read),
+			Uint16Field("LossOfPowerSeconds", 0, Read),
+			Uint16Field("ErroredSeconds", 0, Read),
+			Uint16Field("SeverelyErroredSeconds", 0, Read),
+			Uint16Field("FecSeconds", 0, Read),
+			Uint16Field("UnavailableSeconds", 0, Read),
+			Uint16Field("LeftrDefectSeconds", 0, Read),
+			Uint32Field("ErrorFreeBitsCounter", 0, Read),
+			Uint32Field("MinimumErrorFreeThroughputMineftr", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

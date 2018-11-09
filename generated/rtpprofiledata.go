@@ -19,13 +19,19 @@
  */
 package generated
 
+// RtpProfileData (class ID 143 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type RtpProfileData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
+// NewRtpProfileData (class ID 143 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewRtpProfileData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "RtpProfileData",
 		ClassID:  143,
 		EntityID: eid,
@@ -36,16 +42,16 @@ func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("LocalPortMin", 0, Read|Write|SetByCreate),
-			NewUint16Field("LocalPortMax", 0, Read|Write|SetByCreate),
-			NewByteField("DscpMark", 0, Read|Write|SetByCreate),
-			NewByteField("PiggybackEvents", 0, Read|Write|SetByCreate),
-			NewByteField("ToneEvents", 0, Read|Write|SetByCreate),
-			NewByteField("DtmfEvents", 0, Read|Write|SetByCreate),
-			NewByteField("CasEvents", 0, Read|Write|SetByCreate),
-			NewUint16Field("IpHostConfigPointer", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("LocalPortMin", 0, Read|Write|SetByCreate),
+			Uint16Field("LocalPortMax", 0, Read|Write|SetByCreate),
+			ByteField("DscpMark", 0, Read|Write|SetByCreate),
+			ByteField("PiggybackEvents", 0, Read|Write|SetByCreate),
+			ByteField("ToneEvents", 0, Read|Write|SetByCreate),
+			ByteField("DtmfEvents", 0, Read|Write|SetByCreate),
+			ByteField("CasEvents", 0, Read|Write|SetByCreate),
+			Uint16Field("IpHostConfigPointer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

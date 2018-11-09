@@ -19,13 +19,19 @@
  */
 package generated
 
+// XdslLineInventoryAndStatusDataPart1 (class ID 100 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart1 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity, error) {
+// NewXdslLineInventoryAndStatusDataPart1 (class ID 100 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XdslLineInventoryAndStatusDataPart1",
 		ClassID:  100,
 		EntityID: eid,
@@ -33,23 +39,23 @@ func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUint64Field("XtuCG9941VendorId", 0, Read),
-			NewUint64Field("XtuRG9941VendorId", 0, Read),
-			NewUint64Field("XtuCSystemVendorId", 0, Read),
-			NewUint64Field("XtuRSystemVendorId", 0, Read),
-			NewUnknownField("XtuCVersionNumber", 0, Read),
-			NewUnknownField("XtuRVersionNumber", 0, Read),
-			NewUnknownField("XtuCSerialNumberPart1", 0, Read),
-			NewUnknownField("XtuCSerialNumberPart2", 0, Read),
-			NewUnknownField("XtuRSerialNumberPart1", 0, Read),
-			NewUnknownField("XtuRSerialNumberPart2", 0, Read),
-			NewUint32Field("XtuCSelfTestResults", 0, Read),
-			NewUint32Field("XtuRSelfTestResults", 0, Read),
-			NewUnknownField("XtuCTransmissionSystemCapability", 0, Read),
-			NewUnknownField("XtuRTransmissionSystemCapability", 0, Read),
-			NewByteField("InitializationSuccessFailureCause", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			Uint64Field("XtuCG9941VendorId", 0, Read),
+			Uint64Field("XtuRG9941VendorId", 0, Read),
+			Uint64Field("XtuCSystemVendorId", 0, Read),
+			Uint64Field("XtuRSystemVendorId", 0, Read),
+			UnknownField("XtuCVersionNumber", 0, Read),
+			UnknownField("XtuRVersionNumber", 0, Read),
+			UnknownField("XtuCSerialNumberPart1", 0, Read),
+			UnknownField("XtuCSerialNumberPart2", 0, Read),
+			UnknownField("XtuRSerialNumberPart1", 0, Read),
+			UnknownField("XtuRSerialNumberPart2", 0, Read),
+			Uint32Field("XtuCSelfTestResults", 0, Read),
+			Uint32Field("XtuRSelfTestResults", 0, Read),
+			UnknownField("XtuCTransmissionSystemCapability", 0, Read),
+			UnknownField("XtuRTransmissionSystemCapability", 0, Read),
+			ByteField("InitializationSuccessFailureCause", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

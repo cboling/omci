@@ -19,13 +19,19 @@
  */
 package generated
 
+// ReCommonAmplifierParameters (class ID 328 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type ReCommonAmplifierParameters struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {
+// NewReCommonAmplifierParameters (class ID 328 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "ReCommonAmplifierParameters",
 		ClassID:  328,
 		EntityID: eid,
@@ -34,19 +40,19 @@ func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error)
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("Gain", 0, Read),
-			NewByteField("LowerGainThreshold", 0, Read|Write),
-			NewByteField("UpperGainThreshold", 0, Read|Write),
-			NewByteField("TargetGain", 0, Read|Write),
-			NewUint16Field("DeviceTemperature", 0, Read),
-			NewByteField("LowerDeviceTemperatureThreshold", 0, Read|Write),
-			NewByteField("UpperDeviceTemperatureThreshold", 0, Read|Write),
-			NewByteField("DeviceBiasCurrent", 0, Read),
-			NewUint16Field("AmplifierSaturationOutputPower", 0, Read),
-			NewByteField("AmplifierNoiseFigure", 0, Read),
-			NewByteField("AmplifierSaturationGain", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("Gain", 0, Read),
+			ByteField("LowerGainThreshold", 0, Read|Write),
+			ByteField("UpperGainThreshold", 0, Read|Write),
+			ByteField("TargetGain", 0, Read|Write),
+			Uint16Field("DeviceTemperature", 0, Read),
+			ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write),
+			ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write),
+			ByteField("DeviceBiasCurrent", 0, Read),
+			Uint16Field("AmplifierSaturationOutputPower", 0, Read),
+			ByteField("AmplifierNoiseFigure", 0, Read),
+			ByteField("AmplifierSaturationGain", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

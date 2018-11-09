@@ -19,13 +19,19 @@
  */
 package generated
 
+// Vdsl2LineConfigurationExtensions3 (class ID 410 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Vdsl2LineConfigurationExtensions3 struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, error) {
+// NewVdsl2LineConfigurationExtensions3 (class ID 410 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Vdsl2LineConfigurationExtensions3",
 		ClassID:  410,
 		EntityID: eid,
@@ -36,20 +42,20 @@ func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, 
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("Ripolicyds", 0, Read|Write),
-			NewByteField("Ripolicyus", 0, Read|Write),
-			NewByteField("ReinitTimeThresholdds", 0, Read|Write),
-			NewByteField("ReinitTimeThresholdus", 0, Read|Write),
-			NewByteField("Rxrefvnsfus", 0, Read|Write),
-			NewByteField("Txrefvnsfds", 0, Read|Write),
-			NewByteField("RtxModeds", 0, Read|Write),
-			NewByteField("RtxModeus", 0, Read|Write),
-			NewByteField("LeftrThresh", 0, Read|Write),
-			NewByteField("MaxdelayoctetSplitParameterMdosplit", 0, Read|Write),
-			NewByteField("AttndrMethodAttndrMethod", 0, Read|Write),
-			NewByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("Ripolicyds", 0, Read|Write),
+			ByteField("Ripolicyus", 0, Read|Write),
+			ByteField("ReinitTimeThresholdds", 0, Read|Write),
+			ByteField("ReinitTimeThresholdus", 0, Read|Write),
+			ByteField("Rxrefvnsfus", 0, Read|Write),
+			ByteField("Txrefvnsfds", 0, Read|Write),
+			ByteField("RtxModeds", 0, Read|Write),
+			ByteField("RtxModeus", 0, Read|Write),
+			ByteField("LeftrThresh", 0, Read|Write),
+			ByteField("MaxdelayoctetSplitParameterMdosplit", 0, Read|Write),
+			ByteField("AttndrMethodAttndrMethod", 0, Read|Write),
+			ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

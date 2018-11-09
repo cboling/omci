@@ -19,13 +19,19 @@
  */
 package generated
 
+// OnuRemoteDebug (class ID 158 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type OnuRemoteDebug struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {
+// NewOnuRemoteDebug (class ID 158 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "OnuRemoteDebug",
 		ClassID:  158,
 		EntityID: eid,
@@ -35,11 +41,11 @@ func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {
 			GetNext,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("CommandFormat", 0, Read),
-			NewUnknownField("Command", 0, Write),
-			NewUnknownField("ReplyTable", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("CommandFormat", 0, Read),
+			UnknownField("Command", 0, Write),
+			UnknownField("ReplyTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

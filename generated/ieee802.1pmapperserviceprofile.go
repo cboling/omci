@@ -19,13 +19,19 @@
  */
 package generated
 
+// Ieee8021PMapperServiceProfile (class ID 130 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Ieee8021PMapperServiceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Ieee8021PMapperServiceProfile",
 		ClassID:  130,
 		EntityID: eid,
@@ -36,21 +42,21 @@ func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, erro
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("TpPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority0", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority1", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority2", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority3", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority4", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority5", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority6", 0, Read|Write|SetByCreate),
-			NewUint16Field("InterworkTpPointerForPBitPriority7", 0, Read|Write|SetByCreate),
-			NewByteField("UnmarkedFrameOption", 0, Read|Write|SetByCreate),
-			NewUnknownField("DscpToPBitMapping", 0, Read|Write),
-			NewByteField("DefaultPBitAssumption", 0, Read|Write|SetByCreate),
-			NewByteField("TpType", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("TpPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority0", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority1", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority2", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority3", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority4", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority5", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority6", 0, Read|Write|SetByCreate),
+			Uint16Field("InterworkTpPointerForPBitPriority7", 0, Read|Write|SetByCreate),
+			ByteField("UnmarkedFrameOption", 0, Read|Write|SetByCreate),
+			UnknownField("DscpToPBitMapping", 0, Read|Write),
+			ByteField("DefaultPBitAssumption", 0, Read|Write|SetByCreate),
+			ByteField("TpType", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// CallControlPerformanceMonitoringHistoryData (class ID 140 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type CallControlPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewCallControlPerformanceMonitoringHistoryData (class ID 140 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "CallControlPerformanceMonitoringHistoryData",
 		ClassID:  140,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("CallSetupFailures", 0, Read),
-			NewUint32Field("CallSetupTimer", 0, Read),
-			NewUint32Field("CallTerminateFailures", 0, Read),
-			NewUint32Field("AnalogPortReleases", 0, Read),
-			NewUint32Field("AnalogPortOffHookTimer", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("CallSetupFailures", 0, Read),
+			Uint32Field("CallSetupTimer", 0, Read),
+			Uint32Field("CallTerminateFailures", 0, Read),
+			Uint32Field("AnalogPortReleases", 0, Read),
+			Uint32Field("AnalogPortOffHookTimer", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

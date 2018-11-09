@@ -19,13 +19,19 @@
  */
 package generated
 
+// SipAgentConfigData (class ID 150 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type SipAgentConfigData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
+// NewSipAgentConfigData (class ID 150 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipAgentConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "SipAgentConfigData",
 		ClassID:  150,
 		EntityID: eid,
@@ -36,23 +42,23 @@ func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("ProxyServerAddressPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("OutboundProxyAddressPointer", 0, Read|Write|SetByCreate),
-			NewUint32Field("PrimarySipDns", 0, Read|Write|SetByCreate),
-			NewUint32Field("SecondarySipDns", 0, Read|Write|SetByCreate),
-			NewUint16Field("TcpUdpPointer", 0, Read|Write),
-			NewUint32Field("SipRegExpTime", 0, Read|Write),
-			NewUint32Field("SipReregHeadStartTime", 0, Read|Write),
-			NewUint16Field("HostPartUri", 0, Read|Write|SetByCreate),
-			NewByteField("SipStatus", 0, Read),
-			NewUint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
-			NewUint32Field("Softswitch", 0, Read|Write|SetByCreate),
-			NewUnknownField("SipResponseTable", 0, Read|Write),
-			NewByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
-			NewByteField("SipUriFormat", 0, Read|Write|SetByCreate),
-			NewUint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("ProxyServerAddressPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("OutboundProxyAddressPointer", 0, Read|Write|SetByCreate),
+			Uint32Field("PrimarySipDns", 0, Read|Write|SetByCreate),
+			Uint32Field("SecondarySipDns", 0, Read|Write|SetByCreate),
+			Uint16Field("TcpUdpPointer", 0, Read|Write),
+			Uint32Field("SipRegExpTime", 0, Read|Write),
+			Uint32Field("SipReregHeadStartTime", 0, Read|Write),
+			Uint16Field("HostPartUri", 0, Read|Write|SetByCreate),
+			ByteField("SipStatus", 0, Read),
+			Uint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
+			Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			UnknownField("SipResponseTable", 0, Read|Write),
+			ByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
+			ByteField("SipUriFormat", 0, Read|Write|SetByCreate),
+			Uint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// VoipApplicationServiceProfile (class ID 146 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VoipApplicationServiceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewVoipApplicationServiceProfile (class ID 146 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VoipApplicationServiceProfile",
 		ClassID:  146,
 		EntityID: eid,
@@ -36,17 +42,17 @@ func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, erro
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("CidFeatures", 0, Read|Write|SetByCreate),
-			NewByteField("CallWaitingFeatures", 0, Read|Write|SetByCreate),
-			NewUint16Field("CallProgressOrTransferFeatures", 0, Read|Write|SetByCreate),
-			NewUint16Field("CallPresentationFeatures", 0, Read|Write|SetByCreate),
-			NewByteField("DirectConnectFeature", 0, Read|Write|SetByCreate),
-			NewUint16Field("DirectConnectUriPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("BridgedLineAgentUriPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("ConferenceFactoryUriPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("CidFeatures", 0, Read|Write|SetByCreate),
+			ByteField("CallWaitingFeatures", 0, Read|Write|SetByCreate),
+			Uint16Field("CallProgressOrTransferFeatures", 0, Read|Write|SetByCreate),
+			Uint16Field("CallPresentationFeatures", 0, Read|Write|SetByCreate),
+			ByteField("DirectConnectFeature", 0, Read|Write|SetByCreate),
+			Uint16Field("DirectConnectUriPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("BridgedLineAgentUriPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("ConferenceFactoryUriPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

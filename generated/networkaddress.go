@@ -19,13 +19,19 @@
  */
 package generated
 
+// NetworkAddress (class ID 137 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type NetworkAddress struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewNetworkAddress(params ...ParamData) (IManagedEntity, error) {
+// NewNetworkAddress (class ID 137 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewNetworkAddress(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "NetworkAddress",
 		ClassID:  137,
 		EntityID: eid,
@@ -36,10 +42,10 @@ func NewNetworkAddress(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewUint16Field("SecurityPointer", 0, Read|Write|SetByCreate),
-			NewUint16Field("AddressPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			Uint16Field("SecurityPointer", 0, Read|Write|SetByCreate),
+			Uint16Field("AddressPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

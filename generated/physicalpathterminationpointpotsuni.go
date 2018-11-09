@@ -19,13 +19,19 @@
  */
 package generated
 
+// PhysicalPathTerminationPointPotsUni (class ID 53 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointPotsUni struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity, error) {
+// NewPhysicalPathTerminationPointPotsUni (class ID 53 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointPotsUni",
 		ClassID:  53,
 		EntityID: eid,
@@ -35,21 +41,21 @@ func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity
 			Test,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewByteField("AdministrativeState", 0, Read|Write),
-			NewUint16Field("Deprecated", 0, Read|Write),
-			NewByteField("Arc", 0, Read|Write),
-			NewByteField("ArcInterval", 0, Read|Write),
-			NewByteField("Impedance", 0, Read|Write),
-			NewByteField("TransmissionPath", 0, Read|Write),
-			NewByteField("RxGain", 0, Read|Write),
-			NewByteField("TxGain", 0, Read|Write),
-			NewByteField("OperationalState", 0, Read),
-			NewByteField("HookState", 0, Read),
-			NewUint16Field("PotsHoldoverTime", 0, Read|Write),
-			NewByteField("NominalFeedVoltage", 0, Read|Write),
-			NewByteField("LossOfSoftswitch", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			ByteField("AdministrativeState", 0, Read|Write),
+			Uint16Field("Deprecated", 0, Read|Write),
+			ByteField("Arc", 0, Read|Write),
+			ByteField("ArcInterval", 0, Read|Write),
+			ByteField("Impedance", 0, Read|Write),
+			ByteField("TransmissionPath", 0, Read|Write),
+			ByteField("RxGain", 0, Read|Write),
+			ByteField("TxGain", 0, Read|Write),
+			ByteField("OperationalState", 0, Read),
+			ByteField("HookState", 0, Read),
+			Uint16Field("PotsHoldoverTime", 0, Read|Write),
+			ByteField("NominalFeedVoltage", 0, Read|Write),
+			ByteField("LossOfSoftswitch", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

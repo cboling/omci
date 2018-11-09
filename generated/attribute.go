@@ -20,21 +20,24 @@
 package generated
 
 import (
+	"encoding/binary"
+	"errors"
 	"fmt"
+	"github.com/google/gopacket"
 )
 
-// Attribute represents a single specific Managed Entity attribute
-type IAttribute interface {
-	// Name is the attribute name
+// IAttributeDefinition defines a single specific Managed Entity attribute
+type IAttributeDefinition interface {
 	GetName() string
 	GetSize() int
 	GetDefault() interface{}
 	GetAccess() AttributeAccess
+	GetConstraints() func(interface{}) error
 	GetValue() (interface{}, error)
 }
 
-// Attribute represents a single specific Managed Entity attribute
-type Attribute struct {
+// AttributeDefinition defines a single specific Managed Entity attribute
+type AttributeDefinition struct {
 	Name       string
 	DefValue   interface{}
 	Size       int
@@ -48,68 +51,133 @@ type Attribute struct {
 	Deprecated bool //  If true, this attribute is deprecated and only 'read' operations (if-any) performed
 }
 
-func (attr *Attribute) String() string {
-	return fmt.Sprintf("%v: Size: %v, Default: %v, Access: %v",
+func (attr *AttributeDefinition) String() string {
+	return fmt.Sprintf("Definition: %v: Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *Attribute) GetName() string            { return attr.Name }
-func (attr *Attribute) GetDefault() interface{}    { return attr.DefValue }
-func (attr *Attribute) GetSize() int               { return attr.Size }
-func (attr *Attribute) GetAccess() AttributeAccess { return attr.Access }
-func (attr *Attribute) GetValue() (interface{}, error) {
+func (attr *AttributeDefinition) GetName() string            { return attr.Name }
+func (attr *AttributeDefinition) GetDefault() interface{}    { return attr.DefValue }
+func (attr *AttributeDefinition) GetSize() int               { return attr.Size }
+func (attr *AttributeDefinition) GetAccess() AttributeAccess { return attr.Access }
+func (attr *AttributeDefinition) GetValue() (interface{}, error) {
 	// TODO: Better way to detect not-initialized and no default available?
 	return attr.Value, nil
 }
 
 ///////////////////////////////////////////////////////////////////////
-//
-type ByteField struct {
-	Attribute
+// Attribute Value
+
+// IAttributeValue implements a single specific Managed Entity attribute instance
+// The index for the Entity ID (always the first) is -1 as it is not provided
+// in the attribute mask when transmitted or received on the wire
+type IAttributeValue interface {
+	GetName() string
+	GetIndex() int
+	GetValue() (interface{}, error)
+	SetValue(interface{}) error
 }
 
-func NewByteField(name string, defVal uint16, access AttributeAccess) *ByteField {
-	return &ByteField{
-		Attribute: Attribute{Name: name, DefValue: defVal, Size: 1, Access: access},
+// AttributeValue provides the value for a single specific Managed Entity attribute
+type AttributeValue struct {
+	Name  string
+	Index int
+	Value interface{}
+}
+
+func (attr *AttributeValue) String() string {
+	val, err := attr.GetValue()
+	return fmt.Sprintf("Value: %v, Index: %v, Value: %v, Error: %v",
+		attr.GetName(), attr.GetIndex(), val, err)
+}
+func (attr *AttributeValue) GetName() string { return attr.Name }
+func (attr *AttributeValue) GetIndex() int   { return attr.Index }
+func (attr *AttributeValue) GetValue() (interface{}, error) {
+	// TODO: Better way to detect not-initialized and no default available?
+	return attr.Value, nil
+}
+
+func (attr *AttributeValue) DecodeFromBytes(data []byte, def IAttributeDefinition, df gopacket.DecodeFeedback) error {
+	// Use negative numbers to indicate signed values
+	size := def.GetSize()
+	if size < 0 {
+		size = -size
+	}
+	if len(data) < size {
+		df.SetTruncated()
+		return errors.New("packet too small for field")
+	}
+	var err error
+	switch def.GetSize() {
+	default:
+		return errors.New("unknown attribute size")
+	case 1:
+		attr.Value = data[0]
+		if def.GetConstraints() != nil {
+			err = def.GetConstraints()(attr.Value)
+		}
+		return err
+	case 2:
+		attr.Value = binary.BigEndian.Uint16(data[0:2])
+		if def.GetConstraints() != nil {
+			err = def.GetConstraints()(attr.Value)
+		}
+		return err
+	case 4:
+		attr.Value = binary.BigEndian.Uint32(data[0:4])
+		if def.GetConstraints() != nil {
+			err = def.GetConstraints()(attr.Value)
+		}
+		return err
+	case 8:
+		attr.Value = binary.BigEndian.Uint64(data[0:8])
+		if def.GetConstraints() != nil {
+			err = def.GetConstraints()(attr.Value)
+		}
+		return err
 	}
 }
 
-type Uint16Field struct {
-	Attribute
-}
-
-func NewUint16Field(name string, defVal uint16, access AttributeAccess) *Uint16Field {
-	return &Uint16Field{
-		Attribute: Attribute{Name: name, DefValue: defVal, Size: 2, Access: access},
+func (attr *AttributeValue) SerializeTo(b gopacket.SerializeBuffer, def IAttributeDefinition) error {
+	// TODO: Check to see if space in buffer here !!!!
+	bytes, err := b.AppendBytes(def.GetSize())
+	if err != nil {
+		return err
 	}
-}
-
-type Uint32Field struct {
-	Attribute
-}
-
-func NewUint32Field(name string, defVal uint16, access AttributeAccess) *Uint32Field {
-	return &Uint32Field{
-		Attribute: Attribute{Name: name, DefValue: defVal, Size: 4, Access: access},
+	switch def.GetSize() {
+	default:
+		return errors.New("unknown attribute size")
+	case 1:
+		bytes[0] = attr.Value.(byte)
+	case 2:
+		binary.BigEndian.PutUint16(bytes, attr.Value.(uint16))
+	case 4:
+		binary.BigEndian.PutUint32(bytes, attr.Value.(uint32))
+	case 8:
+		binary.BigEndian.PutUint64(bytes, attr.Value.(uint64))
 	}
+	return nil
 }
 
-type Uint64Field struct {
-	Attribute
+///////////////////////////////////////////////////////////////////////
+// Packet definitions for attributes of various types/sizes
+
+func ByteField(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 1, Access: access}
 }
 
-func NewUint64Field(name string, defVal uint16, access AttributeAccess) *Uint64Field {
-	return &Uint64Field{
-		Attribute: Attribute{Name: name, DefValue: defVal, Size: 8, Access: access},
-	}
+func Uint16Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 2, Access: access}
 }
 
-// TODO: UnknownField is just a placeholder to catch unhandled Attribute sizes/structs
-type UnknownField struct {
-	Attribute
+func Uint32Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 4, Access: access}
 }
 
-func NewUnknownField(name string, defVal uint16, access AttributeAccess) *UnknownField {
-	return &UnknownField{
-		Attribute: Attribute{Name: name, DefValue: defVal, Size: 999999999, Access: access},
-	}
+func NewUint64Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 8, Access: access}
+}
+
+// TODO: Need more fields...
+func UnknownField(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 99999999, Access: access}
 }

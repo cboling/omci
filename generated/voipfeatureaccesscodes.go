@@ -19,13 +19,19 @@
  */
 package generated
 
+// VoipFeatureAccessCodes (class ID 147 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VoipFeatureAccessCodes struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
+// NewVoipFeatureAccessCodes (class ID 147 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VoipFeatureAccessCodes",
 		ClassID:  147,
 		EntityID: eid,
@@ -36,20 +42,20 @@ func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("CancelCallWaiting", 0, Read|Write),
-			NewUnknownField("CallHold", 0, Read|Write),
-			NewUnknownField("CallPark", 0, Read|Write),
-			NewUnknownField("CallerIdActivate", 0, Read|Write),
-			NewUnknownField("CallerIdDeactivate", 0, Read|Write),
-			NewUnknownField("DoNotDisturbActivation", 0, Read|Write),
-			NewUnknownField("DoNotDisturbDeactivation", 0, Read|Write),
-			NewUnknownField("DoNotDisturbPinChange", 0, Read|Write),
-			NewUnknownField("EmergencyServiceNumber", 0, Read|Write),
-			NewUnknownField("IntercomService", 0, Read|Write),
-			NewUnknownField("UnattendedBlindCallTransfer", 0, Read|Write),
-			NewUnknownField("AttendedCallTransfer", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("CancelCallWaiting", 0, Read|Write),
+			UnknownField("CallHold", 0, Read|Write),
+			UnknownField("CallPark", 0, Read|Write),
+			UnknownField("CallerIdActivate", 0, Read|Write),
+			UnknownField("CallerIdDeactivate", 0, Read|Write),
+			UnknownField("DoNotDisturbActivation", 0, Read|Write),
+			UnknownField("DoNotDisturbDeactivation", 0, Read|Write),
+			UnknownField("DoNotDisturbPinChange", 0, Read|Write),
+			UnknownField("EmergencyServiceNumber", 0, Read|Write),
+			UnknownField("IntercomService", 0, Read|Write),
+			UnknownField("UnattendedBlindCallTransfer", 0, Read|Write),
+			UnknownField("AttendedCallTransfer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

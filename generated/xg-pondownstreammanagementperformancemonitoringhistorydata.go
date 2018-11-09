@@ -19,13 +19,19 @@
  */
 package generated
 
+// XgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID 345 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type XgPonDownstreamManagementPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewXgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID 345 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "XgPonDownstreamManagementPerformanceMonitoringHistoryData",
 		ClassID:  345,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...Para
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("PloamMessageIntegrityCheckMicErrorCount", 0, Read),
-			NewUint32Field("DownstreamPloamMessagesCount", 0, Read),
-			NewUint32Field("ProfileMessagesReceived", 0, Read),
-			NewUint32Field("RangingTimeMessagesReceived", 0, Read),
-			NewUint32Field("DeactivateOnuIdMessagesReceived", 0, Read),
-			NewUint32Field("DisableSerialNumberMessagesReceived", 0, Read),
-			NewUint32Field("RequestRegistrationMessagesReceived", 0, Read),
-			NewUint32Field("AssignAllocIdMessagesReceived", 0, Read),
-			NewUint32Field("KeyControlMessagesReceived", 0, Read),
-			NewUint32Field("SleepAllowMessagesReceived", 0, Read),
-			NewUint32Field("BaselineOmciMessagesReceivedCount", 0, Read),
-			NewUint32Field("ExtendedOmciMessagesReceivedCount", 0, Read),
-			NewUint32Field("AssignOnuIdMessagesReceived", 0, Read),
-			NewUint32Field("OmciMicErrorCount", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("PloamMessageIntegrityCheckMicErrorCount", 0, Read),
+			Uint32Field("DownstreamPloamMessagesCount", 0, Read),
+			Uint32Field("ProfileMessagesReceived", 0, Read),
+			Uint32Field("RangingTimeMessagesReceived", 0, Read),
+			Uint32Field("DeactivateOnuIdMessagesReceived", 0, Read),
+			Uint32Field("DisableSerialNumberMessagesReceived", 0, Read),
+			Uint32Field("RequestRegistrationMessagesReceived", 0, Read),
+			Uint32Field("AssignAllocIdMessagesReceived", 0, Read),
+			Uint32Field("KeyControlMessagesReceived", 0, Read),
+			Uint32Field("SleepAllowMessagesReceived", 0, Read),
+			Uint32Field("BaselineOmciMessagesReceivedCount", 0, Read),
+			Uint32Field("ExtendedOmciMessagesReceivedCount", 0, Read),
+			Uint32Field("AssignOnuIdMessagesReceived", 0, Read),
+			Uint32Field("OmciMicErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

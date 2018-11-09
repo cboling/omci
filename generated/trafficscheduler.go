@@ -19,13 +19,19 @@
  */
 package generated
 
+// TrafficScheduler (class ID 278 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TrafficScheduler struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
+// NewTrafficScheduler (class ID 278 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTrafficScheduler(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TrafficScheduler",
 		ClassID:  278,
 		EntityID: eid,
@@ -34,12 +40,12 @@ func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId:", 0, Read),
-			NewUint16Field("TContPointer", 0, Read|Write),
-			NewUint16Field("TrafficSchedulerPointer", 0, Read),
-			NewByteField("Policy", 0, Read|Write),
-			NewByteField("PriorityWeight", 0, Read|Write),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId:", 0, Read),
+			Uint16Field("TContPointer", 0, Read|Write),
+			Uint16Field("TrafficSchedulerPointer", 0, Read),
+			ByteField("Policy", 0, Read|Write),
+			ByteField("PriorityWeight", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

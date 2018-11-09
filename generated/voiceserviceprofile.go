@@ -19,13 +19,19 @@
  */
 package generated
 
+// VoiceServiceProfile (class ID 58 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VoiceServiceProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVoiceServiceProfile(params ...ParamData) (IManagedEntity, error) {
+// NewVoiceServiceProfile (class ID 58 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoiceServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VoiceServiceProfile",
 		ClassID:  58,
 		EntityID: eid,
@@ -36,22 +42,22 @@ func NewVoiceServiceProfile(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("AnnouncementType", 0, Read|Write|SetByCreate),
-			NewUint16Field("JitterTarget", 0, Read|Write|SetByCreate),
-			NewUint16Field("JitterBufferMax", 0, Read|Write|SetByCreate),
-			NewByteField("EchoCancelInd", 0, Read|Write|SetByCreate),
-			NewUint16Field("PstnProtocolVariant", 0, Read|Write|SetByCreate),
-			NewUint16Field("DtmfDigitLevels", 0, Read|Write|SetByCreate),
-			NewUint16Field("DtmfDigitDuration", 0, Read|Write|SetByCreate),
-			NewUint16Field("HookFlashMinimumTime", 0, Read|Write|SetByCreate),
-			NewUint16Field("HookFlashMaximumTime", 0, Read|Write|SetByCreate),
-			NewUnknownField("TonePatternTable", 0, Read|Write),
-			NewUnknownField("ToneEventTable", 0, Read|Write),
-			NewUnknownField("RingingPatternTable", 0, Read|Write),
-			NewUnknownField("RingingEventTable", 0, Read|Write),
-			NewUint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("AnnouncementType", 0, Read|Write|SetByCreate),
+			Uint16Field("JitterTarget", 0, Read|Write|SetByCreate),
+			Uint16Field("JitterBufferMax", 0, Read|Write|SetByCreate),
+			ByteField("EchoCancelInd", 0, Read|Write|SetByCreate),
+			Uint16Field("PstnProtocolVariant", 0, Read|Write|SetByCreate),
+			Uint16Field("DtmfDigitLevels", 0, Read|Write|SetByCreate),
+			Uint16Field("DtmfDigitDuration", 0, Read|Write|SetByCreate),
+			Uint16Field("HookFlashMinimumTime", 0, Read|Write|SetByCreate),
+			Uint16Field("HookFlashMaximumTime", 0, Read|Write|SetByCreate),
+			UnknownField("TonePatternTable", 0, Read|Write),
+			UnknownField("ToneEventTable", 0, Read|Write),
+			UnknownField("RingingPatternTable", 0, Read|Write),
+			UnknownField("RingingEventTable", 0, Read|Write),
+			Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

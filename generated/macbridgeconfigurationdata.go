@@ -19,13 +19,19 @@
  */
 package generated
 
+// MacBridgeConfigurationData (class ID 46 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MacBridgeConfigurationData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) {
+// NewMacBridgeConfigurationData (class ID 46 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MacBridgeConfigurationData",
 		ClassID:  46,
 		EntityID: eid,
@@ -33,16 +39,16 @@ func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) 
 			Get,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read),
-			NewUnknownField("BridgeMacAddress", 0, Read),
-			NewUint16Field("BridgePriority", 0, Read),
-			NewUint64Field("DesignatedRoot", 0, Read),
-			NewUint32Field("RootPathCost", 0, Read),
-			NewByteField("BridgePortCount", 0, Read),
-			NewUint16Field("RootPortNum", 0, Read),
-			NewUint16Field("HelloTime", 0, Read),
-			NewUint16Field("ForwardDelay", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read),
+			UnknownField("BridgeMacAddress", 0, Read),
+			Uint16Field("BridgePriority", 0, Read),
+			Uint64Field("DesignatedRoot", 0, Read),
+			Uint32Field("RootPathCost", 0, Read),
+			ByteField("BridgePortCount", 0, Read),
+			Uint16Field("RootPortNum", 0, Read),
+			Uint16Field("HelloTime", 0, Read),
+			Uint16Field("ForwardDelay", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

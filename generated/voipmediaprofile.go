@@ -19,13 +19,19 @@
  */
 package generated
 
+// VoipMediaProfile (class ID 142 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type VoipMediaProfile struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
+// NewVoipMediaProfile (class ID 142 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipMediaProfile(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "VoipMediaProfile",
 		ClassID:  142,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("FaxMode", 0, Read|Write|SetByCreate),
-			NewUint16Field("VoiceServiceProfilePointer", 0, Read|Write|SetByCreate),
-			NewByteField("CodecSelection1StOrder", 0, Read|Write|SetByCreate),
-			NewByteField("PacketPeriodSelection1StOrder", 0, Read|Write|SetByCreate),
-			NewByteField("SilenceSuppression1StOrder", 0, Read|Write|SetByCreate),
-			NewByteField("CodecSelection2NdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("PacketPeriodSelection2NdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("SilenceSuppression2NdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("CodecSelection3RdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("PacketPeriodSelection3RdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("SilenceSuppression3RdOrder", 0, Read|Write|SetByCreate),
-			NewByteField("CodecSelection4ThOrder", 0, Read|Write|SetByCreate),
-			NewByteField("PacketPeriodSelection4ThOrder", 0, Read|Write|SetByCreate),
-			NewByteField("SilenceSuppression4ThOrder", 0, Read|Write|SetByCreate),
-			NewByteField("OobDtmf", 0, Read|Write|SetByCreate),
-			NewUint16Field("RtpProfilePointer", 0, Read|Write|SetByCreate),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("FaxMode", 0, Read|Write|SetByCreate),
+			Uint16Field("VoiceServiceProfilePointer", 0, Read|Write|SetByCreate),
+			ByteField("CodecSelection1StOrder", 0, Read|Write|SetByCreate),
+			ByteField("PacketPeriodSelection1StOrder", 0, Read|Write|SetByCreate),
+			ByteField("SilenceSuppression1StOrder", 0, Read|Write|SetByCreate),
+			ByteField("CodecSelection2NdOrder", 0, Read|Write|SetByCreate),
+			ByteField("PacketPeriodSelection2NdOrder", 0, Read|Write|SetByCreate),
+			ByteField("SilenceSuppression2NdOrder", 0, Read|Write|SetByCreate),
+			ByteField("CodecSelection3RdOrder", 0, Read|Write|SetByCreate),
+			ByteField("PacketPeriodSelection3RdOrder", 0, Read|Write|SetByCreate),
+			ByteField("SilenceSuppression3RdOrder", 0, Read|Write|SetByCreate),
+			ByteField("CodecSelection4ThOrder", 0, Read|Write|SetByCreate),
+			ByteField("PacketPeriodSelection4ThOrder", 0, Read|Write|SetByCreate),
+			ByteField("SilenceSuppression4ThOrder", 0, Read|Write|SetByCreate),
+			ByteField("OobDtmf", 0, Read|Write|SetByCreate),
+			Uint16Field("RtpProfilePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,13 +19,19 @@
  */
 package generated
 
+// Aal5PerformanceMonitoringHistoryData (class ID 18 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type Aal5PerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewAal5PerformanceMonitoringHistoryData (class ID 18 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "Aal5PerformanceMonitoringHistoryData",
 		ClassID:  18,
 		EntityID: eid,
@@ -36,15 +42,15 @@ func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntit
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			NewUint32Field("SumOfInvalidCsFieldErrors", 0, Read),
-			NewUint32Field("CrcViolations", 0, Read),
-			NewUint32Field("ReassemblyTimerExpirations", 0, Read),
-			NewUint32Field("BufferOverflows", 0, Read),
-			NewUint32Field("EncapProtocolErrors", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			Uint32Field("SumOfInvalidCsFieldErrors", 0, Read),
+			Uint32Field("CrcViolations", 0, Read),
+			Uint32Field("ReassemblyTimerExpirations", 0, Read),
+			Uint32Field("BufferOverflows", 0, Read),
+			Uint32Field("EncapProtocolErrors", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

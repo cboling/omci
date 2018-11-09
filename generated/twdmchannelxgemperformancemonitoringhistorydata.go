@@ -19,13 +19,19 @@
  */
 package generated
 
+// TwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type TwdmChannelXgemPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewTwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "TwdmChannelXgemPerformanceMonitoringHistoryData",
 		ClassID:  445,
 		EntityID: eid,
@@ -37,18 +43,18 @@ func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
-			NewUint64Field("TotalTransmittedXgemFrames", 0, Read),
-			NewUint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
-			NewUint64Field("TotalReceivedXgemFrames", 0, Read),
-			NewUint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
-			NewUint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),
-			NewUint64Field("XgemEncryptionKeyErrors", 0, Read),
-			NewUint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read),
-			NewUint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
+			Uint64Field("TotalTransmittedXgemFrames", 0, Read),
+			Uint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
+			Uint64Field("TotalReceivedXgemFrames", 0, Read),
+			Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
+			Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),
+			Uint64Field("XgemEncryptionKeyErrors", 0, Read),
+			Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read),
+			Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

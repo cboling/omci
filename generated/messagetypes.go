@@ -23,7 +23,7 @@ package generated
 // CreateRequest
 type CreateRequest struct {
 	MsgBase
-	Attributes []IAttribute // Set-by-create attributest
+	Attributes []IAttributeValue
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -52,7 +52,7 @@ type DeleteResponse struct {
 type SetRequest struct {
 	MsgBase
 	AttributeMask uint16
-	Attributes    []IAttribute // Write attributes
+	Attributes    []IAttributeValue
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -69,7 +69,7 @@ type SetResponse struct {
 type GetRequest struct {
 	MsgBase
 	AttributeMask uint16
-	Attributes    []IAttribute // Read attributes
+	Attributes    []IAttributeDefinition // Read attributes
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -78,7 +78,7 @@ type GetResponse struct {
 	MsgBase
 	Result                   Results
 	AttributeMask            uint16
-	Attributes               []IAttribute // Read attributes
+	Attributes               []IAttributeValue
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 }
@@ -116,7 +116,7 @@ type GetAllAlarmsNextResponse struct {
 // MibUploadRequest
 type MibUploadRequest struct {
 	MsgBase
-	cachedME IManagedEntity // Cache any ME decoded from the request
+	//cachedME IManagedEntity // Cache any ME decoded from the request
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -137,7 +137,7 @@ type MibUploadNextRequest struct {
 //
 type MibUploadNextResponse struct {
 	MsgBase
-	cachedME IManagedEntity // Cache any ME decoded from the response
+	//cachedME IManagedEntity // Cache any ME decoded from the response
 }
 
 /////////////////////////////////////////////////////////////////////////////

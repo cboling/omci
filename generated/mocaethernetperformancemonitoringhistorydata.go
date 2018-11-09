@@ -19,13 +19,19 @@
  */
 package generated
 
+// MocaEthernetPerformanceMonitoringHistoryData (class ID 163 defines the basic
+// Managed Entity definition that is further extended by types that support
+// packet encode/decode and user create managed entities.
 type MocaEthernetPerformanceMonitoringHistoryData struct {
-	BaseManagedEntity
+	BaseManagedEntityDefinition
 }
 
-func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+// NewMocaEthernetPerformanceMonitoringHistoryData (class ID 163 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
 	eid := decodeEntityID(params...)
-	entity := BaseManagedEntity{
+	entity := BaseManagedEntityDefinition{
 		Name:     "MocaEthernetPerformanceMonitoringHistoryData",
 		ClassID:  163,
 		EntityID: eid,
@@ -36,24 +42,24 @@ func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IMana
 			Delete,
 		},
 		AttributeMask: 0,
-		Attributes: []IAttribute{
-			NewUint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			NewByteField("IntervalEndTime", 0, Read),
-			NewUint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			NewUint32Field("IncomingUnicastPackets", 0, Read),
-			NewUint32Field("IncomingDiscardedPackets", 0, Read),
-			NewUint32Field("IncomingErroredPackets", 0, Read),
-			NewUint32Field("IncomingUnknownPackets", 0, Read),
-			NewUint32Field("IncomingMulticastPackets", 0, Read),
-			NewUint32Field("IncomingBroadcastPackets", 0, Read),
-			NewUint32Field("IncomingOctets", 0, Read),
-			NewUint32Field("OutgoingUnicastPackets", 0, Read),
-			NewUint32Field("OutgoingDiscardedPackets", 0, Read),
-			NewUint32Field("OutgoingErroredPackets", 0, Read),
-			NewUint32Field("OutgoingUnknownPackets", 0, Read),
-			NewUint32Field("OutgoingMulticastPackets", 0, Read),
-			NewUint32Field("OutgoingBroadcastPackets", 0, Read),
-			NewUint32Field("OutgoingOctets", 0, Read),
+		Attributes: []*AttributeDefinition{
+			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			ByteField("IntervalEndTime", 0, Read),
+			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			Uint32Field("IncomingUnicastPackets", 0, Read),
+			Uint32Field("IncomingDiscardedPackets", 0, Read),
+			Uint32Field("IncomingErroredPackets", 0, Read),
+			Uint32Field("IncomingUnknownPackets", 0, Read),
+			Uint32Field("IncomingMulticastPackets", 0, Read),
+			Uint32Field("IncomingBroadcastPackets", 0, Read),
+			Uint32Field("IncomingOctets", 0, Read),
+			Uint32Field("OutgoingUnicastPackets", 0, Read),
+			Uint32Field("OutgoingDiscardedPackets", 0, Read),
+			Uint32Field("OutgoingErroredPackets", 0, Read),
+			Uint32Field("OutgoingUnknownPackets", 0, Read),
+			Uint32Field("OutgoingMulticastPackets", 0, Read),
+			Uint32Field("OutgoingBroadcastPackets", 0, Read),
+			Uint32Field("OutgoingOctets", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()
