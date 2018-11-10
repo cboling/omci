@@ -26,113 +26,115 @@ import (
 
 /////////////////////////////////////////////////////////////////////////////
 // CreateRequest
-type CreateRequestPacket struct {
-	generated.CreateRequest
-	cachedME
-	cachedME generated.IManagedEntity // Cache any ME decoded from the request  (TODO: Should these be public?)
+type CreateRequest struct {
+	MeBasePacket
+	Attributes []*generated.IAttributeValue// TODO: Change attribute values to map and move EntityID into the map
 }
 
-func (omci *CreateRequestPacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := msgBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Create
-	if !generated.SupportsMsgType(omci.cachedME, generated.Create) {
+	if !generated.SupportsMsgType(meDefinition, generated.Create) {
 		return errors.New("managed entity does not support Create Message-Type")
 	}
 	var sbcMask uint16
-	for index, attr := range omci.GetAttributes() {
+	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if generated.SupportsAttributeAccess(attr, generated.SetByCreate) {
 			sbcMask |= 1 << (15 - uint(index))
 		}
 	}
 	// Attribute decode
-	err = omci.Decode(sbcMask, data[4:], p)
-	if err != nil {
-		return err
-	}
-	omci.Attributes = omci.cachedME.GetAttributes()
-	return nil
+	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[4:], p)
+	return err
 }
 
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateRequest{}
-	omci.layerType = LayerTypeCreateRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeCreateRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	var sbcMask uint16
-	for index, attr := range omci.cachedME.GetAttributes() {
-		if SupportsAttributeAccess(attr, SetByCreate) {
+	for index, attr := range meDefinition.GetAttributeDefinitions() {
+		if generated.SupportsAttributeAccess(attr, generated.SetByCreate) {
 			sbcMask |= 1 << (15 - uint(index))
 		}
 	}
 	// Attribute serialization
-	return omci.cachedME.SerializeTo(sbcMask, b)
+	return meDefinition.SerializeAttributes(sbcMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CreateResponse
-//type CreateResponse struct {
-//	msgBase
-//	Result                 Results
-//	AttributeExecutionMask byte
-//}
+type CreateResponse struct {
+	MeBasePacket
+	Result                 generated.Results
+	AttributeExecutionMask byte
+}
 
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Create
-	if !SupportsMsgType(entity, Create) {
+	if !generated.SupportsMsgType(entity, generated.Create) {
 		return errors.New("managed entity does not support the Create Message-Type")
 	}
-	omci.Result = Results(data[4])
+	omci.Result = generated.Results(data[4])
 	omci.AttributeExecutionMask = data[5]
 	return nil
 }
 func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateResponse{}
-	omci.layerType = LayerTypeCreateResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeCreateResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Create
-	if !SupportsMsgType(entity, Create) {
+	if !generated.SupportsMsgType(entity, generated.Create) {
 		return errors.New("managed entity does not support the Create Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
@@ -146,24 +148,24 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 
 /////////////////////////////////////////////////////////////////////////////
 // DeleteRequest
-//type DeleteRequest struct {
-//	msgBase
-//}
+type DeleteRequest struct {
+	MeBasePacket
+}
 
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Delete
-	if !SupportsMsgType(entity, Delete) {
+	if !generated.SupportsMsgType(entity, generated.Delete) {
 		return errors.New("managed entity does not support the Delete Message-Type")
 	}
 	return nil
@@ -171,24 +173,24 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 
 func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteRequest{}
-	omci.layerType = LayerTypeDeleteRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Delete
-	if !SupportsMsgType(entity, Delete) {
+	if !generated.SupportsMsgType(entity, generated.Delete) {
 		return errors.New("managed entity does not support the Delete Message-Type")
 	}
 	return nil
@@ -196,51 +198,51 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 
 /////////////////////////////////////////////////////////////////////////////
 // DeleteResponse
-//type DeleteResponse struct {
-//	msgBase
-//	Result Results
-//}
+type DeleteResponse struct {
+	MeBasePacket
+	Result generated.Results
+}
 
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Delete
-	if !SupportsMsgType(entity, Delete) {
+	if !generated.SupportsMsgType(entity, generated.Delete) {
 		return errors.New("managed entity does not support the Delete Message-Type")
 	}
-	omci.Result = Results(data[4])
+	omci.Result = generated.Results(data[4])
 	return nil
 }
 
 func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteResponse{}
-	omci.layerType = LayerTypeDeleteResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Delete
-	if !SupportsMsgType(entity, Delete) {
+	if !generated.SupportsMsgType(entity, generated.Delete) {
 		return errors.New("managed entity does not support the Delete Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
@@ -253,72 +255,71 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 
 /////////////////////////////////////////////////////////////////////////////
 // SetRequest
-//type SetRequest struct {
-//	msgBase
-//	AttributeMask uint16
-//	Attributes    []IAttribute // Write attributes
-//
-//	cachedME IManagedEntity // Cache any ME decoded from the request
-//}
+type SetRequest struct {
+	MeBasePacket
+	AttributeMask uint16
+	Attributes    []*generated.IAttributeValue
+}
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Set
-	if !SupportsMsgType(omci.cachedME, Set) {
+	if !generated.SupportsMsgType(meDefinition, generated.Set) {
 		return errors.New("managed entity does not support Set Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
 	// Attribute decode
-	err = omci.cachedME.Decode(omci.AttributeMask, data[6:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
 	if err != nil {
 		return err
 	}
 	// Validate all attributes support write
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Write) {
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
-	omci.Attributes = omci.cachedME.GetAttributes()
 	return nil
 }
 
 func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetRequest{}
-	omci.layerType = LayerTypeDeleteRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Set
-	if !SupportsMsgType(omci.cachedME, Set) {
+	if !generated.SupportsMsgType(meDefinition, generated.Set) {
 		return errors.New("managed entity does not support Set Message-Type")
 	}
 	// Validate all attributes support write
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Write) {
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
@@ -329,35 +330,36 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return omci.cachedME.SerializeTo(omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // SetResponse
-//type SetResponse struct {
-//	msgBase
-//	Result                   Results
-//	UnsupportedAttributeMask uint16
-//	FailedAttributeMask      uint16 // TODO: Use this for no-space-left?
-//}
+type SetResponse struct {
+	MeBasePacket
+	Result                   generated.Results
+	UnsupportedAttributeMask uint16
+	FailedAttributeMask      uint16 // TODO: Use this for no-space-left?
+
+}
 
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Delete
-	if !SupportsMsgType(entity, Delete) {
+	if !generated.SupportsMsgType(entity, generated.Delete) {
 		return errors.New("managed entity does not support the Delete Message-Type")
 	}
-	omci.Result = Results(data[4])
+	omci.Result = generated.Results(data[4])
 	omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(data[5:7])
 	omci.FailedAttributeMask = binary.BigEndian.Uint16(data[7:9])
 	return nil
@@ -365,24 +367,24 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 
 func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetResponse{}
-	omci.layerType = LayerTypeDeleteResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Set
-	if !SupportsMsgType(entity, Set) {
+	if !generated.SupportsMsgType(entity, generated.Set) {
 		return errors.New("managed entity does not support the Set Message-Type")
 	}
 	bytes, err := b.AppendBytes(5)
@@ -397,72 +399,71 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 
 /////////////////////////////////////////////////////////////////////////////
 // GetRequest
-//type GetRequest struct {
-//	msgBase
-//	AttributeMask uint16
-//	Attributes    []IAttribute // Read attributes
-//
-//	cachedME IManagedEntity // Cache any ME decoded from the request
-//}
+type GetRequest struct {
+	MeBasePacket
+	AttributeMask uint16
+	Attributes    []*generated.IAttributeValue // Read attributes
+}
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get
-	if !SupportsMsgType(omci.cachedME, Get) {
+	if !generated.SupportsMsgType(meDefinition, generated.Get) {
 		return errors.New("managed entity does not support Get Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
 	// Attribute decode
-	err = omci.cachedME.Decode(omci.AttributeMask, data[6:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
 	if err != nil {
 		return err
 	}
 	// Validate all attributes support Read
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
-	omci.Attributes = omci.cachedME.GetAttributes()
 	return nil
 }
 
 func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetRequest{}
-	omci.layerType = LayerTypeDeleteRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Set
-	if !SupportsMsgType(omci.cachedME, Get) {
+	if !generated.SupportsMsgType(meDefinition, generated.Get) {
 		return errors.New("managed entity does not support Get Message-Type")
 	}
 	// Validate all attributes support read
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
@@ -473,81 +474,79 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return omci.cachedME.SerializeTo(omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // GetResponse
-//type GetResponse struct {
-//	msgBase
-//	Result                   Results
-//	AttributeMask            uint16
-//	Attributes               []IAttribute // Read attributes
-//	UnsupportedAttributeMask uint16
-//	FailedAttributeMask      uint16
-//
-//	cachedME IManagedEntity // Cache any ME decoded from the response
-//}
+type GetResponse struct {
+	MeBasePacket
+	Result                   generated.Results
+	AttributeMask            uint16
+	Attributes               []*generated.IAttributeValue
+	UnsupportedAttributeMask uint16
+	FailedAttributeMask      uint16
+}
 
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get
-	if !SupportsMsgType(omci.cachedME, Get) {
+	if !generated.SupportsMsgType(meDefinition, generated.Get) {
 		return errors.New("managed entity does not support Get Message-Type")
 	}
-	omci.Result = Results(data[4])
+	omci.Result = generated.Results(data[4])
 	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
 
 	// Attribute decode
-	err = omci.cachedME.Decode(omci.AttributeMask, data[7:32], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:32], p)
 	if err != nil {
 		return err
 	}
 	// If Attribute failed or Unknown, decode optional attribute mask
-	if omci.Result == AttributeFailure {
+	if omci.Result == generated.AttributeFailure {
 		omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(data[32:34])
 		omci.FailedAttributeMask = binary.BigEndian.Uint16(data[34:36])
 	}
 	// Validate all attributes support read
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
-	omci.Attributes = omci.cachedME.GetAttributes()
 	return nil
 }
 
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetResponse{}
-	omci.layerType = LayerTypeDeleteResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDeleteResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
-	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get
-	if !SupportsMsgType(entity, Get) {
+	if !generated.SupportsMsgType(meDefinition, generated.Get) {
 		return errors.New("managed entity does not support the Get Message-Type")
 	}
 	bytes, err := b.AppendBytes(3)
@@ -558,19 +557,19 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
 
 	// Validate all attributes support read
-	for _, attr := range omci.cachedME.GetAttributes() {
-		if !SupportsAttributeAccess(attr, Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.Name())
+	for _, attr := range meDefinition.GetAttributeDefinitions() {
+		if !generated.SupportsAttributeAccess(attr, generated.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
 			return errors.New(msg)
 		}
 	}
 	// Attribute serialization
-	err = omci.cachedME.SerializeTo(omci.AttributeMask, b)
+	err = meDefinition.SerializeAttributes(omci.AttributeMask, b)
 	if err != nil {
 		return err
 	}
 	// If Attribute failed or Unknown, decode optional attribute mask
-	if omci.Result == AttributeFailure {
+	if omci.Result == generated.AttributeFailure {
 		bytesLeft := 36 - len(b.Bytes())
 		bytes, err = b.AppendBytes(bytesLeft)
 		if err != nil {
@@ -585,26 +584,26 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
-//type GetAllAlarmsRequest struct {
-//	msgBase
-//	AlarmRetrievalMode byte
-//	cachedME           IManagedEntity // Cache any ME decoded from the request
-//}
+type GetAllAlarmsRequest struct {
+	MeBasePacket
+	AlarmRetrievalMode byte
+}
 
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+	if !generated.SupportsMsgType(meDefinition, generated.GetAllAlarms) {
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -620,24 +619,24 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsRequest{}
-	omci.layerType = LayerTypeGetAllAlarmsRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(entity, GetAllAlarms) {
+	if !generated.SupportsMsgType(entity, generated.GetAllAlarms) {
 		return errors.New("managed entity does not support the Get All Alarms Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
@@ -650,26 +649,26 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
-//type GetAllAlarmsResponse struct {
-//	msgBase
-//	NumberOfCommands uint16
-//	cachedME         IManagedEntity // Cache any ME decoded from the response
-//}
+type GetAllAlarmsResponse struct {
+	MeBasePacket
+	NumberOfCommands uint16
+}
 
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+	if !generated.SupportsMsgType(meDefinition, generated.GetAllAlarms) {
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -685,24 +684,24 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsResponse{}
-	omci.layerType = LayerTypeGetAllAlarmsResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(entity, GetAllAlarms) {
+	if !generated.SupportsMsgType(entity, generated.GetAllAlarms) {
 		return errors.New("managed entity does not support the Get All Alarms Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
@@ -715,26 +714,25 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
-//type GetAllAlarmsNextRequest struct {
-//	msgBase
-//
-//	CommandSequenceNumber uint16
-//	cachedME              IManagedEntity // Cache any ME decoded from the request
-//}
+type GetAllAlarmsNextRequest struct {
+	MeBasePacket
+	CommandSequenceNumber uint16
+}
 
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(omci.cachedME, GetAllAlarms) {
+	if !generated.SupportsMsgType(meDefinition, generated.GetAllAlarms) {
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -750,24 +748,24 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextRequest{}
-	omci.layerType = LayerTypeGetAllAlarmsRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms Next
-	if !SupportsMsgType(entity, GetAllAlarmsNext) {
+	if !generated.SupportsMsgType(entity, generated.GetAllAlarmsNext) {
 		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
@@ -780,25 +778,25 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 
 /////////////////////////////////////////////////////////////////////////////
 // GetAllAlarms
-//type GetAllAlarmsNextResponse struct {
-//	msgBase
-//	AlarmBitMap [28]byte       // 224 bits
-//	cachedME    IManagedEntity // Cache any ME decoded from the response
-//}
+type GetAllAlarmsNextResponse struct {
+	MeBasePacket
+	AlarmBitMap [28]byte       // 224 bits
+}
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms Next
-	if !SupportsMsgType(omci.cachedME, GetAllAlarmsNext) {
+	if !generated.SupportsMsgType(meDefinition, generated.GetAllAlarmsNext) {
 		return errors.New("managed entity does not support Get All Alarms Next Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -814,24 +812,24 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextResponse{}
-	omci.layerType = LayerTypeGetAllAlarmsResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms Next
-	if !SupportsMsgType(entity, GetAllAlarmsNext) {
+	if !generated.SupportsMsgType(entity, generated.GetAllAlarmsNext) {
 		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(28)
@@ -844,19 +842,21 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 
 /////////////////////////////////////////////////////////////////////////////
 // MibUploadRequest
-//type MibUploadRequest struct {
-//	msgBase
-//	cachedME IManagedEntity // Cache any ME decoded from the request
-//}
+type MibUploadRequest struct {
+	MeBasePacket
+}
 
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	// ME needs to support MIB Upload
-	if !SupportsMsgType(omci.cachedME, MibUpload) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibUpload) {
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -871,24 +871,24 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 
 func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadRequest{}
-	omci.layerType = LayerTypeMibUploadNextRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibUploadNextRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
-	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get
-	if !SupportsMsgType(entity, MibUpload) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibUpload) {
 		return errors.New("managed entity does not support the MIB Upload Message-Type")
 	}
 	return nil
@@ -896,26 +896,26 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 
 /////////////////////////////////////////////////////////////////////////////
 // MibUploadResponse
-//type MibUploadResponse struct {
-//	msgBase
-//	NumberOfCommands uint16
-//	cachedME         IManagedEntity // Cache any ME decoded from the response
-//}
+type MibUploadResponse struct {
+	MeBasePacket
+	NumberOfCommands uint16
+}
 
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support MIB Upload
-	if !SupportsMsgType(omci.cachedME, MibUpload) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibUpload) {
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -931,24 +931,24 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 
 func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadResponse{}
-	omci.layerType = LayerTypeMibUploadNextResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibUploadNextResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support MIB Upload
-	if !SupportsMsgType(entity, MibUpload) {
+	if !generated.SupportsMsgType(entity, generated.MibUpload) {
 		return errors.New("managed entity does not support the MIB Upload Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
@@ -961,27 +961,26 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type MibUploadNextRequest struct {
-//	msgBase
-//	CommandSequenceNumber uint16
-//
-//	cachedME IManagedEntity // Cache any ME decoded from the request
-//}
+type MibUploadNextRequest struct {
+	MeBasePacket
+	CommandSequenceNumber uint16
+}
 
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(omci.cachedME, MibUploadNext) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibUploadNext) {
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -997,24 +996,24 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextRequest{}
-	omci.layerType = LayerTypeMibUploadNextRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibUploadNextRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
-	var entity IManagedEntity
+	var entity generated.IManagedEntityDefinition
 	entity, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support MIB upload
-	if !SupportsMsgType(entity, MibUploadNext) {
+	if !generated.SupportsMsgType(entity, generated.MibUploadNext) {
 		return errors.New("managed entity does not support the MIB Upload Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
@@ -1027,26 +1026,24 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type MibUploadNextResponse struct {
-//	msgBase
-//	cachedME IManagedEntity // Cache any ME decoded from the response
-//
-//	uploadedME IManagedEntity
-//}
+type MibUploadNextResponse struct {
+	MeBasePacket
+}
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support Get All Alarms
-	if !SupportsMsgType(omci.cachedME, MibUploadNext) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibUploadNext) {
 		return errors.New("managed entity does not support MIB Upload Next Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -1074,13 +1071,13 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextResponse{}
-	omci.layerType = LayerTypeMibUploadNextResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibUploadNextResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1089,25 +1086,25 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 
 /////////////////////////////////////////////////////////////////////////////
 // MibResetRequest
-//type MibResetRequest struct {
-//	msgBase
-//	cachedME IManagedEntity // Cache any ME decoded from the request
-//}
+type MibResetRequest struct {
+	MeBasePacket
+}
 
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	omci.cachedME, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
-		generated.ParamData{omci.EntityInstance, nil})
+	var meDefinition generated.IManagedEntityDefinition
+	meDefinition, err = generated.LoadManagedEntityDefinition(omci.EntityClass,
+		generated.ParamData{EntityID: omci.EntityInstance})
 	if err != nil {
 		return err
 	}
 	// ME needs to support MIB reset
-	if !SupportsMsgType(omci.cachedME, MibReset) {
+	if !generated.SupportsMsgType(meDefinition, generated.MibReset) {
 		return errors.New("managed entity does not support Create Message-Type")
 	}
 	// MIB Reset request Entity Class are always ONU DATA (2) and Entity Instance of 0
@@ -1122,24 +1119,24 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 
 func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibResetRequest{}
-	omci.layerType = LayerTypeMibResetRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibResetRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Add class ID and entity ID
-	return omci.msgBase.SerializeTo(b)
+	return omci.MeBasePacket.SerializeTo(b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // MibResetResponse
-//type MibResetResponse struct {
-//	msgBase
-//}
+type MibResetResponse struct {
+	MeBasePacket
+}
 
 func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1156,13 +1153,13 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 
 func decodeMibResetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibResetResponse{}
-	omci.layerType = LayerTypeMibResetResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeMibResetResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1171,13 +1168,13 @@ func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 
 /////////////////////////////////////////////////////////////////////////////
 // AlarmNotificationMsg
-//type AlarmNotificationMsg struct {
-//	msgBase
-//}
+type AlarmNotificationMsg struct {
+	MeBasePacket
+}
 
 func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1194,13 +1191,13 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 
 func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
 	omci := &AlarmNotificationMsg{}
-	omci.layerType = LayerTypeAlarmNotification
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeAlarmNotification
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1209,13 +1206,13 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 
 /////////////////////////////////////////////////////////////////////////////
 // AlarmNotificationMsg
-//type AttributeValueChangeMsg struct {
-//	msgBase
-//}
+type AttributeValueChangeMsg struct {
+	MeBasePacket
+}
 
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1232,13 +1229,13 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 
 func decodeAttributeValueChange(data []byte, p gopacket.PacketBuilder) error {
 	omci := &AttributeValueChangeMsg{}
-	omci.layerType = LayerTypeAttributeValueChange
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeAttributeValueChange
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1247,14 +1244,13 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type TestRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type TestRequest struct {
+	MeBasePacket
+}
 
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1263,13 +1259,13 @@ func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 
 func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestRequest{}
-	omci.layerType = LayerTypeTestRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeTestRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1278,14 +1274,13 @@ func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type TestResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type TestResponse struct {
+	MeBasePacket
+}
 
 func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1294,13 +1289,13 @@ func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder)
 
 func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResponse{}
-	omci.layerType = LayerTypeTestResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeTestResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1309,14 +1304,13 @@ func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type StartSoftwareDownloadRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type StartSoftwareDownloadRequest struct {
+	MeBasePacket
+}
 
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1325,13 +1319,13 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadRequest{}
-	omci.layerType = LayerTypeStartSoftwareDownloadRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeStartSoftwareDownloadRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1340,14 +1334,13 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type StartSoftwareDownloadResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type StartSoftwareDownloadResponse struct {
+	MeBasePacket
+}
 
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1356,13 +1349,13 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadResponse{}
-	omci.layerType = LayerTypeStartSoftwareDownloadResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeStartSoftwareDownloadResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1371,14 +1364,13 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type DownloadSectionRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type DownloadSectionRequest struct {
+	MeBasePacket
+}
 
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1387,13 +1379,13 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionRequest{}
-	omci.layerType = LayerTypeDownloadSectionRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDownloadSectionRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1402,14 +1394,13 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type DownloadSectionResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type DownloadSectionResponse struct {
+	MeBasePacket
+}
 
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1418,13 +1409,13 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 
 func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionResponse{}
-	omci.layerType = LayerTypeDownloadSectionResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeDownloadSectionResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1433,14 +1424,13 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type EndSoftwareDownloadRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type EndSoftwareDownloadRequest struct {
+	MeBasePacket
+}
 
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1449,13 +1439,13 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadRequest{}
-	omci.layerType = LayerTypeEndSoftwareDownloadRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeEndSoftwareDownloadRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1464,14 +1454,13 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type EndSoftwareDownloadResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type EndSoftwareDownloadResponse struct {
+	MeBasePacket
+}
 
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1480,13 +1469,13 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadResponse{}
-	omci.layerType = LayerTypeEndSoftwareDownloadResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeEndSoftwareDownloadResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1495,14 +1484,13 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type ActivateSoftwareRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type ActivateSoftwareRequest struct {
+	MeBasePacket
+}
 
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1511,13 +1499,13 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareRequest{}
-	omci.layerType = LayerTypeActivateSoftwareRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeActivateSoftwareRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1526,14 +1514,13 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type ActivateSoftwareResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type ActivateSoftwareResponse struct {
+	MeBasePacket
+}
 
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1542,13 +1529,13 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareResponse{}
-	omci.layerType = LayerTypeActivateSoftwareResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeActivateSoftwareResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1557,14 +1544,13 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, op
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type CommitSoftwareRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type CommitSoftwareRequest struct {
+	MeBasePacket
+}
 
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1573,13 +1559,13 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 
 func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareRequest{}
-	omci.layerType = LayerTypeCommitSoftwareRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeCommitSoftwareRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1588,14 +1574,13 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type CommitSoftwareResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type CommitSoftwareResponse struct {
+	MeBasePacket
+}
 
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1604,13 +1589,13 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareResponse{}
-	omci.layerType = LayerTypeCommitSoftwareResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeCommitSoftwareResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1619,14 +1604,13 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type SynchronizeTimeRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type SynchronizeTimeRequest struct {
+	MeBasePacket
+}
 
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1635,13 +1619,13 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeRequest{}
-	omci.layerType = LayerTypeSynchronizeTimeRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeSynchronizeTimeRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1650,14 +1634,13 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type SynchronizeTimeResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type SynchronizeTimeResponse struct {
+	MeBasePacket
+}
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1666,13 +1649,13 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeResponse{}
-	omci.layerType = LayerTypeSynchronizeTimeResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeSynchronizeTimeResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1681,13 +1664,13 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type RebootRequest struct {
-//	msgBase
-//}
+type RebootRequest struct {
+	MeBasePacket
+}
 
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1696,13 +1679,13 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 
 func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootRequest{}
-	omci.layerType = LayerTypeRebootRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeRebootRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1711,13 +1694,13 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type RebootResponse struct {
-//	msgBase
-//}
+type RebootResponse struct {
+	MeBasePacket
+}
 
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1726,13 +1709,13 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootResponse{}
-	omci.layerType = LayerTypeRebootResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeRebootResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1741,14 +1724,13 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type GetNextRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type GetNextRequest struct {
+	MeBasePacket
+}
 
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1757,13 +1739,13 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextRequest{}
-	omci.layerType = LayerTypeGetNextRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetNextRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1772,14 +1754,13 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type GetNextResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type GetNextResponse struct {
+	MeBasePacket
+}
 
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1788,13 +1769,13 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextResponse{}
-	omci.layerType = LayerTypeGetNextResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetNextResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1803,14 +1784,13 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type TestResultMsg struct {
-//	msgBase
-//	// TODO: implement
-//}
+type TestResultMsg struct {
+	MeBasePacket
+}
 
 func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1819,13 +1799,13 @@ func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 
 func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResultMsg{}
-	omci.layerType = LayerTypeTestResult
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeTestResult
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1834,14 +1814,13 @@ func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type GetCurrentDataRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type GetCurrentDataRequest struct {
+	MeBasePacket
+}
 
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1850,13 +1829,13 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataRequest{}
-	omci.layerType = LayerTypeGetCurrentDataRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetCurrentDataRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1865,14 +1844,13 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type GetCurrentDataResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type GetCurrentDataResponse struct {
+	MeBasePacket
+}
 
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1881,13 +1859,13 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataResponse{}
-	omci.layerType = LayerTypeGetCurrentDataResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeGetCurrentDataResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1896,14 +1874,13 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type SetTableRequest struct {
-//	msgBase
-//	// TODO: implement
-//}
+type SetTableRequest struct {
+	MeBasePacket
+}
 
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1912,13 +1889,13 @@ func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableRequest{}
-	omci.layerType = LayerTypeSetTableRequest
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeSetTableRequest
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
@@ -1927,14 +1904,13 @@ func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 
 /////////////////////////////////////////////////////////////////////////////
 //
-//type SetTableResponse struct {
-//	msgBase
-//	// TODO: implement
-//}
+type SetTableResponse struct {
+	MeBasePacket
+}
 
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.msgBase.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
@@ -1943,13 +1919,13 @@ func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableResponse{}
-	omci.layerType = LayerTypeSetTableResponse
-	return decodingLayerDecoder(omci, data, p)
+	omci.MsgLayerType = LayerTypeSetTableResponse
+	return DecodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
-	err := omci.msgBase.SerializeTo(b)
+	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}

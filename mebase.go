@@ -23,13 +23,45 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
+type MeBasePacket struct {
+	generated.MeBase
+	EntityInstance	uint16	// TODO: Change attribute values to map and move this into the map
+
+	gopacket.Layer
+	layers.BaseLayer
+	MsgLayerType gopacket.LayerType
+}
+
+func (msg *MeBasePacket) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
+func (msg *MeBasePacket) LayerType() gopacket.LayerType     { return msg.MsgLayerType }
+func (msg *MeBasePacket) CanDecode() gopacket.LayerClass    { return msg.MsgLayerType }
+func (msg *MeBasePacket) LayerPayload() []byte              { return nil }
+
+func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	// Note: Base OMCI frame already checked for frame with at least 10 octets
+	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
+	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
+	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
+	return nil
+}
+func (msg *MeBasePacket) SerializeTo(b gopacket.SerializeBuffer) error {
+	// Add class ID and entity ID
+	bytes, err := b.PrependBytes(4)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, msg.EntityClass)
+	binary.BigEndian.PutUint16(bytes[2:], msg.EntityInstance)
+	return nil
+}
+
 type layerDecodingLayer interface {
 	gopacket.Layer
 	DecodeFromBytes([]byte, gopacket.PacketBuilder) error
 	NextLayerType() gopacket.LayerType
 }
 
-func decodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBuilder) error {
+func DecodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBuilder) error {
 	err := d.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
@@ -40,38 +72,4 @@ func decodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBu
 		return nil
 	}
 	return p.NextDecoder(next)
-}
-
-type msgBasePacket struct {
-	generated.MsgBase
-	layers.BaseLayer
-	layerType gopacket.LayerType
-}
-
-//func (msg *msgBase) String() string {
-//	// TODO: Lookup ClassID Name and add to output
-//	return fmt.Sprintf("ClassID: %v (%#x), EntityID: %v (%#x)",
-//		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
-//}
-func (msg *msgBasePacket) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
-func (msg *msgBasePacket) LayerType() gopacket.LayerType     { return msg.layerType }
-func (msg *msgBasePacket) CanDecode() gopacket.LayerClass    { return msg.layerType }
-func (msg *msgBasePacket) LayerPayload() []byte              { return nil }
-
-func (msg *msgBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	// Note: Base OMCI frame already checked for frame with at least 10 octets
-	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
-	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
-	return nil
-}
-func (msg *msgBasePacket) SerializeTo(b gopacket.SerializeBuffer) error {
-	// Add class ID and entity ID
-	bytes, err := b.PrependBytes(4)
-	if err != nil {
-		return err
-	}
-	binary.BigEndian.PutUint16(bytes, msg.EntityClass)
-	binary.BigEndian.PutUint16(bytes[2:], msg.EntityInstance)
-	return nil
 }
