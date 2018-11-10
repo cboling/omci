@@ -32,11 +32,34 @@ type MeBasePacket struct {
 	MsgLayerType gopacket.LayerType
 }
 
-func (msg *MeBasePacket) NextLayerType() gopacket.LayerType { return gopacket.LayerTypeZero }
-func (msg *MeBasePacket) LayerType() gopacket.LayerType     { return msg.MsgLayerType }
-func (msg *MeBasePacket) CanDecode() gopacket.LayerClass    { return msg.MsgLayerType }
-func (msg *MeBasePacket) LayerPayload() []byte              { return nil }
+//type Layer interface {
+//	LayerType() LayerType
+//	LayerContents() []byte
+//	LayerPayload() []byte
+//}
+//type layerDecodingLayer interface {
+//	gopacket.Layer
+//	DecodeFromBytes([]byte, gopacket.PacketBuilder) error
+//	NextLayerType() gopacket.LayerType
+//}
 
+func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
+	return msg.MsgLayerType
+}
+// Layer Interface implementations
+func (msg *MeBasePacket) LayerType() gopacket.LayerType {
+	return msg.MsgLayerType
+}
+func (msg *MeBasePacket) LayerContents() []byte {
+	return msg.Contents
+}
+func (msg *MeBasePacket) LayerPayload() []byte {
+	return msg.Payload
+}
+// layerDecodingLayer Interface implementations
+func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypeZero
+}
 func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Note: Base OMCI frame already checked for frame with at least 10 octets
 	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
@@ -61,7 +84,7 @@ type layerDecodingLayer interface {
 	NextLayerType() gopacket.LayerType
 }
 
-func DecodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBuilder) error {
+func decodingLayerDecoder(d layerDecodingLayer, data []byte, p gopacket.PacketBuilder) error {
 	err := d.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
