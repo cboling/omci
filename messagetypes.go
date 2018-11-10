@@ -51,7 +51,10 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	var sbcMask uint16
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if generated.SupportsAttributeAccess(attr, generated.SetByCreate) {
-			sbcMask |= 1 << (15 - uint(index))
+			if index == 0 {
+				continue	// Skip Entity ID
+			}
+			sbcMask |= 1 << (15 - uint(index - 1))
 		}
 	}
 	// Attribute decode
@@ -80,7 +83,10 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	var sbcMask uint16
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if generated.SupportsAttributeAccess(attr, generated.SetByCreate) {
-			sbcMask |= 1 << (15 - uint(index))
+			if index == 0 {
+				continue	// Skip Entity ID
+			}
+			sbcMask |= 1 << (15 - uint(index - 1))
 		}
 	}
 	// Attribute serialization
