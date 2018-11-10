@@ -62,7 +62,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateRequest{}
 	omci.MsgLayerType = LayerTypeCreateRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -118,7 +118,7 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateResponse{}
 	omci.MsgLayerType = LayerTypeCreateResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -174,7 +174,7 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteRequest{}
 	omci.MsgLayerType = LayerTypeDeleteRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -226,7 +226,7 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DeleteResponse{}
 	omci.MsgLayerType = LayerTypeDeleteResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -297,7 +297,7 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetRequest{}
 	omci.MsgLayerType = LayerTypeDeleteRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -368,7 +368,7 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetResponse{}
 	omci.MsgLayerType = LayerTypeDeleteResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -441,7 +441,7 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetRequest{}
 	omci.MsgLayerType = LayerTypeDeleteRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -530,7 +530,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetResponse{}
 	omci.MsgLayerType = LayerTypeDeleteResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -607,7 +607,7 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for Get All Alarms request")
 	}
 	if omci.EntityInstance != 0 {
@@ -620,7 +620,7 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsRequest{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -672,7 +672,7 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for Get All Alarms response")
 	}
 	if omci.EntityInstance != 0 {
@@ -685,7 +685,7 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsResponse{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -736,7 +736,7 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 		return errors.New("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for Get All Alarms request")
 	}
 	if omci.EntityInstance != 0 {
@@ -749,7 +749,7 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextRequest{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -800,7 +800,7 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 		return errors.New("managed entity does not support Get All Alarms Next Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for Get All Alarms Next response")
 	}
 	if omci.EntityInstance != 0 {
@@ -813,7 +813,7 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextResponse{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -860,7 +860,7 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload request")
 	}
 	if omci.EntityInstance != 0 {
@@ -872,7 +872,7 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadRequest{}
 	omci.MsgLayerType = LayerTypeMibUploadNextRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -919,7 +919,7 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload response")
 	}
 	if omci.EntityInstance != 0 {
@@ -932,7 +932,7 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadResponse{}
 	omci.MsgLayerType = LayerTypeMibUploadNextResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -984,7 +984,7 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 		return errors.New("managed entity does not support MIB Upload Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload request")
 	}
 	if omci.EntityInstance != 0 {
@@ -997,7 +997,7 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextRequest{}
 	omci.MsgLayerType = LayerTypeMibUploadNextRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1047,7 +1047,7 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 		return errors.New("managed entity does not support MIB Upload Next Message-Type")
 	}
 	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload Next response")
 	}
 	if omci.EntityInstance != 0 {
@@ -1072,7 +1072,7 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextResponse{}
 	omci.MsgLayerType = LayerTypeMibUploadNextResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1108,7 +1108,7 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 		return errors.New("managed entity does not support Create Message-Type")
 	}
 	// MIB Reset request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Reset request")
 	}
 	if omci.EntityInstance != 0 {
@@ -1120,7 +1120,7 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibResetRequest{}
 	omci.MsgLayerType = LayerTypeMibResetRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1142,7 +1142,7 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Reset Response")
 	}
 	if omci.EntityInstance != 0 {
@@ -1154,7 +1154,7 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 func decodeMibResetResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibResetResponse{}
 	omci.MsgLayerType = LayerTypeMibResetResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1180,7 +1180,7 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Reset Response")
 	}
 	if omci.EntityInstance != 0 {
@@ -1192,7 +1192,7 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
 	omci := &AlarmNotificationMsg{}
 	omci.MsgLayerType = LayerTypeAlarmNotification
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1218,7 +1218,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
-	if omci.EntityClass != 2 {
+	if omci.EntityClass != generated.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Reset Response")
 	}
 	if omci.EntityInstance != 0 {
@@ -1230,7 +1230,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeAttributeValueChange(data []byte, p gopacket.PacketBuilder) error {
 	omci := &AttributeValueChangeMsg{}
 	omci.MsgLayerType = LayerTypeAttributeValueChange
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1260,7 +1260,7 @@ func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestRequest{}
 	omci.MsgLayerType = LayerTypeTestRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1290,7 +1290,7 @@ func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder)
 func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResponse{}
 	omci.MsgLayerType = LayerTypeTestResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1320,7 +1320,7 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadRequest{}
 	omci.MsgLayerType = LayerTypeStartSoftwareDownloadRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1350,7 +1350,7 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadResponse{}
 	omci.MsgLayerType = LayerTypeStartSoftwareDownloadResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1380,7 +1380,7 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionRequest{}
 	omci.MsgLayerType = LayerTypeDownloadSectionRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1410,7 +1410,7 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &DownloadSectionResponse{}
 	omci.MsgLayerType = LayerTypeDownloadSectionResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1440,7 +1440,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadRequest{}
 	omci.MsgLayerType = LayerTypeEndSoftwareDownloadRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1470,7 +1470,7 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadResponse{}
 	omci.MsgLayerType = LayerTypeEndSoftwareDownloadResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1500,7 +1500,7 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareRequest{}
 	omci.MsgLayerType = LayerTypeActivateSoftwareRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1530,7 +1530,7 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareResponse{}
 	omci.MsgLayerType = LayerTypeActivateSoftwareResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1560,7 +1560,7 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareRequest{}
 	omci.MsgLayerType = LayerTypeCommitSoftwareRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1590,7 +1590,7 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareResponse{}
 	omci.MsgLayerType = LayerTypeCommitSoftwareResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1620,7 +1620,7 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeRequest{}
 	omci.MsgLayerType = LayerTypeSynchronizeTimeRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1650,7 +1650,7 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SynchronizeTimeResponse{}
 	omci.MsgLayerType = LayerTypeSynchronizeTimeResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1680,7 +1680,7 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootRequest{}
 	omci.MsgLayerType = LayerTypeRebootRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1710,7 +1710,7 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &RebootResponse{}
 	omci.MsgLayerType = LayerTypeRebootResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1740,7 +1740,7 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextRequest{}
 	omci.MsgLayerType = LayerTypeGetNextRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1770,7 +1770,7 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextResponse{}
 	omci.MsgLayerType = LayerTypeGetNextResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1800,7 +1800,7 @@ func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
 	omci := &TestResultMsg{}
 	omci.MsgLayerType = LayerTypeTestResult
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1830,7 +1830,7 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataRequest{}
 	omci.MsgLayerType = LayerTypeGetCurrentDataRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1860,7 +1860,7 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetCurrentDataResponse{}
 	omci.MsgLayerType = LayerTypeGetCurrentDataResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1890,7 +1890,7 @@ func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableRequest{}
 	omci.MsgLayerType = LayerTypeSetTableRequest
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
@@ -1920,7 +1920,7 @@ func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &SetTableResponse{}
 	omci.MsgLayerType = LayerTypeSetTableResponse
-	return DecodingLayerDecoder(omci, data, p)
+	return decodingLayerDecoder(omci, data, p)
 }
 
 func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
