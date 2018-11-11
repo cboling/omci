@@ -28,7 +28,7 @@ import (
 // CreateRequest
 type CreateRequest struct {
 	MeBasePacket
-	Attributes []*generated.IAttributeValue// TODO: Change attribute values to map and move EntityID into the map
+	Attributes AttributeMap
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -264,7 +264,7 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 type SetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
-	Attributes    []*generated.IAttributeValue
+	Attributes    AttributeMap
 }
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -408,7 +408,7 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 type GetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
-	Attributes    []*generated.IAttributeValue // Read attributes
+	Attributes    AttributeMap
 }
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -489,7 +489,7 @@ type GetResponse struct {
 	MeBasePacket
 	Result                   generated.Results
 	AttributeMask            uint16
-	Attributes               []*generated.IAttributeValue
+	Attributes 				 AttributeMap
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 }
