@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipFeatureAccessCodesClassId uint16 = 147
+
 // VoipFeatureAccessCodes (class ID #147) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,20 +44,20 @@ func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntityDefinition, e
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("CancelCallWaiting", 0, Read|Write),
-			UnknownField("CallHold", 0, Read|Write),
-			UnknownField("CallPark", 0, Read|Write),
-			UnknownField("CallerIdActivate", 0, Read|Write),
-			UnknownField("CallerIdDeactivate", 0, Read|Write),
-			UnknownField("DoNotDisturbActivation", 0, Read|Write),
-			UnknownField("DoNotDisturbDeactivation", 0, Read|Write),
-			UnknownField("DoNotDisturbPinChange", 0, Read|Write),
-			UnknownField("EmergencyServiceNumber", 0, Read|Write),
-			UnknownField("IntercomService", 0, Read|Write),
-			UnknownField("UnattendedBlindCallTransfer", 0, Read|Write),
-			UnknownField("AttendedCallTransfer", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("CancelCallWaiting", 0, Read|Write),
+			2: UnknownField("CallHold", 0, Read|Write),
+			3: UnknownField("CallPark", 0, Read|Write),
+			4: UnknownField("CallerIdActivate", 0, Read|Write),
+			5: UnknownField("CallerIdDeactivate", 0, Read|Write),
+			6: UnknownField("DoNotDisturbActivation", 0, Read|Write),
+			7: UnknownField("DoNotDisturbDeactivation", 0, Read|Write),
+			8: UnknownField("DoNotDisturbPinChange", 0, Read|Write),
+			9: UnknownField("EmergencyServiceNumber", 0, Read|Write),
+			10: UnknownField("IntercomService", 0, Read|Write),
+			11: UnknownField("UnattendedBlindCallTransfer", 0, Read|Write),
+			12: UnknownField("AttendedCallTransfer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

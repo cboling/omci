@@ -19,6 +19,8 @@
  */
 package generated
 
+const SipUserDataClassId uint16 = 153
+
 // SipUserData (class ID #153) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,20 +44,20 @@ func NewSipUserData(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("UserPartAor", 0, Read|Write|SetByCreate),
-			UnknownField("SipDisplayName", 0, Read|Write),
-			Uint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
-			Uint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
-			Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),
-			Uint16Field("NetworkDialPlanPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("ApplicationServicesProfilePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("FeatureCodePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
-			ByteField("ReleaseTimer", 0, Read|Write),
-			ByteField("ReceiverOffHookRohTimer", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
+			2: Uint16Field("UserPartAor", 0, Read|Write|SetByCreate),
+			3: UnknownField("SipDisplayName", 0, Read|Write),
+			4: Uint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
+			5: Uint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
+			6: Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),
+			7: Uint16Field("NetworkDialPlanPointer", 0, Read|Write|SetByCreate),
+			8: Uint16Field("ApplicationServicesProfilePointer", 0, Read|Write|SetByCreate),
+			9: Uint16Field("FeatureCodePointer", 0, Read|Write|SetByCreate),
+			10: Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
+			11: ByteField("ReleaseTimer", 0, Read|Write),
+			12: ByteField("ReceiverOffHookRohTimer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

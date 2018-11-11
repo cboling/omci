@@ -19,6 +19,8 @@
  */
 package generated
 
+const NetworkAddressClassId uint16 = 137
+
 // NetworkAddress (class ID #137) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,10 +44,10 @@ func NewNetworkAddress(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("SecurityPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("AddressPointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("SecurityPointer", 0, Read|Write|SetByCreate),
+			2: Uint16Field("AddressPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

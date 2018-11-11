@@ -17,44 +17,46 @@
 package omci
 
 import (
+	"./generated"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
+// TODO: Move test of generated items to Generated...
 
-var allMsgTypes = [...]MsgType{
-	Create,
-	Delete,
-	Set,
-	Get,
-	GetAllAlarms,
-	GetAllAlarmsNext,
-	MibUpload,
-	MibUploadNext,
-	MibReset,
-	AlarmNotification,
-	AttributeValueChange,
-	Test,
-	StartSoftwareDownload,
-	DownloadSection,
-	EndSoftwareDownload,
-	ActivateSoftware,
-	CommitSoftware,
-	SynchronizeTime,
-	Reboot,
-	GetNext,
-	TestResult,
-	GetCurrentData,
-	SetTable}
+var allMsgTypes = [...]generated.MsgType{
+	generated.Create,
+	generated.Delete,
+	generated.Set,
+	generated.Get,
+	generated.GetAllAlarms,
+	generated.GetAllAlarmsNext,
+	generated.MibUpload,
+	generated.MibUploadNext,
+	generated.MibReset,
+	generated.AlarmNotification,
+	generated.AttributeValueChange,
+	generated.Test,
+	generated.StartSoftwareDownload,
+	generated.DownloadSection,
+	generated.EndSoftwareDownload,
+	generated.ActivateSoftware,
+	generated.CommitSoftware,
+	generated.SynchronizeTime,
+	generated.Reboot,
+	generated.GetNext,
+	generated.TestResult,
+	generated.GetCurrentData,
+	generated.SetTable}
 
-var allResults = [...]Results{
-	Success,
-	ProcessingError,
-	NotSupported,
-	ParameterError,
-	UnknownEntity,
-	UnknownInstance,
-	DeviceBusy,
-	InstanceExists}
+var allResults = [...]generated.Results{
+	generated.Success,
+	generated.ProcessingError,
+	generated.NotSupported,
+	generated.ParameterError,
+	generated.UnknownEntity,
+	generated.UnknownInstance,
+	generated.DeviceBusy,
+	generated.InstanceExists}
 
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
 func TestMsgTypeStrings(t *testing.T) {

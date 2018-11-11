@@ -19,6 +19,8 @@
  */
 package generated
 
+const OmciClassId uint16 = 287
+
 // Omci (class ID #287) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,10 +42,10 @@ func NewOmci(params ...ParamData) (IManagedEntityDefinition, error) {
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("MeTypeTable", 0, Read),
-			ByteField("MessageTypeTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("MeTypeTable", 0, Read),
+			2: ByteField("MessageTypeTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

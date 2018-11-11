@@ -19,6 +19,8 @@
  */
 package generated
 
+const XgPonDownstreamManagementPerformanceMonitoringHistoryDataClassId uint16 = 345
+
 // XgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID #345) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...Para
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("PloamMessageIntegrityCheckMicErrorCount", 0, Read),
-			Uint32Field("DownstreamPloamMessagesCount", 0, Read),
-			Uint32Field("ProfileMessagesReceived", 0, Read),
-			Uint32Field("RangingTimeMessagesReceived", 0, Read),
-			Uint32Field("DeactivateOnuIdMessagesReceived", 0, Read),
-			Uint32Field("DisableSerialNumberMessagesReceived", 0, Read),
-			Uint32Field("RequestRegistrationMessagesReceived", 0, Read),
-			Uint32Field("AssignAllocIdMessagesReceived", 0, Read),
-			Uint32Field("KeyControlMessagesReceived", 0, Read),
-			Uint32Field("SleepAllowMessagesReceived", 0, Read),
-			Uint32Field("BaselineOmciMessagesReceivedCount", 0, Read),
-			Uint32Field("ExtendedOmciMessagesReceivedCount", 0, Read),
-			Uint32Field("AssignOnuIdMessagesReceived", 0, Read),
-			Uint32Field("OmciMicErrorCount", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("PloamMessageIntegrityCheckMicErrorCount", 0, Read),
+			4: Uint32Field("DownstreamPloamMessagesCount", 0, Read),
+			5: Uint32Field("ProfileMessagesReceived", 0, Read),
+			6: Uint32Field("RangingTimeMessagesReceived", 0, Read),
+			7: Uint32Field("DeactivateOnuIdMessagesReceived", 0, Read),
+			8: Uint32Field("DisableSerialNumberMessagesReceived", 0, Read),
+			9: Uint32Field("RequestRegistrationMessagesReceived", 0, Read),
+			10: Uint32Field("AssignAllocIdMessagesReceived", 0, Read),
+			11: Uint32Field("KeyControlMessagesReceived", 0, Read),
+			12: Uint32Field("SleepAllowMessagesReceived", 0, Read),
+			13: Uint32Field("BaselineOmciMessagesReceivedCount", 0, Read),
+			14: Uint32Field("ExtendedOmciMessagesReceivedCount", 0, Read),
+			15: Uint32Field("AssignOnuIdMessagesReceived", 0, Read),
+			16: Uint32Field("OmciMicErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

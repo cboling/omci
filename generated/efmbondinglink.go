@@ -19,6 +19,8 @@
  */
 package generated
 
+const EfmBondingLinkClassId uint16 = 420
+
 // EfmBondingLink (class ID #420) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,10 +44,10 @@ func NewEfmBondingLink(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
-			ByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
+			2: ByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

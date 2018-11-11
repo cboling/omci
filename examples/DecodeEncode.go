@@ -63,6 +63,27 @@ func main() {
 		msgLayer := packet.Layer(omci.LayerTypeCreateRequest)
 		fmt.Println(msgLayer)
 		fmt.Println(msgLayer.(*omci.CreateRequest))
+
+		omciMsg, ok2 := omciLayer.(*omci.OMCI)
+		fmt.Println(ok2)
+
+		omciMsg2, ok3 := msgLayer.(*omci.CreateRequest)
+		fmt.Println(ok3)
+		fmt.Println(omciMsg2.EntityClass)    // uint16(0x0110))
+		fmt.Println(omciMsg2.EntityInstance) // uint16(1))
+
+		// Test serialization back to former string
+		var options gopacket.SerializeOptions
+		options.FixLengths = true
+
+		buffer := gopacket.NewSerializeBuffer()
+		err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+		fmt.Println(err)
+
+		outgoingPacket := buffer.Bytes()
+		reconstituted := packetToString(outgoingPacket)
+		fmt.Println(createGalEthernetProfile)
+		fmt.Println(reconstituted)
 	}
 }
 

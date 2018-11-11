@@ -19,6 +19,8 @@
  */
 package generated
 
+const EthernetFlowTerminationPointClassId uint16 = 286
+
 // EthernetFlowTerminationPoint (class ID #286) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntityDefinit
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			UnknownField("DestinationMac", 0, Read|Write|SetByCreate),
-			UnknownField("SourceMac", 0, Read),
-			ByteField("TagPolicy", 0, Read|Write|SetByCreate),
-			Uint16Field("Tci", 0, Read|Write),
-			ByteField("Loopback", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: UnknownField("DestinationMac", 0, Read|Write|SetByCreate),
+			2: UnknownField("SourceMac", 0, Read),
+			3: ByteField("TagPolicy", 0, Read|Write|SetByCreate),
+			4: Uint16Field("Tci", 0, Read|Write),
+			5: ByteField("Loopback", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

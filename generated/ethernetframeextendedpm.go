@@ -19,6 +19,8 @@
  */
 package generated
 
+const EthernetFrameExtendedPmClassId uint16 = 334
+
 // EthernetFrameExtendedPm (class ID #334) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntityDefinition, 
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			UnknownField("ControlBlock", 0, Read|Write|SetByCreate),
-			Uint32Field("DropEvents", 0, Read),
-			Uint32Field("Octets", 0, Read),
-			Uint32Field("Frames", 0, Read),
-			Uint32Field("BroadcastFrames", 0, Read),
-			Uint32Field("MulticastFrames", 0, Read),
-			Uint32Field("CrcErroredFrames", 0, Read),
-			Uint32Field("UndersizeFrames", 0, Read),
-			Uint32Field("OversizeFrames", 0, Read),
-			Uint32Field("Frames64Octets", 0, Read),
-			Uint32Field("Frames65To127Octets", 0, Read),
-			Uint32Field("Frames128To255Octets", 0, Read),
-			Uint32Field("Frames256To511Octets", 0, Read),
-			Uint32Field("Frames512To1023Octets", 0, Read),
-			Uint32Field("Frames1024To1518Octets", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: UnknownField("ControlBlock", 0, Read|Write|SetByCreate),
+			3: Uint32Field("DropEvents", 0, Read),
+			4: Uint32Field("Octets", 0, Read),
+			5: Uint32Field("Frames", 0, Read),
+			6: Uint32Field("BroadcastFrames", 0, Read),
+			7: Uint32Field("MulticastFrames", 0, Read),
+			8: Uint32Field("CrcErroredFrames", 0, Read),
+			9: Uint32Field("UndersizeFrames", 0, Read),
+			10: Uint32Field("OversizeFrames", 0, Read),
+			11: Uint32Field("Frames64Octets", 0, Read),
+			12: Uint32Field("Frames65To127Octets", 0, Read),
+			13: Uint32Field("Frames128To255Octets", 0, Read),
+			14: Uint32Field("Frames256To511Octets", 0, Read),
+			15: Uint32Field("Frames512To1023Octets", 0, Read),
+			16: Uint32Field("Frames1024To1518Octets", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

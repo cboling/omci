@@ -19,6 +19,8 @@
  */
 package generated
 
+const GemInterworkingTerminationPointClassId uint16 = 266
+
 // GemInterworkingTerminationPoint (class ID #266) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefi
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
-			ByteField("InterworkingOption", 0, Read|Write|SetByCreate),
-			Uint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("InterworkingTerminationPointPointer", 0, Read|Write|SetByCreate),
-			ByteField("PptpCounter", 0, Read),
-			ByteField("OperationalState", 0, Read),
-			Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
-			ByteField("GalLoopbackConfiguration", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			2: ByteField("InterworkingOption", 0, Read|Write|SetByCreate),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
+			4: Uint16Field("InterworkingTerminationPointPointer", 0, Read|Write|SetByCreate),
+			5: ByteField("PptpCounter", 0, Read),
+			6: ByteField("OperationalState", 0, Read),
+			7: Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
+			8: ByteField("GalLoopbackConfiguration", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

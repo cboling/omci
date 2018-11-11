@@ -19,6 +19,8 @@
  */
 package generated
 
+const SoftwareImageClassId uint16 = 7
+
 // SoftwareImage (class ID #7) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,14 +42,14 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
 			DownloadSection,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("Version", 0, Read),
-			ByteField("IsCommitted", 0, Read),
-			ByteField("IsActive", 0, Read),
-			ByteField("IsValid", 0, Read),
-			UnknownField("ProductCode", 0, Read),
-			UnknownField("ImageHash", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("Version", 0, Read),
+			2: ByteField("IsCommitted", 0, Read),
+			3: ByteField("IsActive", 0, Read),
+			4: ByteField("IsValid", 0, Read),
+			5: UnknownField("ProductCode", 0, Read),
+			6: UnknownField("ImageHash", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

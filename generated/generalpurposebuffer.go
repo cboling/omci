@@ -19,6 +19,8 @@
  */
 package generated
 
+const GeneralPurposeBufferClassId uint16 = 308
+
 // GeneralPurposeBuffer (class ID #308) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,10 +44,10 @@ func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntityDefinition, err
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint32Field("MaximumSize", 0, Read|Write|SetByCreate),
-			UnknownField("BufferTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint32Field("MaximumSize", 0, Read|Write|SetByCreate),
+			2: UnknownField("BufferTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

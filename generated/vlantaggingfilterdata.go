@@ -19,6 +19,8 @@
  */
 package generated
 
+const VlanTaggingFilterDataClassId uint16 = 84
+
 // VlanTaggingFilterData (class ID #84) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,11 +44,11 @@ func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntityDefinition, er
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			UnknownField("VlanFilterList", 0, Read|Write|SetByCreate),
-			ByteField("ForwardOperation", 0, Read|Write|SetByCreate),
-			ByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: UnknownField("VlanFilterList", 0, Read|Write|SetByCreate),
+			2: ByteField("ForwardOperation", 0, Read|Write|SetByCreate),
+			3: ByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

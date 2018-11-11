@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastDataPathConfigurationProfileClassId uint16 = 433
+
 // FastDataPathConfigurationProfile (class ID #433) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,9 +44,9 @@ func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntityDef
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

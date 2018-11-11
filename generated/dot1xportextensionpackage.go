@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1XPortExtensionPackageClassId uint16 = 290
+
 // Dot1XPortExtensionPackage (class ID #290) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,20 +42,20 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			ByteField("Dot1XEnable", 0, Read|Write),
-			ByteField("ActionRegister", 0, Write),
-			ByteField("AuthenticatorPaeState", 0, Read),
-			ByteField("BackendAuthenticationState", 0, Read),
-			ByteField("AdminControlledDirections", 0, Read|Write),
-			ByteField("OperationalControlledDirections", 0, Read),
-			ByteField("AuthenticatorControlledPortStatus", 0, Read),
-			Uint16Field("QuietPeriod", 0, Read|Write),
-			Uint16Field("ServerTimeoutPeriod", 0, Read|Write),
-			Uint16Field("ReAuthenticationPeriod", 0, Read),
-			ByteField("ReAuthenticationEnabled", 0, Read),
-			ByteField("KeyTransmissionEnabled", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: ByteField("Dot1XEnable", 0, Read|Write),
+			2: ByteField("ActionRegister", 0, Write),
+			3: ByteField("AuthenticatorPaeState", 0, Read),
+			4: ByteField("BackendAuthenticationState", 0, Read),
+			5: ByteField("AdminControlledDirections", 0, Read|Write),
+			6: ByteField("OperationalControlledDirections", 0, Read),
+			7: ByteField("AuthenticatorControlledPortStatus", 0, Read),
+			8: Uint16Field("QuietPeriod", 0, Read|Write),
+			9: Uint16Field("ServerTimeoutPeriod", 0, Read|Write),
+			10: Uint16Field("ReAuthenticationPeriod", 0, Read),
+			11: ByteField("ReAuthenticationEnabled", 0, Read),
+			12: ByteField("KeyTransmissionEnabled", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

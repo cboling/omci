@@ -19,6 +19,8 @@
  */
 package generated
 
+const TcpUdpPerformanceMonitoringHistoryDataClassId uint16 = 342
+
 // TcpUdpPerformanceMonitoringHistoryData (class ID #342) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint16Field("SocketFailed", 0, Read),
-			Uint16Field("ListenFailed", 0, Read),
-			Uint16Field("BindFailed", 0, Read),
-			Uint16Field("AcceptFailed", 0, Read),
-			Uint16Field("SelectFailed", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint16Field("SocketFailed", 0, Read),
+			4: Uint16Field("ListenFailed", 0, Read),
+			5: Uint16Field("BindFailed", 0, Read),
+			6: Uint16Field("AcceptFailed", 0, Read),
+			7: Uint16Field("SelectFailed", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

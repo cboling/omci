@@ -19,6 +19,8 @@
  */
 package generated
 
+const VpNetworkCtpClassId uint16 = 269
+
 // VpNetworkCtp (class ID #269) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewVpNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("VpiValue", 0, Read|Write|SetByCreate),
-			Uint16Field("UniPointer", 0, Read|Write|SetByCreate),
-			ByteField("Direction", 0, Read|Write|SetByCreate),
-			Uint16Field("Deprecated1", 0, Read|Write|SetByCreate),
-			Uint16Field("Deprecated2", 0, Read|Write|SetByCreate),
-			Uint16Field("Deprecated3", 0, Read|Write|SetByCreate),
-			ByteField("Deprecated4", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("VpiValue", 0, Read|Write|SetByCreate),
+			2: Uint16Field("UniPointer", 0, Read|Write|SetByCreate),
+			3: ByteField("Direction", 0, Read|Write|SetByCreate),
+			4: Uint16Field("Deprecated1", 0, Read|Write|SetByCreate),
+			5: Uint16Field("Deprecated2", 0, Read|Write|SetByCreate),
+			6: Uint16Field("Deprecated3", 0, Read|Write|SetByCreate),
+			7: ByteField("Deprecated4", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

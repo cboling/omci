@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastXtuCPerformanceMonitoringHistoryDataClassId uint16 = 437
+
 // FastXtuCPerformanceMonitoringHistoryData (class ID #437) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewFastXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("SuccessfulFraCounter", 0, Read),
-			Uint32Field("SuccessfulRpaCounter", 0, Read),
-			Uint32Field("SuccessfulTigaCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("SuccessfulFraCounter", 0, Read),
+			4: Uint32Field("SuccessfulRpaCounter", 0, Read),
+			5: Uint32Field("SuccessfulTigaCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

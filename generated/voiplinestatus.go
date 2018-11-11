@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipLineStatusClassId uint16 = 141
+
 // VoipLineStatus (class ID #141) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,17 +41,17 @@ func NewVoipLineStatus(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("VoipCodecUsed", 0, Read),
-			ByteField("VoipVoiceServerStatus", 0, Read),
-			ByteField("VoipPortSessionType", 0, Read),
-			Uint16Field("VoipCall1PacketPeriod", 0, Read),
-			Uint16Field("VoipCall2PacketPeriod", 0, Read),
-			UnknownField("VoipCall1DestAddr", 0, Read),
-			UnknownField("VoipCall2DestAddr", 0, Read),
-			ByteField("VoipLineState", 0, Read),
-			ByteField("EmergencyCallStatus", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("VoipCodecUsed", 0, Read),
+			2: ByteField("VoipVoiceServerStatus", 0, Read),
+			3: ByteField("VoipPortSessionType", 0, Read),
+			4: Uint16Field("VoipCall1PacketPeriod", 0, Read),
+			5: Uint16Field("VoipCall2PacketPeriod", 0, Read),
+			6: UnknownField("VoipCall1DestAddr", 0, Read),
+			7: UnknownField("VoipCall2DestAddr", 0, Read),
+			8: ByteField("VoipLineState", 0, Read),
+			9: ByteField("EmergencyCallStatus", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

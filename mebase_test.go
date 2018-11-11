@@ -18,13 +18,14 @@ package omci
 
 import (
 	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )
 
 var buffer []byte
 
-func simpleMock(t *testing.T) *msgBase {
+func simpleMock(t *testing.T) *MeBasePacket {
 	mibResetRequest := "00014F0A000200000000000000000000" +
 		"00000000000000000000000000000000" +
 		"000000000000000000000028"
@@ -32,11 +33,12 @@ func simpleMock(t *testing.T) *msgBase {
 	assert.Nil(t, err)
 	assert.NotNil(t, data)
 
-	return &msgBase{
-		//layers.BaseLayer{data[:4], data[4:]},
-		layerType:      LayerTypeMibResetRequest,
+	return &MeBasePacket{
 		EntityClass:    0x02,
 		EntityInstance: 0x00,
+		Layer:          nil,
+		BaseLayer:      layers.BaseLayer{},
+		MsgLayerType:   LayerTypeMibResetRequest,
 	}
 }
 

@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelManagedEntityClassId uint16 = 443
+
 // TwdmChannelManagedEntity (class ID #443) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,12 +41,12 @@ func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntityDefinition,
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("ActiveChannelIndication", 0, Read),
-			ByteField("OperationalChannelIndication", 0, Read),
-			ByteField("DownstreamWavelengthChannel", 0, Read),
-			ByteField("UpstreamWavelengthChannel", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("ActiveChannelIndication", 0, Read),
+			2: ByteField("OperationalChannelIndication", 0, Read),
+			3: ByteField("DownstreamWavelengthChannel", 0, Read),
+			4: ByteField("UpstreamWavelengthChannel", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const CallControlPerformanceMonitoringHistoryDataClassId uint16 = 140
+
 // CallControlPerformanceMonitoringHistoryData (class ID #140) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("CallSetupFailures", 0, Read),
-			Uint32Field("CallSetupTimer", 0, Read),
-			Uint32Field("CallTerminateFailures", 0, Read),
-			Uint32Field("AnalogPortReleases", 0, Read),
-			Uint32Field("AnalogPortOffHookTimer", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("CallSetupFailures", 0, Read),
+			4: Uint32Field("CallSetupTimer", 0, Read),
+			5: Uint32Field("CallTerminateFailures", 0, Read),
+			6: Uint32Field("AnalogPortReleases", 0, Read),
+			7: Uint32Field("AnalogPortOffHookTimer", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const OnuRemoteDebugClassId uint16 = 158
+
 // OnuRemoteDebug (class ID #158) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,11 +43,11 @@ func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("CommandFormat", 0, Read),
-			UnknownField("Command", 0, Write),
-			UnknownField("ReplyTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("CommandFormat", 0, Read),
+			2: UnknownField("Command", 0, Write),
+			3: UnknownField("ReplyTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

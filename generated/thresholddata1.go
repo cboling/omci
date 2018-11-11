@@ -19,6 +19,8 @@
  */
 package generated
 
+const ThresholdData1ClassId uint16 = 273
+
 // ThresholdData1 (class ID #273) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewThresholdData1(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint32Field("ThresholdValue1", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue2", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue3", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue4", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue5", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue6", 0, Read|Write|SetByCreate),
-			Uint32Field("ThresholdValue7", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint32Field("ThresholdValue1", 0, Read|Write|SetByCreate),
+			2: Uint32Field("ThresholdValue2", 0, Read|Write|SetByCreate),
+			3: Uint32Field("ThresholdValue3", 0, Read|Write|SetByCreate),
+			4: Uint32Field("ThresholdValue4", 0, Read|Write|SetByCreate),
+			5: Uint32Field("ThresholdValue5", 0, Read|Write|SetByCreate),
+			6: Uint32Field("ThresholdValue6", 0, Read|Write|SetByCreate),
+			7: Uint32Field("ThresholdValue7", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipApplicationServiceProfileClassId uint16 = 146
+
 // VoipApplicationServiceProfile (class ID #146) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,17 +44,17 @@ func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntityDefini
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("CidFeatures", 0, Read|Write|SetByCreate),
-			ByteField("CallWaitingFeatures", 0, Read|Write|SetByCreate),
-			Uint16Field("CallProgressOrTransferFeatures", 0, Read|Write|SetByCreate),
-			Uint16Field("CallPresentationFeatures", 0, Read|Write|SetByCreate),
-			ByteField("DirectConnectFeature", 0, Read|Write|SetByCreate),
-			Uint16Field("DirectConnectUriPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("BridgedLineAgentUriPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("ConferenceFactoryUriPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("CidFeatures", 0, Read|Write|SetByCreate),
+			2: ByteField("CallWaitingFeatures", 0, Read|Write|SetByCreate),
+			3: Uint16Field("CallProgressOrTransferFeatures", 0, Read|Write|SetByCreate),
+			4: Uint16Field("CallPresentationFeatures", 0, Read|Write|SetByCreate),
+			5: ByteField("DirectConnectFeature", 0, Read|Write|SetByCreate),
+			6: Uint16Field("DirectConnectUriPointer", 0, Read|Write|SetByCreate),
+			7: Uint16Field("BridgedLineAgentUriPointer", 0, Read|Write|SetByCreate),
+			8: Uint16Field("ConferenceFactoryUriPointer", 0, Read|Write|SetByCreate),
+			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

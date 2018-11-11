@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipVoiceCtpClassId uint16 = 139
+
 // VoipVoiceCtp (class ID #139) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,12 +44,12 @@ func NewVoipVoiceCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("UserProtocolPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("VOIpMediaProfilePointer", 0, Read|Write|SetByCreate),
-			ByteField("SignallingCode", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("UserProtocolPointer", 0, Read|Write|SetByCreate),
+			2: Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
+			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|Write|SetByCreate),
+			4: ByteField("SignallingCode", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

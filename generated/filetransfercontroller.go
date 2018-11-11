@@ -19,6 +19,8 @@
  */
 package generated
 
+const FileTransferControllerClassId uint16 = 318
+
 // FileTransferController (class ID #318) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,19 +42,19 @@ func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, e
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("SupportedTransferProtocols", 0, Read),
-			Uint16Field("FileType", 0, Read|Write),
-			Uint16Field("FileInstance", 0, Read|Write),
-			Uint16Field("LocalFileNamePointer", 0, Read|Write),
-			Uint16Field("NetworkAddressPointer", 0, Read|Write),
-			ByteField("FileTransferTrigger", 0, Read|Write),
-			ByteField("FileTransferStatus", 0, Read),
-			Uint16Field("GemIwtpPointer", 0, Read|Write),
-			Uint16Field("Vlan", 0, Read|Write),
-			Uint32Field("FileSize", 0, Read|Write),
-			UnknownField("DirectoryListingTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("SupportedTransferProtocols", 0, Read),
+			2: Uint16Field("FileType", 0, Read|Write),
+			3: Uint16Field("FileInstance", 0, Read|Write),
+			4: Uint16Field("LocalFileNamePointer", 0, Read|Write),
+			5: Uint16Field("NetworkAddressPointer", 0, Read|Write),
+			6: ByteField("FileTransferTrigger", 0, Read|Write),
+			7: ByteField("FileTransferStatus", 0, Read),
+			8: Uint16Field("GemIwtpPointer", 0, Read|Write),
+			9: Uint16Field("Vlan", 0, Read|Write),
+			10: Uint32Field("FileSize", 0, Read|Write),
+			11: UnknownField("DirectoryListingTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

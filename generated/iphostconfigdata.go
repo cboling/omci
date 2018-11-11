@@ -19,6 +19,8 @@
  */
 package generated
 
+const IpHostConfigDataClassId uint16 = 134
+
 // IpHostConfigData (class ID #134) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,24 +42,24 @@ func NewIpHostConfigData(params ...ParamData) (IManagedEntityDefinition, error) 
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("IpOptions", 0, Read|Write),
-			UnknownField("MacAddress", 0, Read),
-			UnknownField("OnuIdentifier", 0, Read|Write),
-			Uint32Field("IpAddress", 0, Read|Write),
-			Uint32Field("Mask", 0, Read|Write),
-			Uint32Field("Gateway", 0, Read|Write),
-			Uint32Field("PrimaryDns", 0, Read|Write),
-			Uint32Field("SecondaryDns", 0, Read|Write),
-			Uint32Field("CurrentAddress", 0, Read),
-			Uint32Field("CurrentMask", 0, Read),
-			Uint32Field("CurrentGateway", 0, Read),
-			Uint32Field("CurrentPrimaryDns", 0, Read),
-			Uint32Field("CurrentSecondaryDns", 0, Read),
-			UnknownField("DomainName", 0, Read),
-			UnknownField("HostName", 0, Read),
-			Uint16Field("RelayAgentOptions", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("IpOptions", 0, Read|Write),
+			2: UnknownField("MacAddress", 0, Read),
+			3: UnknownField("OnuIdentifier", 0, Read|Write),
+			4: Uint32Field("IpAddress", 0, Read|Write),
+			5: Uint32Field("Mask", 0, Read|Write),
+			6: Uint32Field("Gateway", 0, Read|Write),
+			7: Uint32Field("PrimaryDns", 0, Read|Write),
+			8: Uint32Field("SecondaryDns", 0, Read|Write),
+			9: Uint32Field("CurrentAddress", 0, Read),
+			10: Uint32Field("CurrentMask", 0, Read),
+			11: Uint32Field("CurrentGateway", 0, Read),
+			12: Uint32Field("CurrentPrimaryDns", 0, Read),
+			13: Uint32Field("CurrentSecondaryDns", 0, Read),
+			14: UnknownField("DomainName", 0, Read),
+			15: UnknownField("HostName", 0, Read),
+			16: Uint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

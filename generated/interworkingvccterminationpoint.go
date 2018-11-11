@@ -19,6 +19,8 @@
  */
 package generated
 
+const InterworkingVccTerminationPointClassId uint16 = 14
+
 // InterworkingVccTerminationPoint (class ID #14) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,17 +44,17 @@ func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntityDefi
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("VciValue", 0, Read|Write|SetByCreate),
-			Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
-			ByteField("Deprecated1", 0, Read|Write|SetByCreate),
-			Uint16Field("Deprecated2", 0, Read|Write|SetByCreate),
-			Uint16Field("Aal5ProfilePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("Deprecated3", 0, Read|Write|SetByCreate),
-			ByteField("AalLoopbackConfiguration", 0, Read|Write),
-			ByteField("PptpCounter", 0, Read),
-			ByteField("OperationalState", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("VciValue", 0, Read|Write|SetByCreate),
+			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			3: ByteField("Deprecated1", 0, Read|Write|SetByCreate),
+			4: Uint16Field("Deprecated2", 0, Read|Write|SetByCreate),
+			5: Uint16Field("Aal5ProfilePointer", 0, Read|Write|SetByCreate),
+			6: Uint16Field("Deprecated3", 0, Read|Write|SetByCreate),
+			7: ByteField("AalLoopbackConfiguration", 0, Read|Write),
+			8: ByteField("PptpCounter", 0, Read),
+			9: ByteField("OperationalState", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

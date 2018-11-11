@@ -19,6 +19,8 @@
  */
 package generated
 
+const EthernetPerformanceMonitoringHistoryData2ClassId uint16 = 89
+
 // EthernetPerformanceMonitoringHistoryData2 (class ID #89) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,11 +44,11 @@ func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManaged
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("PppoeFilteredFrameCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("PppoeFilteredFrameCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

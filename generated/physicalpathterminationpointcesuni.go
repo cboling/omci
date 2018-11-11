@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointCesUniClassId uint16 = 12
+
 // PhysicalPathTerminationPointCesUni (class ID #12) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,20 +42,20 @@ func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntityD
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("ExpectedType", 0, Read|Write),
-			ByteField("SensedType", 0, Read),
-			ByteField("CesLoopbackConfiguration", 0, Read|Write),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("Framing", 0, Read|Write),
-			ByteField("Encoding", 0, Read|Write),
-			ByteField("LineLength", 0, Read|Write),
-			ByteField("Ds1Mode", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("LineType", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("ExpectedType", 0, Read|Write),
+			2: ByteField("SensedType", 0, Read),
+			3: ByteField("CesLoopbackConfiguration", 0, Read|Write),
+			4: ByteField("AdministrativeState", 0, Read|Write),
+			5: ByteField("OperationalState", 0, Read),
+			6: ByteField("Framing", 0, Read|Write),
+			7: ByteField("Encoding", 0, Read|Write),
+			8: ByteField("LineLength", 0, Read|Write),
+			9: ByteField("Ds1Mode", 0, Read|Write),
+			10: ByteField("Arc", 0, Read|Write),
+			11: ByteField("ArcInterval", 0, Read|Write),
+			12: ByteField("LineType", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

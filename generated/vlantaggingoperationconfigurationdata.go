@@ -19,6 +19,8 @@
  */
 package generated
 
+const VlanTaggingOperationConfigurationDataClassId uint16 = 78
+
 // VlanTaggingOperationConfigurationData (class ID #78) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
-			ByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			ByteField("AssociationType", 0, Read|Write|SetByCreate),
-			Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			2: Uint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
+			3: ByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
+			4: ByteField("AssociationType", 0, Read|Write|SetByCreate),
+			5: Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

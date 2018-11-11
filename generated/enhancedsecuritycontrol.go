@@ -19,6 +19,8 @@
  */
 package generated
 
+const EnhancedSecurityControlClassId uint16 = 332
+
 // EnhancedSecurityControl (class ID #332) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,20 +43,20 @@ func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntityDefinition, 
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("OltCryptoCapabilities", 0, Write),
-			UnknownField("OltRandomChallengeTable", 0, Read|Write),
-			ByteField("OltChallengeStatus", 0, Read|Write),
-			ByteField("OnuSelectedCryptoCapabilities", 0, Read),
-			UnknownField("OnuRandomChallengeTable", 0, Read),
-			UnknownField("OnuAuthenticationResultTable", 0, Read),
-			UnknownField("OltAuthenticationResultTable", 0, Write),
-			ByteField("OltResultStatus", 0, Read|Write),
-			ByteField("OnuAuthenticationStatus", 0, Read),
-			UnknownField("MasterSessionKeyName", 0, Read),
-			UnknownField("BroadcastKeyTable", 0, Read|Write),
-			Uint16Field("EffectiveKeyLength", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("OltCryptoCapabilities", 0, Write),
+			2: UnknownField("OltRandomChallengeTable", 0, Read|Write),
+			3: ByteField("OltChallengeStatus", 0, Read|Write),
+			4: ByteField("OnuSelectedCryptoCapabilities", 0, Read),
+			5: UnknownField("OnuRandomChallengeTable", 0, Read),
+			6: UnknownField("OnuAuthenticationResultTable", 0, Read),
+			7: UnknownField("OltAuthenticationResultTable", 0, Write),
+			8: ByteField("OltResultStatus", 0, Read|Write),
+			9: ByteField("OnuAuthenticationStatus", 0, Read),
+			10: UnknownField("MasterSessionKeyName", 0, Read),
+			11: UnknownField("BroadcastKeyTable", 0, Read|Write),
+			12: Uint16Field("EffectiveKeyLength", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

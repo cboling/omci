@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelOmciPerformanceMonitoringHistoryDataClassId uint16 = 452
+
 // TwdmChannelOmciPerformanceMonitoringHistoryData (class ID #452) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,13 +45,13 @@ func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("OmciBaselineMessageCount", 0, Read),
-			Uint32Field("OmciExtendedMessageCount", 0, Read),
-			Uint32Field("OmciMicErrorCount:", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("OmciBaselineMessageCount", 0, Read),
+			4: Uint32Field("OmciExtendedMessageCount", 0, Read),
+			5: Uint32Field("OmciMicErrorCount:", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

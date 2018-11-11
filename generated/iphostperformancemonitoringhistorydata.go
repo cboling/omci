@@ -19,6 +19,8 @@
  */
 package generated
 
+const IpHostPerformanceMonitoringHistoryDataClassId uint16 = 135
+
 // IpHostPerformanceMonitoringHistoryData (class ID #135) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			Uint32Field("IcmpErrors", 0, Read),
-			Uint32Field("DnsErrors", 0, Read),
-			Uint16Field("DhcpTimeouts", 0, Read),
-			Uint16Field("IpAddressConflict", 0, Read),
-			Uint16Field("OutOfMemory", 0, Read),
-			Uint16Field("InternalError", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			3: Uint32Field("IcmpErrors", 0, Read),
+			4: Uint32Field("DnsErrors", 0, Read),
+			5: Uint16Field("DhcpTimeouts", 0, Read),
+			6: Uint16Field("IpAddressConflict", 0, Read),
+			7: Uint16Field("OutOfMemory", 0, Read),
+			8: Uint16Field("InternalError", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslChannelUpstreamStatusDataClassId uint16 = 103
+
 // XdslChannelUpstreamStatusData (class ID #103) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,19 +41,19 @@ func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntityDefini
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("ActualInterleavingDelay", 0, Read),
-			Uint32Field("ActualDataRate", 0, Read),
-			Uint32Field("PreviousDataRate", 0, Read),
-			ByteField("ActualImpulseNoiseProtection", 0, Read),
-			ByteField("ImpulseNoiseProtectionReportingMode", 0, Read),
-			ByteField("ActualSizeOfReedSolomonCodeword", 0, Read),
-			ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read),
-			Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read),
-			Uint16Field("ActualInterleavingDepth", 0, Read),
-			ByteField("ActualInterleavingBlockLength", 0, Read),
-			ByteField("ActualLatencyPath", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("ActualInterleavingDelay", 0, Read),
+			2: Uint32Field("ActualDataRate", 0, Read),
+			3: Uint32Field("PreviousDataRate", 0, Read),
+			4: ByteField("ActualImpulseNoiseProtection", 0, Read),
+			5: ByteField("ImpulseNoiseProtectionReportingMode", 0, Read),
+			6: ByteField("ActualSizeOfReedSolomonCodeword", 0, Read),
+			7: ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read),
+			8: Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read),
+			9: Uint16Field("ActualInterleavingDepth", 0, Read),
+			10: ByteField("ActualInterleavingBlockLength", 0, Read),
+			11: ByteField("ActualLatencyPath", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1AgMaintenanceAssociationClassId uint16 = 300
+
 // Dot1AgMaintenanceAssociation (class ID #300) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntityDefinit
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("MdPointer", 0, Read|Write|SetByCreate),
-			ByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
-			UnknownField("ShortMaName1,ShortMaName2", 0, Read|Write),
-			ByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
-			UnknownField("AssociatedVlans", 0, Read|Write),
-			ByteField("MhfCreation", 0, Read|Write|SetByCreate),
-			ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("MdPointer", 0, Read|Write|SetByCreate),
+			2: ByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
+			3: UnknownField("ShortMaName1,ShortMaName2", 0, Read|Write),
+			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
+			5: UnknownField("AssociatedVlans", 0, Read|Write),
+			6: ByteField("MhfCreation", 0, Read|Write|SetByCreate),
+			7: ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

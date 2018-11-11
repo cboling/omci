@@ -19,6 +19,8 @@
  */
 package generated
 
+const SipAgentConfigDataClassId uint16 = 150
+
 // SipAgentConfigData (class ID #150) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewSipAgentConfigData(params ...ParamData) (IManagedEntityDefinition, error
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("ProxyServerAddressPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("OutboundProxyAddressPointer", 0, Read|Write|SetByCreate),
-			Uint32Field("PrimarySipDns", 0, Read|Write|SetByCreate),
-			Uint32Field("SecondarySipDns", 0, Read|Write|SetByCreate),
-			Uint16Field("TcpUdpPointer", 0, Read|Write),
-			Uint32Field("SipRegExpTime", 0, Read|Write),
-			Uint32Field("SipReregHeadStartTime", 0, Read|Write),
-			Uint16Field("HostPartUri", 0, Read|Write|SetByCreate),
-			ByteField("SipStatus", 0, Read),
-			Uint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
-			Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
-			UnknownField("SipResponseTable", 0, Read|Write),
-			ByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
-			ByteField("SipUriFormat", 0, Read|Write|SetByCreate),
-			Uint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("ProxyServerAddressPointer", 0, Read|Write|SetByCreate),
+			2: Uint16Field("OutboundProxyAddressPointer", 0, Read|Write|SetByCreate),
+			3: Uint32Field("PrimarySipDns", 0, Read|Write|SetByCreate),
+			4: Uint32Field("SecondarySipDns", 0, Read|Write|SetByCreate),
+			5: Uint16Field("TcpUdpPointer", 0, Read|Write),
+			6: Uint32Field("SipRegExpTime", 0, Read|Write),
+			7: Uint32Field("SipReregHeadStartTime", 0, Read|Write),
+			8: Uint16Field("HostPartUri", 0, Read|Write|SetByCreate),
+			9: ByteField("SipStatus", 0, Read),
+			10: Uint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
+			11: Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			12: UnknownField("SipResponseTable", 0, Read|Write),
+			13: ByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
+			14: ByteField("SipUriFormat", 0, Read|Write|SetByCreate),
+			15: Uint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const EnergyConsumptionPerformanceMonitoringHistoryDataClassId uint16 = 343
+
 // EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,14 +44,14 @@ func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("DozeTime", 0, Read),
-			Uint32Field("CyclicSleepTime", 0, Read),
-			Uint32Field("WatchfulSleepTime", 0, Read),
-			Uint32Field("EnergyConsumed", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("DozeTime", 0, Read),
+			4: Uint32Field("CyclicSleepTime", 0, Read),
+			5: Uint32Field("WatchfulSleepTime", 0, Read),
+			6: Uint32Field("EnergyConsumed", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

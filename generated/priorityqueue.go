@@ -19,6 +19,8 @@
  */
 package generated
 
+const PriorityQueueClassId uint16 = 277
+
 // PriorityQueue (class ID #277) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,24 +42,24 @@ func NewPriorityQueue(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("QueueConfigurationOption", 0, Read),
-			Uint16Field("MaximumQueueSize", 0, Read),
-			Uint16Field("AllocatedQueueSize", 0, Read|Write),
-			Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write),
-			Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write),
-			Uint32Field("RelatedPort", 0, Read|Write),
-			Uint16Field("TrafficSchedulerPointer", 0, Read|Write),
-			ByteField("Weight", 0, Read|Write),
-			Uint16Field("BackPressureOperation", 0, Read|Write),
-			Uint32Field("BackPressureTime", 0, Read|Write),
-			Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write),
-			Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write),
-			Uint64Field("PacketDropQueueThresholds", 0, Read|Write),
-			Uint16Field("PacketDropMaxP", 0, Read|Write),
-			ByteField("QueueDropWQ", 0, Read|Write),
-			ByteField("DropPrecedenceColourMarking", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("QueueConfigurationOption", 0, Read),
+			2: Uint16Field("MaximumQueueSize", 0, Read),
+			3: Uint16Field("AllocatedQueueSize", 0, Read|Write),
+			4: Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write),
+			5: Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write),
+			6: Uint32Field("RelatedPort", 0, Read|Write),
+			7: Uint16Field("TrafficSchedulerPointer", 0, Read|Write),
+			8: ByteField("Weight", 0, Read|Write),
+			9: Uint16Field("BackPressureOperation", 0, Read|Write),
+			10: Uint32Field("BackPressureTime", 0, Read|Write),
+			11: Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write),
+			12: Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write),
+			13: Uint64Field("PacketDropQueueThresholds", 0, Read|Write),
+			14: Uint16Field("PacketDropMaxP", 0, Read|Write),
+			15: ByteField("QueueDropWQ", 0, Read|Write),
+			16: ByteField("DropPrecedenceColourMarking", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

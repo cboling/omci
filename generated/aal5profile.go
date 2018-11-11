@@ -19,6 +19,8 @@
  */
 package generated
 
+const Aal5ProfileClassId uint16 = 16
+
 // Aal5Profile (class ID #16) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,11 +44,11 @@ func NewAal5Profile(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("MaxCpcsPduSize", 0, Read|Write|SetByCreate),
-			ByteField("AalMode", 0, Read|Write|SetByCreate),
-			ByteField("SscsType", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("MaxCpcsPduSize", 0, Read|Write|SetByCreate),
+			2: ByteField("AalMode", 0, Read|Write|SetByCreate),
+			3: ByteField("SscsType", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

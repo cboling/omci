@@ -19,6 +19,8 @@
  */
 package generated
 
+const PseudowireTerminationPointClassId uint16 = 282
+
 // PseudowireTerminationPoint (class ID #282) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinitio
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("UnderlyingTransport", 0, Read|Write|SetByCreate),
-			ByteField("ServiceType", 0, Read|Write|SetByCreate),
-			ByteField("Signalling", 0, Read|Write|SetByCreate),
-			Uint16Field("TdmUniPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("NorthSidePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("FarEndIpInfo", 0, Read|Write|SetByCreate),
-			Uint16Field("PayloadSize", 0, Read|Write|SetByCreate),
-			ByteField("PayloadEncapsulationDelay", 0, Read|Write|SetByCreate),
-			ByteField("TimingMode", 0, Read|Write),
-			Uint64Field("TransmitCircuitId", 0, Read|Write),
-			Uint64Field("ExpectedCircuitId", 0, Read|Write),
-			Uint64Field("ReceivedCircuitId", 0, Read),
-			Uint16Field("ExceptionPolicy", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("UnderlyingTransport", 0, Read|Write|SetByCreate),
+			2: ByteField("ServiceType", 0, Read|Write|SetByCreate),
+			3: ByteField("Signalling", 0, Read|Write|SetByCreate),
+			4: Uint16Field("TdmUniPointer", 0, Read|Write|SetByCreate),
+			5: Uint16Field("NorthSidePointer", 0, Read|Write|SetByCreate),
+			6: Uint16Field("FarEndIpInfo", 0, Read|Write|SetByCreate),
+			7: Uint16Field("PayloadSize", 0, Read|Write|SetByCreate),
+			8: ByteField("PayloadEncapsulationDelay", 0, Read|Write|SetByCreate),
+			9: ByteField("TimingMode", 0, Read|Write),
+			10: Uint64Field("TransmitCircuitId", 0, Read|Write),
+			11: Uint64Field("ExpectedCircuitId", 0, Read|Write),
+			12: Uint64Field("ReceivedCircuitId", 0, Read),
+			13: Uint16Field("ExceptionPolicy", 0, Read|Write),
+			14: ByteField("Arc", 0, Read|Write),
+			15: ByteField("ArcInterval", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const BbfTr069ManagementServerClassId uint16 = 340
+
 // BbfTr069ManagementServer (class ID #340) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,11 +42,11 @@ func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition,
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			Uint16Field("AcsNetworkAddress", 0, Read|Write),
-			Uint16Field("AssociatedTag", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: Uint16Field("AcsNetworkAddress", 0, Read|Write),
+			3: Uint16Field("AssociatedTag", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

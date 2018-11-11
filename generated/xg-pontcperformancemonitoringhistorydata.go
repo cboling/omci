@@ -19,6 +19,8 @@
  */
 package generated
 
+const XgPonTcPerformanceMonitoringHistoryDataClassId uint16 = 344
+
 // XgPonTcPerformanceMonitoringHistoryData (class ID #344) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEn
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("PsbdHecErrorCount", 0, Read),
-			Uint32Field("XgtcHecErrorCount", 0, Read),
-			Uint32Field("UnknownProfileCount", 0, Read),
-			Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read),
-			Uint32Field("FragmentXgemFrames", 0, Read),
-			Uint32Field("XgemHecLostWordsCount", 0, Read),
-			Uint32Field("XgemKeyErrors", 0, Read),
-			Uint32Field("XgemHecErrorCount", 0, Read),
-			Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read),
-			Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read),
-			Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read),
-			Uint32Field("LodsEventRestoredCount", 0, Read),
-			Uint32Field("OnuReactivationByLodsEvents", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("PsbdHecErrorCount", 0, Read),
+			4: Uint32Field("XgtcHecErrorCount", 0, Read),
+			5: Uint32Field("UnknownProfileCount", 0, Read),
+			6: Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read),
+			7: Uint32Field("FragmentXgemFrames", 0, Read),
+			8: Uint32Field("XgemHecLostWordsCount", 0, Read),
+			9: Uint32Field("XgemKeyErrors", 0, Read),
+			10: Uint32Field("XgemHecErrorCount", 0, Read),
+			11: Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read),
+			12: Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read),
+			13: Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read),
+			14: Uint32Field("LodsEventRestoredCount", 0, Read),
+			15: Uint32Field("OnuReactivationByLodsEvents", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

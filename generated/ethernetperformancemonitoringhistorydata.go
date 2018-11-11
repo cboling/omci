@@ -19,6 +19,8 @@
  */
 package generated
 
+const EthernetPerformanceMonitoringHistoryDataClassId uint16 = 24
+
 // EthernetPerformanceMonitoringHistoryData (class ID #24) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("FcsErrors", 0, Read),
-			Uint32Field("ExcessiveCollisionCounter", 0, Read),
-			Uint32Field("LateCollisionCounter", 0, Read),
-			Uint32Field("FramesTooLong", 0, Read),
-			Uint32Field("BufferOverflowsOnReceive", 0, Read),
-			Uint32Field("BufferOverflowsOnTransmit", 0, Read),
-			Uint32Field("SingleCollisionFrameCounter", 0, Read),
-			Uint32Field("MultipleCollisionsFrameCounter", 0, Read),
-			Uint32Field("SqeCounter", 0, Read),
-			Uint32Field("DeferredTransmissionCounter", 0, Read),
-			Uint32Field("InternalMacTransmitErrorCounter", 0, Read),
-			Uint32Field("CarrierSenseErrorCounter", 0, Read),
-			Uint32Field("AlignmentErrorCounter", 0, Read),
-			Uint32Field("InternalMacReceiveErrorCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("FcsErrors", 0, Read),
+			4: Uint32Field("ExcessiveCollisionCounter", 0, Read),
+			5: Uint32Field("LateCollisionCounter", 0, Read),
+			6: Uint32Field("FramesTooLong", 0, Read),
+			7: Uint32Field("BufferOverflowsOnReceive", 0, Read),
+			8: Uint32Field("BufferOverflowsOnTransmit", 0, Read),
+			9: Uint32Field("SingleCollisionFrameCounter", 0, Read),
+			10: Uint32Field("MultipleCollisionsFrameCounter", 0, Read),
+			11: Uint32Field("SqeCounter", 0, Read),
+			12: Uint32Field("DeferredTransmissionCounter", 0, Read),
+			13: Uint32Field("InternalMacTransmitErrorCounter", 0, Read),
+			14: Uint32Field("CarrierSenseErrorCounter", 0, Read),
+			15: Uint32Field("AlignmentErrorCounter", 0, Read),
+			16: Uint32Field("InternalMacReceiveErrorCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

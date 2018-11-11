@@ -19,6 +19,8 @@
  */
 package generated
 
+const SipCallInitiationPerformanceMonitoringHistoryDataClassId uint16 = 152
+
 // SipCallInitiationPerformanceMonitoringHistoryData (class ID #152) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("FailedToConnectCounter", 0, Read),
-			Uint32Field("FailedToValidateCounter", 0, Read),
-			Uint32Field("TimeoutCounter", 0, Read),
-			Uint32Field("FailureReceivedCounter", 0, Read),
-			Uint32Field("FailedToAuthenticateCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("FailedToConnectCounter", 0, Read),
+			4: Uint32Field("FailedToValidateCounter", 0, Read),
+			5: Uint32Field("TimeoutCounter", 0, Read),
+			6: Uint32Field("FailureReceivedCounter", 0, Read),
+			7: Uint32Field("FailedToAuthenticateCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1AgDefaultMdLevelClassId uint16 = 301
+
 // Dot1AgDefaultMdLevel (class ID #301) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,13 +43,13 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, err
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("Layer2Type", 0, Read),
-			ByteField("CatchallLevel", 0, Read|Write),
-			ByteField("CatchallMhfCreation", 0, Read|Write),
-			ByteField("CatchallSenderIdPermission", 0, Read|Write),
-			ByteField("DefaultMdLevelTable", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("Layer2Type", 0, Read),
+			2: ByteField("CatchallLevel", 0, Read|Write),
+			3: ByteField("CatchallMhfCreation", 0, Read|Write),
+			4: ByteField("CatchallSenderIdPermission", 0, Read|Write),
+			5: ByteField("DefaultMdLevelTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

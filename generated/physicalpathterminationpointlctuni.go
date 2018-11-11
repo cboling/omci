@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointLctUniClassId uint16 = 83
+
 // PhysicalPathTerminationPointLctUni (class ID #83) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,9 +42,9 @@ func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntityD
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

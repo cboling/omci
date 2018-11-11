@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastChannelConfigurationProfileClassId uint16 = 432
+
 // FastChannelConfigurationProfile (class ID #432) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,18 +44,18 @@ func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefi
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write),
-			Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write),
-			Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write),
-			Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write),
-			Uint32Field("MaximumDelayDelaymax", 0, Read|Write),
-			Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write),
-			ByteField("ShineRatioShineratio", 0, Read|Write),
-			ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write),
-			ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write),
-			ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write),
-			ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write),
+			1: Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write),
+			2: Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write),
+			3: Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write),
+			4: Uint32Field("MaximumDelayDelaymax", 0, Read|Write),
+			5: Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write),
+			6: ByteField("ShineRatioShineratio", 0, Read|Write),
+			7: ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write),
+			8: ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write),
+			9: ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write),
+			10: ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

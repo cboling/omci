@@ -19,6 +19,8 @@
  */
 package generated
 
+const PseudowirePerformanceMonitoringHistoryDataClassId uint16 = 285
+
 // PseudowirePerformanceMonitoringHistoryData (class ID #285) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManage
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("ReceivedPackets", 0, Read),
-			Uint32Field("TransmittedPackets", 0, Read),
-			Uint32Field("MissingPackets", 0, Read),
-			Uint32Field("MisorderedPackets,Usable", 0, Read),
-			Uint32Field("MisorderedPacketsDropped", 0, Read),
-			Uint32Field("PlayoutBufferUnderrunsOverruns", 0, Read),
-			Uint32Field("MalformedPackets", 0, Read),
-			Uint32Field("StrayPackets", 0, Read),
-			Uint32Field("RemotePacketLoss", 0, Read),
-			Uint32Field("TdmLBitPacketsTransmitted", 0, Read),
-			Uint32Field("Es", 0, Read),
-			Uint32Field("Ses", 0, Read),
-			Uint32Field("Uas", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("ReceivedPackets", 0, Read),
+			4: Uint32Field("TransmittedPackets", 0, Read),
+			5: Uint32Field("MissingPackets", 0, Read),
+			6: Uint32Field("MisorderedPackets,Usable", 0, Read),
+			7: Uint32Field("MisorderedPacketsDropped", 0, Read),
+			8: Uint32Field("PlayoutBufferUnderrunsOverruns", 0, Read),
+			9: Uint32Field("MalformedPackets", 0, Read),
+			10: Uint32Field("StrayPackets", 0, Read),
+			11: Uint32Field("RemotePacketLoss", 0, Read),
+			12: Uint32Field("TdmLBitPacketsTransmitted", 0, Read),
+			13: Uint32Field("Es", 0, Read),
+			14: Uint32Field("Ses", 0, Read),
+			15: Uint32Field("Uas", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

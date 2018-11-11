@@ -19,6 +19,8 @@
  */
 package generated
 
+const ReAniGClassId uint16 = 313
+
 // ReAniG (class ID #313) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,22 +42,22 @@ func NewReAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			Uint16Field("OpticalSignalLevel", 0, Read),
-			ByteField("LowerOpticalThreshold", 0, Read|Write),
-			ByteField("UpperOpticalThreshold", 0, Read|Write),
-			Uint16Field("TransmitOpticalLevel", 0, Read),
-			ByteField("LowerTransmitPowerThreshold", 0, Read|Write),
-			ByteField("UpperTransmitPowerThreshold", 0, Read|Write),
-			ByteField("UsageMode", 0, Read|Write),
-			Uint32Field("TargetUpstreamFrequency", 0, Read|Write),
-			Uint32Field("TargetDownstreamFrequency", 0, Read|Write),
-			ByteField("UpstreamSignalTransmissionMode", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: ByteField("OperationalState", 0, Read),
+			3: ByteField("Arc", 0, Read|Write),
+			4: ByteField("ArcInterval", 0, Read|Write),
+			5: Uint16Field("OpticalSignalLevel", 0, Read),
+			6: ByteField("LowerOpticalThreshold", 0, Read|Write),
+			7: ByteField("UpperOpticalThreshold", 0, Read|Write),
+			8: Uint16Field("TransmitOpticalLevel", 0, Read),
+			9: ByteField("LowerTransmitPowerThreshold", 0, Read|Write),
+			10: ByteField("UpperTransmitPowerThreshold", 0, Read|Write),
+			11: ByteField("UsageMode", 0, Read|Write),
+			12: Uint32Field("TargetUpstreamFrequency", 0, Read|Write),
+			13: Uint32Field("TargetDownstreamFrequency", 0, Read|Write),
+			14: ByteField("UpstreamSignalTransmissionMode", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

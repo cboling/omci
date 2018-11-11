@@ -19,6 +19,8 @@
  */
 package generated
 
+const TrafficSchedulerClassId uint16 = 278
+
 // TrafficScheduler (class ID #278) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,12 +42,12 @@ func NewTrafficScheduler(params ...ParamData) (IManagedEntityDefinition, error) 
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			Uint16Field("TContPointer", 0, Read|Write),
-			Uint16Field("TrafficSchedulerPointer", 0, Read),
-			ByteField("Policy", 0, Read|Write),
-			ByteField("PriorityWeight", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: Uint16Field("TContPointer", 0, Read|Write),
+			2: Uint16Field("TrafficSchedulerPointer", 0, Read),
+			3: ByteField("Policy", 0, Read|Write),
+			4: ByteField("PriorityWeight", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslLineInventoryAndStatusDataPart1ClassId uint16 = 100
+
 // XdslLineInventoryAndStatusDataPart1 (class ID #100) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,23 +41,23 @@ func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint64Field("XtuCG9941VendorId", 0, Read),
-			Uint64Field("XtuRG9941VendorId", 0, Read),
-			Uint64Field("XtuCSystemVendorId", 0, Read),
-			Uint64Field("XtuRSystemVendorId", 0, Read),
-			UnknownField("XtuCVersionNumber", 0, Read),
-			UnknownField("XtuRVersionNumber", 0, Read),
-			UnknownField("XtuCSerialNumberPart1", 0, Read),
-			UnknownField("XtuCSerialNumberPart2", 0, Read),
-			UnknownField("XtuRSerialNumberPart1", 0, Read),
-			UnknownField("XtuRSerialNumberPart2", 0, Read),
-			Uint32Field("XtuCSelfTestResults", 0, Read),
-			Uint32Field("XtuRSelfTestResults", 0, Read),
-			UnknownField("XtuCTransmissionSystemCapability", 0, Read),
-			UnknownField("XtuRTransmissionSystemCapability", 0, Read),
-			ByteField("InitializationSuccessFailureCause", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint64Field("XtuCG9941VendorId", 0, Read),
+			2: Uint64Field("XtuRG9941VendorId", 0, Read),
+			3: Uint64Field("XtuCSystemVendorId", 0, Read),
+			4: Uint64Field("XtuRSystemVendorId", 0, Read),
+			5: UnknownField("XtuCVersionNumber", 0, Read),
+			6: UnknownField("XtuRVersionNumber", 0, Read),
+			7: UnknownField("XtuCSerialNumberPart1", 0, Read),
+			8: UnknownField("XtuCSerialNumberPart2", 0, Read),
+			9: UnknownField("XtuRSerialNumberPart1", 0, Read),
+			10: UnknownField("XtuRSerialNumberPart2", 0, Read),
+			11: Uint32Field("XtuCSelfTestResults", 0, Read),
+			12: Uint32Field("XtuRSelfTestResults", 0, Read),
+			13: UnknownField("XtuCTransmissionSystemCapability", 0, Read),
+			14: UnknownField("XtuRTransmissionSystemCapability", 0, Read),
+			15: ByteField("InitializationSuccessFailureCause", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

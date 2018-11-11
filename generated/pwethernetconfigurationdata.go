@@ -19,6 +19,8 @@
  */
 package generated
 
+const PwEthernetConfigurationDataClassId uint16 = 339
+
 // PwEthernetConfigurationData (class ID #339) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,11 +44,11 @@ func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntityDefiniti
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("MplsPseudowireTpPointer", 0, Read|Write|SetByCreate),
-			ByteField("TpType", 0, Read|Write|SetByCreate),
-			Uint16Field("UniPointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|Write|SetByCreate),
+			2: ByteField("TpType", 0, Read|Write|SetByCreate),
+			3: Uint16Field("UniPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -18,6 +18,7 @@
 package omci
 
 import (
+	"./generated"
 	"encoding/hex"
 	"fmt"
 	"github.com/google/gopacket"
@@ -59,7 +60,7 @@ func TestMibResetRequest(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(1))
-	assert.Equal(t, omciMsg.MessageType, byte(MibReset)|AR)
+	assert.Equal(t, omciMsg.MessageType, byte(generated.MibReset)|generated.AR)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibResetRequest)
@@ -101,7 +102,7 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(2))
-	assert.Equal(t, omciMsg.MessageType, byte(Create)|AR)
+	assert.Equal(t, omciMsg.MessageType, byte(generated.Create)|generated.AR)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)

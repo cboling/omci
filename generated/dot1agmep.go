@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1AgMepClassId uint16 = 302
+
 // Dot1AgMep (class ID #302) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,22 +44,22 @@ func NewDot1AgMep(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("Layer2EntityPointer", 0, Read|Write|SetByCreate),
-			ByteField("Layer2Type", 0, Read|Write|SetByCreate),
-			Uint16Field("MaPointer", 0, Read|Write|SetByCreate),
-			Uint16Field("MepId", 0, Read|Write|SetByCreate),
-			ByteField("MepControl", 0, Read|Write|SetByCreate),
-			Uint16Field("PrimaryVlan", 0, Read|Write|SetByCreate),
-			ByteField("AdministrativeState", 0, Read|Write|SetByCreate),
-			ByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
-			Uint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
-			UnknownField("PeerMepIds", 0, Read|Write),
-			ByteField("EthAisControl", 0, Read|Write|SetByCreate),
-			ByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
-			Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write),
-			Uint16Field("AlarmClearSoakTime", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("Layer2EntityPointer", 0, Read|Write|SetByCreate),
+			2: ByteField("Layer2Type", 0, Read|Write|SetByCreate),
+			3: Uint16Field("MaPointer", 0, Read|Write|SetByCreate),
+			4: Uint16Field("MepId", 0, Read|Write|SetByCreate),
+			5: ByteField("MepControl", 0, Read|Write|SetByCreate),
+			6: Uint16Field("PrimaryVlan", 0, Read|Write|SetByCreate),
+			7: ByteField("AdministrativeState", 0, Read|Write|SetByCreate),
+			8: ByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
+			9: Uint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
+			10: UnknownField("PeerMepIds", 0, Read|Write),
+			11: ByteField("EthAisControl", 0, Read|Write|SetByCreate),
+			12: ByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
+			13: Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write),
+			14: Uint16Field("AlarmClearSoakTime", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

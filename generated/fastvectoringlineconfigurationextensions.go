@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastVectoringLineConfigurationExtensionsClassId uint16 = 434
+
 // FastVectoringLineConfigurationExtensions (class ID #434) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,10 +44,10 @@ func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
-			ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
+			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

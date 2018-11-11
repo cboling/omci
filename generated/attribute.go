@@ -35,7 +35,6 @@ type AttributeDefinition struct {
 	DefValue   interface{}
 	Size       int
 	Access     AttributeAccess
-	Value      interface{}
 	Constraint func(interface{}) error
 	Avc        bool // If true, an AVC notification can occur for the attribute
 	Tca        bool // If true, a threshold crossing alert alarm notification can occur for the attribute
@@ -54,11 +53,6 @@ func (attr *AttributeDefinition) GetSize() int                { return attr.Size
 func (attr *AttributeDefinition) GetAccess() AttributeAccess  { return attr.Access }
 func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
 	return attr.Constraint
-}
-
-func (attr *AttributeDefinition) GetValue() (interface{}, error) {
-	// TODO: Better way to detect not-initialized and no default available?
-	return attr.Value, nil
 }
 
 func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback) (interface{}, error) {
@@ -87,7 +81,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	case 2:
 		value := binary.BigEndian.Uint16(data[0:2])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(attr.Value)
+			err = attr.GetConstraints()(value)
 			if err != nil {
 				return nil, err
 			}
@@ -96,7 +90,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	case 4:
 		value := binary.BigEndian.Uint32(data[0:4])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(attr.Value)
+			err = attr.GetConstraints()(value)
 			if err != nil {
 				return nil, err
 			}
@@ -105,7 +99,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	case 8:
 		value := binary.BigEndian.Uint64(data[0:8])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(attr.Value)
+			err = attr.GetConstraints()(value)
 			if err != nil {
 				return nil, err
 			}
@@ -114,7 +108,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	}
 }
 
-func (attr *AttributeDefinition) SerializeTo(b gopacket.SerializeBuffer) error {
+func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer) error {
 	// TODO: Check to see if space in buffer here !!!!
 	bytes, err := b.AppendBytes(attr.GetSize())
 	if err != nil {
@@ -124,13 +118,13 @@ func (attr *AttributeDefinition) SerializeTo(b gopacket.SerializeBuffer) error {
 	default:
 		return errors.New("unknown attribute size")
 	case 1:
-		bytes[0] = attr.Value.(byte)
+		bytes[0] = value.(byte)
 	case 2:
-		binary.BigEndian.PutUint16(bytes, attr.Value.(uint16))
+		binary.BigEndian.PutUint16(bytes, value.(uint16))
 	case 4:
-		binary.BigEndian.PutUint32(bytes, attr.Value.(uint32))
+		binary.BigEndian.PutUint32(bytes, value.(uint32))
 	case 8:
-		binary.BigEndian.PutUint64(bytes, attr.Value.(uint64))
+		binary.BigEndian.PutUint64(bytes, value.(uint64))
 	}
 	return nil
 }

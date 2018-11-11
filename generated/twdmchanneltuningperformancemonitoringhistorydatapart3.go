@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelTuningPerformanceMonitoringHistoryDataPart3ClassId uint16 = 451
+
 // TwdmChannelTuningPerformanceMonitoringHistoryDataPart3 (class ID #451) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,18 +45,18 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamDa
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			Uint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackDsLktp", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsVoid", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsTunr", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsLktp", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read),
-			Uint32Field("TuningControlRequestsRollbackUsLncd", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			3: Uint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read),
+			4: Uint32Field("TuningControlRequestsRollbackDsLktp", 0, Read),
+			5: Uint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read),
+			6: Uint32Field("TuningControlRequestsRollbackUsVoid", 0, Read),
+			7: Uint32Field("TuningControlRequestsRollbackUsTunr", 0, Read),
+			8: Uint32Field("TuningControlRequestsRollbackUsLktp", 0, Read),
+			9: Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read),
+			10: Uint32Field("TuningControlRequestsRollbackUsLncd", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

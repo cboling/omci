@@ -19,6 +19,8 @@
  */
 package generated
 
+const CircuitPackClassId uint16 = 6
+
 // CircuitPack (class ID #6) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,22 +43,22 @@ func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
 			Create,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("Type", 0, Read|SetByCreate),
-			ByteField("NumberOfPorts", 0, Read),
-			Uint64Field("SerialNumber", 0, Read),
-			UnknownField("Version", 0, Read),
-			Uint32Field("VendorId:", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("BridgedOrIpInd", 0, Read|Write),
-			UnknownField("EquipmentId", 0, Read),
-			ByteField("CardConfiguration", 0, Read|Write|SetByCreate),
-			ByteField("TotalTContBufferNumber", 0, Read),
-			ByteField("TotalPriorityQueueNumber", 0, Read),
-			ByteField("TotalTrafficSchedulerNumber", 0, Read),
-			Uint32Field("PowerShedOverride", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("Type", 0, Read|SetByCreate),
+			2: ByteField("NumberOfPorts", 0, Read),
+			3: Uint64Field("SerialNumber", 0, Read),
+			4: UnknownField("Version", 0, Read),
+			5: Uint32Field("VendorId:", 0, Read),
+			6: ByteField("AdministrativeState", 0, Read|Write),
+			7: ByteField("OperationalState", 0, Read),
+			8: ByteField("BridgedOrIpInd", 0, Read|Write),
+			9: UnknownField("EquipmentId", 0, Read),
+			10: ByteField("CardConfiguration", 0, Read|Write|SetByCreate),
+			11: ByteField("TotalTContBufferNumber", 0, Read),
+			12: ByteField("TotalPriorityQueueNumber", 0, Read),
+			13: ByteField("TotalTrafficSchedulerNumber", 0, Read),
+			14: Uint32Field("PowerShedOverride", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

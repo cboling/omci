@@ -250,7 +250,7 @@ type IManagedEntityDefinition interface {
 	GetAttributeDefinitions() AttributeDefinitionMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder) (AttributeValueMap, error)
-	SerializeAttributes(uint16, gopacket.SerializeBuffer) error
+	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer) error
 }
 
 type BaseManagedEntityDefinition struct {
@@ -320,19 +320,27 @@ func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byt
 	return attrMap, nil
 }
 
-func (bme* BaseManagedEntityDefinition) SerializeAttributes(mask uint16, data gopacket.SerializeBuffer) error {
+func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer) error {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return errors.New("unsupported attribute mask")
 	}
 	for index, attrDef := range bme.AttributeDefinitions {
+		// TODO: Verify loop over uint indexed map follows index number
 		if index == 0 {
 			continue	// Skip Entity ID
 		}
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
-			fmt.Println(attrDef)
+			attribute, ok := attr[index]
+			if !ok {
+				// TODO: Custom error, or more detail?
+				return errors.New("attribute not found")
+			}
+			err := attrDef.SerializeTo(attribute.Value, b)
+			if err != nil {
+				return nil
+			}
 		}
 	}
-	// TODO Implement me
 	return nil
 }

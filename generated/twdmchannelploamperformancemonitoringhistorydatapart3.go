@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassId uint16 = 448
+
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID #448) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,21 +45,21 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamDat
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("UpstreamPloamMessageCount", 0, Read),
-			Uint32Field("SerialNumberOnuInBandMessageCount", 0, Read),
-			Uint32Field("SerialNumberOnuAmccMessageCount", 0, Read),
-			Uint32Field("RegistrationMessageCount", 0, Read),
-			Uint32Field("KeyReportMessageCount", 0, Read),
-			Uint32Field("AcknowledgementMessageCount", 0, Read),
-			Uint32Field("SleepRequestMessageCount", 0, Read),
-			Uint32Field("TuningResponseAckNackMessageCount", 0, Read),
-			Uint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read),
-			Uint32Field("PowerConsumptionReportMessageCount", 0, Read),
-			Uint32Field("ChangePowerLevelParameterErrorCount", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("UpstreamPloamMessageCount", 0, Read),
+			4: Uint32Field("SerialNumberOnuInBandMessageCount", 0, Read),
+			5: Uint32Field("SerialNumberOnuAmccMessageCount", 0, Read),
+			6: Uint32Field("RegistrationMessageCount", 0, Read),
+			7: Uint32Field("KeyReportMessageCount", 0, Read),
+			8: Uint32Field("AcknowledgementMessageCount", 0, Read),
+			9: Uint32Field("SleepRequestMessageCount", 0, Read),
+			10: Uint32Field("TuningResponseAckNackMessageCount", 0, Read),
+			11: Uint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read),
+			12: Uint32Field("PowerConsumptionReportMessageCount", 0, Read),
+			13: Uint32Field("ChangePowerLevelParameterErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

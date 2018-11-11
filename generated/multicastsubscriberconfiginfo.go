@@ -19,6 +19,8 @@
  */
 package generated
 
+const MulticastSubscriberConfigInfoClassId uint16 = 310
+
 // MulticastSubscriberConfigInfo (class ID #310) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,14 +45,14 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("MeType", 0, Read|Write|SetByCreate),
-			Uint16Field("MulticastOperationsProfilePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("MaxSimultaneousGroups", 0, Read|Write|SetByCreate),
-			Uint32Field("MaxMulticastBandwidth", 0, Read|Write|SetByCreate),
-			ByteField("BandwidthEnforcement", 0, Read|Write|SetByCreate),
-			UnknownField("MulticastServicePackageTable", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("MeType", 0, Read|Write|SetByCreate),
+			2: Uint16Field("MulticastOperationsProfilePointer", 0, Read|Write|SetByCreate),
+			3: Uint16Field("MaxSimultaneousGroups", 0, Read|Write|SetByCreate),
+			4: Uint32Field("MaxMulticastBandwidth", 0, Read|Write|SetByCreate),
+			5: ByteField("BandwidthEnforcement", 0, Read|Write|SetByCreate),
+			6: UnknownField("MulticastServicePackageTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

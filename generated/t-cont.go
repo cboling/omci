@@ -19,6 +19,8 @@
  */
 package generated
 
+const TContClassId uint16 = 262
+
 // TCont (class ID #262) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,11 +42,11 @@ func NewTCont(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			Uint16Field("AllocId", 0, Read|Write),
-			ByteField("Deprecated", 0, Read),
-			ByteField("Policy", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: Uint16Field("AllocId", 0, Read|Write),
+			2: ByteField("Deprecated", 0, Read),
+			3: ByteField("Policy", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

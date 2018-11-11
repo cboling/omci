@@ -19,6 +19,8 @@
  */
 package generated
 
+const EthernetPseudowireParametersClassId uint16 = 400
+
 // EthernetPseudowireParameters (class ID #400) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,9 +44,9 @@ func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntityDefinit
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("Mtu", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("Mtu", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

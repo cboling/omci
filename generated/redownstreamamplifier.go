@@ -19,6 +19,8 @@
  */
 package generated
 
+const ReDownstreamAmplifierClassId uint16 = 316
+
 // ReDownstreamAmplifier (class ID #316) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,20 +43,20 @@ func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntityDefinition, er
 			Test,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("OperationalMode", 0, Read|Write),
-			Uint16Field("InputOpticalSignalLevel", 0, Read),
-			ByteField("LowerInputOpticalThreshold", 0, Read|Write),
-			ByteField("UpperInputOpticalThreshold", 0, Read|Write),
-			Uint16Field("OutputOpticalSignalLevel", 0, Read),
-			ByteField("LowerOutputOpticalThreshold", 0, Read|Write),
-			ByteField("UpperOutputOpticalThreshold", 0, Read|Write),
-			ByteField("R'S'SplitterCouplingRatio", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: ByteField("OperationalState", 0, Read),
+			3: ByteField("Arc", 0, Read|Write),
+			4: ByteField("ArcInterval", 0, Read|Write),
+			5: ByteField("OperationalMode", 0, Read|Write),
+			6: Uint16Field("InputOpticalSignalLevel", 0, Read),
+			7: ByteField("LowerInputOpticalThreshold", 0, Read|Write),
+			8: ByteField("UpperInputOpticalThreshold", 0, Read|Write),
+			9: Uint16Field("OutputOpticalSignalLevel", 0, Read),
+			10: ByteField("LowerOutputOpticalThreshold", 0, Read|Write),
+			11: ByteField("UpperOutputOpticalThreshold", 0, Read|Write),
+			12: ByteField("R'S'SplitterCouplingRatio", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

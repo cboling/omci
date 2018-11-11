@@ -19,6 +19,8 @@
  */
 package generated
 
+const OnuPowerSheddingClassId uint16 = 133
+
 // OnuPowerShedding (class ID #133) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,19 +42,19 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) 
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("RestorePowerTimerResetInterval", 0, Read|Write),
-			Uint16Field("DataClassSheddingInterval", 0, Read|Write),
-			Uint16Field("VoiceClassSheddingInterval", 0, Read|Write),
-			Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
-			Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
-			Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
-			Uint16Field("AtmClassSheddingInterval", 0, Read|Write),
-			Uint16Field("CesClassSheddingInterval", 0, Read|Write),
-			Uint16Field("FrameClassSheddingInterval", 0, Read|Write),
-			Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write),
-			Uint16Field("SheddingStatus", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("RestorePowerTimerResetInterval", 0, Read|Write),
+			2: Uint16Field("DataClassSheddingInterval", 0, Read|Write),
+			3: Uint16Field("VoiceClassSheddingInterval", 0, Read|Write),
+			4: Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
+			5: Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
+			6: Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
+			7: Uint16Field("AtmClassSheddingInterval", 0, Read|Write),
+			8: Uint16Field("CesClassSheddingInterval", 0, Read|Write),
+			9: Uint16Field("FrameClassSheddingInterval", 0, Read|Write),
+			10: Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write),
+			11: Uint16Field("SheddingStatus", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

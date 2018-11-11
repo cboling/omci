@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgeServiceProfileClassId uint16 = 45
+
 // MacBridgeServiceProfile (class ID #45) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,18 +44,18 @@ func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntityDefinition, 
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("SpanningTreeInd", 0, Read|Write|SetByCreate),
-			ByteField("LearningInd", 0, Read|Write|SetByCreate),
-			ByteField("PortBridgingInd", 0, Read|Write|SetByCreate),
-			Uint16Field("Priority", 0, Read|Write|SetByCreate),
-			Uint16Field("MaxAge", 0, Read|Write|SetByCreate),
-			Uint16Field("HelloTime", 0, Read|Write|SetByCreate),
-			Uint16Field("ForwardDelay", 0, Read|Write|SetByCreate),
-			ByteField("UnknownMacAddressDiscard", 0, Read|Write|SetByCreate),
-			ByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
-			Uint32Field("DynamicFilteringAgeingTime", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("SpanningTreeInd", 0, Read|Write|SetByCreate),
+			2: ByteField("LearningInd", 0, Read|Write|SetByCreate),
+			3: ByteField("PortBridgingInd", 0, Read|Write|SetByCreate),
+			4: Uint16Field("Priority", 0, Read|Write|SetByCreate),
+			5: Uint16Field("MaxAge", 0, Read|Write|SetByCreate),
+			6: Uint16Field("HelloTime", 0, Read|Write|SetByCreate),
+			7: Uint16Field("ForwardDelay", 0, Read|Write|SetByCreate),
+			8: ByteField("UnknownMacAddressDiscard", 0, Read|Write|SetByCreate),
+			9: ByteField("MacLearningDepth", 0, Read|Write|SetByCreate),
+			10: Uint32Field("DynamicFilteringAgeingTime", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

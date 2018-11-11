@@ -19,6 +19,8 @@
  */
 package generated
 
+const CardholderClassId uint16 = 5
+
 // Cardholder (class ID #5) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,17 +42,17 @@ func NewCardholder(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("ActualPlugInUnitType", 0, Read),
-			ByteField("ExpectedPlugInUnitType", 0, Read|Write),
-			ByteField("ExpectedPortCount", 0, Read|Write),
-			UnknownField("ExpectedEquipmentId", 0, Read|Write),
-			UnknownField("ActualEquipmentId", 0, Read),
-			ByteField("ProtectionProfilePointer", 0, Read),
-			ByteField("InvokeProtectionSwitch", 0, Read|Write),
-			ByteField("AlarmReportingControl", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("ActualPlugInUnitType", 0, Read),
+			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write),
+			3: ByteField("ExpectedPortCount", 0, Read|Write),
+			4: UnknownField("ExpectedEquipmentId", 0, Read|Write),
+			5: UnknownField("ActualEquipmentId", 0, Read),
+			6: ByteField("ProtectionProfilePointer", 0, Read),
+			7: ByteField("InvokeProtectionSwitch", 0, Read|Write),
+			8: ByteField("AlarmReportingControl", 0, Read|Write),
+			9: ByteField("ArcInterval", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

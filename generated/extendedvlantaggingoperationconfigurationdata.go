@@ -19,6 +19,8 @@
  */
 package generated
 
+const ExtendedVlanTaggingOperationConfigurationDataClassId uint16 = 171
+
 // ExtendedVlanTaggingOperationConfigurationData (class ID #171) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,16 +45,16 @@ func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IMan
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("AssociationType", 0, Read|Write|SetByCreate),
-			Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, Read),
-			Uint16Field("InputTpid", 0, Read|Write),
-			Uint16Field("OutputTpid", 0, Read|Write),
-			ByteField("DownstreamMode", 0, Read|Write),
-			UnknownField("ReceivedFrameVlanTaggingOperationTable", 0, Read|Write),
-			Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
-			UnknownField("DscpToPBitMapping", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("AssociationType", 0, Read|Write|SetByCreate),
+			2: Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, Read),
+			3: Uint16Field("InputTpid", 0, Read|Write),
+			4: Uint16Field("OutputTpid", 0, Read|Write),
+			5: ByteField("DownstreamMode", 0, Read|Write),
+			6: UnknownField("ReceivedFrameVlanTaggingOperationTable", 0, Read|Write),
+			7: Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
+			8: UnknownField("DscpToPBitMapping", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

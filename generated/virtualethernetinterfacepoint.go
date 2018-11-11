@@ -19,6 +19,8 @@
  */
 package generated
 
+const VirtualEthernetInterfacePointClassId uint16 = 329
+
 // VirtualEthernetInterfacePoint (class ID #329) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,13 +42,13 @@ func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntityDefini
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			UnknownField("InterdomainName", 0, Read|Write),
-			Uint16Field("TcpUdpPointer", 0, Read|Write),
-			Uint16Field("IanaAssignedPort", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: ByteField("OperationalState", 0, Read),
+			3: UnknownField("InterdomainName", 0, Read|Write),
+			4: Uint16Field("TcpUdpPointer", 0, Read|Write),
+			5: Uint16Field("IanaAssignedPort", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

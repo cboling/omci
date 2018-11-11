@@ -19,6 +19,8 @@
  */
 package generated
 
+const SnmpConfigurationDataClassId uint16 = 335
+
 // SnmpConfigurationData (class ID #335) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewSnmpConfigurationData(params ...ParamData) (IManagedEntityDefinition, er
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("SnmpVersion", 0, Read|Write|SetByCreate),
-			Uint16Field("SnmpAgentAddress", 0, Read|Write|SetByCreate),
-			Uint32Field("SnmpServerAddress", 0, Read|Write|SetByCreate),
-			Uint16Field("SnmpServerPort", 0, Read|Write|SetByCreate),
-			Uint16Field("SecurityNamePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("CommunityForRead", 0, Read|Write|SetByCreate),
-			Uint16Field("CommunityForWrite", 0, Read|Write|SetByCreate),
-			Uint16Field("SysNamePointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("SnmpVersion", 0, Read|Write|SetByCreate),
+			2: Uint16Field("SnmpAgentAddress", 0, Read|Write|SetByCreate),
+			3: Uint32Field("SnmpServerAddress", 0, Read|Write|SetByCreate),
+			4: Uint16Field("SnmpServerPort", 0, Read|Write|SetByCreate),
+			5: Uint16Field("SecurityNamePointer", 0, Read|Write|SetByCreate),
+			6: Uint16Field("CommunityForRead", 0, Read|Write|SetByCreate),
+			7: Uint16Field("CommunityForWrite", 0, Read|Write|SetByCreate),
+			8: Uint16Field("SysNamePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

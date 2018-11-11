@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1XPerformanceMonitoringHistoryDataClassId uint16 = 292
+
 // Dot1XPerformanceMonitoringHistoryData (class ID #292) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,22 +44,22 @@ func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("EapolFramesReceived", 0, Read),
-			Uint32Field("EapolFramesTransmitted", 0, Read),
-			Uint32Field("EapolStartFramesReceived", 0, Read),
-			Uint32Field("EapolLogoffFramesReceived", 0, Read),
-			Uint32Field("InvalidEapolFramesReceived", 0, Read),
-			Uint32Field("EapRespIdFramesReceived", 0, Read),
-			Uint32Field("EapResponseFramesReceived", 0, Read),
-			Uint32Field("EapInitialRequestFramesTransmitted", 0, Read),
-			Uint32Field("EapRequestFramesTransmitted", 0, Read),
-			Uint32Field("EapLengthErrorFramesReceived", 0, Read),
-			Uint32Field("EapSuccessFramesGeneratedAutonomously", 0, Read),
-			Uint32Field("EapFailureFramesGeneratedAutonomously", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("EapolFramesReceived", 0, Read),
+			4: Uint32Field("EapolFramesTransmitted", 0, Read),
+			5: Uint32Field("EapolStartFramesReceived", 0, Read),
+			6: Uint32Field("EapolLogoffFramesReceived", 0, Read),
+			7: Uint32Field("InvalidEapolFramesReceived", 0, Read),
+			8: Uint32Field("EapRespIdFramesReceived", 0, Read),
+			9: Uint32Field("EapResponseFramesReceived", 0, Read),
+			10: Uint32Field("EapInitialRequestFramesTransmitted", 0, Read),
+			11: Uint32Field("EapRequestFramesTransmitted", 0, Read),
+			12: Uint32Field("EapLengthErrorFramesReceived", 0, Read),
+			13: Uint32Field("EapSuccessFramesGeneratedAutonomously", 0, Read),
+			14: Uint32Field("EapFailureFramesGeneratedAutonomously", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

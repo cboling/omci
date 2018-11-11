@@ -19,6 +19,8 @@
  */
 package generated
 
+const MgcConfigDataClassId uint16 = 155
+
 // MgcConfigData (class ID #155) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,19 +44,19 @@ func NewMgcConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("PrimaryMgc", 0, Read|Write|SetByCreate),
-			Uint16Field("SecondaryMgc", 0, Read|Write|SetByCreate),
-			Uint16Field("TcpUdpPointer", 0, Read|Write|SetByCreate),
-			ByteField("Version", 0, Read|Write|SetByCreate),
-			ByteField("MessageFormat", 0, Read|Write|SetByCreate),
-			Uint16Field("MaximumRetryTime", 0, Read|Write),
-			Uint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
-			Uint16Field("ServiceChangeDelay", 0, Read|Write),
-			UnknownField("TerminationIdBase", 0, Read|Write),
-			Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
-			Uint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("PrimaryMgc", 0, Read|Write|SetByCreate),
+			2: Uint16Field("SecondaryMgc", 0, Read|Write|SetByCreate),
+			3: Uint16Field("TcpUdpPointer", 0, Read|Write|SetByCreate),
+			4: ByteField("Version", 0, Read|Write|SetByCreate),
+			5: ByteField("MessageFormat", 0, Read|Write|SetByCreate),
+			6: Uint16Field("MaximumRetryTime", 0, Read|Write),
+			7: Uint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
+			8: Uint16Field("ServiceChangeDelay", 0, Read|Write),
+			9: UnknownField("TerminationIdBase", 0, Read|Write),
+			10: Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
+			11: Uint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

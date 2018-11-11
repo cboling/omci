@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelPloamPerformanceMonitoringHistoryDataPart1ClassId uint16 = 446
+
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart1 (class ID #446) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,16 +45,16 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamDat
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
-			Uint32Field("PloamMicErrors", 0, Read),
-			Uint32Field("DownstreamPloamMessageCount", 0, Read),
-			Uint32Field("RangingTimeMessageCount", 0, Read),
-			Uint32Field("ProtectionControlMessageCount", 0, Read),
-			Uint32Field("AdjustTxWavelengthMessageCount", 0, Read),
-			Uint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			3: Uint32Field("PloamMicErrors", 0, Read),
+			4: Uint32Field("DownstreamPloamMessageCount", 0, Read),
+			5: Uint32Field("RangingTimeMessageCount", 0, Read),
+			6: Uint32Field("ProtectionControlMessageCount", 0, Read),
+			7: Uint32Field("AdjustTxWavelengthMessageCount", 0, Read),
+			8: Uint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

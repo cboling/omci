@@ -19,6 +19,8 @@
  */
 package generated
 
+const ReCommonAmplifierParametersClassId uint16 = 328
+
 // ReCommonAmplifierParameters (class ID #328) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,19 +42,19 @@ func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntityDefiniti
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("Gain", 0, Read),
-			ByteField("LowerGainThreshold", 0, Read|Write),
-			ByteField("UpperGainThreshold", 0, Read|Write),
-			ByteField("TargetGain", 0, Read|Write),
-			Uint16Field("DeviceTemperature", 0, Read),
-			ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write),
-			ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write),
-			ByteField("DeviceBiasCurrent", 0, Read),
-			Uint16Field("AmplifierSaturationOutputPower", 0, Read),
-			ByteField("AmplifierNoiseFigure", 0, Read),
-			ByteField("AmplifierSaturationGain", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("Gain", 0, Read),
+			2: ByteField("LowerGainThreshold", 0, Read|Write),
+			3: ByteField("UpperGainThreshold", 0, Read|Write),
+			4: ByteField("TargetGain", 0, Read|Write),
+			5: Uint16Field("DeviceTemperature", 0, Read),
+			6: ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write),
+			7: ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write),
+			8: ByteField("DeviceBiasCurrent", 0, Read),
+			9: Uint16Field("AmplifierSaturationOutputPower", 0, Read),
+			10: ByteField("AmplifierNoiseFigure", 0, Read),
+			11: ByteField("AmplifierSaturationGain", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

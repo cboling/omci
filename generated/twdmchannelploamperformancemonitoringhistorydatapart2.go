@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelPloamPerformanceMonitoringHistoryDataPart2ClassId uint16 = 447
+
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID #447) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,24 +45,24 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamDat
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("SystemProfileMessageCount", 0, Read),
-			Uint32Field("ChannelProfileMessageCount", 0, Read),
-			Uint32Field("BurstProfileMessageCount", 0, Read),
-			Uint32Field("AssignOnuIdMessageCount", 0, Read),
-			Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, Read),
-			Uint32Field("DeactivateOnuIdMessageCount", 0, Read),
-			Uint32Field("DisableSerialNumberMessageCount", 0, Read),
-			Uint32Field("RequestRegistrationMessageCount", 0, Read),
-			Uint32Field("AssignAllocIdMessageCount", 0, Read),
-			Uint32Field("KeyControlMessageCount", 0, Read),
-			Uint32Field("SleepAllowMessageCount", 0, Read),
-			Uint32Field("TuningControlRequestMessageCount", 0, Read),
-			Uint32Field("TuningControlCompleteDMessageCount", 0, Read),
-			Uint32Field("CalibrationRequestMessageCount", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("SystemProfileMessageCount", 0, Read),
+			4: Uint32Field("ChannelProfileMessageCount", 0, Read),
+			5: Uint32Field("BurstProfileMessageCount", 0, Read),
+			6: Uint32Field("AssignOnuIdMessageCount", 0, Read),
+			7: Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, Read),
+			8: Uint32Field("DeactivateOnuIdMessageCount", 0, Read),
+			9: Uint32Field("DisableSerialNumberMessageCount", 0, Read),
+			10: Uint32Field("RequestRegistrationMessageCount", 0, Read),
+			11: Uint32Field("AssignAllocIdMessageCount", 0, Read),
+			12: Uint32Field("KeyControlMessageCount", 0, Read),
+			13: Uint32Field("SleepAllowMessageCount", 0, Read),
+			14: Uint32Field("TuningControlRequestMessageCount", 0, Read),
+			15: Uint32Field("TuningControlCompleteDMessageCount", 0, Read),
+			16: Uint32Field("CalibrationRequestMessageCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

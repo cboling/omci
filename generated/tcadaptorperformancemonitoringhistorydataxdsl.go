@@ -19,6 +19,8 @@
  */
 package generated
 
+const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId uint16 = 116
+
 // TcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID #116) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,18 +44,18 @@ func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IMan
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint16Field("NearEndHecViolationCount", 0, Read),
-			Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, Read),
-			Uint32Field("NearEndUserTotalCellCountCuP", 0, Read),
-			Uint16Field("NearEndIdleCellBitErrorCount", 0, Read),
-			Uint16Field("FarEndHecViolationCount", 0, Read),
-			Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, Read),
-			Uint32Field("FarEndUserTotalCellCountCuPfe", 0, Read),
-			Uint16Field("FarEndIdleCellBitErrorCount", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint16Field("NearEndHecViolationCount", 0, Read),
+			4: Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, Read),
+			5: Uint32Field("NearEndUserTotalCellCountCuP", 0, Read),
+			6: Uint16Field("NearEndIdleCellBitErrorCount", 0, Read),
+			7: Uint16Field("FarEndHecViolationCount", 0, Read),
+			8: Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, Read),
+			9: Uint32Field("FarEndUserTotalCellCountCuPfe", 0, Read),
+			10: Uint16Field("FarEndIdleCellBitErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

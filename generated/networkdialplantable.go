@@ -19,6 +19,8 @@
  */
 package generated
 
+const NetworkDialPlanTableClassId uint16 = 145
+
 // NetworkDialPlanTable (class ID #145) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,14 +45,14 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntityDefinition, err
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("DialPlanNumber", 0, Read),
-			Uint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate),
-			Uint16Field("CriticalDialTimeout", 0, Read|Write|SetByCreate),
-			Uint16Field("PartialDialTimeout", 0, Read|Write|SetByCreate),
-			ByteField("DialPlanFormat", 0, Read|Write|SetByCreate),
-			ByteField("DialPlanTable", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("DialPlanNumber", 0, Read),
+			2: Uint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate),
+			3: Uint16Field("CriticalDialTimeout", 0, Read|Write|SetByCreate),
+			4: Uint16Field("PartialDialTimeout", 0, Read|Write|SetByCreate),
+			5: ByteField("DialPlanFormat", 0, Read|Write|SetByCreate),
+			6: ByteField("DialPlanTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

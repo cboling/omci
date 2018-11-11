@@ -19,6 +19,8 @@
  */
 package generated
 
+const EquipmentExtensionPackageClassId uint16 = 160
+
 // EquipmentExtensionPackage (class ID #160) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,10 +42,10 @@ func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			Uint16Field("EnvironmentalSense", 0, Read|Write),
-			Uint16Field("ContactClosureOutput", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: Uint16Field("EnvironmentalSense", 0, Read|Write),
+			2: Uint16Field("ContactClosureOutput", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const RtpProfileDataClassId uint16 = 143
+
 // RtpProfileData (class ID #143) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewRtpProfileData(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("LocalPortMin", 0, Read|Write|SetByCreate),
-			Uint16Field("LocalPortMax", 0, Read|Write|SetByCreate),
-			ByteField("DscpMark", 0, Read|Write|SetByCreate),
-			ByteField("PiggybackEvents", 0, Read|Write|SetByCreate),
-			ByteField("ToneEvents", 0, Read|Write|SetByCreate),
-			ByteField("DtmfEvents", 0, Read|Write|SetByCreate),
-			ByteField("CasEvents", 0, Read|Write|SetByCreate),
-			Uint16Field("IpHostConfigPointer", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("LocalPortMin", 0, Read|Write|SetByCreate),
+			2: Uint16Field("LocalPortMax", 0, Read|Write|SetByCreate),
+			3: ByteField("DscpMark", 0, Read|Write|SetByCreate),
+			4: ByteField("PiggybackEvents", 0, Read|Write|SetByCreate),
+			5: ByteField("ToneEvents", 0, Read|Write|SetByCreate),
+			6: ByteField("DtmfEvents", 0, Read|Write|SetByCreate),
+			7: ByteField("CasEvents", 0, Read|Write|SetByCreate),
+			8: Uint16Field("IpHostConfigPointer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

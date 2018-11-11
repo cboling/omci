@@ -19,6 +19,8 @@
  */
 package generated
 
+const AniGClassId uint16 = 263
+
 // AniG (class ID #263) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,24 +43,24 @@ func NewAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 			Test,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("SrIndication", 0, Read),
-			Uint16Field("TotalTcontNumber", 0, Read),
-			Uint16Field("GemBlockLength", 0, Read|Write),
-			ByteField("PiggybackDbaReporting", 0, Read),
-			ByteField("Deprecated", 0, Read),
-			ByteField("SignalFailThreshold", 0, Read|Write),
-			ByteField("SignalDegradeSdThreshold", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			Uint16Field("OpticalSignalLevel", 0, Read),
-			ByteField("LowerOpticalThreshold", 0, Read|Write),
-			ByteField("UpperOpticalThreshold", 0, Read|Write),
-			Uint16Field("OnuResponseTime", 0, Read),
-			Uint16Field("TransmitOpticalLevel", 0, Read),
-			ByteField("LowerTransmitPowerThreshold", 0, Read|Write),
-			ByteField("UpperTransmitPowerThreshold", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("SrIndication", 0, Read),
+			2: Uint16Field("TotalTcontNumber", 0, Read),
+			3: Uint16Field("GemBlockLength", 0, Read|Write),
+			4: ByteField("PiggybackDbaReporting", 0, Read),
+			5: ByteField("Deprecated", 0, Read),
+			6: ByteField("SignalFailThreshold", 0, Read|Write),
+			7: ByteField("SignalDegradeSdThreshold", 0, Read|Write),
+			8: ByteField("Arc", 0, Read|Write),
+			9: ByteField("ArcInterval", 0, Read|Write),
+			10: Uint16Field("OpticalSignalLevel", 0, Read),
+			11: ByteField("LowerOpticalThreshold", 0, Read|Write),
+			12: ByteField("UpperOpticalThreshold", 0, Read|Write),
+			13: Uint16Field("OnuResponseTime", 0, Read),
+			14: Uint16Field("TransmitOpticalLevel", 0, Read),
+			15: ByteField("LowerTransmitPowerThreshold", 0, Read|Write),
+			16: ByteField("UpperTransmitPowerThreshold", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

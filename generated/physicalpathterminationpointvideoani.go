@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointVideoAniClassId uint16 = 90
+
 // PhysicalPathTerminationPointVideoAni (class ID #90) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,24 +42,24 @@ func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (IManagedEntit
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("FrequencyRangeLow", 0, Read),
-			ByteField("FrequencyRangeHigh", 0, Read),
-			ByteField("SignalCapability", 0, Read),
-			ByteField("OpticalSignalLevel", 0, Read),
-			ByteField("PilotSignalLevel", 0, Read),
-			ByteField("SignalLevelMin", 0, Read),
-			ByteField("SignalLevelMax", 0, Read),
-			Uint32Field("PilotFrequency", 0, Read|Write),
-			ByteField("AgcMode", 0, Read|Write),
-			ByteField("AgcSetting", 0, Read|Write),
-			ByteField("VideoLowerOpticalThreshold", 0, Read|Write),
-			ByteField("VideoUpperOpticalThreshold", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: ByteField("OperationalState", 0, Read),
+			3: ByteField("Arc", 0, Read|Write),
+			4: ByteField("ArcInterval", 0, Read|Write),
+			5: ByteField("FrequencyRangeLow", 0, Read),
+			6: ByteField("FrequencyRangeHigh", 0, Read),
+			7: ByteField("SignalCapability", 0, Read),
+			8: ByteField("OpticalSignalLevel", 0, Read),
+			9: ByteField("PilotSignalLevel", 0, Read),
+			10: ByteField("SignalLevelMin", 0, Read),
+			11: ByteField("SignalLevelMax", 0, Read),
+			12: Uint32Field("PilotFrequency", 0, Read|Write),
+			13: ByteField("AgcMode", 0, Read|Write),
+			14: ByteField("AgcSetting", 0, Read|Write),
+			15: ByteField("VideoLowerOpticalThreshold", 0, Read|Write),
+			16: ByteField("VideoUpperOpticalThreshold", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

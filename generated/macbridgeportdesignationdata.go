@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgePortDesignationDataClassId uint16 = 48
+
 // MacBridgePortDesignationData (class ID #48) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,10 +41,10 @@ func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntityDefinit
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("DesignatedBridgeRootCostPort", 0, Read),
-			ByteField("PortState", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("DesignatedBridgeRootCostPort", 0, Read),
+			2: ByteField("PortState", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

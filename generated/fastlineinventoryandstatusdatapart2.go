@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastLineInventoryAndStatusDataPart2ClassId uint16 = 436
+
 // FastLineInventoryAndStatusDataPart2 (class ID #436) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,13 +41,13 @@ func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
+			2: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
+			3: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
+			4: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
+			5: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipConfigDataClassId uint16 = 138
+
 // VoipConfigData (class ID #138) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,16 +42,16 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AvailableSignallingProtocols", 0, Read),
-			ByteField("SignallingProtocolUsed", 0, Read|Write),
-			Uint32Field("AvailableVoipConfigurationMethods", 0, Read),
-			ByteField("VoipConfigurationMethodUsed", 0, Read|Write),
-			Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
-			ByteField("VoipConfigurationState", 0, Read),
-			ByteField("RetrieveProfile", 0, Write),
-			UnknownField("ProfileVersion", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AvailableSignallingProtocols", 0, Read),
+			2: ByteField("SignallingProtocolUsed", 0, Read|Write),
+			3: Uint32Field("AvailableVoipConfigurationMethods", 0, Read),
+			4: ByteField("VoipConfigurationMethodUsed", 0, Read|Write),
+			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
+			6: ByteField("VoipConfigurationState", 0, Read),
+			7: ByteField("RetrieveProfile", 0, Write),
+			8: UnknownField("ProfileVersion", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

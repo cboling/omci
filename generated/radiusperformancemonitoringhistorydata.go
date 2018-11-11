@@ -19,6 +19,8 @@
  */
 package generated
 
+const RadiusPerformanceMonitoringHistoryDataClassId uint16 = 293
+
 // RadiusPerformanceMonitoringHistoryData (class ID #293) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("AccessRequestPacketsTransmitted", 0, Read),
-			Uint32Field("AccessRequestRetransmissionCount", 0, Read),
-			Uint32Field("AccessChallengePacketsReceived", 0, Read),
-			Uint32Field("AccessAcceptPacketsReceived", 0, Read),
-			Uint32Field("AccessRejectPacketsReceived", 0, Read),
-			Uint32Field("InvalidRadiusPacketsReceived", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("AccessRequestPacketsTransmitted", 0, Read),
+			4: Uint32Field("AccessRequestRetransmissionCount", 0, Read),
+			5: Uint32Field("AccessChallengePacketsReceived", 0, Read),
+			6: Uint32Field("AccessAcceptPacketsReceived", 0, Read),
+			7: Uint32Field("AccessRejectPacketsReceived", 0, Read),
+			8: Uint32Field("InvalidRadiusPacketsReceived", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgePortFilterPreAssignTableClassId uint16 = 79
+
 // MacBridgePortFilterPreAssignTable (class ID #79) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,18 +42,18 @@ func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntityDe
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("Ipv4MulticastFiltering", 0, Read|Write),
-			ByteField("Ipv6MulticastFiltering", 0, Read|Write),
-			ByteField("Ipv4BroadcastFiltering", 0, Read|Write),
-			ByteField("RarpFiltering", 0, Read|Write),
-			ByteField("IpxFiltering", 0, Read|Write),
-			ByteField("NetbeuiFiltering", 0, Read|Write),
-			ByteField("AppletalkFiltering", 0, Read|Write),
-			ByteField("BridgeManagementInformationFiltering", 0, Read|Write),
-			ByteField("ArpFiltering", 0, Read|Write),
-			ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("Ipv4MulticastFiltering", 0, Read|Write),
+			2: ByteField("Ipv6MulticastFiltering", 0, Read|Write),
+			3: ByteField("Ipv4BroadcastFiltering", 0, Read|Write),
+			4: ByteField("RarpFiltering", 0, Read|Write),
+			5: ByteField("IpxFiltering", 0, Read|Write),
+			6: ByteField("NetbeuiFiltering", 0, Read|Write),
+			7: ByteField("AppletalkFiltering", 0, Read|Write),
+			8: ByteField("BridgeManagementInformationFiltering", 0, Read|Write),
+			9: ByteField("ArpFiltering", 0, Read|Write),
+			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

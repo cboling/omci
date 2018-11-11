@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointPotsUniClassId uint16 = 53
+
 // PhysicalPathTerminationPointPotsUni (class ID #53) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -41,21 +43,21 @@ func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity
 			Test,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("AdministrativeState", 0, Read|Write),
-			Uint16Field("Deprecated", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("Impedance", 0, Read|Write),
-			ByteField("TransmissionPath", 0, Read|Write),
-			ByteField("RxGain", 0, Read|Write),
-			ByteField("TxGain", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("HookState", 0, Read),
-			Uint16Field("PotsHoldoverTime", 0, Read|Write),
-			ByteField("NominalFeedVoltage", 0, Read|Write),
-			ByteField("LossOfSoftswitch", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("AdministrativeState", 0, Read|Write),
+			2: Uint16Field("Deprecated", 0, Read|Write),
+			3: ByteField("Arc", 0, Read|Write),
+			4: ByteField("ArcInterval", 0, Read|Write),
+			5: ByteField("Impedance", 0, Read|Write),
+			6: ByteField("TransmissionPath", 0, Read|Write),
+			7: ByteField("RxGain", 0, Read|Write),
+			8: ByteField("TxGain", 0, Read|Write),
+			9: ByteField("OperationalState", 0, Read),
+			10: ByteField("HookState", 0, Read),
+			11: Uint16Field("PotsHoldoverTime", 0, Read|Write),
+			12: ByteField("NominalFeedVoltage", 0, Read|Write),
+			13: ByteField("LossOfSoftswitch", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

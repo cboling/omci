@@ -19,6 +19,8 @@
  */
 package generated
 
+const Aal5PerformanceMonitoringHistoryDataClassId uint16 = 18
+
 // Aal5PerformanceMonitoringHistoryData (class ID #18) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntit
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("SumOfInvalidCsFieldErrors", 0, Read),
-			Uint32Field("CrcViolations", 0, Read),
-			Uint32Field("ReassemblyTimerExpirations", 0, Read),
-			Uint32Field("BufferOverflows", 0, Read),
-			Uint32Field("EncapProtocolErrors", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("SumOfInvalidCsFieldErrors", 0, Read),
+			4: Uint32Field("CrcViolations", 0, Read),
+			5: Uint32Field("ReassemblyTimerExpirations", 0, Read),
+			6: Uint32Field("BufferOverflows", 0, Read),
+			7: Uint32Field("EncapProtocolErrors", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

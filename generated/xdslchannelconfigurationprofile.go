@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslChannelConfigurationProfileClassId uint16 = 107
+
 // XdslChannelConfigurationProfile (class ID #107) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefi
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint32Field("MinimumDataRate", 0, Read|Write|SetByCreate),
-			Uint32Field("MaximumDataRate", 0, Read|Write|SetByCreate),
-			ByteField("RateAdaptationRatio", 0, Read|Write|SetByCreate),
-			ByteField("MaximumInterleavingDelay", 0, Read|Write|SetByCreate),
-			Uint32Field("DataRateThresholdUpshift", 0, Read|Write|SetByCreate),
-			Uint32Field("DataRateThresholdDownshift", 0, Read|Write|SetByCreate),
-			Uint32Field("MinimumReservedDataRate", 0, Read|Write|SetByCreate),
-			Uint32Field("MinimumDataRateInLowPowerState", 0, Read|Write|SetByCreate),
-			ByteField("MinimumImpulseNoiseProtection", 0, Read|Write|SetByCreate),
-			ByteField("MaximumBitErrorRatio", 0, Read|Write|SetByCreate),
-			ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write),
-			ByteField("MaximumDelayVariation", 0, Read|Write),
-			ByteField("ChannelInitializationPolicySelection", 0, Read|Write),
-			Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write),
-			Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint32Field("MinimumDataRate", 0, Read|Write|SetByCreate),
+			2: Uint32Field("MaximumDataRate", 0, Read|Write|SetByCreate),
+			3: ByteField("RateAdaptationRatio", 0, Read|Write|SetByCreate),
+			4: ByteField("MaximumInterleavingDelay", 0, Read|Write|SetByCreate),
+			5: Uint32Field("DataRateThresholdUpshift", 0, Read|Write|SetByCreate),
+			6: Uint32Field("DataRateThresholdDownshift", 0, Read|Write|SetByCreate),
+			7: Uint32Field("MinimumReservedDataRate", 0, Read|Write|SetByCreate),
+			8: Uint32Field("MinimumDataRateInLowPowerState", 0, Read|Write|SetByCreate),
+			9: ByteField("MinimumImpulseNoiseProtection", 0, Read|Write|SetByCreate),
+			10: ByteField("MaximumBitErrorRatio", 0, Read|Write|SetByCreate),
+			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write),
+			12: ByteField("MaximumDelayVariation", 0, Read|Write),
+			13: ByteField("ChannelInitializationPolicySelection", 0, Read|Write),
+			14: Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write),
+			15: Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

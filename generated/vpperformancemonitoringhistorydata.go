@@ -19,6 +19,8 @@
  */
 package generated
 
+const VpPerformanceMonitoringHistoryDataClassId uint16 = 62
+
 // VpPerformanceMonitoringHistoryData (class ID #62) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityD
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint16Field("LostC01Cells", 0, Read),
-			Uint16Field("LostC=0Cells", 0, Read),
-			Uint16Field("MisinsertedCells", 0, Read),
-			UnknownField("TransmittedC=01Cells", 0, Read),
-			UnknownField("TransmittedC=0Cells", 0, Read),
-			Uint16Field("ImpairedBlock", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint16Field("LostC01Cells", 0, Read),
+			4: Uint16Field("LostC=0Cells", 0, Read),
+			5: Uint16Field("MisinsertedCells", 0, Read),
+			6: UnknownField("TransmittedC=01Cells", 0, Read),
+			7: UnknownField("TransmittedC=0Cells", 0, Read),
+			8: Uint16Field("ImpairedBlock", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

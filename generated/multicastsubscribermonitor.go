@@ -19,6 +19,8 @@
  */
 package generated
 
+const MulticastSubscriberMonitorClassId uint16 = 311
+
 // MulticastSubscriberMonitor (class ID #311) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,14 +45,14 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("MeType", 0, Read|Write|SetByCreate),
-			Uint32Field("CurrentMulticastBandwidth", 0, Read),
-			Uint32Field("JoinMessagesCounter", 0, Read),
-			Uint32Field("BandwidthExceededCounter", 0, Read),
-			UnknownField("Ipv4ActiveGroupListTable", 0, Read),
-			UnknownField("Ipv6ActiveGroupListTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("MeType", 0, Read|Write|SetByCreate),
+			2: Uint32Field("CurrentMulticastBandwidth", 0, Read),
+			3: Uint32Field("JoinMessagesCounter", 0, Read),
+			4: Uint32Field("BandwidthExceededCounter", 0, Read),
+			5: UnknownField("Ipv4ActiveGroupListTable", 0, Read),
+			6: UnknownField("Ipv6ActiveGroupListTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

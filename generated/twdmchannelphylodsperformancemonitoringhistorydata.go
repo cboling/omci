@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelPhyLodsPerformanceMonitoringHistoryDataClassId uint16 = 444
+
 // TwdmChannelPhyLodsPerformanceMonitoringHistoryData (class ID #444) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,23 +45,23 @@ func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) 
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read),
-			Uint32Field("Bip32BitErrorCount", 0, Read),
-			Uint32Field("CorrectedPsbdHecErrorCount", 0, Read),
-			Uint32Field("UncorrectablePsbdHecErrorCount", 0, Read),
-			Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read),
-			Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read),
-			Uint32Field("TotalNumberOfLodsEvents", 0, Read),
-			Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read),
-			Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read),
-			Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read),
-			Uint32Field("LodsEventsResultingInReactivation", 0, Read),
-			Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read),
-			Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read),
+			4: Uint32Field("Bip32BitErrorCount", 0, Read),
+			5: Uint32Field("CorrectedPsbdHecErrorCount", 0, Read),
+			6: Uint32Field("UncorrectablePsbdHecErrorCount", 0, Read),
+			7: Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read),
+			8: Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read),
+			9: Uint32Field("TotalNumberOfLodsEvents", 0, Read),
+			10: Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read),
+			11: Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read),
+			12: Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read),
+			13: Uint32Field("LodsEventsResultingInReactivation", 0, Read),
+			14: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read),
+			15: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

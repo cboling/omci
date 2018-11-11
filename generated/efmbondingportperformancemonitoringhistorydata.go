@@ -19,6 +19,8 @@
  */
 package generated
 
+const EfmBondingPortPerformanceMonitoringHistoryDataClassId uint16 = 424
+
 // EfmBondingPortPerformanceMonitoringHistoryData (class ID #424) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewEfmBondingPortPerformanceMonitoringHistoryData(params ...ParamData) (IMa
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("RxFrames", 0, Read),
-			Uint32Field("TxFrames", 0, Read),
-			Uint32Field("RxBytes", 0, Read),
-			Uint32Field("TxBytes", 0, Read),
-			Uint32Field("TxDiscardedFrames", 0, Read),
-			Uint32Field("TxDiscardedBytes", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("RxFrames", 0, Read),
+			4: Uint32Field("TxFrames", 0, Read),
+			5: Uint32Field("RxBytes", 0, Read),
+			6: Uint32Field("TxBytes", 0, Read),
+			7: Uint32Field("TxDiscardedFrames", 0, Read),
+			8: Uint32Field("TxDiscardedBytes", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

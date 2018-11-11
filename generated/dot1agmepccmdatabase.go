@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1AgMepCcmDatabaseClassId uint16 = 304
+
 // Dot1AgMepCcmDatabase (class ID #304) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,20 +42,20 @@ func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntityDefinition, err
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("Rmep1DatabaseTable", 0, Read),
-			UnknownField("Rmep2DatabaseTable", 0, Read),
-			UnknownField("Rmep3DatabaseTable", 0, Read),
-			UnknownField("Rmep4DatabaseTable", 0, Read),
-			UnknownField("Rmep5DatabaseTable", 0, Read),
-			UnknownField("Rmep6DatabaseTable", 0, Read),
-			UnknownField("Rmep7DatabaseTable", 0, Read),
-			UnknownField("Rmep8DatabaseTable", 0, Read),
-			UnknownField("Rmep9DatabaseTable", 0, Read),
-			UnknownField("Rmep10DatabaseTable", 0, Read),
-			UnknownField("Rmep11DatabaseTable", 0, Read),
-			UnknownField("Rmep12DatabaseTable", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("Rmep1DatabaseTable", 0, Read),
+			2: UnknownField("Rmep2DatabaseTable", 0, Read),
+			3: UnknownField("Rmep3DatabaseTable", 0, Read),
+			4: UnknownField("Rmep4DatabaseTable", 0, Read),
+			5: UnknownField("Rmep5DatabaseTable", 0, Read),
+			6: UnknownField("Rmep6DatabaseTable", 0, Read),
+			7: UnknownField("Rmep7DatabaseTable", 0, Read),
+			8: UnknownField("Rmep8DatabaseTable", 0, Read),
+			9: UnknownField("Rmep9DatabaseTable", 0, Read),
+			10: UnknownField("Rmep10DatabaseTable", 0, Read),
+			11: UnknownField("Rmep11DatabaseTable", 0, Read),
+			12: UnknownField("Rmep12DatabaseTable", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslLineConfigurationProfilePart3ClassId uint16 = 106
+
 // XdslLineConfigurationProfilePart3 (class ID #106) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewXdslLineConfigurationProfilePart3(params ...ParamData) (IManagedEntityDe
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|Write|SetByCreate),
-			ByteField("AutomodeColdStartForced", 0, Read|Write|SetByCreate),
-			ByteField("L2Atpr", 0, Read|Write|SetByCreate),
-			ByteField("L2Atprt", 0, Read|Write|SetByCreate),
-			ByteField("ForceInpDownstream", 0, Read|Write),
-			ByteField("ForceInpUpstream", 0, Read|Write),
-			ByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write),
-			ByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write),
-			Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write),
-			ByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write),
-			ByteField("InmClusterContinuationValueUpstream", 0, Read|Write),
-			ByteField("InmEquivalentInpModeUpstream", 0, Read|Write),
-			Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write),
-			ByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write),
-			ByteField("InmClusterContinuationValueDownstream", 0, Read|Write),
-			ByteField("InmEquivalentInpModeDownstream", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|Write|SetByCreate),
+			2: ByteField("AutomodeColdStartForced", 0, Read|Write|SetByCreate),
+			3: ByteField("L2Atpr", 0, Read|Write|SetByCreate),
+			4: ByteField("L2Atprt", 0, Read|Write|SetByCreate),
+			5: ByteField("ForceInpDownstream", 0, Read|Write),
+			6: ByteField("ForceInpUpstream", 0, Read|Write),
+			7: ByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write),
+			8: ByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write),
+			9: Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write),
+			10: ByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write),
+			11: ByteField("InmClusterContinuationValueUpstream", 0, Read|Write),
+			12: ByteField("InmEquivalentInpModeUpstream", 0, Read|Write),
+			13: Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write),
+			14: ByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write),
+			15: ByteField("InmClusterContinuationValueDownstream", 0, Read|Write),
+			16: ByteField("InmEquivalentInpModeDownstream", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

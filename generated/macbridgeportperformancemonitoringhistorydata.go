@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgePortPerformanceMonitoringHistoryDataClassId uint16 = 52
+
 // MacBridgePortPerformanceMonitoringHistoryData (class ID #52) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,15 +44,15 @@ func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (IMan
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("ForwardedFrameCounter", 0, Read),
-			Uint32Field("DelayExceededDiscardCounter", 0, Read),
-			Uint32Field("MaximumTransmissionUNitMtuExceededDiscardCounter", 0, Read),
-			Uint32Field("ReceivedFrameCounter", 0, Read),
-			Uint32Field("ReceivedAndDiscardedCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("ForwardedFrameCounter", 0, Read),
+			4: Uint32Field("DelayExceededDiscardCounter", 0, Read),
+			5: Uint32Field("MaximumTransmissionUNitMtuExceededDiscardCounter", 0, Read),
+			6: Uint32Field("ReceivedFrameCounter", 0, Read),
+			7: Uint32Field("ReceivedAndDiscardedCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

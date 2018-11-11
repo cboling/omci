@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslXtuCPerformanceMonitoringHistoryDataClassId uint16 = 112
+
 // XdslXtuCPerformanceMonitoringHistoryData (class ID #112) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint16Field("LossOfFrameSeconds", 0, Read),
-			Uint16Field("LossOfSignalSeconds", 0, Read),
-			Uint16Field("LossOfLinkSeconds", 0, Read),
-			Uint16Field("LossOfPowerSeconds", 0, Read),
-			Uint16Field("ErroredSecondsEs", 0, Read),
-			Uint16Field("SeverelyErroredSeconds", 0, Read),
-			Uint16Field("LineInitializations", 0, Read),
-			Uint16Field("FailedLineInitializations", 0, Read),
-			Uint16Field("ShortInitializations", 0, Read),
-			Uint16Field("FailedShortInitializations", 0, Read),
-			Uint16Field("FecSeconds", 0, Read),
-			Uint16Field("UnavailableSeconds", 0, Read),
-			Uint16Field("SosSuccessCount,NearEnd", 0, Read),
-			Uint16Field("SosSuccessCount,FarEnd", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint16Field("LossOfFrameSeconds", 0, Read),
+			4: Uint16Field("LossOfSignalSeconds", 0, Read),
+			5: Uint16Field("LossOfLinkSeconds", 0, Read),
+			6: Uint16Field("LossOfPowerSeconds", 0, Read),
+			7: Uint16Field("ErroredSecondsEs", 0, Read),
+			8: Uint16Field("SeverelyErroredSeconds", 0, Read),
+			9: Uint16Field("LineInitializations", 0, Read),
+			10: Uint16Field("FailedLineInitializations", 0, Read),
+			11: Uint16Field("ShortInitializations", 0, Read),
+			12: Uint16Field("FailedShortInitializations", 0, Read),
+			13: Uint16Field("FecSeconds", 0, Read),
+			14: Uint16Field("UnavailableSeconds", 0, Read),
+			15: Uint16Field("SosSuccessCount,NearEnd", 0, Read),
+			16: Uint16Field("SosSuccessCount,FarEnd", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

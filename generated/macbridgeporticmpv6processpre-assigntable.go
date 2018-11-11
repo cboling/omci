@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgePortIcmpv6ProcessPreAssignTableClassId uint16 = 348
+
 // MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,17 +41,17 @@ func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedE
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write),
-			ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write),
-			ByteField("RouterSolicitationProcessing", 0, Read|Write),
-			ByteField("RouterAdvertisementProcessing", 0, Read|Write),
-			ByteField("NeighbourSolicitationProcessing", 0, Read|Write),
-			ByteField("NeighbourAdvertisementProcessing", 0, Read|Write),
-			ByteField("RedirectProcessing", 0, Read|Write),
-			ByteField("MulticastListenerQueryProcessing", 0, Read|Write),
-			ByteField("UnknownIcmpv6Processing", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write),
+			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write),
+			3: ByteField("RouterSolicitationProcessing", 0, Read|Write),
+			4: ByteField("RouterAdvertisementProcessing", 0, Read|Write),
+			5: ByteField("NeighbourSolicitationProcessing", 0, Read|Write),
+			6: ByteField("NeighbourAdvertisementProcessing", 0, Read|Write),
+			7: ByteField("RedirectProcessing", 0, Read|Write),
+			8: ByteField("MulticastListenerQueryProcessing", 0, Read|Write),
+			9: ByteField("UnknownIcmpv6Processing", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

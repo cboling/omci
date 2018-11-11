@@ -19,6 +19,8 @@
  */
 package generated
 
+const UniGClassId uint16 = 264
+
 // UniG (class ID #264) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,13 +42,13 @@ func NewUniG(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("Deprecated", 0, Read|Write),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("ManagementCapability", 0, Read),
-			Uint16Field("NonOmciManagementIdentifier", 0, Read|Write),
-			Uint16Field("RelayAgentOptions", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("Deprecated", 0, Read|Write),
+			2: ByteField("AdministrativeState", 0, Read|Write),
+			3: ByteField("ManagementCapability", 0, Read),
+			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write),
+			5: Uint16Field("RelayAgentOptions", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const RtpPseudowireParametersClassId uint16 = 283
+
 // RtpPseudowireParameters (class ID #283) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,14 +44,14 @@ func NewRtpPseudowireParameters(params ...ParamData) (IManagedEntityDefinition, 
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("ClockReference", 0, Read|Write|SetByCreate),
-			ByteField("RtpTimestampMode", 0, Read|Write|SetByCreate),
-			Uint16Field("Ptype", 0, Read|Write|SetByCreate),
-			Uint64Field("Ssrc", 0, Read|Write|SetByCreate),
-			Uint16Field("ExpectedPtype", 0, Read|Write|SetByCreate),
-			Uint64Field("ExpectedSsrc", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("ClockReference", 0, Read|Write|SetByCreate),
+			2: ByteField("RtpTimestampMode", 0, Read|Write|SetByCreate),
+			3: Uint16Field("Ptype", 0, Read|Write|SetByCreate),
+			4: Uint64Field("Ssrc", 0, Read|Write|SetByCreate),
+			5: Uint16Field("ExpectedPtype", 0, Read|Write|SetByCreate),
+			6: Uint64Field("ExpectedSsrc", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

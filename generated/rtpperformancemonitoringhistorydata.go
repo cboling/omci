@@ -19,6 +19,8 @@
  */
 package generated
 
+const RtpPerformanceMonitoringHistoryDataClassId uint16 = 144
+
 // RtpPerformanceMonitoringHistoryData (class ID #144) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("RtpErrors", 0, Read),
-			Uint32Field("PacketLoss", 0, Read),
-			Uint32Field("MaximumJitter", 0, Read),
-			Uint32Field("MaximumTimeBetweenRealTimeTransportControlProtocolRtcpPackets", 0, Read),
-			Uint32Field("BufferUnderflows", 0, Read),
-			Uint32Field("BufferOverflows", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("RtpErrors", 0, Read),
+			4: Uint32Field("PacketLoss", 0, Read),
+			5: Uint32Field("MaximumJitter", 0, Read),
+			6: Uint32Field("MaximumTimeBetweenRealTimeTransportControlProtocolRtcpPackets", 0, Read),
+			7: Uint32Field("BufferUnderflows", 0, Read),
+			8: Uint32Field("BufferOverflows", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

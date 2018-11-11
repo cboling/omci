@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1AgMaintenanceDomainClassId uint16 = 299
+
 // Dot1AgMaintenanceDomain (class ID #299) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntityDefinition, 
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("MdLevel", 0, Read|Write|SetByCreate),
-			ByteField("MdNameFormat", 0, Read|Write|SetByCreate),
-			UnknownField("MdName1MdName2", 0, Read|Write),
-			ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|Write|SetByCreate),
-			ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("MdLevel", 0, Read|Write|SetByCreate),
+			2: ByteField("MdNameFormat", 0, Read|Write|SetByCreate),
+			3: UnknownField("MdName1MdName2", 0, Read|Write),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|Write|SetByCreate),
+			5: ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

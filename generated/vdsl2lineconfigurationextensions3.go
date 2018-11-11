@@ -19,6 +19,8 @@
  */
 package generated
 
+const Vdsl2LineConfigurationExtensions3ClassId uint16 = 410
+
 // Vdsl2LineConfigurationExtensions3 (class ID #410) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,20 +44,20 @@ func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntityDe
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("Ripolicyds", 0, Read|Write),
-			ByteField("Ripolicyus", 0, Read|Write),
-			ByteField("ReinitTimeThresholdds", 0, Read|Write),
-			ByteField("ReinitTimeThresholdus", 0, Read|Write),
-			ByteField("Rxrefvnsfus", 0, Read|Write),
-			ByteField("Txrefvnsfds", 0, Read|Write),
-			ByteField("RtxModeds", 0, Read|Write),
-			ByteField("RtxModeus", 0, Read|Write),
-			ByteField("LeftrThresh", 0, Read|Write),
-			ByteField("MaxdelayoctetSplitParameterMdosplit", 0, Read|Write),
-			ByteField("AttndrMethodAttndrMethod", 0, Read|Write),
-			ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("Ripolicyds", 0, Read|Write),
+			2: ByteField("Ripolicyus", 0, Read|Write),
+			3: ByteField("ReinitTimeThresholdds", 0, Read|Write),
+			4: ByteField("ReinitTimeThresholdus", 0, Read|Write),
+			5: ByteField("Rxrefvnsfus", 0, Read|Write),
+			6: ByteField("Txrefvnsfds", 0, Read|Write),
+			7: ByteField("RtxModeds", 0, Read|Write),
+			8: ByteField("RtxModeus", 0, Read|Write),
+			9: ByteField("LeftrThresh", 0, Read|Write),
+			10: ByteField("MaxdelayoctetSplitParameterMdosplit", 0, Read|Write),
+			11: ByteField("AttndrMethodAttndrMethod", 0, Read|Write),
+			12: ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const TrafficDescriptorClassId uint16 = 280
+
 // TrafficDescriptor (class ID #280) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewTrafficDescriptor(params ...ParamData) (IManagedEntityDefinition, error)
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint32Field("Cir", 0, Read|Write|SetByCreate),
-			Uint32Field("Pir", 0, Read|Write|SetByCreate),
-			Uint32Field("Cbs", 0, Read|Write|SetByCreate),
-			Uint32Field("Pbs", 0, Read|Write|SetByCreate),
-			ByteField("ColourMode", 0, Read|Write|SetByCreate),
-			ByteField("IngressColourMarking", 0, Read|Write|SetByCreate),
-			ByteField("EgressColourMarking", 0, Read|Write|SetByCreate),
-			ByteField("MeterType", 0, Read|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint32Field("Cir", 0, Read|Write|SetByCreate),
+			2: Uint32Field("Pir", 0, Read|Write|SetByCreate),
+			3: Uint32Field("Cbs", 0, Read|Write|SetByCreate),
+			4: Uint32Field("Pbs", 0, Read|Write|SetByCreate),
+			5: ByteField("ColourMode", 0, Read|Write|SetByCreate),
+			6: ByteField("IngressColourMarking", 0, Read|Write|SetByCreate),
+			7: ByteField("EgressColourMarking", 0, Read|Write|SetByCreate),
+			8: ByteField("MeterType", 0, Read|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

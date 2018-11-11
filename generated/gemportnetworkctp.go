@@ -19,6 +19,8 @@
  */
 package generated
 
+const GemPortNetworkCtpClassId uint16 = 268
+
 // GemPortNetworkCtp (class ID #268) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,18 +44,18 @@ func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error)
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("PortId", 0, Read|Write|SetByCreate),
-			Uint16Field("TContPointer", 0, Read|Write|SetByCreate),
-			ByteField("Direction", 0, Read|Write|SetByCreate),
-			Uint16Field("TrafficManagementPointerForUpstream", 0, Read|Write|SetByCreate),
-			Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|Write|SetByCreate),
-			ByteField("UniCounter", 0, Read),
-			Uint16Field("PriorityQueuePointerForDownStream", 0, Read|Write|SetByCreate),
-			ByteField("EncryptionState", 0, Read),
-			Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|Write|SetByCreate),
-			ByteField("EncryptionKeyRing", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("PortId", 0, Read|Write|SetByCreate),
+			2: Uint16Field("TContPointer", 0, Read|Write|SetByCreate),
+			3: ByteField("Direction", 0, Read|Write|SetByCreate),
+			4: Uint16Field("TrafficManagementPointerForUpstream", 0, Read|Write|SetByCreate),
+			5: Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|Write|SetByCreate),
+			6: ByteField("UniCounter", 0, Read),
+			7: Uint16Field("PriorityQueuePointerForDownStream", 0, Read|Write|SetByCreate),
+			8: ByteField("EncryptionState", 0, Read),
+			9: Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|Write|SetByCreate),
+			10: ByteField("EncryptionKeyRing", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointXdslUniPart2ClassId uint16 = 99
+
 // PhysicalPathTerminationPointXdslUniPart2 (class ID #99) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,16 +42,16 @@ func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (IManagedE
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, Read|Write),
-			Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, Read|Write),
+			2: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, Read|Write),
+			3: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", 0, Read|Write),
+			4: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", 0, Read|Write),
+			5: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", 0, Read|Write),
+			6: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", 0, Read|Write),
+			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, Read|Write),
+			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

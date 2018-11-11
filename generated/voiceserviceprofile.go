@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoiceServiceProfileClassId uint16 = 58
+
 // VoiceServiceProfile (class ID #58) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,22 +44,22 @@ func NewVoiceServiceProfile(params ...ParamData) (IManagedEntityDefinition, erro
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("AnnouncementType", 0, Read|Write|SetByCreate),
-			Uint16Field("JitterTarget", 0, Read|Write|SetByCreate),
-			Uint16Field("JitterBufferMax", 0, Read|Write|SetByCreate),
-			ByteField("EchoCancelInd", 0, Read|Write|SetByCreate),
-			Uint16Field("PstnProtocolVariant", 0, Read|Write|SetByCreate),
-			Uint16Field("DtmfDigitLevels", 0, Read|Write|SetByCreate),
-			Uint16Field("DtmfDigitDuration", 0, Read|Write|SetByCreate),
-			Uint16Field("HookFlashMinimumTime", 0, Read|Write|SetByCreate),
-			Uint16Field("HookFlashMaximumTime", 0, Read|Write|SetByCreate),
-			UnknownField("TonePatternTable", 0, Read|Write),
-			UnknownField("ToneEventTable", 0, Read|Write),
-			UnknownField("RingingPatternTable", 0, Read|Write),
-			UnknownField("RingingEventTable", 0, Read|Write),
-			Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("AnnouncementType", 0, Read|Write|SetByCreate),
+			2: Uint16Field("JitterTarget", 0, Read|Write|SetByCreate),
+			3: Uint16Field("JitterBufferMax", 0, Read|Write|SetByCreate),
+			4: ByteField("EchoCancelInd", 0, Read|Write|SetByCreate),
+			5: Uint16Field("PstnProtocolVariant", 0, Read|Write|SetByCreate),
+			6: Uint16Field("DtmfDigitLevels", 0, Read|Write|SetByCreate),
+			7: Uint16Field("DtmfDigitDuration", 0, Read|Write|SetByCreate),
+			8: Uint16Field("HookFlashMinimumTime", 0, Read|Write|SetByCreate),
+			9: Uint16Field("HookFlashMaximumTime", 0, Read|Write|SetByCreate),
+			10: UnknownField("TonePatternTable", 0, Read|Write),
+			11: UnknownField("ToneEventTable", 0, Read|Write),
+			12: UnknownField("RingingPatternTable", 0, Read|Write),
+			13: UnknownField("RingingEventTable", 0, Read|Write),
+			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

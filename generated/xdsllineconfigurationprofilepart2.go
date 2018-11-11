@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslLineConfigurationProfilePart2ClassId uint16 = 105
+
 // XdslLineConfigurationProfilePart2 (class ID #105) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,23 +44,23 @@ func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntityDe
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read|SetByCreate),
-			Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
-			Uint16Field("DownstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
-			Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
-			ByteField("XtuImpedanceStateForced", 0, Read|Write|SetByCreate),
-			ByteField("L0Time", 0, Read|Write|SetByCreate),
-			ByteField("L2Time", 0, Read|Write|SetByCreate),
-			Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
-			ByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
-			ByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamMaximumAggregateReceivePower", 0, Read),
-			ByteField("Vdsl2TransmissionSystemEnabling", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			1: Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			2: Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			3: Uint16Field("DownstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
+			4: Uint16Field("UpstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),
+			5: Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			6: Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|Write|SetByCreate),
+			7: ByteField("XtuImpedanceStateForced", 0, Read|Write|SetByCreate),
+			8: ByteField("L0Time", 0, Read|Write|SetByCreate),
+			9: ByteField("L2Time", 0, Read|Write|SetByCreate),
+			10: Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
+			11: Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, Read|Write|SetByCreate),
+			12: ByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
+			13: ByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, Read|Write|SetByCreate),
+			14: Uint16Field("UpstreamMaximumAggregateReceivePower", 0, Read),
+			15: ByteField("Vdsl2TransmissionSystemEnabling", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

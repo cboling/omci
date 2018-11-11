@@ -19,6 +19,8 @@
  */
 package generated
 
+const VoipMediaProfileClassId uint16 = 142
+
 // VoipMediaProfile (class ID #142) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,24 +44,24 @@ func NewVoipMediaProfile(params ...ParamData) (IManagedEntityDefinition, error) 
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("FaxMode", 0, Read|Write|SetByCreate),
-			Uint16Field("VoiceServiceProfilePointer", 0, Read|Write|SetByCreate),
-			ByteField("CodecSelection1StOrder", 0, Read|Write|SetByCreate),
-			ByteField("PacketPeriodSelection1StOrder", 0, Read|Write|SetByCreate),
-			ByteField("SilenceSuppression1StOrder", 0, Read|Write|SetByCreate),
-			ByteField("CodecSelection2NdOrder", 0, Read|Write|SetByCreate),
-			ByteField("PacketPeriodSelection2NdOrder", 0, Read|Write|SetByCreate),
-			ByteField("SilenceSuppression2NdOrder", 0, Read|Write|SetByCreate),
-			ByteField("CodecSelection3RdOrder", 0, Read|Write|SetByCreate),
-			ByteField("PacketPeriodSelection3RdOrder", 0, Read|Write|SetByCreate),
-			ByteField("SilenceSuppression3RdOrder", 0, Read|Write|SetByCreate),
-			ByteField("CodecSelection4ThOrder", 0, Read|Write|SetByCreate),
-			ByteField("PacketPeriodSelection4ThOrder", 0, Read|Write|SetByCreate),
-			ByteField("SilenceSuppression4ThOrder", 0, Read|Write|SetByCreate),
-			ByteField("OobDtmf", 0, Read|Write|SetByCreate),
-			Uint16Field("RtpProfilePointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("FaxMode", 0, Read|Write|SetByCreate),
+			2: Uint16Field("VoiceServiceProfilePointer", 0, Read|Write|SetByCreate),
+			3: ByteField("CodecSelection1StOrder", 0, Read|Write|SetByCreate),
+			4: ByteField("PacketPeriodSelection1StOrder", 0, Read|Write|SetByCreate),
+			5: ByteField("SilenceSuppression1StOrder", 0, Read|Write|SetByCreate),
+			6: ByteField("CodecSelection2NdOrder", 0, Read|Write|SetByCreate),
+			7: ByteField("PacketPeriodSelection2NdOrder", 0, Read|Write|SetByCreate),
+			8: ByteField("SilenceSuppression2NdOrder", 0, Read|Write|SetByCreate),
+			9: ByteField("CodecSelection3RdOrder", 0, Read|Write|SetByCreate),
+			10: ByteField("PacketPeriodSelection3RdOrder", 0, Read|Write|SetByCreate),
+			11: ByteField("SilenceSuppression3RdOrder", 0, Read|Write|SetByCreate),
+			12: ByteField("CodecSelection4ThOrder", 0, Read|Write|SetByCreate),
+			13: ByteField("PacketPeriodSelection4ThOrder", 0, Read|Write|SetByCreate),
+			14: ByteField("SilenceSuppression4ThOrder", 0, Read|Write|SetByCreate),
+			15: ByteField("OobDtmf", 0, Read|Write|SetByCreate),
+			16: Uint16Field("RtpProfilePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

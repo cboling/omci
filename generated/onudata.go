@@ -19,6 +19,8 @@
  */
 package generated
 
+const OnuDataClassId uint16 = 2
+
 // OnuData (class ID #2) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -45,9 +47,9 @@ func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 			MibReset,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("MibDataSync", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("MibDataSync", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

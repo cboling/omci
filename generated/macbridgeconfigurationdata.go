@@ -19,6 +19,8 @@
  */
 package generated
 
+const MacBridgeConfigurationDataClassId uint16 = 46
+
 // MacBridgeConfigurationData (class ID #46) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,16 +41,16 @@ func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntityDefinitio
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			UnknownField("BridgeMacAddress", 0, Read),
-			Uint16Field("BridgePriority", 0, Read),
-			Uint64Field("DesignatedRoot", 0, Read),
-			Uint32Field("RootPathCost", 0, Read),
-			ByteField("BridgePortCount", 0, Read),
-			Uint16Field("RootPortNum", 0, Read),
-			Uint16Field("HelloTime", 0, Read),
-			Uint16Field("ForwardDelay", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: UnknownField("BridgeMacAddress", 0, Read),
+			2: Uint16Field("BridgePriority", 0, Read),
+			3: Uint64Field("DesignatedRoot", 0, Read),
+			4: Uint32Field("RootPathCost", 0, Read),
+			5: ByteField("BridgePortCount", 0, Read),
+			6: Uint16Field("RootPortNum", 0, Read),
+			7: Uint16Field("HelloTime", 0, Read),
+			8: Uint16Field("ForwardDelay", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

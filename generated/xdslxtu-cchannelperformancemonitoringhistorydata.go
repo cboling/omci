@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslXtuCChannelPerformanceMonitoringHistoryDataClassId uint16 = 114
+
 // XdslXtuCChannelPerformanceMonitoringHistoryData (class ID #114) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,16 +44,16 @@ func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("CorrectedBlocks", 0, Read),
-			Uint32Field("UncorrectedBlocks", 0, Read),
-			Uint32Field("TransmittedBlocks", 0, Read),
-			Uint32Field("ReceivedBlocks", 0, Read),
-			Uint16Field("CodeViolations", 0, Read),
-			Uint16Field("ForwardErrorCorrections", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("CorrectedBlocks", 0, Read),
+			4: Uint32Field("UncorrectedBlocks", 0, Read),
+			5: Uint32Field("TransmittedBlocks", 0, Read),
+			6: Uint32Field("ReceivedBlocks", 0, Read),
+			7: Uint16Field("CodeViolations", 0, Read),
+			8: Uint16Field("ForwardErrorCorrections", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

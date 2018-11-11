@@ -19,6 +19,8 @@
  */
 package generated
 
+const Vdsl2LineInventoryAndStatusDataPart4ClassId uint16 = 415
+
 // Vdsl2LineInventoryAndStatusDataPart4 (class ID #415) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,8 +41,8 @@ func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntit
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

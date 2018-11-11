@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1RateLimiterClassId uint16 = 298
+
 // Dot1RateLimiter (class ID #298) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewDot1RateLimiter(params ...ParamData) (IManagedEntityDefinition, error) {
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("ParentMePointer", 0, Read|Write|SetByCreate),
-			ByteField("TpType", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamBroadcastRatePointer", 0, Read|Write|SetByCreate),
-			Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|Write|SetByCreate),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("ParentMePointer", 0, Read|Write|SetByCreate),
+			2: ByteField("TpType", 0, Read|Write|SetByCreate),
+			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|Write|SetByCreate),
+			4: Uint16Field("UpstreamBroadcastRatePointer", 0, Read|Write|SetByCreate),
+			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|Write|SetByCreate),
 		},
 	}
 	entity.computeAttributeMask()

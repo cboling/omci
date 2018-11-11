@@ -19,6 +19,8 @@
  */
 package generated
 
+const FastLineInventoryAndStatusDataClassId uint16 = 435
+
 // FastLineInventoryAndStatusData (class ID #435) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -39,15 +41,15 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntityDefin
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("ItuTG9701ProfileProfile", 0, Read),
-			UnknownField("GammaDataRAteGdr", 0, Read),
-			UnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
-			Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
-			Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
-			UnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
-			UnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("ItuTG9701ProfileProfile", 0, Read),
+			2: UnknownField("GammaDataRAteGdr", 0, Read),
+			3: UnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
+			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
+			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
+			6: UnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
+			7: UnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

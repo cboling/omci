@@ -19,6 +19,8 @@
  */
 package generated
 
+const AuthenticationSecurityMethodClassId uint16 = 148
+
 // AuthenticationSecurityMethod (class ID #148) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,13 +44,13 @@ func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntityDefinit
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("ValidationScheme", 0, Read|Write),
-			UnknownField("Username1", 0, Read|Write),
-			UnknownField("Password", 0, Read|Write),
-			UnknownField("Realm", 0, Read|Write),
-			UnknownField("Username2", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("ValidationScheme", 0, Read|Write),
+			2: UnknownField("Username1", 0, Read|Write),
+			3: UnknownField("Password", 0, Read|Write),
+			4: UnknownField("Realm", 0, Read|Write),
+			5: UnknownField("Username2", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

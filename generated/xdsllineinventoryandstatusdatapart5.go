@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslLineInventoryAndStatusDataPart5ClassId uint16 = 325
+
 // XdslLineInventoryAndStatusDataPart5 (class ID #325) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,24 +42,24 @@ func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint16Field("FextDownstreamSnrMargin", 0, Read),
-			Uint16Field("NextDownstreamSnrMargin", 0, Read),
-			Uint16Field("FextUpstreamSnrMargin", 0, Read),
-			Uint16Field("NextUpstreamSnrMargin", 0, Read),
-			Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read),
-			Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read),
-			Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read),
-			Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read),
-			Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read),
-			Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read),
-			Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read),
-			Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read),
-			Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read),
-			Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read),
-			Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read),
-			Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint16Field("FextDownstreamSnrMargin", 0, Read),
+			2: Uint16Field("NextDownstreamSnrMargin", 0, Read),
+			3: Uint16Field("FextUpstreamSnrMargin", 0, Read),
+			4: Uint16Field("NextUpstreamSnrMargin", 0, Read),
+			5: Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read),
+			6: Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read),
+			7: Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read),
+			8: Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read),
+			9: Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read),
+			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read),
+			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read),
+			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read),
+			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read),
+			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read),
+			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read),
+			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

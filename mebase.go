@@ -17,31 +17,19 @@
 package omci
 
 import (
-	"./generated"
 	"encoding/binary"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 )
 
 type MeBasePacket struct {
-	generated.MeBase
+	EntityClass     uint16
 	EntityInstance	uint16	// TODO: Change attribute values to map and move this into the map
 
 	gopacket.Layer
 	layers.BaseLayer
 	MsgLayerType gopacket.LayerType
 }
-
-//type Layer interface {
-//	LayerType() LayerType
-//	LayerContents() []byte
-//	LayerPayload() []byte
-//}
-//type layerDecodingLayer interface {
-//	gopacket.Layer
-//	DecodeFromBytes([]byte, gopacket.PacketBuilder) error
-//	NextLayerType() gopacket.LayerType
-//}
 
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
 	return msg.MsgLayerType

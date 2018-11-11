@@ -19,6 +19,8 @@
  */
 package generated
 
+const EfmBondingGroupPerformanceMonitoringHistoryDataClassId uint16 = 421
+
 // EfmBondingGroupPerformanceMonitoringHistoryData (class ID #421) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,20 +44,20 @@ func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("RxBadFragments", 0, Read),
-			Uint32Field("RxLostFragments", 0, Read),
-			Uint32Field("RxLostStarts", 0, Read),
-			Uint32Field("RxLostEnds", 0, Read),
-			Uint32Field("RxFrames", 0, Read),
-			Uint32Field("TxFrames", 0, Read),
-			Uint64Field("RxBytes", 0, Read),
-			Uint64Field("TxBytes", 0, Read),
-			Uint32Field("TxDiscardedFrames", 0, Read),
-			Uint32Field("TxDiscardedBytes", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("RxBadFragments", 0, Read),
+			4: Uint32Field("RxLostFragments", 0, Read),
+			5: Uint32Field("RxLostStarts", 0, Read),
+			6: Uint32Field("RxLostEnds", 0, Read),
+			7: Uint32Field("RxFrames", 0, Read),
+			8: Uint32Field("TxFrames", 0, Read),
+			9: Uint64Field("RxBytes", 0, Read),
+			10: Uint64Field("TxBytes", 0, Read),
+			11: Uint32Field("TxDiscardedFrames", 0, Read),
+			12: Uint32Field("TxDiscardedBytes", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

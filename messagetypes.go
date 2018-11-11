@@ -90,7 +90,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		}
 	}
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(sbcMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -336,7 +336,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -479,7 +479,7 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -569,7 +569,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		}
 	}
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.AttributeMask, b)
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
 	if err != nil {
 		return err
 	}

@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointMocaUniClassId uint16 = 162
+
 // PhysicalPathTerminationPointMocaUni (class ID #162) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,22 +42,22 @@ func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("LoopbackConfiguration", 0, Read|Write),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			Uint16Field("MaxFrameSize", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("PppoeFilter", 0, Read|Write),
-			ByteField("NetworkStatus", 0, Read),
-			UnknownField("Password", 0, Read|Write),
-			ByteField("PrivacyEnabled", 0, Read|Write),
-			Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
-			Uint32Field("FrequencyMask", 0, Read|Write),
-			Uint16Field("RfChannel", 0, Read),
-			Uint16Field("LastOperationalFrequency", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("LoopbackConfiguration", 0, Read|Write),
+			2: ByteField("AdministrativeState", 0, Read|Write),
+			3: ByteField("OperationalState", 0, Read),
+			4: Uint16Field("MaxFrameSize", 0, Read|Write),
+			5: ByteField("Arc", 0, Read|Write),
+			6: ByteField("ArcInterval", 0, Read|Write),
+			7: ByteField("PppoeFilter", 0, Read|Write),
+			8: ByteField("NetworkStatus", 0, Read),
+			9: UnknownField("Password", 0, Read|Write),
+			10: ByteField("PrivacyEnabled", 0, Read|Write),
+			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
+			12: Uint32Field("FrequencyMask", 0, Read|Write),
+			13: Uint16Field("RfChannel", 0, Read),
+			14: Uint16Field("LastOperationalFrequency", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

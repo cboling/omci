@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslXtuRPerformanceMonitoringHistoryDataClassId uint16 = 113
+
 // XdslXtuRPerformanceMonitoringHistoryData (class ID #113) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,20 +44,20 @@ func NewXdslXtuRPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint16Field("LossOfFrameSeconds", 0, Read),
-			Uint16Field("LossOfSignalSeconds", 0, Read),
-			Uint16Field("LossOfPowerSeconds", 0, Read),
-			Uint16Field("ErroredSeconds", 0, Read),
-			Uint16Field("SeverelyErroredSeconds", 0, Read),
-			Uint16Field("FecSeconds", 0, Read),
-			Uint16Field("UnavailableSeconds", 0, Read),
-			Uint16Field("LeftrDefectSeconds", 0, Read),
-			Uint32Field("ErrorFreeBitsCounter", 0, Read),
-			Uint32Field("MinimumErrorFreeThroughputMineftr", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint16Field("LossOfFrameSeconds", 0, Read),
+			4: Uint16Field("LossOfSignalSeconds", 0, Read),
+			5: Uint16Field("LossOfPowerSeconds", 0, Read),
+			6: Uint16Field("ErroredSeconds", 0, Read),
+			7: Uint16Field("SeverelyErroredSeconds", 0, Read),
+			8: Uint16Field("FecSeconds", 0, Read),
+			9: Uint16Field("UnavailableSeconds", 0, Read),
+			10: Uint16Field("LeftrDefectSeconds", 0, Read),
+			11: Uint32Field("ErrorFreeBitsCounter", 0, Read),
+			12: Uint32Field("MinimumErrorFreeThroughputMineftr", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

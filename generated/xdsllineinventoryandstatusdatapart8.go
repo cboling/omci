@@ -19,6 +19,8 @@
  */
 package generated
 
+const XdslLineInventoryAndStatusDataPart8ClassId uint16 = 414
+
 // XdslLineInventoryAndStatusDataPart8 (class ID #414) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,14 +42,14 @@ func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
-			ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
-			UnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
-			UnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
-			UnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
+			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
+			3: UnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
+			4: UnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
+			5: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
+			6: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

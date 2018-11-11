@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointEthernetUniClassId uint16 = 11
+
 // PhysicalPathTerminationPointEthernetUni (class ID #11) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,23 +42,23 @@ func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEn
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			ByteField("ExpectedType", 0, Read|Write),
-			ByteField("SensedType", 0, Read),
-			ByteField("AutoDetectionConfiguration", 0, Read|Write),
-			ByteField("EthernetLoopbackConfiguration", 0, Read|Write),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			ByteField("ConfigurationInd", 0, Read),
-			Uint16Field("MaxFrameSize", 0, Read|Write),
-			ByteField("DteOrDceInd", 0, Read|Write),
-			Uint16Field("PauseTime", 0, Read|Write),
-			ByteField("BridgedOrIpInd", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("PppoeFilter", 0, Read|Write),
-			ByteField("PowerControl", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: ByteField("ExpectedType", 0, Read|Write),
+			2: ByteField("SensedType", 0, Read),
+			3: ByteField("AutoDetectionConfiguration", 0, Read|Write),
+			4: ByteField("EthernetLoopbackConfiguration", 0, Read|Write),
+			5: ByteField("AdministrativeState", 0, Read|Write),
+			6: ByteField("OperationalState", 0, Read),
+			7: ByteField("ConfigurationInd", 0, Read),
+			8: Uint16Field("MaxFrameSize", 0, Read|Write),
+			9: ByteField("DteOrDceInd", 0, Read|Write),
+			10: Uint16Field("PauseTime", 0, Read|Write),
+			11: ByteField("BridgedOrIpInd", 0, Read|Write),
+			12: ByteField("Arc", 0, Read|Write),
+			13: ByteField("ArcInterval", 0, Read|Write),
+			14: ByteField("PppoeFilter", 0, Read|Write),
+			15: ByteField("PowerControl", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

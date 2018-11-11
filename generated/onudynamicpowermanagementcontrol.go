@@ -19,6 +19,8 @@
  */
 package generated
 
+const OnuDynamicPowerManagementControlClassId uint16 = 336
+
 // OnuDynamicPowerManagementControl (class ID #336) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,20 +42,20 @@ func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntityDef
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("PowerReductionManagementCapability", 0, Read),
-			ByteField("PowerReductionManagementMode", 0, Read|Write),
-			Uint16Field("Itransinit", 0, Read),
-			Uint16Field("Itxinit", 0, Read),
-			Uint32Field("MaximumSleepInterval", 0, Read|Write),
-			Uint32Field("MaximumReceiverOffInterval", 0, Read|Write),
-			Uint32Field("MinimumAwareInterval", 0, Read|Write),
-			Uint16Field("MinimumActiveHeldInterval", 0, Read|Write),
-			Uint64Field("MaximumSleepIntervalExtension", 0, Read|Write),
-			ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read),
-			ByteField("EponSetupExtension", 0, Read|Write),
-			Uint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("PowerReductionManagementCapability", 0, Read),
+			2: ByteField("PowerReductionManagementMode", 0, Read|Write),
+			3: Uint16Field("Itransinit", 0, Read),
+			4: Uint16Field("Itxinit", 0, Read),
+			5: Uint32Field("MaximumSleepInterval", 0, Read|Write),
+			6: Uint32Field("MaximumReceiverOffInterval", 0, Read|Write),
+			7: Uint32Field("MinimumAwareInterval", 0, Read|Write),
+			8: Uint16Field("MinimumActiveHeldInterval", 0, Read|Write),
+			9: Uint64Field("MaximumSleepIntervalExtension", 0, Read|Write),
+			10: ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read),
+			11: ByteField("EponSetupExtension", 0, Read|Write),
+			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

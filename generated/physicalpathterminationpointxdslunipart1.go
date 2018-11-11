@@ -19,6 +19,8 @@
  */
 package generated
 
+const PhysicalPathTerminationPointXdslUniPart1ClassId uint16 = 98
+
 // PhysicalPathTerminationPointXdslUniPart1 (class ID #98) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,21 +42,21 @@ func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (IManagedE
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			ByteField("LoopbackConfiguration", 0, Read|Write),
-			ByteField("AdministrativeState", 0, Read|Write),
-			ByteField("OperationalState", 0, Read),
-			Uint16Field("XdslLineConfigurationProfile", 0, Read|Write),
-			Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write),
-			Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write),
-			Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write),
-			Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write),
-			ByteField("Arc", 0, Read|Write),
-			ByteField("ArcInterval", 0, Read|Write),
-			ByteField("ModemType", 0, Read|Write),
-			Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write),
-			Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: ByteField("LoopbackConfiguration", 0, Read|Write),
+			2: ByteField("AdministrativeState", 0, Read|Write),
+			3: ByteField("OperationalState", 0, Read),
+			4: Uint16Field("XdslLineConfigurationProfile", 0, Read|Write),
+			5: Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write),
+			6: Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write),
+			7: Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write),
+			8: Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write),
+			9: ByteField("Arc", 0, Read|Write),
+			10: ByteField("ArcInterval", 0, Read|Write),
+			11: ByteField("ModemType", 0, Read|Write),
+			12: Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write),
+			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

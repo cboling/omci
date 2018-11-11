@@ -19,6 +19,8 @@
  */
 package generated
 
+const PwAtmPerformanceMonitoringHistoryDataClassId uint16 = 338
+
 // PwAtmPerformanceMonitoringHistoryData (class ID #338) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,17 +44,17 @@ func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("DownstreamMissingPacketsCounter", 0, Read),
-			Uint32Field("DownstreamReorderedPacketsCounter", 0, Read),
-			Uint32Field("DownstreamMisorderedPacketsCounter", 0, Read),
-			Uint32Field("UpstreamTimeoutPacketsCounter", 0, Read),
-			Uint32Field("UpstreamTransmittedCellsCounter", 0, Read),
-			Uint32Field("UpstreamDroppedCellsCounter", 0, Read),
-			Uint32Field("UpstreamReceivedCellsCounter", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("DownstreamMissingPacketsCounter", 0, Read),
+			4: Uint32Field("DownstreamReorderedPacketsCounter", 0, Read),
+			5: Uint32Field("DownstreamMisorderedPacketsCounter", 0, Read),
+			6: Uint32Field("UpstreamTimeoutPacketsCounter", 0, Read),
+			7: Uint32Field("UpstreamTransmittedCellsCounter", 0, Read),
+			8: Uint32Field("UpstreamDroppedCellsCounter", 0, Read),
+			9: Uint32Field("UpstreamReceivedCellsCounter", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

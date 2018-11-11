@@ -19,6 +19,8 @@
  */
 package generated
 
+const OltGClassId uint16 = 131
+
 // OltG (class ID #131) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,12 +42,12 @@ func NewOltG(params ...ParamData) (IManagedEntityDefinition, error) {
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read),
-			Uint32Field("OltVendorId", 0, Read|Write),
-			UnknownField("EquipmentId", 0, Read|Write),
-			UnknownField("Version", 0, Read|Write),
-			UnknownField("TimeOfDayInformation", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read),
+			1: Uint32Field("OltVendorId", 0, Read|Write),
+			2: UnknownField("EquipmentId", 0, Read|Write),
+			3: UnknownField("Version", 0, Read|Write),
+			4: UnknownField("TimeOfDayInformation", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

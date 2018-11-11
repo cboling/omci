@@ -19,6 +19,8 @@
  */
 package generated
 
+const Dot1XConfigurationProfileClassId uint16 = 291
+
 // Dot1XConfigurationProfile (class ID #291) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -40,18 +42,18 @@ func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntityDefinition
 			Get,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId:", 0, Read),
-			Uint16Field("CircuitIdPrefix", 0, Read|Write),
-			ByteField("FallbackPolicy", 0, Read|Write),
-			Uint16Field("AuthServer1", 0, Read|Write),
-			UnknownField("SharedSecretAuth1", 0, Read|Write),
-			Uint16Field("AuthServer2", 0, Read|Write),
-			UnknownField("SharedSecretAuth2", 0, Read|Write),
-			Uint16Field("AuthServer3", 0, Read|Write),
-			UnknownField("SharedSecretAuth3", 0, Read|Write),
-			Uint32Field("OltProxyAddress", 0, Read|Write),
-			Uint16Field("CallingStationIdFormat", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId:", 0, Read),
+			1: Uint16Field("CircuitIdPrefix", 0, Read|Write),
+			2: ByteField("FallbackPolicy", 0, Read|Write),
+			3: Uint16Field("AuthServer1", 0, Read|Write),
+			4: UnknownField("SharedSecretAuth1", 0, Read|Write),
+			5: Uint16Field("AuthServer2", 0, Read|Write),
+			6: UnknownField("SharedSecretAuth2", 0, Read|Write),
+			7: Uint16Field("AuthServer3", 0, Read|Write),
+			8: UnknownField("SharedSecretAuth3", 0, Read|Write),
+			9: Uint32Field("OltProxyAddress", 0, Read|Write),
+			10: Uint16Field("CallingStationIdFormat", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

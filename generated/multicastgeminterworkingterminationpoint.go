@@ -19,6 +19,8 @@
  */
 package generated
 
+const MulticastGemInterworkingTerminationPointClassId uint16 = 281
+
 // MulticastGemInterworkingTerminationPoint (class ID #281) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,15 +45,15 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 			GetNext,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
-			ByteField("InterworkingOption", 0, Read|Write|SetByCreate),
-			Uint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
-			ByteField("PptpCounter", 0, Read),
-			ByteField("OperationalState", 0, Read),
-			Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
-			UnknownField("Ipv6MulticastAddressTable", 0, Read|Write),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|Write|SetByCreate),
+			2: ByteField("InterworkingOption", 0, Read|Write|SetByCreate),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|Write|SetByCreate),
+			4: ByteField("PptpCounter", 0, Read),
+			5: ByteField("OperationalState", 0, Read),
+			6: Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
+			7: UnknownField("Ipv6MulticastAddressTable", 0, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

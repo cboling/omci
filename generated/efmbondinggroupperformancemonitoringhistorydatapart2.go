@@ -19,6 +19,8 @@
  */
 package generated
 
+const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId uint16 = 422
+
 // EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #422) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -42,22 +44,22 @@ func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData
 			Delete,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
-			Uint32Field("RxUnicastFrames", 0, Read),
-			Uint32Field("TxUnicastFrames", 0, Read),
-			Uint64Field("RxUnicastBytes", 0, Read),
-			Uint64Field("TxUnicastBytes", 0, Read),
-			Uint32Field("RxBroadcastFrames", 0, Read),
-			Uint32Field("TxBroadcastFrames", 0, Read),
-			Uint64Field("RxBroadcastBytes", 0, Read),
-			Uint64Field("TxBroadcastBytes", 0, Read),
-			Uint32Field("RxMulticastFrames", 0, Read),
-			Uint32Field("TxMulticastFrames", 0, Read),
-			Uint64Field("RxMulticastBytes", 0, Read),
-			Uint64Field("TxMulticastBytes", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			3: Uint32Field("RxUnicastFrames", 0, Read),
+			4: Uint32Field("TxUnicastFrames", 0, Read),
+			5: Uint64Field("RxUnicastBytes", 0, Read),
+			6: Uint64Field("TxUnicastBytes", 0, Read),
+			7: Uint32Field("RxBroadcastFrames", 0, Read),
+			8: Uint32Field("TxBroadcastFrames", 0, Read),
+			9: Uint64Field("RxBroadcastBytes", 0, Read),
+			10: Uint64Field("TxBroadcastBytes", 0, Read),
+			11: Uint32Field("RxMulticastFrames", 0, Read),
+			12: Uint32Field("TxMulticastFrames", 0, Read),
+			13: Uint64Field("RxMulticastBytes", 0, Read),
+			14: Uint64Field("TxMulticastBytes", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

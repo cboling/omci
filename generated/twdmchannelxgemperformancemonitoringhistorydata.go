@@ -19,6 +19,8 @@
  */
 package generated
 
+const TwdmChannelXgemPerformanceMonitoringHistoryDataClassId uint16 = 445
+
 // TwdmChannelXgemPerformanceMonitoringHistoryData (class ID #445) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
@@ -43,18 +45,18 @@ func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			GetCurrentData,
 		},
 		AllowedAttributeMask: 0,
-		AttributeDefinitions: []*AttributeDefinition{
-			Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			ByteField("IntervalEndTime", 0, Read),
-			Uint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
-			Uint64Field("TotalTransmittedXgemFrames", 0, Read),
-			Uint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
-			Uint64Field("TotalReceivedXgemFrames", 0, Read),
-			Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
-			Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),
-			Uint64Field("XgemEncryptionKeyErrors", 0, Read),
-			Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read),
-			Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read),
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
+			1: ByteField("IntervalEndTime", 0, Read),
+			2: Uint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
+			3: Uint64Field("TotalTransmittedXgemFrames", 0, Read),
+			4: Uint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
+			5: Uint64Field("TotalReceivedXgemFrames", 0, Read),
+			6: Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
+			7: Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),
+			8: Uint64Field("XgemEncryptionKeyErrors", 0, Read),
+			9: Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read),
+			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()
