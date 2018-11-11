@@ -26,7 +26,7 @@ import (
 // AttributeValue provides the value for a single specific Managed Entity attribute
 type AttributeValue struct {
 	Name   string
-	Index  int
+	Index  uint
 	Value  interface{}
 }
 
@@ -36,7 +36,7 @@ func (attr *AttributeValue) String() string {
 		attr.GetName(), attr.GetIndex(), val, err)
 }
 func (attr *AttributeValue) GetName() string  { return attr.Name }
-func (attr *AttributeValue) GetIndex() int    { return attr.Index }
+func (attr *AttributeValue) GetIndex() uint   { return attr.Index }
 func (attr *AttributeValue) GetValue() (interface{}, error) {
 	// TODO: Better way to detect not-initialized and no default available?
 	return attr.Value, nil

@@ -28,7 +28,7 @@ import (
 // CreateRequest
 type CreateRequest struct {
 	MeBasePacket
-	Attributes AttributeMap
+	Attributes generated.AttributeValueMap
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -264,7 +264,7 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 type SetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
-	Attributes    AttributeMap
+	Attributes    generated.AttributeValueMap
 }
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -346,7 +346,6 @@ type SetResponse struct {
 	Result                   generated.Results
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16 // TODO: Use this for no-space-left?
-
 }
 
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -408,7 +407,7 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 type GetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
-	Attributes    AttributeMap
+	Attributes    generated.AttributeValueMap
 }
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -489,7 +488,7 @@ type GetResponse struct {
 	MeBasePacket
 	Result                   generated.Results
 	AttributeMask            uint16
-	Attributes 				 AttributeMap
+	Attributes 				 generated.AttributeValueMap
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 }
@@ -1087,7 +1086,7 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1169,7 +1168,7 @@ func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1207,7 +1206,7 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1245,7 +1244,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1260,7 +1259,7 @@ func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1275,7 +1274,7 @@ func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1290,7 +1289,7 @@ func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder)
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1305,7 +1304,7 @@ func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1320,7 +1319,7 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1335,7 +1334,7 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1350,7 +1349,7 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1365,7 +1364,7 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1380,7 +1379,7 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1395,7 +1394,7 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1410,7 +1409,7 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1425,7 +1424,7 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1440,7 +1439,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1455,7 +1454,7 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1470,7 +1469,7 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1485,7 +1484,7 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1500,7 +1499,7 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1515,7 +1514,7 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1530,7 +1529,7 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1545,7 +1544,7 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1560,7 +1559,7 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1575,7 +1574,7 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1590,7 +1589,7 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1605,7 +1604,7 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1620,7 +1619,7 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1635,7 +1634,7 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1650,7 +1649,7 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1665,7 +1664,7 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1680,7 +1679,7 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1695,7 +1694,7 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1710,7 +1709,7 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1725,7 +1724,7 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1740,7 +1739,7 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1755,7 +1754,7 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1770,7 +1769,7 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1785,7 +1784,7 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1800,7 +1799,7 @@ func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
@@ -1815,7 +1814,7 @@ func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1830,7 +1829,7 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1845,7 +1844,7 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1860,7 +1859,7 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1875,7 +1874,7 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1890,7 +1889,7 @@ func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1905,7 +1904,7 @@ func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1920,7 +1919,7 @@ func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // return nil
+	return errors.New("need to implement") // return nil
 }
 
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1935,5 +1934,5 @@ func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	return errors.New("TODO: Need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
 }
