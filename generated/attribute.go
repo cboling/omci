@@ -19,17 +19,15 @@
  */
 package generated
 
-import "fmt"
+import (
+	"encoding/binary"
+	"errors"
+	"fmt"
+	"github.com/google/gopacket"
+	"strings"
+)
 
-// IAttributeDefinition defines a single specific Managed Entity attribute
-type IAttributeDefinition interface {
-	GetName() string
-	GetSize() int
-	GetDefault() interface{}
-	GetAccess() AttributeAccess
-	GetConstraints() func(interface{}) error
-	GetValue() (interface{}, error)
-}
+type AttributeDefinitionMap map[uint]*AttributeDefinition
 
 // AttributeDefinition defines a single specific Managed Entity attribute
 type AttributeDefinition struct {
@@ -50,13 +48,103 @@ func (attr *AttributeDefinition) String() string {
 	return fmt.Sprintf("Definition: %v: Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *AttributeDefinition) GetName() string            { return attr.Name }
-func (attr *AttributeDefinition) GetDefault() interface{}    { return attr.DefValue }
-func (attr *AttributeDefinition) GetSize() int               { return attr.Size }
-func (attr *AttributeDefinition) GetAccess() AttributeAccess { return attr.Access }
+func (attr *AttributeDefinition) GetName() string             { return attr.Name }
+func (attr *AttributeDefinition) GetDefault() interface{}     { return attr.DefValue }
+func (attr *AttributeDefinition) GetSize() int                { return attr.Size }
+func (attr *AttributeDefinition) GetAccess() AttributeAccess  { return attr.Access }
+func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
+	return attr.Constraint
+}
+
 func (attr *AttributeDefinition) GetValue() (interface{}, error) {
 	// TODO: Better way to detect not-initialized and no default available?
 	return attr.Value, nil
+}
+
+func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback) (interface{}, error) {
+	// Use negative numbers to indicate signed values
+	size := attr.GetSize()
+	if size < 0 {
+		size = -size
+	}
+	if len(data) < size {
+		df.SetTruncated()
+		return nil, errors.New("packet too small for field")
+	}
+	var err error
+	switch attr.GetSize() {
+	default:
+		return nil, errors.New("unknown attribute size")
+	case 1:
+		value := data[0]
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 2:
+		value := binary.BigEndian.Uint16(data[0:2])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(attr.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 4:
+		value := binary.BigEndian.Uint32(data[0:4])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(attr.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 8:
+		value := binary.BigEndian.Uint64(data[0:8])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(attr.Value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	}
+}
+
+func (attr *AttributeDefinition) SerializeTo(b gopacket.SerializeBuffer) error {
+	// TODO: Check to see if space in buffer here !!!!
+	bytes, err := b.AppendBytes(attr.GetSize())
+	if err != nil {
+		return err
+	}
+	switch attr.GetSize() {
+	default:
+		return errors.New("unknown attribute size")
+	case 1:
+		bytes[0] = attr.Value.(byte)
+	case 2:
+		binary.BigEndian.PutUint16(bytes, attr.Value.(uint16))
+	case 4:
+		binary.BigEndian.PutUint32(bytes, attr.Value.(uint32))
+	case 8:
+		binary.BigEndian.PutUint64(bytes, attr.Value.(uint64))
+	}
+	return nil
+}
+
+// GetAttributeDefinitionByName searches the attribute definition map for the
+// attribute with the specified name (case insensitive)
+func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (*AttributeDefinition, error) {
+	nameLower := strings.ToLower(name)
+	for _, attrVal := range attrMap {
+		if nameLower == strings.ToLower(attrVal.GetName()) {
+			return attrVal, nil
+		}
+	}
+	return nil, errors.New("attribute not found")
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -84,14 +172,39 @@ func UnknownField(name string, defVal uint16, access AttributeAccess) *Attribute
 }
 
 ///////////////////////////////////////////////////////////////////////
-// Attribute Value
+// Attribute Value   (Interfaced defined in generated subdirectory)
 
-// IAttributeValue implements a single specific Managed Entity attribute instance
-// The index for the Entity ID (always the first) is -1 as it is not provided
-// in the attribute mask when transmitted or received on the wire
-type IAttributeValue interface {
-	GetName() string
-	GetIndex() int
-	GetValue() (interface{}, error)
-	SetValue(interface{}) error
+type AttributeValueMap map[uint]*AttributeValue
+
+// AttributeValue provides the value for a single specific Managed Entity attribute
+type AttributeValue struct {
+	Name   string
+	Value  interface{}
+}
+
+func (attr *AttributeValue) String() string {
+	val, err := attr.GetValue()
+	return fmt.Sprintf("Value: %v, Value: %v, Error: %v",
+		attr.GetName(), val, err)
+}
+func (attr *AttributeValue) GetName() string  { return attr.Name }
+func (attr *AttributeValue) GetValue() (interface{}, error) {
+	// TODO: Better way to detect not-initialized and no default available?
+	return attr.Value, nil
+}
+
+func (attr *AttributeValue) SetValue(value interface{}) error {
+	return nil
+}
+
+// GetAttributeValueByName searches the attribute value map for the
+// attribute with the specified name (case insensitive)
+func GetAttributeValueByName(attrMap AttributeValueMap, name string) (*AttributeValue, error) {
+	nameLower := strings.ToLower(name)
+	for _, attrVal := range attrMap {
+		if nameLower == strings.ToLower(attrVal.GetName()) {
+			return attrVal, nil
+		}
+	}
+	return nil, errors.New("attribute not found")
 }

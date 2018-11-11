@@ -27,14 +27,14 @@ type IManagedEntityInstance interface {
 	GetAttributeMask() uint16
 	SetAttributeMask(uint16) error
 
-	GetAttributes() []*AttributeValue			// TODO: Can we use interface from generated?
-	SetAttributes([]*AttributeValue) error
+	GetAttributes() generated.AttributeValueMap			// TODO: Can we use interface from generated?
+	SetAttributes(generated.AttributeValueMap) error
 }
 
 type BaseManagedEntityInstance struct {
 	generated.BaseManagedEntityDefinition
 	AttributeMask uint16
-	Attributes []*AttributeValue
+	Attributes generated.AttributeValueMap
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
@@ -48,10 +48,10 @@ func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
 	return nil
 }
 
-func (bme *BaseManagedEntityInstance) GetAttributes() []*AttributeValue {
+func (bme *BaseManagedEntityInstance) GetAttributes() generated.AttributeValueMap {
 	return bme.Attributes
 }
-func (bme *BaseManagedEntityInstance) SetAttributes(attributes []*AttributeValue) error {
+func (bme *BaseManagedEntityInstance) SetAttributes(attributes generated.AttributeValueMap) error {
 	// TODO: Validate attributes
 	bme.Attributes = attributes
 	return nil

@@ -20,8 +20,10 @@
 package generated
 
 import (
+	"errors"
 	"fmt"
 	"github.com/google/gopacket"
+	"math/bits"
 )
 
 // MsgType represents a OMCI message-type
@@ -245,10 +247,10 @@ type IManagedEntityDefinition interface {
 	GetEntityID() uint16
 	GetMessageTypes() []MsgType
 	GetAllowedAttributeMask() uint16
-	GetAttributeDefinitions() []*AttributeDefinition // TODO: Change this to a map, entity ID is index -1
+	GetAttributeDefinitions() AttributeDefinitionMap
 
-	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder) ([]*IAttributeValue, error)
-	SerializeAttributes( uint16, gopacket.SerializeBuffer) error
+	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder) (AttributeValueMap, error)
+	SerializeAttributes(uint16, gopacket.SerializeBuffer) error
 }
 
 type BaseManagedEntityDefinition struct {
@@ -257,7 +259,7 @@ type BaseManagedEntityDefinition struct {
 	EntityID             uint16       // TODO: Move to be inside attributes
 	MessageTypes         []MsgType
 	AllowedAttributeMask uint16
-	AttributeDefinitions []*AttributeDefinition // TODO: Change this to a map, entity ID is index -1
+	AttributeDefinitions AttributeDefinitionMap
 }
 
 func (bme *BaseManagedEntityDefinition) String() string {
@@ -281,22 +283,56 @@ func (bme *BaseManagedEntityDefinition) GetMessageTypes() []MsgType {
 func (bme *BaseManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
 	return bme.AllowedAttributeMask
 }
-func (bme *BaseManagedEntityDefinition) GetAttributeDefinitions() []*AttributeDefinition {
+func (bme *BaseManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinitionMap {
 	return bme.AttributeDefinitions
 }
 
 func (bme *BaseManagedEntityDefinition) computeAttributeMask() {
 	for index := range bme.AttributeDefinitions {
-		bme.AllowedAttributeMask |= 1 << (15 - uint(index))
+		if index == 0 {
+			continue	// Skip Entity ID
+		}
+		bme.AllowedAttributeMask |= 1 << (15 - uint(index - 1))
 	}
 }
 
-func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) ([]*IAttributeValue, error) {
-	// TODO Implement me
-	return nil, nil
+func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) (AttributeValueMap, error) {
+	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
+		// TODO: Provide custom error code so a response 'result' can properly be coded
+		return nil, errors.New("unsupported attribute mask")
+	}
+	attrMap := make(AttributeValueMap, bits.OnesCount16(mask))
+	for index, attrDef := range bme.AttributeDefinitions {
+		if index == 0 {
+			continue	// Skip Entity ID
+		}
+		if mask & (1 << (15 - uint(index - 1))) != 0 {
+			value, err := attrDef.Decode(data, p)
+			if err != nil {
+				return nil, err
+			}
+			attrMap[index] = &AttributeValue{
+				Name: attrDef.GetName(),
+				Value: value,
+			}
+		}
+	}
+	return attrMap, nil
 }
 
 func (bme* BaseManagedEntityDefinition) SerializeAttributes(mask uint16, data gopacket.SerializeBuffer) error {
+	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
+		// TODO: Provide custom error code so a response 'result' can properly be coded
+		return errors.New("unsupported attribute mask")
+	}
+	for index, attrDef := range bme.AttributeDefinitions {
+		if index == 0 {
+			continue	// Skip Entity ID
+		}
+		if mask & (1 << (15 - uint(index - 1))) != 0 {
+			fmt.Println(attrDef)
+		}
+	}
 	// TODO Implement me
 	return nil
 }
