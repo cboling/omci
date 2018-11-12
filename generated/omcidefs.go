@@ -325,11 +325,14 @@ func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueM
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return errors.New("unsupported attribute mask")
 	}
-	for index, attrDef := range bme.AttributeDefinitions {
+	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
+
+	for _, index := range keyList {
 		// TODO: Verify loop over uint indexed map follows index number
 		if index == 0 {
 			continue	// Skip Entity ID
 		}
+		attrDef := bme.AttributeDefinitions[index]
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
 			attribute, ok := attr[index]
 			if !ok {

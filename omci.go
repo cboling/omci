@@ -140,6 +140,9 @@ func calculateMic([]byte) uint32 {
 
 /////////////////////////////////////////////////////////////////////////////
 //   Baseline Message encode / decode
+//
+// TODO: For OMCI and MessageType decode, look into what the proper values for Padding and Payload should be
+//       and what they are generally used for.  Currently often being set to 'nil'
 
 func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	if len(data) < 10 {

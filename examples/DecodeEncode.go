@@ -122,29 +122,28 @@ func setTContExample()() {
 		fmt.Println(ok)
 		fmt.Println(omciMsg)
 
-		layers := packet.Layers()
-		for _, layer := range layers {
-			ltype := layer.LayerType()
-			fmt.Println(ltype, omci.LayerTypeSetRequest)
-		}
 		msgLayer := packet.Layer(omci.LayerTypeSetRequest)
 		fmt.Println(msgLayer)
 		fmt.Println(msgLayer.(*omci.SetRequest))
 
 		omciMsg, ok2 := omciLayer.(*omci.OMCI)
-		fmt.Println(ok2)
+		fmt.Printf("SET Request OMCI Layer Decode status: %v\n", ok2)
+		fmt.Printf("   TransactionID: %v\n", omciMsg.TransactionID)
+		fmt.Printf("   MessageType: %v (%#x)\n", omciMsg.MessageType, omciMsg.MessageType)
+		fmt.Printf("   \n")
 
-		omciMsg2, ok3 := msgLayer.(*omci.CreateRequest)
-		fmt.Println(ok3)
-		fmt.Println(omciMsg2.EntityClass)    // uint16(0x0110))
-		fmt.Println(omciMsg2.EntityInstance) // uint16(1))
+		setRequest, ok3 := msgLayer.(*omci.SetRequest)
+		fmt.Printf("SET Request Decode status: %v\n", ok3)
+		fmt.Printf("  EntityID: %v, InstanceID: %v\n", setRequest.EntityClass, setRequest.EntityInstance)
+		fmt.Printf("  AttributeMask: %#x\n", setRequest.AttributeMask)
+		fmt.Printf("  Attributes: %v\n", setRequest.Attributes)
 
 		// Test serialization back to former string
 		var options gopacket.SerializeOptions
 		options.FixLengths = true
 
 		buffer := gopacket.NewSerializeBuffer()
-		err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+		err = gopacket.SerializeLayers(buffer, options, omciMsg, setRequest)
 		fmt.Println(err)
 
 		outgoingPacket := buffer.Bytes()

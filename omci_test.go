@@ -152,6 +152,15 @@ func TestSetTCont(t *testing.T) {
 	assert.Equal(t, omciMsg2.EntityClass, generated.TContClassId)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
 
+	attributes := omciMsg2.Attributes
+	assert.Equal(t, len(attributes), 1)
+
+	// TODO: Create generic test to look up the name from definition
+	// Here 1 is the index in the attribute definition map of a TCONT that points
+	// to the AllocID attribute.
+	assert.Equal(t, attributes[1].Name, "AllocId")
+	assert.Equal(t, attributes[1].Value, uint16(1024))
+
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
 	options.FixLengths = true
@@ -163,48 +172,6 @@ func TestSetTCont(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, setTCont, reconstituted)
-
-}
-
-func TestSetTCont2(t *testing.T) {
-	setTCont2 := "0004480A010680018000040100000000" +
-		"00000000000000000000000000000000" +
-		"000000000000000000000028"
-
-	data, err := stringToPacket(setTCont2)
-	assert.NoError(t, err)
-
-	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	assert.NotNil(t, packet)
-
-	omciLayer := packet.Layer(LayerTypeOMCI)
-	assert.NotNil(t, packet)
-
-	omciMsg, ok := omciLayer.(*OMCI)
-	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID,uint16(4))
-	assert.Equal(t, omciMsg.MessageType, byte(generated.Set)|generated.AR)
-	assert.Equal(t, omciMsg.Length, uint16(40))
-
-	msgLayer := packet.Layer(LayerTypeSetRequest)
-	assert.NotNil(t, msgLayer)
-
-	omciMsg2, ok2 := msgLayer.(*SetRequest)
-	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, generated.TContClassId)
-	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8001))
-
-	// Test serialization back to former string
-	var options gopacket.SerializeOptions
-	options.FixLengths = true
-
-	buffer := gopacket.NewSerializeBuffer()
-	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
-	assert.NoError(t, err)
-
-	outgoingPacket := buffer.Bytes()
-	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t, setTCont2, reconstituted)
 }
 
 // TODO: Uncomment as encode/decode supported

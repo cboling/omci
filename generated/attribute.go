@@ -24,6 +24,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/gopacket"
+	"sort"
 	"strings"
 )
 
@@ -141,6 +142,18 @@ func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (
 	return nil, errors.New("attribute not found")
 }
 
+// GetAttributeDefinitionMapKeys is a convenience functions since we may need to
+// iterate a map in key index order. Maps in Go since v1.0 the iteration order
+// of maps have been randomized.
+func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
+	var keys []uint
+	for k:= range attrMap {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool { return i < j })
+	return keys
+}
+
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 
@@ -201,4 +214,16 @@ func GetAttributeValueByName(attrMap AttributeValueMap, name string) (*Attribute
 		}
 	}
 	return nil, errors.New("attribute not found")
+}
+
+// GetAttributeValueMapKeys is a convenience functions since we may need to
+// iterate a map in key index order. Maps in Go since v1.0 the iteration order
+// of maps have been randomized.
+func GetAttributeValueMapKeys(attrMap AttributeValueMap) []uint {
+	var keys []uint
+	for k:= range attrMap {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool { return i < j })
+	return keys
 }
