@@ -17,24 +17,24 @@
 package omci
 
 import (
-	"./generated"
+	me "./generated"
 	"errors"
 )
 
 type IManagedEntityInstance interface {
-	generated.IManagedEntityDefinition
+	me.IManagedEntityDefinition
 
 	GetAttributeMask() uint16
 	SetAttributeMask(uint16) error
 
-	GetAttributes() generated.AttributeValueMap			// TODO: Can we use interface from generated?
-	SetAttributes(generated.AttributeValueMap) error
+	GetAttributes() me.AttributeValueMap			// TODO: Can we use interface from generated?
+	SetAttributes(me.AttributeValueMap) error
 }
 
 type BaseManagedEntityInstance struct {
-	generated.BaseManagedEntityDefinition
+	me.BaseManagedEntityDefinition
 	AttributeMask uint16
-	Attributes generated.AttributeValueMap
+	Attributes me.AttributeValueMap
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
@@ -48,10 +48,10 @@ func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
 	return nil
 }
 
-func (bme *BaseManagedEntityInstance) GetAttributes() generated.AttributeValueMap {
+func (bme *BaseManagedEntityInstance) GetAttributes() me.AttributeValueMap {
 	return bme.Attributes
 }
-func (bme *BaseManagedEntityInstance) SetAttributes(attributes generated.AttributeValueMap) error {
+func (bme *BaseManagedEntityInstance) SetAttributes(attributes me.AttributeValueMap) error {
 	// TODO: Validate attributes
 	bme.Attributes = attributes
 	return nil

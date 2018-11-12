@@ -17,7 +17,7 @@
 package omci
 
 import (
-	"./generated"
+	me "./generated"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -82,10 +82,10 @@ type OMCI struct {
 }
 
 func (omci *OMCI) String() string {
-	msgType := generated.MsgType(omci.MessageType & generated.MsgTypeMask)
-	if generated.IsAutonomousNotification(msgType) {
+	msgType := me.MsgType(omci.MessageType & me.MsgTypeMask)
+	if me.IsAutonomousNotification(msgType) {
 		return fmt.Sprintf("OMCI: Type: %v:", msgType)
-	} else if omci.MessageType&generated.AK == generated.AK {
+	} else if omci.MessageType&me.AK == me.AK {
 		return fmt.Sprintf("OMCI: Type: %v Response", msgType)
 	}
 	return fmt.Sprintf("OMCI: Type: %v Request", msgType)
