@@ -43,7 +43,7 @@ func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntityDefinitio
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: UnknownField("BridgeMacAddress", 0, Read),
+			1: MultiByteField("BridgeMacAddress", 6, nil, Read),
 			2: Uint16Field("BridgePriority", 0, Read),
 			3: Uint64Field("DesignatedRoot", 0, Read),
 			4: Uint32Field("RootPathCost", 0, Read),

@@ -46,10 +46,10 @@ func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity
 			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
 			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
-			3: UnknownField("DateTimeStampingOfNearEndTestParametersStampTestNe", 0, Read),
-			4: UnknownField("DateTimeStampingOfFarEndTestParametersStampTestFe", 0, Read),
-			5: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 0, Read),
-			6: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 0, Read),
+			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read),
+			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read),
+			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

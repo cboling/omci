@@ -48,7 +48,7 @@ func NewSipUserData(params ...ParamData) (IManagedEntityDefinition, error) {
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: Uint16Field("SipAgentPointer", 0, Read|Write|SetByCreate),
 			2: Uint16Field("UserPartAor", 0, Read|Write|SetByCreate),
-			3: UnknownField("SipDisplayName", 0, Read|Write),
+			3: MultiByteField("SipDisplayName", 25, nil, Read|Write),
 			4: Uint16Field("UsernameAndPassword", 0, Read|Write|SetByCreate),
 			5: Uint16Field("VoicemailServerSipUri", 0, Read|Write|SetByCreate),
 			6: Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|Write|SetByCreate),

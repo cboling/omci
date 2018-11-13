@@ -69,7 +69,14 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	var err error
 	switch attr.GetSize() {
 	default:
-		return nil, errors.New("unknown attribute size")
+		value := make([]byte, size)
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
 	case 1:
 		value := data[0]
 		if attr.GetConstraints() != nil {
@@ -117,7 +124,7 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	}
 	switch attr.GetSize() {
 	default:
-		return errors.New("unknown attribute size")
+		copy(bytes, value.([]byte))
 	case 1:
 		bytes[0] = value.(byte)
 	case 2:
@@ -171,6 +178,10 @@ func Uint32Field(name string, defVal uint16, access AttributeAccess) *AttributeD
 
 func Uint64Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
 	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 8, Access: access}
+}
+
+func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess) *AttributeDefinition {
+	return &AttributeDefinition{Name: name, DefValue: defVal, Size: int(size), Access: access}
 }
 
 // TODO: Need more fields...

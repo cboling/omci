@@ -45,8 +45,8 @@ func NewDot1AgCfmStack(params ...ParamData) (IManagedEntityDefinition, error) {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("Layer2Type", 0, Read),
-			2: UnknownField("MpStatusTable", 0, Read),
-			3: UnknownField("ConfigurationErrorListTable", 0, Read),
+			2: MultiByteField("MpStatusTable", 18, nil, Read),
+			3: MultiByteField("ConfigurationErrorListTable", 5, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

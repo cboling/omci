@@ -38,11 +38,11 @@ func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IMan
 		ClassID:  171,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
 			GetNext,
+			Create,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -52,9 +52,9 @@ func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IMan
 			3: Uint16Field("InputTpid", 0, Read|Write),
 			4: Uint16Field("OutputTpid", 0, Read|Write),
 			5: ByteField("DownstreamMode", 0, Read|Write),
-			6: UnknownField("ReceivedFrameVlanTaggingOperationTable", 0, Read|Write),
+			6: MultiByteField("ReceivedFrameVlanTaggingOperationTable", 16, nil, Read|Write),
 			7: Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
-			8: UnknownField("DscpToPBitMapping", 0, Read|Write),
+			8: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

@@ -43,7 +43,7 @@ func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: UnknownField("XdslTransmissionSystem", 0, Read),
+			1: MultiByteField("XdslTransmissionSystem", 7, nil, Read),
 			2: ByteField("LinePowerManagementState", 0, Read),
 			3: Uint16Field("DownstreamLineAttenuation", 0, Read),
 			4: Uint16Field("UpstreamLineAttenuation", 0, Read),

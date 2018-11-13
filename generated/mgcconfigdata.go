@@ -54,7 +54,7 @@ func NewMgcConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 			6: Uint16Field("MaximumRetryTime", 0, Read|Write),
 			7: Uint16Field("MaximumRetryAttempts", 0, Read|Write|SetByCreate),
 			8: Uint16Field("ServiceChangeDelay", 0, Read|Write),
-			9: UnknownField("TerminationIdBase", 0, Read|Write),
+			9: MultiByteField("TerminationIdBase", 25, nil, Read|Write),
 			10: Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
 			11: Uint16Field("MessageIdPointer", 0, Read|Write|SetByCreate),
 		},

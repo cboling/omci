@@ -38,11 +38,11 @@ func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) 
 		ClassID:  444,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
+			Create,
 			GetCurrentData,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

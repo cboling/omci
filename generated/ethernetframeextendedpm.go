@@ -47,7 +47,7 @@ func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntityDefinition, 
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: ByteField("IntervalEndTime", 0, Read),
-			2: UnknownField("ControlBlock", 0, Read|Write|SetByCreate),
+			2: MultiByteField("ControlBlock", 16, nil, Read|Write|SetByCreate),
 			3: Uint32Field("DropEvents", 0, Read),
 			4: Uint32Field("Octets", 0, Read),
 			5: Uint32Field("Frames", 0, Read),

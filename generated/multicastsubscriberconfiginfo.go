@@ -38,11 +38,11 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 		ClassID:  310,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
 			GetNext,
+			Create,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -52,7 +52,7 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 			3: Uint16Field("MaxSimultaneousGroups", 0, Read|Write|SetByCreate),
 			4: Uint32Field("MaxMulticastBandwidth", 0, Read|Write|SetByCreate),
 			5: ByteField("BandwidthEnforcement", 0, Read|Write|SetByCreate),
-			6: UnknownField("MulticastServicePackageTable", 0, Read|Write),
+			6: MultiByteField("MulticastServicePackageTable", 22, nil, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

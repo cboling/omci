@@ -38,11 +38,11 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 		ClassID:  281,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
 			GetNext,
+			Create,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -53,7 +53,7 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 			4: ByteField("PptpCounter", 0, Read),
 			5: ByteField("OperationalState", 0, Read),
 			6: Uint16Field("GalProfilePointer", 0, Read|Write|SetByCreate),
-			7: UnknownField("Ipv6MulticastAddressTable", 0, Read|Write),
+			7: MultiByteField("Ipv6MulticastAddressTable", 24, nil, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

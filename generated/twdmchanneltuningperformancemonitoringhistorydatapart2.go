@@ -38,11 +38,11 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamDa
 		ClassID:  450,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
+			Create,
 			GetCurrentData,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

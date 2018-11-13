@@ -52,7 +52,7 @@ func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity
 			6: ByteField("ArcInterval", 0, Read|Write),
 			7: ByteField("PppoeFilter", 0, Read|Write),
 			8: ByteField("NetworkStatus", 0, Read),
-			9: UnknownField("Password", 0, Read|Write),
+			9: MultiByteField("Password", 17, nil, Read|Write),
 			10: ByteField("PrivacyEnabled", 0, Read|Write),
 			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write),
 			12: Uint32Field("FrequencyMask", 0, Read|Write),

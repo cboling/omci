@@ -174,55 +174,163 @@ func TestSetTCont(t *testing.T) {
 	assert.Equal(t, setTCont, reconstituted)
 }
 
+func TestCreate8021pMapperService_profile(t *testing.T) {
+	create8021pMapperServiceProfile := "0007440A00828000ffffffffffffffff" +
+		"ffffffffffffffffffff000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(create8021pMapperServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(7))
+	assert.Equal(t, omciMsg.MessageType, byte(generated.Create)|generated.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, omciMsg2.EntityClass, generated.Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
+
+	attributes := omciMsg2.Attributes
+	assert.NotNil(t, attributes)
+	fmt.Printf("802.1 Attributes: %v\n", attributes)
+	//assert.Equal(t, len(attributes), 1)
+	//
+	//// TODO: Create generic test to look up the name from definition
+	//// Here 1 is the index in the attribute definition map of a TCONT that points
+	//// to the AllocID attribute.
+	//assert.Equal(t, attributes[1].Name, "AllocId")
+	//assert.Equal(t, attributes[1].Value, uint16(1024))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, create8021pMapperServiceProfile, reconstituted)
+}
+
+func TestCreate_macBridgeService_profile(t *testing.T) {
+	var createMacBridgeServiceProfile = "000B440A002D02010001008000140002" +
+		"000f0001000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createMacBridgeServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0xb))
+	assert.Equal(t, omciMsg.MessageType, byte(generated.Create)|generated.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, omciMsg2.EntityClass, generated.TContClassId)
+	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x201))
+
+	attributes := omciMsg2.Attributes
+	assert.NotNil(t, attributes)
+	fmt.Printf("MB Attributes: %v\n", attributes)
+	//assert.Equal(t, len(attributes), 1)
+	//
+	//// TODO: Create generic test to look up the name from definition
+	//// Here 1 is the index in the attribute definition map of a TCONT that points
+	//// to the AllocID attribute.
+	//assert.Equal(t, attributes[1].Name, "AllocId")
+	//assert.Equal(t, attributes[1].Value, uint16(1024))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, createMacBridgeServiceProfile, reconstituted)
+}
+
+func TestCreateGemPortNetworkCtp(t *testing.T) {
+	createGemPortNetworkCtp := "000C440A010C01000400800003010000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createGemPortNetworkCtp)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0xc))
+	assert.Equal(t, omciMsg.MessageType, byte(generated.Create)|generated.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, omciMsg2.EntityClass, generated.GemPortNetworkCtpClassId)
+	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x100))
+
+	attributes := omciMsg2.Attributes
+	assert.NotNil(t, attributes)
+	fmt.Printf("GP Attributes: %v\n", attributes)
+	//assert.Equal(t, len(attributes), 1)
+	//
+	//// TODO: Create generic test to look up the name from definition
+	//// Here 1 is the index in the attribute definition map of a TCONT that points
+	//// to the AllocID attribute.
+	//assert.Equal(t, attributes[1].Name, "AllocId")
+	//assert.Equal(t, attributes[1].Value, uint16(1024))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, createGemPortNetworkCtp, reconstituted)
+}
+
 // TODO: Uncomment as encode/decode supported
-//func TestCreate8021pMapperService_profile(t *testing.T) {
-//
-//	create8021pMapperServiceProfile := "0007440A00828000ffffffffffffffff" +
-//		"ffffffffffffffffffff000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(create8021pMapperServiceProfile)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreate_macBridgeService_profile(t *testing.T) {
-//
-//	var createMacBridgeServiceProfile = "000B440A002D02010001008000140002" +
-//		"000f0001000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createMacBridgeServiceProfile)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreateGemPortNetworkCtp(t *testing.T) {
-//
-//	createGemPortNetworkCtp := "000C440A010C01000400800003010000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createGemPortNetworkCtp)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
 //func TestMulticastGemInterworkingTp(t *testing.T) {
 //
 //	multicastGemInterworkingTp := "0011440A011900060104000001000000" +

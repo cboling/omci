@@ -38,11 +38,11 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntityDefinition, err
 		ClassID:  145,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
 			GetNext,
+			Create,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

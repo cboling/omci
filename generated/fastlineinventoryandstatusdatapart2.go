@@ -43,11 +43,11 @@ func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (IManagedEntity
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 0, Read),
-			2: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 0, Read),
-			3: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 0, Read),
-			4: UnknownField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 0, Read),
-			5: UnknownField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 0, Read),
+			1: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 7, nil, Read),
+			2: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 7, nil, Read),
+			3: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 7, nil, Read),
+			4: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 7, nil, Read),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 7, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

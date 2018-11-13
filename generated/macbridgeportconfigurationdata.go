@@ -55,7 +55,7 @@ func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntityDefin
 			7: ByteField("PortSpanningTreeInd", 0, Read|Write|SetByCreate),
 			8: ByteField("Deprecated1", 0, Read|Write|SetByCreate),
 			9: ByteField("Deprecated2", 0, Read|Write|SetByCreate),
-			10: UnknownField("PortMacAddress", 0, Read),
+			10: MultiByteField("PortMacAddress", 6, nil, Read),
 			11: Uint16Field("OutboundTdPointer", 0, Read|Write),
 			12: Uint16Field("InboundTdPointer", 0, Read|Write),
 			13: ByteField("MacLearningDepth", 0, Read|Write|SetByCreate),

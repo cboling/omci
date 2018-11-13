@@ -51,7 +51,7 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write),
 			6: ByteField("VoipConfigurationState", 0, Read),
 			7: ByteField("RetrieveProfile", 0, Write),
-			8: UnknownField("ProfileVersion", 0, Read),
+			8: MultiByteField("ProfileVersion", 25, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

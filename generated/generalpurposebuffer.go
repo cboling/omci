@@ -47,7 +47,7 @@ func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntityDefinition, err
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: Uint32Field("MaximumSize", 0, Read|Write|SetByCreate),
-			2: UnknownField("BufferTable", 0, Read),
+			2: MultiByteField("BufferTable", 0, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

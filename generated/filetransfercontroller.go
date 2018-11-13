@@ -54,7 +54,7 @@ func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, e
 			8: Uint16Field("GemIwtpPointer", 0, Read|Write),
 			9: Uint16Field("Vlan", 0, Read|Write),
 			10: Uint32Field("FileSize", 0, Read|Write),
-			11: UnknownField("DirectoryListingTable", 0, Read),
+			11: MultiByteField("DirectoryListingTable", 0, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

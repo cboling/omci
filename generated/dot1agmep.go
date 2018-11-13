@@ -55,7 +55,7 @@ func NewDot1AgMep(params ...ParamData) (IManagedEntityDefinition, error) {
 			7: ByteField("AdministrativeState", 0, Read|Write|SetByCreate),
 			8: ByteField("CcmAndLtmPriority", 0, Read|Write|SetByCreate),
 			9: Uint64Field("EgressIdentifier", 0, Read|Write|SetByCreate),
-			10: UnknownField("PeerMepIds", 0, Read|Write),
+			10: MultiByteField("PeerMepIds", 24, nil, Read|Write),
 			11: ByteField("EthAisControl", 0, Read|Write|SetByCreate),
 			12: ByteField("FaultAlarmThreshold", 0, Read|Write|SetByCreate),
 			13: Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write),

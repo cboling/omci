@@ -57,7 +57,7 @@ func NewSipAgentConfigData(params ...ParamData) (IManagedEntityDefinition, error
 			9: ByteField("SipStatus", 0, Read),
 			10: Uint16Field("SipRegistrar", 0, Read|Write|SetByCreate),
 			11: Uint32Field("Softswitch", 0, Read|Write|SetByCreate),
-			12: UnknownField("SipResponseTable", 0, Read|Write),
+			12: MultiByteField("SipResponseTable", 5, nil, Read|Write),
 			13: ByteField("SipOptionTransmitControl", 0, Read|Write|SetByCreate),
 			14: ByteField("SipUriFormat", 0, Read|Write|SetByCreate),
 			15: Uint16Field("RedundantSipAgentPointer", 0, Read|Write|SetByCreate),

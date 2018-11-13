@@ -38,11 +38,11 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamDat
 		ClassID:  448,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
+			Create,
 			GetCurrentData,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

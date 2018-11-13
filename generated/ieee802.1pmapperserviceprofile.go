@@ -56,7 +56,7 @@ func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntityDefini
 			8: Uint16Field("InterworkTpPointerForPBitPriority6", 0, Read|Write|SetByCreate),
 			9: Uint16Field("InterworkTpPointerForPBitPriority7", 0, Read|Write|SetByCreate),
 			10: ByteField("UnmarkedFrameOption", 0, Read|Write|SetByCreate),
-			11: UnknownField("DscpToPBitMapping", 0, Read|Write),
+			11: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write),
 			12: ByteField("DefaultPBitAssumption", 0, Read|Write|SetByCreate),
 			13: ByteField("TpType", 0, Read|Write|SetByCreate),
 		},

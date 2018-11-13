@@ -44,12 +44,12 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntityDefin
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("ItuTG9701ProfileProfile", 0, Read),
-			2: UnknownField("GammaDataRAteGdr", 0, Read),
-			3: UnknownField("AttainableGammaDataRaTeAttgdr", 0, Read),
+			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read),
+			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read),
 			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
 			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
-			6: UnknownField("DpuSerialNumberDpuSystemSerialnr", 0, Read),
-			7: UnknownField("NtSerialNumberNtSystemSerialnr", 0, Read),
+			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read),
+			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

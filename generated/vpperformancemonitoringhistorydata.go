@@ -51,8 +51,8 @@ func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityD
 			3: Uint16Field("LostC01Cells", 0, Read),
 			4: Uint16Field("LostC=0Cells", 0, Read),
 			5: Uint16Field("MisinsertedCells", 0, Read),
-			6: UnknownField("TransmittedC=01Cells", 0, Read),
-			7: UnknownField("TransmittedC=0Cells", 0, Read),
+			6: MultiByteField("TransmittedC=01Cells", 5, nil, Read),
+			7: MultiByteField("TransmittedC=0Cells", 5, nil, Read),
 			8: Uint16Field("ImpairedBlock", 0, Read),
 		},
 	}

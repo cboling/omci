@@ -45,9 +45,9 @@ func NewOltG(params ...ParamData) (IManagedEntityDefinition, error) {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: Uint32Field("OltVendorId", 0, Read|Write),
-			2: UnknownField("EquipmentId", 0, Read|Write),
-			3: UnknownField("Version", 0, Read|Write),
-			4: UnknownField("TimeOfDayInformation", 0, Read|Write),
+			2: MultiByteField("EquipmentId", 20, nil, Read|Write),
+			3: MultiByteField("Version", 14, nil, Read|Write),
+			4: MultiByteField("TimeOfDayInformation", 14, nil, Read|Write),
 		},
 	}
 	entity.computeAttributeMask()

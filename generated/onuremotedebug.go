@@ -46,8 +46,8 @@ func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("CommandFormat", 0, Read),
-			2: UnknownField("Command", 0, Write),
-			3: UnknownField("ReplyTable", 0, Read),
+			2: MultiByteField("Command", 25, nil, Write),
+			3: MultiByteField("ReplyTable", 0, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()

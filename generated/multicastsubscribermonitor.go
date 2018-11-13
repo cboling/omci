@@ -38,11 +38,11 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 		ClassID:  311,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Create,
-			Delete,
 			Set,
 			Get,
 			GetNext,
+			Create,
+			Delete,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -51,8 +51,8 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 			2: Uint32Field("CurrentMulticastBandwidth", 0, Read),
 			3: Uint32Field("JoinMessagesCounter", 0, Read),
 			4: Uint32Field("BandwidthExceededCounter", 0, Read),
-			5: UnknownField("Ipv4ActiveGroupListTable", 0, Read),
-			6: UnknownField("Ipv6ActiveGroupListTable", 0, Read),
+			5: MultiByteField("Ipv4ActiveGroupListTable", 24, nil, Read),
+			6: MultiByteField("Ipv6ActiveGroupListTable", 58, nil, Read),
 		},
 	}
 	entity.computeAttributeMask()
