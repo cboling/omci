@@ -157,7 +157,7 @@ func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
 	for k:= range attrMap {
 		keys = append(keys, k)
 	}
-	sort.Slice(keys, func(i, j int) bool { return i < j })
+	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
 	return keys
 }
 

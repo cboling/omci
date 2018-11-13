@@ -11,6 +11,7 @@ func main() {
 	mibResetExample()
 	createGalEthernetProfileExample()
 	setTContExample()
+	create8021pMapperService_profile()
 }
 
 func mibResetExample() {
@@ -118,23 +119,19 @@ func setTContExample()() {
 		fmt.Println(omciLayer)
 		fmt.Println(omciLayer.(*omci.OMCI))
 
-		omciMsg, ok := omciLayer.(*omci.OMCI)
-		fmt.Println(ok)
-		fmt.Println(omciMsg)
-
 		msgLayer := packet.Layer(omci.LayerTypeSetRequest)
 		fmt.Println(msgLayer)
 		fmt.Println(msgLayer.(*omci.SetRequest))
 
-		omciMsg, ok2 := omciLayer.(*omci.OMCI)
-		fmt.Printf("SET Request OMCI Layer Decode status: %v\n", ok2)
+		omciMsg, ok := omciLayer.(*omci.OMCI)
+		fmt.Printf("SET Request OMCI Layer Decode status: %v\n", ok)
 		fmt.Printf("   TransactionID: %v\n", omciMsg.TransactionID)
 		fmt.Printf("   MessageType: %v (%#x)\n", omciMsg.MessageType, omciMsg.MessageType)
 		fmt.Printf("   \n")
 
-		setRequest, ok3 := msgLayer.(*omci.SetRequest)
-		fmt.Printf("SET Request Decode status: %v\n", ok3)
-		fmt.Printf("  EntityID: %v, InstanceID: %v\n", setRequest.EntityClass, setRequest.EntityInstance)
+		setRequest, ok2 := msgLayer.(*omci.SetRequest)
+		fmt.Printf("SET Request Decode status: %v\n", ok2)
+		fmt.Printf("  EntityID: %v, InstanceID: %#x\n", setRequest.EntityClass, setRequest.EntityInstance)
 		fmt.Printf("  AttributeMask: %#x\n", setRequest.AttributeMask)
 		fmt.Printf("  Attributes: %v\n", setRequest.Attributes)
 
@@ -152,6 +149,54 @@ func setTContExample()() {
 		fmt.Println(reconstituted)
 	}
 }
+
+func create8021pMapperService_profile() {
+	fmt.Println("======================================================")
+	fmt.Println("======================================================")
+	create8021pMapperServiceProfile := "0007440A00828000ffffffffffffffff" +
+		"ffffffffffffffffffff000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(create8021pMapperServiceProfile)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+
+	omciLayer := packet.Layer(omci.LayerTypeOMCI)
+	fmt.Println(omciLayer)
+	fmt.Println(omciLayer.(*omci.OMCI))
+
+	msgLayer := packet.Layer(omci.LayerTypeCreateRequest)
+	fmt.Println(msgLayer)
+	fmt.Println(msgLayer.(*omci.CreateRequest))
+
+	omciMsg, ok := omciLayer.(*omci.OMCI)
+	fmt.Printf("Create Request OMCI Layer Decode status: %v\n", ok)
+	fmt.Printf("   TransactionID: %v\n", omciMsg.TransactionID)
+	fmt.Printf("   MessageType: %v (%#x)\n", omciMsg.MessageType, omciMsg.MessageType)
+	fmt.Printf("   \n")
+
+	createRequest, ok2 := msgLayer.(*omci.CreateRequest)
+	fmt.Printf("Create Request Decode status: %v\n", ok2)
+	fmt.Printf("  EntityID: %v, InstanceID: %v\n", createRequest.EntityClass, createRequest.EntityInstance)
+	fmt.Printf("  Attributes: %v\n", createRequest.Attributes)
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+
+	fmt.Println(create8021pMapperServiceProfile)
+	fmt.Println(reconstituted)
+}
+
 
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte

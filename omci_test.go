@@ -197,12 +197,12 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
 	assert.NotNil(t, msgLayer)
 
-	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, generated.Ieee8021PMapperServiceProfileClassId)
-	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
+	assert.Equal(t, createRequest.EntityClass, generated.Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, createRequest.EntityInstance, uint16(0x8000))
 
-	attributes := omciMsg2.Attributes
+	attributes := createRequest.Attributes
 	assert.NotNil(t, attributes)
 	fmt.Printf("802.1 Attributes: %v\n", attributes)
 	//assert.Equal(t, len(attributes), 1)
@@ -218,7 +218,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	options.FixLengths = true
 
 	buffer := gopacket.NewSerializeBuffer()
-	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
 	assert.NoError(t, err)
 
 	outgoingPacket := buffer.Bytes()
