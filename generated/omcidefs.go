@@ -301,11 +301,15 @@ func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byt
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return nil, errors.New("unsupported attribute mask")
 	}
+	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
+
 	attrMap := make(AttributeValueMap, bits.OnesCount16(mask))
-	for index, attrDef := range bme.AttributeDefinitions {
+	for _, index := range keyList {
 		if index == 0 {
 			continue	// Skip Entity ID
 		}
+		attrDef := bme.AttributeDefinitions[index]
+
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
 			value, err := attrDef.Decode(data, p)
 			if err != nil {
@@ -315,6 +319,7 @@ func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byt
 				Name: attrDef.GetName(),
 				Value: value,
 			}
+			data = data[attrDef.GetSize():]
 		}
 	}
 	return attrMap, nil
@@ -328,11 +333,11 @@ func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueM
 	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
 
 	for _, index := range keyList {
-		// TODO: Verify loop over uint indexed map follows index number
 		if index == 0 {
 			continue	// Skip Entity ID
 		}
 		attrDef := bme.AttributeDefinitions[index]
+
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
 			attribute, ok := attr[index]
 			if !ok {
