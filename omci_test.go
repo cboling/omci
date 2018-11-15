@@ -218,7 +218,16 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	attributes := createRequest.Attributes
 	assert.NotNil(t, attributes)
+	assert.Equal(t, len(attributes), 12)
 
+	for index := uint(1); index <= uint(9); index++ {
+		value, err2 := attributes[index].GetValue()
+		assert.Nil(t, err2)
+
+		value16, ok3 := value.(uint16)
+		assert.True(t, ok3)
+		assert.Equal(t, value16, uint16(0xffff))
+	}
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
 	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
@@ -399,7 +408,6 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 //	assert.NotNil(t, customLayer)
 //}
 
-// TODO: Uncomment as encode/decode supported
 func TestSet8021pMapperServiceProfile(t *testing.T) {
 	set8021pMapperServiceProfile := "0016480A008280004000800100000000" +
 		"00000000000000000000000000000000" +
@@ -420,7 +428,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AR)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
-	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	msgLayer := packet.Layer(LayerTypeSetRequest)
 	assert.NotNil(t, msgLayer)
 
 	setRequest, ok2 := msgLayer.(*SetRequest)
@@ -430,9 +438,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	attributes := setRequest.Attributes
 	assert.NotNil(t, attributes)
-
-	// TODO: test attributes in the set request
-
+	assert.Equal(t, len(attributes), 1)
 
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -445,10 +451,8 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t,  strings.ToLower(set8021pMapperServiceProfile), reconstituted)
-
-
 }
-//
+// TODO: Uncomment as encode/decode supported
 //func TestCreateMacBridgePortConfigurationData(t *testing.T) {
 //
 //	createMacBridgePortConfigurationData := "001A440A002F21010201020380000000" +
@@ -557,23 +561,49 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 //	customLayer := packet.Layer(LayerTypeOMCI)
 //	assert.NotNil(t, customLayer)
 //}
-//
-//func TestMibUpload(t *testing.T) {
-//
-//	mibUpload := "00304D0A000200000000000000000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(mibUpload)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
+
+func TestMibUpload(t *testing.T) {
+	mibUpload := "00304D0A000200000000000000000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(mibUpload)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x30))
+	assert.Equal(t, omciMsg.MessageType, byte(me.MibUpload)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
+	assert.NotNil(t, msgLayer)
+
+	uploadRequest, ok2 := msgLayer.(*MibUploadRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, uploadRequest.EntityClass, me.OnuDataClassId)
+	assert.Equal(t, uploadRequest.EntityInstance, uint16(0))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, uploadRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t,  strings.ToLower(mibUpload), reconstituted)
+}
+
+// TODO: Uncomment as encode/decode supported
 //func TestEnhSecurityAvc(t *testing.T) {
 //
 //	enhSecurityAvc := "0000110a014c0000008000202020202020202020202020202020202020202020" +
@@ -588,38 +618,76 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 //	customLayer := packet.Layer(LayerTypeOMCI)
 //	assert.NotNil(t, customLayer)
 //}
-//
-//func TestAlarmMessage(t *testing.T) {
-//
-//	alarmMessage := "0000100a00050101000000000000000000000000000000000000000000000000" +
-//		"0000000220000000000000280be43cf4"
-//
-//	data, err := stringToPacket(alarmMessage)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestOnuRebootRequest(t *testing.T) {
-//
-//	onuRebootRequest := "0016590a01000000000000000000000000000" +
-//		"0000000000000000000000000000000000000" +
-//		"00000000000028"
-//
-//	data, err := stringToPacket(onuRebootRequest)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
+
+func TestAlarmMessage(t *testing.T) {
+	alarmMessage := "0000100a00050101000000000000000000000000000000000000000000000000" +
+		"0000000220000000000000280be43cf4"
+
+	data, err := stringToPacket(alarmMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0))
+	assert.Equal(t, omciMsg.MessageType, byte(me.AlarmNotification))
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeAlarmNotification)
+	assert.Nil(t, msgLayer)		// TODO: Fix decode
+
+	//assert.NotNil(t, msgLayer)
+	//
+	//alarmNotification, ok2 := msgLayer.(*AlarmNotificationMsg)
+	//assert.True(t, ok2)
+	//// TODO: Repace with actual entity class
+	//assert.Equal(t, alarmNotification.EntityClass, uint16(0x0005))
+	//assert.Equal(t, alarmNotification.EntityInstance, uint16(0x101))
+	// TODO: Decode alarm bits
+
+	// TODO: Serialize frame and test with original
+}
+
+func TestOnuRebootRequest(t *testing.T) {
+	onuRebootRequest := "0016590a01000000000000000000000000000" +
+		"0000000000000000000000000000000000000" +
+		"00000000000028"
+
+	data, err := stringToPacket(onuRebootRequest)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x16))
+	assert.Equal(t, omciMsg.MessageType, byte(me.Reboot)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeRebootRequest)
+	assert.Nil(t, msgLayer)		// TODO: Fix decode
+
+	//assert.NotNil(t, msgLayer)
+	//
+	//rebootRequest, ok2 := msgLayer.(*RebootRequest)
+	//assert.True(t, ok2)
+	//assert.Equal(t, rebootRequest.EntityClass, me.OnuDataClassId)
+	//assert.Equal(t, rebootRequest.EntityInstance, uint16(0x8000))
+	
+	// TODO: Test Decoded flags
+
+	// TODO: Serialize frame and test with original
+}
+//TODO: Uncomment as encode/decode supported
 //func TestMibResetNextSequence(t *testing.T) {
 //
 //	mibResetNextSequence := [...]string{
