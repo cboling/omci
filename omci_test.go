@@ -398,22 +398,56 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 //	customLayer := packet.Layer(LayerTypeOMCI)
 //	assert.NotNil(t, customLayer)
 //}
-//
-//func TestSet8021pMapperServiceProfile(t *testing.T) {
-//
-//	set8021pMapperServiceProfile := "0016480A008280004000800100000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(set8021pMapperServiceProfile)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
+
+// TODO: Uncomment as encode/decode supported
+func TestSet8021pMapperServiceProfile(t *testing.T) {
+	set8021pMapperServiceProfile := "0016480A008280004000800100000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(set8021pMapperServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x16))
+	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	setRequest, ok2 := msgLayer.(*SetRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, setRequest.EntityClass, me.Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, setRequest.EntityInstance, uint16(0x8000))
+
+	attributes := setRequest.Attributes
+	assert.NotNil(t, attributes)
+
+	// TODO: test attributes in the set request
+
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, setRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t,  strings.ToLower(set8021pMapperServiceProfile), reconstituted)
+
+
+}
 //
 //func TestCreateMacBridgePortConfigurationData(t *testing.T) {
 //
