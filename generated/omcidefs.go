@@ -330,6 +330,8 @@ func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueM
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return errors.New("unsupported attribute mask")
 	}
+	// TODO: Need to limit number of bytes appended to not exceed packet size
+	// Is there space/metadata info in 'b' parameter to allow this?
 	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
 
 	for _, index := range keyList {

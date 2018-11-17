@@ -18,7 +18,10 @@ package omci
 
 import (
 	me "./generated"
+	"encoding/binary"
 	"errors"
+	"github.com/google/gopacket"
+	"github.com/google/gopacket/layers"
 )
 
 type IManagedEntityInstance interface {
@@ -32,16 +35,16 @@ type IManagedEntityInstance interface {
 }
 
 type BaseManagedEntityInstance struct {
-	me.BaseManagedEntityDefinition
+	MEDefinition  me.IManagedEntityDefinition
 	AttributeMask uint16
-	Attributes me.AttributeValueMap
+	Attributes    me.AttributeValueMap
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
 func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask | bme.GetAllowedAttributeMask() != bme.GetAllowedAttributeMask() {
+	if mask | bme.baseDef.GetAllowedAttributeMask() != bme.baseDef.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
 	bme.AttributeMask = mask
@@ -54,5 +57,48 @@ func (bme *BaseManagedEntityInstance) GetAttributes() me.AttributeValueMap {
 func (bme *BaseManagedEntityInstance) SetAttributes(attributes me.AttributeValueMap) error {
 	// TODO: Validate attributes
 	bme.Attributes = attributes
+	return nil
+}
+
+// DecodeFromBytes is typically used to decode an ME in a message payload for messages
+// of type MibUploadNextResponse, AVC Notifications, ...
+func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	if len(data) < 6 {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	classID := binary.BigEndian.Uint16(data[0:2])
+	entityID := binary.BigEndian.Uint16(data[2:4])
+	parameters := me.ParamData{EntityID: entityID}
+
+	msgDef, err := me.LoadManagedEntityDefinition(classID, parameters)
+	if err != nil {
+		return err
+	}
+	bme.MEDefinition = msgDef
+	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	bme.Attributes, err = msgDef.DecodeAttributes(bme.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) error {
+	// Add class ID and entity ID
+	bytes, err := b.AppendBytes(6)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, bme.MEDefinition.GetClassID())
+	binary.BigEndian.PutUint16(bytes[2:], bme.MEDefinition.GetEntityID())
+	binary.BigEndian.PutUint16(bytes[4:], bme.AttributeMask)
+
+	// TODO: Need to limit number of bytes appended to not exceed packet size
+	// Is there space/metadata info in 'b' parameter to allow this?
+	err = bme.MEDefinition.SerializeAttributes(bme.Attributes, bme.AttributeMask, b)
+	if err != nil {
+		return err
+	}
 	return nil
 }

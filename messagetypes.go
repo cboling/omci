@@ -1064,6 +1064,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 //
 type MibUploadNextResponse struct {
 	MeBasePacket
+	ReportedME     BaseManagedEntityInstance
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1078,18 +1079,18 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	// ME needs to support Get All Alarms
+	// ME needs to support MibUploadNext
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
 		return errors.New("managed entity does not support MIB Upload Next Message-Type")
 	}
-	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != me.OnuDataClassId {
+	// MibUploadNext response Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.MeBasePacket.EntityClass != me.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload Next response")
 	}
-	if omci.EntityInstance != 0 {
+	if omci.MeBasePacket.EntityInstance != 0 {
 		return errors.New("invalid Entity Instance for MIB Upload Next response")
 	}
-	// Create ME to hold uploaded information
+	// Decode reported me
 
 	// TODO: Work on best way to decode the uploaded ME
 
