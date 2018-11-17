@@ -1,9 +1,10 @@
 package main
 
 import (
-	".."
 	"encoding/hex"
 	"fmt"
+
+	"github.com/cboling/omci"
 	"github.com/google/gopacket"
 )
 
@@ -101,7 +102,7 @@ func createGalEthernetProfileExample() {
 	}
 }
 
-func setTContExample()() {
+func setTContExample() {
 	fmt.Println("======================================================")
 	fmt.Println("======================================================")
 	setTCont := "0003480A010680008000040000000000" +
@@ -196,7 +197,6 @@ func create8021pMapperService_profile() {
 	fmt.Println(create8021pMapperServiceProfile)
 	fmt.Println(reconstituted)
 }
-
 
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte

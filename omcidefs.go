@@ -17,8 +17,9 @@
 package omci
 
 import (
-	me "./generated"
 	"errors"
+
+	me "github.com/cboling/omci/generated"
 )
 
 type IManagedEntityInstance interface {
@@ -27,21 +28,21 @@ type IManagedEntityInstance interface {
 	GetAttributeMask() uint16
 	SetAttributeMask(uint16) error
 
-	GetAttributes() me.AttributeValueMap			// TODO: Can we use interface from generated?
+	GetAttributes() me.AttributeValueMap // TODO: Can we use interface from generated?
 	SetAttributes(me.AttributeValueMap) error
 }
 
 type BaseManagedEntityInstance struct {
 	me.BaseManagedEntityDefinition
 	AttributeMask uint16
-	Attributes me.AttributeValueMap
+	Attributes    me.AttributeValueMap
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
 func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask | bme.GetAllowedAttributeMask() != bme.GetAllowedAttributeMask() {
+	if mask|bme.GetAllowedAttributeMask() != bme.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
 	bme.AttributeMask = mask

@@ -17,8 +17,9 @@
 package omci
 
 import (
-	"./generated"
 	"errors"
+
+	"github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 )
 

@@ -17,10 +17,11 @@
 package omci
 
 import (
-	me "./generated"
 	"encoding/binary"
 	"errors"
 	"fmt"
+
+	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 )
 
@@ -52,9 +53,9 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
-				continue	// Skip Entity ID
+				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index - 1))
+			sbcMask |= 1 << (15 - uint(index-1))
 		}
 	}
 	// Attribute decode
@@ -84,9 +85,9 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
-				continue	// Skip Entity ID
+				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index - 1))
+			sbcMask |= 1 << (15 - uint(index-1))
 		}
 	}
 	// Attribute serialization
@@ -509,7 +510,7 @@ type GetResponse struct {
 	MeBasePacket
 	Result                   me.Results
 	AttributeMask            uint16
-	Attributes 				 me.AttributeValueMap
+	Attributes               me.AttributeValueMap
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 }
@@ -816,7 +817,7 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 // GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
-	AlarmBitMap [28]byte       // 224 bits
+	AlarmBitMap [28]byte // 224 bits
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
