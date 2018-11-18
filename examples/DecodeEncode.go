@@ -9,12 +9,68 @@ import (
 )
 
 func main() {
+	//micTest()
+	//micTestFromFrame()
 	mibResetExample()
 	createGalEthernetProfileExample()
 	setTContExample()
 	create8021pMapperService_profile()
 	mibUploadNextResponses()
+	encodeDecodeWithMIC()
 }
+
+//func micTest() {
+//	var downstreamCDir = [...]byte{0x01}
+//	// var upstreamCDir = [...]byte{0x02}
+//	var msg = [...]byte{
+//		0x80, 0x00, 0x49, 0x0A, 						// TID, Msg Type, Device ID
+//		0x01, 0x00, 0x00, 0x00,							// CID, EID
+//		0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	// Message contents
+//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+//		0x00, 0x00, 0x00, 0x28,							// OMCI Trailer
+//	}
+//	var omciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
+//					     0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
+//
+//	downstream := append(downstreamCDir[:], msg[:]...)
+//	fmt.Println(downstream)
+//	cmac64, err := aes.Sum(downstream, omciIK, 16)
+//	fmt.Println(err)
+//	fmt.Println(cmac64)
+//
+//	expected := uint32(0x78dca53d)
+//	calculated:= binary.BigEndian.Uint32(cmac64)
+//
+//	fmt.Printf("Expected: %#x, Calculated: %#x\n", expected, calculated)
+//	fmt.Println()
+//}
+//
+//func micTestFromFrame() {
+//	frame := "00032e0a0002000000020000800000000000000000000000000000000000000000000000000000000000002828ce00e2"
+//	//var defaultAesKey = []byte{0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+//	//	0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55}
+//
+//	data, err := stringToPacket(frame)
+//	if err != nil {
+//		fmt.Println(err)
+//		return
+//	}
+//	//var omciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
+//	//	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
+//	 var omciIK = []byte {
+//		 0x4f, 0x4d, 0x43, 0x49, 0x49, 0x6e, 0x74, 0x65,
+//		 0x67, 0x72, 0x69, 0x74, 0x79, 0x4b, 0x65, 0x79,}
+//	var downstreamCDir = [...]byte{0x01}
+//	//var upstreamCDir = [...]byte{0x02}
+//	message := append(downstreamCDir[:], data[:44]...)
+//	cmac64, err := aes.Sum(message, omciIK, 16)
+//	expected := binary.BigEndian.Uint32(data[44:])
+//	calculated:= binary.BigEndian.Uint32(cmac64)
+//	fmt.Printf("Expected: %#x, Calculated: %#x\n", expected, calculated)
+//	fmt.Println()
+//}
 
 func mibResetExample() {
 	fmt.Println("======================================================")
@@ -487,6 +543,56 @@ func mibUploadNextResponses() {
 		// Test serialization back to former string
 		var options gopacket.SerializeOptions
 		options.FixLengths = true
+
+		buffer := gopacket.NewSerializeBuffer()
+		err = gopacket.SerializeLayers(buffer, options, omciMsg, uploadResponse)
+
+		outgoingPacket := buffer.Bytes()
+		reconstituted := packetToString(outgoingPacket)
+
+		fmt.Println(packetString)
+		fmt.Println(reconstituted)
+		if !strings.EqualFold(packetString, reconstituted) {
+			fmt.Println("Strings are not equivalent")
+		}
+	}
+}
+
+func encodeDecodeWithMIC() {
+	fmt.Println("======================================================")
+	fmt.Println("======================================================")
+
+	mibUploadNextSequence := [...]string{
+		"00032e0a0002000000020000800000000000000000000000000000000000000000000000000000000000002828ce00e2",
+		"00042e0a0002000000050101f0002f2f05202020202020202020202020202020202020202000000000000028d4eb4bdf",
+		"00052e0a00020000000501010f802020202020202020202020202020202020202020000000000000000000282dbe4b44",
+		"00062e0a0002000000050104f000303001202020202020202020202020202020202020202000000000000028ef1b035b",
+	}
+	for pktNumber, packetString := range mibUploadNextSequence {
+		data, err := stringToPacket(packetString)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+		fmt.Printf("Packet: %v: %v", pktNumber, packet)
+
+		omciLayer := packet.Layer(omci.LayerTypeOMCI)
+		omciMsg, ok := omciLayer.(*omci.OMCI)
+		if !ok {
+			fmt.Println("OMCI decode failed")
+			continue
+		}
+		msgLayer := packet.Layer(omci.LayerTypeMibUploadNextResponse)
+		uploadResponse, ok2 := msgLayer.(*omci.MibUploadNextResponse)
+		if !ok2 {
+			fmt.Println("MibUploadNextResponse decode failed")
+			continue
+		}
+		// Test serialization back to former string
+		var options gopacket.SerializeOptions
+		options.FixLengths = true
+		options.ComputeChecksums = true
 
 		buffer := gopacket.NewSerializeBuffer()
 		err = gopacket.SerializeLayers(buffer, options, omciMsg, uploadResponse)

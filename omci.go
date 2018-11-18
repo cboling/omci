@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
+	"hash/crc32"
 )
 
 type DeviceIdent byte
@@ -45,6 +46,9 @@ const (
 	BaselineIdent DeviceIdent = 0x0A // All G-PON OLTs and ONUs support the baseline message set
 	ExtendedIdent             = 0x0B
 )
+
+var OmciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
+	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
 
 func (di DeviceIdent) String() string {
 	switch di {
@@ -134,9 +138,14 @@ func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	}
 }
 
-func calculateMic([]byte) uint32 {
-	return 0 // TODO: Implement this if needed.
+func calculateMicCrc32(data []byte) uint32 {
+	return crc32.ChecksumIEEE(data)
 }
+
+//func calculateAes128(upstream bool, key uint16, data []byte) uint32 {
+//	block, err := aes.NewCipher(key)
+//	return crc32.ChecksumIEEE(data)
+//}
 
 /////////////////////////////////////////////////////////////////////////////
 //   Baseline Message encode / decode
@@ -178,9 +187,15 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		}
 	}
 	// Extract MIC if present in the data
-	if len(data) >= micOffset+4 {
-		omci.MIC = binary.BigEndian.Uint32(data[micOffset:])
-	}
+	//if len(data) >= micOffset+4 {
+	//	omci.MIC = binary.BigEndian.Uint32(data[micOffset:])
+	//	actual := calculateMicCrc32(data[:micOffset])
+	//	if omci.MIC != actual {
+	//		msg := fmt.Sprintf("invalid MIC, expected %#x, got %#x",
+	//			omci.MIC, actual)
+	//		return errors.New(msg)
+	//	}
+	//}
 	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:]}
 	p.AddLayer(omci)
 	nextLayer, err := MsgTypeToNextLayer(omci.MessageType)
@@ -219,7 +234,7 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 			return err
 		}
 		// TODO: Look up MIC definition and see if it includes the length
-		omci.MIC = calculateMic(bytes[:MaxBaselineLength-4])
+		omci.MIC = calculateMicCrc32(bytes[:MaxBaselineLength-4])
 		binary.BigEndian.PutUint32(micBytes, omci.MIC)
 	}
 	return nil
