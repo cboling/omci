@@ -70,6 +70,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	switch attr.GetSize() {
 	default:
 		value := make([]byte, size)
+		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
 			err = attr.GetConstraints()(value)
 			if err != nil {
