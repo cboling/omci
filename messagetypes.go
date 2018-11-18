@@ -1090,20 +1090,8 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	if omci.MeBasePacket.EntityInstance != 0 {
 		return errors.New("invalid Entity Instance for MIB Upload Next response")
 	}
-	// Decode reported me
-
-	// TODO: Work on best way to decode the uploaded ME
-
-	//classID := binary.BigEndian.Uint16(data[4:6])
-	//entityID := binary.BigEndian.Uint16(data[6:8])
-	//omci.uploadedME, err := LoadManagedEntityDefinition(classID, entityIDe)
-	//if err != nil {
-	//	return err
-	//}
-	//omci.uploadedME..AttributeMask = binary.BigEndian.Uint16(data[8:10])
-	//omci.Attributes = omci.cachedME.Attributes()
-	//
-	return nil
+	// Decode reported ME
+	return omci.ReportedME.DecodeFromBytes(data[4:], p)
 }
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1118,7 +1106,17 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB Upload
+	if !me.SupportsMsgType(entity, me.MibUploadNext) {
+		return errors.New("managed entity does not support the MIB Upload Message-Type")
+	}
+	return omci.ReportedME.SerializeTo(b)
 }
 
 /////////////////////////////////////////////////////////////////////////////

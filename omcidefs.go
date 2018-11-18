@@ -21,7 +21,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"github.com/google/gopacket"
-	"github.com/google/gopacket/layers"
 )
 
 type IManagedEntityInstance interface {
@@ -44,7 +43,7 @@ func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
 func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask | bme.baseDef.GetAllowedAttributeMask() != bme.baseDef.GetAllowedAttributeMask() {
+	if mask | bme.MEDefinition.GetAllowedAttributeMask() != bme.MEDefinition.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
 	bme.AttributeMask = mask
