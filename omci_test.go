@@ -964,7 +964,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 		omciMsg, ok := omciLayer.(*OMCI)
 		assert.True(t, ok)
 		assert.Equal(t, omciMsg.TransactionID, firstTid)
-		assert.Equal(t, omciMsg.MessageType, byte(me.MibUploadNext))
+		assert.Equal(t, omciMsg.MessageType, byte(me.MibUploadNext)|me.AK)
 		assert.Equal(t, omciMsg.Length, uint16(40))
 
 		msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
