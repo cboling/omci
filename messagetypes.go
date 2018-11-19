@@ -292,14 +292,13 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		return err
 	}
 	// Validate all attributes support write
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -329,14 +328,13 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		return errors.New("managed entity does not support Set Message-Type")
 	}
 	// Validate all attributes support write
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -445,14 +443,13 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		return err
 	}
 	// Validate all attributes support Read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -482,14 +479,13 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		return errors.New("managed entity does not support Get Message-Type")
 	}
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -544,14 +540,13 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		omci.FailedAttributeMask = binary.BigEndian.Uint16(data[34:36])
 	}
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -588,14 +583,13 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
 
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}

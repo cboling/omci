@@ -315,10 +315,8 @@ func (bme* BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byt
 			if err != nil {
 				return nil, err
 			}
-			attrMap[index] = &AttributeValue{
-				Name: attrDef.GetName(),
-				Value: value,
-			}
+			attrMap[attrDef.GetName()] = value
+
 			data = data[attrDef.GetSize():]
 		}
 	}
@@ -341,12 +339,12 @@ func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueM
 		attrDef := bme.AttributeDefinitions[index]
 
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
-			attribute, ok := attr[index]
+			value, ok := attr[ attrDef.GetName()]
 			if !ok {
 				// TODO: Custom error, or more detail?
 				return errors.New("attribute not found")
 			}
-			err := attrDef.SerializeTo(attribute.Value, b)
+			err := attrDef.SerializeTo(value, b)
 			if err != nil {
 				return nil
 			}

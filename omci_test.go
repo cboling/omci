@@ -172,8 +172,9 @@ func TestSetTCont(t *testing.T) {
 	// TODO: Create generic test to look up the name from definition
 	// Here 1 is the index in the attribute definition map of a TCONT that points
 	// to the AllocID attribute.
-	assert.Equal(t, attributes[1].Name, "AllocId")
-	assert.Equal(t, attributes[1].Value, uint16(1024))
+	value, ok3 := attributes["AllocId"]
+	assert.True(t, ok3)
+	assert.Equal(t, value, uint16(1024))
 
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -220,26 +221,32 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	assert.NotNil(t, attributes)
 	assert.Equal(t, len(attributes), 12)
 
-	for index := uint(1); index <= uint(9); index++ {
-		value, err2 := attributes[index].GetValue()
-		assert.Nil(t, err2)
-
-		value16, ok3 := value.(uint16)
-		assert.True(t, ok3)
-		assert.Equal(t, value16, uint16(0xffff))
-	}
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
 	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
+	for index := uint(1); index <= uint(9); index++ {
+		attrName := attrDefs[index].GetName()
+		value, ok := attributes[attrName]
+		assert.True(t, ok)
+
+		value16, ok3 := value.(uint16)
+		assert.True(t, ok3)
+		assert.Equal(t, value16, uint16(0xffff))
+	}
+
 	sbcMask := getSbcMask(meDefinition)
-	for index := 1; index <= 16; index++ {
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
 		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.False(t, ok3)
 		}
 	}
@@ -293,13 +300,17 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
 	sbcMask := getSbcMask(meDefinition)
-	for index := 1; index <= 16; index++ {
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
 		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.False(t, ok3)
 		}
 	}
@@ -352,13 +363,17 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
 	sbcMask := getSbcMask(meDefinition)
-	for index := 1; index <= 16; index++ {
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
 		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
-			_, ok3 := attributes[uint(index)]
+			_, ok3 := attributes[attrName]
 			assert.False(t, ok3)
 		}
 	}
