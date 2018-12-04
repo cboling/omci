@@ -52,9 +52,9 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
-				continue	// Skip Entity ID
+				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index - 1))
+			sbcMask |= 1 << (15 - uint(index-1))
 		}
 	}
 	// Attribute decode
@@ -84,9 +84,9 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
-				continue	// Skip Entity ID
+				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index - 1))
+			sbcMask |= 1 << (15 - uint(index-1))
 		}
 	}
 	// Attribute serialization
@@ -505,7 +505,7 @@ type GetResponse struct {
 	MeBasePacket
 	Result                   me.Results
 	AttributeMask            uint16
-	Attributes 				 me.AttributeValueMap
+	Attributes               me.AttributeValueMap
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
 }
@@ -810,7 +810,7 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 // GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
-	AlarmBitMap [28]byte       // 224 bits
+	AlarmBitMap [28]byte // 224 bits
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1058,7 +1058,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 //
 type MibUploadNextResponse struct {
 	MeBasePacket
-	ReportedME     BaseManagedEntityInstance
+	ReportedME BaseManagedEntityInstance
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1237,6 +1237,8 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 // AlarmNotificationMsg
 type AttributeValueChangeMsg struct {
 	MeBasePacket
+	AttributeMask uint16
+	Attributes    me.AttributeValueMap
 }
 
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1245,14 +1247,19 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	// MIB Reset Response Entity Class always ONU DATA (2) and
-	// Entity Instance of 0
-	if omci.EntityClass != me.OnuDataClassId {
-		return errors.New("invalid Entity Class for MIB Reset Response")
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
 	}
-	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for MIB Reset Response")
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	// Attribute decode
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:40], p)
+	if err != nil {
+		return err
 	}
+	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	return nil
 }
 
