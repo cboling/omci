@@ -17,7 +17,8 @@ func main() {
 	setTContExample()
 	create8021pMapperService_profile()
 	mibUploadNextResponses()
-	encodeDecodeWithMIC()
+	// TODO: Hold of on MIC support for the time being
+	//encodeDecodeWithMIC()
 }
 
 //func micTest() {
@@ -160,7 +161,7 @@ func createGalEthernetProfileExample() {
 	}
 }
 
-func setTContExample()() {
+func setTContExample() {
 	fmt.Println("======================================================")
 	fmt.Println("======================================================")
 	setTCont := "0003480A010680008000040000000000" +
@@ -1626,7 +1627,7 @@ func decodeAnyPacket() {
 
 			omciLayer := packet.Layer(omci.LayerTypeOMCI)
 
-			omciMsg, ok := omciLayer.(*omci.OMCI);
+			omciMsg, ok := omciLayer.(*omci.OMCI)
 			if ok {
 				layerType, err := omci.MsgTypeToNextLayer(omciMsg.MessageType)
 
