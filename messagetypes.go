@@ -1642,6 +1642,12 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type SynchronizeTimeRequest struct {
 	MeBasePacket
+	Year   uint16
+	Month  uint8
+	Day    uint8
+	Hour   uint8
+	Minute uint8
+	Second uint8
 }
 
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1650,7 +1656,31 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
+		return errors.New("managed entity does not support Synchronize Time Message-Type")
+	}
+	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != me.OnuDataClassId {
+		return errors.New("invalid Entity Class for Synchronize Time request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time request")
+	}
+	omci.Year = binary.BigEndian.Uint16(data[4:6])
+	omci.Month = data[6]
+	omci.Day = data[7]
+	omci.Hour = data[8]
+	omci.Minute = data[9]
+	omci.Second = data[10]
+	return nil
 }
 
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1665,13 +1695,35 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+	}
+	bytes, err := b.AppendBytes(7)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.Year)
+	bytes[2] = omci.Month
+	bytes[3] = omci.Day
+	bytes[4] = omci.Hour
+	bytes[5] = omci.Minute
+	bytes[6] = omci.Second
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type SynchronizeTimeResponse struct {
 	MeBasePacket
+	Results        me.Results
+	SuccessResults uint8 // Only if 'Results' is 0 -> success
 }
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1680,6 +1732,26 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
+		return errors.New("managed entity does not support Synchronize Time Message-Type")
+	}
+	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
+		return errors.New("invalid Entity Class for Synchronize Time response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time response")
+	}
+	omci.Results = me.Results(data[4]) // TODO: Validate range
+	omci.SuccessResults = data[5]
 	return errors.New("need to implement") // return nil
 }
 
@@ -1695,7 +1767,36 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
+		return errors.New("invalid Entity Class for Synchronize Time response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time response")
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+	}
+	numBytes := 2
+	if omci.Results != me.Success {
+		numBytes = 1
+	}
+	bytes, err := b.AppendBytes(numBytes)
+	if err != nil {
+		return err
+	}
+	bytes[0] = uint8(omci.Results)
+	if omci.Results == me.Success {
+		bytes[1] = omci.SuccessResults
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
