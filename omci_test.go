@@ -634,39 +634,39 @@ func TestMibUpload(t *testing.T) {
 //	assert.NotNil(t, customLayer)
 //}
 
-func TestAlarmMessage(t *testing.T) {
-	alarmMessage := "0000100a00050101000000000000000000000000000000000000000000000000" +
-		"0000000220000000000000280be43cf4"
-
-	data, err := stringToPacket(alarmMessage)
-	assert.NoError(t, err)
-
-	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	assert.NotNil(t, packet)
-
-	omciLayer := packet.Layer(LayerTypeOMCI)
-	assert.NotNil(t, packet)
-
-	omciMsg, ok := omciLayer.(*OMCI)
-	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0))
-	assert.Equal(t, omciMsg.MessageType, byte(me.AlarmNotification))
-	assert.Equal(t, omciMsg.Length, uint16(40))
-
-	msgLayer := packet.Layer(LayerTypeAlarmNotification)
-	assert.Nil(t, msgLayer)		// TODO: Fix decode
-
-	//assert.NotNil(t, msgLayer)
-	//
-	//alarmNotification, ok2 := msgLayer.(*AlarmNotificationMsg)
-	//assert.True(t, ok2)
-	//// TODO: Repace with actual entity class
-	//assert.Equal(t, alarmNotification.EntityClass, uint16(0x0005))
-	//assert.Equal(t, alarmNotification.EntityInstance, uint16(0x101))
-	// TODO: Decode alarm bits
-
-	// TODO: Serialize frame and test with original
-}
+//func TestAlarmMessage(t *testing.T) {
+//	alarmMessage := "0000100a00050101000000000000000000000000000000000000000000000000" +
+//		"0000000220000000000000280be43cf4"
+//
+//	data, err := stringToPacket(alarmMessage)
+//	assert.NoError(t, err)
+//
+//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+//	assert.NotNil(t, packet)
+//
+//	omciLayer := packet.Layer(LayerTypeOMCI)
+//	assert.NotNil(t, packet)
+//
+//	omciMsg, ok := omciLayer.(*OMCI)
+//	assert.True(t, ok)
+//	assert.Equal(t, omciMsg.TransactionID, uint16(0))
+//	assert.Equal(t, omciMsg.MessageType, byte(me.AlarmNotification))
+//	assert.Equal(t, omciMsg.Length, uint16(40))
+//
+//	msgLayer := packet.Layer(LayerTypeAlarmNotification)
+//	assert.Nil(t, msgLayer)		// TODO: Fix decode
+//
+//	//assert.NotNil(t, msgLayer)
+//	//
+//	//alarmNotification, ok2 := msgLayer.(*AlarmNotificationMsg)
+//	//assert.True(t, ok2)
+//	//// TODO: Repace with actual entity class
+//	//assert.Equal(t, alarmNotification.EntityClass, uint16(0x0005))
+//	//assert.Equal(t, alarmNotification.EntityInstance, uint16(0x101))
+//	// TODO: Decode alarm bits
+//
+//	// TODO: Serialize frame and test with original
+//}
 
 func TestOnuRebootRequest(t *testing.T) {
 	onuRebootRequest := "0016590a01000000000000000000000000000" +

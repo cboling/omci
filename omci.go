@@ -162,6 +162,10 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	omci.MessageType = data[2]
 	omci.DeviceIdentifier = DeviceIdent(data[3])
 
+	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
+	if omci.TransactionID == 0 && !isNotification {
+		return errors.New("omci Transaction ID is zero for non-Notification type message")
+	}
 	// Decode length
 	var payloadOffset int
 	var micOffset int
@@ -181,8 +185,13 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		omci.Length = binary.BigEndian.Uint16(data[8:10])
 		micOffset = int(omci.Length) + payloadOffset
 
-		if int(omci.Length) > len(data)+payloadOffset-4 {
-			p.SetTruncated()
+		if omci.Length > MaxExtendedLength {
+			return errors.New("extended frame exceeds maximum allowed")
+		}
+		if int(omci.Length) != micOffset {
+			if int(omci.Length) < micOffset {
+				p.SetTruncated()
+			}
 			return errors.New("extended frame too small")
 		}
 	}
@@ -214,6 +223,22 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	bytes, err := b.PrependBytes(4)
 	if err != nil {
 		return err
+	}
+	// OMCI layer error checks
+	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
+	if omci.TransactionID == 0 && !isNotification {
+		return errors.New("omci Transaction ID is zero for non-Notification type message")
+	}
+	if omci.DeviceIdentifier == BaselineIdent {
+		if omci.Length != MaxBaselineLength - 8 {
+			return errors.New("invalid Baseline message length")
+		}
+	} else if omci.DeviceIdentifier == ExtendedIdent {
+		if omci.Length > MaxExtendedLength {
+			return errors.New("invalid Extended message length")
+		}
+	} else {
+		return errors.New("invalid device identifier, Baseline or Extended expected")
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
 	bytes[2] = byte(omci.MessageType)

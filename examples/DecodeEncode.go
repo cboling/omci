@@ -80,9 +80,9 @@ func mibResetExample() {
 	fmt.Println("======================================================")
 	// MibResetRequestTest tests decode/encode of a MIB Reset Request
 
-	mibResetRequest := "00014F0A000200000000000000000000" +
+	mibResetRequest := "000C440B010C010000290400800003010000" +
 		"00000000000000000000000000000000" +
-		"000000000000000000000028"
+		"00000000000000000000"
 
 	data, err := stringToPacket(mibResetRequest)
 	if err != nil {
