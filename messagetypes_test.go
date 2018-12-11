@@ -434,8 +434,6 @@ func TestMibUploadResponse(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 }
-// TODO: Create request/response tests for all of the following types
-//me.MibUploadNext,
 
 func TestMibUploadNextRequest(t *testing.T) {
 	goodMessage := "02864e0a00020000003a00000000000000000000000000000000000000000000000000000000000000000028"
@@ -486,7 +484,57 @@ func TestMibUploadNextResponse(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 }
-//me.MibReset,
+
+func TestMibResetRequest(t *testing.T) {
+	goodMessage := "00014F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.MibReset)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibResetRequest)
+
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*MibResetRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestMibResetResponse(t *testing.T) {
+	goodMessage := "00012F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.MibReset)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibResetResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*MibResetResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+
 // TODO: Create request/response tests for all of the following types
 //me.Test,
 //me.StartSoftwareDownload,

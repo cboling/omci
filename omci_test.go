@@ -57,7 +57,7 @@ func getSbcMask(meDefinition me.IManagedEntityDefinition) uint16 {
 }
 
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
-func TestMibResetRequest(t *testing.T) {
+func TestMibResetRequestMessage(t *testing.T) {
 	mibResetRequest := "00014F0A000200000000000000000000" +
 		"00000000000000000000000000000000" +
 		"000000000000000000000028"
