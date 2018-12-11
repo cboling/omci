@@ -142,7 +142,7 @@ func TestOmciSerialization(t *testing.T) {
 	// TODO: Add unit test
 }
 
-func TestCreateRequestDecode(t *testing.T) {
+func TestCreateRequest(t *testing.T) {
 	goodMessage := "000C440A010C01000400800003010000" +
 		"00000000000000000000000000000000" +
 		"000000000000000000000028"
@@ -164,17 +164,17 @@ func TestCreateRequestDecode(t *testing.T) {
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
 	assert.NotNil(t, msgLayer)
 
-	createRequest, ok2 := msgLayer.(*CreateRequest)
+	request, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, me.GemPortNetworkCtpClassId)
-	assert.Equal(t, createRequest.EntityInstance, uint16(0x100))
+	assert.Equal(t, request.EntityClass, me.GemPortNetworkCtpClassId)
+	assert.Equal(t, request.EntityInstance, uint16(0x100))
 
-	attributes := createRequest.Attributes
+	attributes := request.Attributes
 	assert.NotNil(t, attributes)
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	meDefinition, err := me.LoadManagedEntityDefinition(request.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := meDefinition.GetAttributeDefinitions()
@@ -196,7 +196,7 @@ func TestCreateRequestDecode(t *testing.T) {
 	options.FixLengths = true
 
 	buffer := gopacket.NewSerializeBuffer()
-	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, request)
 	assert.NoError(t, err)
 
 	outgoingPacket := buffer.Bytes()
@@ -207,9 +207,131 @@ func TestCreateRequestDecode(t *testing.T) {
 	//	o  Decode of a ME that does not support create should fail
 }
 
+func TestCreateResponse(t *testing.T) {
+	goodMessage := "0108240a002d0900000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.Create)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeCreateResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*CreateResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+
+func TestDeleteResquest(t *testing.T) {
+	//goodMessage := ""
+	//data, err := stringToPacket(goodMessage)
+	//assert.NoError(t, err)
+	//
+	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	//assert.NotNil(t, packet)
+	//
+	//omciLayer := packet.Layer(LayerTypeOMCI)
+	//assert.NotNil(t, packet)
+	//
+	//omciMsg, ok := omciLayer.(*OMCI)
+	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.MessageType, byte(me.Delete)|me.AR)
+	//assert.Equal(t, omciMsg.Length, uint16(40))
+	//
+	//msgLayer := packet.Layer(LayerTypeDeleteRequest)
+	//
+	//assert.NotNil(t, msgLayer)
+	//
+	//request, ok2 := msgLayer.(*DeleteRequest)
+	//assert.True(t, ok2)
+	//assert.NotNil(t, request)
+}
+
+func TestDeleteResponse(t *testing.T) {
+	//goodMessage := ""
+	//data, err := stringToPacket(goodMessage)
+	//assert.NoError(t, err)
+	//
+	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	//assert.NotNil(t, packet)
+	//
+	//omciLayer := packet.Layer(LayerTypeOMCI)
+	//assert.NotNil(t, packet)
+	//
+	//omciMsg, ok := omciLayer.(*OMCI)
+	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.MessageType, byte(me.Delete)|me.AK)
+	//assert.Equal(t, omciMsg.Length, uint16(40))
+	//
+	//msgLayer := packet.Layer(LayerTypeDeleteResponse)
+	//
+	//assert.NotNil(t, msgLayer)
+	//
+	//response, ok2 := msgLayer.(*DeleteResponse)
+	//assert.True(t, ok2)
+	//assert.NotNil(t, response)
+}
 // TODO: Create request/response tests for all of the following types
-//me.Create,
-//me.Delete,
+
+func TestSetResquest(t *testing.T) {
+	goodMessage := "0107480a01000000020000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeSetRequest)
+
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*SetRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestSetResponse(t *testing.T) {
+	goodMessage := "0107280a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeSetResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*SetResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
 //me.Set,
 //me.Get,
 //me.GetAllAlarms,
