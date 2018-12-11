@@ -382,18 +382,69 @@ func TestGetResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 // TODO: Create request/response tests for all of the following types
-//me.Get,
 //me.GetAllAlarms,
 //me.GetAllAlarmsNext,
-//me.MibUpload,
+
+func TestMibUploadRequest(t *testing.T) {
+	goodMessage := "03604d0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.MibUpload)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
+
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*MibUploadRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestMibUploadResponse(t *testing.T) {
+	goodMessage := "03602d0a00020000011200000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.MibUpload)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeMibUploadResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*MibUploadResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+// TODO: Create request/response tests for all of the following types
 //me.MibUploadNext,
 //me.MibReset,
+// TODO: Create request/response tests for all of the following types
 //me.Test,
 //me.StartSoftwareDownload,
 //me.DownloadSection,
 //me.EndSoftwareDownload,
 //me.ActivateSoftware,
 //me.CommitSoftware,
+// TODO: Create request/response tests for all of the following types
 //me.SynchronizeTime,
 //me.Reboot,
 //me.GetNext,
@@ -403,5 +454,5 @@ func TestGetResponse(t *testing.T) {
 
 // TODO: Create notification tests for all of the following types
 //me.AlarmNotification,
-//me.AttributeValueChange,
+//me.AttributeValueChange,   "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028",
 //me.TestResult,
