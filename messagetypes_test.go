@@ -281,9 +281,8 @@ func TestDeleteResponse(t *testing.T) {
 	//assert.True(t, ok2)
 	//assert.NotNil(t, response)
 }
-// TODO: Create request/response tests for all of the following types
 
-func TestSetResquest(t *testing.T) {
+func TestSetRequest(t *testing.T) {
 	goodMessage := "0107480a01000000020000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -332,7 +331,57 @@ func TestSetResponse(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 }
-//me.Set,
+
+func TestGetRequest(t *testing.T) {
+	goodMessage := "035e490a01070000004400000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.Get)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetRequest)
+
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestGetResponse(t *testing.T) {
+	goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.Get)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+// TODO: Create request/response tests for all of the following types
 //me.Get,
 //me.GetAllAlarms,
 //me.GetAllAlarmsNext,
