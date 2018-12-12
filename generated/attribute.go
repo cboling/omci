@@ -127,13 +127,33 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	default:
 		copy(bytes, value.([]byte))
 	case 1:
-		bytes[0] = value.(byte)
+		switch value.(type) {
+		case int:
+			bytes[0] = byte(value.(int))
+		default:
+			bytes[0] = value.(byte)
+		}
 	case 2:
-		binary.BigEndian.PutUint16(bytes, value.(uint16))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
+		default:
+			binary.BigEndian.PutUint16(bytes, value.(uint16))
+		}
 	case 4:
-		binary.BigEndian.PutUint32(bytes, value.(uint32))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
+		default:
+			binary.BigEndian.PutUint32(bytes, value.(uint32))
+		}
 	case 8:
-		binary.BigEndian.PutUint64(bytes, value.(uint64))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
+		default:
+			binary.BigEndian.PutUint64(bytes, value.(uint64))
+		}
 	}
 	return nil
 }
