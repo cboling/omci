@@ -1667,8 +1667,8 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
 		return errors.New("managed entity does not support Synchronize Time Message-Type")
 	}
-	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != me.OnuDataClassId {
+	// Synchronize Time request Entity Class are always ONU-G (256) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
 		return errors.New("invalid Entity Class for Synchronize Time request")
 	}
 	if omci.EntityInstance != 0 {
@@ -1743,7 +1743,7 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
 		return errors.New("managed entity does not support Synchronize Time Message-Type")
 	}
-	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	// Synchronize Time request Entity Class are always ONU-G (256) and Entity Instance of 0
 	if omci.EntityClass != me.OnuGClassId {
 		return errors.New("invalid Entity Class for Synchronize Time response")
 	}
@@ -1752,7 +1752,7 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	omci.Results = me.Results(data[4]) // TODO: Validate range
 	omci.SuccessResults = data[5]
-	return errors.New("need to implement") // return nil
+	return nil
 }
 
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {

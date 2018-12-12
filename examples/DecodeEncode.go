@@ -11,6 +11,8 @@ import (
 func main() {
 	//micTest()
 	//micTestFromFrame()
+	syncTimeRequest()
+	syncTimeResponse()
 	decodeMorePackets()
 	decodeAnyPacket()
 	mibResetExample()
@@ -209,6 +211,48 @@ func setTContExample() {
 		fmt.Println(setTCont)
 		fmt.Println(reconstituted)
 	}
+}
+
+func syncTimeRequest() {
+	fmt.Println("======================================================")
+	fmt.Println("======================================================")
+	goodMessage := "0109580a0100000007e20c0001301b0000000000000000000000000000000000000000000000000000000028"
+
+	data, err := stringToPacket(goodMessage)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+
+	omciLayer := packet.Layer(omci.LayerTypeOMCI)
+	fmt.Println(omciLayer)
+	fmt.Println(omciLayer.(*omci.OMCI))
+
+	msgLayer := packet.Layer(omci.LayerTypeSynchronizeTimeRequest)
+	fmt.Println(msgLayer)
+	fmt.Println(msgLayer.(*omci.SynchronizeTimeRequest))
+}
+
+func syncTimeResponse() {
+	fmt.Println("======================================================")
+	fmt.Println("======================================================")
+	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	data, err := stringToPacket(goodMessage)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+
+	omciLayer := packet.Layer(omci.LayerTypeOMCI)
+	fmt.Println(omciLayer)
+	fmt.Println(omciLayer.(*omci.OMCI))
+
+	msgLayer := packet.Layer(omci.LayerTypeSynchronizeTimeResponse)
+	fmt.Println(msgLayer)
+	fmt.Println(msgLayer.(*omci.SynchronizeTimeRequest))
 }
 
 func create8021pMapperService_profile() {
@@ -1053,8 +1097,6 @@ func decodeAnyPacket() {
 		"035c2e0a00020000ff8c0101fefc0000ff01000300000100ffff00000000000000000b010100000000000028",
 		"035d4e0a00020000011100000000000000000000000000000000000000000000000000000000000000000028",
 		"035d2e0a00020000ff8e0000f800000000000000000000000000000000000000000000000000000000000028",
-		"035e490a01070000004400000000000000000000000000000000000000000000000000000000000000000028",
-		"035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028",
 		"035f490a01070000004400000000000000000000000000000000000000000000000000000000000000000028",
 		"035f290a01070000000044dbcb05ee0000000000000000000000000000000000000000000000000000000028",
 		"03604d0a00020000000000000000000000000000000000000000000000000000000000000000000000000028",
