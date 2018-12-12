@@ -231,14 +231,18 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	}
 	if omci.DeviceIdentifier == BaselineIdent {
 		if omci.Length != MaxBaselineLength-8 {
-			return errors.New("invalid Baseline message length")
+			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
+			return errors.New(msg)
 		}
 	} else if omci.DeviceIdentifier == ExtendedIdent {
 		if omci.Length > MaxExtendedLength {
-			return errors.New("invalid Extended message length")
+			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
+			return errors.New(msg)
 		}
 	} else {
-		return errors.New("invalid device identifier, Baseline or Extended expected")
+		msg := fmt.Sprintf("invalid device identifier: %#x, Baseline or Extended expected",
+			omci.DeviceIdentifier)
+		return errors.New(msg)
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
 	bytes[2] = byte(omci.MessageType)

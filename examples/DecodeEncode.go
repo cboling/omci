@@ -2,6 +2,7 @@ package main
 
 import (
 	".."
+	me "../generated"
 	"encoding/hex"
 	"fmt"
 	"github.com/google/gopacket"
@@ -232,6 +233,35 @@ func syncTimeRequest() {
 	msgLayer := packet.Layer(omci.LayerTypeSynchronizeTimeRequest)
 	fmt.Println(msgLayer)
 	fmt.Println(msgLayer.(*omci.SynchronizeTimeRequest))
+
+	omciLayer2 := &omci.OMCI{
+		TransactionID:    0x0c,
+		MessageType:      byte(me.Create) | me.AR,
+		DeviceIdentifier: omci.BaselineIdent,
+	}
+	request := &omci.CreateRequest{
+		MeBasePacket: omci.MeBasePacket{
+			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityInstance: uint16(0x100),
+		},
+		Attributes: me.AttributeValueMap{
+			"PortId": 0x400,
+			"TContPointer": 0x8000,
+			"TrafficManagementPointerForUpstream": 0x100,
+			"TrafficDescriptorProfilePointerForUpstream": 0,
+			"PriorityQueuePointerForDownStream": 0,
+			"TrafficDescriptorProfilePointerForDownstream": 0,
+			"EncryptionKeyRing,": 0,
+		},
+	}
+	fmt.Println(omciLayer, request, goodMessage)
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciLayer2, request)
+	fmt.Println(err)
 }
 
 func syncTimeResponse() {

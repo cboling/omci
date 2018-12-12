@@ -23,6 +23,7 @@ import (
 	"strings"
 	"testing"
 )
+
 // TODO: Move test of generated items to Generated...
 
 var allMsgTypes = [...]me.MsgType{
@@ -142,7 +143,7 @@ func TestOmciSerialization(t *testing.T) {
 	// TODO: Add unit test
 }
 
-func TestCreateRequest(t *testing.T) {
+func TestCreateRequestDecode(t *testing.T) {
 	goodMessage := "000C440A010C01000400800003010000" +
 		"00000000000000000000000000000000" +
 		"000000000000000000000028"
@@ -183,13 +184,14 @@ func TestCreateRequest(t *testing.T) {
 	for index := uint(1); index < uint(len(attrDefs)); index++ {
 		attrName := attrDefs[index].GetName()
 
-		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
 			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
 			_, ok3 := attributes[attrName]
 			assert.False(t, ok3)
 		}
+		//fmt.Printf("Name: %v, Value: %v\n", attrName, attributes[attrName])
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -201,10 +203,46 @@ func TestCreateRequest(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(goodMessage), reconstituted)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
 
-	// TODO: Add tests for
-	//	o  Decode of a ME that does not support create should fail
+func TestCreateRequestSerialize(t *testing.T) {
+	goodMessage := "000C440A010C0100040080000301000000000000000000000000000000000000000000000000000000000028"
+
+	// TODO: Support setting of the length during serialization
+	omciLayer := &OMCI{
+		TransactionID:    0x0c,
+		MessageType:      byte(me.Create) | me.AR,
+		DeviceIdentifier: BaselineIdent,
+		Length:			  0x28,
+	}
+	request := &CreateRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityInstance: uint16(0x100),
+		},
+		Attributes: me.AttributeValueMap{
+			"PortId": 0x400,
+			"TContPointer": 0x8000,
+			"Direction": 3,
+			"TrafficManagementPointerForUpstream": 0x100,
+			"TrafficDescriptorProfilePointerForUpstream": 0,
+			"PriorityQueuePointerForDownStream": 0,
+			"TrafficDescriptorProfilePointerForDownstream": 0,
+			"EncryptionKeyRing": 0,
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t,  strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestCreateResponse(t *testing.T) {
@@ -224,7 +262,6 @@ func TestCreateResponse(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateResponse)
-
 	assert.NotNil(t, msgLayer)
 
 	response, ok2 := msgLayer.(*CreateResponse)
@@ -299,7 +336,6 @@ func TestSetRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
-
 	assert.NotNil(t, msgLayer)
 
 	request, ok2 := msgLayer.(*SetRequest)
@@ -324,7 +360,6 @@ func TestSetResponse(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetResponse)
-
 	assert.NotNil(t, msgLayer)
 
 	response, ok2 := msgLayer.(*SetResponse)
@@ -349,7 +384,6 @@ func TestGetRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetRequest)
-
 	assert.NotNil(t, msgLayer)
 
 	request, ok2 := msgLayer.(*GetRequest)
@@ -374,13 +408,13 @@ func TestGetResponse(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetResponse)
-
 	assert.NotNil(t, msgLayer)
 
 	response, ok2 := msgLayer.(*GetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 }
+
 // TODO: Create request/response tests for all of the following types
 //me.GetAllAlarms,
 //me.GetAllAlarmsNext,
@@ -400,7 +434,6 @@ func TestMibUploadRequest(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.MessageType, byte(me.MibUpload)|me.AR)
 	assert.Equal(t, omciMsg.Length, uint16(40))
-
 	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
 
 	assert.NotNil(t, msgLayer)
@@ -427,7 +460,6 @@ func TestMibUploadResponse(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadResponse)
-
 	assert.NotNil(t, msgLayer)
 
 	response, ok2 := msgLayer.(*MibUploadResponse)
@@ -452,7 +484,6 @@ func TestMibUploadNextRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextRequest)
-
 	assert.NotNil(t, msgLayer)
 
 	request, ok2 := msgLayer.(*MibUploadNextRequest)
@@ -477,7 +508,6 @@ func TestMibUploadNextResponse(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
-
 	assert.NotNil(t, msgLayer)
 
 	response, ok2 := msgLayer.(*MibUploadNextResponse)
@@ -502,7 +532,6 @@ func TestMibResetRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibResetRequest)
-
 	assert.NotNil(t, msgLayer)
 
 	request, ok2 := msgLayer.(*MibResetRequest)
@@ -542,15 +571,87 @@ func TestMibResetResponse(t *testing.T) {
 //me.EndSoftwareDownload,
 //me.ActivateSoftware,
 //me.CommitSoftware,
+
+func TestSynchronizeTimeRequest(t *testing.T) {
+	goodMessage := "0109580a0100000007e20c0001301b0000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.SynchronizeTime)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeSynchronizeTimeRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*SynchronizeTimeRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestSynchronizeTimeResponse(t *testing.T) {
+	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.SynchronizeTime)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeSynchronizeTimeResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*SynchronizeTimeResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+
 // TODO: Create request/response tests for all of the following types
-//me.SynchronizeTime,
 //me.Reboot,
 //me.GetNext,
 //me.GetCurrentData,
 //me.SetTable}
 
-
 // TODO: Create notification tests for all of the following types
 //me.AlarmNotification,
-//me.AttributeValueChange,   "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028",
+
+func TestAttributeValueChange(t *testing.T) {
+	goodMessage := "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.AttributeValueChange))
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeAttributeValueChange)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*AttributeValueChangeMsg)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+// TODO: Create notification tests for all of the following types
 //me.TestResult,
