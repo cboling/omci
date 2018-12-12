@@ -29,7 +29,7 @@ type IManagedEntityInstance interface {
 	GetAttributeMask() uint16
 	SetAttributeMask(uint16) error
 
-	GetAttributes() me.AttributeValueMap			// TODO: Can we use interface from generated?
+	GetAttributes() me.AttributeValueMap // TODO: Can we use interface from generated?
 	SetAttributes(me.AttributeValueMap) error
 }
 
@@ -43,7 +43,7 @@ func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
 func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask | bme.MEDefinition.GetAllowedAttributeMask() != bme.MEDefinition.GetAllowedAttributeMask() {
+	if mask|bme.MEDefinition.GetAllowedAttributeMask() != bme.MEDefinition.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
 	bme.AttributeMask = mask

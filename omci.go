@@ -47,8 +47,8 @@ const (
 	ExtendedIdent             = 0x0B
 )
 
-var OmciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
-	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
+var OmciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
+	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70}
 
 func (di DeviceIdent) String() string {
 	switch di {
@@ -230,7 +230,7 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		return errors.New("omci Transaction ID is zero for non-Notification type message")
 	}
 	if omci.DeviceIdentifier == BaselineIdent {
-		if omci.Length != MaxBaselineLength - 8 {
+		if omci.Length != MaxBaselineLength-8 {
 			return errors.New("invalid Baseline message length")
 		}
 	} else if omci.DeviceIdentifier == ExtendedIdent {

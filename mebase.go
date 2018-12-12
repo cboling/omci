@@ -23,8 +23,8 @@ import (
 )
 
 type MeBasePacket struct {
-	EntityClass     uint16
-	EntityInstance	uint16	// TODO: Change attribute values to map and move this into the map
+	EntityClass    uint16
+	EntityInstance uint16 // TODO: Change attribute values to map and move this into the map
 
 	gopacket.Layer
 	layers.BaseLayer
@@ -34,6 +34,7 @@ type MeBasePacket struct {
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
 	return msg.MsgLayerType
 }
+
 // Layer Interface implementations
 func (msg *MeBasePacket) LayerType() gopacket.LayerType {
 	return msg.MsgLayerType
@@ -44,6 +45,7 @@ func (msg *MeBasePacket) LayerContents() []byte {
 func (msg *MeBasePacket) LayerPayload() []byte {
 	return msg.Payload
 }
+
 // layerDecodingLayer Interface implementations
 func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
 	return gopacket.LayerTypeZero

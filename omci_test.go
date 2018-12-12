@@ -48,9 +48,9 @@ func getSbcMask(meDefinition me.IManagedEntityDefinition) uint16 {
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
-				continue	// Skip Entity ID
+				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index - 1))
+			sbcMask |= 1 << (15 - uint(index-1))
 		}
 	}
 	return sbcMask
@@ -135,7 +135,7 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(createGalEthernetProfile), reconstituted)
+	assert.Equal(t, strings.ToLower(createGalEthernetProfile), reconstituted)
 }
 
 func TestSetTCont(t *testing.T) {
@@ -186,7 +186,7 @@ func TestSetTCont(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(setTCont), reconstituted)
+	assert.Equal(t, strings.ToLower(setTCont), reconstituted)
 }
 
 func TestCreate8021pMapperService_profile(t *testing.T) {
@@ -242,7 +242,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	for index := uint(1); index < uint(len(attrDefs)); index++ {
 		attrName := attrDefs[index].GetName()
 
-		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
 			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
@@ -261,7 +261,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(create8021pMapperServiceProfile), reconstituted)
+	assert.Equal(t, strings.ToLower(create8021pMapperServiceProfile), reconstituted)
 }
 
 func TestCreate_macBridgeService_profile(t *testing.T) {
@@ -306,7 +306,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 	for index := uint(1); index < uint(len(attrDefs)); index++ {
 		attrName := attrDefs[index].GetName()
 
-		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
 			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
@@ -324,7 +324,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(createMacBridgeServiceProfile), reconstituted)
+	assert.Equal(t, strings.ToLower(createMacBridgeServiceProfile), reconstituted)
 }
 
 func TestCreateGemPortNetworkCtp(t *testing.T) {
@@ -369,7 +369,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 	for index := uint(1); index < uint(len(attrDefs)); index++ {
 		attrName := attrDefs[index].GetName()
 
-		if sbcMask & uint16(1 << (uint)(16 - index)) != 0 {
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
 			_, ok3 := attributes[attrName]
 			assert.True(t, ok3)
 		} else {
@@ -387,7 +387,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(createGemPortNetworkCtp), reconstituted)
+	assert.Equal(t, strings.ToLower(createGemPortNetworkCtp), reconstituted)
 }
 
 // TODO: Uncomment as encode/decode supported
@@ -465,8 +465,9 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(set8021pMapperServiceProfile), reconstituted)
+	assert.Equal(t, strings.ToLower(set8021pMapperServiceProfile), reconstituted)
 }
+
 // TODO: Uncomment as encode/decode supported
 //func TestCreateMacBridgePortConfigurationData(t *testing.T) {
 //
@@ -615,7 +616,7 @@ func TestMibUpload(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(mibUpload), reconstituted)
+	assert.Equal(t, strings.ToLower(mibUpload), reconstituted)
 }
 
 // TODO: Uncomment as encode/decode supported
@@ -689,7 +690,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeRebootRequest)
-	assert.Nil(t, msgLayer)		// TODO: Fix decode
+	assert.Nil(t, msgLayer) // TODO: Fix decode
 
 	//assert.NotNil(t, msgLayer)
 	//
@@ -697,7 +698,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	//assert.True(t, ok2)
 	//assert.Equal(t, rebootRequest.EntityClass, me.OnuDataClassId)
 	//assert.Equal(t, rebootRequest.EntityInstance, uint16(0x8000))
-	
+
 	// TODO: Test Decoded flags
 
 	// TODO: Serialize frame and test with original
@@ -1000,7 +1001,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 
 		outgoingPacket := buffer.Bytes()
 		reconstituted := packetToString(outgoingPacket)
-		assert.Equal(t,  strings.ToLower(packetString), reconstituted)
+		assert.Equal(t, strings.ToLower(packetString), reconstituted)
 
 		// Advance TID
 		firstTid += 1
