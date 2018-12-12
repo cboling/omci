@@ -320,6 +320,7 @@ func TestCreateResponseSerialize(t *testing.T) {
 }
 
 func TestDeleteRequestDecode(t *testing.T) {
+	// TODO:Implement
 	//goodMessage := ""
 	//data, err := stringToPacket(goodMessage)
 	//assert.NoError(t, err)
@@ -349,6 +350,7 @@ func TestDeleteRequestSerialize(t *testing.T) {
 }
 
 func TestDeleteResponseDecode(t *testing.T) {
+	// TODO:Implement
 	//goodMessage := ""
 	//data, err := stringToPacket(goodMessage)
 	//assert.NoError(t, err)
@@ -489,9 +491,120 @@ func TestGetResponseSerialize(t *testing.T) {
 	// TODO:Implement
 }
 
-// TODO: Create request/response tests for all of the following types
-//me.GetAllAlarms,
-//me.GetAllAlarmsNext,
+func TestGetAllAlarmsRequestDecode(t *testing.T) {
+	goodMessage := "04454b0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.GetAllAlarms)|me.AR)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetAllAlarmsRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+}
+
+func TestGetAllAlarmsSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestGetAllAlarmsResponseDecode(t *testing.T) {
+	goodMessage := "04452b0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, byte(me.GetAllAlarms)|me.AK)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetAllAlarmsResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+}
+
+func TestGetAllAlarmsResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
+	// TODO:Implement
+	//goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
+	//
+	//data, err := stringToPacket(goodMessage)
+	//assert.NoError(t, err)
+	//
+	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	//assert.NotNil(t, packet)
+	//
+	//omciLayer := packet.Layer(LayerTypeOMCI)
+	//assert.NotNil(t, packet)
+	//
+	//omciMsg, ok := omciLayer.(*OMCI)
+	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.MessageType, byte(me.GetAllAlarmsNext)|me.AR)
+	//assert.Equal(t, omciMsg.Length, uint16(40))
+	//
+	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
+	//assert.NotNil(t, msgLayer)
+	//
+	//request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
+	//assert.True(t, ok2)
+	//assert.NotNil(t, request)
+}
+
+func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
+	// TODO:Implement
+	//goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
+	//data, err := stringToPacket(goodMessage)
+	//assert.NoError(t, err)
+	//
+	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	//assert.NotNil(t, packet)
+	//
+	//omciLayer := packet.Layer(LayerTypeOMCI)
+	//assert.NotNil(t, packet)
+	//
+	//omciMsg, ok := omciLayer.(*OMCI)
+	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.MessageType, byte(me.GetAllAlarmsNext)|me.AK)
+	//assert.Equal(t, omciMsg.Length, uint16(40))
+	//
+	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
+	//assert.NotNil(t, msgLayer)
+	//
+	//response, ok2 := msgLayer.(*GetAllAlarmsResponse)
+	//assert.True(t, ok2)
+	//assert.NotNil(t, response)
+}
+
+func TestGetAllAlarmsNextResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
 
 func TestMibUploadRequestDecode(t *testing.T) {
 	goodMessage := "03604d0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
