@@ -140,7 +140,57 @@ func TestOmciDecode(t *testing.T) {
 // TestOmciSerialization will test for proper error checking of things that
 // are invalid at the OMCI layer
 func TestOmciSerialization(t *testing.T) {
-	// TODO: Add unit test
+	goodMessage := "000C440A010C0100040080000301000000000000000000000000000000000000000000000000000000000028"
+
+	// TODO: Support setting of the length during serialization
+	omciLayerDefaults := &OMCI{
+		TransactionID:    0x0c,
+		MessageType:      byte(me.Create) | me.AR,
+		// DeviceIdentifier: BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,				// Optional, defaults to 40 octets
+	}
+	omciLayerFixed := &OMCI{
+		TransactionID:    0x0c,
+		MessageType:      byte(me.Create) | me.AR,
+		DeviceIdentifier: BaselineIdent,
+		Length:           0x28,
+	}
+	request := &CreateRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityInstance: uint16(0x100),
+		},
+		Attributes: me.AttributeValueMap{
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
+			"TrafficDescriptorProfilePointerForUpstream":   0,
+			"PriorityQueuePointerForDownStream":            0,
+			"TrafficDescriptorProfilePointerForDownstream": 0,
+			"EncryptionKeyRing":                            0,
+		},
+	}
+	// Test serialization back to former string (using defaults in the message parts)
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayerDefaults, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+
+	// Test serialization back to former string (using explicit values in the message parts)
+	buffer = gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciLayerFixed, request)
+	assert.NoError(t, err)
+
+	outgoingPacket = buffer.Bytes()
+	reconstituted = packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestCreateRequestDecode(t *testing.T) {
@@ -213,8 +263,8 @@ func TestCreateRequestSerialize(t *testing.T) {
 	omciLayer := &OMCI{
 		TransactionID:    0x0c,
 		MessageType:      byte(me.Create) | me.AR,
-		DeviceIdentifier: BaselineIdent,
-		Length:           0x28,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
@@ -245,7 +295,7 @@ func TestCreateRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
-func TestCreateResponse(t *testing.T) {
+func TestCreateResponseDecode(t *testing.T) {
 	goodMessage := "0108240a002d0900000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -269,7 +319,11 @@ func TestCreateResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
-func TestDeleteResquest(t *testing.T) {
+func TestCreateResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestDeleteRequestDecode(t *testing.T) {
 	//goodMessage := ""
 	//data, err := stringToPacket(goodMessage)
 	//assert.NoError(t, err)
@@ -294,7 +348,12 @@ func TestDeleteResquest(t *testing.T) {
 	//assert.NotNil(t, request)
 }
 
-func TestDeleteResponse(t *testing.T) {
+
+func TestDeleteRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestDeleteResponseDecode(t *testing.T) {
 	//goodMessage := ""
 	//data, err := stringToPacket(goodMessage)
 	//assert.NoError(t, err)
@@ -319,7 +378,12 @@ func TestDeleteResponse(t *testing.T) {
 	//assert.NotNil(t, response)
 }
 
-func TestSetRequest(t *testing.T) {
+
+func TestDeleteResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestSetRequestDecode(t *testing.T) {
 	goodMessage := "0107480a01000000020000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -343,7 +407,11 @@ func TestSetRequest(t *testing.T) {
 	assert.NotNil(t, request)
 }
 
-func TestSetResponse(t *testing.T) {
+func TestSetRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestSetResponseDecode(t *testing.T) {
 	goodMessage := "0107280a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -367,7 +435,11 @@ func TestSetResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
-func TestGetRequest(t *testing.T) {
+func TestSetResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestGetRequestDecode(t *testing.T) {
 	goodMessage := "035e490a01070000004400000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -391,7 +463,11 @@ func TestGetRequest(t *testing.T) {
 	assert.NotNil(t, request)
 }
 
-func TestGetResponse(t *testing.T) {
+func TestGetRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestGetResponseDecode(t *testing.T) {
 	goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -415,11 +491,15 @@ func TestGetResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
+func TestGetResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
 // TODO: Create request/response tests for all of the following types
 //me.GetAllAlarms,
 //me.GetAllAlarmsNext,
 
-func TestMibUploadRequest(t *testing.T) {
+func TestMibUploadRequestDecode(t *testing.T) {
 	goodMessage := "03604d0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -441,6 +521,10 @@ func TestMibUploadRequest(t *testing.T) {
 	request, ok2 := msgLayer.(*MibUploadRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+}
+
+func TestMibUploadRequestSerialize(t *testing.T) {
+	// TODO:Implement
 }
 
 func TestMibUploadResponse(t *testing.T) {
@@ -467,7 +551,11 @@ func TestMibUploadResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
-func TestMibUploadNextRequest(t *testing.T) {
+func TestMibUploadResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestMibUploadNextRequestDecode(t *testing.T) {
 	goodMessage := "02864e0a00020000003a00000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -489,6 +577,10 @@ func TestMibUploadNextRequest(t *testing.T) {
 	request, ok2 := msgLayer.(*MibUploadNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+}
+
+func TestMibUploadNextRequestSerialize(t *testing.T) {
+	// TODO:Implement
 }
 
 func TestMibUploadNextResponse(t *testing.T) {
@@ -515,7 +607,11 @@ func TestMibUploadNextResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
-func TestMibResetRequest(t *testing.T) {
+func TestMibUploadNextResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestMibResetRequestDecode(t *testing.T) {
 	goodMessage := "00014F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -539,7 +635,11 @@ func TestMibResetRequest(t *testing.T) {
 	assert.NotNil(t, request)
 }
 
-func TestMibResetResponse(t *testing.T) {
+func TestMibResetRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestMibResetResponseDecode(t *testing.T) {
 	goodMessage := "00012F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -564,6 +664,10 @@ func TestMibResetResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
+func TestMibResetResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
 // TODO: Create request/response tests for all of the following types
 //me.Test,
 //me.StartSoftwareDownload,
@@ -572,7 +676,7 @@ func TestMibResetResponse(t *testing.T) {
 //me.ActivateSoftware,
 //me.CommitSoftware,
 
-func TestSynchronizeTimeRequest(t *testing.T) {
+func TestSynchronizeTimeRequestDecode(t *testing.T) {
 	goodMessage := "0109580a0100000007e20c0001301b0000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -596,7 +700,11 @@ func TestSynchronizeTimeRequest(t *testing.T) {
 	assert.NotNil(t, request)
 }
 
-func TestSynchronizeTimeResponse(t *testing.T) {
+func TestSynchronizeTimeRequestSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
+func TestSynchronizeTimeResponseEncode(t *testing.T) {
 	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -620,6 +728,10 @@ func TestSynchronizeTimeResponse(t *testing.T) {
 	assert.NotNil(t, response)
 }
 
+func TestSynchronizeTimeResponseSerialize(t *testing.T) {
+	// TODO:Implement
+}
+
 // TODO: Create request/response tests for all of the following types
 //me.Reboot,
 //me.GetNext,
@@ -629,7 +741,7 @@ func TestSynchronizeTimeResponse(t *testing.T) {
 // TODO: Create notification tests for all of the following types
 //me.AlarmNotification,
 
-func TestAttributeValueChange(t *testing.T) {
+func TestAttributeValueChangeDecode(t *testing.T) {
 	goodMessage := "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -651,6 +763,10 @@ func TestAttributeValueChange(t *testing.T) {
 	request, ok2 := msgLayer.(*AttributeValueChangeMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+}
+
+func TestAttributeValueChangeSerialize(t *testing.T) {
+	// TODO:Implement
 }
 
 // TODO: Create notification tests for all of the following types
