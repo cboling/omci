@@ -12,6 +12,7 @@ import (
 func main() {
 	//micTest()
 	//micTestFromFrame()
+	serializeCreateRequest()
 	syncTimeRequest()
 	syncTimeResponse()
 	decodeMorePackets()
@@ -2182,6 +2183,48 @@ func decodeMorePackets() {
 		}
 	}
 }
+
+func serializeCreateRequest() {
+	goodMessage := "000C440A010C0100040080000301000000000000000000000000000000000000000000000000000000000028"
+
+	// TODO: Support setting of the length during serialization
+	omciLayer := &omci.OMCI{
+		TransactionID:    0x0c,
+		MessageType:      byte(me.Create) | me.AR,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &omci.CreateRequest{
+		MeBasePacket: omci.MeBasePacket{
+			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityInstance: uint16(0x100),
+		},
+		Attributes: me.AttributeValueMap{
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
+			"TrafficDescriptorProfilePointerForUpstream":   0,
+			"PriorityQueuePointerForDownStream":            0,
+			"TrafficDescriptorProfilePointerForDownstream": 0,
+			"EncryptionKeyRing":                            0,
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	fmt.Println(err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	fmt.Println(goodMessage)
+	fmt.Println(reconstituted)
+}
+
+
 
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte
