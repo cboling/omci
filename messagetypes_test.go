@@ -24,8 +24,6 @@ import (
 	"testing"
 )
 
-// TODO: Move test of generated items to Generated...
-
 var allMsgTypes = [...]me.MsgType{
 	me.Create,
 	me.Delete,
@@ -142,7 +140,6 @@ func TestOmciDecode(t *testing.T) {
 func TestOmciSerialization(t *testing.T) {
 	goodMessage := "000C440A010C0100040080000301000000000000000000000000000000000000000000000000000000000028"
 
-	// TODO: Support setting of the length during serialization
 	omciLayerDefaults := &OMCI{
 		TransactionID: 0x0c,
 		MessageType:   byte(me.Create) | me.AR,
@@ -259,7 +256,6 @@ func TestCreateRequestDecode(t *testing.T) {
 func TestCreateRequestSerialize(t *testing.T) {
 	goodMessage := "000C440A010C0100040080000301000000000000000000000000000000000000000000000000000000000028"
 
-	// TODO: Support setting of the length during serialization
 	omciLayer := &OMCI{
 		TransactionID: 0x0c,
 		MessageType:   byte(me.Create) | me.AR,
@@ -636,7 +632,6 @@ func TestMibResetRequestDecode(t *testing.T) {
 func TestMibResetRequestSerialize(t *testing.T) {
 	goodMessage := "00014F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 
-	// TODO: Support setting of the length during serialization
 	omciLayer := &OMCI{
 		TransactionID: 0x01,
 		MessageType:   byte(me.MibReset) | me.AR,
@@ -690,7 +685,6 @@ func TestMibResetResponseDecode(t *testing.T) {
 func TestMibResetResponseSerialize(t *testing.T) {
 	goodMessage := "00012F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 
-	// TODO: Support setting of the length during serialization
 	omciLayer := &OMCI{
 		TransactionID: 0x01,
 		MessageType:   byte(me.MibReset) | me.AK,
