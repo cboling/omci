@@ -144,8 +144,8 @@ func TestOmciSerialization(t *testing.T) {
 
 	// TODO: Support setting of the length during serialization
 	omciLayerDefaults := &OMCI{
-		TransactionID:    0x0c,
-		MessageType:      byte(me.Create) | me.AR,
+		TransactionID: 0x0c,
+		MessageType:   byte(me.Create) | me.AR,
 		// DeviceIdentifier: BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,				// Optional, defaults to 40 octets
 	}
@@ -261,8 +261,8 @@ func TestCreateRequestSerialize(t *testing.T) {
 
 	// TODO: Support setting of the length during serialization
 	omciLayer := &OMCI{
-		TransactionID:    0x0c,
-		MessageType:      byte(me.Create) | me.AR,
+		TransactionID: 0x0c,
+		MessageType:   byte(me.Create) | me.AR,
 		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,						// Optional, defaults to 40 octets
 	}
@@ -348,7 +348,6 @@ func TestDeleteRequestDecode(t *testing.T) {
 	//assert.NotNil(t, request)
 }
 
-
 func TestDeleteRequestSerialize(t *testing.T) {
 	// TODO:Implement
 }
@@ -377,7 +376,6 @@ func TestDeleteResponseDecode(t *testing.T) {
 	//assert.True(t, ok2)
 	//assert.NotNil(t, response)
 }
-
 
 func TestDeleteResponseSerialize(t *testing.T) {
 	// TODO:Implement
@@ -636,7 +634,32 @@ func TestMibResetRequestDecode(t *testing.T) {
 }
 
 func TestMibResetRequestSerialize(t *testing.T) {
-	// TODO:Implement
+	goodMessage := "00014F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	// TODO: Support setting of the length during serialization
+	omciLayer := &OMCI{
+		TransactionID: 0x01,
+		MessageType:   byte(me.MibReset) | me.AR,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &MibResetRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuDataClassId,
+			// Default Instance ID is 0
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestMibResetResponseDecode(t *testing.T) {
@@ -665,7 +688,32 @@ func TestMibResetResponseDecode(t *testing.T) {
 }
 
 func TestMibResetResponseSerialize(t *testing.T) {
-	// TODO:Implement
+	goodMessage := "00012F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	// TODO: Support setting of the length during serialization
+	omciLayer := &OMCI{
+		TransactionID: 0x01,
+		MessageType:   byte(me.MibReset) | me.AK,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &MibResetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuDataClassId,
+			// Default Instance ID is 0
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 // TODO: Create request/response tests for all of the following types
