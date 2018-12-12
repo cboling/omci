@@ -17,7 +17,7 @@
 package omci
 
 import (
-	me "./generated"
+	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -214,7 +214,7 @@ func TestCreateRequestSerialize(t *testing.T) {
 		TransactionID:    0x0c,
 		MessageType:      byte(me.Create) | me.AR,
 		DeviceIdentifier: BaselineIdent,
-		Length:			  0x28,
+		Length:           0x28,
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
@@ -222,14 +222,14 @@ func TestCreateRequestSerialize(t *testing.T) {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{
-			"PortId": 0x400,
-			"TContPointer": 0x8000,
-			"Direction": 3,
-			"TrafficManagementPointerForUpstream": 0x100,
-			"TrafficDescriptorProfilePointerForUpstream": 0,
-			"PriorityQueuePointerForDownStream": 0,
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
+			"TrafficDescriptorProfilePointerForUpstream":   0,
+			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
-			"EncryptionKeyRing": 0,
+			"EncryptionKeyRing":                            0,
 		},
 	}
 	// Test serialization back to former string
@@ -242,7 +242,7 @@ func TestCreateRequestSerialize(t *testing.T) {
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
-	assert.Equal(t,  strings.ToLower(goodMessage), reconstituted)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestCreateResponse(t *testing.T) {

@@ -20,7 +20,6 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"

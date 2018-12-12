@@ -1,10 +1,10 @@
 package main
 
 import (
-	me "github.com/cboling/omci/generated"
 	"encoding/hex"
 	"fmt"
 	"github.com/cboling/omci"
+	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"strings"
 )
@@ -245,13 +245,13 @@ func syncTimeRequest() {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{
-			"PortId": 0x400,
-			"TContPointer": 0x8000,
-			"TrafficManagementPointerForUpstream": 0x100,
-			"TrafficDescriptorProfilePointerForUpstream": 0,
-			"PriorityQueuePointerForDownStream": 0,
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"TrafficManagementPointerForUpstream":          0x100,
+			"TrafficDescriptorProfilePointerForUpstream":   0,
+			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
-			"EncryptionKeyRing,": 0,
+			"EncryptionKeyRing,":                           0,
 		},
 	}
 	fmt.Println(omciLayer, request, goodMessage)
