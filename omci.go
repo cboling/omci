@@ -229,12 +229,20 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	if omci.TransactionID == 0 && !isNotification {
 		return errors.New("omci Transaction ID is zero for non-Notification type message")
 	}
+	if omci.DeviceIdentifier == 0 {
+		omci.DeviceIdentifier = BaselineIdent		// Allow uninitialized device identifier
+	}
 	if omci.DeviceIdentifier == BaselineIdent {
-		if omci.Length != MaxBaselineLength-8 {
+		if omci.Length == 0 {
+			omci.Length = MaxBaselineLength-8		// Allow uninitialized length
+		} else if omci.Length != MaxBaselineLength-8 {
 			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
 			return errors.New(msg)
 		}
 	} else if omci.DeviceIdentifier == ExtendedIdent {
+		if omci.Length == 0 {
+			omci.Length = uint16(len(bytes) - 10)		// Allow uninitialized length
+		}
 		if omci.Length > MaxExtendedLength {
 			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
 			return errors.New(msg)
@@ -254,9 +262,10 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 	padding, err := b.AppendBytes(padSize)
 	copy(padding, lotsOfZeros[:])
 
-	// For baseline, always provide the length
-	binary.BigEndian.PutUint32(b.Bytes()[MaxBaselineLength-8:], 40)
-
+	if omci.DeviceIdentifier == BaselineIdent {
+		// For baseline, always provide the length
+		binary.BigEndian.PutUint32(b.Bytes()[MaxBaselineLength-8:], 40)
+	}
 	if opts.ComputeChecksums {
 		micBytes, err := b.AppendBytes(4)
 		if err != nil {
