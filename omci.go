@@ -230,18 +230,18 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		return errors.New("omci Transaction ID is zero for non-Notification type message")
 	}
 	if omci.DeviceIdentifier == 0 {
-		omci.DeviceIdentifier = BaselineIdent		// Allow uninitialized device identifier
+		omci.DeviceIdentifier = BaselineIdent // Allow uninitialized device identifier
 	}
 	if omci.DeviceIdentifier == BaselineIdent {
 		if omci.Length == 0 {
-			omci.Length = MaxBaselineLength-8		// Allow uninitialized length
+			omci.Length = MaxBaselineLength - 8 // Allow uninitialized length
 		} else if omci.Length != MaxBaselineLength-8 {
 			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
 			return errors.New(msg)
 		}
 	} else if omci.DeviceIdentifier == ExtendedIdent {
 		if omci.Length == 0 {
-			omci.Length = uint16(len(bytes) - 10)		// Allow uninitialized length
+			omci.Length = uint16(len(bytes) - 10) // Allow uninitialized length
 		}
 		if omci.Length > MaxExtendedLength {
 			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
