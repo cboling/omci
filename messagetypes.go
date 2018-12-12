@@ -293,14 +293,13 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		return err
 	}
 	// Validate all attributes support write
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -330,14 +329,13 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		return errors.New("managed entity does not support Set Message-Type")
 	}
 	// Validate all attributes support write
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
-			msg := fmt.Sprintf("attribute '%v' does not support write access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -446,14 +444,13 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		return err
 	}
 	// Validate all attributes support Read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -483,14 +480,13 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		return errors.New("managed entity does not support Get Message-Type")
 	}
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -545,14 +541,13 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		omci.FailedAttributeMask = binary.BigEndian.Uint16(data[34:36])
 	}
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -589,14 +584,13 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
 
 	// Validate all attributes support read
-	for index := range omci.Attributes {
-		attr, ok := meDefinition.GetAttributeDefinitions()[index]
-		if !ok {
-			// TODO: add better detail for error message
-			return errors.New("attribute not found")
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attr.GetName())
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return errors.New(msg)
 		}
 	}
@@ -1065,6 +1059,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 //
 type MibUploadNextResponse struct {
 	MeBasePacket
+	ReportedME BaseManagedEntityInstance
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1079,31 +1074,19 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	// ME needs to support Get All Alarms
+	// ME needs to support MibUploadNext
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
 		return errors.New("managed entity does not support MIB Upload Next Message-Type")
 	}
-	// Get All Alarms request Entity Class are always ONU DATA (2) and Entity Instance of 0
-	if omci.EntityClass != me.OnuDataClassId {
+	// MibUploadNext response Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.MeBasePacket.EntityClass != me.OnuDataClassId {
 		return errors.New("invalid Entity Class for MIB Upload Next response")
 	}
-	if omci.EntityInstance != 0 {
+	if omci.MeBasePacket.EntityInstance != 0 {
 		return errors.New("invalid Entity Instance for MIB Upload Next response")
 	}
-	// Create ME to hold uploaded information
-
-	// TODO: Work on best way to decode the uploaded ME
-
-	//classID := binary.BigEndian.Uint16(data[4:6])
-	//entityID := binary.BigEndian.Uint16(data[6:8])
-	//omci.uploadedME, err := LoadManagedEntityDefinition(classID, entityIDe)
-	//if err != nil {
-	//	return err
-	//}
-	//omci.uploadedME..AttributeMask = binary.BigEndian.Uint16(data[8:10])
-	//omci.Attributes = omci.cachedME.Attributes()
-	//
-	return nil
+	// Decode reported ME
+	return omci.ReportedME.DecodeFromBytes(data[4:], p)
 }
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1118,7 +1101,17 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support MIB Upload
+	if !me.SupportsMsgType(entity, me.MibUploadNext) {
+		return errors.New("managed entity does not support the MIB Upload Message-Type")
+	}
+	return omci.ReportedME.SerializeTo(b)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1245,6 +1238,8 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 // AlarmNotificationMsg
 type AttributeValueChangeMsg struct {
 	MeBasePacket
+	AttributeMask uint16
+	Attributes    me.AttributeValueMap
 }
 
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1253,14 +1248,19 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	// MIB Reset Response Entity Class always ONU DATA (2) and
-	// Entity Instance of 0
-	if omci.EntityClass != me.OnuDataClassId {
-		return errors.New("invalid Entity Class for MIB Reset Response")
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
 	}
-	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for MIB Reset Response")
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	// Attribute decode
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:40], p)
+	if err != nil {
+		return err
 	}
+	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	return nil
 }
 
@@ -1643,6 +1643,12 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type SynchronizeTimeRequest struct {
 	MeBasePacket
+	Year   uint16
+	Month  uint8
+	Day    uint8
+	Hour   uint8
+	Minute uint8
+	Second uint8
 }
 
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1651,7 +1657,31 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
+		return errors.New("managed entity does not support Synchronize Time Message-Type")
+	}
+	// Synchronize Time request Entity Class are always ONU-G (256) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
+		return errors.New("invalid Entity Class for Synchronize Time request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time request")
+	}
+	omci.Year = binary.BigEndian.Uint16(data[4:6])
+	omci.Month = data[6]
+	omci.Day = data[7]
+	omci.Hour = data[8]
+	omci.Minute = data[9]
+	omci.Second = data[10]
+	return nil
 }
 
 func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1666,13 +1696,35 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+	}
+	bytes, err := b.AppendBytes(7)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.Year)
+	bytes[2] = omci.Month
+	bytes[3] = omci.Day
+	bytes[4] = omci.Hour
+	bytes[5] = omci.Minute
+	bytes[6] = omci.Second
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type SynchronizeTimeResponse struct {
 	MeBasePacket
+	Results        me.Results
+	SuccessResults uint8 // Only if 'Results' is 0 -> success
 }
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1681,7 +1733,27 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
+		return errors.New("managed entity does not support Synchronize Time Message-Type")
+	}
+	// Synchronize Time request Entity Class are always ONU-G (256) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
+		return errors.New("invalid Entity Class for Synchronize Time response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time response")
+	}
+	omci.Results = me.Results(data[4]) // TODO: Validate range
+	omci.SuccessResults = data[5]
+	return nil
 }
 
 func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1696,7 +1768,36 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// Synchronize Time request Entity Class are always ONU DATA (2) and Entity Instance of 0
+	if omci.EntityClass != me.OnuGClassId {
+		return errors.New("invalid Entity Class for Synchronize Time response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Synchronize Time response")
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+	}
+	numBytes := 2
+	if omci.Results != me.Success {
+		numBytes = 1
+	}
+	bytes, err := b.AppendBytes(numBytes)
+	if err != nil {
+		return err
+	}
+	bytes[0] = uint8(omci.Results)
+	if omci.Results == me.Success {
+		bytes[1] = omci.SuccessResults
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -30,7 +30,7 @@ import (
 
 type AttributeDefinitionMap map[uint]*AttributeDefinition
 
-// AttributeDefinition defines a single specific Managed Entity attribute
+// AttributeDefinition defines a single specific Managed Entity's attributes
 type AttributeDefinition struct {
 	Name       string
 	DefValue   interface{}
@@ -70,6 +70,7 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	switch attr.GetSize() {
 	default:
 		value := make([]byte, size)
+		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
 			err = attr.GetConstraints()(value)
 			if err != nil {
@@ -126,13 +127,33 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	default:
 		copy(bytes, value.([]byte))
 	case 1:
-		bytes[0] = value.(byte)
+		switch value.(type) {
+		case int:
+			bytes[0] = byte(value.(int))
+		default:
+			bytes[0] = value.(byte)
+		}
 	case 2:
-		binary.BigEndian.PutUint16(bytes, value.(uint16))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
+		default:
+			binary.BigEndian.PutUint16(bytes, value.(uint16))
+		}
 	case 4:
-		binary.BigEndian.PutUint32(bytes, value.(uint32))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
+		default:
+			binary.BigEndian.PutUint32(bytes, value.(uint32))
+		}
 	case 8:
-		binary.BigEndian.PutUint64(bytes, value.(uint64))
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
+		default:
+			binary.BigEndian.PutUint64(bytes, value.(uint64))
+		}
 	}
 	return nil
 }
@@ -190,51 +211,6 @@ func UnknownField(name string, defVal uint16, access AttributeAccess) *Attribute
 }
 
 ///////////////////////////////////////////////////////////////////////
-// Attribute Value   (Interfaced defined in generated subdirectory)
+// Attribute Name to Value    (Interfaced defined in generated subdirectory)
 
-type AttributeValueMap map[uint]*AttributeValue
-
-// AttributeValue provides the value for a single specific Managed Entity attribute
-type AttributeValue struct {
-	Name   string
-	Value  interface{}
-}
-
-func (attr *AttributeValue) String() string {
-	val, err := attr.GetValue()
-	return fmt.Sprintf("Value: %v, Value: %v, Error: %v",
-		attr.GetName(), val, err)
-}
-func (attr *AttributeValue) GetName() string  { return attr.Name }
-func (attr *AttributeValue) GetValue() (interface{}, error) {
-	// TODO: Better way to detect not-initialized and no default available?
-	return attr.Value, nil
-}
-
-func (attr *AttributeValue) SetValue(value interface{}) error {
-	return nil
-}
-
-// GetAttributeValueByName searches the attribute value map for the
-// attribute with the specified name (case insensitive)
-func GetAttributeValueByName(attrMap AttributeValueMap, name string) (*AttributeValue, error) {
-	nameLower := strings.ToLower(name)
-	for _, attrVal := range attrMap {
-		if nameLower == strings.ToLower(attrVal.GetName()) {
-			return attrVal, nil
-		}
-	}
-	return nil, errors.New("attribute not found")
-}
-
-// GetAttributeValueMapKeys is a convenience functions since we may need to
-// iterate a map in key index order. Maps in Go since v1.0 the iteration order
-// of maps have been randomized.
-func GetAttributeValueMapKeys(attrMap AttributeValueMap) []uint {
-	var keys []uint
-	for k:= range attrMap {
-		keys = append(keys, k)
-	}
-	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
-	return keys
-}
+type AttributeValueMap map[string]interface{}

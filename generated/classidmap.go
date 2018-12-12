@@ -42,7 +42,7 @@ type ManagedEntityInfo struct {
 //
 type ParamData struct {
 	EntityID   uint16
-	Attributes []*AttributeValue
+	Attributes AttributeValueMap
 }
 
 func decodeEntityID(params ...ParamData) uint16 {
@@ -59,7 +59,7 @@ var classToManagedEntityMap map[uint16]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[uint16]CreateME, 159)
+	classToManagedEntityMap = make(map[uint16]CreateME, 161)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -133,6 +133,8 @@ func init() {
 	classToManagedEntityMap[162] = NewPhysicalPathTerminationPointMocaUni
 	classToManagedEntityMap[163] = NewMocaEthernetPerformanceMonitoringHistoryData
 	classToManagedEntityMap[171] = NewExtendedVlanTaggingOperationConfigurationData
+	classToManagedEntityMap[256] = NewOnuG
+	classToManagedEntityMap[257] = NewOnu2G
 	classToManagedEntityMap[262] = NewTCont
 	classToManagedEntityMap[263] = NewAniG
 	classToManagedEntityMap[264] = NewUniG
