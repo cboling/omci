@@ -1192,7 +1192,7 @@ func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // omci.cachedME.SerializeTo(mask, b)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
