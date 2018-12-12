@@ -17,7 +17,7 @@
 package omci
 
 import (
-	me "./generated"
+	me "github.com/cboling/omci/generated"
 	"encoding/binary"
 	"errors"
 	"github.com/google/gopacket"

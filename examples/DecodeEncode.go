@@ -1,10 +1,10 @@
 package main
 
 import (
-	".."
-	me "../generated"
+	me "github.com/cboling/omci/generated"
 	"encoding/hex"
 	"fmt"
+	"github.com/cboling/omci"
 	"github.com/google/gopacket"
 	"strings"
 )
