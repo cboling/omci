@@ -894,7 +894,7 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 //me.SetTable}
 
 // TODO: Create notification tests for all of the following types
-//me.AlarmNotification,
+//me.AlarmNotification,  (TODO: Include alarm bitmap tests as well)
 
 func TestAttributeValueChangeDecode(t *testing.T) {
 	goodMessage := "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028"
