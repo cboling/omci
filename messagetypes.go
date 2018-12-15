@@ -1542,8 +1542,8 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
 		return errors.New("managed entity does not support Start Software Download Message-Type")
 	}
-	// Start OMCI Entity Class are always use the Software Image
-	if omci.EntityClass != me.OmciClassId {
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
 		return errors.New("invalid Entity Class for Start Software Download request")
 	}
 	if omci.EntityInstance != 0 {
@@ -1586,8 +1586,8 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
 		return errors.New("managed entity does not support the SStart Software Download Message-Type")
 	}
-	// Start OMCI Entity Class are always use the Software Image
-	if omci.EntityClass != me.OmciClassId {
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
 		return errors.New("invalid Entity Class for Start Software Download request")
 	}
 	if omci.EntityInstance != 0 {
@@ -1615,8 +1615,17 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 
 /////////////////////////////////////////////////////////////////////////////
 //
+type startResults struct {
+	ManagedEntityID	uint16		// ME ID of software image entity instance (slot number plus instance 0..1 or 2..254 vendor-specific)
+	Result			me.Results
+}
+
 type StartSoftwareDownloadResponse struct {
-	MeBasePacket
+	MeBasePacket                	// Note: EntityInstance for software download is two specific values
+	Result				me.Results
+	WindowSize			byte   		// Window Size -1
+	NumberOfInstances	byte
+	MeResults			[]startResults
 }
 
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1625,7 +1634,52 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Start Software Download
+	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
+		return errors.New("managed entity does not support Start Software Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Start Software Download response")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Start Software Download response")
+	}
+	omci.Result = me.Results(data[4])
+	if omci.Result > me.DeviceBusy {
+		msg := fmt.Sprintf("invalid results for Start Software Download response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
+	}
+	omci.WindowSize = data[5]
+	omci.NumberOfInstances = data[6]
+
+	if omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 0..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	if omci.NumberOfInstances > 0 {
+		omci.MeResults = make([]startResults, omci.NumberOfInstances)
+
+		for index := 0; index < int(omci.NumberOfInstances); index++ {
+			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[7 + (index * 3):])
+			omci.MeResults[index].Result = me.Results(data[9 + (index * 3)])
+			if omci.MeResults[index].Result >  me.DeviceBusy {
+				msg := fmt.Sprintf("invalid results for Start Software Download instance %v response: %v, must be 0..6",
+					index, omci.MeResults[index])
+				return errors.New(msg)
+			}
+		}
+	}
+	return nil
 }
 
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1640,7 +1694,7 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // TODO: Fix me) // return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1655,7 +1709,7 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
 }
 
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
