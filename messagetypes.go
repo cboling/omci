@@ -1519,16 +1519,49 @@ func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.
 /////////////////////////////////////////////////////////////////////////////
 //
 type StartSoftwareDownloadRequest struct {
-	MeBasePacket
+	MeBasePacket                // Note: EntityInstance for software download is two specific values
+	WindowSize           byte   // Window Size -1
+	ImageSize            uint32 // Octets
+	NumberOfCircuitPacks byte
+	MSBInstance          []uint16 // MSB & LSB of software image instance
 }
 
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Start Software Download
+	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
+		return errors.New("managed entity does not support Start Software Download Message-Type")
+	}
+	// Start OMCI Entity Class are always use the Software Image
+	if omci.EntityClass != me.OmciClassId {
+		return errors.New("invalid Entity Class for Start Software Download request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Start Software Download request")
+	}
+	omci.WindowSize = data[4]
+	omci.ImageSize = binary.BigEndian.Uint32(data[5:9])
+	omci.NumberOfCircuitPacks = data[9]
+	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
+		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
+			omci.NumberOfCircuitPacks)
+		return errors.New(msg)
+	}
+	omci.MSBInstance = make([]uint16, omci.NumberOfCircuitPacks)
+	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
+		omci.MSBInstance[index] = binary.BigEndian.Uint16(data[10+(index*2):])
+	}
+	return nil
 }
 
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1543,7 +1576,41 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Synchronize Time
+	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+		return errors.New("managed entity does not support the SStart Software Download Message-Type")
+	}
+	// Start OMCI Entity Class are always use the Software Image
+	if omci.EntityClass != me.OmciClassId {
+		return errors.New("invalid Entity Class for Start Software Download request")
+	}
+	if omci.EntityInstance != 0 {
+		return errors.New("invalid Entity Instance for Start Software Download request")
+	}
+	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
+		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
+			omci.NumberOfCircuitPacks)
+		return errors.New(msg)
+	}
+	bytes, err := b.AppendBytes(8 + (2 * int(omci.NumberOfCircuitPacks)))
+	if err != nil {
+		return err
+	}
+	//binary.BigEndian.PutUint16(bytes[0:2], omci.Year)
+
+	bytes[4] = omci.WindowSize
+	binary.BigEndian.PutUint32(bytes[5:9], omci.ImageSize)
+	bytes[1] = omci.NumberOfCircuitPacks
+	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
+		binary.BigEndian.PutUint16(bytes[10+(index*2):], omci.MSBInstance[index])
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

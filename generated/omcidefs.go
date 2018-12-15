@@ -339,7 +339,7 @@ func (bme* BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueM
 		attrDef := bme.AttributeDefinitions[index]
 
 		if mask & (1 << (15 - uint(index - 1))) != 0 {
-			value, ok := attr[ attrDef.GetName()]
+			value, ok := attr[attrDef.GetName()]
 			if !ok {
 				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
 				return errors.New(msg)
