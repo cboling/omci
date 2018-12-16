@@ -67,3 +67,24 @@ The following OMCI message types currently have not been coded.
  - SetTableRequest
  - SetTableResponse
 
+## Other outstanding items
+
+Besides OMCI Message decode/serialization, and associated unit tests, the following items
+would be needed or useful in a first official release of this library. Some changes are
+to be done in the generated OMCI ME code as well.
+
+ - Specific examples of how to use this library (expand upon DecodeEncode.go examples)
+   Include unknown ME examples and how to catch various common or expected errors
+ - Add Alarm Table Support (generated MEs also)
+ - Add AVC flag for appropriate attributes
+ - For serialization, check early for message size exceeded
+ - Check proper gopacket use of Payload/Contents properties and make sure we
+   follow guidelines (if there are any)
+ - For 'mebase.go' string output, look up ME name and output as needed
+ - Look through 'error' messages and see if there are a few very common ones that
+   could be moved to a custom class to allow for better user interception/decode of
+   these errors.
+ 
+The following would be 'nice' to have but are not necessary for initial code release
+ - Extended message support
+ - MIC Encode/Decode support
