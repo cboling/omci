@@ -37,6 +37,7 @@ var (
 	LayerTypeTestRequest                  gopacket.LayerType
 	LayerTypeStartSoftwareDownloadRequest gopacket.LayerType
 	LayerTypeDownloadSectionRequest       gopacket.LayerType
+	LayerTypeDownloadSectionLastRequest   gopacket.LayerType
 	LayerTypeEndSoftwareDownloadRequest   gopacket.LayerType
 	LayerTypeActivateSoftwareRequest      gopacket.LayerType
 	LayerTypeCommitSoftwareRequest        gopacket.LayerType
@@ -100,7 +101,10 @@ func init() {
 	LayerTypeMibResetRequest = mkReqLayer(me.MibReset, "MibResetRequest", gopacket.DecodeFunc(decodeMibResetRequest))
 	LayerTypeTestRequest = mkReqLayer(me.Test, "TestRequest", gopacket.DecodeFunc(decodeTestRequest))
 	LayerTypeStartSoftwareDownloadRequest = mkReqLayer(me.StartSoftwareDownload, "StartSoftwareDownloadRequest", gopacket.DecodeFunc(decodeStartSoftwareDownloadRequest))
-	LayerTypeDownloadSectionRequest = mkReqLayer(me.DownloadSection, "DownloadSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
+
+	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
+	LayerTypeDownloadSectionRequest = mkLayer(me.DownloadSection, "DownloadSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
+	LayerTypeDownloadSectionLastRequest = mkReqLayer(me.DownloadSection, "DownloadLastSectionRequest", gopacket.DecodeFunc(decodeDownloadSectionRequest))
 	LayerTypeEndSoftwareDownloadRequest = mkReqLayer(me.EndSoftwareDownload, "EndSoftwareDownloadRequest", gopacket.DecodeFunc(decodeEndSoftwareDownloadRequest))
 	LayerTypeActivateSoftwareRequest = mkReqLayer(me.ActivateSoftware, "ActivateSoftwareRequest", gopacket.DecodeFunc(decodeActivateSoftwareRequest))
 	LayerTypeCommitSoftwareRequest = mkReqLayer(me.CommitSoftware, "CommitSoftwareRequest", gopacket.DecodeFunc(decodeCommitSoftwareRequest))

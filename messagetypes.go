@@ -1546,9 +1546,6 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if omci.EntityClass != me.SoftwareImageClassId {
 		return errors.New("invalid Entity Class for Start Software Download request")
 	}
-	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Start Software Download request")
-	}
 	omci.WindowSize = data[4]
 	omci.ImageSize = binary.BigEndian.Uint32(data[5:9])
 	omci.NumberOfCircuitPacks = data[9]
@@ -1590,9 +1587,6 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if omci.EntityClass != me.SoftwareImageClassId {
 		return errors.New("invalid Entity Class for Start Software Download request")
 	}
-	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Start Software Download request")
-	}
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
 		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
 			omci.NumberOfCircuitPacks)
@@ -1602,8 +1596,6 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if err != nil {
 		return err
 	}
-	//binary.BigEndian.PutUint16(bytes[0:2], omci.Year)
-
 	bytes[4] = omci.WindowSize
 	binary.BigEndian.PutUint32(bytes[5:9], omci.ImageSize)
 	bytes[1] = omci.NumberOfCircuitPacks
@@ -1649,9 +1641,6 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if omci.EntityClass != me.SoftwareImageClassId {
 		return errors.New("invalid Entity Class for Start Software Download response")
 	}
-	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Start Software Download response")
-	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.DeviceBusy {
 		msg := fmt.Sprintf("invalid results for Start Software Download response: %v, must be 0..6",
@@ -1694,13 +1683,60 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Start Software Download
+	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
+		return errors.New("managed entity does not support Start Software Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Start Software Download response")
+	}
+	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
+	if err != nil {
+		return err
+	}
+	if omci.Result > me.DeviceBusy {
+		msg := fmt.Sprintf("invalid results for Start Software Download response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
+	}
+	bytes[0] = byte(omci.Result)
+	bytes[1] = omci.WindowSize
+	bytes[2] = omci.NumberOfInstances
+
+	if omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 0..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	if omci.NumberOfInstances > 0 {
+		for index := 0; index < int(omci.NumberOfInstances); index++ {
+			binary.BigEndian.PutUint16(bytes[3 + (3 * index):], omci.MeResults[index].ManagedEntityID)
+
+			if omci.MeResults[index].Result >  me.DeviceBusy {
+				msg := fmt.Sprintf("invalid results for Start Software Download instance %v response: %v, must be 0..6",
+					index, omci.MeResults[index])
+				return errors.New(msg)
+			}
+			bytes[5 + (3 * index)] = byte(omci.MeResults[index].Result)
+		}
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type DownloadSectionRequest struct {
-	MeBasePacket
+	MeBasePacket				// Note: EntityInstance for software download is two specific values
+	SectionNumber	byte
+	SectionData		[29]byte	// 0 padding if final transfer requires only a partial block
 }
 
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1709,7 +1745,24 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Download section
+	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
+		return errors.New("managed entity does not support Download Section Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Download Section request")
+	}
+	omci.SectionNumber = data[4]
+	copy(omci.SectionData[0:], data[5:])
+	return nil
 }
 
 func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1724,7 +1777,28 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Download section
+	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
+		return errors.New("managed entity does not support Download Section Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Download Section response")
+	}
+	bytes, err := b.AppendBytes(1 + 29)
+	if err != nil {
+		return err
+	}
+	bytes[0] = omci.SectionNumber
+	copy(bytes[1:], omci.SectionData[0:])
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
