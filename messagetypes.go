@@ -2646,7 +2646,21 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support GetNext
+	if !me.SupportsMsgType(meDefinition, me.GetNext) {
+		return errors.New("managed entity does not support Get Next Message-Type")
+	}
+	// Note: G.988 specifies that an error code of (3) should result if more
+	//       than one attribute is requested
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	omci.SequenceNumber = binary.BigEndian.Uint16(data[6:8])
+	return nil
 }
 
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -2661,7 +2675,23 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support GetNext
+	if !me.SupportsMsgType(meDefinition, me.GetNext) {
+		return errors.New("managed entity does not support Get Next Message-Type")
+	}
+	bytes, err := b.AppendBytes(4)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
+	binary.BigEndian.PutUint16(bytes, omci.SequenceNumber)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
