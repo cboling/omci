@@ -1579,8 +1579,8 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if err != nil {
 		return err
 	}
-	// ME needs to support Synchronize Time
-	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
+	// ME needs to support Start Software Download
+	if !me.SupportsMsgType(entity, me.StartSoftwareDownload) {
 		return errors.New("managed entity does not support the SStart Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
@@ -1897,7 +1897,36 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
+		return errors.New("managed entity does not support End Software Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for End Software Download request")
+	}
+	omci.CRC32 = binary.BigEndian.Uint32(data[4:8])
+	omci.ImageSize = binary.BigEndian.Uint32(data[8:12])
+	omci.NumberOfInstances = data[13]
+
+	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	omci.ImageInstances = make([]uint16, omci.NumberOfInstances)
+
+	for index := 0; index < int(omci.NumberOfInstances); index++ {
+		omci.ImageInstances[index] = binary.BigEndian.Uint16(data[14+(index*2):])
+	}
+	return nil
 }
 
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -1912,7 +1941,37 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
+		return errors.New("managed entity does not support Start End Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for End Software Download response")
+	}
+	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	bytes, err := b.AppendBytes(9 + (2 * int(omci.NumberOfInstances)))
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint32(bytes[4:8], omci.CRC32)
+	binary.BigEndian.PutUint32(bytes[8:12], omci.ImageSize)
+	bytes[13] = omci.NumberOfInstances
+	for index := 0; index < int(omci.NumberOfInstances); index++ {
+		binary.BigEndian.PutUint16(bytes[14+(index*2):], omci.ImageInstances[index])
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2523,6 +2582,7 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type SetTableRequest struct {
 	MeBasePacket
+	// TODO: Fix me when extended messages supported)
 }
 
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2531,7 +2591,7 @@ func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	return errors.New("need to implement") // TODO: Fix me when extended messages supported)
 }
 
 func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -2546,13 +2606,14 @@ func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") /// TODO: Fix me when extended messages supported)
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 type SetTableResponse struct {
 	MeBasePacket
+	// TODO: Fix me when extended messages supported)
 }
 
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2561,7 +2622,7 @@ func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	return errors.New("need to implement") // TODO: Fix me when extended messages supported)
 }
 
 func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2576,5 +2637,5 @@ func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	return errors.New("need to implement") // TODO: Fix me when extended messages supported)
 }
