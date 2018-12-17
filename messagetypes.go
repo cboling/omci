@@ -2366,6 +2366,8 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 //
 type GetNextRequest struct {
 	MeBasePacket
+	AttributeMask  uint16
+	SequenceNumber uint16
 }
 
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2396,6 +2398,8 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 //
 type GetNextResponse struct {
 	MeBasePacket
+	AttributeMask uint16
+	Attributes    me.AttributeValueMap
 }
 
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2456,6 +2460,7 @@ func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 //
 type GetCurrentDataRequest struct {
 	MeBasePacket
+	AttributeMask uint16
 }
 
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2486,6 +2491,8 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 //
 type GetCurrentDataResponse struct {
 	MeBasePacket
+	Result        me.Results
+	AttributeMask uint16
 }
 
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
