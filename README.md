@@ -43,6 +43,9 @@ The following OMCI message types currently have been coded but any unit test cov
  - StartSoftwareDownloadRequest
  - DownloadSectionRequest
  - DownloadSectionResponse
+ - EndSoftwareDownloadRequest
+ - EndSoftwareDownloadResponse
+ - ActivateSoftwareRequest
  - RebootRequest
  - RebootResponse
  - AlarmNotification
@@ -54,9 +57,6 @@ The following OMCI message types currently have not been coded.
  - TestResult
  - TestRequest
  - TestResponse
- - EndSoftwareDownloadRequest
- - EndSoftwareDownloadResponse
- - ActivateSoftwareRequest
  - ActivateSoftwareResponse
  - CommitSoftwareRequest
  - CommitSoftwareResponse

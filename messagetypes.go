@@ -1960,7 +1960,7 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 /////////////////////////////////////////////////////////////////////////////
 //
 type EndSoftwareDownloadResponse struct {
-	MeBasePacket
+	MeBasePacket // Note: EntityInstance for software download is two specific values
 	Result            me.Results
 	NumberOfInstances byte
 	MeResults         []downloadResults
@@ -2039,7 +2039,7 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for End End Download response")
+		return errors.New("invalid Entity Class for End Download response")
 	}
 	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
 	if err != nil {
@@ -2076,7 +2076,8 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 /////////////////////////////////////////////////////////////////////////////
 //
 type ActivateSoftwareRequest struct {
-	MeBasePacket
+	MeBasePacket // Note: EntityInstance for software download is two specific values
+	ActivateFlags byte
 }
 
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2085,7 +2086,27 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
+		return errors.New("managed entity does not support Activate Software Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Activate Software  response")
+	}
+	omci.ActivateFlags = data[4]
+	if omci.ActivateFlags > 2 {
+		msg := fmt.Sprintf("invalid number of Activation flangs: %v, must be 0..2",
+			omci.ActivateFlags)
+		return errors.New(msg)
+	}
+	return nil
 }
 
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -2100,7 +2121,31 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
+		return errors.New("managed entity does not support Activate Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Activate Software response")
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = omci.ActivateFlags
+	if omci.ActivateFlags > 2 {
+		msg := fmt.Sprintf("invalid results for Activate Software response: %v, must be 0..2",
+			omci.ActivateFlags)
+		return errors.New(msg)
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
