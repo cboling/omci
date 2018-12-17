@@ -2293,7 +2293,21 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
+		return errors.New("managed entity does not support Commit Software Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Commit Software response")
+	}
+	return nil
 }
 
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2308,7 +2322,21 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
+		return errors.New("managed entity does not support Commit Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for Commit Software response")
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
