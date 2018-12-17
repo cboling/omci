@@ -2234,7 +2234,7 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 //
 type RebootRequest struct {
 	MeBasePacket
-	RebootCondition	byte
+	RebootCondition byte
 }
 
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2292,7 +2292,7 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		msg := fmt.Sprintf("invalid reboot condition code: %v, must be 0..3", omci.RebootCondition)
 		return errors.New(msg)
 	}
-	bytes[0] = RebootCondition
+	bytes[0] = omci.RebootCondition
 	return nil
 }
 
@@ -2300,6 +2300,7 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 //
 type RebootResponse struct {
 	MeBasePacket
+	Result me.Results
 }
 
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2308,7 +2309,23 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	// Create attribute mask for all set-by-create entries
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Reboot
+	if !me.SupportsMsgType(meDefinition, me.Reboot) {
+		return errors.New("managed entity does not support Reboot Message-Type")
+	}
+	if omci.Result > 6 {
+		msg := fmt.Sprintf("invalid reboot results code: %v, must be 0..6", omci.Result)
+		return errors.New(msg)
+	}
+	omci.Result = me.Results(data[4])
+	return nil
 }
 
 func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2323,7 +2340,26 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Reboot
+	if !me.SupportsMsgType(entity, me.Reboot) {
+		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	if omci.Result > 6 {
+		msg := fmt.Sprintf("invalid reboot results code: %v, must be 0..6", omci.Result)
+		return errors.New(msg)
+	}
+	bytes[0] = byte(omci.Result)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
