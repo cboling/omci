@@ -628,7 +628,6 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -702,7 +701,6 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -965,7 +963,6 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1034,7 +1031,6 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1165,7 +1161,6 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1214,7 +1209,6 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1315,7 +1309,6 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	//var meDefinition me.IManagedEntityDefinition
 	//meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 	//	me.ParamData{EntityID: omci.EntityInstance})
@@ -1351,7 +1344,6 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	//var meDefinition me.IManagedEntityDefinition
 	//meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 	//	me.ParamData{EntityID: omci.EntityInstance})
@@ -1531,7 +1523,6 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1607,7 +1598,7 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type startResults struct {
+type downloadResults struct {
 	ManagedEntityID uint16 // ME ID of software image entity instance (slot number plus instance 0..1 or 2..254 vendor-specific)
 	Result          me.Results
 }
@@ -1617,7 +1608,7 @@ type StartSoftwareDownloadResponse struct {
 	Result            me.Results
 	WindowSize        byte // Window Size -1
 	NumberOfInstances byte
-	MeResults         []startResults
+	MeResults         []downloadResults
 }
 
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1626,7 +1617,6 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1656,7 +1646,7 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 		return errors.New(msg)
 	}
 	if omci.NumberOfInstances > 0 {
-		omci.MeResults = make([]startResults, omci.NumberOfInstances)
+		omci.MeResults = make([]downloadResults, omci.NumberOfInstances)
 
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
 			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[7+(index*3):])
@@ -1683,7 +1673,6 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1745,7 +1734,6 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1777,7 +1765,6 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1815,7 +1802,6 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1852,7 +1838,6 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1897,7 +1882,6 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1941,7 +1925,6 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -1978,6 +1961,9 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 //
 type EndSoftwareDownloadResponse struct {
 	MeBasePacket
+	Result            me.Results
+	NumberOfInstances byte
+	MeResults         []downloadResults
 }
 
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1986,7 +1972,47 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
+		return errors.New("managed entity does not support End Software Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for End Software Download response")
+	}
+	omci.Result = me.Results(data[4])
+	if omci.Result > me.DeviceBusy {
+		msg := fmt.Sprintf("invalid results for End Software Download response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
+	}
+	omci.NumberOfInstances = data[5]
+
+	if omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Instances: %v, must be 0..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	if omci.NumberOfInstances > 0 {
+		omci.MeResults = make([]downloadResults, omci.NumberOfInstances)
+
+		for index := 0; index < int(omci.NumberOfInstances); index++ {
+			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[6+(index*3):])
+			omci.MeResults[index].Result = me.Results(data[8+(index*3)])
+			if omci.MeResults[index].Result > me.DeviceBusy {
+				msg := fmt.Sprintf("invalid results for End Software Download instance %v response: %v, must be 0..6",
+					index, omci.MeResults[index])
+				return errors.New(msg)
+			}
+		}
+	}
+	return nil
 }
 
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2001,7 +2027,50 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support End Software Download
+	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
+		return errors.New("managed entity does not support End End Download Message-Type")
+	}
+	// Software Image Entity Class are always use the Software Image
+	if omci.EntityClass != me.SoftwareImageClassId {
+		return errors.New("invalid Entity Class for End End Download response")
+	}
+	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
+	if err != nil {
+		return err
+	}
+	if omci.Result > me.DeviceBusy {
+		msg := fmt.Sprintf("invalid results for End Software Download response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
+	}
+	bytes[0] = byte(omci.Result)
+	bytes[1] = omci.NumberOfInstances
+
+	if omci.NumberOfInstances > 9 {
+		msg := fmt.Sprintf("invalid number of Instances: %v, must be 0..9",
+			omci.NumberOfInstances)
+		return errors.New(msg)
+	}
+	if omci.NumberOfInstances > 0 {
+		for index := 0; index < int(omci.NumberOfInstances); index++ {
+			binary.BigEndian.PutUint16(bytes[2+(3*index):], omci.MeResults[index].ManagedEntityID)
+
+			if omci.MeResults[index].Result > me.DeviceBusy {
+				msg := fmt.Sprintf("invalid results for End Software Download instance %v response: %v, must be 0..6",
+					index, omci.MeResults[index])
+				return errors.New(msg)
+			}
+			bytes[4+(3*index)] = byte(omci.MeResults[index].Result)
+		}
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2142,7 +2211,6 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -2218,7 +2286,6 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -2302,7 +2369,6 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
@@ -2368,7 +2434,6 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	// Create attribute mask for all set-by-create entries
 	var meDefinition me.IManagedEntityDefinition
 	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})

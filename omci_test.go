@@ -690,7 +690,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeRebootRequest)
-	assert.Nil(t, msgLayer) // TODO: Fix decode
+	assert.NotNil(t, msgLayer) // TODO: Fix decode
 
 	//assert.NotNil(t, msgLayer)
 	//
