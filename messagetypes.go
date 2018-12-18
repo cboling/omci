@@ -2809,7 +2809,20 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support GetNext
+	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
+		return errors.New("managed entity does not support Get Current Data Message-Type")
+	}
+	// Note: G.988 specifies that an error code of (3) should result if more
+	//       than one attribute is requested
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	return nil
 }
 
 func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
@@ -2824,7 +2837,22 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support GetNext
+	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
+		return errors.New("managed entity does not support Get Current Data Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
