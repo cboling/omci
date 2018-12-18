@@ -2708,7 +2708,25 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !me.SupportsMsgType(meDefinition, me.GetNext) {
+		return errors.New("managed entity does not support Get Next Message-Type")
+	}
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	// TODO: Validate attributes support 'Read' access ?
+
+	// Attribute decode
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2723,7 +2741,29 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !me.SupportsMsgType(meDefinition, me.GetNext) {
+		return errors.New("managed entity does not support the Get Next Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.AttributeMask)
+	// TODO: Validate attributes support 'Read' access ?
+
+	// Attribute serialization
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

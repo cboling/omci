@@ -52,6 +52,7 @@ The following OMCI message types currently have been coded but any unit test cov
  - CommitSoftwareRequest
  - CommitSoftwareResponse
  - GetNextRequest
+ - GetNextResponse
  - AlarmNotification
  
 ## Message Types not yet supported
@@ -61,7 +62,6 @@ The following OMCI message types currently have not been coded.
  - TestResult
  - TestRequest
  - TestResponse
- - GetNextResponse
  - GetCurrentDataRequest
  - GetCurrentDataResponse
  - SetTableRequest
