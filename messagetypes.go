@@ -1960,7 +1960,7 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 /////////////////////////////////////////////////////////////////////////////
 //
 type EndSoftwareDownloadResponse struct {
-	MeBasePacket // Note: EntityInstance for software download is two specific values
+	MeBasePacket      // Note: EntityInstance for software download is two specific values
 	Result            me.Results
 	NumberOfInstances byte
 	MeResults         []downloadResults
@@ -2076,7 +2076,7 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 /////////////////////////////////////////////////////////////////////////////
 //
 type ActivateSoftwareRequest struct {
-	MeBasePacket // Note: EntityInstance for software download is two specific values
+	MeBasePacket  // Note: EntityInstance for software download is two specific values
 	ActivateFlags byte
 }
 
@@ -2861,6 +2861,7 @@ type GetCurrentDataResponse struct {
 	MeBasePacket
 	Result        me.Results
 	AttributeMask uint16
+	Attributes    me.AttributeValueMap
 }
 
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2869,7 +2870,24 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // return nil
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
+		return errors.New("managed entity does not support Get Current Data Message-Type")
+	}
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+
+	// Attribute decode
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -2884,7 +2902,28 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	return errors.New("need to implement") // TODO: Fix me) // omci.cachedME.SerializeTo(mask, b)
+	var meDefinition me.IManagedEntityDefinition
+	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Get
+	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
+		return errors.New("managed entity does not support the Get Current Data Message-Type")
+	}
+	bytes, err := b.AppendBytes(2)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes[0:2], omci.AttributeMask)
+
+	// Attribute serialization
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

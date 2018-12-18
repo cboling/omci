@@ -11,8 +11,6 @@ by unit tests.
  - MibResetRequest
  - MibResetResponse
 
- 
-
 ## Message Types supported but lacking full unit test
 The following OMCI message types currently have been coded and are partially covered
 by unit tests, but work still remains for sufficient unit test coverage.
@@ -54,6 +52,7 @@ The following OMCI message types currently have been coded but any unit test cov
  - GetNextRequest
  - GetNextResponse
  - GetCurrentDataRequest
+ - GetCurrentDataResponse
  - AlarmNotification
  
 ## Message Types not yet supported
@@ -63,7 +62,6 @@ The following OMCI message types currently have not been coded.
  - TestResult
  - TestRequest
  - TestResponse
- - GetCurrentDataResponse
  - SetTableRequest
  - SetTableResponse
 
