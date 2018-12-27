@@ -825,11 +825,11 @@ func TestMibResetResponseSerialize(t *testing.T) {
 
 // TODO: Create request/response tests for all of the following types
 //me.Test,
-//me.StartSoftwareDownload,
-//me.DownloadSection,
-//me.EndSoftwareDownload,
-//me.ActivateSoftware,
-//me.CommitSoftware,
+//me.StartSoftwareDownload, reqMsg := "0000530a0007000113000f424001000100000000000000000000000000000000000000000000000000000028"
+//me.DownloadSection, reqMsg := '0000140a00070001083534363836393733323036393733323036313230373436353733373400000000000028'
+//me.EndSoftwareDownload, reqMsg := '0000550a00070001ff92a226000f424001000100000000000000000000000000000000000000000000000028'
+//me.ActivateSoftware, reqMsg := '0000560a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
+//me.CommitSoftware, reqMsg := '0000570a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
 
 func TestSynchronizeTimeRequestDecode(t *testing.T) {
 	goodMessage := "0109580a0100000007e20c0001301b0000000000000000000000000000000000000000000000000000000028"
@@ -888,7 +888,7 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 }
 
 // TODO: Create request/response tests for all of the following types
-//me.Reboot,
+//me.Reboot, msgRequest := '0001590a01000000000000000000000000000000000000000000000000000000000000000000000000000028'
 //me.GetNext,
 //me.GetCurrentData,
 //me.SetTable}
