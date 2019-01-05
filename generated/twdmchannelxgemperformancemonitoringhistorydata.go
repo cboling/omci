@@ -50,7 +50,7 @@ func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			1: ByteField("IntervalEndTime", 0, Read),
 			2: Uint16Field("ThresholdData64BItId", 0, Read|Write|SetByCreate),
 			3: Uint64Field("TotalTransmittedXgemFrames", 0, Read),
-			4: Uint64Field("TransmittedXgemFramesWithLfBitNotSet:", 0, Read),
+			4: Uint64Field("TransmittedXgemFramesWithLfBitNotSet", 0, Read),
 			5: Uint64Field("TotalReceivedXgemFrames", 0, Read),
 			6: Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read),
 			7: Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read),

@@ -49,7 +49,7 @@ func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
 			2: ByteField("NumberOfPorts", 0, Read),
 			3: Uint64Field("SerialNumber", 0, Read),
 			4: MultiByteField("Version", 14, nil, Read),
-			5: Uint32Field("VendorId:", 0, Read),
+			5: Uint32Field("VendorId", 0, Read),
 			6: ByteField("AdministrativeState", 0, Read|Write),
 			7: ByteField("OperationalState", 0, Read),
 			8: ByteField("BridgedOrIpInd", 0, Read|Write),

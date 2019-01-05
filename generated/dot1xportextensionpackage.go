@@ -43,7 +43,7 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("Dot1XEnable", 0, Read|Write),
 			2: ByteField("ActionRegister", 0, Write),
 			3: ByteField("AuthenticatorPaeState", 0, Read),

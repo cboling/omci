@@ -45,9 +45,9 @@ func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: ByteField("IntervalEndTime", 0, Read),
-			2: Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
 			3: Uint32Field("TransmittedGemFrames", 0, Read),
 			4: Uint32Field("ReceivedGemFrames", 0, Read),
 			5: Uint64Field("ReceivedPayloadBytes", 0, Read),

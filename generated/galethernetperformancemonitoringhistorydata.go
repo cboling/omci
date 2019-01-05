@@ -45,7 +45,7 @@ func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: ByteField("IntervalEndTime", 0, Read),
 			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
 			3: Uint32Field("DiscardedFrames", 0, Read),

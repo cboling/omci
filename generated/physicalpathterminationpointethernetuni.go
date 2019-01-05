@@ -43,7 +43,7 @@ func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEn
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: ByteField("ExpectedType", 0, Read|Write),
 			2: ByteField("SensedType", 0, Read),
 			3: ByteField("AutoDetectionConfiguration", 0, Read|Write),

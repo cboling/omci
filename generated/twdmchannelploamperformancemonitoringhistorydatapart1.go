@@ -48,7 +48,7 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamDat
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: ByteField("IntervalEndTime", 0, Read),
-			2: Uint16Field("ThresholdData12Id:", 0, Read|Write|SetByCreate),
+			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
 			3: Uint32Field("PloamMicErrors", 0, Read),
 			4: Uint32Field("DownstreamPloamMessageCount", 0, Read),
 			5: Uint32Field("RangingTimeMessageCount", 0, Read),

@@ -43,7 +43,7 @@ func NewTCont(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: Uint16Field("AllocId", 0, Read|Write),
 			2: ByteField("Deprecated", 0, Read),
 			3: ByteField("Policy", 0, Read|Write),

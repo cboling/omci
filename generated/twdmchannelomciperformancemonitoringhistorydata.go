@@ -51,7 +51,7 @@ func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
 			3: Uint32Field("OmciBaselineMessageCount", 0, Read),
 			4: Uint32Field("OmciExtendedMessageCount", 0, Read),
-			5: Uint32Field("OmciMicErrorCount:", 0, Read),
+			5: Uint32Field("OmciMicErrorCount", 0, Read),
 		},
 	}
 	entity.computeAttributeMask()

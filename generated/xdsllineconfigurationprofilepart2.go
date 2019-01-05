@@ -45,7 +45,7 @@ func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntityDe
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read|SetByCreate),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
 			2: Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|Write|SetByCreate),
 			3: Uint16Field("DownstreamDownshiftNoiseMargin", 0, Read|Write|SetByCreate),

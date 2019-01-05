@@ -43,7 +43,7 @@ func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntityDefinition
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId:", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read),
 			1: Uint16Field("CircuitIdPrefix", 0, Read|Write),
 			2: ByteField("FallbackPolicy", 0, Read|Write),
 			3: Uint16Field("AuthServer1", 0, Read|Write),
