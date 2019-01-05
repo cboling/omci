@@ -633,7 +633,6 @@ func TestMibUploadRequestDecode(t *testing.T) {
 func TestMibUploadRequestSerialize(t *testing.T) {
 	// TODO:Implement
 }
-
 func TestMibUploadResponse(t *testing.T) {
 	goodMessage := "03602d0a00020000011200000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -661,7 +660,6 @@ func TestMibUploadResponse(t *testing.T) {
 func TestMibUploadResponseSerialize(t *testing.T) {
 	// TODO:Implement
 }
-
 func TestMibUploadNextRequestDecode(t *testing.T) {
 	goodMessage := "02864e0a00020000003a00000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -889,6 +887,7 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 
 // TODO: Create request/response tests for all of the following types
 //me.Reboot, msgRequest := '0001590a01000000000000000000000000000000000000000000000000000000000000000000000000000028'
+//			msgResponse: '023c390a01000000000000000000000000000000000000000000000000000000000000000000000000000028005999e3'
 //me.GetNext,
 //me.GetCurrentData,
 //me.SetTable}
