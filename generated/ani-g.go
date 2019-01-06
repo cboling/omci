@@ -50,7 +50,7 @@ func NewAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 			3: Uint16Field("GemBlockLength", 0, Read|Write),
 			4: ByteField("PiggybackDbaReporting", 0, Read),
 			5: ByteField("Deprecated", 0, Read),
-			6: ByteField("SignalFailThreshold", 0, Read|Write),
+			6: ByteField("SignalFailthreshold", 0, Read|Write),
 			7: ByteField("SignalDegradeSdThreshold", 0, Read|Write),
 			8: ByteField("Arc", 0, Read|Write),
 			9: ByteField("ArcInterval", 0, Read|Write),

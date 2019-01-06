@@ -49,7 +49,7 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) 
 			3: Uint16Field("VoiceClassSheddingInterval", 0, Read|Write),
 			4: Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write),
 			5: Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write),
-			6: Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write),
+			6: Uint16Field("DigitalSubscriberLineclassSheddingInterval", 0, Read|Write),
 			7: Uint16Field("AtmClassSheddingInterval", 0, Read|Write),
 			8: Uint16Field("CesClassSheddingInterval", 0, Read|Write),
 			9: Uint16Field("FrameClassSheddingInterval", 0, Read|Write),
