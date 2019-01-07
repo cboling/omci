@@ -44,7 +44,7 @@ const (
 	// Device Identifiers
 	_                         = iota
 	BaselineIdent DeviceIdent = 0x0A // All G-PON OLTs and ONUs support the baseline message set
-	ExtendedIdent             = 0x0B
+	ExtendedIdent DeviceIdent = 0x0B
 )
 
 var OmciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
