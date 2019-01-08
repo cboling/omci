@@ -2987,3 +2987,28 @@ func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	}
 	return errors.New("need to implement") // TODO: Fix me when extended messages supported)
 }
+
+/////////////////////////////////////////////////////////////////////////////
+//
+type UnsupportedMessageTypeResponse struct {
+	MeBasePacket
+	Result me.Results
+}
+
+func (omci *UnsupportedMessageTypeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	return errors.New("you should never really decode this")
+}
+
+func (omci *UnsupportedMessageTypeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+	// Basic (common) OMCI Header is 8 octets, 10
+	err := omci.MeBasePacket.SerializeTo(b)
+	if err != nil {
+		return err
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	return nil
+}
