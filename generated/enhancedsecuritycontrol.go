@@ -38,9 +38,9 @@ func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntityDefinition, 
 		ClassID:  332,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
 			GetNext,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

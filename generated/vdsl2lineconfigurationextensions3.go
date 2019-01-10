@@ -38,10 +38,10 @@ func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntityDe
 		ClassID:  410,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

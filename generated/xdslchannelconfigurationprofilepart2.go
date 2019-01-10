@@ -38,10 +38,10 @@ func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntit
 		ClassID:  412,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

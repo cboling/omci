@@ -38,8 +38,8 @@ func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 		ClassID:  160,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

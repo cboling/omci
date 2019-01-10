@@ -38,21 +38,21 @@ func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntityDefinit
 		ClassID:  300,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("MdPointer", 0, Read|Write|SetByCreate),
-			2: ByteField("ShortMaNameFormat", 0, Read|Write|SetByCreate),
+			1: Uint16Field("MdPointer", 0, Read|SetByCreate|Write),
+			2: ByteField("ShortMaNameFormat", 0, Read|SetByCreate|Write),
 			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, Read|Write),
-			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|Write|SetByCreate),
+			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|SetByCreate|Write),
 			5: MultiByteField("AssociatedVlans", 24, nil, Read|Write),
-			6: ByteField("MhfCreation", 0, Read|Write|SetByCreate),
-			7: ByteField("SenderIdPermission", 0, Read|Write|SetByCreate),
+			6: ByteField("MhfCreation", 0, Read|SetByCreate|Write),
+			7: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

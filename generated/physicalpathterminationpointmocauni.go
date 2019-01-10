@@ -38,8 +38,8 @@ func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity
 		ClassID:  162,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

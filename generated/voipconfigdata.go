@@ -38,8 +38,8 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  138,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

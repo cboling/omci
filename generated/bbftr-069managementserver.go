@@ -38,8 +38,8 @@ func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition,
 		ClassID:  340,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

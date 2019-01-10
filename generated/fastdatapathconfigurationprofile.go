@@ -38,10 +38,10 @@ func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntityDef
 		ClassID:  433,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

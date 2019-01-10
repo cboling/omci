@@ -38,8 +38,8 @@ func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntityD
 		ClassID:  83,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

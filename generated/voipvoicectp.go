@@ -38,18 +38,18 @@ func NewVoipVoiceCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  139,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("UserProtocolPointer", 0, Read|Write|SetByCreate),
-			2: Uint16Field("PptpPointer", 0, Read|Write|SetByCreate),
-			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|Write|SetByCreate),
-			4: ByteField("SignallingCode", 0, Read|Write|SetByCreate),
+			1: Uint16Field("UserProtocolPointer", 0, Read|SetByCreate|Write),
+			2: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write),
+			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|SetByCreate|Write),
+			4: ByteField("SignallingCode", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

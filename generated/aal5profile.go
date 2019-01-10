@@ -38,17 +38,17 @@ func NewAal5Profile(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  16,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("MaxCpcsPduSize", 0, Read|Write|SetByCreate),
-			2: ByteField("AalMode", 0, Read|Write|SetByCreate),
-			3: ByteField("SscsType", 0, Read|Write|SetByCreate),
+			1: Uint16Field("MaxCpcsPduSize", 0, Read|SetByCreate|Write),
+			2: ByteField("AalMode", 0, Read|SetByCreate|Write),
+			3: ByteField("SscsType", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

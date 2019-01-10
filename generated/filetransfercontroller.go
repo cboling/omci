@@ -38,8 +38,8 @@ func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, e
 		ClassID:  318,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

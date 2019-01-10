@@ -38,8 +38,8 @@ func NewUniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  264,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

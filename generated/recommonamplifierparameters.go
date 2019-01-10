@@ -38,8 +38,8 @@ func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntityDefiniti
 		ClassID:  328,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

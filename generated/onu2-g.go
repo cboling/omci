@@ -38,8 +38,8 @@ func NewOnu2G(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  257,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

@@ -38,8 +38,8 @@ func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntityDefini
 		ClassID:  329,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

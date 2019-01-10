@@ -38,8 +38,8 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  7,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Get,
 			DownloadSection,
+			Get,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

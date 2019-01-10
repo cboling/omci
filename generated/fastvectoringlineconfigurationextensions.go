@@ -38,10 +38,10 @@ func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedE
 		ClassID:  434,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

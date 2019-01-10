@@ -38,10 +38,10 @@ func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntityDefinit
 		ClassID:  148,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

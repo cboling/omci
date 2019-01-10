@@ -38,8 +38,8 @@ func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntityDef
 		ClassID:  336,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

@@ -38,15 +38,15 @@ func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntityDefinit
 		ClassID:  400,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("Mtu", 0, Read|Write|SetByCreate),
+			1: Uint16Field("Mtu", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

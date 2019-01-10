@@ -38,8 +38,8 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) 
 		ClassID:  133,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

@@ -38,11 +38,11 @@ func NewOnuG(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  256,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
-			Test,
-			SynchronizeTime,
 			Reboot,
+			Set,
+			SynchronizeTime,
+			Test,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

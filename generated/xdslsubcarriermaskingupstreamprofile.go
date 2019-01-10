@@ -38,15 +38,15 @@ func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntit
 		ClassID:  109,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint64Field("UpstreamSubcarrierMask", 0, Read|Write|SetByCreate),
+			1: Uint64Field("UpstreamSubcarrierMask", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

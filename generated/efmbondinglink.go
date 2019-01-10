@@ -38,16 +38,16 @@ func NewEfmBondingLink(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  420,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("AssociatedGroupMeId", 0, Read|Write|SetByCreate),
-			2: ByteField("LinkAlarmEnable", 0, Read|Write|SetByCreate),
+			1: Uint16Field("AssociatedGroupMeId", 0, Read|SetByCreate|Write),
+			2: ByteField("LinkAlarmEnable", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

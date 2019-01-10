@@ -38,8 +38,8 @@ func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntityDefinition, er
 		ClassID:  316,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 			Test,
 		},
 		AllowedAttributeMask: 0,

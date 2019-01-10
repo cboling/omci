@@ -38,13 +38,13 @@ func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  2,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
 			GetAllAlarms,
 			GetAllAlarmsNext,
+			MibReset,
 			MibUpload,
 			MibUploadNext,
-			MibReset,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

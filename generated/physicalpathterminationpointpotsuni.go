@@ -38,8 +38,8 @@ func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity
 		ClassID:  53,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 			Test,
 		},
 		AllowedAttributeMask: 0,

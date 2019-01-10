@@ -38,18 +38,18 @@ func NewTcpUdpConfigData(params ...ParamData) (IManagedEntityDefinition, error) 
 		ClassID:  136,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("PortId", 0, Read|Write|SetByCreate),
-			2: ByteField("Protocol", 0, Read|Write|SetByCreate),
-			3: ByteField("TosDiffservField", 0, Read|Write|SetByCreate),
-			4: Uint16Field("IpHostPointer", 0, Read|Write|SetByCreate),
+			1: Uint16Field("PortId", 0, Read|SetByCreate|Write),
+			2: ByteField("Protocol", 0, Read|SetByCreate|Write),
+			3: ByteField("TosDiffservField", 0, Read|SetByCreate|Write),
+			4: Uint16Field("IpHostPointer", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

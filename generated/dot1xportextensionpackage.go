@@ -38,8 +38,8 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 		ClassID:  290,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

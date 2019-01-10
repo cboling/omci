@@ -38,9 +38,9 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, err
 		ClassID:  301,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
 			GetNext,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

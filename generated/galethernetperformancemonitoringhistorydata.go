@@ -38,16 +38,16 @@ func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 		ClassID:  276,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
 			1: ByteField("IntervalEndTime", 0, Read),
-			2: Uint16Field("ThresholdData12Id", 0, Read|Write|SetByCreate),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write),
 			3: Uint32Field("DiscardedFrames", 0, Read),
 		},
 	}

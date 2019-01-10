@@ -38,10 +38,10 @@ func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntityDefinition, e
 		ClassID:  147,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

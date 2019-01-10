@@ -38,8 +38,8 @@ func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntit
 		ClassID:  82,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

@@ -38,9 +38,9 @@ func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  158,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
 			GetNext,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

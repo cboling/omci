@@ -38,10 +38,10 @@ func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefi
 		ClassID:  432,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

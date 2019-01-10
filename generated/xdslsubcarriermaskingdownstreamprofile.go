@@ -38,15 +38,15 @@ func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEnt
 		ClassID:  108,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, Read|Write|SetByCreate),
+			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, Read|SetByCreate|Write),
 			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, Read|Write),
 			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, Read|Write),
 			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, Read|Write),

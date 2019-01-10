@@ -38,8 +38,8 @@ func NewOltG(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  131,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

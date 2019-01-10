@@ -38,8 +38,8 @@ func NewPriorityQueue(params ...ParamData) (IManagedEntityDefinition, error) {
 		ClassID:  277,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
 			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{

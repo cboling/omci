@@ -38,17 +38,17 @@ func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntityDefinition, er
 		ClassID:  84,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: MultiByteField("VlanFilterList", 24, nil, Read|Write|SetByCreate),
-			2: ByteField("ForwardOperation", 0, Read|Write|SetByCreate),
-			3: ByteField("NumberOfEntries", 0, Read|Write|SetByCreate),
+			1: MultiByteField("VlanFilterList", 24, nil, Read|SetByCreate|Write),
+			2: ByteField("ForwardOperation", 0, Read|SetByCreate|Write),
+			3: ByteField("NumberOfEntries", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()

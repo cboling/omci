@@ -38,19 +38,19 @@ func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEnti
 		ClassID:  78,
 		EntityID: eid,
 		MessageTypes: []MsgType{
-			Set,
-			Get,
 			Create,
 			Delete,
+			Get,
+			Set,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("UpstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			2: Uint16Field("UpstreamVlanTagTciValue", 0, Read|Write|SetByCreate),
-			3: ByteField("DownstreamVlanTaggingOperationMode", 0, Read|Write|SetByCreate),
-			4: ByteField("AssociationType", 0, Read|Write|SetByCreate),
-			5: Uint16Field("AssociatedMePointer", 0, Read|Write|SetByCreate),
+			1: ByteField("UpstreamVlanTaggingOperationMode", 0, Read|SetByCreate|Write),
+			2: Uint16Field("UpstreamVlanTagTciValue", 0, Read|SetByCreate|Write),
+			3: ByteField("DownstreamVlanTaggingOperationMode", 0, Read|SetByCreate|Write),
+			4: ByteField("AssociationType", 0, Read|SetByCreate|Write),
+			5: Uint16Field("AssociatedMePointer", 0, Read|SetByCreate|Write),
 		},
 	}
 	entity.computeAttributeMask()
