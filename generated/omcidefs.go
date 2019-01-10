@@ -26,6 +26,37 @@ import (
 	"math/bits"
 )
 
+// DeviceIdent conveys the OMCI message format (Baseline or extended)
+type DeviceIdent byte
+
+const (
+	// Device Identifiers
+	_                         = iota
+	BaselineIdent DeviceIdent = 0x0A // All G-PON OLTs and ONUs support the baseline message set
+	ExtendedIdent DeviceIdent = 0x0B
+)
+
+func (di DeviceIdent) String() string {
+	switch di {
+	default:
+		return "Unknown"
+
+	case BaselineIdent:
+		return "Baseline"
+
+	case ExtendedIdent:
+		return "Extended"
+	}
+}
+
+// MaxBaselineLength is the maximum number of octets allowed in an OMCI Baseline
+// message.  Depending on the adapter, it may or may not include the
+const MaxBaselineLength = 48
+
+// MaxExtendedLength is the maximum number of octets allowed in an OMCI Extended
+// message (including header).
+const MaxExtendedLength = 1980
+
 // MsgType represents a OMCI message-type
 type MsgType byte
 
@@ -256,7 +287,7 @@ type IManagedEntityDefinition interface {
 type BaseManagedEntityDefinition struct {
 	Name                 string
 	ClassID              uint16
-	EntityID             uint16       // TODO: Move to be inside attributes
+	EntityID             uint16       // TODO: Move to be inside attributes?
 	MessageTypes         []MsgType
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
