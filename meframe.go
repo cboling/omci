@@ -581,29 +581,18 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 						meLayer.Attributes[attrDef.Name] = attrValue
 						payloadAvailable -= attrDef.Size
 
+						// If it is a table, set up our getNextResponses now
+						if attrDef.IsTableAttribute() {
+						}
+
 					} else if opt.failIfTruncated {
 						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
 							attrDef.GetName())
 						return nil, errors.New(msg)
 					} else {
-						if attrDef.IsTableAttribute() {
-							//// TODO: Encode extras
-							//payloadAvailable = int(maxPayload)
-							//
-							//meLayer := &SetRequest{
-							//	MeBasePacket: MeBasePacket{
-							//		EntityClass:    m.ClassId,
-							//		EntityInstance: m.InstanceId,
-							//	},
-							//	AttributeMask: 0,
-							//	Attributes:    make(me.AttributeValueMap),
-							//}
-							//results = append(results, meLayer)
-							//// Back up indexing by one and retry
-							//attrIndex--
-						} else {
-
-						}
+						// Add to existing 'failed' mask and update result
+						meLayer.FailedAttributeMask |= 1 << (16 - attrIndex)
+						meLayer.Result = me.AttributeFailure
 					}
 				}
 			}
