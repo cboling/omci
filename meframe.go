@@ -20,9 +20,9 @@
 package omci
 
 import (
-	me "./generated"
 	"errors"
 	"fmt"
+	me "github.com/cboling/omci/generated"
 )
 
 type options struct {
@@ -52,14 +52,53 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 	}
 }
 
-// FailIfTruncated determines whether a request encode a frame that does not
-// have enough room for all requested options should return an error.
+// FailIfTruncated determines whether a request to encode a frame that does
+// not have enough room for all requested options should fail and return an
+// error.
 //
-// If set to 'false', only Attributes that can fit will be encoded into the
-// request and if the message type supports it, an appropriate status code
-// and failed-attribute-flag fields will be set accordingly
+// If set to 'false', the behaviour depends on the message type/operation
+// requested. The table below provides more information:
 //
-// If set to 'true', no object is returned and an error is provided.
+//   Request Type	Behavour
+//	 ------------------------------------------------------------------------
+//	 CreateRequest  A single CreateRequest struct is always returned as the
+//                  CreateRequest message does not have an Attributes Mask
+//                  field and a Baseline OMCI message is large enough to
+//                  support all Set-By-Create attributes.
+//
+//   SetRequest		If multiple OMCI frames will be needed to support setting
+//					all of the requested attributes, multiple SetRequest
+//					structs will be returned with Attributes encoded in
+//					decreasing Attribute mask bit order. Since this is an
+//					operation that should only occur on an OLT, it is the
+//					responsibility for the OLT application to clone the OMCI
+//					structure returned should it wish to send more than the
+//					initial SetRequest in the returned array.
+//
+//   GetResponse	If multiple OMCI response frames are needed to return
+//					all requested attributes, multiple GetResponse structs
+//					will be returned. Since this is an operation that should
+//					only occur on an ONU, there are several ways in which
+//					the responses will be encoded.
+//
+//					If this is an ME that simply has simple attributes that
+//					when combined will exceed the OMCI frame size, the first
+//					(and only) GetResponse struct will be encoded with as many
+//					attributes as possible and the Results field set to 1001
+//					(AttributeFailure) and the FailedAttributeMask field
+//					set to the attributes that could not be returned
+//
+//					If this is an ME with an attribute that is a table, the
+//					first GetResponse struct will return the size of the
+//					attribute and the following GetResponse structs will
+//					contain the attribute data. The ONU application is
+//					responsible for stashing these extra struct(s) away in
+//					anticipation of possible GetNext Requests occuring for
+//					the attribute.  See the discussion on Table Attributes
+//					in the GetResponse section of ITU G.988 for more
+//					information.
+//
+// If set to 'true', no struct(s) are returned and an error is provided.
 //
 // The default value is 'false'
 func FailIfTruncated(f bool) FrameOption {
@@ -80,14 +119,13 @@ func AttributeMask(m uint16) FrameOption {
 // IManagedEntity provides an interface definition for a simplified ME that can
 // be used in a variety of applications (MIB database, ONU driver, OLT application, ...)
 // where the serialization into a packet may not always be desired.
-
 type IManagedEntity interface {
 	GetClassId() uint16
 	GetInstanceId() uint16
 	SetInstanceId(uint16) error
 	GetAttributesMap() *me.AttributeValueMap
 	GetManagedEntityDefinition() (me.IManagedEntityDefinition, error)
-	EncodeFrame(messageType me.MsgType, opt ...FrameOption) (*OMCI, interface{}, error)
+	EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, []interface{}, error)
 }
 
 // ManagedEntity is intended to be a lighter weight version of a specific managed
@@ -100,10 +138,42 @@ type ManagedEntity struct {
 	Attributes me.AttributeValueMap
 }
 
+func NewManagedEntity(meDef me.IManagedEntityDefinition, params ...me.ParamData) (*ManagedEntity, error) {
+	m := &ManagedEntity{
+		ClassId: 	meDef.GetClassID(),
+		InstanceId:	meDef.GetEntityID(),
+		Attributes: make(me.AttributeValueMap),
+	}
+	if len(params) > 0 {
+		m.InstanceId = params[0].EntityID
+		m.Attributes = params[0].Attributes
+	}
+	// TODO: Not done.  Will this work?
+
+	return m, errors.New("todo: not fully implemented yet")
+}
+
 // String provides a simple string that describes this struct
 func (m *ManagedEntity) String() string {
 	return fmt.Sprintf("ManagedEntity: %v/%v (%#x/%#x): Attributes: %v",
 		m.ClassId, m.ClassId, m.InstanceId, m.InstanceId, m.Attributes)
+}
+
+func (m *ManagedEntity) GetClassId() uint16 {
+	return m.ClassId
+}
+
+func (m *ManagedEntity) GetInstanceId() uint16 {
+	return m.InstanceId
+}
+
+func (m *ManagedEntity) SetInstanceId(id uint16) error {
+	m.InstanceId = id
+	return nil
+}
+
+func (m *ManagedEntity) GetAttributesMap() me.AttributeValueMap {
+	return m.Attributes
 }
 
 // GetManagedEntityDefinition returns a definition of what message types this
@@ -117,6 +187,17 @@ func (m *ManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinitio
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
 func (m *ManagedEntity) EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, interface{}, error) {
+	// Check for message type support
+	msgType := me.MsgType(messageType & me.MsgTypeMask)
+	meDefinition, err := m.GetManagedEntityDefinition()
+	if err != nil {
+		return nil, nil, err
+	} else if !me.SupportsMsgType(meDefinition, msgType) {
+		msg := fmt.Sprintf("managed entity %v does not support %v Message-Type",
+			meDefinition.GetName(), msgType)
+		return nil, nil, errors.New(msg)
+	}
+	// Decode options
 	opts := defaultFrameOptions
 	for _, o := range opt {
 		o(&opts)
@@ -128,7 +209,6 @@ func (m *ManagedEntity) EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI
 		DeviceIdentifier: opts.frameFormat,
 	}
 	var meInfo interface{}
-	var err error
 
 	// Encode message type specific operation
 	switch messageType {
@@ -264,7 +344,6 @@ func (m *ManagedEntity) createRequestFrame(opt options) (interface{}, error) {
 }
 
 func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
-	// Common for all MEs
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
@@ -274,9 +353,7 @@ func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-//Delete                MsgType = 6
 func (m *ManagedEntity) deleteRequestFrame(opt options) (interface{}, error) {
-	// Common for all MEs
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
@@ -287,24 +364,14 @@ func (m *ManagedEntity) deleteRequestFrame(opt options) (interface{}, error) {
 }
 
 func (m *ManagedEntity) deleteResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
-	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		Result: opt.results,
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
@@ -312,20 +379,84 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Common for all MEs
-	meLayer := &CreateRequest{
+	results := make([]*SetRequest, 0)
+	meDefinition, _ := m.GetManagedEntityDefinition()
+	attrDefs := meDefinition.GetAttributeDefinitions()
+	attrMap := m.GetAttributesMap()
+
+	// Get payload space available
+	maxPayload := m.maxPacketAvailable(opt)
+	payloadAvailable := int(maxPayload)
+
+	meLayer := &SetRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		AttributeMask: 0,
+		Attributes:    make(me.AttributeValueMap),
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	results = append(results, meLayer)
 
-	// TODO: Lots of work to do
+	for mask != 0 {
+		// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
+		var attrRetry bool
+		var attrIndex uint
+		for attrIndex = 1; attrIndex <= 16; attrIndex++ {
+			// Is this attribute requested
+			if mask & (1 << (16-attrIndex)) != 0 {
+				// Get definitions since we need the name
+				attrDef, ok := attrDefs[attrIndex]
+				if !ok {
+					msg := fmt.Sprintf("Unexpected error, index %v not valued for ME %v",
+						attrIndex, meDefinition.GetName())
+					return nil, errors.New(msg)
+				}
+				var attrValue interface{}
+				attrValue, ok = attrMap[attrDef.Name]
+				if !ok {
+					msg := fmt.Sprintf("Unexpected error, attribute %v not provided in ME %v: %v",
+						attrDef.GetName(), meDefinition.GetName(), m)
+					return nil, errors.New(msg)
 
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+				}
+				// Is space available?
+				if attrDef.Size <= payloadAvailable {
+					// Mark bit handled
+					mask &= ^(1 << (16 - attrIndex))
+					meLayer.AttributeMask |= 1 << (16 - attrIndex)
+					meLayer.Attributes[attrDef.Name] = attrValue
+					payloadAvailable -= attrDef.Size
+					attrRetry = false
+
+				} else if opt.failIfTruncated || attrRetry {
+					msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
+						attrDef.GetName())
+					return nil, errors.New(msg)
+				} else {
+					// Start another SetRequest frame
+					payloadAvailable = int(maxPayload)
+
+					meLayer := &SetRequest{
+						MeBasePacket: MeBasePacket{
+							EntityClass:    m.ClassId,
+							EntityInstance: m.InstanceId,
+						},
+						AttributeMask: 0,
+						Attributes:    make(me.AttributeValueMap),
+					}
+					results = append(results, meLayer)
+					// Back up indexing by one and retry
+					attrRetry = true
+					attrIndex--
+				}
+			}
+		}
+	}
+	if err == nil && len(results) == 0 {
+		return nil, errors.New("no attributes encoded for SetRequest")
+	}
+	return results, nil
 }
 
 func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
@@ -334,7 +465,7 @@ func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -355,7 +486,7 @@ func (m *ManagedEntity) getRequestFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -376,7 +507,7 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -397,7 +528,7 @@ func (m *ManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, erro
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetAllAlarmsRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -418,7 +549,7 @@ func (m *ManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, err
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetAllAlarmsResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -439,7 +570,7 @@ func (m *ManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetAllAlarmsNextRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -460,7 +591,7 @@ func (m *ManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{},
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetAllAlarmsNextResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -481,7 +612,7 @@ func (m *ManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibUploadRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -502,7 +633,7 @@ func (m *ManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error)
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibUploadResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -523,7 +654,7 @@ func (m *ManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, err
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -544,7 +675,7 @@ func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, er
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibUploadNextResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -560,24 +691,14 @@ func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, er
 }
 
 func (m *ManagedEntity) mibResetRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) {
@@ -586,7 +707,7 @@ func (m *ManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &MibResetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -607,7 +728,7 @@ func (m *ManagedEntity) alarmNotificationFrame(opt options) (interface{}, error)
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &AlarmNotificationMsg{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -628,7 +749,7 @@ func (m *ManagedEntity) attributeValueChangeFrame(opt options) (interface{}, err
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &AttributeValueChangeMsg{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -649,7 +770,7 @@ func (m *ManagedEntity) testRequestFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &TestRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -670,7 +791,7 @@ func (m *ManagedEntity) testResponseFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &TestResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -691,7 +812,7 @@ func (m *ManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interfac
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &StartSoftwareDownloadRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -712,7 +833,7 @@ func (m *ManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interfa
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &StartSoftwareDownloadResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -733,7 +854,7 @@ func (m *ManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, e
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &DownloadSectionRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -754,7 +875,7 @@ func (m *ManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &DownloadSectionResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -775,7 +896,7 @@ func (m *ManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &EndSoftwareDownloadRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -796,7 +917,7 @@ func (m *ManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &EndSoftwareDownloadResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -817,7 +938,7 @@ func (m *ManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &ActivateSoftwareRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -838,7 +959,7 @@ func (m *ManagedEntity) activateSoftwareResponseFrame(opt options) (interface{},
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &ActivateSoftwareResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -859,7 +980,7 @@ func (m *ManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, er
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &CommitSoftwareRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -880,7 +1001,7 @@ func (m *ManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, e
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &CommitSoftwareResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -901,7 +1022,7 @@ func (m *ManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, e
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &SynchronizeTimeRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -922,7 +1043,7 @@ func (m *ManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, 
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &SynchronizeTimeResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -943,7 +1064,7 @@ func (m *ManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &RebootRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -964,7 +1085,7 @@ func (m *ManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &RebootResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -985,7 +1106,7 @@ func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetNextRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1006,7 +1127,7 @@ func (m *ManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetNextResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1027,7 +1148,7 @@ func (m *ManagedEntity) testResultFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &TestResultMsg{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1048,7 +1169,7 @@ func (m *ManagedEntity) getCurrentDataRequestFrame(opt options) (interface{}, er
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetCurrentDataRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1069,7 +1190,7 @@ func (m *ManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, e
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &GetCurrentDataResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1085,12 +1206,15 @@ func (m *ManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, e
 }
 
 func (m *ManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
+	if opt.frameFormat != ExtendedIdent {
+		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
+	}
 	mask, err := m.reduceMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &SetTableRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
@@ -1106,12 +1230,15 @@ func (m *ManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
 }
 
 func (m *ManagedEntity) setTableResponseFrame(opt options) (interface{}, error) {
+	if opt.frameFormat != ExtendedIdent {
+		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
+	}
 	mask, err := m.reduceMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
-	meLayer := &CreateRequest{
+	meLayer := &SetTableResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
