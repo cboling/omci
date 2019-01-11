@@ -98,7 +98,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 type CreateResponse struct {
 	MeBasePacket
 	Result                 me.Results
-	AttributeExecutionMask byte
+	AttributeExecutionMask uint16
 }
 
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -118,7 +118,7 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 		return errors.New("managed entity does not support the Create Message-Type")
 	}
 	omci.Result = me.Results(data[4])
-	omci.AttributeExecutionMask = data[5]
+	omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[5:])
 	return nil
 }
 
@@ -149,7 +149,7 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 		return err
 	}
 	bytes[0] = byte(omci.Result)
-	bytes[1] = omci.AttributeExecutionMask
+	binary.BigEndian.PutUint16(bytes[1:], omci.AttributeExecutionMask)
 	return nil
 }
 
@@ -419,7 +419,6 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 type GetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
-	Attributes    me.AttributeValueMap
 }
 
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -439,23 +438,6 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		return errors.New("managed entity does not support Get Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
-
-	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
-	if err != nil {
-		return err
-	}
-	// Validate all attributes support Read
-	for attrName := range omci.Attributes {
-		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
-		if err != nil {
-			return err
-		}
-		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
-			return errors.New(msg)
-		}
-	}
 	return nil
 }
 
@@ -481,25 +463,12 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if !me.SupportsMsgType(meDefinition, me.Get) {
 		return errors.New("managed entity does not support Get Message-Type")
 	}
-	// Validate all attributes support read
-	for attrName := range omci.Attributes {
-		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
-		if err != nil {
-			return err
-		}
-		if !me.SupportsAttributeAccess(attr, me.Read) {
-			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
-			return errors.New(msg)
-		}
-	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
-
-	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////

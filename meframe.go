@@ -30,15 +30,18 @@ type options struct {
 	failIfTruncated 	bool
 	attributeMask   	uint16
 	results         	me.Results	 // Common for many responses
-	attrExecutionMask   uint8		 // Create Response Only if results == 3
+	attrExecutionMask   uint16		 // Create Response Only if results == 3 or
+									 // Set Response only if results == 0
+	unsupportedMask		uint16		 // Set Response only if results == 9
 }
 
 var defaultFrameOptions = options{
 	frameFormat:     	BaselineIdent,
 	failIfTruncated: 	false,
 	attributeMask:   	0xFFFF,
-	results:         	me.Success,	// TODO: Add setter funcs for these
+	results:         	me.Success,
 	attrExecutionMask: 	0,
+	unsupportedMask:	0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -90,7 +93,7 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 //
 //					If this is an ME with an attribute that is a table, the
 //					first GetResponse struct will return the size of the
-//					attribute and the following GetResponse structs will
+//					attribute and the following GetNextResponse structs will
 //					contain the attribute data. The ONU application is
 //					responsible for stashing these extra struct(s) away in
 //					anticipation of possible GetNext Requests occuring for
@@ -113,6 +116,22 @@ func FailIfTruncated(f bool) FrameOption {
 func AttributeMask(m uint16) FrameOption {
 	return func(o *options) {
 		o.attributeMask = m
+	}
+}
+
+// AttributeExecutionMask is used by the Create and Set Response frames to indicate
+// attributes that failed to be created/set.
+func AttributeExecutionMask(m uint16) FrameOption {
+	return func(o *options) {
+		o.attrExecutionMask = m
+	}
+}
+
+// AttributeUnsupportedMask is used by the Set Response frames to indicate attributes
+// that failed to be set by the ONU due to not being supported
+func AttributeUnsupportedMask(m uint16) FrameOption {
+	return func(o *options) {
+		o.unsupportedMask = m
 	}
 }
 
@@ -349,6 +368,10 @@ func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		Result:		opt.results,
+	}
+	if meLayer.Result == me.ParameterError {
+		meLayer.AttributeExecutionMask = opt.attrExecutionMask
 	}
 	return meLayer, nil
 }
@@ -454,30 +477,25 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 		}
 	}
 	if err == nil && len(results) == 0 {
+		// TODO: Is a Get request with no attributes valid?
 		return nil, errors.New("no attributes encoded for SetRequest")
 	}
 	return results, nil
 }
 
 func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
-	// Common for all MEs
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		Result:  opt.results,
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	if meLayer.Result == me.AttributeFailure {
+		meLayer.UnsupportedAttributeMask = opt.unsupportedMask
+		meLayer.FailedAttributeMask = opt.attrExecutionMask
+	}
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) getRequestFrame(opt options) (interface{}, error) {
@@ -485,20 +503,18 @@ func (m *ManagedEntity) getRequestFrame(opt options) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Common for all MEs
+	if mask == 0 {
+		// TODO: Is a Get request with no attributes valid?
+		return nil, errors.New("no attributes requested for GetRequest")
+	}
 	meLayer := &GetRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		AttributeMask: mask,
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
@@ -506,20 +522,94 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	// Common for all MEs
+	if mask == 0 {
+		// TODO: Is a Get request with no attributes valid?
+		return nil, errors.New("no attributes encoded for Get Response")
+	}
+	results := make([]*GetResponse, 0)
 	meLayer := &GetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		Result: 	   opt.results,
+		AttributeMask: 0,
+		Attributes:    make(me.AttributeValueMap),
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	if meLayer.Result == me.AttributeFailure {
+		meLayer.UnsupportedAttributeMask = opt.unsupportedMask
+		meLayer.FailedAttributeMask = opt.attrExecutionMask
+	}
+	// Encode whatever we can
+	if meLayer.Result == me.Success || meLayer.Result == me.AttributeFailure {
+		// Encode results
+		// Get payload space available
+		maxPayload := m.maxPacketAvailable(opt)
+		payloadAvailable := int(maxPayload)
+		meDefinition, _ := m.GetManagedEntityDefinition()
+		attrDefs := meDefinition.GetAttributeDefinitions()
+		attrMap := m.GetAttributesMap()
 
-	// TODO: Lots of work to do
+		results = append(results, meLayer)
 
-	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+		for mask != 0 {
+			// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
+			var attrIndex uint
+			for attrIndex = 1; attrIndex <= 16; attrIndex++ {
+				// Is this attribute requested
+				if mask&(1<<(16-attrIndex)) != 0 {
+					// Get definitions since we need the name
+					attrDef, ok := attrDefs[attrIndex]
+					if !ok {
+						msg := fmt.Sprintf("Unexpected error, index %v not valued for ME %v",
+							attrIndex, meDefinition.GetName())
+						return nil, errors.New(msg)
+					}
+					var attrValue interface{}
+					attrValue, ok = attrMap[attrDef.Name]
+					if !ok {
+						msg := fmt.Sprintf("Unexpected error, attribute %v not provided in ME %v: %v",
+							attrDef.GetName(), meDefinition.GetName(), m)
+						return nil, errors.New(msg)
+
+					}
+					// Is space available?
+					if attrDef.Size <= payloadAvailable {
+						// Mark bit handled
+						mask &= ^(1 << (16 - attrIndex))
+						meLayer.AttributeMask |= 1 << (16 - attrIndex)
+						meLayer.Attributes[attrDef.Name] = attrValue
+						payloadAvailable -= attrDef.Size
+
+					} else if opt.failIfTruncated {
+						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
+							attrDef.GetName())
+						return nil, errors.New(msg)
+					} else {
+						if attrDef.IsTableAttribute() {
+							//// TODO: Encode extras
+							//payloadAvailable = int(maxPayload)
+							//
+							//meLayer := &SetRequest{
+							//	MeBasePacket: MeBasePacket{
+							//		EntityClass:    m.ClassId,
+							//		EntityInstance: m.InstanceId,
+							//	},
+							//	AttributeMask: 0,
+							//	Attributes:    make(me.AttributeValueMap),
+							//}
+							//results = append(results, meLayer)
+							//// Back up indexing by one and retry
+							//attrIndex--
+						} else {
+
+						}
+					}
+				}
+			}
+		}
+	}
+	return results, nil
 }
 
 func (m *ManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
