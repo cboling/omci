@@ -51,7 +51,7 @@ func NewVoipLineStatus(params ...ParamData) (IManagedEntityDefinition, error) {
 			6: MultiByteField("VoipCall1DestAddr", 25, nil, Read, false, false, false, false),
 			7: MultiByteField("VoipCall2DestAddr", 25, nil, Read, false, false, false, false),
 			8: ByteField("VoipLineState", 0, Read, false, false, false, true),
-			9: ByteField("EmergencyCallStatus", 0, Read, false, false, false, true),
+			9: ByteField("EmergencyCallStatus", 0, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

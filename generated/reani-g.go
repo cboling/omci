@@ -45,8 +45,8 @@ func NewReAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
 			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2:  ByteField("OperationalState", 0, Read, false, false, false, true),
-			3:  ByteField("Arc", 0, Read|Write, false, false, false, true),
+			2:  ByteField("OperationalState", 0, Read, true, false, false, true),
+			3:  ByteField("Arc", 0, Read|Write, true, false, false, true),
 			4:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
 			5:  Uint16Field("OpticalSignalLevel", 0, Read, false, false, false, true),
 			6:  ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, false, true),

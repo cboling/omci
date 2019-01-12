@@ -45,7 +45,7 @@ func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntityDefini
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
 			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2: ByteField("OperationalState", 0, Read, false, false, false, true),
+			2: ByteField("OperationalState", 0, Read, true, false, false, true),
 			3: MultiByteField("InterdomainName", 25, nil, Read|Write, false, false, false, true),
 			4: Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, false, true),
 			5: Uint16Field("IanaAssignedPort", 0, Read, false, false, false, false),

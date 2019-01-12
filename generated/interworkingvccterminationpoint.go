@@ -54,7 +54,7 @@ func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntityDefi
 			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false, false),
 			7: ByteField("AalLoopbackConfiguration", 0, Read|Write, false, false, false, false),
 			8: ByteField("PptpCounter", 0, Read, false, false, false, true),
-			9: ByteField("OperationalState", 0, Read, false, false, false, true),
+			9: ByteField("OperationalState", 0, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

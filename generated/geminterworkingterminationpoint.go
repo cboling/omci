@@ -51,7 +51,7 @@ func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefi
 			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
 			4: Uint16Field("InterworkingTerminationPointPointer", 0, Read|SetByCreate|Write, false, false, false, false),
 			5: ByteField("PptpCounter", 0, Read, false, false, false, true),
-			6: ByteField("OperationalState", 0, Read, false, false, false, true),
+			6: ByteField("OperationalState", 0, Read, true, false, false, true),
 			7: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
 			8: ByteField("GalLoopbackConfiguration", 0, Read|Write, false, false, false, false),
 		},

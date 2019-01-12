@@ -52,7 +52,7 @@ func NewAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 			5:  ByteField("Deprecated", 0, Read, false, false, false, false),
 			6:  ByteField("SignalFailThreshold", 0, Read|Write, false, false, false, false),
 			7:  ByteField("SignalDegradeSdThreshold", 0, Read|Write, false, false, false, false),
-			8:  ByteField("Arc", 0, Read|Write, false, false, false, true),
+			8:  ByteField("Arc", 0, Read|Write, true, false, false, true),
 			9:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
 			10: Uint16Field("OpticalSignalLevel", 0, Read, false, false, false, true),
 			11: ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, false, true),

@@ -50,11 +50,11 @@ func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, e
 			4:  Uint16Field("LocalFileNamePointer", 0, Read|Write, false, false, false, false),
 			5:  Uint16Field("NetworkAddressPointer", 0, Read|Write, false, false, false, false),
 			6:  ByteField("FileTransferTrigger", 0, Read|Write, false, false, false, false),
-			7:  ByteField("FileTransferStatus", 0, Read, false, false, false, false),
+			7:  ByteField("FileTransferStatus", 0, Read, true, false, false, false),
 			8:  Uint16Field("GemIwtpPointer", 0, Read|Write, false, false, false, true),
 			9:  Uint16Field("Vlan", 0, Read|Write, false, false, false, true),
 			10: Uint32Field("FileSize", 0, Read|Write, false, false, false, true),
-			11: MultiByteField("DirectoryListingTable", 0, nil, Read, false, false, false, true),
+			11: MultiByteField("DirectoryListingTable", 0, nil, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

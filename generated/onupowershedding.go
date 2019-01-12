@@ -54,7 +54,7 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) 
 			8:  Uint16Field("CesClassSheddingInterval", 0, Read|Write, false, false, false, false),
 			9:  Uint16Field("FrameClassSheddingInterval", 0, Read|Write, false, false, false, false),
 			10: Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			11: Uint16Field("SheddingStatus", 0, Read, false, false, false, true),
+			11: Uint16Field("SheddingStatus", 0, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

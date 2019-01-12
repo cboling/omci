@@ -54,7 +54,7 @@ func NewSipAgentConfigData(params ...ParamData) (IManagedEntityDefinition, error
 			6:  Uint32Field("SipRegExpTime", 0, Read|Write, false, false, false, false),
 			7:  Uint32Field("SipReregHeadStartTime", 0, Read|Write, false, false, false, false),
 			8:  Uint16Field("HostPartUri", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("SipStatus", 0, Read, false, false, false, false),
+			9:  ByteField("SipStatus", 0, Read, true, false, false, false),
 			10: Uint16Field("SipRegistrar", 0, Read|SetByCreate|Write, false, false, false, false),
 			11: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false, false),
 			12: MultiByteField("SipResponseTable", 5, nil, Read|Write, false, false, false, true),

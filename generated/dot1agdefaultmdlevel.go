@@ -49,7 +49,7 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, err
 			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false, false),
 			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false, false),
 			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false, false),
-			5: ByteField("DefaultMdLevelTable", 0, Read|Write, false, false, false, false),
+			5: ByteField("DefaultMdLevelTable", 0, Read|Write, false, false, true, false),
 		},
 	}
 	entity.computeAttributeMask()

@@ -45,7 +45,7 @@ func NewOnu2G(params ...ParamData) (IManagedEntityDefinition, error) {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
 			1:  MultiByteField("EquipmentId", 20, nil, Read, false, false, false, true),
-			2:  ByteField("OpticalNetworkUnitManagementAndControlChannelOmccVersion", 0, Read, false, false, false, false),
+			2:  ByteField("OpticalNetworkUnitManagementAndControlChannelOmccVersion", 0, Read, true, false, false, false),
 			3:  Uint16Field("VendorProductCode", 0, Read, false, false, false, true),
 			4:  ByteField("SecurityCapability", 0, Read, false, false, false, false),
 			5:  ByteField("SecurityMode", 0, Read|Write, false, false, false, false),

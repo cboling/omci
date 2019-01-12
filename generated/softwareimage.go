@@ -44,12 +44,12 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: MultiByteField("Version", 14, nil, Read, false, false, false, false),
-			2: ByteField("IsCommitted", 0, Read, false, false, false, false),
-			3: ByteField("IsActive", 0, Read, false, false, false, false),
-			4: ByteField("IsValid", 0, Read, false, false, false, false),
-			5: MultiByteField("ProductCode", 25, nil, Read, false, false, false, true),
-			6: MultiByteField("ImageHash", 16, nil, Read, false, false, false, true),
+			1: MultiByteField("Version", 14, nil, Read, true, false, false, false),
+			2: ByteField("IsCommitted", 0, Read, true, false, false, false),
+			3: ByteField("IsActive", 0, Read, true, false, false, false),
+			4: ByteField("IsValid", 0, Read, true, false, false, false),
+			5: MultiByteField("ProductCode", 25, nil, Read, true, false, false, true),
+			6: MultiByteField("ImageHash", 16, nil, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

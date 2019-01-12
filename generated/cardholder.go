@@ -44,14 +44,14 @@ func NewCardholder(params ...ParamData) (IManagedEntityDefinition, error) {
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("ActualPlugInUnitType", 0, Read, false, false, false, false),
+			1: ByteField("ActualPlugInUnitType", 0, Read, true, false, false, false),
 			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write, false, false, false, false),
 			3: ByteField("ExpectedPortCount", 0, Read|Write, false, false, false, true),
 			4: MultiByteField("ExpectedEquipmentId", 20, nil, Read|Write, false, false, false, true),
-			5: MultiByteField("ActualEquipmentId", 20, nil, Read, false, false, false, true),
+			5: MultiByteField("ActualEquipmentId", 20, nil, Read, true, false, false, true),
 			6: ByteField("ProtectionProfilePointer", 0, Read, false, false, false, true),
 			7: ByteField("InvokeProtectionSwitch", 0, Read|Write, false, false, false, true),
-			8: ByteField("AlarmReportingControl", 0, Read|Write, false, false, false, true),
+			8: ByteField("AlarmReportingControl", 0, Read|Write, true, false, false, true),
 			9: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
 		},
 	}

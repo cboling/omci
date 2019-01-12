@@ -51,7 +51,7 @@ func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
 			4:  MultiByteField("Version", 14, nil, Read, false, false, false, false),
 			5:  Uint32Field("VendorId", 0, Read, false, false, false, true),
 			6:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			7:  ByteField("OperationalState", 0, Read, false, false, false, true),
+			7:  ByteField("OperationalState", 0, Read, true, false, false, true),
 			8:  ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false, false),
 			9:  MultiByteField("EquipmentId", 20, nil, Read, false, false, false, true),
 			10: ByteField("CardConfiguration", 0, Read|SetByCreate|Write, false, false, false, false),

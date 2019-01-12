@@ -60,7 +60,7 @@ func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefin
 			12: Uint16Field("PseudowireType", 0, Read|SetByCreate|Write, false, false, false, false),
 			13: ByteField("PseudowireControlWordPreference", 0, Read|SetByCreate|Write, false, false, false, true),
 			14: ByteField("AdministrativeState", 0, Read|Write, false, false, false, true),
-			15: ByteField("OperationalState", 0, Read, false, false, false, true),
+			15: ByteField("OperationalState", 0, Read, true, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

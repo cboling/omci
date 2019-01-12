@@ -59,7 +59,7 @@ func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinitio
 			11: Uint64Field("ExpectedCircuitId", 0, Read|Write, false, false, false, false),
 			12: Uint64Field("ReceivedCircuitId", 0, Read, false, false, false, false),
 			13: Uint16Field("ExceptionPolicy", 0, Read|Write, false, false, false, true),
-			14: ByteField("Arc", 0, Read|Write, false, false, false, true),
+			14: ByteField("Arc", 0, Read|Write, true, false, false, true),
 			15: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
 		},
 	}
