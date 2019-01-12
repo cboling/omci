@@ -42,7 +42,7 @@ func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

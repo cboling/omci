@@ -43,12 +43,12 @@ func NewUniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: Uint16Field("Deprecated", 0, Read|Write),
-			2: ByteField("AdministrativeState", 0, Read|Write),
-			3: ByteField("ManagementCapability", 0, Read),
-			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write),
-			5: Uint16Field("RelayAgentOptions", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: Uint16Field("Deprecated", 0, Read|Write, false, false, false, false),
+			2: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
+			3: ByteField("ManagementCapability", 0, Read, false, false, false, true),
+			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write, false, false, false, true),
+			5: Uint16Field("RelayAgentOptions", 0, Read|Write, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

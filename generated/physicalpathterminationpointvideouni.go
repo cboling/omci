@@ -43,12 +43,12 @@ func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("AdministrativeState", 0, Read|Write),
-			2: ByteField("OperationalState", 0, Read),
-			3: ByteField("Arc", 0, Read|Write),
-			4: ByteField("ArcInterval", 0, Read|Write),
-			5: ByteField("PowerControl", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
+			2: ByteField("OperationalState", 0, Read, false, false, false, true),
+			3: ByteField("Arc", 0, Read|Write, false, false, false, true),
+			4: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
+			5: ByteField("PowerControl", 0, Read|Write, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

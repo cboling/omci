@@ -32,26 +32,27 @@ type AttributeDefinitionMap map[uint]*AttributeDefinition
 
 // AttributeDefinition defines a single specific Managed Entity's attributes
 type AttributeDefinition struct {
-	Name       string
-	DefValue   interface{}
-	Size       int
-	Access     AttributeAccess
-	Constraint func(interface{}) error
-	Avc        bool // If true, an AVC notification can occur for the attribute
-	Tca        bool // If true, a threshold crossing alert alarm notification can occur for the attribute
-	Counter    bool // If true, this attribute is a PM counter
-	Optional   bool // If true, attribute is option, else mandatory
-	Deprecated bool //  If true, this attribute is deprecated and only 'read' operations (if-any) performed
+	Name         string
+	DefValue     interface{} // Note: Not supported yet
+	Size         int
+	Access       AttributeAccess
+	Constraint   func(interface{}) error
+	Avc          bool // If true, an AVC notification can occur for the attribute
+	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
+	Counter      bool // If true, this attribute is a PM counter
+	Optional     bool // If true, attribute is option, else mandatory
+	TableSupport bool // If true, attribute is a table
+	Deprecated   bool // If true, this attribute is deprecated and only 'read' operations (if-any) performed
 }
 
 func (attr *AttributeDefinition) String() string {
 	return fmt.Sprintf("Definition: %v: Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *AttributeDefinition) GetName() string             { return attr.Name }
-func (attr *AttributeDefinition) GetDefault() interface{}     { return attr.DefValue }
-func (attr *AttributeDefinition) GetSize() int                { return attr.Size }
-func (attr *AttributeDefinition) GetAccess() AttributeAccess  { return attr.Access }
+func (attr *AttributeDefinition) GetName() string            { return attr.Name }
+func (attr *AttributeDefinition) GetDefault() interface{}    { return attr.DefValue }
+func (attr *AttributeDefinition) GetSize() int               { return attr.Size }
+func (attr *AttributeDefinition) GetAccess() AttributeAccess { return attr.Access }
 func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
 	return attr.Constraint
 }
@@ -179,7 +180,7 @@ func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (
 // of maps have been randomized.
 func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
 	var keys []uint
-	for k:= range attrMap {
+	for k := range attrMap {
 		keys = append(keys, k)
 	}
 	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
@@ -189,29 +190,89 @@ func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 
-func ByteField(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 1, Access: access}
+func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         1,
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
-func Uint16Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 2, Access: access}
+func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         2,
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
-func Uint32Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 4, Access: access}
+func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         4,
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
-func Uint64Field(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 8, Access: access}
+func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         8,
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
-func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: int(size), Access: access}
+func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         int(size),
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
 // TODO: Need more fields...
-func UnknownField(name string, defVal uint16, access AttributeAccess) *AttributeDefinition {
-	return &AttributeDefinition{Name: name, DefValue: defVal, Size: 99999999, Access: access}
+func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
+	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         99999999,
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: tableSupport,
+		Optional:     optional,
+	}
 }
 
 ///////////////////////////////////////////////////////////////////////

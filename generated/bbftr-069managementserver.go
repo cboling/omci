@@ -43,10 +43,10 @@ func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("AdministrativeState", 0, Read|Write),
-			2: Uint16Field("AcsNetworkAddress", 0, Read|Write),
-			3: Uint16Field("AssociatedTag", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
+			2: Uint16Field("AcsNetworkAddress", 0, Read|Write, false, false, false, false),
+			3: Uint16Field("AssociatedTag", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

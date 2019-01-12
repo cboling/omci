@@ -45,9 +45,9 @@ func NewCesServiceProfile(params ...ParamData) (IManagedEntityDefinition, error)
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("CesBufferedCdvTolerance", 0, Read|SetByCreate|Write),
-			2: ByteField("ChannelAssociatedSignallingCas", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("CesBufferedCdvTolerance", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("ChannelAssociatedSignallingCas", 0, Read|SetByCreate|Write, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

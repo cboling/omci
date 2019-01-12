@@ -43,13 +43,13 @@ func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read),
-			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read),
-			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read),
-			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read),
-			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read),
-			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read, false, false, false, false),
+			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read, false, false, false, false),
+			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read, false, false, false, true),
+			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read, false, false, false, true),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read, false, false, false, true),
+			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

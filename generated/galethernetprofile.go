@@ -45,8 +45,8 @@ func NewGalEthernetProfile(params ...ParamData) (IManagedEntityDefinition, error
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("MaximumGemPayloadSize", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("MaximumGemPayloadSize", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

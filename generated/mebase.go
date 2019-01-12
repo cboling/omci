@@ -22,7 +22,7 @@ package generated
 import "fmt"
 
 type MeBase struct {
-	EntityClass    uint16
+	EntityClass uint16
 }
 
 func (msg *MeBase) String() string {

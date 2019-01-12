@@ -45,11 +45,11 @@ func NewVoipVoiceCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("UserProtocolPointer", 0, Read|SetByCreate|Write),
-			2: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write),
-			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|SetByCreate|Write),
-			4: ByteField("SignallingCode", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("UserProtocolPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: ByteField("SignallingCode", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

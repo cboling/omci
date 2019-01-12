@@ -45,12 +45,12 @@ func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntityDefinit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("ValidationScheme", 0, Read|Write),
-			2: MultiByteField("Username1", 25, nil, Read|Write),
-			3: MultiByteField("Password", 25, nil, Read|Write),
-			4: MultiByteField("Realm", 25, nil, Read|Write),
-			5: MultiByteField("Username2", 25, nil, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("ValidationScheme", 0, Read|Write, false, false, false, false),
+			2: MultiByteField("Username1", 25, nil, Read|Write, false, false, false, false),
+			3: MultiByteField("Password", 25, nil, Read|Write, false, false, false, false),
+			4: MultiByteField("Realm", 25, nil, Read|Write, false, false, false, false),
+			5: MultiByteField("Username2", 25, nil, Read|Write, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

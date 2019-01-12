@@ -45,8 +45,8 @@ func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntityDef
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("TpsTcTestmodeTpsTestmode", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

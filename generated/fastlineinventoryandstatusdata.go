@@ -42,14 +42,14 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntityDefin
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("ItuTG9701ProfileProfile", 0, Read),
-			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read),
-			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read),
-			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read),
-			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read),
-			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read),
-			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("ItuTG9701ProfileProfile", 0, Read, false, false, false, false),
+			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read, false, false, false, false),
+			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read, false, false, false, false),
+			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read, false, false, false, true),
+			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read, false, false, false, true),
+			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read, false, false, false, true),
+			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

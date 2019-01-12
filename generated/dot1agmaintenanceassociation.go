@@ -45,14 +45,14 @@ func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntityDefinit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("MdPointer", 0, Read|SetByCreate|Write),
-			2: ByteField("ShortMaNameFormat", 0, Read|SetByCreate|Write),
-			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, Read|Write),
-			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|SetByCreate|Write),
-			5: MultiByteField("AssociatedVlans", 24, nil, Read|Write),
-			6: ByteField("MhfCreation", 0, Read|SetByCreate|Write),
-			7: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("MdPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("ShortMaNameFormat", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, Read|Write, false, false, false, false),
+			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|SetByCreate|Write, false, false, false, false),
+			5: MultiByteField("AssociatedVlans", 24, nil, Read|Write, false, false, false, false),
+			6: ByteField("MhfCreation", 0, Read|SetByCreate|Write, false, false, false, false),
+			7: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

@@ -45,14 +45,14 @@ func NewVpNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("VpiValue", 0, Read|SetByCreate|Write),
-			2: Uint16Field("UniPointer", 0, Read|SetByCreate|Write),
-			3: ByteField("Direction", 0, Read|SetByCreate|Write),
-			4: Uint16Field("Deprecated1", 0, Read|SetByCreate|Write),
-			5: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write),
-			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write),
-			7: ByteField("Deprecated4", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("VpiValue", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: Uint16Field("Deprecated1", 0, Read|SetByCreate|Write, false, false, false, false),
+			5: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false, false),
+			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false, true),
+			7: ByteField("Deprecated4", 0, Read, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

@@ -42,11 +42,11 @@ func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntityDefinition,
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("ActiveChannelIndication", 0, Read),
-			2: ByteField("OperationalChannelIndication", 0, Read),
-			3: ByteField("DownstreamWavelengthChannel", 0, Read),
-			4: ByteField("UpstreamWavelengthChannel", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("ActiveChannelIndication", 0, Read, false, false, false, false),
+			2: ByteField("OperationalChannelIndication", 0, Read, false, false, false, false),
+			3: ByteField("DownstreamWavelengthChannel", 0, Read, false, false, false, false),
+			4: ByteField("UpstreamWavelengthChannel", 0, Read, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

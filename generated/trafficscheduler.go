@@ -43,11 +43,11 @@ func NewTrafficScheduler(params ...ParamData) (IManagedEntityDefinition, error) 
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: Uint16Field("TContPointer", 0, Read|Write),
-			2: Uint16Field("TrafficSchedulerPointer", 0, Read),
-			3: ByteField("Policy", 0, Read|Write),
-			4: ByteField("PriorityWeight", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: Uint16Field("TContPointer", 0, Read|Write, false, false, false, false),
+			2: Uint16Field("TrafficSchedulerPointer", 0, Read, false, false, false, false),
+			3: ByteField("Policy", 0, Read|Write, false, false, false, false),
+			4: ByteField("PriorityWeight", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

@@ -45,10 +45,10 @@ func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntityDefiniti
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|SetByCreate|Write),
-			2: ByteField("TpType", 0, Read|SetByCreate|Write),
-			3: Uint16Field("UniPointer", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

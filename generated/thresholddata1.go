@@ -45,14 +45,14 @@ func NewThresholdData1(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint32Field("ThresholdValue1", 0, Read|SetByCreate|Write),
-			2: Uint32Field("ThresholdValue2", 0, Read|SetByCreate|Write),
-			3: Uint32Field("ThresholdValue3", 0, Read|SetByCreate|Write),
-			4: Uint32Field("ThresholdValue4", 0, Read|SetByCreate|Write),
-			5: Uint32Field("ThresholdValue5", 0, Read|SetByCreate|Write),
-			6: Uint32Field("ThresholdValue6", 0, Read|SetByCreate|Write),
-			7: Uint32Field("ThresholdValue7", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint32Field("ThresholdValue1", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: Uint32Field("ThresholdValue2", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint32Field("ThresholdValue3", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: Uint32Field("ThresholdValue4", 0, Read|SetByCreate|Write, false, false, false, false),
+			5: Uint32Field("ThresholdValue5", 0, Read|SetByCreate|Write, false, false, false, false),
+			6: Uint32Field("ThresholdValue6", 0, Read|SetByCreate|Write, false, false, false, false),
+			7: Uint32Field("ThresholdValue7", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

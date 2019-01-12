@@ -43,9 +43,9 @@ func NewOmci(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: Uint16Field("MeTypeTable", 0, Read),
-			2: ByteField("MessageTypeTable", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: Uint16Field("MeTypeTable", 0, Read, false, false, false, false),
+			2: ByteField("MessageTypeTable", 0, Read, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

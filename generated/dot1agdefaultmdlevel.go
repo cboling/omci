@@ -44,12 +44,12 @@ func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, err
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: ByteField("Layer2Type", 0, Read),
-			2: ByteField("CatchallLevel", 0, Read|Write),
-			3: ByteField("CatchallMhfCreation", 0, Read|Write),
-			4: ByteField("CatchallSenderIdPermission", 0, Read|Write),
-			5: ByteField("DefaultMdLevelTable", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: ByteField("Layer2Type", 0, Read, false, false, false, false),
+			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false, false),
+			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false, false),
+			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false, false),
+			5: ByteField("DefaultMdLevelTable", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

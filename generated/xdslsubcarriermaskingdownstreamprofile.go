@@ -45,12 +45,12 @@ func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (IManagedEnt
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, Read|SetByCreate|Write),
-			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, Read|Write),
-			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, Read|Write),
-			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, Read|Write),
-			5: ByteField("MaskValid", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, Read|SetByCreate|Write, false, false, false, false),
+			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, Read|Write, false, false, false, false),
+			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, Read|Write, false, false, false, false),
+			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, Read|Write, false, false, false, false),
+			5: ByteField("MaskValid", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

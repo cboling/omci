@@ -45,12 +45,12 @@ func NewDot1RateLimiter(params ...ParamData) (IManagedEntityDefinition, error) {
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("ParentMePointer", 0, Read|SetByCreate|Write),
-			2: ByteField("TpType", 0, Read|SetByCreate|Write),
-			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|SetByCreate|Write),
-			4: Uint16Field("UpstreamBroadcastRatePointer", 0, Read|SetByCreate|Write),
-			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("ParentMePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			4: Uint16Field("UpstreamBroadcastRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()

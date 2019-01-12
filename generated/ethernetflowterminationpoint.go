@@ -45,12 +45,12 @@ func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntityDefinit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: MultiByteField("DestinationMac", 6, nil, Read|SetByCreate|Write),
-			2: MultiByteField("SourceMac", 6, nil, Read),
-			3: ByteField("TagPolicy", 0, Read|SetByCreate|Write),
-			4: Uint16Field("Tci", 0, Read|Write),
-			5: ByteField("Loopback", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: MultiByteField("DestinationMac", 6, nil, Read|SetByCreate|Write, false, false, false, false),
+			2: MultiByteField("SourceMac", 6, nil, Read, false, false, false, false),
+			3: ByteField("TagPolicy", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: Uint16Field("Tci", 0, Read|Write, false, false, false, true),
+			5: ByteField("Loopback", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

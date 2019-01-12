@@ -45,12 +45,12 @@ func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntityDefinition, 
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("MdLevel", 0, Read|SetByCreate|Write),
-			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write),
-			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write),
-			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write),
-			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false, false),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false, false),
+			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

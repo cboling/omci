@@ -42,9 +42,9 @@ func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntityDefinit
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read),
-			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, Read),
-			2: ByteField("PortState", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
+			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, Read, false, false, false, false),
+			2: ByteField("PortState", 0, Read, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

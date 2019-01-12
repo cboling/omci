@@ -45,9 +45,9 @@ func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (IManagedE
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write),
-			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write, false, false, false, false),
+			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

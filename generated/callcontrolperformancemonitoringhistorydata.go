@@ -45,14 +45,14 @@ func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("IntervalEndTime", 0, Read),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write),
-			3: Uint32Field("CallSetupFailures", 0, Read),
-			4: Uint32Field("CallSetupTimer", 0, Read),
-			5: Uint32Field("CallTerminateFailures", 0, Read),
-			6: Uint32Field("AnalogPortReleases", 0, Read),
-			7: Uint32Field("AnalogPortOffHookTimer", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint32Field("CallSetupFailures", 0, Read, false, false, false, false),
+			4: Uint32Field("CallSetupTimer", 0, Read, false, false, false, false),
+			5: Uint32Field("CallTerminateFailures", 0, Read, false, false, false, false),
+			6: Uint32Field("AnalogPortReleases", 0, Read, false, false, false, false),
+			7: Uint32Field("AnalogPortOffHookTimer", 0, Read, false, false, false, false),
 		},
 	}
 	entity.computeAttributeMask()

@@ -45,13 +45,13 @@ func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("IntervalEndTime", 0, Read),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write),
-			3: Uint32Field("DozeTime", 0, Read),
-			4: Uint32Field("CyclicSleepTime", 0, Read),
-			5: Uint32Field("WatchfulSleepTime", 0, Read),
-			6: Uint32Field("EnergyConsumed", 0, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint32Field("DozeTime", 0, Read, false, false, false, false),
+			4: Uint32Field("CyclicSleepTime", 0, Read, false, false, false, false),
+			5: Uint32Field("WatchfulSleepTime", 0, Read, false, false, false, false),
+			6: Uint32Field("EnergyConsumed", 0, Read, false, false, false, true),
 		},
 	}
 	entity.computeAttributeMask()
