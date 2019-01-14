@@ -477,7 +477,7 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 		}
 	}
 	if err == nil && len(results) == 0 {
-		// TODO: Is a Get request with no attributes valid?
+		// TODO: Is a set request with no attributes valid?
 		return nil, errors.New("no attributes encoded for SetRequest")
 	}
 	return results, nil
@@ -584,7 +584,6 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 						// If it is a table, set up our getNextResponses now
 						if attrDef.IsTableAttribute() {
 						}
-
 					} else if opt.failIfTruncated {
 						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
 							attrDef.GetName())
