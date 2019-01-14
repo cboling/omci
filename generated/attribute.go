@@ -260,7 +260,49 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 	}
 }
 
-// TODO: Need more fields...
+// Notes on various OMCI ME Table attribute fields.  This comment will eventually be
+// removed once a good table solution is implemented.  These are not all the MEs with
+// table attributes, but probably ones I care about to support initially.
+//
+//   ME                     Notes
+//  --------------------------------------------------------------------------------------------
+//	Port-mapping package -> Combined Port table -> N * 25 sized rows (port (1) + ME(2) * 12)
+//  ONU Remote Debug     -> Reply table (N bytes)
+//  ONU3-G               -> Status snapshot recordtable M x N bytes
+//  MCAST Gem interworkTP-> IPv4 multicast adress table (12*n) (two 2 byte fields, two 4 byte fields)
+//                          IPv6 multicast adress table (24*n) (various sub-fields)
+//  L2 mcast gem TP      -> MCAST MAC addr filtering table (11 * n) (various sub-fields)
+//  MAC Bridge Port Filt -> MAC Filter table (8 * n) (3 fields, some are bits)      *** BITS ***
+//  MAC Bridge Port data -> Bridge Table (8*M) (vaius fields, some are bits)        *** BITS ***
+//  VLAN tagging filter  -> Rx Vlan tag op table (16 * n) Lots of bit fields        *** BITS ***
+//  MCAST operations profile
+//  MCAST Subscriber config info
+//  MCAST subscriber monitor
+//  OMCI                -> Two tables (N bytes and 2*N bytes)
+//  General pupose buffer   -> N bytes
+//  Enhanced security control (17 * N bytes), (16 * P Bytes) , (16 * Q bytes), and more...
+//
+// An early example of info to track
+//
+type TableInfo struct {
+    HelloWorld  bool        // Need a table description, and an entry description struct
+}
+
+// Now the field
+func TableField(name string, access AttributeAccess, tableInfo TableInfo,
+                avc bool, optional bool) *AttributeDefinition {
+	return &AttributeDefinition{
+		Name:         name,
+		DefValue:     defVal,
+		Size:         int(size),
+		Access:       access,
+		Avc:          avc,
+		Counter:      counter,
+		TableSupport: true,
+		Optional:     optional,
+	}
+}
+
 func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
 	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
