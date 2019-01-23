@@ -20,10 +20,7 @@
 package generated
 
 import (
-	"errors"
 	"fmt"
-	"github.com/google/gopacket"
-	"math/bits"
 )
 
 // Custom Go Error messages for common OMCI errors
@@ -47,29 +44,46 @@ func NewOmciError(text string, status Results) error {
 	if status == Success {
 		panic("Do not use OmciError to convey successful results")
 	}
-	return &OmciErrors{
+	return &OmciError{
 		err:        text,
 		statusCode: status,
 	}
 }
 
+type OmciProcessingError struct {
+	OmciError
+}
+
 // NewProcessingError means the command processing failed at the ONU
-// for reasons not described by one of the more specific error
-// codes.
-func NewProcessingError(text string) error {
-	if len(text) == 0 {
-		text = "command processing error"
+// for reasons not described by one of the more specific error codes.
+func NewProcessingError(args... interface{}) error {
+	defaultValue := "command processing error"
+	return &OmciProcessingError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: ProcessingError,
+		},
 	}
-	return NewOmciError(genMessage(defaultValue, args...), ProcessingError)
+}
+
+type NotSupportedError struct {
+	OmciError
 }
 
 // NewNotSupportedError means that the message type indicated in byte 3 is
 // not supported by the ONU.
-func NewNotSupportedError(text string) error {
-	if len(text) == 0 {
-		text = "command not supported"
+func NewNotSupportedError(args... interface{}) error {
+	defaultValue := "command not supported"
+	return &NotSupportedError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: NotSupported,
+		},
 	}
-	return NewOmciError(genMessage(defaultValue, args...), NotSupported)
+}
+
+type ParamError struct {
+	OmciError
 }
 
 // NewParameterError means that the command message received by the
@@ -78,26 +92,50 @@ func NewNotSupportedError(text string) error {
 // frequently used interchangeably with code 1001. However, the
 // optional attribute and attribute execution masks in the reply
 // messages are only defined for code 1001.
-func NewParameterError(text string) error {
-	defaultValue = "parameter error"
-
-	return NewOmciError(genMessage(defaultValue, args...), ParameterError)
+func NewParameterError(args... interface{}) error {
+	defaultValue := "parameter error"
+	return &ParamError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: ParameterError,
+		},
+	}
 }
 
-// NewUnknownEntityError This result means that the managed entity class (bytes 5..6) is
-// not supported by the ONU.
-func NewUnknownEntityError(text string) error {
-	defaultValue = "unknown managed entity"
+type UnknownEntityError struct {
+	OmciError
+}
 
-	return NewOmciError(genMessage(defaultValue, args...), UnknownEntity)
+// NewUnknownEntityError This result means that the managed entity class
+// (bytes 5..6) is not supported by the ONU.
+func NewUnknownEntityError(args... interface{}) error {
+	defaultValue := "unknown managed entity"
+	return &UnknownEntityError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: UnknownEntity,
+		},
+	}
+}
+
+type UnknownInstanceError struct {
+	OmciError
 }
 
 // NewUnknownInstanceError means that the managed entity instance (bytes 7..8)
 // does not exist in the ONU.
-func NewUnknownInstanceError(text string) error {
-	defaultValue = "unknown managed entity instance"
+func NewUnknownInstanceError(args... interface{}) error {
+	defaultValue := "unknown managed entity instance"
+	return &UnknownInstanceError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: UnknownInstance,
+		},
+	}
+}
 
-	return NewOmciError(genMessage(defaultValue, args...), UnknownInstance)
+type DeviceBusyError struct {
+	OmciError
 }
 
 // NewDeviceBusyError means that the command could not be processed due
@@ -105,47 +143,65 @@ func NewUnknownInstanceError(text string) error {
 // also be used as a pause indication to the OLT while the ONU
 // conducts a time-consuming operation such as storage of a
 // software image into non-volatile memory.
-func NewDeviceBusyError(text string) error {
-	defaultValue = "device busy"
+func NewDeviceBusyError(args... interface{}) error {
+	defaultValue := "device busy"
+	return &DeviceBusyError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: DeviceBusy,
+		},
+	}
+}
 
-	return NewOmciError(genMessage(defaultValue, args...), DeviceBusy)
+type InstanceExistsError struct {
+	OmciError
 }
 
 // NewInstanceExistsError
-func NewInstanceExistsError(text string) error {
-	defaultValue = "instance exists"
+func NewInstanceExistsError(args... interface{}) error {
+	defaultValue := "instance exists"
+	return &InstanceExistsError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: InstanceExists,
+		},
+	}
+}
 
-	return NewOmciError(genMessage(defaultValue, args...), InstanceExists)
+type AttributeFailureError struct {
+	OmciError
 }
 
 // NewAttributeFailureError means that the ONU already has a managed entity
-// instance that corresponds to the one the OLT is attempting to
-// create.
+// instance that corresponds to the one the OLT is attempting to create.
 func NewAttributeFailureError(args ...interface{}) error {
-	defaultValue = "attribute(s) failed or unknown"
-
-	return NewOmciError(genMessage(defaultValue, args...), AttributeFailure)
+	defaultValue := "attribute(s) failed or unknown"
+	return &AttributeFailureError{
+		OmciError: OmciError{
+			err:		genMessage(defaultValue, args...),
+			statusCode: AttributeFailure,
+		},
+	}
 }
 
-func genMessage(defaultValue string, args ...interface{}) error {
+func genMessage(defaultValue string, args ...interface{}) string {
 	switch len(args) {
 	case 0:
 		return defaultValue
 
 	case 1:
-		switch args[0].(type) {
+		switch first := args[0].(type) {
 		case string:
-			// Assume a simple, preformatted string
-			return args[0]
+			// Assume a simple, pre-formatted string
+			return args[0].(string)
 
 		case func() string:
 			// Assume a closure with no other arguments used
-			return args[0]()
+			return first()
 
 		default:
+			panic("Unsupported parameter type")
 		}
-
-	default:
-		return fmt.Sprintf(args[0], args[1:]...)
 	}
+	return fmt.Sprintf(args[0].(string), args[1:]...)
 }
