@@ -286,6 +286,8 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 //
 type TableInfo struct {
     HelloWorld  bool        // Need a table description, and an entry description struct
+    DefValue    []byte
+    Size        int
 }
 
 // Now the field
@@ -293,11 +295,11 @@ func TableField(name string, access AttributeAccess, tableInfo TableInfo,
                 avc bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
-		DefValue:     defVal,
-		Size:         int(size),
+		DefValue:     tableInfo.DefValue,
+		Size:         tableInfo.Size,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
+		Counter:      false,
 		TableSupport: true,
 		Optional:     optional,
 	}
