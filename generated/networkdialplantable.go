@@ -46,13 +46,13 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntityDefinition, err
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("DialPlanNumber", 0, Read),
-			2: Uint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate),
-			3: Uint16Field("CriticalDialTimeout", 0, Read|SetByCreate|Write),
-			4: Uint16Field("PartialDialTimeout", 0, Read|SetByCreate|Write),
-			5: ByteField("DialPlanFormat", 0, Read|SetByCreate|Write),
-			6: ByteField("DialPlanTable", 0, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("DialPlanNumber", 0, Read, false, false, false, false),
+			2: Uint16Field("DialPlanTableMaxSize", 0, Read|SetByCreate, false, false, true, false),
+			3: Uint16Field("CriticalDialTimeout", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: Uint16Field("PartialDialTimeout", 0, Read|SetByCreate|Write, false, false, false, false),
+			5: ByteField("DialPlanFormat", 0, Read|SetByCreate|Write, false, false, false, false),
+			6: ByteField("DialPlanTable", 0, Read|Write, false, false, true, false),
 		},
 	}
 	entity.computeAttributeMask()

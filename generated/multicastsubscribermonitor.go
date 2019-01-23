@@ -46,13 +46,13 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("MeType", 0, Read|SetByCreate|Write),
-			2: Uint32Field("CurrentMulticastBandwidth", 0, Read),
-			3: Uint32Field("JoinMessagesCounter", 0, Read),
-			4: Uint32Field("BandwidthExceededCounter", 0, Read),
-			5: MultiByteField("Ipv4ActiveGroupListTable", 24, nil, Read),
-			6: MultiByteField("Ipv6ActiveGroupListTable", 58, nil, Read),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, false, true),
+			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, false, true),
+			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, false, true),
+			5: MultiByteField("Ipv4ActiveGroupListTable", 24, nil, Read, false, false, true, false),
+			6: MultiByteField("Ipv6ActiveGroupListTable", 58, nil, Read, false, false, true, true),
 		},
 	}
 	entity.computeAttributeMask()

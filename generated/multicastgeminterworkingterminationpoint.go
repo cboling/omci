@@ -46,14 +46,14 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write),
-			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write),
-			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write),
-			4: ByteField("PptpCounter", 0, Read),
-			5: ByteField("OperationalState", 0, Read),
-			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write),
-			7: MultiByteField("Ipv6MulticastAddressTable", 24, nil, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			4: ByteField("PptpCounter", 0, Read, false, false, false, true),
+			5: ByteField("OperationalState", 0, Read, true, false, false, true),
+			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			7: MultiByteField("Ipv6MulticastAddressTable", 24, nil, Read|Write, false, false, true, true),
 		},
 	}
 	entity.computeAttributeMask()

@@ -46,13 +46,13 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 		},
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate),
-			1: ByteField("MeType", 0, Read|SetByCreate|Write),
-			2: Uint16Field("MulticastOperationsProfilePointer", 0, Read|SetByCreate|Write),
-			3: Uint16Field("MaxSimultaneousGroups", 0, Read|SetByCreate|Write),
-			4: Uint32Field("MaxMulticastBandwidth", 0, Read|SetByCreate|Write),
-			5: ByteField("BandwidthEnforcement", 0, Read|SetByCreate|Write),
-			6: MultiByteField("MulticastServicePackageTable", 22, nil, Read|Write),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
+			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false, false),
+			2: Uint16Field("MulticastOperationsProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			3: Uint16Field("MaxSimultaneousGroups", 0, Read|SetByCreate|Write, false, false, false, true),
+			4: Uint32Field("MaxMulticastBandwidth", 0, Read|SetByCreate|Write, false, false, false, true),
+			5: ByteField("BandwidthEnforcement", 0, Read|SetByCreate|Write, false, false, false, true),
+			6: MultiByteField("MulticastServicePackageTable", 22, nil, Read|Write, false, false, true, true),
 		},
 	}
 	entity.computeAttributeMask()
