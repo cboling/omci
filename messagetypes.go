@@ -46,7 +46,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(meDefinition, me.Create) {
-		return errors.New("managed entity does not support Create Message-Type")
+		return me.NewProcessingError("managed entity does not support Create Message-Type")
 	}
 	var sbcMask uint16
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
@@ -115,7 +115,7 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(entity, me.Create) {
-		return errors.New("managed entity does not support the Create Message-Type")
+		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
 	omci.Result = me.Results(data[4])
 	omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[5:])
@@ -142,7 +142,7 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(entity, me.Create) {
-		return errors.New("managed entity does not support the Create Message-Type")
+		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -173,7 +173,7 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
-		return errors.New("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
 	}
 	return nil
 }
@@ -198,7 +198,7 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
-		return errors.New("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
 	}
 	return nil
 }
@@ -224,7 +224,7 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
-		return errors.New("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
 	}
 	omci.Result = me.Results(data[4])
 	return nil
@@ -250,7 +250,7 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
-		return errors.New("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -282,7 +282,7 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Set) {
-		return errors.New("managed entity does not support Set Message-Type")
+		return me.NewProcessingError("managed entity does not support Set Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
@@ -299,7 +299,7 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
-			return errors.New(msg)
+			return me.NewProcessingError(msg)
 		}
 	}
 	return nil
@@ -325,7 +325,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Set) {
-		return errors.New("managed entity does not support Set Message-Type")
+		return me.NewProcessingError("managed entity does not support Set Message-Type")
 	}
 	// Validate all attributes support write
 	for attrName := range omci.Attributes {
@@ -335,7 +335,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		}
 		if !me.SupportsAttributeAccess(attr, me.Write) {
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
-			return errors.New(msg)
+			return me.NewProcessingError(msg)
 		}
 	}
 	bytes, err := b.AppendBytes(2)
@@ -371,7 +371,7 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.Set) {
-		return errors.New("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
 	}
 	omci.Result = me.Results(data[4])
 
@@ -402,7 +402,7 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.Set) {
-		return errors.New("managed entity does not support the Set Message-Type")
+		return me.NewProcessingError("managed entity does not support the Set Message-Type")
 	}
 	bytes, err := b.AppendBytes(5)
 	if err != nil {
@@ -435,7 +435,7 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
-		return errors.New("managed entity does not support Get Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	return nil
@@ -461,7 +461,7 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Get) {
-		return errors.New("managed entity does not support Get Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -496,7 +496,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
-		return errors.New("managed entity does not support Get Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Message-Type")
 	}
 	omci.Result = me.Results(data[4])
 	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
@@ -519,7 +519,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
-			return errors.New(msg)
+			return me.NewProcessingError(msg)
 		}
 	}
 	return nil
@@ -545,7 +545,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
-		return errors.New("managed entity does not support the Get Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get Message-Type")
 	}
 	bytes, err := b.AppendBytes(3)
 	if err != nil {
@@ -562,7 +562,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		}
 		if !me.SupportsAttributeAccess(attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
-			return errors.New(msg)
+			return me.NewProcessingError(msg)
 		}
 	}
 	// Attribute serialization
@@ -605,18 +605,18 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarms) {
-		return errors.New("managed entity does not support Get All Alarms Message-Type")
+		return me.NewProcessingError("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for Get All Alarms request: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for Get All Alarms request: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	omci.AlarmRetrievalMode = data[4]
 	if omci.AlarmRetrievalMode > 1 {
@@ -647,7 +647,7 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
-		return errors.New("managed entity does not support the Get All Alarms Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get All Alarms Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -678,18 +678,18 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarms) {
-		return errors.New("managed entity does not support Get All Alarms Message-Type")
+		return me.NewProcessingError("managed entity does not support Get All Alarms Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for Get All Alarms response: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for Get All Alarms response: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
 	return nil
@@ -715,7 +715,7 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
-		return errors.New("managed entity does not support the Get All Alarms Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get All Alarms Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -746,18 +746,18 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarmsNext) {
-		return errors.New("managed entity does not support Get All Alarms Next Message-Type")
+		return me.NewProcessingError("managed entity does not support Get All Alarms Next Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for Get All Alarms Next request: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for Get All Alarms Next request: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
 	return nil
@@ -783,7 +783,7 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
-		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get All Alarms Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -814,18 +814,18 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarmsNext) {
-		return errors.New("managed entity does not support Get All Alarms Next Message-Type")
+		return me.NewProcessingError("managed entity does not support Get All Alarms Next Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for Get All Alarms Next response: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for Get All Alarms Next response: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	copy(omci.AlarmBitMap[:], data[4:32])
 	return nil
@@ -851,7 +851,7 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
-		return errors.New("managed entity does not support the Get All Alarms Next Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get All Alarms Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(28)
 	if err != nil {
@@ -878,18 +878,18 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 		me.ParamData{EntityID: omci.EntityInstance})
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
-		return errors.New("managed entity does not support MIB Upload Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Upload Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for  MIB Upload request: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for MIB Upload request: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	return nil
 }
@@ -914,7 +914,7 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
-		return errors.New("managed entity does not support the MIB Upload Message-Type")
+		return me.NewProcessingError("managed entity does not support the MIB Upload Message-Type")
 	}
 	return nil
 }
@@ -940,18 +940,18 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
-		return errors.New("managed entity does not support MIB Upload Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Upload Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for  MIB Upload response: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for MIB Upload response: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
 	return nil
@@ -977,7 +977,7 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(entity, me.MibUpload) {
-		return errors.New("managed entity does not support the MIB Upload Message-Type")
+		return me.NewProcessingError("managed entity does not support the MIB Upload Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -1008,18 +1008,18 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
-		return errors.New("managed entity does not support MIB Upload Next Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Upload Next Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for  MIB Upload Next request: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for MIB Upload Next request: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
 	return nil
@@ -1045,7 +1045,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 	}
 	// ME needs to support MIB upload
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
-		return errors.New("managed entity does not support the MIB Upload Next Message-Type")
+		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -1076,18 +1076,18 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	// ME needs to support MibUploadNext
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
-		return errors.New("managed entity does not support MIB Upload Next Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Upload Next Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
 		msg := fmt.Sprintf("invalid Entity Class for  MIB Upload Next response: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for MIB Upload Next response: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	// Decode reported ME
 	return omci.ReportedME.DecodeFromBytes(data[4:], p)
@@ -1113,7 +1113,7 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
-		return errors.New("managed entity does not support the MIB Upload Next Message-Type")
+		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
 	return omci.ReportedME.SerializeTo(b)
 }
@@ -1138,18 +1138,18 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	}
 	// ME needs to support MIB reset
 	if !me.SupportsMsgType(meDefinition, me.MibReset) {
-		return errors.New("managed entity does not support MIB Reset Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Reset Message-Type")
 	}
 	// Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
-		msg := fmt.Sprintf("invalid Entity Class for  MIB Reset request: %v",
+		msg := fmt.Sprintf("invalid Entity Class for MIB Reset request: %v",
 			omci.EntityClass)
-		return errors.New(msg)
+		return me.NewProcessingError(msg)
 	}
 	if omci.EntityInstance != 0 {
 		msg := fmt.Sprintf("invalid Entity Instance for MIB Reset request: %v",
 			omci.EntityInstance)
-		return errors.New(msg)
+		return me.NewUnknownInstanceError(msg)
 	}
 	return nil
 }
@@ -1186,15 +1186,15 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	}
 	// ME needs to support MIB reset
 	if !me.SupportsMsgType(meDefinition, me.MibReset) {
-		return errors.New("managed entity does not support MIB Reset Message-Type")
+		return me.NewProcessingError("managed entity does not support MIB Reset Message-Type")
 	}
 	// MIB Reset Response Entity Class always ONU DATA (2) and
 	// Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassId {
-		return errors.New("invalid Entity Class for MIB Reset Response")
+		return me.NewProcessingError("invalid Entity Class for MIB Reset Response")
 	}
 	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for MIB Reset Response")
+		return me.NewUnknownInstanceError("invalid Entity Instance for MIB Reset Response")
 	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.DeviceBusy {
@@ -1287,7 +1287,7 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 	// ME needs to support Alarms
 	// TODO: Add attribute to ME to specify that alarm is allowed
 	//if !me.SupportsMsgType(meDefinition, me.MibReset) {
-	//	return errors.New("managed entity does not support MIB Reset Message-Type")
+	//	return me.NewProcesssingError("managed entity does not support MIB Reset Message-Type")
 	//}
 	for index, octet := range data[4 : (AlarmBitmapSize/8)-4] {
 		omci.AlarmBitmap[index] = octet
@@ -1322,7 +1322,7 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 	// ME needs to support Alarms
 	// TODO: Add attribute to ME to specify that alarm is allowed
 	//if !me.SupportsMsgType(meDefinition, me.MibReset) {
-	//	return errors.New("managed entity does not support MIB Reset Message-Type")
+	//	return me.NewProcessingError("managed entity does not support MIB Reset Message-Type")
 	//}
 	bytes, err := b.AppendBytes((AlarmBitmapSize / 8) + 3 + 1)
 	if err != nil {
@@ -1371,7 +1371,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	//	}
 	//	if !me.SupportsAttributeAVC(attr) {
 	//		msg := fmt.Sprintf("attribute '%v' does not support AVC notifications", attrName)
-	//		return errors.New(msg)
+	//		return me.NewProcessingError(msg)
 	//	}
 	//}
 	return err
@@ -1404,7 +1404,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	//	}
 	//	if !me.SupportsAttributeAVC(attr) {
 	//		msg := fmt.Sprintf("attribute '%v' does not support AVC notifications", attrName)
-	//		return errors.New(msg)
+	//		return me.NewProcessingError(msg)
 	//	}
 	//}
 	bytes, err := b.AppendBytes(2)
@@ -1500,11 +1500,11 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
-		return errors.New("managed entity does not support Start Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support Start Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Start Software Download request")
+		return me.NewProcessingError("invalid Entity Class for Start Software Download request")
 	}
 	omci.WindowSize = data[4]
 	omci.ImageSize = binary.BigEndian.Uint32(data[5:9])
@@ -1512,7 +1512,7 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
 		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
 			omci.NumberOfCircuitPacks)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	omci.MSBInstance = make([]uint16, omci.NumberOfCircuitPacks)
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
@@ -1541,16 +1541,16 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(entity, me.StartSoftwareDownload) {
-		return errors.New("managed entity does not support the SStart Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support the SStart Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Start Software Download request")
+		return me.NewProcessingError("invalid Entity Class for Start Software Download request")
 	}
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
 		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
 			omci.NumberOfCircuitPacks)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	bytes, err := b.AppendBytes(8 + (2 * int(omci.NumberOfCircuitPacks)))
 	if err != nil {
@@ -1594,11 +1594,11 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
-		return errors.New("managed entity does not support Start Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support Start Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Start Software Download response")
+		return me.NewProcessingError("invalid Entity Class for Start Software Download response")
 	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.DeviceBusy {
@@ -1650,11 +1650,11 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
-		return errors.New("managed entity does not support Start Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support Start Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Start Software Download response")
+		return me.NewProcessingError("invalid Entity Class for Start Software Download response")
 	}
 	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
 	if err != nil {
@@ -1711,11 +1711,11 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
-		return errors.New("managed entity does not support Download Section Message-Type")
+		return me.NewProcessingError("managed entity does not support Download Section Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Download Section request")
+		return me.NewProcessingError("invalid Entity Class for Download Section request")
 	}
 	omci.SectionNumber = data[4]
 	copy(omci.SectionData[0:], data[5:])
@@ -1742,11 +1742,11 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
-		return errors.New("managed entity does not support Download Section Message-Type")
+		return me.NewProcessingError("managed entity does not support Download Section Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Download Section response")
+		return me.NewProcessingError("invalid Entity Class for Download Section response")
 	}
 	bytes, err := b.AppendBytes(1 + 29)
 	if err != nil {
@@ -1779,11 +1779,11 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
-		return errors.New("managed entity does not support Download Section Message-Type")
+		return me.NewProcessingError("managed entity does not support Download Section Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Download Section response")
+		return me.NewProcessingError("invalid Entity Class for Download Section response")
 	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.DeviceBusy {
@@ -1815,11 +1815,11 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
-		return errors.New("managed entity does not support Download Section Message-Type")
+		return me.NewProcessingError("managed entity does not support Download Section Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Download Section response")
+		return me.NewProcessingError("invalid Entity Class for Download Section response")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -1859,11 +1859,11 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
-		return errors.New("managed entity does not support End Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support End Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for End Software Download request")
+		return me.NewProcessingError("invalid Entity Class for End Software Download request")
 	}
 	omci.CRC32 = binary.BigEndian.Uint32(data[4:8])
 	omci.ImageSize = binary.BigEndian.Uint32(data[8:12])
@@ -1872,7 +1872,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
 			omci.NumberOfInstances)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	omci.ImageInstances = make([]uint16, omci.NumberOfInstances)
 
@@ -1902,16 +1902,16 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
-		return errors.New("managed entity does not support Start End Download Message-Type")
+		return me.NewProcessingError("managed entity does not support Start End Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for End Software Download response")
+		return me.NewProcessingError("invalid Entity Class for End Software Download response")
 	}
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
 			omci.NumberOfInstances)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	bytes, err := b.AppendBytes(9 + (2 * int(omci.NumberOfInstances)))
 	if err != nil {
@@ -1949,11 +1949,11 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
-		return errors.New("managed entity does not support End Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support End Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for End Software Download response")
+		return me.NewProcessingError("invalid Entity Class for End Software Download response")
 	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.DeviceBusy {
@@ -2004,11 +2004,11 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
-		return errors.New("managed entity does not support End End Download Message-Type")
+		return me.NewProcessingError("managed entity does not support End End Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for End Download response")
+		return me.NewProcessingError("invalid Entity Class for End Download response")
 	}
 	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
 	if err != nil {
@@ -2063,17 +2063,17 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
-		return errors.New("managed entity does not support Activate Software Message-Type")
+		return me.NewProcessingError("managed entity does not support Activate Software Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Activate Software request")
+		return me.NewProcessingError("invalid Entity Class for Activate Software request")
 	}
 	omci.ActivateFlags = data[4]
 	if omci.ActivateFlags > 2 {
 		msg := fmt.Sprintf("invalid number of Activation flangs: %v, must be 0..2",
 			omci.ActivateFlags)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	return nil
 }
@@ -2098,11 +2098,11 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
-		return errors.New("managed entity does not support Activate Message-Type")
+		return me.NewProcessingError("managed entity does not support Activate Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Activate Software request")
+		return me.NewProcessingError("invalid Entity Class for Activate Software request")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -2138,11 +2138,11 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
-		return errors.New("managed entity does not support Activate Software Message-Type")
+		return me.NewProcessingError("managed entity does not support Activate Software Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Activate Software response")
+		return me.NewProcessingError("invalid Entity Class for Activate Software response")
 	}
 	omci.Result = me.Results(data[4])
 	if omci.Result > me.Results(6) {
@@ -2173,11 +2173,11 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
-		return errors.New("managed entity does not support Activate Message-Type")
+		return me.NewProcessingError("managed entity does not support Activate Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Activate Software response")
+		return me.NewProcessingError("invalid Entity Class for Activate Software response")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -2212,11 +2212,11 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
-		return errors.New("managed entity does not support Commit Software Message-Type")
+		return me.NewProcessingError("managed entity does not support Commit Software Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Commit Software request")
+		return me.NewProcessingError("invalid Entity Class for Commit Software request")
 	}
 	return nil
 }
@@ -2241,11 +2241,11 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
-		return errors.New("managed entity does not support Commit Message-Type")
+		return me.NewProcessingError("managed entity does not support Commit Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Commit Software request")
+		return me.NewProcessingError("invalid Entity Class for Commit Software request")
 	}
 	return nil
 }
@@ -2270,11 +2270,11 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
-		return errors.New("managed entity does not support Commit Software Message-Type")
+		return me.NewProcessingError("managed entity does not support Commit Software Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Commit Software response")
+		return me.NewProcessingError("invalid Entity Class for Commit Software response")
 	}
 	return nil
 }
@@ -2299,11 +2299,11 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
-		return errors.New("managed entity does not support Commit Message-Type")
+		return me.NewProcessingError("managed entity does not support Commit Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassId {
-		return errors.New("invalid Entity Class for Commit Software response")
+		return me.NewProcessingError("invalid Entity Class for Commit Software response")
 	}
 	return nil
 }
@@ -2334,14 +2334,14 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
-		return errors.New("managed entity does not support Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support Synchronize Time Message-Type")
 	}
 	// Synchronize Time Entity Class are always ONU-G (256) and Entity Instance of 0
 	if omci.EntityClass != me.OnuGClassId {
-		return errors.New("invalid Entity Class for Synchronize Time request")
+		return me.NewProcessingError("invalid Entity Class for Synchronize Time request")
 	}
 	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Synchronize Time request")
+		return me.NewUnknownInstanceError("invalid Entity Instance for Synchronize Time request")
 	}
 	omci.Year = binary.BigEndian.Uint16(data[4:6])
 	omci.Month = data[6]
@@ -2372,7 +2372,7 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
-		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support the Synchronize Time Message-Type")
 	}
 	bytes, err := b.AppendBytes(7)
 	if err != nil {
@@ -2409,14 +2409,14 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
-		return errors.New("managed entity does not support Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support Synchronize Time Message-Type")
 	}
 	// Synchronize Time Entity Class are always ONU-G (256) and Entity Instance of 0
 	if omci.EntityClass != me.OnuGClassId {
-		return errors.New("invalid Entity Class for Synchronize Time response")
+		return me.NewProcessingError("invalid Entity Class for Synchronize Time response")
 	}
 	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Synchronize Time response")
+		return me.NewUnknownInstanceError("invalid Entity Instance for Synchronize Time response")
 	}
 	omci.Results = me.Results(data[4])
 	if omci.Results > me.DeviceBusy {
@@ -2447,14 +2447,14 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	}
 	// Synchronize Time Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuGClassId {
-		return errors.New("invalid Entity Class for Synchronize Time response")
+		return me.NewProcessingError("invalid Entity Class for Synchronize Time response")
 	}
 	if omci.EntityInstance != 0 {
-		return errors.New("invalid Entity Instance for Synchronize Time response")
+		return me.NewUnknownInstanceError("invalid Entity Instance for Synchronize Time response")
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
-		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support the Synchronize Time Message-Type")
 	}
 	numBytes := 2
 	if omci.Results != me.Success {
@@ -2492,7 +2492,7 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(meDefinition, me.Reboot) {
-		return errors.New("managed entity does not support Reboot Message-Type")
+		return me.NewProcessingError("managed entity does not support Reboot Message-Type")
 	}
 	omci.RebootCondition = data[4]
 	if omci.RebootCondition > 3 {
@@ -2522,7 +2522,7 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(entity, me.Reboot) {
-		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support the Synchronize Time Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -2530,7 +2530,7 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	}
 	if omci.RebootCondition > 3 {
 		msg := fmt.Sprintf("invalid reboot condition code: %v, must be 0..3", omci.RebootCondition)
-		return errors.New(msg)
+		return me.NewAttributeFailureError(msg)
 	}
 	bytes[0] = omci.RebootCondition
 	return nil
@@ -2557,7 +2557,7 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(meDefinition, me.Reboot) {
-		return errors.New("managed entity does not support Reboot Message-Type")
+		return me.NewProcessingError("managed entity does not support Reboot Message-Type")
 	}
 	if omci.Result > 6 {
 		msg := fmt.Sprintf("invalid reboot results code: %v, must be 0..6", omci.Result)
@@ -2587,7 +2587,7 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(entity, me.Reboot) {
-		return errors.New("managed entity does not support the Synchronize Time Message-Type")
+		return me.NewProcessingError("managed entity does not support the Synchronize Time Message-Type")
 	}
 	bytes, err := b.AppendBytes(1)
 	if err != nil {
@@ -2623,7 +2623,7 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
-		return errors.New("managed entity does not support Get Next Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
 	// Note: G.988 specifies that an error code of (3) should result if more
 	//       than one attribute is requested
@@ -2652,7 +2652,7 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
-		return errors.New("managed entity does not support Get Next Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(4)
 	if err != nil {
@@ -2685,7 +2685,7 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
-		return errors.New("managed entity does not support Get Next Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	// TODO: Validate attributes support 'Read' access ?
@@ -2718,7 +2718,7 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
-		return errors.New("managed entity does not support the Get Next Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get Next Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -2786,7 +2786,7 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
-		return errors.New("managed entity does not support Get Current Data Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Current Data Message-Type")
 	}
 	// Note: G.988 specifies that an error code of (3) should result if more
 	//       than one attribute is requested
@@ -2814,7 +2814,7 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
-		return errors.New("managed entity does not support Get Current Data Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Current Data Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {
@@ -2847,7 +2847,7 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
-		return errors.New("managed entity does not support Get Current Data Message-Type")
+		return me.NewProcessingError("managed entity does not support Get Current Data Message-Type")
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
@@ -2879,7 +2879,7 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
-		return errors.New("managed entity does not support the Get Current Data Message-Type")
+		return me.NewProcessingError("managed entity does not support the Get Current Data Message-Type")
 	}
 	bytes, err := b.AppendBytes(2)
 	if err != nil {

@@ -175,7 +175,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		if len(data) >= micOffset {
 			length := binary.BigEndian.Uint32(data[micOffset-4:])
 			if uint16(length) != omci.Length {
-				return errors.New("invalid baseline message length")
+				return me.NewProcessingError("invalid baseline message length")
 			}
 		}
 	} else {
@@ -184,13 +184,13 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		micOffset = int(omci.Length) + payloadOffset
 
 		if omci.Length > MaxExtendedLength {
-			return errors.New("extended frame exceeds maximum allowed")
+			return me.NewProcessingError("extended frame exceeds maximum allowed")
 		}
 		if int(omci.Length) != micOffset {
 			if int(omci.Length) < micOffset {
 				p.SetTruncated()
 			}
-			return errors.New("extended frame too small")
+			return me.NewProcessingError("extended frame too small")
 		}
 	}
 	// Extract MIC if present in the data
