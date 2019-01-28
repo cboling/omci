@@ -35,6 +35,7 @@ type IManagedEntityInstance interface {
 
 type BaseManagedEntityInstance struct {
 	MEDefinition  me.IManagedEntityDefinition
+	EntityID      uint16
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
 }
