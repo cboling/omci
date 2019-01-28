@@ -91,7 +91,7 @@ func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) er
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, bme.MEDefinition.GetClassID())
-	binary.BigEndian.PutUint16(bytes[2:], bme.MEDefinition.GetEntityID())
+	binary.BigEndian.PutUint16(bytes[2:], bme.EntityID)
 	binary.BigEndian.PutUint16(bytes[4:], bme.AttributeMask)
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
