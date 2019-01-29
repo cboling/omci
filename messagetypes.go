@@ -1089,7 +1089,9 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	// Decode reported ME
+	// Decode reported ME.  If an out-of-range sequence number was sent, this will
+	// contain an ME with class ID and entity ID of zero and you should get an
+	// error of "managed entity definition not found" returned.
 	return omci.ReportedME.DecodeFromBytes(data[4:], p)
 }
 
