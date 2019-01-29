@@ -10,15 +10,15 @@
   version = "v1.1.1"
 
 [[projects]]
-  digest = "1:ea67796271a88d74870035f5abbd84f5845a69afbd056d29e10c4872d81e43ed"
+  branch = "master"
+  digest = "1:e1bdf8bd56b2c7775b12f17219b2e6b1d45a39cf20e42926f9069b1755639918"
   name = "github.com/google/gopacket"
   packages = [
     ".",
     "layers",
   ]
   pruneopts = "UT"
-  revision = "a6b099ece4680a8bdea84fa78166d0712108a95c"
-  version = "v1.1.15"
+  revision = "66eed7fc5258c34b3ead3c5964ea538025686a68"
 
 [[projects]]
   digest = "1:0028cb19b2e4c3112225cd871870f2d9cf49b9b4276531f03438a88e94be86fe"
