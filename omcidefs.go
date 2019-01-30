@@ -67,6 +67,10 @@ func (bme *BaseManagedEntityInstance) SetAttributes(attributes me.AttributeValue
 	return nil
 }
 
+func (bme *BaseManagedEntityInstance) GetEntityID() uint16 {
+	return bme.EntityID
+}
+
 // DecodeFromBytes is typically used to decode an ME in a message payload for messages
 // of type MibUploadNextResponse, AVC Notifications, ...
 func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -83,6 +87,7 @@ func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.Pa
 		return err
 	}
 	bme.MEDefinition = msgDef
+	bme.EntityID = entityID
 	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	bme.Attributes, err = msgDef.DecodeAttributes(bme.AttributeMask, data[6:], p)
 	if err != nil {
