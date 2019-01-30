@@ -56,11 +56,11 @@ type OmciProcessingError struct {
 
 // NewProcessingError means the command processing failed at the ONU
 // for reasons not described by one of the more specific error codes.
-func NewProcessingError(args... interface{}) error {
+func NewProcessingError(args ...interface{}) error {
 	defaultValue := "command processing error"
 	return &OmciProcessingError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: ProcessingError,
 		},
 	}
@@ -72,11 +72,11 @@ type NotSupportedError struct {
 
 // NewNotSupportedError means that the message type indicated in byte 3 is
 // not supported by the ONU.
-func NewNotSupportedError(args... interface{}) error {
+func NewNotSupportedError(args ...interface{}) error {
 	defaultValue := "command not supported"
 	return &NotSupportedError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: NotSupported,
 		},
 	}
@@ -92,11 +92,11 @@ type ParamError struct {
 // frequently used interchangeably with code 1001. However, the
 // optional attribute and attribute execution masks in the reply
 // messages are only defined for code 1001.
-func NewParameterError(args... interface{}) error {
+func NewParameterError(args ...interface{}) error {
 	defaultValue := "parameter error"
 	return &ParamError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: ParameterError,
 		},
 	}
@@ -108,11 +108,11 @@ type UnknownEntityError struct {
 
 // NewUnknownEntityError This result means that the managed entity class
 // (bytes 5..6) is not supported by the ONU.
-func NewUnknownEntityError(args... interface{}) error {
+func NewUnknownEntityError(args ...interface{}) error {
 	defaultValue := "unknown managed entity"
 	return &UnknownEntityError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: UnknownEntity,
 		},
 	}
@@ -124,11 +124,11 @@ type UnknownInstanceError struct {
 
 // NewUnknownInstanceError means that the managed entity instance (bytes 7..8)
 // does not exist in the ONU.
-func NewUnknownInstanceError(args... interface{}) error {
+func NewUnknownInstanceError(args ...interface{}) error {
 	defaultValue := "unknown managed entity instance"
 	return &UnknownInstanceError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: UnknownInstance,
 		},
 	}
@@ -143,11 +143,11 @@ type DeviceBusyError struct {
 // also be used as a pause indication to the OLT while the ONU
 // conducts a time-consuming operation such as storage of a
 // software image into non-volatile memory.
-func NewDeviceBusyError(args... interface{}) error {
+func NewDeviceBusyError(args ...interface{}) error {
 	defaultValue := "device busy"
 	return &DeviceBusyError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: DeviceBusy,
 		},
 	}
@@ -158,11 +158,11 @@ type InstanceExistsError struct {
 }
 
 // NewInstanceExistsError
-func NewInstanceExistsError(args... interface{}) error {
+func NewInstanceExistsError(args ...interface{}) error {
 	defaultValue := "instance exists"
 	return &InstanceExistsError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: InstanceExists,
 		},
 	}
@@ -178,7 +178,7 @@ func NewAttributeFailureError(args ...interface{}) error {
 	defaultValue := "attribute(s) failed or unknown"
 	return &AttributeFailureError{
 		OmciError: OmciError{
-			err:		genMessage(defaultValue, args...),
+			err:        genMessage(defaultValue, args...),
 			statusCode: AttributeFailure,
 		},
 	}

@@ -285,14 +285,14 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 // An early example of info to track
 //
 type TableInfo struct {
-    HelloWorld  bool        // Need a table description, and an entry description struct
-    DefValue    []byte
-    Size        int
+	HelloWorld bool // TODO: Need a table description, and an entry description struct
+	DefValue   []byte
+	Size       int
 }
 
 // Now the field
 func TableField(name string, access AttributeAccess, tableInfo TableInfo,
-                avc bool, optional bool) *AttributeDefinition {
+	avc bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     tableInfo.DefValue,

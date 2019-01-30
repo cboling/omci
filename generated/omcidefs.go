@@ -245,6 +245,7 @@ type IManagedEntityDefinition interface {
 	GetName() string
 	GetClassID() uint16
 	GetEntityID() uint16
+	SetEntityID(uint16) error
 	GetMessageTypes() []MsgType
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() AttributeDefinitionMap
@@ -256,16 +257,15 @@ type IManagedEntityDefinition interface {
 type BaseManagedEntityDefinition struct {
 	Name                 string
 	ClassID              uint16
-	EntityID             uint16 // TODO: Move to be inside attributes
+	EntityID             uint16
 	MessageTypes         []MsgType
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
 }
 
 func (bme *BaseManagedEntityDefinition) String() string {
-	return fmt.Sprintf("Definition: %v: CID: %v (%#x), EID: %v (%#x), Attributes: %v",
-		bme.Name, bme.ClassID, bme.ClassID, bme.EntityID, bme.EntityID,
-		bme.AttributeDefinitions)
+	return fmt.Sprintf("Definition: %v: CID: %v (%#x), Attributes: %v",
+		bme.Name, bme.ClassID, bme.ClassID, bme.AttributeDefinitions)
 }
 
 func (bme *BaseManagedEntityDefinition) GetName() string {
@@ -276,6 +276,10 @@ func (bme *BaseManagedEntityDefinition) GetClassID() uint16 {
 }
 func (bme *BaseManagedEntityDefinition) GetEntityID() uint16 {
 	return bme.EntityID
+}
+func (bme *BaseManagedEntityDefinition) SetEntityID(eid uint16) error {
+	bme.EntityID = eid
+	return nil
 }
 func (bme *BaseManagedEntityDefinition) GetMessageTypes() []MsgType {
 	return bme.MessageTypes
