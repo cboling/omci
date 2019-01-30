@@ -18,6 +18,7 @@ package omci
 
 import (
 	"encoding/binary"
+	"fmt"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 )
@@ -29,6 +30,12 @@ type MeBasePacket struct {
 	gopacket.Layer
 	layers.BaseLayer
 	MsgLayerType gopacket.LayerType
+}
+
+func (msg *MeBasePacket) String() string {
+	return fmt.Sprintf("ClassID: %d, InstanceId: %d/(%#x), LayerType: %d (%d)",
+		msg.EntityClass, msg.EntityInstance, msg.EntityInstance, msg.LayerType(),
+		msg.MsgLayerType)
 }
 
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {

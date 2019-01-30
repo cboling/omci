@@ -19,6 +19,7 @@ package omci
 import (
 	"encoding/binary"
 	"errors"
+	"fmt"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 )
@@ -38,6 +39,12 @@ type BaseManagedEntityInstance struct {
 	EntityID      uint16
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
+}
+
+func (bme *BaseManagedEntityInstance) String() string {
+	return fmt.Sprintf("ClassID: %v (%v), EntityID: %v, Mask: %#x, Attributes: %v",
+		bme.MEDefinition.GetClassID(), bme.MEDefinition.GetName(),
+		bme.EntityID, bme.AttributeMask, bme.Attributes)
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {

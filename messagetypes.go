@@ -31,6 +31,10 @@ type CreateRequest struct {
 	Attributes me.AttributeValueMap
 }
 
+func (omci *CreateRequest) String() string {
+	return fmt.Sprintf("CreateRequest: %v, Attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
+}
+
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -101,6 +105,11 @@ type CreateResponse struct {
 	AttributeExecutionMask uint16
 }
 
+func (omci *CreateResponse) String() string {
+	return fmt.Sprintf("CreateResponse: %v, Result: %d (%v), Mask: %#x",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeExecutionMask)
+}
+
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -159,6 +168,10 @@ type DeleteRequest struct {
 	MeBasePacket
 }
 
+func (omci *DeleteRequest) String() string {
+	return fmt.Sprintf("DeleteRequest: %v", omci.MeBasePacket.String())
+}
+
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -208,6 +221,11 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 type DeleteResponse struct {
 	MeBasePacket
 	Result me.Results
+}
+
+func (omci *DeleteResponse) String() string {
+	return fmt.Sprintf("DeleteResponse: %v, Result: %d (%v)",
+		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -266,6 +284,11 @@ type SetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
+}
+
+func (omci *SetRequest) String() string {
+	return fmt.Sprintf("SetRequest: %v, Mask: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -357,6 +380,12 @@ type SetResponse struct {
 	FailedAttributeMask      uint16
 }
 
+func (omci *SetResponse) String() string {
+	return fmt.Sprintf("SetResponse: %v, Result: %d (%v), Unsupported Mask: %#x, Failed Mask: %#x",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.UnsupportedAttributeMask,
+		omci.FailedAttributeMask)
+}
+
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -421,6 +450,10 @@ type GetRequest struct {
 	AttributeMask uint16
 }
 
+func (omci *GetRequest) String() string {
+	return fmt.Sprintf("GetRequest: %v, Mask: %#x",
+		omci.MeBasePacket.String(), omci.AttributeMask)
+}
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -480,6 +513,12 @@ type GetResponse struct {
 	Attributes               me.AttributeValueMap
 	UnsupportedAttributeMask uint16
 	FailedAttributeMask      uint16
+}
+
+func (omci *GetResponse) String() string {
+	return fmt.Sprintf("GetResponse: %v, Result: %d (%v), Mask: %#x, Unsupported: %#x, Failed: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask,
+		omci.UnsupportedAttributeMask, omci.FailedAttributeMask, omci.Attributes)
 }
 
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -591,6 +630,11 @@ type GetAllAlarmsRequest struct {
 	AlarmRetrievalMode byte
 }
 
+func (omci *GetAllAlarmsRequest) String() string {
+	return fmt.Sprintf("GetAllAlarmsRequest: %v, Retrieval Mode: %v",
+		omci.MeBasePacket.String(), omci.AlarmRetrievalMode)
+}
+
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -664,6 +708,11 @@ type GetAllAlarmsResponse struct {
 	NumberOfCommands uint16
 }
 
+func (omci *GetAllAlarmsResponse) String() string {
+	return fmt.Sprintf("GetAllAlarmsResponse: %v, NumberOfCommands: %d",
+		omci.MeBasePacket.String(), omci.NumberOfCommands)
+}
+
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -730,6 +779,11 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 type GetAllAlarmsNextRequest struct {
 	MeBasePacket
 	CommandSequenceNumber uint16
+}
+
+func (omci *GetAllAlarmsNextRequest) String() string {
+	return fmt.Sprintf("GetAllAlarmsNextRequest: %v, Sequence Number: %d",
+		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -800,6 +854,11 @@ type GetAllAlarmsNextResponse struct {
 	AlarmBitMap [28]byte // 224 bits
 }
 
+func (omci *GetAllAlarmsNextResponse) String() string {
+	return fmt.Sprintf("GetAllAlarmsNextResponse: %v, Bitmap: %v",
+		omci.MeBasePacket.String(), omci.AlarmBitMap)
+}
+
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -867,6 +926,10 @@ type MibUploadRequest struct {
 	MeBasePacket
 }
 
+func (omci *MibUploadRequest) String() string {
+	return fmt.Sprintf("MibUploadRequest: %v", omci.MeBasePacket.String())
+}
+
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -924,6 +987,11 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 type MibUploadResponse struct {
 	MeBasePacket
 	NumberOfCommands uint16
+}
+
+func (omci *MibUploadResponse) String() string {
+	return fmt.Sprintf("MibUploadResponse: %v, NumberOfCommands: %#v",
+		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -994,6 +1062,11 @@ type MibUploadNextRequest struct {
 	CommandSequenceNumber uint16
 }
 
+func (omci *MibUploadNextRequest) String() string {
+	return fmt.Sprintf("MibUploadNextRequest: %v, SequenceNumber: %v",
+		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
+}
+
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1062,6 +1135,11 @@ type MibUploadNextResponse struct {
 	ReportedME BaseManagedEntityInstance
 }
 
+func (omci *MibUploadNextResponse) String() string {
+	return fmt.Sprintf("MibUploadNextResponse: %v, ReportedME: [%v]",
+		omci.MeBasePacket.String(), omci.ReportedME)
+}
+
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1126,6 +1204,10 @@ type MibResetRequest struct {
 	MeBasePacket
 }
 
+func (omci *MibResetRequest) String() string {
+	return fmt.Sprintf("MibResetRequest: %v", omci.MeBasePacket.String())
+}
+
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1172,6 +1254,11 @@ func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 type MibResetResponse struct {
 	MeBasePacket
 	Result me.Results
+}
+
+func (omci *MibResetResponse) String() string {
+	return fmt.Sprintf("MibResetResponse: %v, Result: %d (%v)",
+		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
 func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1230,6 +1317,11 @@ type AlarmNotificationMsg struct {
 	AlarmBitmap         [AlarmBitmapSize / 8]byte
 	zeroPadding         [3]byte
 	AlarmSequenceNumber byte
+}
+
+func (omci *AlarmNotificationMsg) String() string {
+	return fmt.Sprintf("AlarmNotificationMsg: %v, SequenceNumber: %d, Alarm Bitmap: %v",
+		omci.MeBasePacket.String(), omci.AlarmSequenceNumber, omci.AlarmBitmap)
 }
 
 func (omci *AlarmNotificationMsg) IsAlarmActive(alarmNumber uint8) (bool, error) {
@@ -1342,11 +1434,16 @@ func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts g
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// AlarmNotificationMsg
+// AttributeValueChangeMsg
 type AttributeValueChangeMsg struct {
 	MeBasePacket
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
+}
+
+func (omci *AttributeValueChangeMsg) String() string {
+	return fmt.Sprintf("AttributeValueChangeMsg: %v, Mask: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1425,6 +1522,10 @@ type TestRequest struct {
 	MeBasePacket
 }
 
+func (omci *TestRequest) String() string {
+	return fmt.Sprintf("TestRequest: %v", omci.MeBasePacket.String())
+}
+
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1450,7 +1551,7 @@ func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
+// TestResponse:		TODO: Not yet implemented
 type TestResponse struct {
 	MeBasePacket
 }
