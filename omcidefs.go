@@ -36,7 +36,6 @@ type IManagedEntityInstance interface {
 
 type BaseManagedEntityInstance struct {
 	MEDefinition  me.IManagedEntityDefinition
-	EntityID      uint16
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
 }
@@ -44,7 +43,7 @@ type BaseManagedEntityInstance struct {
 func (bme *BaseManagedEntityInstance) String() string {
 	return fmt.Sprintf("ClassID: %v (%v), EntityID: %v, Mask: %#x, Attributes: %v",
 		bme.MEDefinition.GetClassID(), bme.MEDefinition.GetName(),
-		bme.EntityID, bme.AttributeMask, bme.Attributes)
+		bme.MEDefinition.GetEntityID(), bme.AttributeMask, bme.Attributes)
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
@@ -67,10 +66,6 @@ func (bme *BaseManagedEntityInstance) SetAttributes(attributes me.AttributeValue
 	return nil
 }
 
-func (bme *BaseManagedEntityInstance) GetEntityID() uint16 {
-	return bme.EntityID
-}
-
 // DecodeFromBytes is typically used to decode an ME in a message payload for messages
 // of type MibUploadNextResponse, AVC Notifications, ...
 func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -87,7 +82,6 @@ func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.Pa
 		return err
 	}
 	bme.MEDefinition = msgDef
-	bme.EntityID = entityID
 	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	bme.Attributes, err = msgDef.DecodeAttributes(bme.AttributeMask, data[6:], p)
 	if err != nil {
@@ -103,7 +97,7 @@ func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) er
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, bme.MEDefinition.GetClassID())
-	binary.BigEndian.PutUint16(bytes[2:], bme.EntityID)
+	binary.BigEndian.PutUint16(bytes[2:], bme.MEDefinition.GetEntityID())
 	binary.BigEndian.PutUint16(bytes[4:], bme.AttributeMask)
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
