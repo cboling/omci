@@ -2189,8 +2189,8 @@ func serializeCreateRequest() {
 
 	// TODO: Support setting of the length during serialization
 	omciLayer := &omci.OMCI{
-		TransactionID:    0x0c,
-		MessageType:      byte(me.Create) | me.AR,
+		TransactionID: 0x0c,
+		MessageType:   byte(me.Create) | me.AR,
 		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,						// Optional, defaults to 40 octets
 	}
@@ -2223,8 +2223,6 @@ func serializeCreateRequest() {
 	fmt.Println(goodMessage)
 	fmt.Println(reconstituted)
 }
-
-
 
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte

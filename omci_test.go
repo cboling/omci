@@ -73,7 +73,7 @@ func TestMibResetRequestMessage(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(1))
-	assert.Equal(t, omciMsg.MessageType, byte(me.MibReset)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, MibResetRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibResetRequest)
@@ -114,7 +114,7 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(2))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Create)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, CreateRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
@@ -155,7 +155,7 @@ func TestSetTCont(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(3))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, SetRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
@@ -206,7 +206,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(7))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Create)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, CreateRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
@@ -281,7 +281,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0xb))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Create)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, CreateRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
@@ -344,7 +344,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0xc))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Create)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, CreateRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
@@ -440,7 +440,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0x16))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Set)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, SetRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
@@ -595,7 +595,7 @@ func TestMibUpload(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0x30))
-	assert.Equal(t, omciMsg.MessageType, byte(me.MibUpload)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, MibUploadRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
@@ -686,7 +686,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0x16))
-	assert.Equal(t, omciMsg.MessageType, byte(me.Reboot)|me.AR)
+	assert.Equal(t, omciMsg.MessageType, RebootRequestType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeRebootRequest)
@@ -980,7 +980,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 		omciMsg, ok := omciLayer.(*OMCI)
 		assert.True(t, ok)
 		assert.Equal(t, omciMsg.TransactionID, firstTid)
-		assert.Equal(t, omciMsg.MessageType, byte(me.MibUploadNext)|me.AK)
+		assert.Equal(t, omciMsg.MessageType, MibUploadNextResponseType)
 		assert.Equal(t, omciMsg.Length, uint16(40))
 
 		msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)

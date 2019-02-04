@@ -24,6 +24,53 @@ import (
 	"github.com/google/gopacket"
 )
 
+// MessageType is the OMCI Message Type or'ed with the AR/AK flags as appropriate.
+type MessageType byte
+
+const (
+	_                                             = iota
+	CreateRequestType                 MessageType = MessageType(byte(me.Create) | me.AR)
+	CreateResponseType                MessageType = MessageType(byte(me.Create) | me.AK)
+	DeleteRequestType                 MessageType = MessageType(byte(me.Delete) | me.AR)
+	DeleteResponseType                MessageType = MessageType(byte(me.Delete) | me.AK)
+	SetRequestType                    MessageType = MessageType(byte(me.Set) | me.AR)
+	SetResponseType                   MessageType = MessageType(byte(me.Set) | me.AK)
+	GetRequestType                    MessageType = MessageType(byte(me.Get) | me.AR)
+	GetResponseType                   MessageType = MessageType(byte(me.Get) | me.AK)
+	GetAllAlarmsRequestType           MessageType = MessageType(byte(me.GetAllAlarms) | me.AR)
+	GetAllAlarmsResponseType          MessageType = MessageType(byte(me.GetAllAlarms) | me.AK)
+	GetAllAlarmsNextRequestType       MessageType = MessageType(byte(me.GetAllAlarmsNext) | me.AR)
+	GetAllAlarmsNextResponseType      MessageType = MessageType(byte(me.GetAllAlarmsNext) | me.AK)
+	MibUploadRequestType              MessageType = MessageType(byte(me.MibUpload) | me.AR)
+	MibUploadResponseType             MessageType = MessageType(byte(me.MibUpload) | me.AK)
+	MibUploadNextRequestType          MessageType = MessageType(byte(me.MibUploadNext) | me.AR)
+	MibUploadNextResponseType         MessageType = MessageType(byte(me.MibUploadNext) | me.AK)
+	MibResetRequestType               MessageType = MessageType(byte(me.MibReset) | me.AR)
+	MibResetResponseType              MessageType = MessageType(byte(me.MibReset) | me.AK)
+	TestRequestType                   MessageType = MessageType(byte(me.Test) | me.AR)
+	TestResponseType                  MessageType = MessageType(byte(me.Test) | me.AK)
+	StartSoftwareDownloadRequestType  MessageType = MessageType(byte(me.StartSoftwareDownload) | me.AR)
+	StartSoftwareDownloadResponseType MessageType = MessageType(byte(me.StartSoftwareDownload) | me.AK)
+	DownloadSectionRequestType        MessageType = MessageType(byte(me.DownloadSection) | me.AR)
+	DownloadSectionResponseType       MessageType = MessageType(byte(me.DownloadSection) | me.AK)
+	EndSoftwareDownloadRequestType    MessageType = MessageType(byte(me.EndSoftwareDownload) | me.AR)
+	EndSoftwareDownloadResponseType   MessageType = MessageType(byte(me.EndSoftwareDownload) | me.AK)
+	ActivateSoftwareRequestType       MessageType = MessageType(byte(me.ActivateSoftware) | me.AR)
+	ActivateSoftwareResponseType      MessageType = MessageType(byte(me.ActivateSoftware) | me.AK)
+	CommitSoftwareRequestType         MessageType = MessageType(byte(me.CommitSoftware) | me.AR)
+	CommitSoftwareResponseType        MessageType = MessageType(byte(me.CommitSoftware) | me.AK)
+	SynchronizeTimeRequestType        MessageType = MessageType(byte(me.SynchronizeTime) | me.AR)
+	SynchronizeTimeResponseType       MessageType = MessageType(byte(me.SynchronizeTime) | me.AK)
+	RebootRequestType                 MessageType = MessageType(byte(me.Reboot) | me.AR)
+	RebootResponseType                MessageType = MessageType(byte(me.Reboot) | me.AK)
+	GetNextRequestType                MessageType = MessageType(byte(me.GetNext) | me.AR)
+	GetNextResponseType               MessageType = MessageType(byte(me.GetNext) | me.AK)
+	GetCurrentDataRequestType         MessageType = MessageType(byte(me.GetCurrentData) | me.AR)
+	GetCurrentDataResponseType        MessageType = MessageType(byte(me.GetCurrentData) | me.AK)
+	SetTableRequestType               MessageType = MessageType(byte(me.SetTable) | me.AR)
+	SetTableResponseType              MessageType = MessageType(byte(me.SetTable) | me.AK)
+)
+
 /////////////////////////////////////////////////////////////////////////////
 // CreateRequest
 type CreateRequest struct {

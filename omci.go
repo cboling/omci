@@ -77,7 +77,7 @@ const MaxExtendedLength = 1980
 type OMCI struct {
 	layers.BaseLayer
 	TransactionID    uint16
-	MessageType      uint8
+	MessageType      MessageType
 	DeviceIdentifier DeviceIdent
 	Payload          []byte
 	padding          []byte
@@ -86,10 +86,10 @@ type OMCI struct {
 }
 
 func (omci *OMCI) String() string {
-	msgType := me.MsgType(omci.MessageType & me.MsgTypeMask)
+	msgType := me.MsgType(byte(omci.MessageType) & me.MsgTypeMask)
 	if me.IsAutonomousNotification(msgType) {
 		return fmt.Sprintf("OMCI: Type: %v:", msgType)
-	} else if omci.MessageType&me.AK == me.AK {
+	} else if byte(omci.MessageType)&me.AK == me.AK {
 		return fmt.Sprintf("OMCI: Type: %v Response", msgType)
 	}
 	return fmt.Sprintf("OMCI: Type: %v Request", msgType)
@@ -103,7 +103,7 @@ func (omci *OMCI) LayerType() gopacket.LayerType {
 func (omci *OMCI) LayerContents() []byte {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint16(b, omci.TransactionID)
-	b[2] = omci.MessageType
+	b[2] = byte(omci.MessageType)
 	b[3] = byte(omci.DeviceIdentifier)
 	return b
 }
@@ -157,7 +157,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		return errors.New("frame too small")
 	}
 	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
-	omci.MessageType = data[2]
+	omci.MessageType = MessageType(data[2])
 	omci.DeviceIdentifier = DeviceIdent(data[3])
 
 	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0

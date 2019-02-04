@@ -26,22 +26,22 @@ import (
 )
 
 type options struct {
-	frameFormat     	DeviceIdent
-	failIfTruncated 	bool
-	attributeMask   	uint16
-	results         	me.Results	 // Common for many responses
-	attrExecutionMask   uint16		 // Create Response Only if results == 3 or
-									 // Set Response only if results == 0
-	unsupportedMask		uint16		 // Set Response only if results == 9
+	frameFormat       DeviceIdent
+	failIfTruncated   bool
+	attributeMask     uint16
+	results           me.Results // Common for many responses
+	attrExecutionMask uint16     // Create Response Only if results == 3 or
+	// Set Response only if results == 0
+	unsupportedMask uint16 // Set Response only if results == 9
 }
 
 var defaultFrameOptions = options{
-	frameFormat:     	BaselineIdent,
-	failIfTruncated: 	false,
-	attributeMask:   	0xFFFF,
-	results:         	me.Success,
-	attrExecutionMask: 	0,
-	unsupportedMask:	0,
+	frameFormat:       BaselineIdent,
+	failIfTruncated:   false,
+	attributeMask:     0xFFFF,
+	results:           me.Success,
+	attrExecutionMask: 0,
+	unsupportedMask:   0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -159,8 +159,8 @@ type ManagedEntity struct {
 
 func NewManagedEntity(meDef me.IManagedEntityDefinition, params ...me.ParamData) (*ManagedEntity, error) {
 	m := &ManagedEntity{
-		ClassId: 	meDef.GetClassID(),
-		InstanceId:	meDef.GetEntityID(),
+		ClassId:    meDef.GetClassID(),
+		InstanceId: meDef.GetEntityID(),
 		Attributes: make(me.AttributeValueMap),
 	}
 	if len(params) > 0 {
@@ -205,7 +205,7 @@ func (m *ManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinitio
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
-func (m *ManagedEntity) EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, interface{}, error) {
+func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, interface{}, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
 	meDefinition, err := m.GetManagedEntityDefinition()
@@ -231,91 +231,95 @@ func (m *ManagedEntity) EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI
 
 	// Encode message type specific operation
 	switch messageType {
-	case byte(me.Create) | me.AR:
+	case CreateRequestType:
 		meInfo, err = m.createRequestFrame(opts)
-	case byte(me.Delete) | me.AR:
+	case DeleteRequestType:
 		meInfo, err = m.deleteRequestFrame(opts)
-	case byte(me.Get) | me.AR:
+	case SetRequestType:
+		meInfo, err = m.setRequestFrame(opts)
+	case GetRequestType:
 		meInfo, err = m.getRequestFrame(opts)
-	case byte(me.GetAllAlarms) | me.AR:
+	case GetAllAlarmsRequestType:
 		meInfo, err = m.getAllAlarmsRequestFrame(opts)
-	case byte(me.GetAllAlarmsNext) | me.AR:
+	case GetAllAlarmsNextRequestType:
 		meInfo, err = m.getAllAlarmsNextRequestFrame(opts)
-	case byte(me.MibUpload) | me.AR:
+	case MibUploadRequestType:
 		meInfo, err = m.mibUploadRequestFrame(opts)
-	case byte(me.MibUploadNext) | me.AR:
+	case MibUploadNextRequestType:
 		meInfo, err = m.mibUploadNextRequestFrame(opts)
-	case byte(me.MibReset) | me.AR:
+	case MibResetRequestType:
 		meInfo, err = m.mibResetRequestFrame(opts)
-	case byte(me.Test) | me.AR:
+	case TestRequestType:
 		meInfo, err = m.testRequestFrame(opts)
-	case byte(me.StartSoftwareDownload) | me.AR:
+	case StartSoftwareDownloadRequestType:
 		meInfo, err = m.startSoftwareDownloadRequestFrame(opts)
-	case byte(me.DownloadSection) | me.AR, byte(me.DownloadSection):
+	case DownloadSectionRequestType:
 		meInfo, err = m.downloadSectionRequestFrame(opts)
-	case byte(me.EndSoftwareDownload) | me.AR:
+	case EndSoftwareDownloadRequestType:
 		meInfo, err = m.endSoftwareDownloadRequestFrame(opts)
-	case byte(me.ActivateSoftware) | me.AR:
+	case ActivateSoftwareRequestType:
 		meInfo, err = m.activateSoftwareRequestFrame(opts)
-	case byte(me.CommitSoftware) | me.AR:
+	case CommitSoftwareRequestType:
 		meInfo, err = m.commitSoftwareRequestFrame(opts)
-	case byte(me.SynchronizeTime) | me.AR:
+	case SynchronizeTimeRequestType:
 		meInfo, err = m.synchronizeTimeRequestFrame(opts)
-	case byte(me.Reboot) | me.AR:
+	case RebootRequestType:
 		meInfo, err = m.rebootRequestFrame(opts)
-	case byte(me.GetNext) | me.AR:
+	case GetNextRequestType:
 		meInfo, err = m.getNextRequestFrame(opts)
-	case byte(me.GetCurrentData) | me.AR:
+	case GetCurrentDataRequestType:
 		meInfo, err = m.getCurrentDataRequestFrame(opts)
-	case byte(me.SetTable) | me.AR:
+	case SetTableRequestType:
 		meInfo, err = m.setTableRequestFrame(opts)
 
 	// Response Frames
-	case byte(me.Create) | me.AK:
+	case CreateResponseType:
 		meInfo, err = m.createResponseFrame(opts)
-	case byte(me.Delete) | me.AK:
+	case DeleteResponseType:
 		meInfo, err = m.deleteResponseFrame(opts)
-	case byte(me.Get) | me.AK:
+	case SetResponseType:
+		meInfo, err = m.setResponseFrame(opts)
+	case GetResponseType:
 		meInfo, err = m.getResponseFrame(opts)
-	case byte(me.GetAllAlarms) | me.AK:
+	case GetAllAlarmsResponseType:
 		meInfo, err = m.getAllAlarmsResponseFrame(opts)
-	case byte(me.GetAllAlarmsNext) | me.AK:
+	case GetAllAlarmsNextResponseType:
 		meInfo, err = m.getAllAlarmsNextResponseFrame(opts)
-	case byte(me.MibUpload) | me.AK:
+	case MibUploadResponseType:
 		meInfo, err = m.mibUploadResponseFrame(opts)
-	case byte(me.MibUploadNext) | me.AK:
+	case MibUploadNextResponseType:
 		meInfo, err = m.mibUploadNextResponseFrame(opts)
-	case byte(me.MibReset) | me.AK:
+	case MibResetResponseType:
 		meInfo, err = m.mibResetResponseFrame(opts)
-	case byte(me.Test) | me.AK:
+	case TestResponseType:
 		meInfo, err = m.testResponseFrame(opts)
-	case byte(me.StartSoftwareDownload) | me.AK:
+	case StartSoftwareDownloadResponseType:
 		meInfo, err = m.startSoftwareDownloadResponseFrame(opts)
-	case byte(me.DownloadSection) | me.AK:
+	case DownloadSectionResponseType:
 		meInfo, err = m.downloadSectionResponseFrame(opts)
-	case byte(me.EndSoftwareDownload) | me.AK:
+	case EndSoftwareDownloadResponseType:
 		meInfo, err = m.endSoftwareDownloadResponseFrame(opts)
-	case byte(me.ActivateSoftware) | me.AK:
+	case ActivateSoftwareResponseType:
 		meInfo, err = m.activateSoftwareResponseFrame(opts)
-	case byte(me.CommitSoftware) | me.AK:
+	case CommitSoftwareResponseType:
 		meInfo, err = m.commitSoftwareResponseFrame(opts)
-	case byte(me.SynchronizeTime) | me.AK:
+	case SynchronizeTimeResponseType:
 		meInfo, err = m.synchronizeTimeResponseFrame(opts)
-	case byte(me.Reboot) | me.AK:
+	case RebootResponseType:
 		meInfo, err = m.rebootResponseFrame(opts)
-	case byte(me.GetNext) | me.AK:
+	case GetNextResponseType:
 		meInfo, err = m.getNextResponseFrame(opts)
-	case byte(me.GetCurrentData) | me.AK:
+	case GetCurrentDataResponseType:
 		meInfo, err = m.getCurrentDataResponseFrame(opts)
-	case byte(me.SetTable) | me.AK:
+	case SetTableResponseType:
 		meInfo, err = m.setTableResponseFrame(opts)
 
 	// Autonomous ONU Frames
-	case byte(me.AlarmNotification) | me.AK:
+	case MessageType(me.AlarmNotification):
 		meInfo, err = m.alarmNotificationFrame(opts)
-	case byte(me.AttributeValueChange) | me.AK:
+	case MessageType(me.AttributeValueChange):
 		meInfo, err = m.attributeValueChangeFrame(opts)
-	case byte(me.TestResult):
+	case MessageType(me.TestResult):
 		meInfo, err = m.testResultFrame(opts)
 
 	// Unknown
@@ -368,7 +372,7 @@ func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
-		Result:		opt.results,
+		Result: opt.results,
 	}
 	if meLayer.Result == me.ParameterError {
 		meLayer.AttributeExecutionMask = opt.attrExecutionMask
@@ -427,7 +431,7 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 		var attrIndex uint
 		for attrIndex = 1; attrIndex <= 16; attrIndex++ {
 			// Is this attribute requested
-			if mask & (1 << (16-attrIndex)) != 0 {
+			if mask&(1<<(16-attrIndex)) != 0 {
 				// Get definitions since we need the name
 				attrDef, ok := attrDefs[attrIndex]
 				if !ok {
@@ -489,7 +493,7 @@ func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
-		Result:  opt.results,
+		Result: opt.results,
 	}
 	if meLayer.Result == me.AttributeFailure {
 		meLayer.UnsupportedAttributeMask = opt.unsupportedMask
@@ -532,7 +536,7 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
-		Result: 	   opt.results,
+		Result:        opt.results,
 		AttributeMask: 0,
 		Attributes:    make(me.AttributeValueMap),
 	}
@@ -639,7 +643,7 @@ func (m *ManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, err
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
@@ -681,7 +685,7 @@ func (m *ManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{},
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) {
@@ -723,7 +727,7 @@ func (m *ManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error)
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, error) {
@@ -765,7 +769,7 @@ func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, er
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) mibResetRequestFrame(opt options) (interface{}, error) {
@@ -797,7 +801,7 @@ func (m *ManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) 
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) alarmNotificationFrame(opt options) (interface{}, error) {
@@ -881,7 +885,7 @@ func (m *ManagedEntity) testResponseFrame(opt options) (interface{}, error) {
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
@@ -923,7 +927,7 @@ func (m *ManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interfa
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, error) {
@@ -965,7 +969,7 @@ func (m *ManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, 
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
@@ -1007,7 +1011,7 @@ func (m *ManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, error) {
@@ -1049,7 +1053,7 @@ func (m *ManagedEntity) activateSoftwareResponseFrame(opt options) (interface{},
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, error) {
@@ -1091,7 +1095,7 @@ func (m *ManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, e
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
@@ -1133,7 +1137,7 @@ func (m *ManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, 
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
@@ -1175,7 +1179,7 @@ func (m *ManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
@@ -1217,7 +1221,7 @@ func (m *ManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) testResultFrame(opt options) (interface{}, error) {
@@ -1280,7 +1284,7 @@ func (m *ManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, e
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
 
 func (m *ManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
@@ -1328,5 +1332,5 @@ func (m *ManagedEntity) setTableResponseFrame(opt options) (interface{}, error) 
 	// TODO: Lots of work to do
 
 	fmt.Println(mask, maxPayload)
-	return meLayer,  errors.New("todo: Not implemented")
+	return meLayer, errors.New("todo: Not implemented")
 }
