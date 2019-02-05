@@ -152,12 +152,7 @@ var allNotificationTypes = [...]MsgType{
 // SupportsMsgType returns true if the managed entity supports the desired
 // Message Type / action
 func SupportsMsgType(entity IManagedEntityDefinition, msgType MsgType) bool {
-	for _, msg := range entity.GetMessageTypes() {
-		if msgType == msg {
-			return true
-		}
-	}
-	return false
+	return entity.GetMessageTypes().Contains(msgType)
 }
 
 func IsAutonomousNotification(mt MsgType) bool {
@@ -247,7 +242,7 @@ type IManagedEntityDefinition interface {
 	GetClassID() uint16
 	GetEntityID() uint16
 	SetEntityID(uint16) error
-	GetMessageTypes() []MsgType
+	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() AttributeDefinitionMap
 
