@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PwAtmPerformanceMonitoringHistoryDataClassId uint16 = 338
 
 // PwAtmPerformanceMonitoringHistoryData (class ID #338) defines the basic
@@ -37,12 +39,12 @@ func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 		Name:     "PwAtmPerformanceMonitoringHistoryData",
 		ClassID:  338,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

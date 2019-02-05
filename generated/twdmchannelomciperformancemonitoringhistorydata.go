@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TwdmChannelOmciPerformanceMonitoringHistoryDataClassId uint16 = 452
 
 // TwdmChannelOmciPerformanceMonitoringHistoryData (class ID #452) defines the basic
@@ -37,13 +39,13 @@ func NewTwdmChannelOmciPerformanceMonitoringHistoryData(params ...ParamData) (IM
 		Name:     "TwdmChannelOmciPerformanceMonitoringHistoryData",
 		ClassID:  452,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetCurrentData,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

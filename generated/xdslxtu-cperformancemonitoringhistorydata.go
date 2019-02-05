@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XdslXtuCPerformanceMonitoringHistoryDataClassId uint16 = 112
 
 // XdslXtuCPerformanceMonitoringHistoryData (class ID #112) defines the basic
@@ -37,12 +39,12 @@ func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 		Name:     "XdslXtuCPerformanceMonitoringHistoryData",
 		ClassID:  112,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

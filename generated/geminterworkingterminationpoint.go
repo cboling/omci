@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const GemInterworkingTerminationPointClassId uint16 = 266
 
 // GemInterworkingTerminationPoint (class ID #266) defines the basic
@@ -37,12 +39,12 @@ func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefi
 		Name:     "GemInterworkingTerminationPoint",
 		ClassID:  266,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

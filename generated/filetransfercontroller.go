@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const FileTransferControllerClassId uint16 = 318
 
 // FileTransferController (class ID #318) defines the basic
@@ -37,10 +39,10 @@ func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, e
 		Name:     "FileTransferController",
 		ClassID:  318,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

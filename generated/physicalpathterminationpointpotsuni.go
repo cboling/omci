@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PhysicalPathTerminationPointPotsUniClassId uint16 = 53
 
 // PhysicalPathTerminationPointPotsUni (class ID #53) defines the basic
@@ -37,11 +39,11 @@ func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity
 		Name:     "PhysicalPathTerminationPointPotsUni",
 		ClassID:  53,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
 			Test,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

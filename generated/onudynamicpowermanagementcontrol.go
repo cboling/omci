@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OnuDynamicPowerManagementControlClassId uint16 = 336
 
 // OnuDynamicPowerManagementControl (class ID #336) defines the basic
@@ -37,10 +39,10 @@ func NewOnuDynamicPowerManagementControl(params ...ParamData) (IManagedEntityDef
 		Name:     "OnuDynamicPowerManagementControl",
 		ClassID:  336,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

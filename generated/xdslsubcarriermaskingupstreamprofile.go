@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XdslSubcarrierMaskingUpstreamProfileClassId uint16 = 109
 
 // XdslSubcarrierMaskingUpstreamProfile (class ID #109) defines the basic
@@ -37,12 +39,12 @@ func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntit
 		Name:     "XdslSubcarrierMaskingUpstreamProfile",
 		ClassID:  109,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

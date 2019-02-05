@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EfmBondingLinkClassId uint16 = 420
 
 // EfmBondingLink (class ID #420) defines the basic
@@ -37,12 +39,12 @@ func NewEfmBondingLink(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "EfmBondingLink",
 		ClassID:  420,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

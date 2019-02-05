@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const IpHostConfigDataClassId uint16 = 134
 
 // IpHostConfigData (class ID #134) defines the basic
@@ -37,10 +39,10 @@ func NewIpHostConfigData(params ...ParamData) (IManagedEntityDefinition, error) 
 		Name:     "IpHostConfigData",
 		ClassID:  134,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

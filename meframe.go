@@ -168,9 +168,7 @@ func NewManagedEntity(meDef me.IManagedEntityDefinition, params ...me.ParamData)
 		m.InstanceId = params[0].EntityID
 		m.Attributes = params[0].Attributes
 	}
-	// TODO: Not done.  Will this work?
-
-	return m, errors.New("todo: not fully implemented yet")
+	return m, nil
 }
 
 // String provides a simple string that describes this struct

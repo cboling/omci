@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TwdmChannelPloamPerformanceMonitoringHistoryDataPart2ClassId uint16 = 447
 
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID #447) defines the basic
@@ -37,13 +39,13 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamDat
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart2",
 		ClassID:  447,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetCurrentData,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

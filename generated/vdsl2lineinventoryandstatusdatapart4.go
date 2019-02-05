@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Vdsl2LineInventoryAndStatusDataPart4ClassId uint16 = 415
 
 // Vdsl2LineInventoryAndStatusDataPart4 (class ID #415) defines the basic
@@ -37,9 +39,9 @@ func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntit
 		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
 		ClassID:  415,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

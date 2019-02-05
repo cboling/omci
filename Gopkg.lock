@@ -10,6 +10,14 @@
   version = "v1.1.1"
 
 [[projects]]
+  digest = "1:e47d51dab652d26c3fba6f8cba403f922d02757a82abdc77e90df7948daf296e"
+  name = "github.com/deckarep/golang-set"
+  packages = ["."]
+  pruneopts = "UT"
+  revision = "cbaa98ba5575e67703b32b4b19f73c91f3c4159e"
+  version = "v1.7.1"
+
+[[projects]]
   branch = "master"
   digest = "1:e1bdf8bd56b2c7775b12f17219b2e6b1d45a39cf20e42926f9069b1755639918"
   name = "github.com/google/gopacket"
@@ -40,6 +48,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/deckarep/golang-set",
     "github.com/google/gopacket",
     "github.com/google/gopacket/layers",
     "github.com/stretchr/testify/assert",

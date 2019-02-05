@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MulticastSubscriberMonitorClassId uint16 = 311
 
 // MulticastSubscriberMonitor (class ID #311) defines the basic
@@ -37,13 +39,13 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 		Name:     "MulticastSubscriberMonitor",
 		ClassID:  311,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

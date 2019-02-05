@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EthernetFrameExtendedPmClassId uint16 = 334
 
 // EthernetFrameExtendedPm (class ID #334) defines the basic
@@ -37,12 +39,12 @@ func NewEthernetFrameExtendedPm(params ...ParamData) (IManagedEntityDefinition, 
 		Name:     "EthernetFrameExtendedPm",
 		ClassID:  334,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

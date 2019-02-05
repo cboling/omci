@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OnuPowerSheddingClassId uint16 = 133
 
 // OnuPowerShedding (class ID #133) defines the basic
@@ -37,10 +39,10 @@ func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) 
 		Name:     "OnuPowerShedding",
 		ClassID:  133,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

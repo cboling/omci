@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VoipMediaProfileClassId uint16 = 142
 
 // VoipMediaProfile (class ID #142) defines the basic
@@ -37,12 +39,12 @@ func NewVoipMediaProfile(params ...ParamData) (IManagedEntityDefinition, error) 
 		Name:     "VoipMediaProfile",
 		ClassID:  142,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TContClassId uint16 = 262
 
 // TCont (class ID #262) defines the basic
@@ -37,10 +39,10 @@ func NewTCont(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "TCont",
 		ClassID:  262,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

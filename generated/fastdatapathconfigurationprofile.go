@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const FastDataPathConfigurationProfileClassId uint16 = 433
 
 // FastDataPathConfigurationProfile (class ID #433) defines the basic
@@ -37,12 +39,12 @@ func NewFastDataPathConfigurationProfile(params ...ParamData) (IManagedEntityDef
 		Name:     "FastDataPathConfigurationProfile",
 		ClassID:  433,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

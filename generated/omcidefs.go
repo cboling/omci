@@ -22,6 +22,7 @@ package generated
 import (
 	"errors"
 	"fmt"
+	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 	"math/bits"
 )
@@ -258,7 +259,7 @@ type BaseManagedEntityDefinition struct {
 	Name                 string
 	ClassID              uint16
 	EntityID             uint16
-	MessageTypes         []MsgType
+	MessageTypes         mapset.Set
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
 }
@@ -281,7 +282,7 @@ func (bme *BaseManagedEntityDefinition) SetEntityID(eid uint16) error {
 	bme.EntityID = eid
 	return nil
 }
-func (bme *BaseManagedEntityDefinition) GetMessageTypes() []MsgType {
+func (bme *BaseManagedEntityDefinition) GetMessageTypes() mapset.Set {
 	return bme.MessageTypes
 }
 func (bme *BaseManagedEntityDefinition) GetAllowedAttributeMask() uint16 {

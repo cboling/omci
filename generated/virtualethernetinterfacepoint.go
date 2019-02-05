@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VirtualEthernetInterfacePointClassId uint16 = 329
 
 // VirtualEthernetInterfacePoint (class ID #329) defines the basic
@@ -37,10 +39,10 @@ func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntityDefini
 		Name:     "VirtualEthernetInterfacePoint",
 		ClassID:  329,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

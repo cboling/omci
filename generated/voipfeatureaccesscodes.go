@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VoipFeatureAccessCodesClassId uint16 = 147
 
 // VoipFeatureAccessCodes (class ID #147) defines the basic
@@ -37,12 +39,12 @@ func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntityDefinition, e
 		Name:     "VoipFeatureAccessCodes",
 		ClassID:  147,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

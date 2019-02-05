@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MgcPerformanceMonitoringHistoryDataClassId uint16 = 156
 
 // MgcPerformanceMonitoringHistoryData (class ID #156) defines the basic
@@ -37,12 +39,12 @@ func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity
 		Name:     "MgcPerformanceMonitoringHistoryData",
 		ClassID:  156,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

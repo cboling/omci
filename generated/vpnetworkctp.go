@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VpNetworkCtpClassId uint16 = 269
 
 // VpNetworkCtp (class ID #269) defines the basic
@@ -37,12 +39,12 @@ func NewVpNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "VpNetworkCtp",
 		ClassID:  269,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

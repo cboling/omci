@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const UniGClassId uint16 = 264
 
 // UniG (class ID #264) defines the basic
@@ -37,10 +39,10 @@ func NewUniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "UniG",
 		ClassID:  264,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

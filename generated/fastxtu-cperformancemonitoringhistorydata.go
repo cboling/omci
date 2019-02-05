@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const FastXtuCPerformanceMonitoringHistoryDataClassId uint16 = 437
 
 // FastXtuCPerformanceMonitoringHistoryData (class ID #437) defines the basic
@@ -37,12 +39,12 @@ func NewFastXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 		Name:     "FastXtuCPerformanceMonitoringHistoryData",
 		ClassID:  437,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

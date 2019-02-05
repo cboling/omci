@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const SnmpConfigurationDataClassId uint16 = 335
 
 // SnmpConfigurationData (class ID #335) defines the basic
@@ -37,12 +39,12 @@ func NewSnmpConfigurationData(params ...ParamData) (IManagedEntityDefinition, er
 		Name:     "SnmpConfigurationData",
 		ClassID:  335,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const ReCommonAmplifierParametersClassId uint16 = 328
 
 // ReCommonAmplifierParameters (class ID #328) defines the basic
@@ -37,10 +39,10 @@ func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntityDefiniti
 		Name:     "ReCommonAmplifierParameters",
 		ClassID:  328,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const SipAgentPerformanceMonitoringHistoryDataClassId uint16 = 151
 
 // SipAgentPerformanceMonitoringHistoryData (class ID #151) defines the basic
@@ -37,12 +39,12 @@ func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (IManagedE
 		Name:     "SipAgentPerformanceMonitoringHistoryData",
 		ClassID:  151,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

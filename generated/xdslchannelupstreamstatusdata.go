@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XdslChannelUpstreamStatusDataClassId uint16 = 103
 
 // XdslChannelUpstreamStatusData (class ID #103) defines the basic
@@ -37,9 +39,9 @@ func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntityDefini
 		Name:     "XdslChannelUpstreamStatusData",
 		ClassID:  103,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

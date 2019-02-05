@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1XPerformanceMonitoringHistoryDataClassId uint16 = 292
 
 // Dot1XPerformanceMonitoringHistoryData (class ID #292) defines the basic
@@ -37,12 +39,12 @@ func NewDot1XPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnti
 		Name:     "Dot1XPerformanceMonitoringHistoryData",
 		ClassID:  292,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

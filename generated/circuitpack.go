@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const CircuitPackClassId uint16 = 6
 
 // CircuitPack (class ID #6) defines the basic
@@ -37,11 +39,11 @@ func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "CircuitPack",
 		ClassID:  6,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

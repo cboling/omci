@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PseudowireMaintenanceProfileClassId uint16 = 284
 
 // PseudowireMaintenanceProfile (class ID #284) defines the basic
@@ -37,12 +39,12 @@ func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntityDefinit
 		Name:     "PseudowireMaintenanceProfile",
 		ClassID:  284,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

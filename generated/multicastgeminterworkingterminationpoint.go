@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MulticastGemInterworkingTerminationPointClassId uint16 = 281
 
 // MulticastGemInterworkingTerminationPoint (class ID #281) defines the basic
@@ -37,13 +39,13 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 		Name:     "MulticastGemInterworkingTerminationPoint",
 		ClassID:  281,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

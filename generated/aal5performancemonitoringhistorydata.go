@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Aal5PerformanceMonitoringHistoryDataClassId uint16 = 18
 
 // Aal5PerformanceMonitoringHistoryData (class ID #18) defines the basic
@@ -37,12 +39,12 @@ func NewAal5PerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntit
 		Name:     "Aal5PerformanceMonitoringHistoryData",
 		ClassID:  18,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

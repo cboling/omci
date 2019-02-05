@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const ThresholdData1ClassId uint16 = 273
 
 // ThresholdData1 (class ID #273) defines the basic
@@ -37,12 +39,12 @@ func NewThresholdData1(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "ThresholdData1",
 		ClassID:  273,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

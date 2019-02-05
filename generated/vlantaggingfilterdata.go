@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VlanTaggingFilterDataClassId uint16 = 84
 
 // VlanTaggingFilterData (class ID #84) defines the basic
@@ -37,12 +39,12 @@ func NewVlanTaggingFilterData(params ...ParamData) (IManagedEntityDefinition, er
 		Name:     "VlanTaggingFilterData",
 		ClassID:  84,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

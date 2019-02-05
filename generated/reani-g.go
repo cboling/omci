@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const ReAniGClassId uint16 = 313
 
 // ReAniG (class ID #313) defines the basic
@@ -37,10 +39,10 @@ func NewReAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "ReAniG",
 		ClassID:  313,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

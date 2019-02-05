@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const ReDownstreamAmplifierClassId uint16 = 316
 
 // ReDownstreamAmplifier (class ID #316) defines the basic
@@ -37,11 +39,11 @@ func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntityDefinition, er
 		Name:     "ReDownstreamAmplifier",
 		ClassID:  316,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
 			Test,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

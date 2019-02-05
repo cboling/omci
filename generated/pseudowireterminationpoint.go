@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PseudowireTerminationPointClassId uint16 = 282
 
 // PseudowireTerminationPoint (class ID #282) defines the basic
@@ -37,12 +39,12 @@ func NewPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinitio
 		Name:     "PseudowireTerminationPoint",
 		ClassID:  282,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

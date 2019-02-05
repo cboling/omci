@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const FastLineInventoryAndStatusDataClassId uint16 = 435
 
 // FastLineInventoryAndStatusData (class ID #435) defines the basic
@@ -37,9 +39,9 @@ func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntityDefin
 		Name:     "FastLineInventoryAndStatusData",
 		ClassID:  435,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

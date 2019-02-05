@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PseudowirePerformanceMonitoringHistoryDataClassId uint16 = 285
 
 // PseudowirePerformanceMonitoringHistoryData (class ID #285) defines the basic
@@ -37,12 +39,12 @@ func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManage
 		Name:     "PseudowirePerformanceMonitoringHistoryData",
 		ClassID:  285,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

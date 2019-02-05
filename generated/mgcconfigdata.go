@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MgcConfigDataClassId uint16 = 155
 
 // MgcConfigData (class ID #155) defines the basic
@@ -37,12 +39,12 @@ func NewMgcConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "MgcConfigData",
 		ClassID:  155,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

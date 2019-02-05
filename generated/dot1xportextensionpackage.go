@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1XPortExtensionPackageClassId uint16 = 290
 
 // Dot1XPortExtensionPackage (class ID #290) defines the basic
@@ -37,10 +39,10 @@ func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 		Name:     "Dot1XPortExtensionPackage",
 		ClassID:  290,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

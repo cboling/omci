@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Ieee8021PMapperServiceProfileClassId uint16 = 130
 
 // Ieee8021PMapperServiceProfile (class ID #130) defines the basic
@@ -37,12 +39,12 @@ func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntityDefini
 		Name:     "Ieee8021PMapperServiceProfile",
 		ClassID:  130,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

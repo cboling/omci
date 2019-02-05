@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XdslLineInventoryAndStatusDataPart5ClassId uint16 = 325
 
 // XdslLineInventoryAndStatusDataPart5 (class ID #325) defines the basic
@@ -37,10 +39,10 @@ func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity
 		Name:     "XdslLineInventoryAndStatusDataPart5",
 		ClassID:  325,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

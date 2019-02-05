@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId uint16 = 422
 
 // EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #422) defines the basic
@@ -37,12 +39,12 @@ func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData
 		Name:     "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
 		ClassID:  422,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

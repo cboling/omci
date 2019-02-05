@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1AgMepClassId uint16 = 302
 
 // Dot1AgMep (class ID #302) defines the basic
@@ -37,12 +39,12 @@ func NewDot1AgMep(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "Dot1AgMep",
 		ClassID:  302,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

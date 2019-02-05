@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VoipVoiceCtpClassId uint16 = 139
 
 // VoipVoiceCtp (class ID #139) defines the basic
@@ -37,12 +39,12 @@ func NewVoipVoiceCtp(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "VoipVoiceCtp",
 		ClassID:  139,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EthernetPseudowireParametersClassId uint16 = 400
 
 // EthernetPseudowireParameters (class ID #400) defines the basic
@@ -37,12 +39,12 @@ func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntityDefinit
 		Name:     "EthernetPseudowireParameters",
 		ClassID:  400,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

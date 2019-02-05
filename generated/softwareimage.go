@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const SoftwareImageClassId uint16 = 7
 
 // SoftwareImage (class ID #7) defines the basic
@@ -37,10 +39,10 @@ func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "SoftwareImage",
 		ClassID:  7,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			DownloadSection,
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

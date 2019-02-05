@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const RadiusPerformanceMonitoringHistoryDataClassId uint16 = 293
 
 // RadiusPerformanceMonitoringHistoryData (class ID #293) defines the basic
@@ -37,12 +39,12 @@ func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEnt
 		Name:     "RadiusPerformanceMonitoringHistoryData",
 		ClassID:  293,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

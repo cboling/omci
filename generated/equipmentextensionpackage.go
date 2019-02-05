@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EquipmentExtensionPackageClassId uint16 = 160
 
 // EquipmentExtensionPackage (class ID #160) defines the basic
@@ -37,10 +39,10 @@ func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntityDefinition
 		Name:     "EquipmentExtensionPackage",
 		ClassID:  160,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

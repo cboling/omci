@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OnuRemoteDebugClassId uint16 = 158
 
 // OnuRemoteDebug (class ID #158) defines the basic
@@ -37,11 +39,11 @@ func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "OnuRemoteDebug",
 		ClassID:  158,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

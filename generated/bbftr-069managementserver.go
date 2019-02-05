@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const BbfTr069ManagementServerClassId uint16 = 340
 
 // BbfTr069ManagementServer (class ID #340) defines the basic
@@ -37,10 +39,10 @@ func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition,
 		Name:     "BbfTr069ManagementServer",
 		ClassID:  340,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EnhancedSecurityControlClassId uint16 = 332
 
 // EnhancedSecurityControl (class ID #332) defines the basic
@@ -37,11 +39,11 @@ func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntityDefinition, 
 		Name:     "EnhancedSecurityControl",
 		ClassID:  332,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

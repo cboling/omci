@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId uint16 = 116
 
 // TcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID #116) defines the basic
@@ -37,12 +39,12 @@ func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (IMan
 		Name:     "TcAdaptorPerformanceMonitoringHistoryDataXdsl",
 		ClassID:  116,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const CesServiceProfileClassId uint16 = 21
 
 // CesServiceProfile (class ID #21) defines the basic
@@ -37,12 +39,12 @@ func NewCesServiceProfile(params ...ParamData) (IManagedEntityDefinition, error)
 		Name:     "CesServiceProfile",
 		ClassID:  21,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

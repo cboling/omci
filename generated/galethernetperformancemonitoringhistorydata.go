@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const GalEthernetPerformanceMonitoringHistoryDataClassId uint16 = 276
 
 // GalEthernetPerformanceMonitoringHistoryData (class ID #276) defines the basic
@@ -37,12 +39,12 @@ func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManag
 		Name:     "GalEthernetPerformanceMonitoringHistoryData",
 		ClassID:  276,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

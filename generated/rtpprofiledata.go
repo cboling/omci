@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const RtpProfileDataClassId uint16 = 143
 
 // RtpProfileData (class ID #143) defines the basic
@@ -37,12 +39,12 @@ func NewRtpProfileData(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "RtpProfileData",
 		ClassID:  143,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

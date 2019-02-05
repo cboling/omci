@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TrafficSchedulerClassId uint16 = 278
 
 // TrafficScheduler (class ID #278) defines the basic
@@ -37,10 +39,10 @@ func NewTrafficScheduler(params ...ParamData) (IManagedEntityDefinition, error) 
 		Name:     "TrafficScheduler",
 		ClassID:  278,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EnergyConsumptionPerformanceMonitoringHistoryDataClassId uint16 = 343
 
 // EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343) defines the basic
@@ -37,12 +39,12 @@ func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (
 		Name:     "EnergyConsumptionPerformanceMonitoringHistoryData",
 		ClassID:  343,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

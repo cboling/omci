@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const NetworkDialPlanTableClassId uint16 = 145
 
 // NetworkDialPlanTable (class ID #145) defines the basic
@@ -37,13 +39,13 @@ func NewNetworkDialPlanTable(params ...ParamData) (IManagedEntityDefinition, err
 		Name:     "NetworkDialPlanTable",
 		ClassID:  145,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

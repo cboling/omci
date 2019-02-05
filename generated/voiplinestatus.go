@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VoipLineStatusClassId uint16 = 141
 
 // VoipLineStatus (class ID #141) defines the basic
@@ -37,9 +39,9 @@ func NewVoipLineStatus(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "VoipLineStatus",
 		ClassID:  141,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

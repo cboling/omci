@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OltGClassId uint16 = 131
 
 // OltG (class ID #131) defines the basic
@@ -37,10 +39,10 @@ func NewOltG(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "OltG",
 		ClassID:  131,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

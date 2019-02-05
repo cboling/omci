@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XdslChannelConfigurationProfilePart2ClassId uint16 = 412
 
 // XdslChannelConfigurationProfilePart2 (class ID #412) defines the basic
@@ -37,12 +39,12 @@ func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (IManagedEntit
 		Name:     "XdslChannelConfigurationProfilePart2",
 		ClassID:  412,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

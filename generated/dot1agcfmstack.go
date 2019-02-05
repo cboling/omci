@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1AgCfmStackClassId uint16 = 305
 
 // Dot1AgCfmStack (class ID #305) defines the basic
@@ -37,10 +39,10 @@ func NewDot1AgCfmStack(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "Dot1AgCfmStack",
 		ClassID:  305,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

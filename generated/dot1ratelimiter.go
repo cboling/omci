@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1RateLimiterClassId uint16 = 298
 
 // Dot1RateLimiter (class ID #298) defines the basic
@@ -37,12 +39,12 @@ func NewDot1RateLimiter(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "Dot1RateLimiter",
 		ClassID:  298,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

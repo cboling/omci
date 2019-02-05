@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const FastChannelConfigurationProfileClassId uint16 = 432
 
 // FastChannelConfigurationProfile (class ID #432) defines the basic
@@ -37,12 +39,12 @@ func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefi
 		Name:     "FastChannelConfigurationProfile",
 		ClassID:  432,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write, false, false, false, false),

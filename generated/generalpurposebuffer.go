@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const GeneralPurposeBufferClassId uint16 = 308
 
 // GeneralPurposeBuffer (class ID #308) defines the basic
@@ -37,12 +39,12 @@ func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntityDefinition, err
 		Name:     "GeneralPurposeBuffer",
 		ClassID:  308,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetNext,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

@@ -23,6 +23,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 	"sort"
 	"strings"
@@ -185,6 +186,22 @@ func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
 	}
 	sort.Slice(keys, func(i, j int) bool { return keys[i] < keys[j] })
 	return keys
+}
+
+// GetAttributeBitmap is a convenience functions to scan a list of attributes
+// and return the bitmask that represents them
+func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (uint16, error) {
+	var mask uint16
+	for k, def := range attrMap {
+		if attributes.Contains(def.Name) {
+			mask |= 1 << uint16(16-k)
+			attributes.Remove(def.Name)
+		}
+	}
+	if len(attributes) {
+		return 0, errors.New(fmt.Sprintf("unsupported attributes: %v", attributes))
+	}
+	return mask
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MacBridgePerformanceMonitoringHistoryDataClassId uint16 = 51
 
 // MacBridgePerformanceMonitoringHistoryData (class ID #51) defines the basic
@@ -37,12 +39,12 @@ func NewMacBridgePerformanceMonitoringHistoryData(params ...ParamData) (IManaged
 		Name:     "MacBridgePerformanceMonitoringHistoryData",
 		ClassID:  51,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

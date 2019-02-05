@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PriorityQueueClassId uint16 = 277
 
 // PriorityQueue (class ID #277) defines the basic
@@ -37,10 +39,10 @@ func NewPriorityQueue(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "PriorityQueue",
 		ClassID:  277,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

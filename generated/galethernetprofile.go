@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const GalEthernetProfileClassId uint16 = 272
 
 // GalEthernetProfile (class ID #272) defines the basic
@@ -37,12 +39,12 @@ func NewGalEthernetProfile(params ...ParamData) (IManagedEntityDefinition, error
 		Name:     "GalEthernetProfile",
 		ClassID:  272,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

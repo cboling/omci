@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OnuDataClassId uint16 = 2
 
 // OnuData (class ID #2) defines the basic
@@ -37,7 +39,7 @@ func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "OnuData",
 		ClassID:  2,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetAllAlarms,
 			GetAllAlarmsNext,
@@ -45,7 +47,7 @@ func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 			MibUpload,
 			MibUploadNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EthernetFlowTerminationPointClassId uint16 = 286
 
 // EthernetFlowTerminationPoint (class ID #286) defines the basic
@@ -37,12 +39,12 @@ func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntityDefinit
 		Name:     "EthernetFlowTerminationPoint",
 		ClassID:  286,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

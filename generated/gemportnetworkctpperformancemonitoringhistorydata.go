@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId uint16 = 341
 
 // GemPortNetworkCtpPerformanceMonitoringHistoryData (class ID #341) defines the basic
@@ -37,12 +39,12 @@ func NewGemPortNetworkCtpPerformanceMonitoringHistoryData(params ...ParamData) (
 		Name:     "GemPortNetworkCtpPerformanceMonitoringHistoryData",
 		ClassID:  341,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

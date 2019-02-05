@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const CardholderClassId uint16 = 5
 
 // Cardholder (class ID #5) defines the basic
@@ -37,10 +39,10 @@ func NewCardholder(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "Cardholder",
 		ClassID:  5,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

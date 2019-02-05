@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const OnuGClassId uint16 = 256
 
 // OnuG (class ID #256) defines the basic
@@ -37,13 +39,13 @@ func NewOnuG(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "OnuG",
 		ClassID:  256,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Reboot,
 			Set,
 			SynchronizeTime,
 			Test,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

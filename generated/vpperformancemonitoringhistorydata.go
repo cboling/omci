@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VpPerformanceMonitoringHistoryDataClassId uint16 = 62
 
 // VpPerformanceMonitoringHistoryData (class ID #62) defines the basic
@@ -37,12 +39,12 @@ func NewVpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityD
 		Name:     "VpPerformanceMonitoringHistoryData",
 		ClassID:  62,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

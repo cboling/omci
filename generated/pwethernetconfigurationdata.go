@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const PwEthernetConfigurationDataClassId uint16 = 339
 
 // PwEthernetConfigurationData (class ID #339) defines the basic
@@ -37,12 +39,12 @@ func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntityDefiniti
 		Name:     "PwEthernetConfigurationData",
 		ClassID:  339,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

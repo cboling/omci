@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const VoipConfigDataClassId uint16 = 138
 
 // VoipConfigData (class ID #138) defines the basic
@@ -37,10 +39,10 @@ func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "VoipConfigData",
 		ClassID:  138,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

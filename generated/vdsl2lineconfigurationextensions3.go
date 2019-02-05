@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Vdsl2LineConfigurationExtensions3ClassId uint16 = 410
 
 // Vdsl2LineConfigurationExtensions3 (class ID #410) defines the basic
@@ -37,12 +39,12 @@ func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntityDe
 		Name:     "Vdsl2LineConfigurationExtensions3",
 		ClassID:  410,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

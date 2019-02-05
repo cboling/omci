@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId uint16 = 346
 
 // XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346) defines the basic
@@ -37,12 +39,12 @@ func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamD
 		Name:     "XgPonUpstreamManagementPerformanceMonitoringHistoryData",
 		ClassID:  346,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

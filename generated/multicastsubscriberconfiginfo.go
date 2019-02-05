@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MulticastSubscriberConfigInfoClassId uint16 = 310
 
 // MulticastSubscriberConfigInfo (class ID #310) defines the basic
@@ -37,13 +39,13 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 		Name:     "MulticastSubscriberConfigInfo",
 		ClassID:  310,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			GetNext,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

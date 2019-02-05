@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const AniGClassId uint16 = 263
 
 // AniG (class ID #263) defines the basic
@@ -37,11 +39,11 @@ func NewAniG(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "AniG",
 		ClassID:  263,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
 			Test,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

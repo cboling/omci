@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const RtpPerformanceMonitoringHistoryDataClassId uint16 = 144
 
 // RtpPerformanceMonitoringHistoryData (class ID #144) defines the basic
@@ -37,12 +39,12 @@ func NewRtpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity
 		Name:     "RtpPerformanceMonitoringHistoryData",
 		ClassID:  144,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

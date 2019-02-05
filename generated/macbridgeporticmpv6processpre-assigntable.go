@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MacBridgePortIcmpv6ProcessPreAssignTableClassId uint16 = 348
 
 // MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348) defines the basic
@@ -37,9 +39,9 @@ func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedE
 		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
 		ClassID:  348,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

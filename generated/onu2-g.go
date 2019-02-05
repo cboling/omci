@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Onu2GClassId uint16 = 257
 
 // Onu2G (class ID #257) defines the basic
@@ -37,10 +39,10 @@ func NewOnu2G(params ...ParamData) (IManagedEntityDefinition, error) {
 		Name:     "Onu2G",
 		ClassID:  257,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

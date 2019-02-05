@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const Dot1XConfigurationProfileClassId uint16 = 291
 
 // Dot1XConfigurationProfile (class ID #291) defines the basic
@@ -37,10 +39,10 @@ func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntityDefinition
 		Name:     "Dot1XConfigurationProfile",
 		ClassID:  291,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

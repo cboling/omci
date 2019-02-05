@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const TwdmChannelManagedEntityClassId uint16 = 443
 
 // TwdmChannelManagedEntity (class ID #443) defines the basic
@@ -37,9 +39,9 @@ func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntityDefinition,
 		Name:     "TwdmChannelManagedEntity",
 		ClassID:  443,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Get,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),

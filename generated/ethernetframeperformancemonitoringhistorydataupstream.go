@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const EthernetFramePerformanceMonitoringHistoryDataUpstreamClassId uint16 = 322
 
 // EthernetFramePerformanceMonitoringHistoryDataUpstream (class ID #322) defines the basic
@@ -37,12 +39,12 @@ func NewEthernetFramePerformanceMonitoringHistoryDataUpstream(params ...ParamDat
 		Name:     "EthernetFramePerformanceMonitoringHistoryDataUpstream",
 		ClassID:  322,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),

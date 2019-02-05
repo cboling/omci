@@ -19,6 +19,8 @@
  */
 package generated
 
+import "github.com/deckarep/golang-set"
+
 const MacBridgePortConfigurationDataClassId uint16 = 47
 
 // MacBridgePortConfigurationData (class ID #47) defines the basic
@@ -37,12 +39,12 @@ func NewMacBridgePortConfigurationData(params ...ParamData) (IManagedEntityDefin
 		Name:     "MacBridgePortConfigurationData",
 		ClassID:  47,
 		EntityID: eid,
-		MessageTypes: []MsgType{
+		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
-		},
+		),
 		AllowedAttributeMask: 0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
