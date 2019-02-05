@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
+	"github.com/google/gopacket"
 )
 
 type options struct {
@@ -205,7 +206,7 @@ func (m *ManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinitio
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
-func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, interface{}, error) {
+func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
 	meDefinition, err := m.GetManagedEntityDefinition()
@@ -326,7 +327,17 @@ func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption)
 	default:
 		err = errors.New(fmt.Sprintf("message-type: %v/%#x is not supported", messageType, messageType))
 	}
-	return omci, meInfo, err
+	if err != nil {
+		return nil, nil, err
+	}
+	// Some requests return an array of serializable intefaces
+	if singleResult, ok := meInfo.(gopacket.SerializableLayer); ok {
+		return omci, singleResult, err
+	} else if arrayResult, ok := meInfo.([]gopacket.SerializableLayer); ok {
+		// TODO: Support this return type
+		return omci, arrayResult[0], err
+	}
+	return nil, nil, errors.New(fmt.Sprintf("unexpected return type' %t", meInfo))
 }
 
 // For most all create methods below, error checking for valid masks, attribute
