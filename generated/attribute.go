@@ -198,10 +198,10 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 			attributes.Remove(def.Name)
 		}
 	}
-	if len(attributes) {
+	if attributes.Cardinality() > 0 {
 		return 0, errors.New(fmt.Sprintf("unsupported attributes: %v", attributes))
 	}
-	return mask
+	return mask, nil
 }
 
 ///////////////////////////////////////////////////////////////////////
