@@ -34,6 +34,7 @@ type options struct {
 	attrExecutionMask uint16     // Create Response Only if results == 3 or
 	// Set Response only if results == 0
 	unsupportedMask uint16 // Set Response only if results == 9
+	sequenceNumber  uint16 // For get-next request frames
 }
 
 var defaultFrameOptions = options{
@@ -43,6 +44,7 @@ var defaultFrameOptions = options{
 	results:           me.Success,
 	attrExecutionMask: 0,
 	unsupportedMask:   0,
+	sequenceNumber:    0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -133,6 +135,13 @@ func AttributeExecutionMask(m uint16) FrameOption {
 func AttributeUnsupportedMask(m uint16) FrameOption {
 	return func(o *options) {
 		o.unsupportedMask = m
+	}
+}
+
+// SequenceNumber is used by the GetNext and MibUploadGetNext request frames
+func SequenceNumber(m uint16) FrameOption {
+	return func(o *options) {
+		o.sequenceNumber = m
 	}
 }
 
@@ -750,14 +759,9 @@ func (m *ManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, err
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		CommandSequenceNumber: opt.sequenceNumber,
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, error) {
@@ -1196,20 +1200,17 @@ func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
+	// TODO: For GetNext, we may want to make sure that only 1 attribute is being requested
 	// Common for all MEs
 	meLayer := &GetNextRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.ClassId,
 			EntityInstance: m.InstanceId,
 		},
+		AttributeMask:  mask,
+		SequenceNumber: opt.sequenceNumber,
 	}
-	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func (m *ManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {

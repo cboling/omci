@@ -71,6 +71,26 @@ const MaxBaselineLength = 48
 // message (including header).
 const MaxExtendedLength = 1980
 
+// MaxAttributeMibUploadNextBaselineLength is the maximum payload size for attributes for
+// a Baseline MIB Upload Next message.29
+const MaxAttributeMibUploadNextBaselineLength = MaxBaselineLength - 14 - 8
+
+// MaxAttributeGetNextBaselineLength is the maximum payload size for attributes for
+// a Baseline MIB Get Next message. This is just the attribute portion of the
+// message contents and does not include the Result Code & Attribute Mask.
+const MaxAttributeGetNextBaselineLength = MaxBaselineLength - 11 - 8
+
+// MaxAttributeMibUploadNextExtendedLength is the maximum payload size for ME
+// entries for an Extended MIB Upload Next message. Extended messages differ from
+// the baseline as multiple MEs can be reported in a single frame, just not multiple
+// attributes.
+const MaxManagedEntityMibUploadNextExtendedLength = MaxExtendedLength - 10 - 4
+
+// MaxAttributeGetNextExtendedLength is the maximum payload size for attributes for
+// a Extended MIB Get Next message. This is just the attribute portion of the
+// message contents and does not include the Result Code & Attribute Mask.
+const MaxAttributeGetNextExtendedLength = MaxExtendedLength - 13 - 4
+
 // OMCI defines the common protocol. Extended will be added once
 // I can get basic working (and layered properly).  See ITU-T G.988 11/2017 section
 // A.3 for more information
