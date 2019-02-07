@@ -749,10 +749,6 @@ func (m *ManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error)
 }
 
 func (m *ManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
