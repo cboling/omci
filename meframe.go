@@ -145,81 +145,78 @@ func SequenceNumber(m uint16) FrameOption {
 	}
 }
 
-// IManagedEntity provides an interface definition for a simplified ME that can
-// be used in a variety of applications (MIB database, ONU driver, OLT application, ...)
-// where the serialization into a packet may not always be desired.
-type IManagedEntity interface {
-	GetClassId() uint16
-	GetInstanceId() uint16
-	SetInstanceId(uint16) error
-	GetAttributesMap() *me.AttributeValueMap
-	GetManagedEntityDefinition() (me.IManagedEntityDefinition, error)
-	EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, []interface{}, error)
-}
+//// IManagedEntity provides an interface definition for a simplified ME that can
+//// be used in a variety of applications (MIB database, ONU driver, OLT application, ...)
+//// where the serialization into a packet may not always be desired.
+//type IManagedEntity interface {
+//	GetClassId() uint16
+//	GetInstanceId() uint16
+//	SetInstanceId(uint16) error
+//	GetAttributesMap() *me.AttributeValueMap
+//	GetManagedEntityDefinition() (me.IManagedEntityDefinition, error)
+//	EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, []interface{}, error)
+//}
 
 // ManagedEntity is intended to be a lighter weight version of a specific managed
 // entity. It is intended to be used by generated Managed Entity classes as a base
 // class which is easier to use within an application outside of just decode and
 // serialization of OMCI Packets
-type ManagedEntity struct {
-	ClassId    uint16
-	InstanceId uint16
-	Attributes me.AttributeValueMap
+type FrameManagedEntity struct {
+	me.ManagedEntity
 }
 
-func NewManagedEntity(meDef me.IManagedEntityDefinition, params ...me.ParamData) (*ManagedEntity, error) {
-	m := &ManagedEntity{
-		ClassId:    meDef.GetClassID(),
-		InstanceId: meDef.GetEntityID(),
-		Attributes: make(me.AttributeValueMap),
-	}
-	if len(params) > 0 {
-		m.InstanceId = params[0].EntityID
-		m.Attributes = params[0].Attributes
-	}
-	return m, nil
-}
+//func NewManagedEntity(entity me.IManagedEntityDefinition, params ...me.ParamData) (*ManagedEntity, error) {
+//	m := &me.ManagedEntity{
+//		ClassId:    meDef.GetClassID(),
+//		InstanceId: meDef.GetEntityID(),
+//		Attributes: make(me.AttributeValueMap),
+//	}
+//	if len(params) > 0 {
+//		m.GetEntityID() = params[0].EntityID
+//		m.Attributes = params[0].Attributes
+//	}
+//	return m, nil
+//}
 
 // String provides a simple string that describes this struct
-func (m *ManagedEntity) String() string {
-	return fmt.Sprintf("ManagedEntity: %v/%v (%#x/%#x): Attributes: %v",
-		m.ClassId, m.ClassId, m.InstanceId, m.InstanceId, m.Attributes)
-}
-
-func (m *ManagedEntity) GetClassId() uint16 {
-	return m.ClassId
-}
-
-func (m *ManagedEntity) GetInstanceId() uint16 {
-	return m.InstanceId
-}
-
-func (m *ManagedEntity) SetInstanceId(id uint16) error {
-	m.InstanceId = id
-	return nil
-}
-
-func (m *ManagedEntity) GetAttributesMap() me.AttributeValueMap {
-	return m.Attributes
-}
-
-// GetManagedEntityDefinition returns a definition of what message types this
-// ME supports as well as detailed information on the attributes of this ME.
-func (m *ManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinition, error) {
-	// Just get definition without validation of parameters
-	return me.LoadManagedEntityDefinition(m.ClassId)
-}
+//func (m *FrameManagedEntity) String() string {
+//	return fmt.Sprintf("ManagedEntity: %v/%v (%#x/%#x): Attributes: %v",
+//		m.GetClassID(), m.GetClassID(), m.GetEntityID(), m.GetEntityID(), m.Attributes)
+//}
+//
+//func (m *FrameManagedEntity) GetClassId() uint16 {
+//	return m.GetClassID()
+//}
+//
+//func (m *FrameManagedEntity) GetInstanceId() uint16 {
+//	return m.GetEntityID()
+//}
+//
+//func (m *FrameManagedEntity) SetInstanceId(id uint16) error {
+//	m.GetEntityID() = id
+//	return nil
+//}
+//
+//func (m *FrameManagedEntity) GetAttributesMap() me.AttributeValueMap {
+//	return m.Attributes
+//}
+//
+//// GetManagedEntityDefinition returns a definition of what message types this
+//// ME supports as well as detailed information on the attributes of this ME.
+//func (m *FrameManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinition, error) {
+//	// Just get definition without validation of parameters
+//	return me.LoadManagedEntityDefinition(m.Definition)
+//}
 
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
-func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
+func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
-	meDefinition, err := m.GetManagedEntityDefinition()
-	if err != nil {
-		return nil, nil, err
-	} else if !me.SupportsMsgType(meDefinition, msgType) {
+	meDefinition := m.Definition
+
+	if !me.SupportsMsgType(meDefinition, msgType) {
 		msg := fmt.Sprintf("managed entity %v does not support %v Message-Type",
 			meDefinition.GetName(), msgType)
 		return nil, nil, errors.New(msg)
@@ -236,7 +233,8 @@ func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption)
 		DeviceIdentifier: opts.frameFormat,
 	}
 	var meInfo interface{}
-
+	var err error
+	
 	// Encode message type specific operation
 	switch messageType {
 	case CreateRequestType:
@@ -350,16 +348,15 @@ func (m *ManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption)
 // For most all create methods below, error checking for valid masks, attribute
 // values, and other fields is left to when the frame is actually serialized.
 
-func (m *ManagedEntity) reduceMask(mask uint16) (uint16, error) {
-	def, err := m.GetManagedEntityDefinition()
-	if err != nil {
-		return 0, err
+func (m *FrameManagedEntity) checkAttributeMask(mask uint16) (uint16, error) {
+	if mask & m.Definition.GetAllowedAttributeMask() != mask {
+		return 0, errors.New("invalid attribute mask")
 	}
-	return mask & def.GetAllowedAttributeMask(), nil
+	return mask & m.Definition.GetAllowedAttributeMask(), nil
 }
 
 // return the maximum space that can be used by attributes
-func (m *ManagedEntity) maxPacketAvailable(opt options) uint {
+func (m *FrameManagedEntity) maxPacketAvailable(opt options) uint {
 	if opt.frameFormat == BaselineIdent {
 		// OMCI Header          - 4 octets
 		// Class ID/Instance ID - 4 octets
@@ -374,21 +371,21 @@ func (m *ManagedEntity) maxPacketAvailable(opt options) uint {
 	return MaxExtendedLength - 16
 }
 
-func (m *ManagedEntity) createRequestFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) createRequestFrame(opt options) (interface{}, error) {
 	meLayer := &CreateRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) createResponseFrame(opt options) (interface{}, error) {
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		Result: opt.results,
 	}
@@ -398,36 +395,36 @@ func (m *ManagedEntity) createResponseFrame(opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) deleteRequestFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) deleteRequestFrame(opt options) (interface{}, error) {
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) deleteResponseFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) deleteResponseFrame(opt options) (interface{}, error) {
 	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		Result: opt.results,
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) setRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	results := make([]*SetRequest, 0)
-	meDefinition, _ := m.GetManagedEntityDefinition()
-	attrDefs := meDefinition.GetAttributeDefinitions()
-	attrMap := m.GetAttributesMap()
+	meDefinition := m.Definition
+	attrDefs := *meDefinition.GetAttributeDefinitions()
+	attrMap := m.Attributes
 
 	// Get payload space available
 	maxPayload := m.maxPacketAvailable(opt)
@@ -435,8 +432,8 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 
 	meLayer := &SetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		AttributeMask: 0,
 		Attributes:    make(me.AttributeValueMap),
@@ -484,8 +481,8 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 
 					meLayer := &SetRequest{
 						MeBasePacket: MeBasePacket{
-							EntityClass:    m.ClassId,
-							EntityInstance: m.InstanceId,
+							EntityClass:    m.GetClassID(),
+							EntityInstance: m.GetEntityID(),
 						},
 						AttributeMask: 0,
 						Attributes:    make(me.AttributeValueMap),
@@ -505,11 +502,11 @@ func (m *ManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 	return results, nil
 }
 
-func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) setResponseFrame(opt options) (interface{}, error) {
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		Result: opt.results,
 	}
@@ -520,8 +517,8 @@ func (m *ManagedEntity) setResponseFrame(opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) getRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -531,16 +528,16 @@ func (m *ManagedEntity) getRequestFrame(opt options) (interface{}, error) {
 	}
 	meLayer := &GetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		AttributeMask: mask,
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -551,8 +548,8 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 	results := make([]*GetResponse, 0)
 	meLayer := &GetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		Result:        opt.results,
 		AttributeMask: 0,
@@ -568,9 +565,9 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 		// Get payload space available
 		maxPayload := m.maxPacketAvailable(opt)
 		payloadAvailable := int(maxPayload)
-		meDefinition, _ := m.GetManagedEntityDefinition()
-		attrDefs := meDefinition.GetAttributeDefinitions()
-		attrMap := m.GetAttributesMap()
+		meDefinition := m.Definition
+		attrDefs := *meDefinition.GetAttributeDefinitions()
+		attrMap := m.Attributes
 
 		results = append(results, meLayer)
 
@@ -622,16 +619,16 @@ func (m *ManagedEntity) getResponseFrame(opt options) (interface{}, error) {
 	return results, nil
 }
 
-func (m *ManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -643,16 +640,16 @@ func (m *ManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, erro
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -664,16 +661,16 @@ func (m *ManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, err
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -685,16 +682,16 @@ func (m *ManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -706,16 +703,16 @@ func (m *ManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &MibUploadRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -727,16 +724,16 @@ func (m *ManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &MibUploadResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -748,28 +745,28 @@ func (m *ManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		CommandSequenceNumber: opt.sequenceNumber,
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &MibUploadNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -781,27 +778,27 @@ func (m *ManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) mibResetRequestFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) mibResetRequestFrame(opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &MibResetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -813,16 +810,16 @@ func (m *ManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) alarmNotificationFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) alarmNotificationFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &AlarmNotificationMsg{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -834,16 +831,16 @@ func (m *ManagedEntity) alarmNotificationFrame(opt options) (interface{}, error)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) attributeValueChangeFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) attributeValueChangeFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &AttributeValueChangeMsg{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -855,16 +852,16 @@ func (m *ManagedEntity) attributeValueChangeFrame(opt options) (interface{}, err
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) testRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) testRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &TestRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -876,16 +873,16 @@ func (m *ManagedEntity) testRequestFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) testResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) testResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &TestResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -897,16 +894,16 @@ func (m *ManagedEntity) testResponseFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -918,16 +915,16 @@ func (m *ManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -939,16 +936,16 @@ func (m *ManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &DownloadSectionRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -960,16 +957,16 @@ func (m *ManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &DownloadSectionResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -981,16 +978,16 @@ func (m *ManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &EndSoftwareDownloadRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1002,16 +999,16 @@ func (m *ManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &EndSoftwareDownloadResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1023,16 +1020,16 @@ func (m *ManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &ActivateSoftwareRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1044,16 +1041,16 @@ func (m *ManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) activateSoftwareResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) activateSoftwareResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &ActivateSoftwareResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1065,16 +1062,16 @@ func (m *ManagedEntity) activateSoftwareResponseFrame(opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &CommitSoftwareRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1086,16 +1083,16 @@ func (m *ManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &CommitSoftwareResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1107,16 +1104,16 @@ func (m *ManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &SynchronizeTimeRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1128,16 +1125,16 @@ func (m *ManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &SynchronizeTimeResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1149,16 +1146,16 @@ func (m *ManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &RebootRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1170,16 +1167,16 @@ func (m *ManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &RebootResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1191,8 +1188,8 @@ func (m *ManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1200,8 +1197,8 @@ func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &GetNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 		AttributeMask:  mask,
 		SequenceNumber: opt.sequenceNumber,
@@ -1209,16 +1206,16 @@ func (m *ManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func (m *ManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1230,16 +1227,16 @@ func (m *ManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) testResultFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) testResultFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &TestResultMsg{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1251,16 +1248,16 @@ func (m *ManagedEntity) testResultFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getCurrentDataRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getCurrentDataRequestFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetCurrentDataRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1272,16 +1269,16 @@ func (m *ManagedEntity) getCurrentDataRequestFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.reduceMask(opt.attributeMask)
+func (m *FrameManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, error) {
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &GetCurrentDataResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1293,19 +1290,19 @@ func (m *ManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
-	mask, err := m.reduceMask(opt.attributeMask)
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &SetTableRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available
@@ -1317,19 +1314,19 @@ func (m *ManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntity) setTableResponseFrame(opt options) (interface{}, error) {
+func (m *FrameManagedEntity) setTableResponseFrame(opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
-	mask, err := m.reduceMask(opt.attributeMask)
+	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
 	// Common for all MEs
 	meLayer := &SetTableResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    m.ClassId,
-			EntityInstance: m.InstanceId,
+			EntityClass:    m.GetClassID(),
+			EntityInstance: m.GetEntityID(),
 		},
 	}
 	// Get payload space available

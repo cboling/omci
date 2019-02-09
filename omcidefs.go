@@ -25,7 +25,7 @@ import (
 )
 
 type IManagedEntityInstance interface {
-	me.IManagedEntityDefinition
+	me.IManagedEntity
 
 	GetAttributeMask() uint16
 	SetAttributeMask(uint16) error
@@ -35,22 +35,22 @@ type IManagedEntityInstance interface {
 }
 
 type BaseManagedEntityInstance struct {
-	MEDefinition  me.IManagedEntityDefinition
+	Entity  	  me.IManagedEntity
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
 }
 
 func (bme *BaseManagedEntityInstance) String() string {
-	return fmt.Sprintf("ClassID: %v (%v), EntityID: %v, Mask: %#x, Attributes: %v",
-		bme.MEDefinition.GetClassID(), bme.MEDefinition.GetName(),
-		bme.MEDefinition.GetEntityID(), bme.AttributeMask, bme.Attributes)
+	return fmt.Sprintf("ClassID: %v (%v), Mask: %#x, Attributes: %v",
+		bme.Entity.GetClassID(), bme.Entity.GetName(),
+		bme.AttributeMask, bme.Attributes)
 }
 
 func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
 func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask|bme.MEDefinition.GetAllowedAttributeMask() != bme.MEDefinition.GetAllowedAttributeMask() {
+	if mask|bme.Entity.GetAllowedAttributeMask() != bme.Entity.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
 	bme.AttributeMask = mask
@@ -96,13 +96,13 @@ func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) er
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, bme.MEDefinition.GetClassID())
-	binary.BigEndian.PutUint16(bytes[2:], bme.MEDefinition.GetEntityID())
+	binary.BigEndian.PutUint16(bytes, bme.Entity.GetClassID())
+	binary.BigEndian.PutUint16(bytes[2:], bme.Entity.GetEntityID())
 	binary.BigEndian.PutUint16(bytes[4:], bme.AttributeMask)
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = bme.MEDefinition.SerializeAttributes(bme.Attributes, bme.AttributeMask, b)
+	err = bme.Entity.SerializeAttributes(bme.Attributes, bme.AttributeMask, b)
 	if err != nil {
 		return err
 	}

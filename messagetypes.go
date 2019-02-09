@@ -100,7 +100,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		return me.NewProcessingError("managed entity does not support Create Message-Type")
 	}
 	var sbcMask uint16
-	for index, attr := range meDefinition.GetAttributeDefinitions() {
+	for index, attr := range *meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
@@ -132,7 +132,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		return err
 	}
 	var sbcMask uint16
-	for index, attr := range meDefinition.GetAttributeDefinitions() {
+	for index, attr := range *meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
