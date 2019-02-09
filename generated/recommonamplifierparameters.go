@@ -34,9 +34,9 @@ type ReCommonAmplifierParameters struct {
 }
 
 func init() {
-	recommonamplifierparametersBME := &BaseManagedEntityDefinition{
-		Name:     "ReCommonAmplifierParameters",
-		ClassID:  328,
+	recommonamplifierparametersBME = &BaseManagedEntityDefinition{
+		Name:    "ReCommonAmplifierParameters",
+		ClassID: 328,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
@@ -63,12 +63,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: recommonamplifierparametersBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: recommonamplifierparametersBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -34,9 +34,9 @@ type TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 struct {
 }
 
 func init() {
-	twdmchannelploamperformancemonitoringhistorydatapart2BME := &BaseManagedEntityDefinition{
-		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart2",
-		ClassID:  447,
+	twdmchannelploamperformancemonitoringhistorydatapart2BME = &BaseManagedEntityDefinition{
+		Name:    "TwdmChannelPloamPerformanceMonitoringHistoryDataPart2",
+		ClassID: 447,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -71,12 +71,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: twdmchannelploamperformancemonitoringhistorydatapart2BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: twdmchannelploamperformancemonitoringhistorydatapart2BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

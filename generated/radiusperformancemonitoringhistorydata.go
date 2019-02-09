@@ -34,9 +34,9 @@ type RadiusPerformanceMonitoringHistoryData struct {
 }
 
 func init() {
-	radiusperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
-		Name:     "RadiusPerformanceMonitoringHistoryData",
-		ClassID:  293,
+	radiusperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+		Name:    "RadiusPerformanceMonitoringHistoryData",
+		ClassID: 293,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -62,12 +62,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: radiusperformancemonitoringhistorydataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: radiusperformancemonitoringhistorydataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

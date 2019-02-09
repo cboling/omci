@@ -34,9 +34,9 @@ type MacBridgeConfigurationData struct {
 }
 
 func init() {
-	macbridgeconfigurationdataBME := &BaseManagedEntityDefinition{
-		Name:     "MacBridgeConfigurationData",
-		ClassID:  46,
+	macbridgeconfigurationdataBME = &BaseManagedEntityDefinition{
+		Name:    "MacBridgeConfigurationData",
+		ClassID: 46,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
@@ -59,12 +59,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgeConfigurationData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: macbridgeconfigurationdataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: macbridgeconfigurationdataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

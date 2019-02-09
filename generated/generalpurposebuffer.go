@@ -34,9 +34,9 @@ type GeneralPurposeBuffer struct {
 }
 
 func init() {
-	generalpurposebufferBME := &BaseManagedEntityDefinition{
-		Name:     "GeneralPurposeBuffer",
-		ClassID:  308,
+	generalpurposebufferBME = &BaseManagedEntityDefinition{
+		Name:    "GeneralPurposeBuffer",
+		ClassID: 308,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -47,7 +47,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
 			1: Uint32Field("MaximumSize", 0, Read|SetByCreate|Write, false, false, true),
-			2: TableField("BufferTable", TableInfo{0, nil, 0}, Read, true, false),
+			2: TableField("BufferTable", TableInfo{nil, 0}, Read, true, false),
 		},
 	}
 }
@@ -56,12 +56,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewGeneralPurposeBuffer(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: generalpurposebufferBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: generalpurposebufferBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

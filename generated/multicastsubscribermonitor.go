@@ -34,9 +34,9 @@ type MulticastSubscriberMonitor struct {
 }
 
 func init() {
-	multicastsubscribermonitorBME := &BaseManagedEntityDefinition{
-		Name:     "MulticastSubscriberMonitor",
-		ClassID:  311,
+	multicastsubscribermonitorBME = &BaseManagedEntityDefinition{
+		Name:    "MulticastSubscriberMonitor",
+		ClassID: 311,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -51,8 +51,8 @@ func init() {
 			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, true),
 			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, true),
 			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, true),
-			5: TableField("Ipv4ActiveGroupListTable", TableInfo{24, nil, 24}, Read, false, false),
-			6: TableField("Ipv6ActiveGroupListTable", TableInfo{58, nil, 58}, Read, false, true),
+			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, Read, false, false),
+			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, Read, false, true),
 		},
 	}
 }
@@ -61,12 +61,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: multicastsubscribermonitorBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: multicastsubscribermonitorBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

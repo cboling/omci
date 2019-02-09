@@ -34,9 +34,9 @@ type CircuitPack struct {
 }
 
 func init() {
-	circuitpackBME := &BaseManagedEntityDefinition{
-		Name:     "CircuitPack",
-		ClassID:  6,
+	circuitpackBME = &BaseManagedEntityDefinition{
+		Name:    "CircuitPack",
+		ClassID: 6,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Get,
@@ -67,12 +67,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: circuitpackBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: circuitpackBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

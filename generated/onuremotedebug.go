@@ -34,9 +34,9 @@ type OnuRemoteDebug struct {
 }
 
 func init() {
-	onuremotedebugBME := &BaseManagedEntityDefinition{
-		Name:     "OnuRemoteDebug",
-		ClassID:  158,
+	onuremotedebugBME = &BaseManagedEntityDefinition{
+		Name:    "OnuRemoteDebug",
+		ClassID: 158,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -47,7 +47,7 @@ func init() {
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
 			1: ByteField("CommandFormat", 0, Read, false, false, false),
 			2: MultiByteField("Command", 25, nil, Write, false, false, false),
-			3: TableField("ReplyTable", TableInfo{0, nil, 0}, Read, false, false),
+			3: TableField("ReplyTable", TableInfo{nil, 0}, Read, false, false),
 		},
 	}
 }
@@ -56,12 +56,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: onuremotedebugBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: onuremotedebugBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

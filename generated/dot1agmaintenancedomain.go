@@ -34,9 +34,9 @@ type Dot1AgMaintenanceDomain struct {
 }
 
 func init() {
-	dot1agmaintenancedomainBME := &BaseManagedEntityDefinition{
-		Name:     "Dot1AgMaintenanceDomain",
-		ClassID:  299,
+	dot1agmaintenancedomainBME = &BaseManagedEntityDefinition{
+		Name:    "Dot1AgMaintenanceDomain",
+		ClassID: 299,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -59,12 +59,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: dot1agmaintenancedomainBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: dot1agmaintenancedomainBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

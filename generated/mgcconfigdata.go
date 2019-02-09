@@ -34,9 +34,9 @@ type MgcConfigData struct {
 }
 
 func init() {
-	mgcconfigdataBME := &BaseManagedEntityDefinition{
-		Name:     "MgcConfigData",
-		ClassID:  155,
+	mgcconfigdataBME = &BaseManagedEntityDefinition{
+		Name:    "MgcConfigData",
+		ClassID: 155,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -65,12 +65,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: mgcconfigdataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: mgcconfigdataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

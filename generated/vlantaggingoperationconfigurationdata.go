@@ -34,9 +34,9 @@ type VlanTaggingOperationConfigurationData struct {
 }
 
 func init() {
-	vlantaggingoperationconfigurationdataBME := &BaseManagedEntityDefinition{
-		Name:     "VlanTaggingOperationConfigurationData",
-		ClassID:  78,
+	vlantaggingoperationconfigurationdataBME = &BaseManagedEntityDefinition{
+		Name:    "VlanTaggingOperationConfigurationData",
+		ClassID: 78,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -59,12 +59,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: vlantaggingoperationconfigurationdataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: vlantaggingoperationconfigurationdataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

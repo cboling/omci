@@ -34,9 +34,9 @@ type CesServiceProfile struct {
 }
 
 func init() {
-	cesserviceprofileBME := &BaseManagedEntityDefinition{
-		Name:     "CesServiceProfile",
-		ClassID:  21,
+	cesserviceprofileBME = &BaseManagedEntityDefinition{
+		Name:    "CesServiceProfile",
+		ClassID: 21,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -56,12 +56,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCesServiceProfile(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: cesserviceprofileBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: cesserviceprofileBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

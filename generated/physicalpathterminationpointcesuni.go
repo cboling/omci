@@ -34,9 +34,9 @@ type PhysicalPathTerminationPointCesUni struct {
 }
 
 func init() {
-	physicalpathterminationpointcesuniBME := &BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointCesUni",
-		ClassID:  12,
+	physicalpathterminationpointcesuniBME = &BaseManagedEntityDefinition{
+		Name:    "PhysicalPathTerminationPointCesUni",
+		ClassID: 12,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
@@ -64,12 +64,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: physicalpathterminationpointcesuniBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: physicalpathterminationpointcesuniBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

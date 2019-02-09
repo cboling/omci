@@ -166,9 +166,9 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 
 // GetAttributeDefinitionByName searches the attribute definition map for the
 // attribute with the specified name (case insensitive)
-func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (*AttributeDefinition, error) {
+func GetAttributeDefinitionByName(attrMap *AttributeDefinitionMap, name string) (*AttributeDefinition, error) {
 	nameLower := strings.ToLower(name)
-	for _, attrVal := range attrMap {
+	for _, attrVal := range *attrMap {
 		if nameLower == strings.ToLower(attrVal.GetName()) {
 			return attrVal, nil
 		}
@@ -302,8 +302,8 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 // An early example of info to track
 //
 type TableInfo struct {
-	DefValue   interface{}
-	Size       int
+	DefValue interface{}
+	Size     int
 }
 
 // Now the field

@@ -34,9 +34,9 @@ type Dot1XConfigurationProfile struct {
 }
 
 func init() {
-	dot1xconfigurationprofileBME := &BaseManagedEntityDefinition{
-		Name:     "Dot1XConfigurationProfile",
-		ClassID:  291,
+	dot1xconfigurationprofileBME = &BaseManagedEntityDefinition{
+		Name:    "Dot1XConfigurationProfile",
+		ClassID: 291,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
@@ -62,12 +62,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: dot1xconfigurationprofileBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: dot1xconfigurationprofileBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

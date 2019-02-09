@@ -34,9 +34,9 @@ type XdslChannelConfigurationProfile struct {
 }
 
 func init() {
-	xdslchannelconfigurationprofileBME := &BaseManagedEntityDefinition{
-		Name:     "XdslChannelConfigurationProfile",
-		ClassID:  107,
+	xdslchannelconfigurationprofileBME = &BaseManagedEntityDefinition{
+		Name:    "XdslChannelConfigurationProfile",
+		ClassID: 107,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -69,12 +69,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: xdslchannelconfigurationprofileBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: xdslchannelconfigurationprofileBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

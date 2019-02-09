@@ -34,9 +34,9 @@ type VoipVoiceCtp struct {
 }
 
 func init() {
-	voipvoicectpBME := &BaseManagedEntityDefinition{
-		Name:     "VoipVoiceCtp",
-		ClassID:  139,
+	voipvoicectpBME = &BaseManagedEntityDefinition{
+		Name:    "VoipVoiceCtp",
+		ClassID: 139,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -58,12 +58,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: voipvoicectpBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: voipvoicectpBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -34,9 +34,9 @@ type XdslXtuCPerformanceMonitoringHistoryDataPart2 struct {
 }
 
 func init() {
-	xdslxtucperformancemonitoringhistorydatapart2BME := &BaseManagedEntityDefinition{
-		Name:     "XdslXtuCPerformanceMonitoringHistoryDataPart2",
-		ClassID:  408,
+	xdslxtucperformancemonitoringhistorydatapart2BME = &BaseManagedEntityDefinition{
+		Name:    "XdslXtuCPerformanceMonitoringHistoryDataPart2",
+		ClassID: 408,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -59,12 +59,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslXtuCPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: xdslxtucperformancemonitoringhistorydatapart2BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: xdslxtucperformancemonitoringhistorydatapart2BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -237,10 +237,9 @@ func SupportsAttributeAccess(attr *AttributeDefinition, acc AttributeAccess) boo
 type IManagedEntityDefinition interface {
 	GetName() string
 	GetClassID() uint16
-	GetEntityID() uint16
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
-	GetAttributeDefinitions() AttributeDefinitionMap
+	GetAttributeDefinitions() *AttributeDefinitionMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder) (AttributeValueMap, error)
 	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer) error
@@ -248,6 +247,8 @@ type IManagedEntityDefinition interface {
 
 type IManagedEntity interface {
 	IManagedEntityDefinition
+
+	GetEntityID() uint16
 	SetEntityID(uint16) error
 
 	GetAttributeValueMap() *AttributeValueMap

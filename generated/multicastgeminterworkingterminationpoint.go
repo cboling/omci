@@ -34,9 +34,9 @@ type MulticastGemInterworkingTerminationPoint struct {
 }
 
 func init() {
-	multicastgeminterworkingterminationpointBME := &BaseManagedEntityDefinition{
-		Name:     "MulticastGemInterworkingTerminationPoint",
-		ClassID:  281,
+	multicastgeminterworkingterminationpointBME = &BaseManagedEntityDefinition{
+		Name:    "MulticastGemInterworkingTerminationPoint",
+		ClassID: 281,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -53,7 +53,7 @@ func init() {
 			4: ByteField("PptpCounter", 0, Read, false, false, true),
 			5: ByteField("OperationalState", 0, Read, true, false, true),
 			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
-			7: TableField("Ipv6MulticastAddressTable", TableInfo{24, nil, 24}, Read|Write, false, true),
+			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, Read|Write, false, true),
 		},
 	}
 }
@@ -62,12 +62,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: multicastgeminterworkingterminationpointBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: multicastgeminterworkingterminationpointBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

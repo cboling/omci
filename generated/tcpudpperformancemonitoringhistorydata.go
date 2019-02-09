@@ -34,9 +34,9 @@ type TcpUdpPerformanceMonitoringHistoryData struct {
 }
 
 func init() {
-	tcpudpperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
-		Name:     "TcpUdpPerformanceMonitoringHistoryData",
-		ClassID:  342,
+	tcpudpperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+		Name:    "TcpUdpPerformanceMonitoringHistoryData",
+		ClassID: 342,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -61,12 +61,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: tcpudpperformancemonitoringhistorydataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: tcpudpperformancemonitoringhistorydataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -34,9 +34,9 @@ type XdslChannelUpstreamStatusData struct {
 }
 
 func init() {
-	xdslchannelupstreamstatusdataBME := &BaseManagedEntityDefinition{
-		Name:     "XdslChannelUpstreamStatusData",
-		ClassID:  103,
+	xdslchannelupstreamstatusdataBME = &BaseManagedEntityDefinition{
+		Name:    "XdslChannelUpstreamStatusData",
+		ClassID: 103,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
@@ -62,12 +62,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslChannelUpstreamStatusData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: xdslchannelupstreamstatusdataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: xdslchannelupstreamstatusdataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

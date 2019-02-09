@@ -34,9 +34,9 @@ type MulticastSubscriberConfigInfo struct {
 }
 
 func init() {
-	multicastsubscriberconfiginfoBME := &BaseManagedEntityDefinition{
-		Name:     "MulticastSubscriberConfigInfo",
-		ClassID:  310,
+	multicastsubscriberconfiginfoBME = &BaseManagedEntityDefinition{
+		Name:    "MulticastSubscriberConfigInfo",
+		ClassID: 310,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -52,7 +52,7 @@ func init() {
 			3: Uint16Field("MaxSimultaneousGroups", 0, Read|SetByCreate|Write, false, false, true),
 			4: Uint32Field("MaxMulticastBandwidth", 0, Read|SetByCreate|Write, false, false, true),
 			5: ByteField("BandwidthEnforcement", 0, Read|SetByCreate|Write, false, false, true),
-			6: TableField("MulticastServicePackageTable", TableInfo{22, nil, 22}, Read|Write, false, true),
+			6: TableField("MulticastServicePackageTable", TableInfo{nil, 22}, Read|Write, false, true),
 		},
 	}
 }
@@ -61,12 +61,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: multicastsubscriberconfiginfoBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: multicastsubscriberconfiginfoBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -34,9 +34,9 @@ type Dot1AgMepCcmDatabase struct {
 }
 
 func init() {
-	dot1agmepccmdatabaseBME := &BaseManagedEntityDefinition{
-		Name:     "Dot1AgMepCcmDatabase",
-		ClassID:  304,
+	dot1agmepccmdatabaseBME = &BaseManagedEntityDefinition{
+		Name:    "Dot1AgMepCcmDatabase",
+		ClassID: 304,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -44,18 +44,18 @@ func init() {
 		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  TableField("Rmep1DatabaseTable", TableInfo{0, nil, 0}, Read, false, false),
-			2:  TableField("Rmep2DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			3:  TableField("Rmep3DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			4:  TableField("Rmep4DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			5:  TableField("Rmep5DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			6:  TableField("Rmep6DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			7:  TableField("Rmep7DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			8:  TableField("Rmep8DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			9:  TableField("Rmep9DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			10: TableField("Rmep10DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			11: TableField("Rmep11DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
-			12: TableField("Rmep12DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			1:  TableField("Rmep1DatabaseTable", TableInfo{nil, 0}, Read, false, false),
+			2:  TableField("Rmep2DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			3:  TableField("Rmep3DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			4:  TableField("Rmep4DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			5:  TableField("Rmep5DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			6:  TableField("Rmep6DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			7:  TableField("Rmep7DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			8:  TableField("Rmep8DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			9:  TableField("Rmep9DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			10: TableField("Rmep10DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			11: TableField("Rmep11DatabaseTable", TableInfo{nil, 0}, Read, false, true),
+			12: TableField("Rmep12DatabaseTable", TableInfo{nil, 0}, Read, false, true),
 		},
 	}
 }
@@ -64,12 +64,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: dot1agmepccmdatabaseBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: dot1agmepccmdatabaseBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

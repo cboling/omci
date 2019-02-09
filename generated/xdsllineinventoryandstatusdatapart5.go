@@ -34,9 +34,9 @@ type XdslLineInventoryAndStatusDataPart5 struct {
 }
 
 func init() {
-	xdsllineinventoryandstatusdatapart5BME := &BaseManagedEntityDefinition{
-		Name:     "XdslLineInventoryAndStatusDataPart5",
-		ClassID:  325,
+	xdsllineinventoryandstatusdatapart5BME = &BaseManagedEntityDefinition{
+		Name:    "XdslLineInventoryAndStatusDataPart5",
+		ClassID: 325,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -68,12 +68,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: xdsllineinventoryandstatusdatapart5BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: xdsllineinventoryandstatusdatapart5BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

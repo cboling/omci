@@ -34,9 +34,9 @@ type OnuData struct {
 }
 
 func init() {
-	onudataBME := &BaseManagedEntityDefinition{
-		Name:     "OnuData",
-		ClassID:  2,
+	onudataBME = &BaseManagedEntityDefinition{
+		Name:    "OnuData",
+		ClassID: 2,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetAllAlarms,
@@ -58,12 +58,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: onudataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: onudataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

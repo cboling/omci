@@ -34,9 +34,9 @@ type EfmBondingGroupPerformanceMonitoringHistoryDataPart2 struct {
 }
 
 func init() {
-	efmbondinggroupperformancemonitoringhistorydatapart2BME := &BaseManagedEntityDefinition{
-		Name:     "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
-		ClassID:  422,
+	efmbondinggroupperformancemonitoringhistorydatapart2BME = &BaseManagedEntityDefinition{
+		Name:    "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
+		ClassID: 422,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -68,12 +68,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: efmbondinggroupperformancemonitoringhistorydatapart2BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: efmbondinggroupperformancemonitoringhistorydatapart2BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

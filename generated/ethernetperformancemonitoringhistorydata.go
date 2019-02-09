@@ -34,9 +34,9 @@ type EthernetPerformanceMonitoringHistoryData struct {
 }
 
 func init() {
-	ethernetperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
-		Name:     "EthernetPerformanceMonitoringHistoryData",
-		ClassID:  24,
+	ethernetperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+		Name:    "EthernetPerformanceMonitoringHistoryData",
+		ClassID: 24,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -70,12 +70,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: ethernetperformancemonitoringhistorydataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: ethernetperformancemonitoringhistorydataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

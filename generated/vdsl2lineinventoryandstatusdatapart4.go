@@ -34,13 +34,13 @@ type Vdsl2LineInventoryAndStatusDataPart4 struct {
 }
 
 func init() {
-	vdsl2lineinventoryandstatusdatapart4BME := &BaseManagedEntityDefinition{
-		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
-		ClassID:  415,
+	vdsl2lineinventoryandstatusdatapart4BME = &BaseManagedEntityDefinition{
+		Name:    "Vdsl2LineInventoryAndStatusDataPart4",
+		ClassID: 415,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: ,
+		AllowedAttributeMask: 0x0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
 		},
@@ -51,12 +51,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: vdsl2lineinventoryandstatusdatapart4BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: vdsl2lineinventoryandstatusdatapart4BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

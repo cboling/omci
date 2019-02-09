@@ -34,9 +34,9 @@ type ThresholdData2 struct {
 }
 
 func init() {
-	thresholddata2BME := &BaseManagedEntityDefinition{
-		Name:     "ThresholdData2",
-		ClassID:  274,
+	thresholddata2BME = &BaseManagedEntityDefinition{
+		Name:    "ThresholdData2",
+		ClassID: 274,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -61,12 +61,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewThresholdData2(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: thresholddata2BME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: thresholddata2BME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

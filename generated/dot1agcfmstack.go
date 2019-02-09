@@ -34,9 +34,9 @@ type Dot1AgCfmStack struct {
 }
 
 func init() {
-	dot1agcfmstackBME := &BaseManagedEntityDefinition{
-		Name:     "Dot1AgCfmStack",
-		ClassID:  305,
+	dot1agcfmstackBME = &BaseManagedEntityDefinition{
+		Name:    "Dot1AgCfmStack",
+		ClassID: 305,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -45,8 +45,8 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
 			1: ByteField("Layer2Type", 0, Read, false, false, false),
-			2: TableField("MpStatusTable", TableInfo{18, nil, 18}, Read, false, false),
-			3: TableField("ConfigurationErrorListTable", TableInfo{5, nil, 5}, Read, true, false),
+			2: TableField("MpStatusTable", TableInfo{nil, 18}, Read, false, false),
+			3: TableField("ConfigurationErrorListTable", TableInfo{nil, 5}, Read, true, false),
 		},
 	}
 }
@@ -55,12 +55,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: dot1agcfmstackBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: dot1agcfmstackBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

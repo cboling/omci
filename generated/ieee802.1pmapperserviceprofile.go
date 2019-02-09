@@ -34,9 +34,9 @@ type Ieee8021PMapperServiceProfile struct {
 }
 
 func init() {
-	ieee8021pmapperserviceprofileBME := &BaseManagedEntityDefinition{
-		Name:     "Ieee8021PMapperServiceProfile",
-		ClassID:  130,
+	ieee8021pmapperserviceprofileBME = &BaseManagedEntityDefinition{
+		Name:    "Ieee8021PMapperServiceProfile",
+		ClassID: 130,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -67,12 +67,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: ieee8021pmapperserviceprofileBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: ieee8021pmapperserviceprofileBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

@@ -34,9 +34,9 @@ type Dot1AgDefaultMdLevel struct {
 }
 
 func init() {
-	dot1agdefaultmdlevelBME := &BaseManagedEntityDefinition{
-		Name:     "Dot1AgDefaultMdLevel",
-		ClassID:  301,
+	dot1agdefaultmdlevelBME = &BaseManagedEntityDefinition{
+		Name:    "Dot1AgDefaultMdLevel",
+		ClassID: 301,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -58,12 +58,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: dot1agdefaultmdlevelBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: dot1agdefaultmdlevelBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }

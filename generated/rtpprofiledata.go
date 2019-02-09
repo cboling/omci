@@ -34,9 +34,9 @@ type RtpProfileData struct {
 }
 
 func init() {
-	rtpprofiledataBME := &BaseManagedEntityDefinition{
-		Name:     "RtpProfileData",
-		ClassID:  143,
+	rtpprofiledataBME = &BaseManagedEntityDefinition{
+		Name:    "RtpProfileData",
+		ClassID: 143,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -62,12 +62,12 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
-	entity := &ManagedEntity {
-	    Definition: rtpprofiledataBME,
-	    Attributes: make(map[string]interface{}),
+	entity := &ManagedEntity{
+		Definition: rtpprofiledataBME,
+		Attributes: make(map[string]interface{}),
 	}
 	if err := entity.setAttributes(params...); err != nil {
-	    return nil, err
+		return nil, err
 	}
 	return entity, nil
 }
