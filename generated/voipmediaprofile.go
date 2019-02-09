@@ -23,49 +23,59 @@ import "github.com/deckarep/golang-set"
 
 const VoipMediaProfileClassId uint16 = 142
 
+var voipmediaprofileBME *BaseManagedEntityDefinition
+
 // VoipMediaProfile (class ID #142) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipMediaProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewVoipMediaProfile (class ID 142 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewVoipMediaProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	voipmediaprofileBME := &BaseManagedEntityDefinition{
 		Name:     "VoipMediaProfile",
 		ClassID:  142,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("FaxMode", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("VoiceServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  ByteField("CodecSelection1StOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  ByteField("PacketPeriodSelection1StOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  ByteField("SilenceSuppression1StOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  ByteField("CodecSelection2NdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  ByteField("PacketPeriodSelection2NdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  ByteField("SilenceSuppression2NdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("CodecSelection3RdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: ByteField("PacketPeriodSelection3RdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: ByteField("SilenceSuppression3RdOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			12: ByteField("CodecSelection4ThOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			13: ByteField("PacketPeriodSelection4ThOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			14: ByteField("SilenceSuppression4ThOrder", 0, Read|SetByCreate|Write, false, false, false, false),
-			15: ByteField("OobDtmf", 0, Read|SetByCreate|Write, false, false, false, false),
-			16: Uint16Field("RtpProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("FaxMode", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("VoiceServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			3:  ByteField("CodecSelection1StOrder", 0, Read|SetByCreate|Write, false, false, false),
+			4:  ByteField("PacketPeriodSelection1StOrder", 0, Read|SetByCreate|Write, false, false, false),
+			5:  ByteField("SilenceSuppression1StOrder", 0, Read|SetByCreate|Write, false, false, false),
+			6:  ByteField("CodecSelection2NdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			7:  ByteField("PacketPeriodSelection2NdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			8:  ByteField("SilenceSuppression2NdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			9:  ByteField("CodecSelection3RdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			10: ByteField("PacketPeriodSelection3RdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			11: ByteField("SilenceSuppression3RdOrder", 0, Read|SetByCreate|Write, false, false, false),
+			12: ByteField("CodecSelection4ThOrder", 0, Read|SetByCreate|Write, false, false, false),
+			13: ByteField("PacketPeriodSelection4ThOrder", 0, Read|SetByCreate|Write, false, false, false),
+			14: ByteField("SilenceSuppression4ThOrder", 0, Read|SetByCreate|Write, false, false, false),
+			15: ByteField("OobDtmf", 0, Read|SetByCreate|Write, false, false, false),
+			16: Uint16Field("RtpProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &VoipMediaProfile{entity}, nil
+}
+
+// NewVoipMediaProfile (class ID 142 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipMediaProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voipmediaprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const MulticastSubscriberMonitorClassId uint16 = 311
 
+var multicastsubscribermonitorBME *BaseManagedEntityDefinition
+
 // MulticastSubscriberMonitor (class ID #311) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MulticastSubscriberMonitor struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMulticastSubscriberMonitor (class ID 311 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	multicastsubscribermonitorBME := &BaseManagedEntityDefinition{
 		Name:     "MulticastSubscriberMonitor",
 		ClassID:  311,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,17 +44,29 @@ func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntityDefinitio
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, false, true),
-			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, false, true),
-			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, false, true),
-			5: MultiByteField("Ipv4ActiveGroupListTable", 24, nil, Read, false, false, true, false),
-			6: MultiByteField("Ipv6ActiveGroupListTable", 58, nil, Read, false, false, true, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, true),
+			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, true),
+			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, true),
+			5: TableField("Ipv4ActiveGroupListTable", TableInfo{24, nil, 24}, Read, false, false),
+			6: TableField("Ipv6ActiveGroupListTable", TableInfo{58, nil, 58}, Read, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MulticastSubscriberMonitor{entity}, nil
+}
+
+// NewMulticastSubscriberMonitor (class ID 311 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMulticastSubscriberMonitor(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: multicastsubscribermonitorBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

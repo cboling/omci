@@ -23,38 +23,48 @@ import "github.com/deckarep/golang-set"
 
 const Dot1RateLimiterClassId uint16 = 298
 
+var dot1ratelimiterBME *BaseManagedEntityDefinition
+
 // Dot1RateLimiter (class ID #298) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1RateLimiter struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewDot1RateLimiter (class ID 298 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewDot1RateLimiter(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	dot1ratelimiterBME := &BaseManagedEntityDefinition{
 		Name:     "Dot1RateLimiter",
 		ClassID:  298,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("ParentMePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
-			4: Uint16Field("UpstreamBroadcastRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
-			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("ParentMePointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, Read|SetByCreate|Write, false, false, true),
+			4: Uint16Field("UpstreamBroadcastRatePointer", 0, Read|SetByCreate|Write, false, false, true),
+			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Dot1RateLimiter{entity}, nil
+}
+
+// NewDot1RateLimiter (class ID 298 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1RateLimiter(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1ratelimiterBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

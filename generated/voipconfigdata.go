@@ -23,39 +23,49 @@ import "github.com/deckarep/golang-set"
 
 const VoipConfigDataClassId uint16 = 138
 
+var voipconfigdataBME *BaseManagedEntityDefinition
+
 // VoipConfigData (class ID #138) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipConfigData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	voipconfigdataBME := &BaseManagedEntityDefinition{
+		Name:     "VoipConfigData",
+		ClassID:  138,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFF00,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("AvailableSignallingProtocols", 0, Read, false, false, false),
+			2: ByteField("SignallingProtocolUsed", 0, Read|Write, false, false, false),
+			3: Uint32Field("AvailableVoipConfigurationMethods", 0, Read, false, false, false),
+			4: ByteField("VoipConfigurationMethodUsed", 0, Read|Write, false, false, false),
+			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write, false, false, false),
+			6: ByteField("VoipConfigurationState", 0, Read, false, false, false),
+			7: ByteField("RetrieveProfile", 0, Write, false, false, false),
+			8: MultiByteField("ProfileVersion", 25, nil, Read, true, false, false),
+		},
+	}
 }
 
 // NewVoipConfigData (class ID 138 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVoipConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "VoipConfigData",
-		ClassID:  138,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("AvailableSignallingProtocols", 0, Read, false, false, false, false),
-			2: ByteField("SignallingProtocolUsed", 0, Read|Write, false, false, false, false),
-			3: Uint32Field("AvailableVoipConfigurationMethods", 0, Read, false, false, false, false),
-			4: ByteField("VoipConfigurationMethodUsed", 0, Read|Write, false, false, false, false),
-			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write, false, false, false, false),
-			6: ByteField("VoipConfigurationState", 0, Read, false, false, false, false),
-			7: ByteField("RetrieveProfile", 0, Write, false, false, false, false),
-			8: MultiByteField("ProfileVersion", 25, nil, Read, true, false, false, false),
-		},
+func NewVoipConfigData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voipconfigdataBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &VoipConfigData{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

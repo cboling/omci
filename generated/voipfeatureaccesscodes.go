@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const VoipFeatureAccessCodesClassId uint16 = 147
 
+var voipfeatureaccesscodesBME *BaseManagedEntityDefinition
+
 // VoipFeatureAccessCodes (class ID #147) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipFeatureAccessCodes struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewVoipFeatureAccessCodes (class ID 147 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	voipfeatureaccesscodesBME := &BaseManagedEntityDefinition{
 		Name:     "VoipFeatureAccessCodes",
 		ClassID:  147,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  MultiByteField("CancelCallWaiting", 5, nil, Read|Write, false, false, false, true),
-			2:  MultiByteField("CallHold", 5, nil, Read|Write, false, false, false, true),
-			3:  MultiByteField("CallPark", 5, nil, Read|Write, false, false, false, true),
-			4:  MultiByteField("CallerIdActivate", 5, nil, Read|Write, false, false, false, true),
-			5:  MultiByteField("CallerIdDeactivate", 5, nil, Read|Write, false, false, false, true),
-			6:  MultiByteField("DoNotDisturbActivation", 5, nil, Read|Write, false, false, false, true),
-			7:  MultiByteField("DoNotDisturbDeactivation", 5, nil, Read|Write, false, false, false, true),
-			8:  MultiByteField("DoNotDisturbPinChange", 5, nil, Read|Write, false, false, false, true),
-			9:  MultiByteField("EmergencyServiceNumber", 5, nil, Read|Write, false, false, false, true),
-			10: MultiByteField("IntercomService", 5, nil, Read|Write, false, false, false, true),
-			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, Read|Write, false, false, false, true),
-			12: MultiByteField("AttendedCallTransfer", 5, nil, Read|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  MultiByteField("CancelCallWaiting", 5, nil, Read|Write, false, false, true),
+			2:  MultiByteField("CallHold", 5, nil, Read|Write, false, false, true),
+			3:  MultiByteField("CallPark", 5, nil, Read|Write, false, false, true),
+			4:  MultiByteField("CallerIdActivate", 5, nil, Read|Write, false, false, true),
+			5:  MultiByteField("CallerIdDeactivate", 5, nil, Read|Write, false, false, true),
+			6:  MultiByteField("DoNotDisturbActivation", 5, nil, Read|Write, false, false, true),
+			7:  MultiByteField("DoNotDisturbDeactivation", 5, nil, Read|Write, false, false, true),
+			8:  MultiByteField("DoNotDisturbPinChange", 5, nil, Read|Write, false, false, true),
+			9:  MultiByteField("EmergencyServiceNumber", 5, nil, Read|Write, false, false, true),
+			10: MultiByteField("IntercomService", 5, nil, Read|Write, false, false, true),
+			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, Read|Write, false, false, true),
+			12: MultiByteField("AttendedCallTransfer", 5, nil, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &VoipFeatureAccessCodes{entity}, nil
+}
+
+// NewVoipFeatureAccessCodes (class ID 147 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipFeatureAccessCodes(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voipfeatureaccesscodesBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

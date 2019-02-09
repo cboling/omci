@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const Dot1XConfigurationProfileClassId uint16 = 291
 
+var dot1xconfigurationprofileBME *BaseManagedEntityDefinition
+
 // Dot1XConfigurationProfile (class ID #291) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1XConfigurationProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	dot1xconfigurationprofileBME := &BaseManagedEntityDefinition{
+		Name:     "Dot1XConfigurationProfile",
+		ClassID:  291,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFC0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  Uint16Field("CircuitIdPrefix", 0, Read|Write, false, false, false),
+			2:  ByteField("FallbackPolicy", 0, Read|Write, false, false, false),
+			3:  Uint16Field("AuthServer1", 0, Read|Write, false, false, false),
+			4:  MultiByteField("SharedSecretAuth1", 25, nil, Read|Write, false, false, false),
+			5:  Uint16Field("AuthServer2", 0, Read|Write, false, false, true),
+			6:  MultiByteField("SharedSecretAuth2", 25, nil, Read|Write, false, false, true),
+			7:  Uint16Field("AuthServer3", 0, Read|Write, false, false, true),
+			8:  MultiByteField("SharedSecretAuth3", 25, nil, Read|Write, false, false, true),
+			9:  Uint32Field("OltProxyAddress", 0, Read|Write, false, false, true),
+			10: Uint16Field("CallingStationIdFormat", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewDot1XConfigurationProfile (class ID 291 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Dot1XConfigurationProfile",
-		ClassID:  291,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  Uint16Field("CircuitIdPrefix", 0, Read|Write, false, false, false, false),
-			2:  ByteField("FallbackPolicy", 0, Read|Write, false, false, false, false),
-			3:  Uint16Field("AuthServer1", 0, Read|Write, false, false, false, false),
-			4:  MultiByteField("SharedSecretAuth1", 25, nil, Read|Write, false, false, false, false),
-			5:  Uint16Field("AuthServer2", 0, Read|Write, false, false, false, true),
-			6:  MultiByteField("SharedSecretAuth2", 25, nil, Read|Write, false, false, false, true),
-			7:  Uint16Field("AuthServer3", 0, Read|Write, false, false, false, true),
-			8:  MultiByteField("SharedSecretAuth3", 25, nil, Read|Write, false, false, false, true),
-			9:  Uint32Field("OltProxyAddress", 0, Read|Write, false, false, false, true),
-			10: Uint16Field("CallingStationIdFormat", 0, Read|Write, false, false, false, true),
-		},
+func NewDot1XConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1xconfigurationprofileBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Dot1XConfigurationProfile{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

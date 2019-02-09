@@ -23,40 +23,50 @@ import "github.com/deckarep/golang-set"
 
 const TcpUdpPerformanceMonitoringHistoryDataClassId uint16 = 342
 
+var tcpudpperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // TcpUdpPerformanceMonitoringHistoryData (class ID #342) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TcpUdpPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTcpUdpPerformanceMonitoringHistoryData (class ID 342 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	tcpudpperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "TcpUdpPerformanceMonitoringHistoryData",
 		ClassID:  342,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("SocketFailed", 0, Read, false, false, false, false),
-			4: Uint16Field("ListenFailed", 0, Read, false, false, false, false),
-			5: Uint16Field("BindFailed", 0, Read, false, false, false, false),
-			6: Uint16Field("AcceptFailed", 0, Read, false, false, false, false),
-			7: Uint16Field("SelectFailed", 0, Read, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("SocketFailed", 0, Read, false, false, false),
+			4: Uint16Field("ListenFailed", 0, Read, false, false, false),
+			5: Uint16Field("BindFailed", 0, Read, false, false, false),
+			6: Uint16Field("AcceptFailed", 0, Read, false, false, false),
+			7: Uint16Field("SelectFailed", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TcpUdpPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewTcpUdpPerformanceMonitoringHistoryData (class ID 342 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: tcpudpperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

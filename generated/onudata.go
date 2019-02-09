@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const OnuDataClassId uint16 = 2
 
+var onudataBME *BaseManagedEntityDefinition
+
 // OnuData (class ID #2) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewOnuData (class ID 2 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	onudataBME := &BaseManagedEntityDefinition{
 		Name:     "OnuData",
 		ClassID:  2,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetAllAlarms,
@@ -48,12 +46,24 @@ func NewOnuData(params ...ParamData) (IManagedEntityDefinition, error) {
 			MibUploadNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0X8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("MibDataSync", 0, Read|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("MibDataSync", 0, Read|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &OnuData{entity}, nil
+}
+
+// NewOnuData (class ID 2 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: onudataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

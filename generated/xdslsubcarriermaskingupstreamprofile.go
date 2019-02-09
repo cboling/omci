@@ -23,34 +23,44 @@ import "github.com/deckarep/golang-set"
 
 const XdslSubcarrierMaskingUpstreamProfileClassId uint16 = 109
 
+var xdslsubcarriermaskingupstreamprofileBME *BaseManagedEntityDefinition
+
 // XdslSubcarrierMaskingUpstreamProfile (class ID #109) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslSubcarrierMaskingUpstreamProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXdslSubcarrierMaskingUpstreamProfile (class ID 109 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xdslsubcarriermaskingupstreamprofileBME := &BaseManagedEntityDefinition{
 		Name:     "XdslSubcarrierMaskingUpstreamProfile",
 		ClassID:  109,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0X8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint64Field("UpstreamSubcarrierMask", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint64Field("UpstreamSubcarrierMask", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XdslSubcarrierMaskingUpstreamProfile{entity}, nil
+}
+
+// NewXdslSubcarrierMaskingUpstreamProfile (class ID 109 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdslsubcarriermaskingupstreamprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

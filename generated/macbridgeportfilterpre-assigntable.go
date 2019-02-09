@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortFilterPreAssignTableClassId uint16 = 79
 
+var macbridgeportfilterpreassigntableBME *BaseManagedEntityDefinition
+
 // MacBridgePortFilterPreAssignTable (class ID #79) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortFilterPreAssignTable struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	macbridgeportfilterpreassigntableBME := &BaseManagedEntityDefinition{
+		Name:     "MacBridgePortFilterPreAssignTable",
+		ClassID:  79,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFC0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("Ipv4MulticastFiltering", 0, Read|Write, false, false, false),
+			2:  ByteField("Ipv6MulticastFiltering", 0, Read|Write, false, false, false),
+			3:  ByteField("Ipv4BroadcastFiltering", 0, Read|Write, false, false, false),
+			4:  ByteField("RarpFiltering", 0, Read|Write, false, false, false),
+			5:  ByteField("IpxFiltering", 0, Read|Write, false, false, false),
+			6:  ByteField("NetbeuiFiltering", 0, Read|Write, false, false, false),
+			7:  ByteField("AppletalkFiltering", 0, Read|Write, false, false, false),
+			8:  ByteField("BridgeManagementInformationFiltering", 0, Read|Write, false, false, false),
+			9:  ByteField("ArpFiltering", 0, Read|Write, false, false, false),
+			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewMacBridgePortFilterPreAssignTable (class ID 79 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "MacBridgePortFilterPreAssignTable",
-		ClassID:  79,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("Ipv4MulticastFiltering", 0, Read|Write, false, false, false, false),
-			2:  ByteField("Ipv6MulticastFiltering", 0, Read|Write, false, false, false, false),
-			3:  ByteField("Ipv4BroadcastFiltering", 0, Read|Write, false, false, false, false),
-			4:  ByteField("RarpFiltering", 0, Read|Write, false, false, false, false),
-			5:  ByteField("IpxFiltering", 0, Read|Write, false, false, false, false),
-			6:  ByteField("NetbeuiFiltering", 0, Read|Write, false, false, false, false),
-			7:  ByteField("AppletalkFiltering", 0, Read|Write, false, false, false, false),
-			8:  ByteField("BridgeManagementInformationFiltering", 0, Read|Write, false, false, false, false),
-			9:  ByteField("ArpFiltering", 0, Read|Write, false, false, false, false),
-			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write, false, false, false, false),
-		},
+func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: macbridgeportfilterpreassigntableBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &MacBridgePortFilterPreAssignTable{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

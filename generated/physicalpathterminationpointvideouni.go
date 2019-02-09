@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointVideoUniClassId uint16 = 82
 
+var physicalpathterminationpointvideouniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointVideoUni (class ID #82) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointVideoUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointvideouniBME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointVideoUni",
+		ClassID:  82,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XF800,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			2: ByteField("OperationalState", 0, Read, true, false, true),
+			3: ByteField("Arc", 0, Read|Write, true, false, true),
+			4: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			5: ByteField("PowerControl", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointVideoUni (class ID 82 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointVideoUni",
-		ClassID:  82,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2: ByteField("OperationalState", 0, Read, true, false, false, true),
-			3: ByteField("Arc", 0, Read|Write, true, false, false, true),
-			4: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			5: ByteField("PowerControl", 0, Read|Write, false, false, false, true),
-		},
+func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointvideouniBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointVideoUni{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

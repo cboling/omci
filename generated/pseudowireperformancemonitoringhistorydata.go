@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const PseudowirePerformanceMonitoringHistoryDataClassId uint16 = 285
 
+var pseudowireperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // PseudowirePerformanceMonitoringHistoryData (class ID #285) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PseudowirePerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewPseudowirePerformanceMonitoringHistoryData (class ID 285 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	pseudowireperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "PseudowirePerformanceMonitoringHistoryData",
 		ClassID:  285,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("ReceivedPackets", 0, Read, false, false, false, false),
-			4:  Uint32Field("TransmittedPackets", 0, Read, false, false, false, false),
-			5:  Uint32Field("MissingPackets", 0, Read, false, false, false, false),
-			6:  Uint32Field("MisorderedPackets,Usable", 0, Read, false, false, false, false),
-			7:  Uint32Field("MisorderedPacketsDropped", 0, Read, false, false, false, false),
-			8:  Uint32Field("PlayoutBufferUnderrunsOverruns", 0, Read, false, false, false, false),
-			9:  Uint32Field("MalformedPackets", 0, Read, false, false, false, false),
-			10: Uint32Field("StrayPackets", 0, Read, false, false, false, false),
-			11: Uint32Field("RemotePacketLoss", 0, Read, false, false, false, false),
-			12: Uint32Field("TdmLBitPacketsTransmitted", 0, Read, false, false, false, false),
-			13: Uint32Field("Es", 0, Read, false, false, false, false),
-			14: Uint32Field("Ses", 0, Read, false, false, false, false),
-			15: Uint32Field("Uas", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("ReceivedPackets", 0, Read, false, false, false),
+			4:  Uint32Field("TransmittedPackets", 0, Read, false, false, false),
+			5:  Uint32Field("MissingPackets", 0, Read, false, false, false),
+			6:  Uint32Field("MisorderedPackets,Usable", 0, Read, false, false, false),
+			7:  Uint32Field("MisorderedPacketsDropped", 0, Read, false, false, false),
+			8:  Uint32Field("PlayoutBufferUnderrunsOverruns", 0, Read, false, false, false),
+			9:  Uint32Field("MalformedPackets", 0, Read, false, false, false),
+			10: Uint32Field("StrayPackets", 0, Read, false, false, false),
+			11: Uint32Field("RemotePacketLoss", 0, Read, false, false, false),
+			12: Uint32Field("TdmLBitPacketsTransmitted", 0, Read, false, false, false),
+			13: Uint32Field("Es", 0, Read, false, false, false),
+			14: Uint32Field("Ses", 0, Read, false, false, false),
+			15: Uint32Field("Uas", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &PseudowirePerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewPseudowirePerformanceMonitoringHistoryData (class ID 285 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: pseudowireperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,37 +23,47 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgDefaultMdLevelClassId uint16 = 301
 
+var dot1agdefaultmdlevelBME *BaseManagedEntityDefinition
+
 // Dot1AgDefaultMdLevel (class ID #301) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgDefaultMdLevel struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewDot1AgDefaultMdLevel (class ID 301 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	dot1agdefaultmdlevelBME := &BaseManagedEntityDefinition{
 		Name:     "Dot1AgDefaultMdLevel",
 		ClassID:  301,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("Layer2Type", 0, Read, false, false, false, false),
-			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false, false),
-			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false, false),
-			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false, false),
-			5: ByteField("DefaultMdLevelTable", 0, Read|Write, false, false, true, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("Layer2Type", 0, Read, false, false, false),
+			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false),
+			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false),
+			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false),
+			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, Read|Write, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Dot1AgDefaultMdLevel{entity}, nil
+}
+
+// NewDot1AgDefaultMdLevel (class ID 301 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1agdefaultmdlevelBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

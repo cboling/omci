@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const GalEthernetPerformanceMonitoringHistoryDataClassId uint16 = 276
 
+var galethernetperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // GalEthernetPerformanceMonitoringHistoryData (class ID #276) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GalEthernetPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewGalEthernetPerformanceMonitoringHistoryData (class ID 276 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	galethernetperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "GalEthernetPerformanceMonitoringHistoryData",
 		ClassID:  276,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("DiscardedFrames", 0, Read, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("DiscardedFrames", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &GalEthernetPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewGalEthernetPerformanceMonitoringHistoryData (class ID 276 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGalEthernetPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: galethernetperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

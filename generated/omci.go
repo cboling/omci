@@ -23,33 +23,43 @@ import "github.com/deckarep/golang-set"
 
 const OmciClassId uint16 = 287
 
+var omciBME *BaseManagedEntityDefinition
+
 // Omci (class ID #287) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Omci struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	omciBME := &BaseManagedEntityDefinition{
+		Name:     "Omci",
+		ClassID:  287,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			GetNext,
+		),
+		AllowedAttributeMask: 0XC000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: TableField("MeTypeTable", TableInfo{0, 2}, Read, false, false),
+			2: TableField("MessageTypeTable", TableInfo{0, 1}, Read, false, false),
+		},
+	}
 }
 
 // NewOmci (class ID 287 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOmci(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Omci",
-		ClassID:  287,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			GetNext,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint16Field("MeTypeTable", 0, Read, false, false, true, false),
-			2: ByteField("MessageTypeTable", 0, Read, false, false, true, false),
-		},
+func NewOmci(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: omciBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Omci{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

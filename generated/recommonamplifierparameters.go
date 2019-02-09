@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const ReCommonAmplifierParametersClassId uint16 = 328
 
+var recommonamplifierparametersBME *BaseManagedEntityDefinition
+
 // ReCommonAmplifierParameters (class ID #328) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ReCommonAmplifierParameters struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	recommonamplifierparametersBME := &BaseManagedEntityDefinition{
+		Name:     "ReCommonAmplifierParameters",
+		ClassID:  328,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFE0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("Gain", 0, Read, false, false, true),
+			2:  ByteField("LowerGainThreshold", 0, Read|Write, false, false, true),
+			3:  ByteField("UpperGainThreshold", 0, Read|Write, false, false, true),
+			4:  ByteField("TargetGain", 0, Read|Write, false, false, true),
+			5:  Uint16Field("DeviceTemperature", 0, Read, false, false, true),
+			6:  ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write, false, false, true),
+			7:  ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write, false, false, true),
+			8:  ByteField("DeviceBiasCurrent", 0, Read, false, false, true),
+			9:  Uint16Field("AmplifierSaturationOutputPower", 0, Read, false, false, true),
+			10: ByteField("AmplifierNoiseFigure", 0, Read, false, false, true),
+			11: ByteField("AmplifierSaturationGain", 0, Read, false, false, true),
+		},
+	}
 }
 
 // NewReCommonAmplifierParameters (class ID 328 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "ReCommonAmplifierParameters",
-		ClassID:  328,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("Gain", 0, Read, false, false, false, true),
-			2:  ByteField("LowerGainThreshold", 0, Read|Write, false, false, false, true),
-			3:  ByteField("UpperGainThreshold", 0, Read|Write, false, false, false, true),
-			4:  ByteField("TargetGain", 0, Read|Write, false, false, false, true),
-			5:  Uint16Field("DeviceTemperature", 0, Read, false, false, false, true),
-			6:  ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write, false, false, false, true),
-			7:  ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write, false, false, false, true),
-			8:  ByteField("DeviceBiasCurrent", 0, Read, false, false, false, true),
-			9:  Uint16Field("AmplifierSaturationOutputPower", 0, Read, false, false, false, true),
-			10: ByteField("AmplifierNoiseFigure", 0, Read, false, false, false, true),
-			11: ByteField("AmplifierSaturationGain", 0, Read, false, false, false, true),
-		},
+func NewReCommonAmplifierParameters(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: recommonamplifierparametersBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &ReCommonAmplifierParameters{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

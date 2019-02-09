@@ -23,38 +23,48 @@ import "github.com/deckarep/golang-set"
 
 const EthernetFlowTerminationPointClassId uint16 = 286
 
+var ethernetflowterminationpointBME *BaseManagedEntityDefinition
+
 // EthernetFlowTerminationPoint (class ID #286) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetFlowTerminationPoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEthernetFlowTerminationPoint (class ID 286 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	ethernetflowterminationpointBME := &BaseManagedEntityDefinition{
 		Name:     "EthernetFlowTerminationPoint",
 		ClassID:  286,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: MultiByteField("DestinationMac", 6, nil, Read|SetByCreate|Write, false, false, false, false),
-			2: MultiByteField("SourceMac", 6, nil, Read, false, false, false, false),
-			3: ByteField("TagPolicy", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint16Field("Tci", 0, Read|Write, false, false, false, true),
-			5: ByteField("Loopback", 0, Read|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: MultiByteField("DestinationMac", 6, nil, Read|SetByCreate|Write, false, false, false),
+			2: MultiByteField("SourceMac", 6, nil, Read, false, false, false),
+			3: ByteField("TagPolicy", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint16Field("Tci", 0, Read|Write, false, false, true),
+			5: ByteField("Loopback", 0, Read|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EthernetFlowTerminationPoint{entity}, nil
+}
+
+// NewEthernetFlowTerminationPoint (class ID 286 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: ethernetflowterminationpointBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const Onu2GClassId uint16 = 257
 
+var onu2gBME *BaseManagedEntityDefinition
+
 // Onu2G (class ID #257) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Onu2G struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	onu2gBME := &BaseManagedEntityDefinition{
+		Name:     "Onu2G",
+		ClassID:  257,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFC,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  MultiByteField("EquipmentId", 20, nil, Read, false, false, true),
+			2:  ByteField("OpticalNetworkUnitManagementAndControlChannelOmccVersion", 0, Read, true, false, false),
+			3:  Uint16Field("VendorProductCode", 0, Read, false, false, true),
+			4:  ByteField("SecurityCapability", 0, Read, false, false, false),
+			5:  ByteField("SecurityMode", 0, Read|Write, false, false, false),
+			6:  Uint16Field("TotalPriorityQueueNumber", 0, Read, false, false, false),
+			7:  ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false),
+			8:  ByteField("Deprecated", 0, Read, false, false, false),
+			9:  Uint16Field("TotalGemPortIdNumber", 0, Read, false, false, true),
+			10: Uint32Field("Sysuptime", 0, Read, false, false, true),
+			11: Uint16Field("ConnectivityCapability", 0, Read, false, false, true),
+			12: ByteField("CurrentConnectivityMode", 0, Read|Write, false, false, true),
+			13: Uint16Field("QualityOfServiceQosConfigurationFlexibility", 0, Read, false, false, true),
+			14: Uint16Field("PriorityQueueScaleFactor", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewOnu2G (class ID 257 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOnu2G(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Onu2G",
-		ClassID:  257,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  MultiByteField("EquipmentId", 20, nil, Read, false, false, false, true),
-			2:  ByteField("OpticalNetworkUnitManagementAndControlChannelOmccVersion", 0, Read, true, false, false, false),
-			3:  Uint16Field("VendorProductCode", 0, Read, false, false, false, true),
-			4:  ByteField("SecurityCapability", 0, Read, false, false, false, false),
-			5:  ByteField("SecurityMode", 0, Read|Write, false, false, false, false),
-			6:  Uint16Field("TotalPriorityQueueNumber", 0, Read, false, false, false, false),
-			7:  ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false, false),
-			8:  ByteField("Deprecated", 0, Read, false, false, false, false),
-			9:  Uint16Field("TotalGemPortIdNumber", 0, Read, false, false, false, true),
-			10: Uint32Field("Sysuptime", 0, Read, false, false, false, true),
-			11: Uint16Field("ConnectivityCapability", 0, Read, false, false, false, true),
-			12: ByteField("CurrentConnectivityMode", 0, Read|Write, false, false, false, true),
-			13: Uint16Field("QualityOfServiceQosConfigurationFlexibility", 0, Read, false, false, false, true),
-			14: Uint16Field("PriorityQueueScaleFactor", 0, Read|Write, false, false, false, true),
-		},
+func NewOnu2G(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: onu2gBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Onu2G{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

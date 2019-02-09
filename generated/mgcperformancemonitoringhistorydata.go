@@ -23,44 +23,54 @@ import "github.com/deckarep/golang-set"
 
 const MgcPerformanceMonitoringHistoryDataClassId uint16 = 156
 
+var mgcperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // MgcPerformanceMonitoringHistoryData (class ID #156) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MgcPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMgcPerformanceMonitoringHistoryData (class ID 156 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	mgcperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "MgcPerformanceMonitoringHistoryData",
 		ClassID:  156,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("ReceivedMessages", 0, Read, false, false, false, false),
-			4:  Uint32Field("ReceivedOctets", 0, Read, false, false, false, false),
-			5:  Uint32Field("SentMessages", 0, Read, false, false, false, false),
-			6:  Uint32Field("SentOctets", 0, Read, false, false, false, false),
-			7:  Uint32Field("ProtocolErrors", 0, Read, false, false, false, false),
-			8:  Uint32Field("TransportLosses", 0, Read, false, false, false, false),
-			9:  ByteField("LastDetectedEvent", 0, Read, false, false, false, false),
-			10: Uint32Field("LastDetectedEventTime", 0, Read, false, false, false, false),
-			11: Uint32Field("LastDetectedResetTime", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("ReceivedMessages", 0, Read, false, false, false),
+			4:  Uint32Field("ReceivedOctets", 0, Read, false, false, false),
+			5:  Uint32Field("SentMessages", 0, Read, false, false, false),
+			6:  Uint32Field("SentOctets", 0, Read, false, false, false),
+			7:  Uint32Field("ProtocolErrors", 0, Read, false, false, false),
+			8:  Uint32Field("TransportLosses", 0, Read, false, false, false),
+			9:  ByteField("LastDetectedEvent", 0, Read, false, false, false),
+			10: Uint32Field("LastDetectedEventTime", 0, Read, false, false, false),
+			11: Uint32Field("LastDetectedResetTime", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MgcPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewMgcPerformanceMonitoringHistoryData (class ID 156 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: mgcperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

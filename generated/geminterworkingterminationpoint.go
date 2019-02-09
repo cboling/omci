@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const GemInterworkingTerminationPointClassId uint16 = 266
 
+var geminterworkingterminationpointBME *BaseManagedEntityDefinition
+
 // GemInterworkingTerminationPoint (class ID #266) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GemInterworkingTerminationPoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewGemInterworkingTerminationPoint (class ID 266 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	geminterworkingterminationpointBME := &BaseManagedEntityDefinition{
 		Name:     "GemInterworkingTerminationPoint",
 		ClassID:  266,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint16Field("InterworkingTerminationPointPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: ByteField("PptpCounter", 0, Read, false, false, false, true),
-			6: ByteField("OperationalState", 0, Read, true, false, false, true),
-			7: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			8: ByteField("GalLoopbackConfiguration", 0, Read|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint16Field("InterworkingTerminationPointPointer", 0, Read|SetByCreate|Write, false, false, false),
+			5: ByteField("PptpCounter", 0, Read, false, false, true),
+			6: ByteField("OperationalState", 0, Read, true, false, true),
+			7: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			8: ByteField("GalLoopbackConfiguration", 0, Read|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &GemInterworkingTerminationPoint{entity}, nil
+}
+
+// NewGemInterworkingTerminationPoint (class ID 266 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: geminterworkingterminationpointBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

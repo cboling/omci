@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const SipUserDataClassId uint16 = 153
 
+var sipuserdataBME *BaseManagedEntityDefinition
+
 // SipUserData (class ID #153) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SipUserData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewSipUserData (class ID 153 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewSipUserData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	sipuserdataBME := &BaseManagedEntityDefinition{
 		Name:     "SipUserData",
 		ClassID:  153,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("SipAgentPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("UserPartAor", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  MultiByteField("SipDisplayName", 25, nil, Read|Write, false, false, false, false),
-			4:  Uint16Field("UsernameAndPassword", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("VoicemailServerSipUri", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  Uint16Field("NetworkDialPlanPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  Uint16Field("ApplicationServicesProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  Uint16Field("FeatureCodePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: ByteField("ReleaseTimer", 0, Read|Write, false, false, false, true),
-			12: ByteField("ReceiverOffHookRohTimer", 0, Read|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("SipAgentPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("UserPartAor", 0, Read|SetByCreate|Write, false, false, false),
+			3:  MultiByteField("SipDisplayName", 25, nil, Read|Write, false, false, false),
+			4:  Uint16Field("UsernameAndPassword", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("VoicemailServerSipUri", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|SetByCreate|Write, false, false, false),
+			7:  Uint16Field("NetworkDialPlanPointer", 0, Read|SetByCreate|Write, false, false, false),
+			8:  Uint16Field("ApplicationServicesProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			9:  Uint16Field("FeatureCodePointer", 0, Read|SetByCreate|Write, false, false, false),
+			10: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			11: ByteField("ReleaseTimer", 0, Read|Write, false, false, true),
+			12: ByteField("ReceiverOffHookRohTimer", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &SipUserData{entity}, nil
+}
+
+// NewSipUserData (class ID 153 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipUserData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: sipuserdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,35 +23,45 @@ import "github.com/deckarep/golang-set"
 
 const EfmBondingLinkClassId uint16 = 420
 
+var efmbondinglinkBME *BaseManagedEntityDefinition
+
 // EfmBondingLink (class ID #420) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EfmBondingLink struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEfmBondingLink (class ID 420 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEfmBondingLink(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	efmbondinglinkBME := &BaseManagedEntityDefinition{
 		Name:     "EfmBondingLink",
 		ClassID:  420,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XC000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("AssociatedGroupMeId", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("LinkAlarmEnable", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("AssociatedGroupMeId", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("LinkAlarmEnable", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EfmBondingLink{entity}, nil
+}
+
+// NewEfmBondingLink (class ID 420 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEfmBondingLink(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: efmbondinglinkBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

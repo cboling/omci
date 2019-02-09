@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const XdslXtuCChannelPerformanceMonitoringHistoryDataClassId uint16 = 114
 
+var xdslxtucchannelperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // XdslXtuCChannelPerformanceMonitoringHistoryData (class ID #114) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslXtuCChannelPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXdslXtuCChannelPerformanceMonitoringHistoryData (class ID 114 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xdslxtucchannelperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "XdslXtuCChannelPerformanceMonitoringHistoryData",
 		ClassID:  114,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("CorrectedBlocks", 0, Read, false, false, false, false),
-			4: Uint32Field("UncorrectedBlocks", 0, Read, false, false, false, false),
-			5: Uint32Field("TransmittedBlocks", 0, Read, false, false, false, false),
-			6: Uint32Field("ReceivedBlocks", 0, Read, false, false, false, false),
-			7: Uint16Field("CodeViolations", 0, Read, false, false, false, false),
-			8: Uint16Field("ForwardErrorCorrections", 0, Read, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("CorrectedBlocks", 0, Read, false, false, false),
+			4: Uint32Field("UncorrectedBlocks", 0, Read, false, false, false),
+			5: Uint32Field("TransmittedBlocks", 0, Read, false, false, false),
+			6: Uint32Field("ReceivedBlocks", 0, Read, false, false, false),
+			7: Uint16Field("CodeViolations", 0, Read, false, false, false),
+			8: Uint16Field("ForwardErrorCorrections", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XdslXtuCChannelPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewXdslXtuCChannelPerformanceMonitoringHistoryData (class ID 114 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslXtuCChannelPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdslxtucchannelperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

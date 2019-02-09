@@ -23,37 +23,47 @@ import "github.com/deckarep/golang-set"
 
 const VoipVoiceCtpClassId uint16 = 139
 
+var voipvoicectpBME *BaseManagedEntityDefinition
+
 // VoipVoiceCtp (class ID #139) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipVoiceCtp struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewVoipVoiceCtp (class ID 139 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewVoipVoiceCtp(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	voipvoicectpBME := &BaseManagedEntityDefinition{
 		Name:     "VoipVoiceCtp",
 		ClassID:  139,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("UserProtocolPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: ByteField("SignallingCode", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("UserProtocolPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("VOIpMediaProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			4: ByteField("SignallingCode", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &VoipVoiceCtp{entity}, nil
+}
+
+// NewVoipVoiceCtp (class ID 139 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipVoiceCtp(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voipvoicectpBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

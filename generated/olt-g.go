@@ -23,35 +23,45 @@ import "github.com/deckarep/golang-set"
 
 const OltGClassId uint16 = 131
 
+var oltgBME *BaseManagedEntityDefinition
+
 // OltG (class ID #131) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OltG struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	oltgBME := &BaseManagedEntityDefinition{
+		Name:     "OltG",
+		ClassID:  131,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XF000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: Uint32Field("OltVendorId", 0, Read|Write, false, false, false),
+			2: MultiByteField("EquipmentId", 20, nil, Read|Write, false, false, false),
+			3: MultiByteField("Version", 14, nil, Read|Write, false, false, false),
+			4: MultiByteField("TimeOfDayInformation", 14, nil, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewOltG (class ID 131 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOltG(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "OltG",
-		ClassID:  131,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint32Field("OltVendorId", 0, Read|Write, false, false, false, false),
-			2: MultiByteField("EquipmentId", 20, nil, Read|Write, false, false, false, false),
-			3: MultiByteField("Version", 14, nil, Read|Write, false, false, false, false),
-			4: MultiByteField("TimeOfDayInformation", 14, nil, Read|Write, false, false, false, true),
-		},
+func NewOltG(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: oltgBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &OltG{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

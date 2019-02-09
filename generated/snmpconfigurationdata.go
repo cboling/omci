@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const SnmpConfigurationDataClassId uint16 = 335
 
+var snmpconfigurationdataBME *BaseManagedEntityDefinition
+
 // SnmpConfigurationData (class ID #335) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SnmpConfigurationData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewSnmpConfigurationData (class ID 335 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewSnmpConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	snmpconfigurationdataBME := &BaseManagedEntityDefinition{
 		Name:     "SnmpConfigurationData",
 		ClassID:  335,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("SnmpVersion", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("SnmpAgentAddress", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("SnmpServerAddress", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint16Field("SnmpServerPort", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: Uint16Field("SecurityNamePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			6: Uint16Field("CommunityForRead", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: Uint16Field("CommunityForWrite", 0, Read|SetByCreate|Write, false, false, false, false),
-			8: Uint16Field("SysNamePointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("SnmpVersion", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint16Field("SnmpAgentAddress", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("SnmpServerAddress", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint16Field("SnmpServerPort", 0, Read|SetByCreate|Write, false, false, false),
+			5: Uint16Field("SecurityNamePointer", 0, Read|SetByCreate|Write, false, false, false),
+			6: Uint16Field("CommunityForRead", 0, Read|SetByCreate|Write, false, false, false),
+			7: Uint16Field("CommunityForWrite", 0, Read|SetByCreate|Write, false, false, false),
+			8: Uint16Field("SysNamePointer", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &SnmpConfigurationData{entity}, nil
+}
+
+// NewSnmpConfigurationData (class ID 335 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSnmpConfigurationData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: snmpconfigurationdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

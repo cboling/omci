@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const XdslChannelConfigurationProfileClassId uint16 = 107
 
+var xdslchannelconfigurationprofileBME *BaseManagedEntityDefinition
+
 // XdslChannelConfigurationProfile (class ID #107) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslChannelConfigurationProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXdslChannelConfigurationProfile (class ID 107 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xdslchannelconfigurationprofileBME := &BaseManagedEntityDefinition{
 		Name:     "XdslChannelConfigurationProfile",
 		ClassID:  107,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint32Field("MinimumDataRate", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint32Field("MaximumDataRate", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  ByteField("RateAdaptationRatio", 0, Read|SetByCreate|Write, false, false, false, true),
-			4:  ByteField("MaximumInterleavingDelay", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint32Field("DataRateThresholdUpshift", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint32Field("DataRateThresholdDownshift", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  Uint32Field("MinimumReservedDataRate", 0, Read|SetByCreate|Write, false, false, false, true),
-			8:  Uint32Field("MinimumDataRateInLowPowerState", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("MinimumImpulseNoiseProtection", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: ByteField("MaximumBitErrorRatio", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write, false, false, false, false),
-			12: ByteField("MaximumDelayVariation", 0, Read|Write, false, false, false, false),
-			13: ByteField("ChannelInitializationPolicySelection", 0, Read|Write, false, false, false, true),
-			14: Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write, false, false, false, true),
-			15: Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint32Field("MinimumDataRate", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint32Field("MaximumDataRate", 0, Read|SetByCreate|Write, false, false, false),
+			3:  ByteField("RateAdaptationRatio", 0, Read|SetByCreate|Write, false, false, true),
+			4:  ByteField("MaximumInterleavingDelay", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint32Field("DataRateThresholdUpshift", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint32Field("DataRateThresholdDownshift", 0, Read|SetByCreate|Write, false, false, false),
+			7:  Uint32Field("MinimumReservedDataRate", 0, Read|SetByCreate|Write, false, false, true),
+			8:  Uint32Field("MinimumDataRateInLowPowerState", 0, Read|SetByCreate|Write, false, false, false),
+			9:  ByteField("MinimumImpulseNoiseProtection", 0, Read|SetByCreate|Write, false, false, false),
+			10: ByteField("MaximumBitErrorRatio", 0, Read|SetByCreate|Write, false, false, false),
+			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write, false, false, false),
+			12: ByteField("MaximumDelayVariation", 0, Read|Write, false, false, false),
+			13: ByteField("ChannelInitializationPolicySelection", 0, Read|Write, false, false, true),
+			14: Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write, false, false, true),
+			15: Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XdslChannelConfigurationProfile{entity}, nil
+}
+
+// NewXdslChannelConfigurationProfile (class ID 107 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdslchannelconfigurationprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

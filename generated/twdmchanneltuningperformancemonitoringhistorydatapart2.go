@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelTuningPerformanceMonitoringHistoryDataPart2ClassId uint16 = 450
 
+var twdmchanneltuningperformancemonitoringhistorydatapart2BME *BaseManagedEntityDefinition
+
 // TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID #450) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	twdmchanneltuningperformancemonitoringhistorydatapart2BME := &BaseManagedEntityDefinition{
 		Name:     "TwdmChannelTuningPerformanceMonitoringHistoryDataPart2",
 		ClassID:  450,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,26 +44,38 @@ func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamDa
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("TuningControlRequestsRejectedDsAlbl", 0, Read, false, false, false, false),
-			4:  Uint32Field("TuningControlRequestsRejectedDsVoid", 0, Read, false, false, false, false),
-			5:  Uint32Field("TuningControlRequestsRejectedDsPart", 0, Read, false, false, false, false),
-			6:  Uint32Field("TuningControlRequestsRejectedDsTunr", 0, Read, false, false, false, false),
-			7:  Uint32Field("TuningControlRequestsRejectedDsLnrt", 0, Read, false, false, false, false),
-			8:  Uint32Field("TuningControlRequestsRejectedDsLncd", 0, Read, false, false, false, false),
-			9:  Uint32Field("TuningControlRequestsRejectedUsAlbl", 0, Read, false, false, false, false),
-			10: Uint32Field("TuningControlRequestsRejectedUsVoid", 0, Read, false, false, false, false),
-			11: Uint32Field("TuningControlRequestsRejectedUsTunr", 0, Read, false, false, false, false),
-			12: Uint32Field("TuningControlRequestsRejectedUsClbr", 0, Read, false, false, false, false),
-			13: Uint32Field("TuningControlRequestsRejectedUsLktp", 0, Read, false, false, false, false),
-			14: Uint32Field("TuningControlRequestsRejectedUsLnrt", 0, Read, false, false, false, false),
-			15: Uint32Field("TuningControlRequestsRejectedUsLncd", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("TuningControlRequestsRejectedDsAlbl", 0, Read, false, false, false),
+			4:  Uint32Field("TuningControlRequestsRejectedDsVoid", 0, Read, false, false, false),
+			5:  Uint32Field("TuningControlRequestsRejectedDsPart", 0, Read, false, false, false),
+			6:  Uint32Field("TuningControlRequestsRejectedDsTunr", 0, Read, false, false, false),
+			7:  Uint32Field("TuningControlRequestsRejectedDsLnrt", 0, Read, false, false, false),
+			8:  Uint32Field("TuningControlRequestsRejectedDsLncd", 0, Read, false, false, false),
+			9:  Uint32Field("TuningControlRequestsRejectedUsAlbl", 0, Read, false, false, false),
+			10: Uint32Field("TuningControlRequestsRejectedUsVoid", 0, Read, false, false, false),
+			11: Uint32Field("TuningControlRequestsRejectedUsTunr", 0, Read, false, false, false),
+			12: Uint32Field("TuningControlRequestsRejectedUsClbr", 0, Read, false, false, false),
+			13: Uint32Field("TuningControlRequestsRejectedUsLktp", 0, Read, false, false, false),
+			14: Uint32Field("TuningControlRequestsRejectedUsLnrt", 0, Read, false, false, false),
+			15: Uint32Field("TuningControlRequestsRejectedUsLncd", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TwdmChannelTuningPerformanceMonitoringHistoryDataPart2{entity}, nil
+}
+
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: twdmchanneltuningperformancemonitoringhistorydatapart2BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

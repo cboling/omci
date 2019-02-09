@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const Dot1XPortExtensionPackageClassId uint16 = 290
 
+var dot1xportextensionpackageBME *BaseManagedEntityDefinition
+
 // Dot1XPortExtensionPackage (class ID #290) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1XPortExtensionPackage struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	dot1xportextensionpackageBME := &BaseManagedEntityDefinition{
+		Name:     "Dot1XPortExtensionPackage",
+		ClassID:  290,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFF0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("Dot1XEnable", 0, Read|Write, false, false, false),
+			2:  ByteField("ActionRegister", 0, Write, false, false, false),
+			3:  ByteField("AuthenticatorPaeState", 0, Read, false, false, true),
+			4:  ByteField("BackendAuthenticationState", 0, Read, false, false, true),
+			5:  ByteField("AdminControlledDirections", 0, Read|Write, false, false, true),
+			6:  ByteField("OperationalControlledDirections", 0, Read, false, false, true),
+			7:  ByteField("AuthenticatorControlledPortStatus", 0, Read, false, false, true),
+			8:  Uint16Field("QuietPeriod", 0, Read|Write, false, false, true),
+			9:  Uint16Field("ServerTimeoutPeriod", 0, Read|Write, false, false, true),
+			10: Uint16Field("ReAuthenticationPeriod", 0, Read, false, false, true),
+			11: ByteField("ReAuthenticationEnabled", 0, Read, false, false, true),
+			12: ByteField("KeyTransmissionEnabled", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewDot1XPortExtensionPackage (class ID 290 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Dot1XPortExtensionPackage",
-		ClassID:  290,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("Dot1XEnable", 0, Read|Write, false, false, false, false),
-			2:  ByteField("ActionRegister", 0, Write, false, false, false, false),
-			3:  ByteField("AuthenticatorPaeState", 0, Read, false, false, false, true),
-			4:  ByteField("BackendAuthenticationState", 0, Read, false, false, false, true),
-			5:  ByteField("AdminControlledDirections", 0, Read|Write, false, false, false, true),
-			6:  ByteField("OperationalControlledDirections", 0, Read, false, false, false, true),
-			7:  ByteField("AuthenticatorControlledPortStatus", 0, Read, false, false, false, true),
-			8:  Uint16Field("QuietPeriod", 0, Read|Write, false, false, false, true),
-			9:  Uint16Field("ServerTimeoutPeriod", 0, Read|Write, false, false, false, true),
-			10: Uint16Field("ReAuthenticationPeriod", 0, Read, false, false, false, true),
-			11: ByteField("ReAuthenticationEnabled", 0, Read, false, false, false, true),
-			12: ByteField("KeyTransmissionEnabled", 0, Read|Write, false, false, false, true),
-		},
+func NewDot1XPortExtensionPackage(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1xportextensionpackageBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Dot1XPortExtensionPackage{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

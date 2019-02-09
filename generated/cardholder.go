@@ -23,40 +23,50 @@ import "github.com/deckarep/golang-set"
 
 const CardholderClassId uint16 = 5
 
+var cardholderBME *BaseManagedEntityDefinition
+
 // Cardholder (class ID #5) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Cardholder struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	cardholderBME := &BaseManagedEntityDefinition{
+		Name:     "Cardholder",
+		ClassID:  5,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFF80,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("ActualPlugInUnitType", 0, Read, true, false, false),
+			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write, false, false, false),
+			3: ByteField("ExpectedPortCount", 0, Read|Write, false, false, true),
+			4: MultiByteField("ExpectedEquipmentId", 20, nil, Read|Write, false, false, true),
+			5: MultiByteField("ActualEquipmentId", 20, nil, Read, true, false, true),
+			6: ByteField("ProtectionProfilePointer", 0, Read, false, false, true),
+			7: ByteField("InvokeProtectionSwitch", 0, Read|Write, false, false, true),
+			8: ByteField("AlarmReportingControl", 0, Read|Write, true, false, true),
+			9: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewCardholder (class ID 5 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewCardholder(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Cardholder",
-		ClassID:  5,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("ActualPlugInUnitType", 0, Read, true, false, false, false),
-			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write, false, false, false, false),
-			3: ByteField("ExpectedPortCount", 0, Read|Write, false, false, false, true),
-			4: MultiByteField("ExpectedEquipmentId", 20, nil, Read|Write, false, false, false, true),
-			5: MultiByteField("ActualEquipmentId", 20, nil, Read, true, false, false, true),
-			6: ByteField("ProtectionProfilePointer", 0, Read, false, false, false, true),
-			7: ByteField("InvokeProtectionSwitch", 0, Read|Write, false, false, false, true),
-			8: ByteField("AlarmReportingControl", 0, Read|Write, true, false, false, true),
-			9: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-		},
+func NewCardholder(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: cardholderBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Cardholder{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

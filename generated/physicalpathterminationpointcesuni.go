@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointCesUniClassId uint16 = 12
 
+var physicalpathterminationpointcesuniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointCesUni (class ID #12) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointCesUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointcesuniBME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointCesUni",
+		ClassID:  12,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFF0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false),
+			2:  ByteField("SensedType", 0, Read, true, false, false),
+			3:  ByteField("CesLoopbackConfiguration", 0, Read|Write, true, false, false),
+			4:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			5:  ByteField("OperationalState", 0, Read, true, false, true),
+			6:  ByteField("Framing", 0, Read|Write, false, false, true),
+			7:  ByteField("Encoding", 0, Read|Write, false, false, false),
+			8:  ByteField("LineLength", 0, Read|Write, false, false, true),
+			9:  ByteField("Ds1Mode", 0, Read|Write, false, false, true),
+			10: ByteField("Arc", 0, Read|Write, true, false, true),
+			11: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			12: ByteField("LineType", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointCesUni (class ID 12 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointCesUni",
-		ClassID:  12,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false, false),
-			2:  ByteField("SensedType", 0, Read, true, false, false, false),
-			3:  ByteField("CesLoopbackConfiguration", 0, Read|Write, true, false, false, false),
-			4:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			5:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			6:  ByteField("Framing", 0, Read|Write, false, false, false, true),
-			7:  ByteField("Encoding", 0, Read|Write, false, false, false, false),
-			8:  ByteField("LineLength", 0, Read|Write, false, false, false, true),
-			9:  ByteField("Ds1Mode", 0, Read|Write, false, false, false, true),
-			10: ByteField("Arc", 0, Read|Write, true, false, false, true),
-			11: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			12: ByteField("LineType", 0, Read|Write, false, false, false, false),
-		},
+func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointcesuniBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointCesUni{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,38 +23,48 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgMaintenanceDomainClassId uint16 = 299
 
+var dot1agmaintenancedomainBME *BaseManagedEntityDefinition
+
 // Dot1AgMaintenanceDomain (class ID #299) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgMaintenanceDomain struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewDot1AgMaintenanceDomain (class ID 299 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	dot1agmaintenancedomainBME := &BaseManagedEntityDefinition{
 		Name:     "Dot1AgMaintenanceDomain",
 		ClassID:  299,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false, false),
-			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false),
+			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false),
+			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Dot1AgMaintenanceDomain{entity}, nil
+}
+
+// NewDot1AgMaintenanceDomain (class ID 299 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMaintenanceDomain(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1agmaintenancedomainBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

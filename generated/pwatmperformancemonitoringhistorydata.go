@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const PwAtmPerformanceMonitoringHistoryDataClassId uint16 = 338
 
+var pwatmperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // PwAtmPerformanceMonitoringHistoryData (class ID #338) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PwAtmPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewPwAtmPerformanceMonitoringHistoryData (class ID 338 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	pwatmperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "PwAtmPerformanceMonitoringHistoryData",
 		ClassID:  338,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("DownstreamMissingPacketsCounter", 0, Read, false, false, false, false),
-			4: Uint32Field("DownstreamReorderedPacketsCounter", 0, Read, false, false, false, true),
-			5: Uint32Field("DownstreamMisorderedPacketsCounter", 0, Read, false, false, false, false),
-			6: Uint32Field("UpstreamTimeoutPacketsCounter", 0, Read, false, false, false, false),
-			7: Uint32Field("UpstreamTransmittedCellsCounter", 0, Read, false, false, false, false),
-			8: Uint32Field("UpstreamDroppedCellsCounter", 0, Read, false, false, false, false),
-			9: Uint32Field("UpstreamReceivedCellsCounter", 0, Read, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("DownstreamMissingPacketsCounter", 0, Read, false, false, false),
+			4: Uint32Field("DownstreamReorderedPacketsCounter", 0, Read, false, false, true),
+			5: Uint32Field("DownstreamMisorderedPacketsCounter", 0, Read, false, false, false),
+			6: Uint32Field("UpstreamTimeoutPacketsCounter", 0, Read, false, false, false),
+			7: Uint32Field("UpstreamTransmittedCellsCounter", 0, Read, false, false, false),
+			8: Uint32Field("UpstreamDroppedCellsCounter", 0, Read, false, false, false),
+			9: Uint32Field("UpstreamReceivedCellsCounter", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &PwAtmPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewPwAtmPerformanceMonitoringHistoryData (class ID 338 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: pwatmperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

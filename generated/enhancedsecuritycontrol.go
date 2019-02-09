@@ -23,44 +23,54 @@ import "github.com/deckarep/golang-set"
 
 const EnhancedSecurityControlClassId uint16 = 332
 
+var enhancedsecuritycontrolBME *BaseManagedEntityDefinition
+
 // EnhancedSecurityControl (class ID #332) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EnhancedSecurityControl struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEnhancedSecurityControl (class ID 332 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	enhancedsecuritycontrolBME := &BaseManagedEntityDefinition{
 		Name:     "EnhancedSecurityControl",
 		ClassID:  332,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  MultiByteField("OltCryptoCapabilities", 16, nil, Write, false, false, false, false),
-			2:  MultiByteField("OltRandomChallengeTable", 17, nil, Read|Write, false, false, true, false),
-			3:  ByteField("OltChallengeStatus", 0, Read|Write, false, false, false, false),
-			4:  ByteField("OnuSelectedCryptoCapabilities", 0, Read, false, false, false, false),
-			5:  MultiByteField("OnuRandomChallengeTable", 16, nil, Read, true, false, true, false),
-			6:  MultiByteField("OnuAuthenticationResultTable", 16, nil, Read, true, false, true, false),
-			7:  MultiByteField("OltAuthenticationResultTable", 17, nil, Write, false, false, true, false),
-			8:  ByteField("OltResultStatus", 0, Read|Write, false, false, false, false),
-			9:  ByteField("OnuAuthenticationStatus", 0, Read, true, false, false, false),
-			10: MultiByteField("MasterSessionKeyName", 16, nil, Read, false, false, false, false),
-			11: MultiByteField("BroadcastKeyTable", 18, nil, Read|Write, false, false, true, true),
-			12: Uint16Field("EffectiveKeyLength", 0, Read, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  MultiByteField("OltCryptoCapabilities", 16, nil, Write, false, false, false),
+			2:  TableField("OltRandomChallengeTable", TableInfo{17, nil, 17}, Read|Write, false, false),
+			3:  ByteField("OltChallengeStatus", 0, Read|Write, false, false, false),
+			4:  ByteField("OnuSelectedCryptoCapabilities", 0, Read, false, false, false),
+			5:  TableField("OnuRandomChallengeTable", TableInfo{16, nil, 16}, Read, true, false),
+			6:  TableField("OnuAuthenticationResultTable", TableInfo{16, nil, 16}, Read, true, false),
+			7:  TableField("OltAuthenticationResultTable", TableInfo{17, nil, 17}, Write, false, false),
+			8:  ByteField("OltResultStatus", 0, Read|Write, false, false, false),
+			9:  ByteField("OnuAuthenticationStatus", 0, Read, true, false, false),
+			10: MultiByteField("MasterSessionKeyName", 16, nil, Read, false, false, false),
+			11: TableField("BroadcastKeyTable", TableInfo{18, nil, 18}, Read|Write, false, true),
+			12: Uint16Field("EffectiveKeyLength", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EnhancedSecurityControl{entity}, nil
+}
+
+// NewEnhancedSecurityControl (class ID 332 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEnhancedSecurityControl(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: enhancedsecuritycontrolBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

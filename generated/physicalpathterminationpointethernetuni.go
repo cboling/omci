@@ -23,46 +23,56 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointEthernetUniClassId uint16 = 11
 
+var physicalpathterminationpointethernetuniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointEthernetUni (class ID #11) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointEthernetUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointethernetuniBME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointEthernetUni",
+		ClassID:  11,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFE,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false),
+			2:  ByteField("SensedType", 0, Read, true, false, false),
+			3:  ByteField("AutoDetectionConfiguration", 0, Read|Write, false, false, false),
+			4:  ByteField("EthernetLoopbackConfiguration", 0, Read|Write, false, false, false),
+			5:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			6:  ByteField("OperationalState", 0, Read, true, false, true),
+			7:  ByteField("ConfigurationInd", 0, Read, false, false, false),
+			8:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false),
+			9:  ByteField("DteOrDceInd", 0, Read|Write, false, false, false),
+			10: Uint16Field("PauseTime", 0, Read|Write, false, false, true),
+			11: ByteField("BridgedOrIpInd", 0, Read|Write, false, false, true),
+			12: ByteField("Arc", 0, Read|Write, true, false, true),
+			13: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			14: ByteField("PppoeFilter", 0, Read|Write, false, false, true),
+			15: ByteField("PowerControl", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointEthernetUni (class ID 11 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointEthernetUni",
-		ClassID:  11,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false, false),
-			2:  ByteField("SensedType", 0, Read, true, false, false, false),
-			3:  ByteField("AutoDetectionConfiguration", 0, Read|Write, false, false, false, false),
-			4:  ByteField("EthernetLoopbackConfiguration", 0, Read|Write, false, false, false, false),
-			5:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			6:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			7:  ByteField("ConfigurationInd", 0, Read, false, false, false, false),
-			8:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false, false),
-			9:  ByteField("DteOrDceInd", 0, Read|Write, false, false, false, false),
-			10: Uint16Field("PauseTime", 0, Read|Write, false, false, false, true),
-			11: ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false, true),
-			12: ByteField("Arc", 0, Read|Write, true, false, false, true),
-			13: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			14: ByteField("PppoeFilter", 0, Read|Write, false, false, false, true),
-			15: ByteField("PowerControl", 0, Read|Write, false, false, false, true),
-		},
+func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointethernetuniBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointEthernetUni{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

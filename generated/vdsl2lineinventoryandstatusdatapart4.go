@@ -23,30 +23,40 @@ import "github.com/deckarep/golang-set"
 
 const Vdsl2LineInventoryAndStatusDataPart4ClassId uint16 = 415
 
+var vdsl2lineinventoryandstatusdatapart4BME *BaseManagedEntityDefinition
+
 // Vdsl2LineInventoryAndStatusDataPart4 (class ID #415) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Vdsl2LineInventoryAndStatusDataPart4 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	vdsl2lineinventoryandstatusdatapart4BME := &BaseManagedEntityDefinition{
+		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
+		ClassID:  415,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: ,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewVdsl2LineInventoryAndStatusDataPart4 (class ID 415 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Vdsl2LineInventoryAndStatusDataPart4",
-		ClassID:  415,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-		},
+func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: vdsl2lineinventoryandstatusdatapart4BME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Vdsl2LineInventoryAndStatusDataPart4{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

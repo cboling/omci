@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId uint16 = 346
 
+var xgponupstreammanagementperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID 346 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xgponupstreammanagementperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "XgPonUpstreamManagementPerformanceMonitoringHistoryData",
 		ClassID:  346,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("UpstreamPloamMessageCount", 0, Read, false, false, false, true),
-			4: Uint32Field("SerialNumberOnuMessageCount", 0, Read, false, false, false, true),
-			5: Uint32Field("RegistrationMessageCount", 0, Read, false, false, false, true),
-			6: Uint32Field("KeyReportMessageCount", 0, Read, false, false, false, true),
-			7: Uint32Field("AcknowledgeMessageCount", 0, Read, false, false, false, true),
-			8: Uint32Field("SleepRequestMessageCount", 0, Read, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("UpstreamPloamMessageCount", 0, Read, false, false, true),
+			4: Uint32Field("SerialNumberOnuMessageCount", 0, Read, false, false, true),
+			5: Uint32Field("RegistrationMessageCount", 0, Read, false, false, true),
+			6: Uint32Field("KeyReportMessageCount", 0, Read, false, false, true),
+			7: Uint32Field("AcknowledgeMessageCount", 0, Read, false, false, true),
+			8: Uint32Field("SleepRequestMessageCount", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XgPonUpstreamManagementPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewXgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID 346 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXgPonUpstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xgponupstreammanagementperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

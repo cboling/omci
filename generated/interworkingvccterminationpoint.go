@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const InterworkingVccTerminationPointClassId uint16 = 14
 
+var interworkingvccterminationpointBME *BaseManagedEntityDefinition
+
 // InterworkingVccTerminationPoint (class ID #14) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type InterworkingVccTerminationPoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewInterworkingVccTerminationPoint (class ID 14 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	interworkingvccterminationpointBME := &BaseManagedEntityDefinition{
 		Name:     "InterworkingVccTerminationPoint",
 		ClassID:  14,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("VciValue", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: ByteField("Deprecated1", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: Uint16Field("Aal5ProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: ByteField("AalLoopbackConfiguration", 0, Read|Write, false, false, false, false),
-			8: ByteField("PptpCounter", 0, Read, false, false, false, true),
-			9: ByteField("OperationalState", 0, Read, true, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("VciValue", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false),
+			3: ByteField("Deprecated1", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false),
+			5: Uint16Field("Aal5ProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false),
+			7: ByteField("AalLoopbackConfiguration", 0, Read|Write, false, false, false),
+			8: ByteField("PptpCounter", 0, Read, false, false, true),
+			9: ByteField("OperationalState", 0, Read, true, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &InterworkingVccTerminationPoint{entity}, nil
+}
+
+// NewInterworkingVccTerminationPoint (class ID 14 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: interworkingvccterminationpointBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const MulticastGemInterworkingTerminationPointClassId uint16 = 281
 
+var multicastgeminterworkingterminationpointBME *BaseManagedEntityDefinition
+
 // MulticastGemInterworkingTerminationPoint (class ID #281) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MulticastGemInterworkingTerminationPoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMulticastGemInterworkingTerminationPoint (class ID 281 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	multicastgeminterworkingterminationpointBME := &BaseManagedEntityDefinition{
 		Name:     "MulticastGemInterworkingTerminationPoint",
 		ClassID:  281,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,18 +44,30 @@ func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedE
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: ByteField("PptpCounter", 0, Read, false, false, false, true),
-			5: ByteField("OperationalState", 0, Read, true, false, false, true),
-			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: MultiByteField("Ipv6MulticastAddressTable", 24, nil, Read|Write, false, false, true, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			4: ByteField("PptpCounter", 0, Read, false, false, true),
+			5: ByteField("OperationalState", 0, Read, true, false, true),
+			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			7: TableField("Ipv6MulticastAddressTable", TableInfo{24, nil, 24}, Read|Write, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MulticastGemInterworkingTerminationPoint{entity}, nil
+}
+
+// NewMulticastGemInterworkingTerminationPoint (class ID 281 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: multicastgeminterworkingterminationpointBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

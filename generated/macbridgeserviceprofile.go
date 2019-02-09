@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgeServiceProfileClassId uint16 = 45
 
+var macbridgeserviceprofileBME *BaseManagedEntityDefinition
+
 // MacBridgeServiceProfile (class ID #45) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgeServiceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMacBridgeServiceProfile (class ID 45 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	macbridgeserviceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "MacBridgeServiceProfile",
 		ClassID:  45,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("SpanningTreeInd", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  ByteField("LearningInd", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  ByteField("PortBridgingInd", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  Uint16Field("Priority", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("MaxAge", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint16Field("HelloTime", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  Uint16Field("ForwardDelay", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  ByteField("UnknownMacAddressDiscard", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("MacLearningDepth", 0, Read|SetByCreate|Write, false, false, false, true),
-			10: Uint32Field("DynamicFilteringAgeingTime", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("SpanningTreeInd", 0, Read|SetByCreate|Write, false, false, false),
+			2:  ByteField("LearningInd", 0, Read|SetByCreate|Write, false, false, false),
+			3:  ByteField("PortBridgingInd", 0, Read|SetByCreate|Write, false, false, false),
+			4:  Uint16Field("Priority", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("MaxAge", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint16Field("HelloTime", 0, Read|SetByCreate|Write, false, false, false),
+			7:  Uint16Field("ForwardDelay", 0, Read|SetByCreate|Write, false, false, false),
+			8:  ByteField("UnknownMacAddressDiscard", 0, Read|SetByCreate|Write, false, false, false),
+			9:  ByteField("MacLearningDepth", 0, Read|SetByCreate|Write, false, false, true),
+			10: Uint32Field("DynamicFilteringAgeingTime", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MacBridgeServiceProfile{entity}, nil
+}
+
+// NewMacBridgeServiceProfile (class ID 45 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: macbridgeserviceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

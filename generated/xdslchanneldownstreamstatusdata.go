@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const XdslChannelDownstreamStatusDataClassId uint16 = 102
 
+var xdslchanneldownstreamstatusdataBME *BaseManagedEntityDefinition
+
 // XdslChannelDownstreamStatusData (class ID #102) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslChannelDownstreamStatusData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	xdslchanneldownstreamstatusdataBME := &BaseManagedEntityDefinition{
+		Name:     "XdslChannelDownstreamStatusData",
+		ClassID:  102,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: 0XFFE0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("ActualInterleavingDelay", 0, Read, false, false, false),
+			2:  Uint32Field("ActualDataRate", 0, Read, false, false, false),
+			3:  Uint32Field("PreviousDataRate", 0, Read, false, false, false),
+			4:  ByteField("ActualImpulseNoiseProtection", 0, Read, false, false, false),
+			5:  ByteField("ActualSizeOfReedSolomonCodeword", 0, Read, false, false, false),
+			6:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read, false, false, false),
+			7:  Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read, false, false, false),
+			8:  Uint16Field("ActualInterleavingDepth", 0, Read, false, false, false),
+			9:  ByteField("ActualInterleavingBlockLength", 0, Read, false, false, false),
+			10: ByteField("ActualLatencyPath", 0, Read, false, false, false),
+			11: ByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, Read, false, false, true),
+		},
+	}
 }
 
 // NewXdslChannelDownstreamStatusData (class ID 102 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "XdslChannelDownstreamStatusData",
-		ClassID:  102,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("ActualInterleavingDelay", 0, Read, false, false, false, false),
-			2:  Uint32Field("ActualDataRate", 0, Read, false, false, false, false),
-			3:  Uint32Field("PreviousDataRate", 0, Read, false, false, false, false),
-			4:  ByteField("ActualImpulseNoiseProtection", 0, Read, false, false, false, false),
-			5:  ByteField("ActualSizeOfReedSolomonCodeword", 0, Read, false, false, false, false),
-			6:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read, false, false, false, false),
-			7:  Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read, false, false, false, false),
-			8:  Uint16Field("ActualInterleavingDepth", 0, Read, false, false, false, false),
-			9:  ByteField("ActualInterleavingBlockLength", 0, Read, false, false, false, false),
-			10: ByteField("ActualLatencyPath", 0, Read, false, false, false, false),
-			11: ByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, Read, false, false, false, true),
-		},
+func NewXdslChannelDownstreamStatusData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdslchanneldownstreamstatusdataBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &XdslChannelDownstreamStatusData{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

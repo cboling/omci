@@ -23,34 +23,44 @@ import "github.com/deckarep/golang-set"
 
 const BbfTr069ManagementServerClassId uint16 = 340
 
+var bbftr069managementserverBME *BaseManagedEntityDefinition
+
 // BbfTr069ManagementServer (class ID #340) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type BbfTr069ManagementServer struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	bbftr069managementserverBME := &BaseManagedEntityDefinition{
+		Name:     "BbfTr069ManagementServer",
+		ClassID:  340,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XE000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			2: Uint16Field("AcsNetworkAddress", 0, Read|Write, false, false, false),
+			3: Uint16Field("AssociatedTag", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewBbfTr069ManagementServer (class ID 340 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "BbfTr069ManagementServer",
-		ClassID:  340,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2: Uint16Field("AcsNetworkAddress", 0, Read|Write, false, false, false, false),
-			3: Uint16Field("AssociatedTag", 0, Read|Write, false, false, false, false),
-		},
+func NewBbfTr069ManagementServer(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: bbftr069managementserverBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &BbfTr069ManagementServer{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

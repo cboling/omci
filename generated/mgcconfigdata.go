@@ -23,44 +23,54 @@ import "github.com/deckarep/golang-set"
 
 const MgcConfigDataClassId uint16 = 155
 
+var mgcconfigdataBME *BaseManagedEntityDefinition
+
 // MgcConfigData (class ID #155) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MgcConfigData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMgcConfigData (class ID 155 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMgcConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	mgcconfigdataBME := &BaseManagedEntityDefinition{
 		Name:     "MgcConfigData",
 		ClassID:  155,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("PrimaryMgc", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("SecondaryMgc", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint16Field("TcpUdpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  ByteField("Version", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  ByteField("MessageFormat", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint16Field("MaximumRetryTime", 0, Read|Write, false, false, false, true),
-			7:  Uint16Field("MaximumRetryAttempts", 0, Read|SetByCreate|Write, false, false, false, true),
-			8:  Uint16Field("ServiceChangeDelay", 0, Read|Write, false, false, false, true),
-			9:  MultiByteField("TerminationIdBase", 25, nil, Read|Write, false, false, false, true),
-			10: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: Uint16Field("MessageIdPointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("PrimaryMgc", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("SecondaryMgc", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint16Field("TcpUdpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			4:  ByteField("Version", 0, Read|SetByCreate|Write, false, false, false),
+			5:  ByteField("MessageFormat", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint16Field("MaximumRetryTime", 0, Read|Write, false, false, true),
+			7:  Uint16Field("MaximumRetryAttempts", 0, Read|SetByCreate|Write, false, false, true),
+			8:  Uint16Field("ServiceChangeDelay", 0, Read|Write, false, false, true),
+			9:  MultiByteField("TerminationIdBase", 25, nil, Read|Write, false, false, true),
+			10: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false),
+			11: Uint16Field("MessageIdPointer", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MgcConfigData{entity}, nil
+}
+
+// NewMgcConfigData (class ID 155 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMgcConfigData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: mgcconfigdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

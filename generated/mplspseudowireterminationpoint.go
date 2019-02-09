@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const MplsPseudowireTerminationPointClassId uint16 = 333
 
+var mplspseudowireterminationpointBME *BaseManagedEntityDefinition
+
 // MplsPseudowireTerminationPoint (class ID #333) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MplsPseudowireTerminationPoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMplsPseudowireTerminationPoint (class ID 333 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	mplspseudowireterminationpointBME := &BaseManagedEntityDefinition{
 		Name:     "MplsPseudowireTerminationPoint",
 		ClassID:  333,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("TpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  ByteField("MplsLabelIndicator", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  ByteField("MplsPwDirection", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint32Field("MplsPwUplinkLabel", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint32Field("MplsPwDownlinkLabel", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  ByteField("MplsPwTc", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  ByteField("MplsTunnelDirection", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  Uint32Field("MplsTunnelUplinkLabel", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: Uint32Field("MplsTunnelDownlinkLabel", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: ByteField("MplsTunnelTc", 0, Read|SetByCreate|Write, false, false, false, false),
-			12: Uint16Field("PseudowireType", 0, Read|SetByCreate|Write, false, false, false, false),
-			13: ByteField("PseudowireControlWordPreference", 0, Read|SetByCreate|Write, false, false, false, true),
-			14: ByteField("AdministrativeState", 0, Read|Write, false, false, false, true),
-			15: ByteField("OperationalState", 0, Read, true, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("TpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			3:  ByteField("MplsLabelIndicator", 0, Read|SetByCreate|Write, false, false, false),
+			4:  ByteField("MplsPwDirection", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint32Field("MplsPwUplinkLabel", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint32Field("MplsPwDownlinkLabel", 0, Read|SetByCreate|Write, false, false, false),
+			7:  ByteField("MplsPwTc", 0, Read|SetByCreate|Write, false, false, false),
+			8:  ByteField("MplsTunnelDirection", 0, Read|SetByCreate|Write, false, false, false),
+			9:  Uint32Field("MplsTunnelUplinkLabel", 0, Read|SetByCreate|Write, false, false, false),
+			10: Uint32Field("MplsTunnelDownlinkLabel", 0, Read|SetByCreate|Write, false, false, false),
+			11: ByteField("MplsTunnelTc", 0, Read|SetByCreate|Write, false, false, false),
+			12: Uint16Field("PseudowireType", 0, Read|SetByCreate|Write, false, false, false),
+			13: ByteField("PseudowireControlWordPreference", 0, Read|SetByCreate|Write, false, false, true),
+			14: ByteField("AdministrativeState", 0, Read|Write, false, false, true),
+			15: ByteField("OperationalState", 0, Read, true, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MplsPseudowireTerminationPoint{entity}, nil
+}
+
+// NewMplsPseudowireTerminationPoint (class ID 333 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: mplspseudowireterminationpointBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

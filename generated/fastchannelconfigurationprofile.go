@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const FastChannelConfigurationProfileClassId uint16 = 432
 
+var fastchannelconfigurationprofileBME *BaseManagedEntityDefinition
+
 // FastChannelConfigurationProfile (class ID #432) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastChannelConfigurationProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewFastChannelConfigurationProfile (class ID 432 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	fastchannelconfigurationprofileBME := &BaseManagedEntityDefinition{
 		Name:     "FastChannelConfigurationProfile",
 		ClassID:  432,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write, false, false, false, false),
-			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write, false, false, false, false),
-			2:  Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write, false, false, false, false),
-			3:  Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write, false, false, false, false),
-			4:  Uint32Field("MaximumDelayDelaymax", 0, Read|Write, false, false, false, false),
-			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write, false, false, false, false),
-			6:  ByteField("ShineRatioShineratio", 0, Read|Write, false, false, false, false),
-			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write, false, false, false, false),
-			8:  ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write, false, false, false, false),
-			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write, false, false, false, false),
-			10: ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write, false, false, false, true),
+			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write, false, false, false),
+			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write, false, false, false),
+			2:  Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write, false, false, false),
+			3:  Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write, false, false, false),
+			4:  Uint32Field("MaximumDelayDelaymax", 0, Read|Write, false, false, false),
+			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write, false, false, false),
+			6:  ByteField("ShineRatioShineratio", 0, Read|Write, false, false, false),
+			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write, false, false, false),
+			8:  ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write, false, false, false),
+			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write, false, false, false),
+			10: ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &FastChannelConfigurationProfile{entity}, nil
+}
+
+// NewFastChannelConfigurationProfile (class ID 432 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewFastChannelConfigurationProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: fastchannelconfigurationprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,33 +23,43 @@ import "github.com/deckarep/golang-set"
 
 const EquipmentExtensionPackageClassId uint16 = 160
 
+var equipmentextensionpackageBME *BaseManagedEntityDefinition
+
 // EquipmentExtensionPackage (class ID #160) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EquipmentExtensionPackage struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	equipmentextensionpackageBME := &BaseManagedEntityDefinition{
+		Name:     "EquipmentExtensionPackage",
+		ClassID:  160,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XC000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: Uint16Field("EnvironmentalSense", 0, Read|Write, false, false, true),
+			2: Uint16Field("ContactClosureOutput", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewEquipmentExtensionPackage (class ID 160 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "EquipmentExtensionPackage",
-		ClassID:  160,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint16Field("EnvironmentalSense", 0, Read|Write, false, false, false, true),
-			2: Uint16Field("ContactClosureOutput", 0, Read|Write, false, false, false, true),
-		},
+func NewEquipmentExtensionPackage(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: equipmentextensionpackageBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &EquipmentExtensionPackage{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

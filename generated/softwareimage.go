@@ -23,37 +23,47 @@ import "github.com/deckarep/golang-set"
 
 const SoftwareImageClassId uint16 = 7
 
+var softwareimageBME *BaseManagedEntityDefinition
+
 // SoftwareImage (class ID #7) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SoftwareImage struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	softwareimageBME := &BaseManagedEntityDefinition{
+		Name:     "SoftwareImage",
+		ClassID:  7,
+		MessageTypes: mapset.NewSetWith(
+			DownloadSection,
+			Get,
+		),
+		AllowedAttributeMask: 0XFC00,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: MultiByteField("Version", 14, nil, Read, true, false, false),
+			2: ByteField("IsCommitted", 0, Read, true, false, false),
+			3: ByteField("IsActive", 0, Read, true, false, false),
+			4: ByteField("IsValid", 0, Read, true, false, false),
+			5: MultiByteField("ProductCode", 25, nil, Read, true, false, true),
+			6: MultiByteField("ImageHash", 16, nil, Read, true, false, true),
+		},
+	}
 }
 
 // NewSoftwareImage (class ID 7 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewSoftwareImage(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "SoftwareImage",
-		ClassID:  7,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			DownloadSection,
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: MultiByteField("Version", 14, nil, Read, true, false, false, false),
-			2: ByteField("IsCommitted", 0, Read, true, false, false, false),
-			3: ByteField("IsActive", 0, Read, true, false, false, false),
-			4: ByteField("IsValid", 0, Read, true, false, false, false),
-			5: MultiByteField("ProductCode", 25, nil, Read, true, false, false, true),
-			6: MultiByteField("ImageHash", 16, nil, Read, true, false, false, true),
-		},
+func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: softwareimageBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &SoftwareImage{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

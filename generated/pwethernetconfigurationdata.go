@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const PwEthernetConfigurationDataClassId uint16 = 339
 
+var pwethernetconfigurationdataBME *BaseManagedEntityDefinition
+
 // PwEthernetConfigurationData (class ID #339) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PwEthernetConfigurationData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewPwEthernetConfigurationData (class ID 339 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	pwethernetconfigurationdataBME := &BaseManagedEntityDefinition{
 		Name:     "PwEthernetConfigurationData",
 		ClassID:  339,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &PwEthernetConfigurationData{entity}, nil
+}
+
+// NewPwEthernetConfigurationData (class ID 339 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPwEthernetConfigurationData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: pwethernetconfigurationdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const XgPonTcPerformanceMonitoringHistoryDataClassId uint16 = 344
 
+var xgpontcperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // XgPonTcPerformanceMonitoringHistoryData (class ID #344) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XgPonTcPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXgPonTcPerformanceMonitoringHistoryData (class ID 344 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xgpontcperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "XgPonTcPerformanceMonitoringHistoryData",
 		ClassID:  344,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("PsbdHecErrorCount", 0, Read, false, false, false, true),
-			4:  Uint32Field("XgtcHecErrorCount", 0, Read, false, false, false, true),
-			5:  Uint32Field("UnknownProfileCount", 0, Read, false, false, false, true),
-			6:  Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read, false, false, false, false),
-			7:  Uint32Field("FragmentXgemFrames", 0, Read, false, false, false, true),
-			8:  Uint32Field("XgemHecLostWordsCount", 0, Read, false, false, false, true),
-			9:  Uint32Field("XgemKeyErrors", 0, Read, false, false, false, false),
-			10: Uint32Field("XgemHecErrorCount", 0, Read, false, false, false, false),
-			11: Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read, false, false, false, false),
-			12: Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read, false, false, false, true),
-			13: Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read, false, false, false, true),
-			14: Uint32Field("LodsEventRestoredCount", 0, Read, false, false, false, true),
-			15: Uint32Field("OnuReactivationByLodsEvents", 0, Read, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("PsbdHecErrorCount", 0, Read, false, false, true),
+			4:  Uint32Field("XgtcHecErrorCount", 0, Read, false, false, true),
+			5:  Uint32Field("UnknownProfileCount", 0, Read, false, false, true),
+			6:  Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, Read, false, false, false),
+			7:  Uint32Field("FragmentXgemFrames", 0, Read, false, false, true),
+			8:  Uint32Field("XgemHecLostWordsCount", 0, Read, false, false, true),
+			9:  Uint32Field("XgemKeyErrors", 0, Read, false, false, false),
+			10: Uint32Field("XgemHecErrorCount", 0, Read, false, false, false),
+			11: Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, Read, false, false, false),
+			12: Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, Read, false, false, true),
+			13: Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, Read, false, false, true),
+			14: Uint32Field("LodsEventRestoredCount", 0, Read, false, false, true),
+			15: Uint32Field("OnuReactivationByLodsEvents", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XgPonTcPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewXgPonTcPerformanceMonitoringHistoryData (class ID 344 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xgpontcperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

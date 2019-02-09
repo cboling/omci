@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelPloamPerformanceMonitoringHistoryDataPart2ClassId uint16 = 447
 
+var twdmchannelploamperformancemonitoringhistorydatapart2BME *BaseManagedEntityDefinition
+
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID #447) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID 447 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	twdmchannelploamperformancemonitoringhistorydatapart2BME := &BaseManagedEntityDefinition{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart2",
 		ClassID:  447,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,27 +44,39 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamDat
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("SystemProfileMessageCount", 0, Read, false, false, false, false),
-			4:  Uint32Field("ChannelProfileMessageCount", 0, Read, false, false, false, false),
-			5:  Uint32Field("BurstProfileMessageCount", 0, Read, false, false, false, false),
-			6:  Uint32Field("AssignOnuIdMessageCount", 0, Read, false, false, false, false),
-			7:  Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, Read, false, false, false, false),
-			8:  Uint32Field("DeactivateOnuIdMessageCount", 0, Read, false, false, false, false),
-			9:  Uint32Field("DisableSerialNumberMessageCount", 0, Read, false, false, false, false),
-			10: Uint32Field("RequestRegistrationMessageCount", 0, Read, false, false, false, false),
-			11: Uint32Field("AssignAllocIdMessageCount", 0, Read, false, false, false, false),
-			12: Uint32Field("KeyControlMessageCount", 0, Read, false, false, false, false),
-			13: Uint32Field("SleepAllowMessageCount", 0, Read, false, false, false, false),
-			14: Uint32Field("TuningControlRequestMessageCount", 0, Read, false, false, false, false),
-			15: Uint32Field("TuningControlCompleteDMessageCount", 0, Read, false, false, false, false),
-			16: Uint32Field("CalibrationRequestMessageCount", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("SystemProfileMessageCount", 0, Read, false, false, false),
+			4:  Uint32Field("ChannelProfileMessageCount", 0, Read, false, false, false),
+			5:  Uint32Field("BurstProfileMessageCount", 0, Read, false, false, false),
+			6:  Uint32Field("AssignOnuIdMessageCount", 0, Read, false, false, false),
+			7:  Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, Read, false, false, false),
+			8:  Uint32Field("DeactivateOnuIdMessageCount", 0, Read, false, false, false),
+			9:  Uint32Field("DisableSerialNumberMessageCount", 0, Read, false, false, false),
+			10: Uint32Field("RequestRegistrationMessageCount", 0, Read, false, false, false),
+			11: Uint32Field("AssignAllocIdMessageCount", 0, Read, false, false, false),
+			12: Uint32Field("KeyControlMessageCount", 0, Read, false, false, false),
+			13: Uint32Field("SleepAllowMessageCount", 0, Read, false, false, false),
+			14: Uint32Field("TuningControlRequestMessageCount", 0, Read, false, false, false),
+			15: Uint32Field("TuningControlCompleteDMessageCount", 0, Read, false, false, false),
+			16: Uint32Field("CalibrationRequestMessageCount", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TwdmChannelPloamPerformanceMonitoringHistoryDataPart2{entity}, nil
+}
+
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID 447 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: twdmchannelploamperformancemonitoringhistorydatapart2BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

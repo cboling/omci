@@ -23,35 +23,45 @@ import "github.com/deckarep/golang-set"
 
 const OnuRemoteDebugClassId uint16 = 158
 
+var onuremotedebugBME *BaseManagedEntityDefinition
+
 // OnuRemoteDebug (class ID #158) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuRemoteDebug struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewOnuRemoteDebug (class ID 158 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewOnuRemoteDebug(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	onuremotedebugBME := &BaseManagedEntityDefinition{
 		Name:     "OnuRemoteDebug",
 		ClassID:  158,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("CommandFormat", 0, Read, false, false, false, false),
-			2: MultiByteField("Command", 25, nil, Write, false, false, false, false),
-			3: MultiByteField("ReplyTable", 0, nil, Read, false, false, true, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("CommandFormat", 0, Read, false, false, false),
+			2: MultiByteField("Command", 25, nil, Write, false, false, false),
+			3: TableField("ReplyTable", TableInfo{0, nil, 0}, Read, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &OnuRemoteDebug{entity}, nil
+}
+
+// NewOnuRemoteDebug (class ID 158 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewOnuRemoteDebug(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: onuremotedebugBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

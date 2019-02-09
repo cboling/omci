@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const GemPortNetworkCtpClassId uint16 = 268
 
+var gemportnetworkctpBME *BaseManagedEntityDefinition
+
 // GemPortNetworkCtp (class ID #268) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GemPortNetworkCtp struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewGemPortNetworkCtp (class ID 268 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	gemportnetworkctpBME := &BaseManagedEntityDefinition{
 		Name:     "GemPortNetworkCtp",
 		ClassID:  268,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("TContPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|SetByCreate|Write, false, false, false, true),
-			6:  ByteField("UniCounter", 0, Read, false, false, false, true),
-			7:  Uint16Field("PriorityQueuePointerForDownStream", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  ByteField("EncryptionState", 0, Read, false, false, false, true),
-			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|SetByCreate|Write, false, false, false, true),
-			10: ByteField("EncryptionKeyRing", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("TContPointer", 0, Read|SetByCreate|Write, false, false, false),
+			3:  ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false),
+			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|SetByCreate|Write, false, false, true),
+			6:  ByteField("UniCounter", 0, Read, false, false, true),
+			7:  Uint16Field("PriorityQueuePointerForDownStream", 0, Read|SetByCreate|Write, false, false, false),
+			8:  ByteField("EncryptionState", 0, Read, false, false, true),
+			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|SetByCreate|Write, false, false, true),
+			10: ByteField("EncryptionKeyRing", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &GemPortNetworkCtp{entity}, nil
+}
+
+// NewGemPortNetworkCtp (class ID 268 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: gemportnetworkctpBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

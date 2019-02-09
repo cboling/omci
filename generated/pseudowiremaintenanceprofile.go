@@ -23,49 +23,59 @@ import "github.com/deckarep/golang-set"
 
 const PseudowireMaintenanceProfileClassId uint16 = 284
 
+var pseudowiremaintenanceprofileBME *BaseManagedEntityDefinition
+
 // PseudowireMaintenanceProfile (class ID #284) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PseudowireMaintenanceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewPseudowireMaintenanceProfile (class ID 284 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	pseudowiremaintenanceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "PseudowireMaintenanceProfile",
 		ClassID:  284,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("JitterBufferMaximumDepth", 0, Read|SetByCreate|Write, false, false, false, true),
-			2:  Uint16Field("JitterBufferDesiredDepth", 0, Read|SetByCreate|Write, false, false, false, true),
-			3:  ByteField("FillPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			4:  ByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			5:  ByteField("MisconnectedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			6:  ByteField("LossOfPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			7:  ByteField("LossOfPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			9:  ByteField("BufferOverrunUnderrunClearPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			10: ByteField("MalformedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			11: ByteField("MalformedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			12: ByteField("RBitTransmitSetPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			13: ByteField("RBitTransmitClearPolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			14: ByteField("RBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			15: ByteField("LBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, false, true),
-			16: Uint16Field("SesThreshold", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("JitterBufferMaximumDepth", 0, Read|SetByCreate|Write, false, false, true),
+			2:  Uint16Field("JitterBufferDesiredDepth", 0, Read|SetByCreate|Write, false, false, true),
+			3:  ByteField("FillPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			4:  ByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			5:  ByteField("MisconnectedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			6:  ByteField("LossOfPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			7:  ByteField("LossOfPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			9:  ByteField("BufferOverrunUnderrunClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			10: ByteField("MalformedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			11: ByteField("MalformedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			12: ByteField("RBitTransmitSetPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			13: ByteField("RBitTransmitClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
+			14: ByteField("RBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true),
+			15: ByteField("LBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true),
+			16: Uint16Field("SesThreshold", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &PseudowireMaintenanceProfile{entity}, nil
+}
+
+// NewPseudowireMaintenanceProfile (class ID 284 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPseudowireMaintenanceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: pseudowiremaintenanceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

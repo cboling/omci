@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const VirtualEthernetInterfacePointClassId uint16 = 329
 
+var virtualethernetinterfacepointBME *BaseManagedEntityDefinition
+
 // VirtualEthernetInterfacePoint (class ID #329) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VirtualEthernetInterfacePoint struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	virtualethernetinterfacepointBME := &BaseManagedEntityDefinition{
+		Name:     "VirtualEthernetInterfacePoint",
+		ClassID:  329,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XF800,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			2: ByteField("OperationalState", 0, Read, true, false, true),
+			3: MultiByteField("InterdomainName", 25, nil, Read|Write, false, false, true),
+			4: Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, true),
+			5: Uint16Field("IanaAssignedPort", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewVirtualEthernetInterfacePoint (class ID 329 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "VirtualEthernetInterfacePoint",
-		ClassID:  329,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2: ByteField("OperationalState", 0, Read, true, false, false, true),
-			3: MultiByteField("InterdomainName", 25, nil, Read|Write, false, false, false, true),
-			4: Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, false, true),
-			5: Uint16Field("IanaAssignedPort", 0, Read, false, false, false, false),
-		},
+func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: virtualethernetinterfacepointBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &VirtualEthernetInterfacePoint{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

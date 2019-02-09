@@ -23,43 +23,53 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgMepCcmDatabaseClassId uint16 = 304
 
+var dot1agmepccmdatabaseBME *BaseManagedEntityDefinition
+
 // Dot1AgMepCcmDatabase (class ID #304) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgMepCcmDatabase struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	dot1agmepccmdatabaseBME := &BaseManagedEntityDefinition{
+		Name:     "Dot1AgMepCcmDatabase",
+		ClassID:  304,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			GetNext,
+		),
+		AllowedAttributeMask: 0XFFF0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  TableField("Rmep1DatabaseTable", TableInfo{0, nil, 0}, Read, false, false),
+			2:  TableField("Rmep2DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			3:  TableField("Rmep3DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			4:  TableField("Rmep4DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			5:  TableField("Rmep5DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			6:  TableField("Rmep6DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			7:  TableField("Rmep7DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			8:  TableField("Rmep8DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			9:  TableField("Rmep9DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			10: TableField("Rmep10DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			11: TableField("Rmep11DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+			12: TableField("Rmep12DatabaseTable", TableInfo{0, nil, 0}, Read, false, true),
+		},
+	}
 }
 
 // NewDot1AgMepCcmDatabase (class ID 304 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Dot1AgMepCcmDatabase",
-		ClassID:  304,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			GetNext,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  MultiByteField("Rmep1DatabaseTable", 0, nil, Read, false, false, true, false),
-			2:  MultiByteField("Rmep2DatabaseTable", 0, nil, Read, false, false, true, true),
-			3:  MultiByteField("Rmep3DatabaseTable", 0, nil, Read, false, false, true, true),
-			4:  MultiByteField("Rmep4DatabaseTable", 0, nil, Read, false, false, true, true),
-			5:  MultiByteField("Rmep5DatabaseTable", 0, nil, Read, false, false, true, true),
-			6:  MultiByteField("Rmep6DatabaseTable", 0, nil, Read, false, false, true, true),
-			7:  MultiByteField("Rmep7DatabaseTable", 0, nil, Read, false, false, true, true),
-			8:  MultiByteField("Rmep8DatabaseTable", 0, nil, Read, false, false, true, true),
-			9:  MultiByteField("Rmep9DatabaseTable", 0, nil, Read, false, false, true, true),
-			10: MultiByteField("Rmep10DatabaseTable", 0, nil, Read, false, false, true, true),
-			11: MultiByteField("Rmep11DatabaseTable", 0, nil, Read, false, false, true, true),
-			12: MultiByteField("Rmep12DatabaseTable", 0, nil, Read, false, false, true, true),
-		},
+func NewDot1AgMepCcmDatabase(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1agmepccmdatabaseBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Dot1AgMepCcmDatabase{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

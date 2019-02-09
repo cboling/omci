@@ -23,34 +23,44 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgCfmStackClassId uint16 = 305
 
+var dot1agcfmstackBME *BaseManagedEntityDefinition
+
 // Dot1AgCfmStack (class ID #305) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgCfmStack struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	dot1agcfmstackBME := &BaseManagedEntityDefinition{
+		Name:     "Dot1AgCfmStack",
+		ClassID:  305,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			GetNext,
+		),
+		AllowedAttributeMask: 0XE000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("Layer2Type", 0, Read, false, false, false),
+			2: TableField("MpStatusTable", TableInfo{18, nil, 18}, Read, false, false),
+			3: TableField("ConfigurationErrorListTable", TableInfo{5, nil, 5}, Read, true, false),
+		},
+	}
 }
 
 // NewDot1AgCfmStack (class ID 305 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgCfmStack(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "Dot1AgCfmStack",
-		ClassID:  305,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			GetNext,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("Layer2Type", 0, Read, false, false, false, false),
-			2: MultiByteField("MpStatusTable", 18, nil, Read, false, false, true, false),
-			3: MultiByteField("ConfigurationErrorListTable", 5, nil, Read, true, false, true, false),
-		},
+func NewDot1AgCfmStack(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1agcfmstackBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &Dot1AgCfmStack{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

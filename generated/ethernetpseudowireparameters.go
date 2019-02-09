@@ -23,34 +23,44 @@ import "github.com/deckarep/golang-set"
 
 const EthernetPseudowireParametersClassId uint16 = 400
 
+var ethernetpseudowireparametersBME *BaseManagedEntityDefinition
+
 // EthernetPseudowireParameters (class ID #400) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetPseudowireParameters struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEthernetPseudowireParameters (class ID 400 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	ethernetpseudowireparametersBME := &BaseManagedEntityDefinition{
 		Name:     "EthernetPseudowireParameters",
 		ClassID:  400,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0X8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("Mtu", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("Mtu", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EthernetPseudowireParameters{entity}, nil
+}
+
+// NewEthernetPseudowireParameters (class ID 400 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: ethernetpseudowireparametersBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

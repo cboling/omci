@@ -23,40 +23,50 @@ import "github.com/deckarep/golang-set"
 
 const ThresholdData1ClassId uint16 = 273
 
+var thresholddata1BME *BaseManagedEntityDefinition
+
 // ThresholdData1 (class ID #273) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ThresholdData1 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewThresholdData1 (class ID 273 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewThresholdData1(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	thresholddata1BME := &BaseManagedEntityDefinition{
 		Name:     "ThresholdData1",
 		ClassID:  273,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint32Field("ThresholdValue1", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint32Field("ThresholdValue2", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("ThresholdValue3", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint32Field("ThresholdValue4", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: Uint32Field("ThresholdValue5", 0, Read|SetByCreate|Write, false, false, false, false),
-			6: Uint32Field("ThresholdValue6", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: Uint32Field("ThresholdValue7", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint32Field("ThresholdValue1", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint32Field("ThresholdValue2", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("ThresholdValue3", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint32Field("ThresholdValue4", 0, Read|SetByCreate|Write, false, false, false),
+			5: Uint32Field("ThresholdValue5", 0, Read|SetByCreate|Write, false, false, false),
+			6: Uint32Field("ThresholdValue6", 0, Read|SetByCreate|Write, false, false, false),
+			7: Uint32Field("ThresholdValue7", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &ThresholdData1{entity}, nil
+}
+
+// NewThresholdData1 (class ID 273 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewThresholdData1(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: thresholddata1BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

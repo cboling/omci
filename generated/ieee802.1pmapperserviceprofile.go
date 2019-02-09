@@ -23,46 +23,56 @@ import "github.com/deckarep/golang-set"
 
 const Ieee8021PMapperServiceProfileClassId uint16 = 130
 
+var ieee8021pmapperserviceprofileBME *BaseManagedEntityDefinition
+
 // Ieee8021PMapperServiceProfile (class ID #130) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Ieee8021PMapperServiceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	ieee8021pmapperserviceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "Ieee8021PMapperServiceProfile",
 		ClassID:  130,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("TpPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("InterworkTpPointerForPBitPriority0", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint16Field("InterworkTpPointerForPBitPriority1", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  Uint16Field("InterworkTpPointerForPBitPriority2", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("InterworkTpPointerForPBitPriority3", 0, Read|SetByCreate|Write, false, false, false, false),
-			6:  Uint16Field("InterworkTpPointerForPBitPriority4", 0, Read|SetByCreate|Write, false, false, false, false),
-			7:  Uint16Field("InterworkTpPointerForPBitPriority5", 0, Read|SetByCreate|Write, false, false, false, false),
-			8:  Uint16Field("InterworkTpPointerForPBitPriority6", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  Uint16Field("InterworkTpPointerForPBitPriority7", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: ByteField("UnmarkedFrameOption", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, false, false),
-			12: ByteField("DefaultPBitAssumption", 0, Read|SetByCreate|Write, false, false, false, false),
-			13: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("TpPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("InterworkTpPointerForPBitPriority0", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint16Field("InterworkTpPointerForPBitPriority1", 0, Read|SetByCreate|Write, false, false, false),
+			4:  Uint16Field("InterworkTpPointerForPBitPriority2", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("InterworkTpPointerForPBitPriority3", 0, Read|SetByCreate|Write, false, false, false),
+			6:  Uint16Field("InterworkTpPointerForPBitPriority4", 0, Read|SetByCreate|Write, false, false, false),
+			7:  Uint16Field("InterworkTpPointerForPBitPriority5", 0, Read|SetByCreate|Write, false, false, false),
+			8:  Uint16Field("InterworkTpPointerForPBitPriority6", 0, Read|SetByCreate|Write, false, false, false),
+			9:  Uint16Field("InterworkTpPointerForPBitPriority7", 0, Read|SetByCreate|Write, false, false, false),
+			10: ByteField("UnmarkedFrameOption", 0, Read|SetByCreate|Write, false, false, false),
+			11: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, false),
+			12: ByteField("DefaultPBitAssumption", 0, Read|SetByCreate|Write, false, false, false),
+			13: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Ieee8021PMapperServiceProfile{entity}, nil
+}
+
+// NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: ieee8021pmapperserviceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

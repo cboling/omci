@@ -23,47 +23,57 @@ import "github.com/deckarep/golang-set"
 
 const XdslLineInventoryAndStatusDataPart5ClassId uint16 = 325
 
+var xdsllineinventoryandstatusdatapart5BME *BaseManagedEntityDefinition
+
 // XdslLineInventoryAndStatusDataPart5 (class ID #325) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart5 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	xdsllineinventoryandstatusdatapart5BME := &BaseManagedEntityDefinition{
+		Name:     "XdslLineInventoryAndStatusDataPart5",
+		ClassID:  325,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			GetNext,
+		),
+		AllowedAttributeMask: 0XFFFF,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  Uint16Field("FextDownstreamSnrMargin", 0, Read, false, false, false),
+			2:  Uint16Field("NextDownstreamSnrMargin", 0, Read, false, false, false),
+			3:  Uint16Field("FextUpstreamSnrMargin", 0, Read, false, false, false),
+			4:  Uint16Field("NextUpstreamSnrMargin", 0, Read, false, false, false),
+			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false),
+			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false),
+			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false),
+			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false),
+			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false),
+			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false),
+			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false),
+			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false),
+			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false),
+			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false),
+			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false),
+			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewXdslLineInventoryAndStatusDataPart5 (class ID 325 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "XdslLineInventoryAndStatusDataPart5",
-		ClassID:  325,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			GetNext,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  Uint16Field("FextDownstreamSnrMargin", 0, Read, false, false, false, false),
-			2:  Uint16Field("NextDownstreamSnrMargin", 0, Read, false, false, false, false),
-			3:  Uint16Field("FextUpstreamSnrMargin", 0, Read, false, false, false, false),
-			4:  Uint16Field("NextUpstreamSnrMargin", 0, Read, false, false, false, false),
-			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false, false),
-			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false, false),
-			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false, false),
-			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false, false),
-			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false, false),
-			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false, false),
-			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false, false),
-			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false, false),
-			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false, false),
-			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false, false),
-			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false, false),
-			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false, false),
-		},
+func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdsllineinventoryandstatusdatapart5BME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &XdslLineInventoryAndStatusDataPart5{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

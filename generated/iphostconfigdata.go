@@ -23,47 +23,57 @@ import "github.com/deckarep/golang-set"
 
 const IpHostConfigDataClassId uint16 = 134
 
+var iphostconfigdataBME *BaseManagedEntityDefinition
+
 // IpHostConfigData (class ID #134) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type IpHostConfigData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	iphostconfigdataBME := &BaseManagedEntityDefinition{
+		Name:     "IpHostConfigData",
+		ClassID:  134,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFF,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("IpOptions", 0, Read|Write, false, false, false),
+			2:  MultiByteField("MacAddress", 6, nil, Read, false, false, false),
+			3:  MultiByteField("OnuIdentifier", 25, nil, Read|Write, false, false, false),
+			4:  Uint32Field("IpAddress", 0, Read|Write, false, false, false),
+			5:  Uint32Field("Mask", 0, Read|Write, false, false, false),
+			6:  Uint32Field("Gateway", 0, Read|Write, false, false, false),
+			7:  Uint32Field("PrimaryDns", 0, Read|Write, false, false, false),
+			8:  Uint32Field("SecondaryDns", 0, Read|Write, false, false, false),
+			9:  Uint32Field("CurrentAddress", 0, Read, true, false, true),
+			10: Uint32Field("CurrentMask", 0, Read, true, false, true),
+			11: Uint32Field("CurrentGateway", 0, Read, true, false, true),
+			12: Uint32Field("CurrentPrimaryDns", 0, Read, true, false, true),
+			13: Uint32Field("CurrentSecondaryDns", 0, Read, true, false, true),
+			14: MultiByteField("DomainName", 25, nil, Read, true, false, false),
+			15: MultiByteField("HostName", 25, nil, Read, true, false, false),
+			16: Uint16Field("RelayAgentOptions", 0, Read|Write, true, false, true),
+		},
+	}
 }
 
 // NewIpHostConfigData (class ID 134 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewIpHostConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "IpHostConfigData",
-		ClassID:  134,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("IpOptions", 0, Read|Write, false, false, false, false),
-			2:  MultiByteField("MacAddress", 6, nil, Read, false, false, false, false),
-			3:  MultiByteField("OnuIdentifier", 25, nil, Read|Write, false, false, false, false),
-			4:  Uint32Field("IpAddress", 0, Read|Write, false, false, false, false),
-			5:  Uint32Field("Mask", 0, Read|Write, false, false, false, false),
-			6:  Uint32Field("Gateway", 0, Read|Write, false, false, false, false),
-			7:  Uint32Field("PrimaryDns", 0, Read|Write, false, false, false, false),
-			8:  Uint32Field("SecondaryDns", 0, Read|Write, false, false, false, false),
-			9:  Uint32Field("CurrentAddress", 0, Read, true, false, false, true),
-			10: Uint32Field("CurrentMask", 0, Read, true, false, false, true),
-			11: Uint32Field("CurrentGateway", 0, Read, true, false, false, true),
-			12: Uint32Field("CurrentPrimaryDns", 0, Read, true, false, false, true),
-			13: Uint32Field("CurrentSecondaryDns", 0, Read, true, false, false, true),
-			14: MultiByteField("DomainName", 25, nil, Read, true, false, false, false),
-			15: MultiByteField("HostName", 25, nil, Read, true, false, false, false),
-			16: Uint16Field("RelayAgentOptions", 0, Read|Write, true, false, false, true),
-		},
+func NewIpHostConfigData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: iphostconfigdataBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &IpHostConfigData{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const MulticastSubscriberConfigInfoClassId uint16 = 310
 
+var multicastsubscriberconfiginfoBME *BaseManagedEntityDefinition
+
 // MulticastSubscriberConfigInfo (class ID #310) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MulticastSubscriberConfigInfo struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewMulticastSubscriberConfigInfo (class ID 310 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	multicastsubscriberconfiginfoBME := &BaseManagedEntityDefinition{
 		Name:     "MulticastSubscriberConfigInfo",
 		ClassID:  310,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,17 +44,29 @@ func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntityDefini
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("MulticastOperationsProfilePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("MaxSimultaneousGroups", 0, Read|SetByCreate|Write, false, false, false, true),
-			4: Uint32Field("MaxMulticastBandwidth", 0, Read|SetByCreate|Write, false, false, false, true),
-			5: ByteField("BandwidthEnforcement", 0, Read|SetByCreate|Write, false, false, false, true),
-			6: MultiByteField("MulticastServicePackageTable", 22, nil, Read|Write, false, false, true, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint16Field("MulticastOperationsProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("MaxSimultaneousGroups", 0, Read|SetByCreate|Write, false, false, true),
+			4: Uint32Field("MaxMulticastBandwidth", 0, Read|SetByCreate|Write, false, false, true),
+			5: ByteField("BandwidthEnforcement", 0, Read|SetByCreate|Write, false, false, true),
+			6: TableField("MulticastServicePackageTable", TableInfo{22, nil, 22}, Read|Write, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &MulticastSubscriberConfigInfo{entity}, nil
+}
+
+// NewMulticastSubscriberConfigInfo (class ID 310 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewMulticastSubscriberConfigInfo(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: multicastsubscriberconfiginfoBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

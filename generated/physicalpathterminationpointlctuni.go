@@ -23,32 +23,42 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointLctUniClassId uint16 = 83
 
+var physicalpathterminationpointlctuniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointLctUni (class ID #83) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointLctUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointlctuniBME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointLctUni",
+		ClassID:  83,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0X8000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointLctUni (class ID 83 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointLctUni",
-		ClassID:  83,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-		},
+func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointlctuniBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointLctUni{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

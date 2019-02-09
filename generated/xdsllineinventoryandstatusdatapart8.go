@@ -23,37 +23,47 @@ import "github.com/deckarep/golang-set"
 
 const XdslLineInventoryAndStatusDataPart8ClassId uint16 = 414
 
+var xdsllineinventoryandstatusdatapart8BME *BaseManagedEntityDefinition
+
 // XdslLineInventoryAndStatusDataPart8 (class ID #414) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart8 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	xdsllineinventoryandstatusdatapart8BME := &BaseManagedEntityDefinition{
+		Name:     "XdslLineInventoryAndStatusDataPart8",
+		ClassID:  414,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			GetNext,
+		),
+		AllowedAttributeMask: 0XFC00,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read, false, false, false),
+			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read, false, false, false),
+			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read, false, false, true),
+			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read, false, false, true),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read, false, false, true),
+			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read, false, false, true),
+		},
+	}
 }
 
 // NewXdslLineInventoryAndStatusDataPart8 (class ID 414 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "XdslLineInventoryAndStatusDataPart8",
-		ClassID:  414,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			GetNext,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read, false, false, false, false),
-			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read, false, false, false, false),
-			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read, false, false, false, true),
-			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read, false, false, false, true),
-			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read, false, false, false, true),
-			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read, false, false, false, true),
-		},
+func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdsllineinventoryandstatusdatapart8BME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &XdslLineInventoryAndStatusDataPart8{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

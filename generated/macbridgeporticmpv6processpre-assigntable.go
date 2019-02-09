@@ -23,39 +23,49 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortIcmpv6ProcessPreAssignTableClassId uint16 = 348
 
+var macbridgeporticmpv6processpreassigntableBME *BaseManagedEntityDefinition
+
 // MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	macbridgeporticmpv6processpreassigntableBME := &BaseManagedEntityDefinition{
+		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
+		ClassID:  348,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: 0XFF80,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write, false, false, false),
+			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write, false, false, false),
+			3: ByteField("RouterSolicitationProcessing", 0, Read|Write, false, false, false),
+			4: ByteField("RouterAdvertisementProcessing", 0, Read|Write, false, false, false),
+			5: ByteField("NeighbourSolicitationProcessing", 0, Read|Write, false, false, false),
+			6: ByteField("NeighbourAdvertisementProcessing", 0, Read|Write, false, false, false),
+			7: ByteField("RedirectProcessing", 0, Read|Write, false, false, false),
+			8: ByteField("MulticastListenerQueryProcessing", 0, Read|Write, false, false, false),
+			9: ByteField("UnknownIcmpv6Processing", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "MacBridgePortIcmpv6ProcessPreAssignTable",
-		ClassID:  348,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write, false, false, false, false),
-			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write, false, false, false, false),
-			3: ByteField("RouterSolicitationProcessing", 0, Read|Write, false, false, false, false),
-			4: ByteField("RouterAdvertisementProcessing", 0, Read|Write, false, false, false, false),
-			5: ByteField("NeighbourSolicitationProcessing", 0, Read|Write, false, false, false, false),
-			6: ByteField("NeighbourAdvertisementProcessing", 0, Read|Write, false, false, false, false),
-			7: ByteField("RedirectProcessing", 0, Read|Write, false, false, false, false),
-			8: ByteField("MulticastListenerQueryProcessing", 0, Read|Write, false, false, false, false),
-			9: ByteField("UnknownIcmpv6Processing", 0, Read|Write, false, false, false, false),
-		},
+func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: macbridgeporticmpv6processpreassigntableBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &MacBridgePortIcmpv6ProcessPreAssignTable{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,40 +23,50 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgMaintenanceAssociationClassId uint16 = 300
 
+var dot1agmaintenanceassociationBME *BaseManagedEntityDefinition
+
 // Dot1AgMaintenanceAssociation (class ID #300) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgMaintenanceAssociation struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	dot1agmaintenanceassociationBME := &BaseManagedEntityDefinition{
 		Name:     "Dot1AgMaintenanceAssociation",
 		ClassID:  300,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("MdPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("ShortMaNameFormat", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, Read|Write, false, false, false, false),
-			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: MultiByteField("AssociatedVlans", 24, nil, Read|Write, false, false, false, false),
-			6: ByteField("MhfCreation", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("MdPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("ShortMaNameFormat", 0, Read|SetByCreate|Write, false, false, false),
+			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, Read|Write, false, false, false),
+			4: ByteField("ContinuityCheckMessageCcmInterval", 0, Read|SetByCreate|Write, false, false, false),
+			5: MultiByteField("AssociatedVlans", 24, nil, Read|Write, false, false, false),
+			6: ByteField("MhfCreation", 0, Read|SetByCreate|Write, false, false, false),
+			7: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Dot1AgMaintenanceAssociation{entity}, nil
+}
+
+// NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewDot1AgMaintenanceAssociation(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: dot1agmaintenanceassociationBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

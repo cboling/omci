@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const RtpProfileDataClassId uint16 = 143
 
+var rtpprofiledataBME *BaseManagedEntityDefinition
+
 // RtpProfileData (class ID #143) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type RtpProfileData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewRtpProfileData (class ID 143 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewRtpProfileData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	rtpprofiledataBME := &BaseManagedEntityDefinition{
 		Name:     "RtpProfileData",
 		ClassID:  143,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("LocalPortMin", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("LocalPortMax", 0, Read|SetByCreate|Write, false, false, false, true),
-			3: ByteField("DscpMark", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: ByteField("PiggybackEvents", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: ByteField("ToneEvents", 0, Read|SetByCreate|Write, false, false, false, false),
-			6: ByteField("DtmfEvents", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: ByteField("CasEvents", 0, Read|SetByCreate|Write, false, false, false, false),
-			8: Uint16Field("IpHostConfigPointer", 0, Read|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("LocalPortMin", 0, Read|SetByCreate|Write, false, false, false),
+			2: Uint16Field("LocalPortMax", 0, Read|SetByCreate|Write, false, false, true),
+			3: ByteField("DscpMark", 0, Read|SetByCreate|Write, false, false, false),
+			4: ByteField("PiggybackEvents", 0, Read|SetByCreate|Write, false, false, false),
+			5: ByteField("ToneEvents", 0, Read|SetByCreate|Write, false, false, false),
+			6: ByteField("DtmfEvents", 0, Read|SetByCreate|Write, false, false, false),
+			7: ByteField("CasEvents", 0, Read|SetByCreate|Write, false, false, false),
+			8: Uint16Field("IpHostConfigPointer", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &RtpProfileData{entity}, nil
+}
+
+// NewRtpProfileData (class ID 143 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewRtpProfileData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: rtpprofiledataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

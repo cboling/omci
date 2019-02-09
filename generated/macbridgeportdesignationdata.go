@@ -23,32 +23,42 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortDesignationDataClassId uint16 = 48
 
+var macbridgeportdesignationdataBME *BaseManagedEntityDefinition
+
 // MacBridgePortDesignationData (class ID #48) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortDesignationData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	macbridgeportdesignationdataBME := &BaseManagedEntityDefinition{
+		Name:     "MacBridgePortDesignationData",
+		ClassID:  48,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: 0XC000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, Read, false, false, false),
+			2: ByteField("PortState", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewMacBridgePortDesignationData (class ID 48 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "MacBridgePortDesignationData",
-		ClassID:  48,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, Read, false, false, false, false),
-			2: ByteField("PortState", 0, Read, false, false, false, false),
-		},
+func NewMacBridgePortDesignationData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: macbridgeportdesignationdataBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &MacBridgePortDesignationData{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

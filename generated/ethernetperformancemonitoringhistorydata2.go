@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const EthernetPerformanceMonitoringHistoryData2ClassId uint16 = 89
 
+var ethernetperformancemonitoringhistorydata2BME *BaseManagedEntityDefinition
+
 // EthernetPerformanceMonitoringHistoryData2 (class ID #89) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetPerformanceMonitoringHistoryData2 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEthernetPerformanceMonitoringHistoryData2 (class ID 89 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	ethernetperformancemonitoringhistorydata2BME := &BaseManagedEntityDefinition{
 		Name:     "EthernetPerformanceMonitoringHistoryData2",
 		ClassID:  89,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("PppoeFilteredFrameCounter", 0, Read, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("PppoeFilteredFrameCounter", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EthernetPerformanceMonitoringHistoryData2{entity}, nil
+}
+
+// NewEthernetPerformanceMonitoringHistoryData2 (class ID 89 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: ethernetperformancemonitoringhistorydata2BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

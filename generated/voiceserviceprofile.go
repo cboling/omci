@@ -23,47 +23,57 @@ import "github.com/deckarep/golang-set"
 
 const VoiceServiceProfileClassId uint16 = 58
 
+var voiceserviceprofileBME *BaseManagedEntityDefinition
+
 // VoiceServiceProfile (class ID #58) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoiceServiceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewVoiceServiceProfile (class ID 58 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewVoiceServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	voiceserviceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "VoiceServiceProfile",
 		ClassID:  58,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("AnnouncementType", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("JitterTarget", 0, Read|SetByCreate|Write, false, false, false, true),
-			3:  Uint16Field("JitterBufferMax", 0, Read|SetByCreate|Write, false, false, false, true),
-			4:  ByteField("EchoCancelInd", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("PstnProtocolVariant", 0, Read|SetByCreate|Write, false, false, false, true),
-			6:  Uint16Field("DtmfDigitLevels", 0, Read|SetByCreate|Write, false, false, false, true),
-			7:  Uint16Field("DtmfDigitDuration", 0, Read|SetByCreate|Write, false, false, false, true),
-			8:  Uint16Field("HookFlashMinimumTime", 0, Read|SetByCreate|Write, false, false, false, true),
-			9:  Uint16Field("HookFlashMaximumTime", 0, Read|SetByCreate|Write, false, false, false, true),
-			10: MultiByteField("TonePatternTable", 20, nil, Read|Write, false, false, false, true),
-			11: MultiByteField("ToneEventTable", 7, nil, Read|Write, false, false, false, true),
-			12: MultiByteField("RingingPatternTable", 5, nil, Read|Write, false, false, false, true),
-			13: MultiByteField("RingingEventTable", 7, nil, Read|Write, false, false, false, true),
-			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("AnnouncementType", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("JitterTarget", 0, Read|SetByCreate|Write, false, false, true),
+			3:  Uint16Field("JitterBufferMax", 0, Read|SetByCreate|Write, false, false, true),
+			4:  ByteField("EchoCancelInd", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("PstnProtocolVariant", 0, Read|SetByCreate|Write, false, false, true),
+			6:  Uint16Field("DtmfDigitLevels", 0, Read|SetByCreate|Write, false, false, true),
+			7:  Uint16Field("DtmfDigitDuration", 0, Read|SetByCreate|Write, false, false, true),
+			8:  Uint16Field("HookFlashMinimumTime", 0, Read|SetByCreate|Write, false, false, true),
+			9:  Uint16Field("HookFlashMaximumTime", 0, Read|SetByCreate|Write, false, false, true),
+			10: MultiByteField("TonePatternTable", 20, nil, Read|Write, false, false, true),
+			11: MultiByteField("ToneEventTable", 7, nil, Read|Write, false, false, true),
+			12: MultiByteField("RingingPatternTable", 5, nil, Read|Write, false, false, true),
+			13: MultiByteField("RingingEventTable", 7, nil, Read|Write, false, false, true),
+			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &VoiceServiceProfile{entity}, nil
+}
+
+// NewVoiceServiceProfile (class ID 58 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoiceServiceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voiceserviceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

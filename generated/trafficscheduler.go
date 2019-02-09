@@ -23,35 +23,45 @@ import "github.com/deckarep/golang-set"
 
 const TrafficSchedulerClassId uint16 = 278
 
+var trafficschedulerBME *BaseManagedEntityDefinition
+
 // TrafficScheduler (class ID #278) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TrafficScheduler struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	trafficschedulerBME := &BaseManagedEntityDefinition{
+		Name:     "TrafficScheduler",
+		ClassID:  278,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XF000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: Uint16Field("TContPointer", 0, Read|Write, false, false, false),
+			2: Uint16Field("TrafficSchedulerPointer", 0, Read, false, false, false),
+			3: ByteField("Policy", 0, Read|Write, false, false, false),
+			4: ByteField("PriorityWeight", 0, Read|Write, false, false, false),
+		},
+	}
 }
 
 // NewTrafficScheduler (class ID 278 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTrafficScheduler(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "TrafficScheduler",
-		ClassID:  278,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint16Field("TContPointer", 0, Read|Write, false, false, false, false),
-			2: Uint16Field("TrafficSchedulerPointer", 0, Read, false, false, false, false),
-			3: ByteField("Policy", 0, Read|Write, false, false, false, false),
-			4: ByteField("PriorityWeight", 0, Read|Write, false, false, false, false),
-		},
+func NewTrafficScheduler(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: trafficschedulerBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &TrafficScheduler{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

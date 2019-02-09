@@ -23,44 +23,54 @@ import "github.com/deckarep/golang-set"
 
 const ReDownstreamAmplifierClassId uint16 = 316
 
+var redownstreamamplifierBME *BaseManagedEntityDefinition
+
 // ReDownstreamAmplifier (class ID #316) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ReDownstreamAmplifier struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewReDownstreamAmplifier (class ID 316 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	redownstreamamplifierBME := &BaseManagedEntityDefinition{
 		Name:     "ReDownstreamAmplifier",
 		ClassID:  316,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
 			Test,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			3:  ByteField("Arc", 0, Read|Write, true, false, false, true),
-			4:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			5:  ByteField("OperationalMode", 0, Read|Write, false, false, false, false),
-			6:  Uint16Field("InputOpticalSignalLevel", 0, Read, false, false, false, true),
-			7:  ByteField("LowerInputOpticalThreshold", 0, Read|Write, false, false, false, true),
-			8:  ByteField("UpperInputOpticalThreshold", 0, Read|Write, false, false, false, true),
-			9:  Uint16Field("OutputOpticalSignalLevel", 0, Read, false, false, false, true),
-			10: ByteField("LowerOutputOpticalThreshold", 0, Read|Write, false, false, false, true),
-			11: ByteField("UpperOutputOpticalThreshold", 0, Read|Write, false, false, false, true),
-			12: ByteField("R'S'SplitterCouplingRatio", 0, Read, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			2:  ByteField("OperationalState", 0, Read, true, false, true),
+			3:  ByteField("Arc", 0, Read|Write, true, false, true),
+			4:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			5:  ByteField("OperationalMode", 0, Read|Write, false, false, false),
+			6:  Uint16Field("InputOpticalSignalLevel", 0, Read, false, false, true),
+			7:  ByteField("LowerInputOpticalThreshold", 0, Read|Write, false, false, true),
+			8:  ByteField("UpperInputOpticalThreshold", 0, Read|Write, false, false, true),
+			9:  Uint16Field("OutputOpticalSignalLevel", 0, Read, false, false, true),
+			10: ByteField("LowerOutputOpticalThreshold", 0, Read|Write, false, false, true),
+			11: ByteField("UpperOutputOpticalThreshold", 0, Read|Write, false, false, true),
+			12: ByteField("R'S'SplitterCouplingRatio", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &ReDownstreamAmplifier{entity}, nil
+}
+
+// NewReDownstreamAmplifier (class ID 316 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: redownstreamamplifierBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

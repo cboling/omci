@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointMocaUniClassId uint16 = 162
 
+var physicalpathterminationpointmocauniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointMocaUni (class ID #162) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointMocaUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointmocauniBME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointMocaUni",
+		ClassID:  162,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFC,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, true),
+			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			3:  ByteField("OperationalState", 0, Read, true, false, true),
+			4:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false),
+			5:  ByteField("Arc", 0, Read|Write, true, false, true),
+			6:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			7:  ByteField("PppoeFilter", 0, Read|Write, false, false, true),
+			8:  ByteField("NetworkStatus", 0, Read, false, false, false),
+			9:  MultiByteField("Password", 17, nil, Read|Write, false, false, false),
+			10: ByteField("PrivacyEnabled", 0, Read|Write, false, false, false),
+			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write, false, false, true),
+			12: Uint32Field("FrequencyMask", 0, Read|Write, false, false, true),
+			13: Uint16Field("RfChannel", 0, Read, false, false, false),
+			14: Uint16Field("LastOperationalFrequency", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointMocaUni (class ID 162 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointMocaUni",
-		ClassID:  162,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, false, true),
-			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			3:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			4:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false, false),
-			5:  ByteField("Arc", 0, Read|Write, true, false, false, true),
-			6:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			7:  ByteField("PppoeFilter", 0, Read|Write, false, false, false, true),
-			8:  ByteField("NetworkStatus", 0, Read, false, false, false, false),
-			9:  MultiByteField("Password", 17, nil, Read|Write, false, false, false, false),
-			10: ByteField("PrivacyEnabled", 0, Read|Write, false, false, false, false),
-			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write, false, false, false, true),
-			12: Uint32Field("FrequencyMask", 0, Read|Write, false, false, false, true),
-			13: Uint16Field("RfChannel", 0, Read, false, false, false, false),
-			14: Uint16Field("LastOperationalFrequency", 0, Read, false, false, false, false),
-		},
+func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointmocauniBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointMocaUni{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

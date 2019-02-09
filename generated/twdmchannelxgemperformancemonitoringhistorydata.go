@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelXgemPerformanceMonitoringHistoryDataClassId uint16 = 445
 
+var twdmchannelxgemperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // TwdmChannelXgemPerformanceMonitoringHistoryData (class ID #445) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelXgemPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	twdmchannelxgemperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "TwdmChannelXgemPerformanceMonitoringHistoryData",
 		ClassID:  445,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,21 +44,33 @@ func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IM
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData64BItId", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint64Field("TotalTransmittedXgemFrames", 0, Read, false, false, false, false),
-			4:  Uint64Field("TransmittedXgemFramesWithLfBitNotSet", 0, Read, false, false, false, false),
-			5:  Uint64Field("TotalReceivedXgemFrames", 0, Read, false, false, false, false),
-			6:  Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read, false, false, false, false),
-			7:  Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read, false, false, false, false),
-			8:  Uint64Field("XgemEncryptionKeyErrors", 0, Read, false, false, false, false),
-			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read, false, false, false, false),
-			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData64BItId", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint64Field("TotalTransmittedXgemFrames", 0, Read, false, false, false),
+			4:  Uint64Field("TransmittedXgemFramesWithLfBitNotSet", 0, Read, false, false, false),
+			5:  Uint64Field("TotalReceivedXgemFrames", 0, Read, false, false, false),
+			6:  Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, Read, false, false, false),
+			7:  Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, Read, false, false, false),
+			8:  Uint64Field("XgemEncryptionKeyErrors", 0, Read, false, false, false),
+			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, Read, false, false, false),
+			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TwdmChannelXgemPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewTwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: twdmchannelxgemperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

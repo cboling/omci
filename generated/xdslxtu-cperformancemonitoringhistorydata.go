@@ -23,49 +23,59 @@ import "github.com/deckarep/golang-set"
 
 const XdslXtuCPerformanceMonitoringHistoryDataClassId uint16 = 112
 
+var xdslxtucperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // XdslXtuCPerformanceMonitoringHistoryData (class ID #112) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslXtuCPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXdslXtuCPerformanceMonitoringHistoryData (class ID 112 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xdslxtucperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "XdslXtuCPerformanceMonitoringHistoryData",
 		ClassID:  112,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint16Field("LossOfFrameSeconds", 0, Read, false, false, false, false),
-			4:  Uint16Field("LossOfSignalSeconds", 0, Read, false, false, false, false),
-			5:  Uint16Field("LossOfLinkSeconds", 0, Read, false, false, false, false),
-			6:  Uint16Field("LossOfPowerSeconds", 0, Read, false, false, false, false),
-			7:  Uint16Field("ErroredSecondsEs", 0, Read, false, false, false, false),
-			8:  Uint16Field("SeverelyErroredSeconds", 0, Read, false, false, false, false),
-			9:  Uint16Field("LineInitializations", 0, Read, false, false, false, false),
-			10: Uint16Field("FailedLineInitializations", 0, Read, false, false, false, false),
-			11: Uint16Field("ShortInitializations", 0, Read, false, false, false, true),
-			12: Uint16Field("FailedShortInitializations", 0, Read, false, false, false, true),
-			13: Uint16Field("FecSeconds", 0, Read, false, false, false, false),
-			14: Uint16Field("UnavailableSeconds", 0, Read, false, false, false, false),
-			15: Uint16Field("SosSuccessCount,NearEnd", 0, Read, false, false, false, true),
-			16: Uint16Field("SosSuccessCount,FarEnd", 0, Read, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint16Field("LossOfFrameSeconds", 0, Read, false, false, false),
+			4:  Uint16Field("LossOfSignalSeconds", 0, Read, false, false, false),
+			5:  Uint16Field("LossOfLinkSeconds", 0, Read, false, false, false),
+			6:  Uint16Field("LossOfPowerSeconds", 0, Read, false, false, false),
+			7:  Uint16Field("ErroredSecondsEs", 0, Read, false, false, false),
+			8:  Uint16Field("SeverelyErroredSeconds", 0, Read, false, false, false),
+			9:  Uint16Field("LineInitializations", 0, Read, false, false, false),
+			10: Uint16Field("FailedLineInitializations", 0, Read, false, false, false),
+			11: Uint16Field("ShortInitializations", 0, Read, false, false, true),
+			12: Uint16Field("FailedShortInitializations", 0, Read, false, false, true),
+			13: Uint16Field("FecSeconds", 0, Read, false, false, false),
+			14: Uint16Field("UnavailableSeconds", 0, Read, false, false, false),
+			15: Uint16Field("SosSuccessCount,NearEnd", 0, Read, false, false, true),
+			16: Uint16Field("SosSuccessCount,FarEnd", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XdslXtuCPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewXdslXtuCPerformanceMonitoringHistoryData (class ID 112 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdslxtucperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

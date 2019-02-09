@@ -23,44 +23,54 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointXdslUniPart1ClassId uint16 = 98
 
+var physicalpathterminationpointxdslunipart1BME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointXdslUniPart1 (class ID #98) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointXdslUniPart1 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointxdslunipart1BME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointXdslUniPart1",
+		ClassID:  98,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFF8,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, false),
+			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			3:  ByteField("OperationalState", 0, Read, true, false, true),
+			4:  Uint16Field("XdslLineConfigurationProfile", 0, Read|Write, false, false, false),
+			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write, false, false, false),
+			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write, false, false, false),
+			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write, false, false, false),
+			8:  Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write, false, false, false),
+			9:  ByteField("Arc", 0, Read|Write, true, false, true),
+			10: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			11: ByteField("ModemType", 0, Read|Write, false, false, true),
+			12: Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write, false, false, true),
+			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointXdslUniPart1 (class ID 98 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointXdslUniPart1",
-		ClassID:  98,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, false, false),
-			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			3:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			4:  Uint16Field("XdslLineConfigurationProfile", 0, Read|Write, false, false, false, false),
-			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write, false, false, false, false),
-			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write, false, false, false, false),
-			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write, false, false, false, false),
-			8:  Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write, false, false, false, false),
-			9:  ByteField("Arc", 0, Read|Write, true, false, false, true),
-			10: ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			11: ByteField("ModemType", 0, Read|Write, false, false, false, true),
-			12: Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write, false, false, false, true),
-			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write, false, false, false, true),
-		},
+func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointxdslunipart1BME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointXdslUniPart1{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,39 +23,49 @@ import "github.com/deckarep/golang-set"
 
 const EnergyConsumptionPerformanceMonitoringHistoryDataClassId uint16 = 343
 
+var energyconsumptionperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+
 // EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EnergyConsumptionPerformanceMonitoringHistoryData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewEnergyConsumptionPerformanceMonitoringHistoryData (class ID 343 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	energyconsumptionperformancemonitoringhistorydataBME := &BaseManagedEntityDefinition{
 		Name:     "EnergyConsumptionPerformanceMonitoringHistoryData",
 		ClassID:  343,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint32Field("DozeTime", 0, Read, false, false, false, false),
-			4: Uint32Field("CyclicSleepTime", 0, Read, false, false, false, false),
-			5: Uint32Field("WatchfulSleepTime", 0, Read, false, false, false, false),
-			6: Uint32Field("EnergyConsumed", 0, Read, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint32Field("DozeTime", 0, Read, false, false, false),
+			4: Uint32Field("CyclicSleepTime", 0, Read, false, false, false),
+			5: Uint32Field("WatchfulSleepTime", 0, Read, false, false, false),
+			6: Uint32Field("EnergyConsumed", 0, Read, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &EnergyConsumptionPerformanceMonitoringHistoryData{entity}, nil
+}
+
+// NewEnergyConsumptionPerformanceMonitoringHistoryData (class ID 343 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: energyconsumptionperformancemonitoringhistorydataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

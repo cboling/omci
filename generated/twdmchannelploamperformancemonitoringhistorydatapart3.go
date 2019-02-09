@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassId uint16 = 448
 
+var twdmchannelploamperformancemonitoringhistorydatapart3BME *BaseManagedEntityDefinition
+
 // TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID #448) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart3 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	twdmchannelploamperformancemonitoringhistorydatapart3BME := &BaseManagedEntityDefinition{
 		Name:     "TwdmChannelPloamPerformanceMonitoringHistoryDataPart3",
 		ClassID:  448,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,24 +44,36 @@ func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamDat
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("UpstreamPloamMessageCount", 0, Read, false, false, false, false),
-			4:  Uint32Field("SerialNumberOnuInBandMessageCount", 0, Read, false, false, false, false),
-			5:  Uint32Field("SerialNumberOnuAmccMessageCount", 0, Read, false, false, false, false),
-			6:  Uint32Field("RegistrationMessageCount", 0, Read, false, false, false, false),
-			7:  Uint32Field("KeyReportMessageCount", 0, Read, false, false, false, false),
-			8:  Uint32Field("AcknowledgementMessageCount", 0, Read, false, false, false, false),
-			9:  Uint32Field("SleepRequestMessageCount", 0, Read, false, false, false, false),
-			10: Uint32Field("TuningResponseAckNackMessageCount", 0, Read, false, false, false, false),
-			11: Uint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read, false, false, false, false),
-			12: Uint32Field("PowerConsumptionReportMessageCount", 0, Read, false, false, false, false),
-			13: Uint32Field("ChangePowerLevelParameterErrorCount", 0, Read, false, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("UpstreamPloamMessageCount", 0, Read, false, false, false),
+			4:  Uint32Field("SerialNumberOnuInBandMessageCount", 0, Read, false, false, false),
+			5:  Uint32Field("SerialNumberOnuAmccMessageCount", 0, Read, false, false, false),
+			6:  Uint32Field("RegistrationMessageCount", 0, Read, false, false, false),
+			7:  Uint32Field("KeyReportMessageCount", 0, Read, false, false, false),
+			8:  Uint32Field("AcknowledgementMessageCount", 0, Read, false, false, false),
+			9:  Uint32Field("SleepRequestMessageCount", 0, Read, false, false, false),
+			10: Uint32Field("TuningResponseAckNackMessageCount", 0, Read, false, false, false),
+			11: Uint32Field("TuningResponseCompleteURollbackMessageCount", 0, Read, false, false, false),
+			12: Uint32Field("PowerConsumptionReportMessageCount", 0, Read, false, false, false),
+			13: Uint32Field("ChangePowerLevelParameterErrorCount", 0, Read, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TwdmChannelPloamPerformanceMonitoringHistoryDataPart3{entity}, nil
+}
+
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: twdmchannelploamperformancemonitoringhistorydatapart3BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

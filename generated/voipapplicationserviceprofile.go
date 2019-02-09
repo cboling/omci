@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const VoipApplicationServiceProfileClassId uint16 = 146
 
+var voipapplicationserviceprofileBME *BaseManagedEntityDefinition
+
 // VoipApplicationServiceProfile (class ID #146) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipApplicationServiceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewVoipApplicationServiceProfile (class ID 146 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	voipapplicationserviceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "VoipApplicationServiceProfile",
 		ClassID:  146,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("CidFeatures", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("CallWaitingFeatures", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: Uint16Field("CallProgressOrTransferFeatures", 0, Read|SetByCreate|Write, false, false, false, false),
-			4: Uint16Field("CallPresentationFeatures", 0, Read|SetByCreate|Write, false, false, false, false),
-			5: ByteField("DirectConnectFeature", 0, Read|SetByCreate|Write, false, false, false, false),
-			6: Uint16Field("DirectConnectUriPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			7: Uint16Field("BridgedLineAgentUriPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			8: Uint16Field("ConferenceFactoryUriPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("CidFeatures", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("CallWaitingFeatures", 0, Read|SetByCreate|Write, false, false, false),
+			3: Uint16Field("CallProgressOrTransferFeatures", 0, Read|SetByCreate|Write, false, false, false),
+			4: Uint16Field("CallPresentationFeatures", 0, Read|SetByCreate|Write, false, false, false),
+			5: ByteField("DirectConnectFeature", 0, Read|SetByCreate|Write, false, false, false),
+			6: Uint16Field("DirectConnectUriPointer", 0, Read|SetByCreate|Write, false, false, false),
+			7: Uint16Field("BridgedLineAgentUriPointer", 0, Read|SetByCreate|Write, false, false, false),
+			8: Uint16Field("ConferenceFactoryUriPointer", 0, Read|SetByCreate|Write, false, false, false),
+			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &VoipApplicationServiceProfile{entity}, nil
+}
+
+// NewVoipApplicationServiceProfile (class ID 146 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewVoipApplicationServiceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voipapplicationserviceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

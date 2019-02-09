@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointPotsUniClassId uint16 = 53
 
+var physicalpathterminationpointpotsuniBME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointPotsUni (class ID #53) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointPotsUni struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewPhysicalPathTerminationPointPotsUni (class ID 53 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	physicalpathterminationpointpotsuniBME := &BaseManagedEntityDefinition{
 		Name:     "PhysicalPathTerminationPointPotsUni",
 		ClassID:  53,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			Set,
 			Test,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("AdministrativeState", 0, Read|Write, true, false, false, false),
-			2:  Uint16Field("Deprecated", 0, Read|Write, false, false, false, true),
-			3:  ByteField("Arc", 0, Read|Write, true, false, false, true),
-			4:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			5:  ByteField("Impedance", 0, Read|Write, false, false, false, true),
-			6:  ByteField("TransmissionPath", 0, Read|Write, false, false, false, true),
-			7:  ByteField("RxGain", 0, Read|Write, false, false, false, true),
-			8:  ByteField("TxGain", 0, Read|Write, false, false, false, true),
-			9:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			10: ByteField("HookState", 0, Read, false, false, false, true),
-			11: Uint16Field("PotsHoldoverTime", 0, Read|Write, false, false, false, true),
-			12: ByteField("NominalFeedVoltage", 0, Read|Write, false, false, false, true),
-			13: ByteField("LossOfSoftswitch", 0, Read|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("AdministrativeState", 0, Read|Write, true, false, false),
+			2:  Uint16Field("Deprecated", 0, Read|Write, false, false, true),
+			3:  ByteField("Arc", 0, Read|Write, true, false, true),
+			4:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			5:  ByteField("Impedance", 0, Read|Write, false, false, true),
+			6:  ByteField("TransmissionPath", 0, Read|Write, false, false, true),
+			7:  ByteField("RxGain", 0, Read|Write, false, false, true),
+			8:  ByteField("TxGain", 0, Read|Write, false, false, true),
+			9:  ByteField("OperationalState", 0, Read, true, false, true),
+			10: ByteField("HookState", 0, Read, false, false, true),
+			11: Uint16Field("PotsHoldoverTime", 0, Read|Write, false, false, true),
+			12: ByteField("NominalFeedVoltage", 0, Read|Write, false, false, true),
+			13: ByteField("LossOfSoftswitch", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointPotsUni{entity}, nil
+}
+
+// NewPhysicalPathTerminationPointPotsUni (class ID 53 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewPhysicalPathTerminationPointPotsUni(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointpotsuniBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const SipAgentConfigDataClassId uint16 = 150
 
+var sipagentconfigdataBME *BaseManagedEntityDefinition
+
 // SipAgentConfigData (class ID #150) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SipAgentConfigData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewSipAgentConfigData (class ID 150 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewSipAgentConfigData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	sipagentconfigdataBME := &BaseManagedEntityDefinition{
 		Name:     "SipAgentConfigData",
 		ClassID:  150,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("ProxyServerAddressPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			2:  Uint16Field("OutboundProxyAddressPointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			3:  Uint32Field("PrimarySipDns", 0, Read|SetByCreate|Write, false, false, false, false),
-			4:  Uint32Field("SecondarySipDns", 0, Read|SetByCreate|Write, false, false, false, false),
-			5:  Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, false, false),
-			6:  Uint32Field("SipRegExpTime", 0, Read|Write, false, false, false, false),
-			7:  Uint32Field("SipReregHeadStartTime", 0, Read|Write, false, false, false, false),
-			8:  Uint16Field("HostPartUri", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("SipStatus", 0, Read, true, false, false, false),
-			10: Uint16Field("SipRegistrar", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false, false),
-			12: MultiByteField("SipResponseTable", 5, nil, Read|Write, false, false, false, true),
-			13: ByteField("SipOptionTransmitControl", 0, Read|SetByCreate|Write, false, false, false, true),
-			14: ByteField("SipUriFormat", 0, Read|SetByCreate|Write, false, false, false, true),
-			15: Uint16Field("RedundantSipAgentPointer", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("ProxyServerAddressPointer", 0, Read|SetByCreate|Write, false, false, false),
+			2:  Uint16Field("OutboundProxyAddressPointer", 0, Read|SetByCreate|Write, false, false, false),
+			3:  Uint32Field("PrimarySipDns", 0, Read|SetByCreate|Write, false, false, false),
+			4:  Uint32Field("SecondarySipDns", 0, Read|SetByCreate|Write, false, false, false),
+			5:  Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, false),
+			6:  Uint32Field("SipRegExpTime", 0, Read|Write, false, false, false),
+			7:  Uint32Field("SipReregHeadStartTime", 0, Read|Write, false, false, false),
+			8:  Uint16Field("HostPartUri", 0, Read|SetByCreate|Write, false, false, false),
+			9:  ByteField("SipStatus", 0, Read, true, false, false),
+			10: Uint16Field("SipRegistrar", 0, Read|SetByCreate|Write, false, false, false),
+			11: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false),
+			12: MultiByteField("SipResponseTable", 5, nil, Read|Write, false, false, true),
+			13: ByteField("SipOptionTransmitControl", 0, Read|SetByCreate|Write, false, false, true),
+			14: ByteField("SipUriFormat", 0, Read|SetByCreate|Write, false, false, true),
+			15: Uint16Field("RedundantSipAgentPointer", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &SipAgentConfigData{entity}, nil
+}
+
+// NewSipAgentConfigData (class ID 150 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewSipAgentConfigData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: sipagentconfigdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

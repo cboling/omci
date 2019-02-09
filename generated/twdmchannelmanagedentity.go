@@ -23,34 +23,44 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelManagedEntityClassId uint16 = 443
 
+var twdmchannelmanagedentityBME *BaseManagedEntityDefinition
+
 // TwdmChannelManagedEntity (class ID #443) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelManagedEntity struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	twdmchannelmanagedentityBME := &BaseManagedEntityDefinition{
+		Name:     "TwdmChannelManagedEntity",
+		ClassID:  443,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: 0XF000,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: ByteField("ActiveChannelIndication", 0, Read, false, false, false),
+			2: ByteField("OperationalChannelIndication", 0, Read, false, false, false),
+			3: ByteField("DownstreamWavelengthChannel", 0, Read, false, false, false),
+			4: ByteField("UpstreamWavelengthChannel", 0, Read, false, false, false),
+		},
+	}
 }
 
 // NewTwdmChannelManagedEntity (class ID 443 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "TwdmChannelManagedEntity",
-		ClassID:  443,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: ByteField("ActiveChannelIndication", 0, Read, false, false, false, false),
-			2: ByteField("OperationalChannelIndication", 0, Read, false, false, false, false),
-			3: ByteField("DownstreamWavelengthChannel", 0, Read, false, false, false, false),
-			4: ByteField("UpstreamWavelengthChannel", 0, Read, false, false, false, false),
-		},
+func NewTwdmChannelManagedEntity(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: twdmchannelmanagedentityBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &TwdmChannelManagedEntity{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const FileTransferControllerClassId uint16 = 318
 
+var filetransfercontrollerBME *BaseManagedEntityDefinition
+
 // FileTransferController (class ID #318) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FileTransferController struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	filetransfercontrollerBME := &BaseManagedEntityDefinition{
+		Name:     "FileTransferController",
+		ClassID:  318,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFE0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  Uint16Field("SupportedTransferProtocols", 0, Read, false, false, false),
+			2:  Uint16Field("FileType", 0, Read|Write, false, false, false),
+			3:  Uint16Field("FileInstance", 0, Read|Write, false, false, false),
+			4:  Uint16Field("LocalFileNamePointer", 0, Read|Write, false, false, false),
+			5:  Uint16Field("NetworkAddressPointer", 0, Read|Write, false, false, false),
+			6:  ByteField("FileTransferTrigger", 0, Read|Write, false, false, false),
+			7:  ByteField("FileTransferStatus", 0, Read, true, false, false),
+			8:  Uint16Field("GemIwtpPointer", 0, Read|Write, false, false, true),
+			9:  Uint16Field("Vlan", 0, Read|Write, false, false, true),
+			10: Uint32Field("FileSize", 0, Read|Write, false, false, true),
+			11: MultiByteField("DirectoryListingTable", 0, nil, Read, true, false, true),
+		},
+	}
 }
 
 // NewFileTransferController (class ID 318 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewFileTransferController(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "FileTransferController",
-		ClassID:  318,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  Uint16Field("SupportedTransferProtocols", 0, Read, false, false, false, false),
-			2:  Uint16Field("FileType", 0, Read|Write, false, false, false, false),
-			3:  Uint16Field("FileInstance", 0, Read|Write, false, false, false, false),
-			4:  Uint16Field("LocalFileNamePointer", 0, Read|Write, false, false, false, false),
-			5:  Uint16Field("NetworkAddressPointer", 0, Read|Write, false, false, false, false),
-			6:  ByteField("FileTransferTrigger", 0, Read|Write, false, false, false, false),
-			7:  ByteField("FileTransferStatus", 0, Read, true, false, false, false),
-			8:  Uint16Field("GemIwtpPointer", 0, Read|Write, false, false, false, true),
-			9:  Uint16Field("Vlan", 0, Read|Write, false, false, false, true),
-			10: Uint32Field("FileSize", 0, Read|Write, false, false, false, true),
-			11: MultiByteField("DirectoryListingTable", 0, nil, Read, true, false, false, true),
-		},
+func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: filetransfercontrollerBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &FileTransferController{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

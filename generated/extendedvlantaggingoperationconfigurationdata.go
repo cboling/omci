@@ -23,22 +23,20 @@ import "github.com/deckarep/golang-set"
 
 const ExtendedVlanTaggingOperationConfigurationDataClassId uint16 = 171
 
+var extendedvlantaggingoperationconfigurationdataBME *BaseManagedEntityDefinition
+
 // ExtendedVlanTaggingOperationConfigurationData (class ID #171) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ExtendedVlanTaggingOperationConfigurationData struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	extendedvlantaggingoperationconfigurationdataBME := &BaseManagedEntityDefinition{
 		Name:     "ExtendedVlanTaggingOperationConfigurationData",
 		ClassID:  171,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -46,19 +44,31 @@ func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IMan
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("AssociationType", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, Read, false, false, true, false),
-			3: Uint16Field("InputTpid", 0, Read|Write, false, false, false, false),
-			4: Uint16Field("OutputTpid", 0, Read|Write, false, false, false, false),
-			5: ByteField("DownstreamMode", 0, Read|Write, false, false, false, false),
-			6: MultiByteField("ReceivedFrameVlanTaggingOperationTable", 16, nil, Read|Write, false, false, true, false),
-			7: Uint16Field("AssociatedMePointer", 0, Read|SetByCreate|Write, false, false, false, false),
-			8: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("AssociationType", 0, Read|SetByCreate|Write, false, false, false),
+			2: TableField("ReceivedFrameVlanTaggingOperationTableMaxSize", TableInfo{0, 2}, Read, false, false),
+			3: Uint16Field("InputTpid", 0, Read|Write, false, false, false),
+			4: Uint16Field("OutputTpid", 0, Read|Write, false, false, false),
+			5: ByteField("DownstreamMode", 0, Read|Write, false, false, false),
+			6: TableField("ReceivedFrameVlanTaggingOperationTable", TableInfo{16, nil, 16}, Read|Write, false, false),
+			7: Uint16Field("AssociatedMePointer", 0, Read|SetByCreate|Write, false, false, false),
+			8: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &ExtendedVlanTaggingOperationConfigurationData{entity}, nil
+}
+
+// NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: extendedvlantaggingoperationconfigurationdataBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

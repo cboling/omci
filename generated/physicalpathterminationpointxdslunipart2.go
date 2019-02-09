@@ -23,39 +23,49 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointXdslUniPart2ClassId uint16 = 99
 
+var physicalpathterminationpointxdslunipart2BME *BaseManagedEntityDefinition
+
 // PhysicalPathTerminationPointXdslUniPart2 (class ID #99) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointXdslUniPart2 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	physicalpathterminationpointxdslunipart2BME := &BaseManagedEntityDefinition{
+		Name:     "PhysicalPathTerminationPointXdslUniPart2",
+		ClassID:  99,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFF00,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, Read|Write, false, false, true),
+			2: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, Read|Write, false, false, true),
+			3: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", 0, Read|Write, false, false, true),
+			4: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", 0, Read|Write, false, false, true),
+			5: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", 0, Read|Write, false, false, true),
+			6: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", 0, Read|Write, false, false, true),
+			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, Read|Write, false, false, true),
+			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewPhysicalPathTerminationPointXdslUniPart2 (class ID 99 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PhysicalPathTerminationPointXdslUniPart2",
-		ClassID:  99,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, Read|Write, false, false, false, true),
-			2: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, Read|Write, false, false, false, true),
-			3: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", 0, Read|Write, false, false, false, true),
-			4: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", 0, Read|Write, false, false, false, true),
-			5: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", 0, Read|Write, false, false, false, true),
-			6: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", 0, Read|Write, false, false, false, true),
-			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, Read|Write, false, false, false, true),
-			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, Read|Write, false, false, false, true),
-		},
+func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: physicalpathterminationpointxdslunipart2BME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PhysicalPathTerminationPointXdslUniPart2{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

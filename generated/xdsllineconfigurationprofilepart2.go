@@ -23,48 +23,58 @@ import "github.com/deckarep/golang-set"
 
 const XdslLineConfigurationProfilePart2ClassId uint16 = 105
 
+var xdsllineconfigurationprofilepart2BME *BaseManagedEntityDefinition
+
 // XdslLineConfigurationProfilePart2 (class ID #105) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslLineConfigurationProfilePart2 struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewXdslLineConfigurationProfilePart2 (class ID 105 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	xdsllineconfigurationprofilepart2BME := &BaseManagedEntityDefinition{
 		Name:     "XdslLineConfigurationProfilePart2",
 		ClassID:  105,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, false, true),
-			2:  Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, false, true),
-			3:  Uint16Field("DownstreamDownshiftNoiseMargin", 0, Read|SetByCreate|Write, false, false, false, true),
-			4:  Uint16Field("UpstreamDownshiftNoiseMargin", 0, Read|SetByCreate|Write, false, false, false, true),
-			5:  Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, false, true),
-			6:  Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, false, true),
-			7:  ByteField("XtuImpedanceStateForced", 0, Read|SetByCreate|Write, false, false, false, true),
-			8:  ByteField("L0Time", 0, Read|SetByCreate|Write, false, false, false, false),
-			9:  ByteField("L2Time", 0, Read|SetByCreate|Write, false, false, false, false),
-			10: Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, Read|SetByCreate|Write, false, false, false, false),
-			12: ByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, Read|SetByCreate|Write, false, false, false, false),
-			13: ByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, Read|SetByCreate|Write, false, false, false, false),
-			14: Uint16Field("UpstreamMaximumAggregateReceivePower", 0, Read, false, false, false, false),
-			15: ByteField("Vdsl2TransmissionSystemEnabling", 0, Read|SetByCreate|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, true),
+			2:  Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, true),
+			3:  Uint16Field("DownstreamDownshiftNoiseMargin", 0, Read|SetByCreate|Write, false, false, true),
+			4:  Uint16Field("UpstreamDownshiftNoiseMargin", 0, Read|SetByCreate|Write, false, false, true),
+			5:  Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, true),
+			6:  Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, Read|SetByCreate|Write, false, false, true),
+			7:  ByteField("XtuImpedanceStateForced", 0, Read|SetByCreate|Write, false, false, true),
+			8:  ByteField("L0Time", 0, Read|SetByCreate|Write, false, false, false),
+			9:  ByteField("L2Time", 0, Read|SetByCreate|Write, false, false, false),
+			10: Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, Read|SetByCreate|Write, false, false, false),
+			11: Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, Read|SetByCreate|Write, false, false, false),
+			12: ByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, Read|SetByCreate|Write, false, false, false),
+			13: ByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, Read|SetByCreate|Write, false, false, false),
+			14: Uint16Field("UpstreamMaximumAggregateReceivePower", 0, Read, false, false, false),
+			15: ByteField("Vdsl2TransmissionSystemEnabling", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &XdslLineConfigurationProfilePart2{entity}, nil
+}
+
+// NewXdslLineConfigurationProfilePart2 (class ID 105 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewXdslLineConfigurationProfilePart2(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: xdsllineconfigurationprofilepart2BME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

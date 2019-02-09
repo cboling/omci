@@ -23,46 +23,56 @@ import "github.com/deckarep/golang-set"
 
 const CircuitPackClassId uint16 = 6
 
+var circuitpackBME *BaseManagedEntityDefinition
+
 // CircuitPack (class ID #6) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type CircuitPack struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewCircuitPack (class ID 6 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewCircuitPack(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	circuitpackBME := &BaseManagedEntityDefinition{
 		Name:     "CircuitPack",
 		ClassID:  6,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1:  ByteField("Type", 0, Read|SetByCreate, false, false, false, false),
-			2:  ByteField("NumberOfPorts", 0, Read, false, false, false, true),
-			3:  Uint64Field("SerialNumber", 0, Read, false, false, false, false),
-			4:  MultiByteField("Version", 14, nil, Read, false, false, false, false),
-			5:  Uint32Field("VendorId", 0, Read, false, false, false, true),
-			6:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			7:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			8:  ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false, false),
-			9:  MultiByteField("EquipmentId", 20, nil, Read, false, false, false, true),
-			10: ByteField("CardConfiguration", 0, Read|SetByCreate|Write, false, false, false, false),
-			11: ByteField("TotalTContBufferNumber", 0, Read, false, false, false, false),
-			12: ByteField("TotalPriorityQueueNumber", 0, Read, false, false, false, false),
-			13: ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false, false),
-			14: Uint32Field("PowerShedOverride", 0, Read|Write, false, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1:  ByteField("Type", 0, Read|SetByCreate, false, false, false),
+			2:  ByteField("NumberOfPorts", 0, Read, false, false, true),
+			3:  Uint64Field("SerialNumber", 0, Read, false, false, false),
+			4:  MultiByteField("Version", 14, nil, Read, false, false, false),
+			5:  Uint32Field("VendorId", 0, Read, false, false, true),
+			6:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			7:  ByteField("OperationalState", 0, Read, true, false, true),
+			8:  ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false),
+			9:  MultiByteField("EquipmentId", 20, nil, Read, false, false, true),
+			10: ByteField("CardConfiguration", 0, Read|SetByCreate|Write, false, false, false),
+			11: ByteField("TotalTContBufferNumber", 0, Read, false, false, false),
+			12: ByteField("TotalPriorityQueueNumber", 0, Read, false, false, false),
+			13: ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false),
+			14: Uint32Field("PowerShedOverride", 0, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &CircuitPack{entity}, nil
+}
+
+// NewCircuitPack (class ID 6 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCircuitPack(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: circuitpackBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

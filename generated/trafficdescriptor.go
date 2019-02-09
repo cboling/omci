@@ -23,41 +23,51 @@ import "github.com/deckarep/golang-set"
 
 const TrafficDescriptorClassId uint16 = 280
 
+var trafficdescriptorBME *BaseManagedEntityDefinition
+
 // TrafficDescriptor (class ID #280) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TrafficDescriptor struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewTrafficDescriptor (class ID 280 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewTrafficDescriptor(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	trafficdescriptorBME := &BaseManagedEntityDefinition{
 		Name:     "TrafficDescriptor",
 		ClassID:  280,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint32Field("Cir", 0, Read|SetByCreate|Write, false, false, false, true),
-			2: Uint32Field("Pir", 0, Read|SetByCreate|Write, false, false, false, true),
-			3: Uint32Field("Cbs", 0, Read|SetByCreate|Write, false, false, false, true),
-			4: Uint32Field("Pbs", 0, Read|SetByCreate|Write, false, false, false, true),
-			5: ByteField("ColourMode", 0, Read|SetByCreate|Write, false, false, false, true),
-			6: ByteField("IngressColourMarking", 0, Read|SetByCreate|Write, false, false, false, true),
-			7: ByteField("EgressColourMarking", 0, Read|SetByCreate|Write, false, false, false, true),
-			8: ByteField("MeterType", 0, Read|SetByCreate, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint32Field("Cir", 0, Read|SetByCreate|Write, false, false, true),
+			2: Uint32Field("Pir", 0, Read|SetByCreate|Write, false, false, true),
+			3: Uint32Field("Cbs", 0, Read|SetByCreate|Write, false, false, true),
+			4: Uint32Field("Pbs", 0, Read|SetByCreate|Write, false, false, true),
+			5: ByteField("ColourMode", 0, Read|SetByCreate|Write, false, false, true),
+			6: ByteField("IngressColourMarking", 0, Read|SetByCreate|Write, false, false, true),
+			7: ByteField("EgressColourMarking", 0, Read|SetByCreate|Write, false, false, true),
+			8: ByteField("MeterType", 0, Read|SetByCreate, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &TrafficDescriptor{entity}, nil
+}
+
+// NewTrafficDescriptor (class ID 280 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewTrafficDescriptor(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: trafficdescriptorBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

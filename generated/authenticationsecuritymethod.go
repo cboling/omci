@@ -23,38 +23,48 @@ import "github.com/deckarep/golang-set"
 
 const AuthenticationSecurityMethodClassId uint16 = 148
 
+var authenticationsecuritymethodBME *BaseManagedEntityDefinition
+
 // AuthenticationSecurityMethod (class ID #148) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type AuthenticationSecurityMethod struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewAuthenticationSecurityMethod (class ID 148 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	authenticationsecuritymethodBME := &BaseManagedEntityDefinition{
 		Name:     "AuthenticationSecurityMethod",
 		ClassID:  148,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: ByteField("ValidationScheme", 0, Read|Write, false, false, false, false),
-			2: MultiByteField("Username1", 25, nil, Read|Write, false, false, false, false),
-			3: MultiByteField("Password", 25, nil, Read|Write, false, false, false, false),
-			4: MultiByteField("Realm", 25, nil, Read|Write, false, false, false, false),
-			5: MultiByteField("Username2", 25, nil, Read|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: ByteField("ValidationScheme", 0, Read|Write, false, false, false),
+			2: MultiByteField("Username1", 25, nil, Read|Write, false, false, false),
+			3: MultiByteField("Password", 25, nil, Read|Write, false, false, false),
+			4: MultiByteField("Realm", 25, nil, Read|Write, false, false, false),
+			5: MultiByteField("Username2", 25, nil, Read|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &AuthenticationSecurityMethod{entity}, nil
+}
+
+// NewAuthenticationSecurityMethod (class ID 148 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewAuthenticationSecurityMethod(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: authenticationsecuritymethodBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

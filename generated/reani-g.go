@@ -23,45 +23,55 @@ import "github.com/deckarep/golang-set"
 
 const ReAniGClassId uint16 = 313
 
+var reanigBME *BaseManagedEntityDefinition
+
 // ReAniG (class ID #313) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ReAniG struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	reanigBME := &BaseManagedEntityDefinition{
+		Name:     "ReAniG",
+		ClassID:  313,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFC,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			2:  ByteField("OperationalState", 0, Read, true, false, true),
+			3:  ByteField("Arc", 0, Read|Write, true, false, true),
+			4:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			5:  Uint16Field("OpticalSignalLevel", 0, Read, false, false, true),
+			6:  ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, true),
+			7:  ByteField("UpperOpticalThreshold", 0, Read|Write, false, false, true),
+			8:  Uint16Field("TransmitOpticalLevel", 0, Read, false, false, true),
+			9:  ByteField("LowerTransmitPowerThreshold", 0, Read|Write, false, false, true),
+			10: ByteField("UpperTransmitPowerThreshold", 0, Read|Write, false, false, true),
+			11: ByteField("UsageMode", 0, Read|Write, false, false, false),
+			12: Uint32Field("TargetUpstreamFrequency", 0, Read|Write, false, false, true),
+			13: Uint32Field("TargetDownstreamFrequency", 0, Read|Write, false, false, true),
+			14: ByteField("UpstreamSignalTransmissionMode", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewReAniG (class ID 313 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewReAniG(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "ReAniG",
-		ClassID:  313,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, false),
-			2:  ByteField("OperationalState", 0, Read, true, false, false, true),
-			3:  ByteField("Arc", 0, Read|Write, true, false, false, true),
-			4:  ByteField("ArcInterval", 0, Read|Write, false, false, false, true),
-			5:  Uint16Field("OpticalSignalLevel", 0, Read, false, false, false, true),
-			6:  ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, false, true),
-			7:  ByteField("UpperOpticalThreshold", 0, Read|Write, false, false, false, true),
-			8:  Uint16Field("TransmitOpticalLevel", 0, Read, false, false, false, true),
-			9:  ByteField("LowerTransmitPowerThreshold", 0, Read|Write, false, false, false, true),
-			10: ByteField("UpperTransmitPowerThreshold", 0, Read|Write, false, false, false, true),
-			11: ByteField("UsageMode", 0, Read|Write, false, false, false, false),
-			12: Uint32Field("TargetUpstreamFrequency", 0, Read|Write, false, false, false, true),
-			13: Uint32Field("TargetDownstreamFrequency", 0, Read|Write, false, false, false, true),
-			14: ByteField("UpstreamSignalTransmissionMode", 0, Read|Write, false, false, false, true),
-		},
+func NewReAniG(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: reanigBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &ReAniG{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

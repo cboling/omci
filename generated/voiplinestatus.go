@@ -23,39 +23,49 @@ import "github.com/deckarep/golang-set"
 
 const VoipLineStatusClassId uint16 = 141
 
+var voiplinestatusBME *BaseManagedEntityDefinition
+
 // VoipLineStatus (class ID #141) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipLineStatus struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	voiplinestatusBME := &BaseManagedEntityDefinition{
+		Name:     "VoipLineStatus",
+		ClassID:  141,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+		),
+		AllowedAttributeMask: 0XFF80,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1: Uint16Field("VoipCodecUsed", 0, Read, false, false, false),
+			2: ByteField("VoipVoiceServerStatus", 0, Read, false, false, false),
+			3: ByteField("VoipPortSessionType", 0, Read, false, false, false),
+			4: Uint16Field("VoipCall1PacketPeriod", 0, Read, false, false, false),
+			5: Uint16Field("VoipCall2PacketPeriod", 0, Read, false, false, false),
+			6: MultiByteField("VoipCall1DestAddr", 25, nil, Read, false, false, false),
+			7: MultiByteField("VoipCall2DestAddr", 25, nil, Read, false, false, false),
+			8: ByteField("VoipLineState", 0, Read, false, false, true),
+			9: ByteField("EmergencyCallStatus", 0, Read, true, false, true),
+		},
+	}
 }
 
 // NewVoipLineStatus (class ID 141 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVoipLineStatus(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "VoipLineStatus",
-		ClassID:  141,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1: Uint16Field("VoipCodecUsed", 0, Read, false, false, false, false),
-			2: ByteField("VoipVoiceServerStatus", 0, Read, false, false, false, false),
-			3: ByteField("VoipPortSessionType", 0, Read, false, false, false, false),
-			4: Uint16Field("VoipCall1PacketPeriod", 0, Read, false, false, false, false),
-			5: Uint16Field("VoipCall2PacketPeriod", 0, Read, false, false, false, false),
-			6: MultiByteField("VoipCall1DestAddr", 25, nil, Read, false, false, false, false),
-			7: MultiByteField("VoipCall2DestAddr", 25, nil, Read, false, false, false, false),
-			8: ByteField("VoipLineState", 0, Read, false, false, false, true),
-			9: ByteField("EmergencyCallStatus", 0, Read, true, false, false, true),
-		},
+func NewVoipLineStatus(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: voiplinestatusBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &VoipLineStatus{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

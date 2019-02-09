@@ -23,36 +23,46 @@ import "github.com/deckarep/golang-set"
 
 const Aal5ProfileClassId uint16 = 16
 
+var aal5profileBME *BaseManagedEntityDefinition
+
 // Aal5Profile (class ID #16) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Aal5Profile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewAal5Profile (class ID 16 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewAal5Profile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	aal5profileBME := &BaseManagedEntityDefinition{
 		Name:     "Aal5Profile",
 		ClassID:  16,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("MaxCpcsPduSize", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("AalMode", 0, Read|SetByCreate|Write, false, false, false, false),
-			3: ByteField("SscsType", 0, Read|SetByCreate|Write, false, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("MaxCpcsPduSize", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("AalMode", 0, Read|SetByCreate|Write, false, false, false),
+			3: ByteField("SscsType", 0, Read|SetByCreate|Write, false, false, false),
 		},
 	}
-	entity.computeAttributeMask()
-	return &Aal5Profile{entity}, nil
+}
+
+// NewAal5Profile (class ID 16 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewAal5Profile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: aal5profileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

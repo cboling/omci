@@ -23,47 +23,57 @@ import "github.com/deckarep/golang-set"
 
 const PriorityQueueClassId uint16 = 277
 
+var priorityqueueBME *BaseManagedEntityDefinition
+
 // PriorityQueue (class ID #277) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PriorityQueue struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	priorityqueueBME := &BaseManagedEntityDefinition{
+		Name:     "PriorityQueue",
+		ClassID:  277,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFFF,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  ByteField("QueueConfigurationOption", 0, Read, false, false, false),
+			2:  Uint16Field("MaximumQueueSize", 0, Read, false, false, false),
+			3:  Uint16Field("AllocatedQueueSize", 0, Read|Write, false, false, false),
+			4:  Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write, false, false, true),
+			5:  Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write, false, false, true),
+			6:  Uint32Field("RelatedPort", 0, Read|Write, false, false, false),
+			7:  Uint16Field("TrafficSchedulerPointer", 0, Read|Write, false, false, false),
+			8:  ByteField("Weight", 0, Read|Write, false, false, false),
+			9:  Uint16Field("BackPressureOperation", 0, Read|Write, false, false, false),
+			10: Uint32Field("BackPressureTime", 0, Read|Write, false, false, false),
+			11: Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write, false, false, false),
+			12: Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write, false, false, false),
+			13: Uint64Field("PacketDropQueueThresholds", 0, Read|Write, false, false, true),
+			14: Uint16Field("PacketDropMaxP", 0, Read|Write, false, false, true),
+			15: ByteField("QueueDropWQ", 0, Read|Write, false, false, true),
+			16: ByteField("DropPrecedenceColourMarking", 0, Read|Write, false, false, true),
+		},
+	}
 }
 
 // NewPriorityQueue (class ID 277 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPriorityQueue(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "PriorityQueue",
-		ClassID:  277,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  ByteField("QueueConfigurationOption", 0, Read, false, false, false, false),
-			2:  Uint16Field("MaximumQueueSize", 0, Read, false, false, false, false),
-			3:  Uint16Field("AllocatedQueueSize", 0, Read|Write, false, false, false, false),
-			4:  Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write, false, false, false, true),
-			5:  Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write, false, false, false, true),
-			6:  Uint32Field("RelatedPort", 0, Read|Write, false, false, false, false),
-			7:  Uint16Field("TrafficSchedulerPointer", 0, Read|Write, false, false, false, false),
-			8:  ByteField("Weight", 0, Read|Write, false, false, false, false),
-			9:  Uint16Field("BackPressureOperation", 0, Read|Write, false, false, false, false),
-			10: Uint32Field("BackPressureTime", 0, Read|Write, false, false, false, false),
-			11: Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write, false, false, false, false),
-			12: Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write, false, false, false, false),
-			13: Uint64Field("PacketDropQueueThresholds", 0, Read|Write, false, false, false, true),
-			14: Uint16Field("PacketDropMaxP", 0, Read|Write, false, false, false, true),
-			15: ByteField("QueueDropWQ", 0, Read|Write, false, false, false, true),
-			16: ByteField("DropPrecedenceColourMarking", 0, Read|Write, false, false, false, true),
-		},
+func NewPriorityQueue(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: priorityqueueBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &PriorityQueue{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

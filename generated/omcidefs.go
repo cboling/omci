@@ -20,11 +20,8 @@
 package generated
 
 import (
-	"errors"
-	"fmt"
 	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
-	"math/bits"
 )
 
 // MsgType represents a OMCI message-type
@@ -241,7 +238,6 @@ type IManagedEntityDefinition interface {
 	GetName() string
 	GetClassID() uint16
 	GetEntityID() uint16
-	SetEntityID(uint16) error
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() AttributeDefinitionMap
@@ -250,105 +246,14 @@ type IManagedEntityDefinition interface {
 	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer) error
 }
 
-type BaseManagedEntityDefinition struct {
-	Name                 string
-	ClassID              uint16
-	EntityID             uint16
-	MessageTypes         mapset.Set
-	AllowedAttributeMask uint16
-	AttributeDefinitions AttributeDefinitionMap
-}
+type IManagedEntity interface {
+	IManagedEntityDefinition
+	SetEntityID(uint16) error
 
-func (bme *BaseManagedEntityDefinition) String() string {
-	return fmt.Sprintf("Definition: %v: CID: %v (%#x), Attributes: %v",
-		bme.Name, bme.ClassID, bme.ClassID, bme.AttributeDefinitions)
-}
+	GetAttributeValueMap() *AttributeValueMap
+	GetAttribute(string) (interface{}, error)
+	GetAttributeByIndex(uint) (interface{}, error)
 
-func (bme *BaseManagedEntityDefinition) GetName() string {
-	return bme.Name
-}
-func (bme *BaseManagedEntityDefinition) GetClassID() uint16 {
-	return bme.ClassID
-}
-func (bme *BaseManagedEntityDefinition) GetEntityID() uint16 {
-	return bme.EntityID
-}
-func (bme *BaseManagedEntityDefinition) SetEntityID(eid uint16) error {
-	bme.EntityID = eid
-	return nil
-}
-func (bme *BaseManagedEntityDefinition) GetMessageTypes() mapset.Set {
-	return bme.MessageTypes
-}
-func (bme *BaseManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
-	return bme.AllowedAttributeMask
-}
-func (bme *BaseManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinitionMap {
-	return bme.AttributeDefinitions
-}
-
-func (bme *BaseManagedEntityDefinition) computeAttributeMask() {
-	for index := range bme.AttributeDefinitions {
-		if index == 0 {
-			continue // Skip Entity ID
-		}
-		bme.AllowedAttributeMask |= 1 << (15 - uint(index-1))
-	}
-}
-
-func (bme *BaseManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) (AttributeValueMap, error) {
-	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
-		// TODO: Provide custom error code so a response 'result' can properly be coded
-		return nil, errors.New("unsupported attribute mask")
-	}
-	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
-
-	attrMap := make(AttributeValueMap, bits.OnesCount16(mask))
-	for _, index := range keyList {
-		if index == 0 {
-			continue // Skip Entity ID
-		}
-		attrDef := bme.AttributeDefinitions[index]
-
-		if mask&(1<<(15-uint(index-1))) != 0 {
-			value, err := attrDef.Decode(data, p)
-			if err != nil {
-				return nil, err
-			}
-			attrMap[attrDef.GetName()] = value
-
-			data = data[attrDef.GetSize():]
-		}
-	}
-	return attrMap, nil
-}
-
-func (bme *BaseManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer) error {
-	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
-		// TODO: Provide custom error code so a response 'result' can properly be coded
-		return errors.New("unsupported attribute mask")
-	}
-	// TODO: Need to limit number of bytes appended to not exceed packet size
-	// Is there space/metadata info in 'b' parameter to allow this?
-	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
-
-	for _, index := range keyList {
-		if index == 0 {
-			continue // Skip Entity ID
-		}
-		attrDef := bme.AttributeDefinitions[index]
-
-		if mask&(1<<(15-uint(index-1))) != 0 {
-			value, ok := attr[attrDef.GetName()]
-			if !ok {
-				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
-				return errors.New(msg)
-			}
-			err := attrDef.SerializeTo(value, b)
-			if err != nil {
-				return nil
-			}
-		}
-	}
-	return nil
+	SetAttribute(string, interface{}) error
+	SetAttributeByIndex(uint, interface{}) error
 }

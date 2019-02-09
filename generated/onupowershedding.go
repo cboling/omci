@@ -23,42 +23,52 @@ import "github.com/deckarep/golang-set"
 
 const OnuPowerSheddingClassId uint16 = 133
 
+var onupowersheddingBME *BaseManagedEntityDefinition
+
 // OnuPowerShedding (class ID #133) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuPowerShedding struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
+}
+
+func init() {
+	onupowersheddingBME := &BaseManagedEntityDefinition{
+		Name:     "OnuPowerShedding",
+		ClassID:  133,
+		MessageTypes: mapset.NewSetWith(
+			Get,
+			Set,
+		),
+		AllowedAttributeMask: 0XFFE0,
+		AttributeDefinitions: AttributeDefinitionMap{
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			1:  Uint16Field("RestorePowerTimerResetInterval", 0, Read|Write, false, false, false),
+			2:  Uint16Field("DataClassSheddingInterval", 0, Read|Write, false, false, false),
+			3:  Uint16Field("VoiceClassSheddingInterval", 0, Read|Write, false, false, false),
+			4:  Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write, false, false, false),
+			5:  Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write, false, false, false),
+			6:  Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write, false, false, false),
+			7:  Uint16Field("AtmClassSheddingInterval", 0, Read|Write, false, false, false),
+			8:  Uint16Field("CesClassSheddingInterval", 0, Read|Write, false, false, false),
+			9:  Uint16Field("FrameClassSheddingInterval", 0, Read|Write, false, false, false),
+			10: Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write, false, false, false),
+			11: Uint16Field("SheddingStatus", 0, Read, true, false, true),
+		},
+	}
 }
 
 // NewOnuPowerShedding (class ID 133 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOnuPowerShedding(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
-		Name:     "OnuPowerShedding",
-		ClassID:  133,
-		EntityID: eid,
-		MessageTypes: mapset.NewSetWith(
-			Get,
-			Set,
-		),
-		AllowedAttributeMask: 0,
-		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, false),
-			1:  Uint16Field("RestorePowerTimerResetInterval", 0, Read|Write, false, false, false, false),
-			2:  Uint16Field("DataClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			3:  Uint16Field("VoiceClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			4:  Uint16Field("VideoOverlayClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			5:  Uint16Field("VideoReturnClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			6:  Uint16Field("DigitalSubscriberLineClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			7:  Uint16Field("AtmClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			8:  Uint16Field("CesClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			9:  Uint16Field("FrameClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			10: Uint16Field("SdhSonetClassSheddingInterval", 0, Read|Write, false, false, false, false),
-			11: Uint16Field("SheddingStatus", 0, Read, true, false, false, true),
-		},
+func NewOnuPowerShedding(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: onupowersheddingBME,
+	    Attributes: make(map[string]interface{}),
 	}
-	entity.computeAttributeMask()
-	return &OnuPowerShedding{entity}, nil
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }

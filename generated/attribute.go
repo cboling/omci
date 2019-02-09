@@ -208,7 +208,7 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 // Packet definitions for attributes of various types/sizes
 
 func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -216,13 +216,13 @@ func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }
 
 func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -230,13 +230,13 @@ func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }
 
 func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -244,13 +244,13 @@ func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }
 
 func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -258,13 +258,13 @@ func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }
 
 func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -272,7 +272,7 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }
@@ -302,13 +302,12 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 // An early example of info to track
 //
 type TableInfo struct {
-	HelloWorld bool // TODO: Need a table description, and an entry description struct
-	DefValue   []byte
+	DefValue   interface{}
 	Size       int
 }
 
 // Now the field
-func TableField(name string, access AttributeAccess, tableInfo TableInfo,
+func TableField(name string, tableInfo TableInfo, access AttributeAccess,
 	avc bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -323,7 +322,7 @@ func TableField(name string, access AttributeAccess, tableInfo TableInfo,
 }
 
 func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, tableSupport bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		DefValue:     defVal,
@@ -331,7 +330,7 @@ func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
 		Access:       access,
 		Avc:          avc,
 		Counter:      counter,
-		TableSupport: tableSupport,
+		TableSupport: false,
 		Optional:     optional,
 	}
 }

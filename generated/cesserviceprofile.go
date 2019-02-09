@@ -23,35 +23,45 @@ import "github.com/deckarep/golang-set"
 
 const CesServiceProfileClassId uint16 = 21
 
+var cesserviceprofileBME *BaseManagedEntityDefinition
+
 // CesServiceProfile (class ID #21) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type CesServiceProfile struct {
 	BaseManagedEntityDefinition
+	Attributes AttributeValueMap
 }
 
-// NewCesServiceProfile (class ID 21 creates the basic
-// Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
-func NewCesServiceProfile(params ...ParamData) (IManagedEntityDefinition, error) {
-	eid := decodeEntityID(params...)
-	entity := BaseManagedEntityDefinition{
+func init() {
+	cesserviceprofileBME := &BaseManagedEntityDefinition{
 		Name:     "CesServiceProfile",
 		ClassID:  21,
-		EntityID: eid,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0,
+		AllowedAttributeMask: 0XC000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, false),
-			1: Uint16Field("CesBufferedCdvTolerance", 0, Read|SetByCreate|Write, false, false, false, false),
-			2: ByteField("ChannelAssociatedSignallingCas", 0, Read|SetByCreate|Write, false, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
+			1: Uint16Field("CesBufferedCdvTolerance", 0, Read|SetByCreate|Write, false, false, false),
+			2: ByteField("ChannelAssociatedSignallingCas", 0, Read|SetByCreate|Write, false, false, true),
 		},
 	}
-	entity.computeAttributeMask()
-	return &CesServiceProfile{entity}, nil
+}
+
+// NewCesServiceProfile (class ID 21 creates the basic
+// Managed Entity definition that is used to validate an ME of this type that
+// is received from the wire, about to be sent on the wire.
+func NewCesServiceProfile(params ...ParamData) (IManagedEntity, error) {
+	entity := &ManagedEntity {
+	    Definition: cesserviceprofileBME,
+	    Attributes: make(map[string]interface{}),
+	}
+	if err := entity.setAttributes(params...); err != nil {
+	    return nil, err
+	}
+	return entity, nil
 }
