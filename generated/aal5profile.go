@@ -45,10 +45,10 @@ func init() {
 		),
 		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("MaxCpcsPduSize", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("AalMode", 0, Read|SetByCreate|Write, false, false, false),
-			3: ByteField("SscsType", 0, Read|SetByCreate|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("MaxCpcsPduSize", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("AalMode", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: ByteField("SscsType", 0, Read|SetByCreate|Write, false, false, false, 3),
 		},
 	}
 }
@@ -57,12 +57,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewAal5Profile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: aal5profileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(aal5profileBME, params...)
 }

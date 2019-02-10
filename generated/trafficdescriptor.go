@@ -45,15 +45,15 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint32Field("Cir", 0, Read|SetByCreate|Write, false, false, true),
-			2: Uint32Field("Pir", 0, Read|SetByCreate|Write, false, false, true),
-			3: Uint32Field("Cbs", 0, Read|SetByCreate|Write, false, false, true),
-			4: Uint32Field("Pbs", 0, Read|SetByCreate|Write, false, false, true),
-			5: ByteField("ColourMode", 0, Read|SetByCreate|Write, false, false, true),
-			6: ByteField("IngressColourMarking", 0, Read|SetByCreate|Write, false, false, true),
-			7: ByteField("EgressColourMarking", 0, Read|SetByCreate|Write, false, false, true),
-			8: ByteField("MeterType", 0, Read|SetByCreate, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint32Field("Cir", 0, Read|SetByCreate|Write, false, false, true, 1),
+			2: Uint32Field("Pir", 0, Read|SetByCreate|Write, false, false, true, 2),
+			3: Uint32Field("Cbs", 0, Read|SetByCreate|Write, false, false, true, 3),
+			4: Uint32Field("Pbs", 0, Read|SetByCreate|Write, false, false, true, 4),
+			5: ByteField("ColourMode", 0, Read|SetByCreate|Write, false, false, true, 5),
+			6: ByteField("IngressColourMarking", 0, Read|SetByCreate|Write, false, false, true, 6),
+			7: ByteField("EgressColourMarking", 0, Read|SetByCreate|Write, false, false, true, 7),
+			8: ByteField("MeterType", 0, Read|SetByCreate, false, false, true, 8),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTrafficDescriptor(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: trafficdescriptorBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(trafficdescriptorBME, params...)
 }

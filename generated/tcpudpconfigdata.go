@@ -45,11 +45,11 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("Protocol", 0, Read|SetByCreate|Write, false, false, false),
-			3: ByteField("TosDiffservField", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint16Field("IpHostPointer", 0, Read|SetByCreate|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("Protocol", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: ByteField("TosDiffservField", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint16Field("IpHostPointer", 0, Read|SetByCreate|Write, false, false, false, 4),
 		},
 	}
 }
@@ -58,12 +58,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTcpUdpConfigData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: tcpudpconfigdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(tcpudpconfigdataBME, params...)
 }

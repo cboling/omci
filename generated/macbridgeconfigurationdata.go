@@ -42,15 +42,15 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: MultiByteField("BridgeMacAddress", 6, nil, Read, false, false, false),
-			2: Uint16Field("BridgePriority", 0, Read, false, false, false),
-			3: Uint64Field("DesignatedRoot", 0, Read, false, false, false),
-			4: Uint32Field("RootPathCost", 0, Read, false, false, false),
-			5: ByteField("BridgePortCount", 0, Read, false, false, false),
-			6: Uint16Field("RootPortNum", 0, Read, false, false, false),
-			7: Uint16Field("HelloTime", 0, Read, false, false, true),
-			8: Uint16Field("ForwardDelay", 0, Read, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: MultiByteField("BridgeMacAddress", 6, nil, Read, false, false, false, 1),
+			2: Uint16Field("BridgePriority", 0, Read, false, false, false, 2),
+			3: Uint64Field("DesignatedRoot", 0, Read, false, false, false, 3),
+			4: Uint32Field("RootPathCost", 0, Read, false, false, false, 4),
+			5: ByteField("BridgePortCount", 0, Read, false, false, false, 5),
+			6: Uint16Field("RootPortNum", 0, Read, false, false, false, 6),
+			7: Uint16Field("HelloTime", 0, Read, false, false, true, 7),
+			8: Uint16Field("ForwardDelay", 0, Read, false, false, true, 8),
 		},
 	}
 }
@@ -59,12 +59,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgeConfigurationData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: macbridgeconfigurationdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(macbridgeconfigurationdataBME, params...)
 }

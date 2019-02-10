@@ -44,21 +44,21 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  ByteField("Type", 0, Read|SetByCreate, false, false, false),
-			2:  ByteField("NumberOfPorts", 0, Read, false, false, true),
-			3:  Uint64Field("SerialNumber", 0, Read, false, false, false),
-			4:  MultiByteField("Version", 14, nil, Read, false, false, false),
-			5:  Uint32Field("VendorId", 0, Read, false, false, true),
-			6:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			7:  ByteField("OperationalState", 0, Read, true, false, true),
-			8:  ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false),
-			9:  MultiByteField("EquipmentId", 20, nil, Read, false, false, true),
-			10: ByteField("CardConfiguration", 0, Read|SetByCreate|Write, false, false, false),
-			11: ByteField("TotalTContBufferNumber", 0, Read, false, false, false),
-			12: ByteField("TotalPriorityQueueNumber", 0, Read, false, false, false),
-			13: ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false),
-			14: Uint32Field("PowerShedOverride", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  ByteField("Type", 0, Read|SetByCreate, false, false, false, 1),
+			2:  ByteField("NumberOfPorts", 0, Read, false, false, true, 2),
+			3:  Uint64Field("SerialNumber", 0, Read, false, false, false, 3),
+			4:  MultiByteField("Version", 14, nil, Read, false, false, false, 4),
+			5:  Uint32Field("VendorId", 0, Read, false, false, true, 5),
+			6:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("OperationalState", 0, Read, true, false, true, 7),
+			8:  ByteField("BridgedOrIpInd", 0, Read|Write, false, false, false, 8),
+			9:  MultiByteField("EquipmentId", 20, nil, Read, false, false, true, 9),
+			10: ByteField("CardConfiguration", 0, Read|SetByCreate|Write, false, false, false, 10),
+			11: ByteField("TotalTContBufferNumber", 0, Read, false, false, false, 11),
+			12: ByteField("TotalPriorityQueueNumber", 0, Read, false, false, false, 12),
+			13: ByteField("TotalTrafficSchedulerNumber", 0, Read, false, false, false, 13),
+			14: Uint32Field("PowerShedOverride", 0, Read|Write, false, false, true, 14),
 		},
 	}
 }
@@ -67,12 +67,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCircuitPack(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: circuitpackBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(circuitpackBME, params...)
 }

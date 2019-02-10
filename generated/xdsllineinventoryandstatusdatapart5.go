@@ -43,23 +43,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  Uint16Field("FextDownstreamSnrMargin", 0, Read, false, false, false),
-			2:  Uint16Field("NextDownstreamSnrMargin", 0, Read, false, false, false),
-			3:  Uint16Field("FextUpstreamSnrMargin", 0, Read, false, false, false),
-			4:  Uint16Field("NextUpstreamSnrMargin", 0, Read, false, false, false),
-			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false),
-			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false),
-			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false),
-			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false),
-			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false),
-			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false),
-			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false),
-			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false),
-			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false),
-			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false),
-			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false),
-			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  Uint16Field("FextDownstreamSnrMargin", 0, Read, false, false, false, 1),
+			2:  Uint16Field("NextDownstreamSnrMargin", 0, Read, false, false, false, 2),
+			3:  Uint16Field("FextUpstreamSnrMargin", 0, Read, false, false, false, 3),
+			4:  Uint16Field("NextUpstreamSnrMargin", 0, Read, false, false, false, 4),
+			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false, 5),
+			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, Read, false, false, false, 6),
+			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false, 7),
+			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, Read, false, false, false, 8),
+			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false, 9),
+			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, Read, false, false, false, 10),
+			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false, 11),
+			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, Read, false, false, false, 12),
+			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false, 13),
+			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, Read, false, false, false, 14),
+			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false, 15),
+			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, Read, false, false, false, 16),
 		},
 	}
 }
@@ -68,12 +68,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdsllineinventoryandstatusdatapart5BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdsllineinventoryandstatusdatapart5BME, params...)
 }

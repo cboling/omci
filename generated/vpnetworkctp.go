@@ -45,14 +45,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("VpiValue", 0, Read|SetByCreate|Write, false, false, false),
-			2: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false),
-			3: ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint16Field("Deprecated1", 0, Read|SetByCreate|Write, false, false, false),
-			5: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false),
-			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, true),
-			7: ByteField("Deprecated4", 0, Read, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("VpiValue", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint16Field("Deprecated1", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, true, 6),
+			7: ByteField("Deprecated4", 0, Read, false, false, true, 7),
 		},
 	}
 }
@@ -61,12 +61,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVpNetworkCtp(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: vpnetworkctpBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(vpnetworkctpBME, params...)
 }

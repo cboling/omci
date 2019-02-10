@@ -43,15 +43,15 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("AvailableSignallingProtocols", 0, Read, false, false, false),
-			2: ByteField("SignallingProtocolUsed", 0, Read|Write, false, false, false),
-			3: Uint32Field("AvailableVoipConfigurationMethods", 0, Read, false, false, false),
-			4: ByteField("VoipConfigurationMethodUsed", 0, Read|Write, false, false, false),
-			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write, false, false, false),
-			6: ByteField("VoipConfigurationState", 0, Read, false, false, false),
-			7: ByteField("RetrieveProfile", 0, Write, false, false, false),
-			8: MultiByteField("ProfileVersion", 25, nil, Read, true, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("AvailableSignallingProtocols", 0, Read, false, false, false, 1),
+			2: ByteField("SignallingProtocolUsed", 0, Read|Write, false, false, false, 2),
+			3: Uint32Field("AvailableVoipConfigurationMethods", 0, Read, false, false, false, 3),
+			4: ByteField("VoipConfigurationMethodUsed", 0, Read|Write, false, false, false, 4),
+			5: Uint16Field("VoipConfigurationAddressPointer", 0, Read|Write, false, false, false, 5),
+			6: ByteField("VoipConfigurationState", 0, Read, false, false, false, 6),
+			7: ByteField("RetrieveProfile", 0, Write, false, false, false, 7),
+			8: MultiByteField("ProfileVersion", 25, nil, Read, true, false, false, 8),
 		},
 	}
 }
@@ -60,12 +60,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipConfigData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: voipconfigdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(voipconfigdataBME, params...)
 }

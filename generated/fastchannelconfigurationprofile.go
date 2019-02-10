@@ -45,17 +45,17 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write, false, false, false),
-			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write, false, false, false),
-			2:  Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write, false, false, false),
-			3:  Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write, false, false, false),
-			4:  Uint32Field("MaximumDelayDelaymax", 0, Read|Write, false, false, false),
-			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write, false, false, false),
-			6:  ByteField("ShineRatioShineratio", 0, Read|Write, false, false, false),
-			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write, false, false, false),
-			8:  ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write, false, false, false),
-			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write, false, false, false),
-			10: ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write, false, false, true),
+			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, Read|Write, false, false, false, 0),
+			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, Read|Write, false, false, false, 1),
+			2:  Uint32Field("MaximumGammaDataRateMaxgdr", 0, Read|Write, false, false, false, 2),
+			3:  Uint32Field("MinimumGammaDataRateMingdr", 0, Read|Write, false, false, false, 3),
+			4:  Uint32Field("MaximumDelayDelaymax", 0, Read|Write, false, false, false, 4),
+			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("ShineRatioShineratio", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("ReinInterArrivalTimeIatRein", 0, Read|Write, false, false, false, 8),
+			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, Read|Write, false, false, false, 9),
+			10: ByteField("RtxTcTestmodeRtxTestmode", 0, Read|Write, false, false, true, 10),
 		},
 	}
 }
@@ -64,12 +64,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastChannelConfigurationProfile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: fastchannelconfigurationprofileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(fastchannelconfigurationprofileBME, params...)
 }

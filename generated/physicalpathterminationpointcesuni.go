@@ -43,19 +43,19 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false),
-			2:  ByteField("SensedType", 0, Read, true, false, false),
-			3:  ByteField("CesLoopbackConfiguration", 0, Read|Write, true, false, false),
-			4:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			5:  ByteField("OperationalState", 0, Read, true, false, true),
-			6:  ByteField("Framing", 0, Read|Write, false, false, true),
-			7:  ByteField("Encoding", 0, Read|Write, false, false, false),
-			8:  ByteField("LineLength", 0, Read|Write, false, false, true),
-			9:  ByteField("Ds1Mode", 0, Read|Write, false, false, true),
-			10: ByteField("Arc", 0, Read|Write, true, false, true),
-			11: ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			12: ByteField("LineType", 0, Read|Write, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("SensedType", 0, Read, true, false, false, 2),
+			3:  ByteField("CesLoopbackConfiguration", 0, Read|Write, true, false, false, 3),
+			4:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 4),
+			5:  ByteField("OperationalState", 0, Read, true, false, true, 5),
+			6:  ByteField("Framing", 0, Read|Write, false, false, true, 6),
+			7:  ByteField("Encoding", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("LineLength", 0, Read|Write, false, false, true, 8),
+			9:  ByteField("Ds1Mode", 0, Read|Write, false, false, true, 9),
+			10: ByteField("Arc", 0, Read|Write, true, false, true, 10),
+			11: ByteField("ArcInterval", 0, Read|Write, false, false, true, 11),
+			12: ByteField("LineType", 0, Read|Write, false, false, false, 12),
 		},
 	}
 }
@@ -64,12 +64,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointcesuniBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointcesuniBME, params...)
 }

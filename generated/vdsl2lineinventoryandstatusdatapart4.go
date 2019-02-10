@@ -42,7 +42,7 @@ func init() {
 		),
 		AllowedAttributeMask: 0x0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
 		},
 	}
 }
@@ -51,12 +51,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: vdsl2lineinventoryandstatusdatapart4BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(vdsl2lineinventoryandstatusdatapart4BME, params...)
 }

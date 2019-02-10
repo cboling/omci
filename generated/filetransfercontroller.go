@@ -43,18 +43,18 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  Uint16Field("SupportedTransferProtocols", 0, Read, false, false, false),
-			2:  Uint16Field("FileType", 0, Read|Write, false, false, false),
-			3:  Uint16Field("FileInstance", 0, Read|Write, false, false, false),
-			4:  Uint16Field("LocalFileNamePointer", 0, Read|Write, false, false, false),
-			5:  Uint16Field("NetworkAddressPointer", 0, Read|Write, false, false, false),
-			6:  ByteField("FileTransferTrigger", 0, Read|Write, false, false, false),
-			7:  ByteField("FileTransferStatus", 0, Read, true, false, false),
-			8:  Uint16Field("GemIwtpPointer", 0, Read|Write, false, false, true),
-			9:  Uint16Field("Vlan", 0, Read|Write, false, false, true),
-			10: Uint32Field("FileSize", 0, Read|Write, false, false, true),
-			11: MultiByteField("DirectoryListingTable", 0, nil, Read, true, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  Uint16Field("SupportedTransferProtocols", 0, Read, false, false, false, 1),
+			2:  Uint16Field("FileType", 0, Read|Write, false, false, false, 2),
+			3:  Uint16Field("FileInstance", 0, Read|Write, false, false, false, 3),
+			4:  Uint16Field("LocalFileNamePointer", 0, Read|Write, false, false, false, 4),
+			5:  Uint16Field("NetworkAddressPointer", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("FileTransferTrigger", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("FileTransferStatus", 0, Read, true, false, false, 7),
+			8:  Uint16Field("GemIwtpPointer", 0, Read|Write, false, false, true, 8),
+			9:  Uint16Field("Vlan", 0, Read|Write, false, false, true, 9),
+			10: Uint32Field("FileSize", 0, Read|Write, false, false, true, 10),
+			11: MultiByteField("DirectoryListingTable", 0, nil, Read, true, false, true, 11),
 		},
 	}
 }
@@ -63,12 +63,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFileTransferController(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: filetransfercontrollerBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(filetransfercontrollerBME, params...)
 }

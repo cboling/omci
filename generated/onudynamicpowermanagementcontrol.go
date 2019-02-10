@@ -43,19 +43,19 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("PowerReductionManagementCapability", 0, Read, false, false, false),
-			2:  ByteField("PowerReductionManagementMode", 0, Read|Write, false, false, false),
-			3:  Uint16Field("Itransinit", 0, Read, false, false, false),
-			4:  Uint16Field("Itxinit", 0, Read, false, false, false),
-			5:  Uint32Field("MaximumSleepInterval", 0, Read|Write, false, false, false),
-			6:  Uint32Field("MaximumReceiverOffInterval", 0, Read|Write, false, false, false),
-			7:  Uint32Field("MinimumAwareInterval", 0, Read|Write, false, false, false),
-			8:  Uint16Field("MinimumActiveHeldInterval", 0, Read|Write, false, false, false),
-			9:  Uint64Field("MaximumSleepIntervalExtension", 0, Read|Write, false, false, true),
-			10: ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read, false, false, true),
-			11: ByteField("EponSetupExtension", 0, Read|Write, false, false, true),
-			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("PowerReductionManagementCapability", 0, Read, false, false, false, 1),
+			2:  ByteField("PowerReductionManagementMode", 0, Read|Write, false, false, false, 2),
+			3:  Uint16Field("Itransinit", 0, Read, false, false, false, 3),
+			4:  Uint16Field("Itxinit", 0, Read, false, false, false, 4),
+			5:  Uint32Field("MaximumSleepInterval", 0, Read|Write, false, false, false, 5),
+			6:  Uint32Field("MaximumReceiverOffInterval", 0, Read|Write, false, false, false, 6),
+			7:  Uint32Field("MinimumAwareInterval", 0, Read|Write, false, false, false, 7),
+			8:  Uint16Field("MinimumActiveHeldInterval", 0, Read|Write, false, false, false, 8),
+			9:  Uint64Field("MaximumSleepIntervalExtension", 0, Read|Write, false, false, true, 9),
+			10: ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, Read, false, false, true, 10),
+			11: ByteField("EponSetupExtension", 0, Read|Write, false, false, true, 11),
+			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, Read|Write, false, false, false, 12),
 		},
 	}
 }
@@ -64,12 +64,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuDynamicPowerManagementControl(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: onudynamicpowermanagementcontrolBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(onudynamicpowermanagementcontrolBME, params...)
 }

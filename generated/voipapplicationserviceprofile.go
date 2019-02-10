@@ -45,16 +45,16 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: ByteField("CidFeatures", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("CallWaitingFeatures", 0, Read|SetByCreate|Write, false, false, false),
-			3: Uint16Field("CallProgressOrTransferFeatures", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint16Field("CallPresentationFeatures", 0, Read|SetByCreate|Write, false, false, false),
-			5: ByteField("DirectConnectFeature", 0, Read|SetByCreate|Write, false, false, false),
-			6: Uint16Field("DirectConnectUriPointer", 0, Read|SetByCreate|Write, false, false, false),
-			7: Uint16Field("BridgedLineAgentUriPointer", 0, Read|SetByCreate|Write, false, false, false),
-			8: Uint16Field("ConferenceFactoryUriPointer", 0, Read|SetByCreate|Write, false, false, false),
-			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: ByteField("CidFeatures", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("CallWaitingFeatures", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: Uint16Field("CallProgressOrTransferFeatures", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint16Field("CallPresentationFeatures", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: ByteField("DirectConnectFeature", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6: Uint16Field("DirectConnectUriPointer", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7: Uint16Field("BridgedLineAgentUriPointer", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8: Uint16Field("ConferenceFactoryUriPointer", 0, Read|SetByCreate|Write, false, false, false, 8),
+			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, Read|Write, false, false, true, 9),
 		},
 	}
 }
@@ -63,12 +63,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipApplicationServiceProfile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: voipapplicationserviceprofileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(voipapplicationserviceprofileBME, params...)
 }

@@ -45,22 +45,22 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint32Field("MinimumDataRate", 0, Read|SetByCreate|Write, false, false, false),
-			2:  Uint32Field("MaximumDataRate", 0, Read|SetByCreate|Write, false, false, false),
-			3:  ByteField("RateAdaptationRatio", 0, Read|SetByCreate|Write, false, false, true),
-			4:  ByteField("MaximumInterleavingDelay", 0, Read|SetByCreate|Write, false, false, false),
-			5:  Uint32Field("DataRateThresholdUpshift", 0, Read|SetByCreate|Write, false, false, false),
-			6:  Uint32Field("DataRateThresholdDownshift", 0, Read|SetByCreate|Write, false, false, false),
-			7:  Uint32Field("MinimumReservedDataRate", 0, Read|SetByCreate|Write, false, false, true),
-			8:  Uint32Field("MinimumDataRateInLowPowerState", 0, Read|SetByCreate|Write, false, false, false),
-			9:  ByteField("MinimumImpulseNoiseProtection", 0, Read|SetByCreate|Write, false, false, false),
-			10: ByteField("MaximumBitErrorRatio", 0, Read|SetByCreate|Write, false, false, false),
-			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write, false, false, false),
-			12: ByteField("MaximumDelayVariation", 0, Read|Write, false, false, false),
-			13: ByteField("ChannelInitializationPolicySelection", 0, Read|Write, false, false, true),
-			14: Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write, false, false, true),
-			15: Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint32Field("MinimumDataRate", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  Uint32Field("MaximumDataRate", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  ByteField("RateAdaptationRatio", 0, Read|SetByCreate|Write, false, false, true, 3),
+			4:  ByteField("MaximumInterleavingDelay", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  Uint32Field("DataRateThresholdUpshift", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6:  Uint32Field("DataRateThresholdDownshift", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7:  Uint32Field("MinimumReservedDataRate", 0, Read|SetByCreate|Write, false, false, true, 7),
+			8:  Uint32Field("MinimumDataRateInLowPowerState", 0, Read|SetByCreate|Write, false, false, false, 8),
+			9:  ByteField("MinimumImpulseNoiseProtection", 0, Read|SetByCreate|Write, false, false, false, 9),
+			10: ByteField("MaximumBitErrorRatio", 0, Read|SetByCreate|Write, false, false, false, 10),
+			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, Read|Write, false, false, false, 11),
+			12: ByteField("MaximumDelayVariation", 0, Read|Write, false, false, false, 12),
+			13: ByteField("ChannelInitializationPolicySelection", 0, Read|Write, false, false, true, 13),
+			14: Uint32Field("MinimumSosBitRateDownstream", 0, Read|Write, false, false, true, 14),
+			15: Uint32Field("MinimumSosBitRateUpstream", 0, Read|Write, false, false, true, 15),
 		},
 	}
 }
@@ -69,12 +69,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslChannelConfigurationProfile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdslchannelconfigurationprofileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdslchannelconfigurationprofileBME, params...)
 }

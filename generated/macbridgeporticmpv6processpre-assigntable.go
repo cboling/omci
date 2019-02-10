@@ -42,16 +42,16 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write, false, false, false),
-			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write, false, false, false),
-			3: ByteField("RouterSolicitationProcessing", 0, Read|Write, false, false, false),
-			4: ByteField("RouterAdvertisementProcessing", 0, Read|Write, false, false, false),
-			5: ByteField("NeighbourSolicitationProcessing", 0, Read|Write, false, false, false),
-			6: ByteField("NeighbourAdvertisementProcessing", 0, Read|Write, false, false, false),
-			7: ByteField("RedirectProcessing", 0, Read|Write, false, false, false),
-			8: ByteField("MulticastListenerQueryProcessing", 0, Read|Write, false, false, false),
-			9: ByteField("UnknownIcmpv6Processing", 0, Read|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, Read|Write, false, false, false, 1),
+			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, Read|Write, false, false, false, 2),
+			3: ByteField("RouterSolicitationProcessing", 0, Read|Write, false, false, false, 3),
+			4: ByteField("RouterAdvertisementProcessing", 0, Read|Write, false, false, false, 4),
+			5: ByteField("NeighbourSolicitationProcessing", 0, Read|Write, false, false, false, 5),
+			6: ByteField("NeighbourAdvertisementProcessing", 0, Read|Write, false, false, false, 6),
+			7: ByteField("RedirectProcessing", 0, Read|Write, false, false, false, 7),
+			8: ByteField("MulticastListenerQueryProcessing", 0, Read|Write, false, false, false, 8),
+			9: ByteField("UnknownIcmpv6Processing", 0, Read|Write, false, false, false, 9),
 		},
 	}
 }
@@ -60,12 +60,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: macbridgeporticmpv6processpreassigntableBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(macbridgeporticmpv6processpreassigntableBME, params...)
 }

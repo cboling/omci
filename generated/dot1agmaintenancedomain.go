@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false),
-			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false),
-			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false),
-			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false, 3),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, 5),
 		},
 	}
 }
@@ -59,12 +59,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgMaintenanceDomain(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: dot1agmaintenancedomainBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(dot1agmaintenancedomainBME, params...)
 }

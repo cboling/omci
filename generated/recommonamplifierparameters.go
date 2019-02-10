@@ -43,18 +43,18 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("Gain", 0, Read, false, false, true),
-			2:  ByteField("LowerGainThreshold", 0, Read|Write, false, false, true),
-			3:  ByteField("UpperGainThreshold", 0, Read|Write, false, false, true),
-			4:  ByteField("TargetGain", 0, Read|Write, false, false, true),
-			5:  Uint16Field("DeviceTemperature", 0, Read, false, false, true),
-			6:  ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write, false, false, true),
-			7:  ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write, false, false, true),
-			8:  ByteField("DeviceBiasCurrent", 0, Read, false, false, true),
-			9:  Uint16Field("AmplifierSaturationOutputPower", 0, Read, false, false, true),
-			10: ByteField("AmplifierNoiseFigure", 0, Read, false, false, true),
-			11: ByteField("AmplifierSaturationGain", 0, Read, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("Gain", 0, Read, false, false, true, 1),
+			2:  ByteField("LowerGainThreshold", 0, Read|Write, false, false, true, 2),
+			3:  ByteField("UpperGainThreshold", 0, Read|Write, false, false, true, 3),
+			4:  ByteField("TargetGain", 0, Read|Write, false, false, true, 4),
+			5:  Uint16Field("DeviceTemperature", 0, Read, false, false, true, 5),
+			6:  ByteField("LowerDeviceTemperatureThreshold", 0, Read|Write, false, false, true, 6),
+			7:  ByteField("UpperDeviceTemperatureThreshold", 0, Read|Write, false, false, true, 7),
+			8:  ByteField("DeviceBiasCurrent", 0, Read, false, false, true, 8),
+			9:  Uint16Field("AmplifierSaturationOutputPower", 0, Read, false, false, true, 9),
+			10: ByteField("AmplifierNoiseFigure", 0, Read, false, false, true, 10),
+			11: ByteField("AmplifierSaturationGain", 0, Read, false, false, true, 11),
 		},
 	}
 }
@@ -63,12 +63,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewReCommonAmplifierParameters(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: recommonamplifierparametersBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(recommonamplifierparametersBME, params...)
 }

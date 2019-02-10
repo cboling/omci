@@ -45,20 +45,20 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, Read|Write, false, false, false),
-			2:  Uint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, Read|Write, false, false, false),
-			3:  Uint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, Read|Write, false, false, false),
-			4:  ByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, Read|Write, false, false, false),
-			5:  ByteField("MinimumDelayForRetransmissionDelayminRtx", 0, Read|Write, false, false, false),
-			6:  ByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, Read|Write, false, false, false),
-			7:  ByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, Read|Write, false, false, false),
-			8:  ByteField("ShineratioRtx", 0, Read|Write, false, false, false),
-			9:  ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, Read|Write, false, false, false),
-			10: ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, Read|Write, false, false, false),
-			11: ByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, Read|Write, false, false, false),
-			12: Uint32Field("TargetNetDataRateTargetNdr", 0, Read|Write, false, false, false),
-			13: Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, Read|Write, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, Read|Write, false, false, false, 1),
+			2:  Uint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, Read|Write, false, false, false, 2),
+			3:  Uint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, Read|Write, false, false, false, 3),
+			4:  ByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, Read|Write, false, false, false, 4),
+			5:  ByteField("MinimumDelayForRetransmissionDelayminRtx", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("ShineratioRtx", 0, Read|Write, false, false, false, 8),
+			9:  ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, Read|Write, false, false, false, 9),
+			10: ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, Read|Write, false, false, false, 10),
+			11: ByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, Read|Write, false, false, false, 11),
+			12: Uint32Field("TargetNetDataRateTargetNdr", 0, Read|Write, false, false, false, 12),
+			13: Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, Read|Write, false, false, false, 13),
 		},
 	}
 }
@@ -67,12 +67,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdslchannelconfigurationprofilepart2BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdslchannelconfigurationprofilepart2BME, params...)
 }

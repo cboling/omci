@@ -43,11 +43,11 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: Uint32Field("OltVendorId", 0, Read|Write, false, false, false),
-			2: MultiByteField("EquipmentId", 20, nil, Read|Write, false, false, false),
-			3: MultiByteField("Version", 14, nil, Read|Write, false, false, false),
-			4: MultiByteField("TimeOfDayInformation", 14, nil, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: Uint32Field("OltVendorId", 0, Read|Write, false, false, false, 1),
+			2: MultiByteField("EquipmentId", 20, nil, Read|Write, false, false, false, 2),
+			3: MultiByteField("Version", 14, nil, Read|Write, false, false, false, 3),
+			4: MultiByteField("TimeOfDayInformation", 14, nil, Read|Write, false, false, true, 4),
 		},
 	}
 }
@@ -56,12 +56,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOltG(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: oltgBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(oltgBME, params...)
 }

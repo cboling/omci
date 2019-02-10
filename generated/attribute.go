@@ -34,6 +34,7 @@ type AttributeDefinitionMap map[uint]*AttributeDefinition
 // AttributeDefinition defines a single specific Managed Entity's attributes
 type AttributeDefinition struct {
 	Name         string
+	Index        uint
 	DefValue     interface{} // Note: Not supported yet
 	Size         int
 	Access       AttributeAccess
@@ -47,10 +48,11 @@ type AttributeDefinition struct {
 }
 
 func (attr *AttributeDefinition) String() string {
-	return fmt.Sprintf("Definition: %v: Size: %v, Default: %v, Access: %v",
-		attr.GetName(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
+	return fmt.Sprintf("Definition: %v (%v): Size: %v, Default: %v, Access: %v",
+		attr.GetName(), attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
 func (attr *AttributeDefinition) GetName() string            { return attr.Name }
+func (attr *AttributeDefinition) GetIndex() uint             { return attr.Index }
 func (attr *AttributeDefinition) GetDefault() interface{}    { return attr.DefValue }
 func (attr *AttributeDefinition) GetSize() int               { return attr.Size }
 func (attr *AttributeDefinition) GetAccess() AttributeAccess { return attr.Access }
@@ -208,9 +210,10 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 // Packet definitions for attributes of various types/sizes
 
 func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         1,
 		Access:       access,
@@ -222,9 +225,10 @@ func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
 }
 
 func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         2,
 		Access:       access,
@@ -236,9 +240,10 @@ func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
 }
 
 func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         4,
 		Access:       access,
@@ -250,9 +255,10 @@ func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
 }
 
 func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         8,
 		Access:       access,
@@ -264,9 +270,10 @@ func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
 }
 
 func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         int(size),
 		Access:       access,
@@ -308,9 +315,10 @@ type TableInfo struct {
 
 // Now the field
 func TableField(name string, tableInfo TableInfo, access AttributeAccess,
-	avc bool, optional bool) *AttributeDefinition {
+	avc bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     tableInfo.DefValue,
 		Size:         tableInfo.Size,
 		Access:       access,
@@ -322,9 +330,10 @@ func TableField(name string, tableInfo TableInfo, access AttributeAccess,
 }
 
 func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
-	counter bool, optional bool) *AttributeDefinition {
+	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
+		Index:        index,
 		DefValue:     defVal,
 		Size:         99999999,
 		Access:       access,

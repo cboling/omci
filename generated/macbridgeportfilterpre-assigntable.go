@@ -43,17 +43,17 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("Ipv4MulticastFiltering", 0, Read|Write, false, false, false),
-			2:  ByteField("Ipv6MulticastFiltering", 0, Read|Write, false, false, false),
-			3:  ByteField("Ipv4BroadcastFiltering", 0, Read|Write, false, false, false),
-			4:  ByteField("RarpFiltering", 0, Read|Write, false, false, false),
-			5:  ByteField("IpxFiltering", 0, Read|Write, false, false, false),
-			6:  ByteField("NetbeuiFiltering", 0, Read|Write, false, false, false),
-			7:  ByteField("AppletalkFiltering", 0, Read|Write, false, false, false),
-			8:  ByteField("BridgeManagementInformationFiltering", 0, Read|Write, false, false, false),
-			9:  ByteField("ArpFiltering", 0, Read|Write, false, false, false),
-			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("Ipv4MulticastFiltering", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("Ipv6MulticastFiltering", 0, Read|Write, false, false, false, 2),
+			3:  ByteField("Ipv4BroadcastFiltering", 0, Read|Write, false, false, false, 3),
+			4:  ByteField("RarpFiltering", 0, Read|Write, false, false, false, 4),
+			5:  ByteField("IpxFiltering", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("NetbeuiFiltering", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("AppletalkFiltering", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("BridgeManagementInformationFiltering", 0, Read|Write, false, false, false, 8),
+			9:  ByteField("ArpFiltering", 0, Read|Write, false, false, false, 9),
+			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, Read|Write, false, false, false, 10),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: macbridgeportfilterpreassigntableBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(macbridgeportfilterpreassigntableBME, params...)
 }

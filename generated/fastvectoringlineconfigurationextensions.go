@@ -45,9 +45,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0XC000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write, false, false, false),
-			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write, false, false, false, 1),
+			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write, false, false, false, 2),
 		},
 	}
 }
@@ -56,12 +56,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: fastvectoringlineconfigurationextensionsBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(fastvectoringlineconfigurationextensionsBME, params...)
 }

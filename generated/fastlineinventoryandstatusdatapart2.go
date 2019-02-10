@@ -42,12 +42,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 7, nil, Read, false, false, true),
-			2: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 7, nil, Read, false, false, true),
-			3: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 7, nil, Read, false, false, true),
-			4: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 7, nil, Read, false, false, true),
-			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 7, nil, Read, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 7, nil, Read, false, false, true, 1),
+			2: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamFraOperationStampFraus", 7, nil, Read, false, false, true, 2),
+			3: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamRpaOperationStampRpads", 7, nil, Read, false, false, true, 3),
+			4: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 7, nil, Read, false, false, true, 4),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 7, nil, Read, false, false, true, 5),
 		},
 	}
 }
@@ -56,12 +56,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: fastlineinventoryandstatusdatapart2BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(fastlineinventoryandstatusdatapart2BME, params...)
 }

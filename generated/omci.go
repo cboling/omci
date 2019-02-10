@@ -43,9 +43,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0XC000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: TableField("MeTypeTable", TableInfo{0, 2}, Read, false, false),
-			2: TableField("MessageTypeTable", TableInfo{0, 1}, Read, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: TableField("MeTypeTable", TableInfo{0, 2}, Read, false, false, 1),
+			2: TableField("MessageTypeTable", TableInfo{0, 1}, Read, false, false, 2),
 		},
 	}
 }
@@ -54,12 +54,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOmci(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: omciBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(omciBME, params...)
 }

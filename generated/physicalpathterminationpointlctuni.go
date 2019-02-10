@@ -43,8 +43,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0X8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, 1),
 		},
 	}
 }
@@ -53,12 +53,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointlctuniBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointlctuniBME, params...)
 }

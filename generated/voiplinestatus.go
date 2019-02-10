@@ -42,16 +42,16 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: Uint16Field("VoipCodecUsed", 0, Read, false, false, false),
-			2: ByteField("VoipVoiceServerStatus", 0, Read, false, false, false),
-			3: ByteField("VoipPortSessionType", 0, Read, false, false, false),
-			4: Uint16Field("VoipCall1PacketPeriod", 0, Read, false, false, false),
-			5: Uint16Field("VoipCall2PacketPeriod", 0, Read, false, false, false),
-			6: MultiByteField("VoipCall1DestAddr", 25, nil, Read, false, false, false),
-			7: MultiByteField("VoipCall2DestAddr", 25, nil, Read, false, false, false),
-			8: ByteField("VoipLineState", 0, Read, false, false, true),
-			9: ByteField("EmergencyCallStatus", 0, Read, true, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: Uint16Field("VoipCodecUsed", 0, Read, false, false, false, 1),
+			2: ByteField("VoipVoiceServerStatus", 0, Read, false, false, false, 2),
+			3: ByteField("VoipPortSessionType", 0, Read, false, false, false, 3),
+			4: Uint16Field("VoipCall1PacketPeriod", 0, Read, false, false, false, 4),
+			5: Uint16Field("VoipCall2PacketPeriod", 0, Read, false, false, false, 5),
+			6: MultiByteField("VoipCall1DestAddr", 25, nil, Read, false, false, false, 6),
+			7: MultiByteField("VoipCall2DestAddr", 25, nil, Read, false, false, false, 7),
+			8: ByteField("VoipLineState", 0, Read, false, false, true, 8),
+			9: ByteField("EmergencyCallStatus", 0, Read, true, false, true, 9),
 		},
 	}
 }
@@ -60,12 +60,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipLineStatus(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: voiplinestatusBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(voiplinestatusBME, params...)
 }

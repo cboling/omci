@@ -46,13 +46,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("DialPlanNumber", 0, Read, false, false, false),
-			2: TableField("DialPlanTableMaxSize", TableInfo{0, 2}, Read|SetByCreate, false, false),
-			3: Uint16Field("CriticalDialTimeout", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint16Field("PartialDialTimeout", 0, Read|SetByCreate|Write, false, false, false),
-			5: ByteField("DialPlanFormat", 0, Read|SetByCreate|Write, false, false, false),
-			6: TableField("DialPlanTable", TableInfo{0, 1}, Read|Write, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("DialPlanNumber", 0, Read, false, false, false, 1),
+			2: TableField("DialPlanTableMaxSize", TableInfo{0, 2}, Read|SetByCreate, false, false, 2),
+			3: Uint16Field("CriticalDialTimeout", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint16Field("PartialDialTimeout", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: ByteField("DialPlanFormat", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6: TableField("DialPlanTable", TableInfo{0, 1}, Read|Write, false, false, 6),
 		},
 	}
 }
@@ -61,12 +61,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewNetworkDialPlanTable(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: networkdialplantableBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(networkdialplantableBME, params...)
 }

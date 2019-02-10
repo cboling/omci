@@ -44,23 +44,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("SrIndication", 0, Read, false, false, false),
-			2:  Uint16Field("TotalTcontNumber", 0, Read, false, false, false),
-			3:  Uint16Field("GemBlockLength", 0, Read|Write, false, false, false),
-			4:  ByteField("PiggybackDbaReporting", 0, Read, false, false, false),
-			5:  ByteField("Deprecated", 0, Read, false, false, false),
-			6:  ByteField("SignalFailThreshold", 0, Read|Write, false, false, false),
-			7:  ByteField("SignalDegradeSdThreshold", 0, Read|Write, false, false, false),
-			8:  ByteField("Arc", 0, Read|Write, true, false, true),
-			9:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			10: Uint16Field("OpticalSignalLevel", 0, Read, false, false, true),
-			11: ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, true),
-			12: ByteField("UpperOpticalThreshold", 0, Read|Write, false, false, true),
-			13: Uint16Field("OnuResponseTime", 0, Read, false, false, true),
-			14: Uint16Field("TransmitOpticalLevel", 0, Read, false, false, true),
-			15: ByteField("LowerTransmitPowerThreshold", 0, Read|Write, false, false, true),
-			16: ByteField("UpperTransmitPowerThreshold", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("SrIndication", 0, Read, false, false, false, 1),
+			2:  Uint16Field("TotalTcontNumber", 0, Read, false, false, false, 2),
+			3:  Uint16Field("GemBlockLength", 0, Read|Write, false, false, false, 3),
+			4:  ByteField("PiggybackDbaReporting", 0, Read, false, false, false, 4),
+			5:  ByteField("Deprecated", 0, Read, false, false, false, 5),
+			6:  ByteField("SignalFailThreshold", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("SignalDegradeSdThreshold", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("Arc", 0, Read|Write, true, false, true, 8),
+			9:  ByteField("ArcInterval", 0, Read|Write, false, false, true, 9),
+			10: Uint16Field("OpticalSignalLevel", 0, Read, false, false, true, 10),
+			11: ByteField("LowerOpticalThreshold", 0, Read|Write, false, false, true, 11),
+			12: ByteField("UpperOpticalThreshold", 0, Read|Write, false, false, true, 12),
+			13: Uint16Field("OnuResponseTime", 0, Read, false, false, true, 13),
+			14: Uint16Field("TransmitOpticalLevel", 0, Read, false, false, true, 14),
+			15: ByteField("LowerTransmitPowerThreshold", 0, Read|Write, false, false, true, 15),
+			16: ByteField("UpperTransmitPowerThreshold", 0, Read|Write, false, false, true, 16),
 		},
 	}
 }
@@ -69,12 +69,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewAniG(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: anigBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(anigBME, params...)
 }

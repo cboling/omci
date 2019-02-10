@@ -46,22 +46,22 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
-			3:  Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read, false, false, false),
-			4:  Uint32Field("Bip32BitErrorCount", 0, Read, false, false, false),
-			5:  Uint32Field("CorrectedPsbdHecErrorCount", 0, Read, false, false, false),
-			6:  Uint32Field("UncorrectablePsbdHecErrorCount", 0, Read, false, false, false),
-			7:  Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read, false, false, false),
-			8:  Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read, false, false, false),
-			9:  Uint32Field("TotalNumberOfLodsEvents", 0, Read, false, false, false),
-			10: Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read, false, false, false),
-			11: Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read, false, false, false),
-			12: Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read, false, false, false),
-			13: Uint32Field("LodsEventsResultingInReactivation", 0, Read, false, false, false),
-			14: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read, false, false, false),
-			15: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, Read, false, false, false, 3),
+			4:  Uint32Field("Bip32BitErrorCount", 0, Read, false, false, false, 4),
+			5:  Uint32Field("CorrectedPsbdHecErrorCount", 0, Read, false, false, false, 5),
+			6:  Uint32Field("UncorrectablePsbdHecErrorCount", 0, Read, false, false, false, 6),
+			7:  Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, Read, false, false, false, 7),
+			8:  Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, Read, false, false, false, 8),
+			9:  Uint32Field("TotalNumberOfLodsEvents", 0, Read, false, false, false, 9),
+			10: Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, Read, false, false, false, 10),
+			11: Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, Read, false, false, false, 11),
+			12: Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, Read, false, false, false, 12),
+			13: Uint32Field("LodsEventsResultingInReactivation", 0, Read, false, false, false, 13),
+			14: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, Read, false, false, false, 14),
+			15: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, Read, false, false, false, 15),
 		},
 	}
 }
@@ -70,12 +70,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: twdmchannelphylodsperformancemonitoringhistorydataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(twdmchannelphylodsperformancemonitoringhistorydataBME, params...)
 }

@@ -45,13 +45,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("ClockReference", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("RtpTimestampMode", 0, Read|SetByCreate|Write, false, false, false),
-			3: Uint16Field("Ptype", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint64Field("Ssrc", 0, Read|SetByCreate|Write, false, false, false),
-			5: Uint16Field("ExpectedPtype", 0, Read|SetByCreate|Write, false, false, true),
-			6: Uint64Field("ExpectedSsrc", 0, Read|SetByCreate|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("ClockReference", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("RtpTimestampMode", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: Uint16Field("Ptype", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint64Field("Ssrc", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: Uint16Field("ExpectedPtype", 0, Read|SetByCreate|Write, false, false, true, 5),
+			6: Uint64Field("ExpectedSsrc", 0, Read|SetByCreate|Write, false, false, true, 6),
 		},
 	}
 }
@@ -60,12 +60,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRtpPseudowireParameters(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: rtppseudowireparametersBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(rtppseudowireparametersBME, params...)
 }

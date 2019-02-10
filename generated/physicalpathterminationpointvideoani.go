@@ -43,23 +43,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			2:  ByteField("OperationalState", 0, Read, true, false, true),
-			3:  ByteField("Arc", 0, Read|Write, true, false, true),
-			4:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			5:  ByteField("FrequencyRangeLow", 0, Read, false, false, false),
-			6:  ByteField("FrequencyRangeHigh", 0, Read, false, false, false),
-			7:  ByteField("SignalCapability", 0, Read, false, false, false),
-			8:  ByteField("OpticalSignalLevel", 0, Read, false, false, true),
-			9:  ByteField("PilotSignalLevel", 0, Read, false, false, true),
-			10: ByteField("SignalLevelMin", 0, Read, false, false, false),
-			11: ByteField("SignalLevelMax", 0, Read, false, false, false),
-			12: Uint32Field("PilotFrequency", 0, Read|Write, false, false, true),
-			13: ByteField("AgcMode", 0, Read|Write, false, false, true),
-			14: ByteField("AgcSetting", 0, Read|Write, false, false, true),
-			15: ByteField("VideoLowerOpticalThreshold", 0, Read|Write, false, false, true),
-			16: ByteField("VideoUpperOpticalThreshold", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("OperationalState", 0, Read, true, false, true, 2),
+			3:  ByteField("Arc", 0, Read|Write, true, false, true, 3),
+			4:  ByteField("ArcInterval", 0, Read|Write, false, false, true, 4),
+			5:  ByteField("FrequencyRangeLow", 0, Read, false, false, false, 5),
+			6:  ByteField("FrequencyRangeHigh", 0, Read, false, false, false, 6),
+			7:  ByteField("SignalCapability", 0, Read, false, false, false, 7),
+			8:  ByteField("OpticalSignalLevel", 0, Read, false, false, true, 8),
+			9:  ByteField("PilotSignalLevel", 0, Read, false, false, true, 9),
+			10: ByteField("SignalLevelMin", 0, Read, false, false, false, 10),
+			11: ByteField("SignalLevelMax", 0, Read, false, false, false, 11),
+			12: Uint32Field("PilotFrequency", 0, Read|Write, false, false, true, 12),
+			13: ByteField("AgcMode", 0, Read|Write, false, false, true, 13),
+			14: ByteField("AgcSetting", 0, Read|Write, false, false, true, 14),
+			15: ByteField("VideoLowerOpticalThreshold", 0, Read|Write, false, false, true, 15),
+			16: ByteField("VideoUpperOpticalThreshold", 0, Read|Write, false, false, true, 16),
 		},
 	}
 }
@@ -68,12 +68,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointvideoaniBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointvideoaniBME, params...)
 }

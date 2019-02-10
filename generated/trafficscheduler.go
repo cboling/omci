@@ -43,11 +43,11 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: Uint16Field("TContPointer", 0, Read|Write, false, false, false),
-			2: Uint16Field("TrafficSchedulerPointer", 0, Read, false, false, false),
-			3: ByteField("Policy", 0, Read|Write, false, false, false),
-			4: ByteField("PriorityWeight", 0, Read|Write, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: Uint16Field("TContPointer", 0, Read|Write, false, false, false, 1),
+			2: Uint16Field("TrafficSchedulerPointer", 0, Read, false, false, false, 2),
+			3: ByteField("Policy", 0, Read|Write, false, false, false, 3),
+			4: ByteField("PriorityWeight", 0, Read|Write, false, false, false, 4),
 		},
 	}
 }
@@ -56,12 +56,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTrafficScheduler(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: trafficschedulerBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(trafficschedulerBME, params...)
 }

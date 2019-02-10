@@ -43,23 +43,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("QueueConfigurationOption", 0, Read, false, false, false),
-			2:  Uint16Field("MaximumQueueSize", 0, Read, false, false, false),
-			3:  Uint16Field("AllocatedQueueSize", 0, Read|Write, false, false, false),
-			4:  Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write, false, false, true),
-			5:  Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write, false, false, true),
-			6:  Uint32Field("RelatedPort", 0, Read|Write, false, false, false),
-			7:  Uint16Field("TrafficSchedulerPointer", 0, Read|Write, false, false, false),
-			8:  ByteField("Weight", 0, Read|Write, false, false, false),
-			9:  Uint16Field("BackPressureOperation", 0, Read|Write, false, false, false),
-			10: Uint32Field("BackPressureTime", 0, Read|Write, false, false, false),
-			11: Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write, false, false, false),
-			12: Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write, false, false, false),
-			13: Uint64Field("PacketDropQueueThresholds", 0, Read|Write, false, false, true),
-			14: Uint16Field("PacketDropMaxP", 0, Read|Write, false, false, true),
-			15: ByteField("QueueDropWQ", 0, Read|Write, false, false, true),
-			16: ByteField("DropPrecedenceColourMarking", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("QueueConfigurationOption", 0, Read, false, false, false, 1),
+			2:  Uint16Field("MaximumQueueSize", 0, Read, false, false, false, 2),
+			3:  Uint16Field("AllocatedQueueSize", 0, Read|Write, false, false, false, 3),
+			4:  Uint16Field("DiscardBlockCounterResetInterval", 0, Read|Write, false, false, true, 4),
+			5:  Uint16Field("ThresholdValueForDiscardedBlocksDueToBufferOverflow", 0, Read|Write, false, false, true, 5),
+			6:  Uint32Field("RelatedPort", 0, Read|Write, false, false, false, 6),
+			7:  Uint16Field("TrafficSchedulerPointer", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("Weight", 0, Read|Write, false, false, false, 8),
+			9:  Uint16Field("BackPressureOperation", 0, Read|Write, false, false, false, 9),
+			10: Uint32Field("BackPressureTime", 0, Read|Write, false, false, false, 10),
+			11: Uint16Field("BackPressureOccurQueueThreshold", 0, Read|Write, false, false, false, 11),
+			12: Uint16Field("BackPressureClearQueueThreshold", 0, Read|Write, false, false, false, 12),
+			13: Uint64Field("PacketDropQueueThresholds", 0, Read|Write, false, false, true, 13),
+			14: Uint16Field("PacketDropMaxP", 0, Read|Write, false, false, true, 14),
+			15: ByteField("QueueDropWQ", 0, Read|Write, false, false, true, 15),
+			16: ByteField("DropPrecedenceColourMarking", 0, Read|Write, false, false, true, 16),
 		},
 	}
 }
@@ -68,12 +68,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPriorityQueue(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: priorityqueueBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(priorityqueueBME, params...)
 }

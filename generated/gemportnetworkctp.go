@@ -45,17 +45,17 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false),
-			2:  Uint16Field("TContPointer", 0, Read|SetByCreate|Write, false, false, false),
-			3:  ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false),
-			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, Read|SetByCreate|Write, false, false, false),
-			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|SetByCreate|Write, false, false, true),
-			6:  ByteField("UniCounter", 0, Read, false, false, true),
-			7:  Uint16Field("PriorityQueuePointerForDownStream", 0, Read|SetByCreate|Write, false, false, false),
-			8:  ByteField("EncryptionState", 0, Read, false, false, true),
-			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|SetByCreate|Write, false, false, true),
-			10: ByteField("EncryptionKeyRing", 0, Read|SetByCreate|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint16Field("PortId", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  Uint16Field("TContPointer", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  ByteField("Direction", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, Read|SetByCreate|Write, false, false, true, 5),
+			6:  ByteField("UniCounter", 0, Read, false, false, true, 6),
+			7:  Uint16Field("PriorityQueuePointerForDownStream", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8:  ByteField("EncryptionState", 0, Read, false, false, true, 8),
+			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, Read|SetByCreate|Write, false, false, true, 9),
+			10: ByteField("EncryptionKeyRing", 0, Read|SetByCreate|Write, false, false, true, 10),
 		},
 	}
 }
@@ -64,12 +64,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewGemPortNetworkCtp(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: gemportnetworkctpBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(gemportnetworkctpBME, params...)
 }

@@ -44,12 +44,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("Layer2Type", 0, Read, false, false, false),
-			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false),
-			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false),
-			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false),
-			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, Read|Write, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("Layer2Type", 0, Read, false, false, false, 1),
+			2: ByteField("CatchallLevel", 0, Read|Write, false, false, false, 2),
+			3: ByteField("CatchallMhfCreation", 0, Read|Write, false, false, false, 3),
+			4: ByteField("CatchallSenderIdPermission", 0, Read|Write, false, false, false, 4),
+			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, Read|Write, false, false, 5),
 		},
 	}
 }
@@ -58,12 +58,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgDefaultMdLevel(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: dot1agdefaultmdlevelBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(dot1agdefaultmdlevelBME, params...)
 }

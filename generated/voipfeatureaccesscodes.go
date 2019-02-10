@@ -45,19 +45,19 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  MultiByteField("CancelCallWaiting", 5, nil, Read|Write, false, false, true),
-			2:  MultiByteField("CallHold", 5, nil, Read|Write, false, false, true),
-			3:  MultiByteField("CallPark", 5, nil, Read|Write, false, false, true),
-			4:  MultiByteField("CallerIdActivate", 5, nil, Read|Write, false, false, true),
-			5:  MultiByteField("CallerIdDeactivate", 5, nil, Read|Write, false, false, true),
-			6:  MultiByteField("DoNotDisturbActivation", 5, nil, Read|Write, false, false, true),
-			7:  MultiByteField("DoNotDisturbDeactivation", 5, nil, Read|Write, false, false, true),
-			8:  MultiByteField("DoNotDisturbPinChange", 5, nil, Read|Write, false, false, true),
-			9:  MultiByteField("EmergencyServiceNumber", 5, nil, Read|Write, false, false, true),
-			10: MultiByteField("IntercomService", 5, nil, Read|Write, false, false, true),
-			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, Read|Write, false, false, true),
-			12: MultiByteField("AttendedCallTransfer", 5, nil, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  MultiByteField("CancelCallWaiting", 5, nil, Read|Write, false, false, true, 1),
+			2:  MultiByteField("CallHold", 5, nil, Read|Write, false, false, true, 2),
+			3:  MultiByteField("CallPark", 5, nil, Read|Write, false, false, true, 3),
+			4:  MultiByteField("CallerIdActivate", 5, nil, Read|Write, false, false, true, 4),
+			5:  MultiByteField("CallerIdDeactivate", 5, nil, Read|Write, false, false, true, 5),
+			6:  MultiByteField("DoNotDisturbActivation", 5, nil, Read|Write, false, false, true, 6),
+			7:  MultiByteField("DoNotDisturbDeactivation", 5, nil, Read|Write, false, false, true, 7),
+			8:  MultiByteField("DoNotDisturbPinChange", 5, nil, Read|Write, false, false, true, 8),
+			9:  MultiByteField("EmergencyServiceNumber", 5, nil, Read|Write, false, false, true, 9),
+			10: MultiByteField("IntercomService", 5, nil, Read|Write, false, false, true, 10),
+			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, Read|Write, false, false, true, 11),
+			12: MultiByteField("AttendedCallTransfer", 5, nil, Read|Write, false, false, true, 12),
 		},
 	}
 }
@@ -66,12 +66,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipFeatureAccessCodes(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: voipfeatureaccesscodesBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(voipfeatureaccesscodesBME, params...)
 }

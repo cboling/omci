@@ -45,16 +45,16 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("VciValue", 0, Read|SetByCreate|Write, false, false, false),
-			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false),
-			3: ByteField("Deprecated1", 0, Read|SetByCreate|Write, false, false, false),
-			4: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false),
-			5: Uint16Field("Aal5ProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
-			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false),
-			7: ByteField("AalLoopbackConfiguration", 0, Read|Write, false, false, false),
-			8: ByteField("PptpCounter", 0, Read, false, false, true),
-			9: ByteField("OperationalState", 0, Read, true, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("VciValue", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: ByteField("Deprecated1", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: Uint16Field("Deprecated2", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: Uint16Field("Aal5ProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6: Uint16Field("Deprecated3", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7: ByteField("AalLoopbackConfiguration", 0, Read|Write, false, false, false, 7),
+			8: ByteField("PptpCounter", 0, Read, false, false, true, 8),
+			9: ByteField("OperationalState", 0, Read, true, false, true, 9),
 		},
 	}
 }
@@ -63,12 +63,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewInterworkingVccTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: interworkingvccterminationpointBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(interworkingvccterminationpointBME, params...)
 }

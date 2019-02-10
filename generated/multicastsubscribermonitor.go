@@ -46,13 +46,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false),
-			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, true),
-			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, true),
-			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, true),
-			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, Read, false, false),
-			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, Read, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: ByteField("MeType", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: Uint32Field("CurrentMulticastBandwidth", 0, Read, false, false, true, 2),
+			3: Uint32Field("JoinMessagesCounter", 0, Read, false, false, true, 3),
+			4: Uint32Field("BandwidthExceededCounter", 0, Read, false, false, true, 4),
+			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, Read, false, false, 5),
+			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, Read, false, true, 6),
 		},
 	}
 }
@@ -61,12 +61,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastSubscriberMonitor(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: multicastsubscribermonitorBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(multicastsubscribermonitorBME, params...)
 }

@@ -43,21 +43,21 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, true),
-			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			3:  ByteField("OperationalState", 0, Read, true, false, true),
-			4:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false),
-			5:  ByteField("Arc", 0, Read|Write, true, false, true),
-			6:  ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			7:  ByteField("PppoeFilter", 0, Read|Write, false, false, true),
-			8:  ByteField("NetworkStatus", 0, Read, false, false, false),
-			9:  MultiByteField("Password", 17, nil, Read|Write, false, false, false),
-			10: ByteField("PrivacyEnabled", 0, Read|Write, false, false, false),
-			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write, false, false, true),
-			12: Uint32Field("FrequencyMask", 0, Read|Write, false, false, true),
-			13: Uint16Field("RfChannel", 0, Read, false, false, false),
-			14: Uint16Field("LastOperationalFrequency", 0, Read, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, true, 1),
+			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 2),
+			3:  ByteField("OperationalState", 0, Read, true, false, true, 3),
+			4:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false, 4),
+			5:  ByteField("Arc", 0, Read|Write, true, false, true, 5),
+			6:  ByteField("ArcInterval", 0, Read|Write, false, false, true, 6),
+			7:  ByteField("PppoeFilter", 0, Read|Write, false, false, true, 7),
+			8:  ByteField("NetworkStatus", 0, Read, false, false, false, 8),
+			9:  MultiByteField("Password", 17, nil, Read|Write, false, false, false, 9),
+			10: ByteField("PrivacyEnabled", 0, Read|Write, false, false, false, 10),
+			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, Read|Write, false, false, true, 11),
+			12: Uint32Field("FrequencyMask", 0, Read|Write, false, false, true, 12),
+			13: Uint16Field("RfChannel", 0, Read, false, false, false, 13),
+			14: Uint16Field("LastOperationalFrequency", 0, Read, false, false, false, 14),
 		},
 	}
 }
@@ -66,12 +66,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointmocauniBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointmocauniBME, params...)
 }

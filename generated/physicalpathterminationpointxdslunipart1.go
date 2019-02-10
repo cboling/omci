@@ -43,20 +43,20 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, false),
-			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			3:  ByteField("OperationalState", 0, Read, true, false, true),
-			4:  Uint16Field("XdslLineConfigurationProfile", 0, Read|Write, false, false, false),
-			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write, false, false, false),
-			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write, false, false, false),
-			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write, false, false, false),
-			8:  Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write, false, false, false),
-			9:  ByteField("Arc", 0, Read|Write, true, false, true),
-			10: ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			11: ByteField("ModemType", 0, Read|Write, false, false, true),
-			12: Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write, false, false, true),
-			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("LoopbackConfiguration", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 2),
+			3:  ByteField("OperationalState", 0, Read, true, false, true, 3),
+			4:  Uint16Field("XdslLineConfigurationProfile", 0, Read|Write, false, false, false, 4),
+			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, Read|Write, false, false, false, 5),
+			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, Read|Write, false, false, false, 6),
+			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, Read|Write, false, false, false, 7),
+			8:  Uint16Field("XdslDownstreamRfiBandsProfile", 0, Read|Write, false, false, false, 8),
+			9:  ByteField("Arc", 0, Read|Write, true, false, true, 9),
+			10: ByteField("ArcInterval", 0, Read|Write, false, false, true, 10),
+			11: ByteField("ModemType", 0, Read|Write, false, false, true, 11),
+			12: Uint16Field("UpstreamPsdMaskProfile", 0, Read|Write, false, false, true, 12),
+			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, Read|Write, false, false, true, 13),
 		},
 	}
 }
@@ -65,12 +65,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointxdslunipart1BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointxdslunipart1BME, params...)
 }

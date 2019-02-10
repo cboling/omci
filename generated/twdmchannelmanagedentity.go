@@ -42,11 +42,11 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("ActiveChannelIndication", 0, Read, false, false, false),
-			2: ByteField("OperationalChannelIndication", 0, Read, false, false, false),
-			3: ByteField("DownstreamWavelengthChannel", 0, Read, false, false, false),
-			4: ByteField("UpstreamWavelengthChannel", 0, Read, false, false, false),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("ActiveChannelIndication", 0, Read, false, false, false, 1),
+			2: ByteField("OperationalChannelIndication", 0, Read, false, false, false, 2),
+			3: ByteField("DownstreamWavelengthChannel", 0, Read, false, false, false, 3),
+			4: ByteField("UpstreamWavelengthChannel", 0, Read, false, false, false, 4),
 		},
 	}
 }
@@ -55,12 +55,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelManagedEntity(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: twdmchannelmanagedentityBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(twdmchannelmanagedentityBME, params...)
 }

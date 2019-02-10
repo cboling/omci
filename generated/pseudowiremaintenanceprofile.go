@@ -45,23 +45,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint16Field("JitterBufferMaximumDepth", 0, Read|SetByCreate|Write, false, false, true),
-			2:  Uint16Field("JitterBufferDesiredDepth", 0, Read|SetByCreate|Write, false, false, true),
-			3:  ByteField("FillPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			4:  ByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			5:  ByteField("MisconnectedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			6:  ByteField("LossOfPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			7:  ByteField("LossOfPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			9:  ByteField("BufferOverrunUnderrunClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			10: ByteField("MalformedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			11: ByteField("MalformedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			12: ByteField("RBitTransmitSetPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			13: ByteField("RBitTransmitClearPolicy", 0, Read|SetByCreate|Write, false, false, true),
-			14: ByteField("RBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true),
-			15: ByteField("LBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true),
-			16: Uint16Field("SesThreshold", 0, Read|SetByCreate|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint16Field("JitterBufferMaximumDepth", 0, Read|SetByCreate|Write, false, false, true, 1),
+			2:  Uint16Field("JitterBufferDesiredDepth", 0, Read|SetByCreate|Write, false, false, true, 2),
+			3:  ByteField("FillPolicy", 0, Read|SetByCreate|Write, false, false, true, 3),
+			4:  ByteField("MisconnectedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true, 4),
+			5:  ByteField("MisconnectedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true, 5),
+			6:  ByteField("LossOfPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true, 6),
+			7:  ByteField("LossOfPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true, 7),
+			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true, 8),
+			9:  ByteField("BufferOverrunUnderrunClearPolicy", 0, Read|SetByCreate|Write, false, false, true, 9),
+			10: ByteField("MalformedPacketsDeclarationPolicy", 0, Read|SetByCreate|Write, false, false, true, 10),
+			11: ByteField("MalformedPacketsClearPolicy", 0, Read|SetByCreate|Write, false, false, true, 11),
+			12: ByteField("RBitTransmitSetPolicy", 0, Read|SetByCreate|Write, false, false, true, 12),
+			13: ByteField("RBitTransmitClearPolicy", 0, Read|SetByCreate|Write, false, false, true, 13),
+			14: ByteField("RBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true, 14),
+			15: ByteField("LBitReceivePolicy", 0, Read|SetByCreate|Write, false, false, true, 15),
+			16: Uint16Field("SesThreshold", 0, Read|SetByCreate|Write, false, false, true, 16),
 		},
 	}
 }
@@ -70,12 +70,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPseudowireMaintenanceProfile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: pseudowiremaintenanceprofileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(pseudowiremaintenanceprofileBME, params...)
 }

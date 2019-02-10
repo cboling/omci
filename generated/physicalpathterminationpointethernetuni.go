@@ -43,22 +43,22 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false),
-			2:  ByteField("SensedType", 0, Read, true, false, false),
-			3:  ByteField("AutoDetectionConfiguration", 0, Read|Write, false, false, false),
-			4:  ByteField("EthernetLoopbackConfiguration", 0, Read|Write, false, false, false),
-			5:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			6:  ByteField("OperationalState", 0, Read, true, false, true),
-			7:  ByteField("ConfigurationInd", 0, Read, false, false, false),
-			8:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false),
-			9:  ByteField("DteOrDceInd", 0, Read|Write, false, false, false),
-			10: Uint16Field("PauseTime", 0, Read|Write, false, false, true),
-			11: ByteField("BridgedOrIpInd", 0, Read|Write, false, false, true),
-			12: ByteField("Arc", 0, Read|Write, true, false, true),
-			13: ByteField("ArcInterval", 0, Read|Write, false, false, true),
-			14: ByteField("PppoeFilter", 0, Read|Write, false, false, true),
-			15: ByteField("PowerControl", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("ExpectedType", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("SensedType", 0, Read, true, false, false, 2),
+			3:  ByteField("AutoDetectionConfiguration", 0, Read|Write, false, false, false, 3),
+			4:  ByteField("EthernetLoopbackConfiguration", 0, Read|Write, false, false, false, 4),
+			5:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("OperationalState", 0, Read, true, false, true, 6),
+			7:  ByteField("ConfigurationInd", 0, Read, false, false, false, 7),
+			8:  Uint16Field("MaxFrameSize", 0, Read|Write, false, false, false, 8),
+			9:  ByteField("DteOrDceInd", 0, Read|Write, false, false, false, 9),
+			10: Uint16Field("PauseTime", 0, Read|Write, false, false, true, 10),
+			11: ByteField("BridgedOrIpInd", 0, Read|Write, false, false, true, 11),
+			12: ByteField("Arc", 0, Read|Write, true, false, true, 12),
+			13: ByteField("ArcInterval", 0, Read|Write, false, false, true, 13),
+			14: ByteField("PppoeFilter", 0, Read|Write, false, false, true, 14),
+			15: ByteField("PowerControl", 0, Read|Write, false, false, true, 15),
 		},
 	}
 }
@@ -67,12 +67,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: physicalpathterminationpointethernetuniBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(physicalpathterminationpointethernetuniBME, params...)
 }

@@ -27,43 +27,56 @@ import (
 )
 
 type ManagedEntity struct {
-	Definition *ManagedEntityDefinition
-	Attributes AttributeValueMap
+	definition    *ManagedEntityDefinition
+	attributeMask uint16
+	attributes    AttributeValueMap
 }
 
 // String provides a simple string that describes this struct
 func (entity *ManagedEntity) String() string {
-	return fmt.Sprintf("ManagedEntity: (%v) %v/%v (%#x/%#x): Attributes: %v",
+	return fmt.Sprintf("ManagedEntity: (%v) %v/%v (%#x/%#x): attributes: %v",
 		entity.GetName, entity.GetClassID(), entity.GetEntityID(),
-		entity.GetClassID(), entity.GetEntityID(), entity.Attributes)
+		entity.GetClassID(), entity.GetEntityID(), entity.attributes)
+}
+
+func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, error) {
+	entity := &ManagedEntity{
+		definition: definition,
+		attributes: make(map[string]interface{}),
+	}
+	err := entity.setAttributes(params...)
+	if err != nil {
+		entity = nil
+	}
+	return entity, err
 }
 
 func (entity *ManagedEntity) GetName() string {
-	return entity.Definition.GetName()
+	return entity.definition.GetName()
 }
 
 func (entity *ManagedEntity) GetClassID() uint16 {
-	return entity.Definition.GetClassID()
+	return entity.definition.GetClassID()
 }
 
 func (entity *ManagedEntity) GetMessageTypes() mapset.Set {
-	return entity.Definition.GetMessageTypes()
+	return entity.definition.GetMessageTypes()
 }
 
 func (entity *ManagedEntity) GetAllowedAttributeMask() uint16 {
-	return entity.Definition.GetAllowedAttributeMask()
+	return entity.definition.GetAllowedAttributeMask()
 }
 
 func (entity *ManagedEntity) GetAttributeDefinitions() *AttributeDefinitionMap {
-	return entity.Definition.GetAttributeDefinitions()
+	return entity.definition.GetAttributeDefinitions()
 }
 
 func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) (AttributeValueMap, error) {
-	return entity.Definition.DecodeAttributes(mask, data, p)
+	return entity.definition.DecodeAttributes(mask, data, p)
 }
 
 func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer) error {
-	return entity.Definition.SerializeAttributes(attr, mask, b)
+	return entity.definition.SerializeAttributes(attr, mask, b)
 }
 
 func (entity *ManagedEntity) GetEntityID() uint16 {
@@ -78,11 +91,11 @@ func (entity *ManagedEntity) SetEntityID(eid uint16) error {
 }
 
 func (entity *ManagedEntity) GetAttributeValueMap() *AttributeValueMap {
-	return &entity.Attributes
+	return &entity.attributes
 }
 
 func (entity *ManagedEntity) GetAttribute(name string) (interface{}, error) {
-	value, ok := entity.Attributes[name]
+	value, ok := entity.attributes[name]
 	if !ok {
 		return 0, errors.New(fmt.Sprintf("attribute '%v' not found", name))
 	}
@@ -90,26 +103,28 @@ func (entity *ManagedEntity) GetAttribute(name string) (interface{}, error) {
 }
 
 func (entity *ManagedEntity) GetAttributeByIndex(index uint) (interface{}, error) {
-	if len(entity.Attributes) == 0 {
+	if len(entity.attributes) == 0 {
 		return nil, errors.New("attributes have already been set")
 	}
-	if _, ok := entity.Definition.AttributeDefinitions[index]; !ok {
+	if _, ok := entity.definition.AttributeDefinitions[index]; !ok {
 		return nil, errors.New(fmt.Sprintf("invalid attribute index: %d, should be 0..%d",
-			index, len(entity.Definition.AttributeDefinitions)-1))
+			index, len(entity.definition.AttributeDefinitions)-1))
 	}
-	return entity.GetAttribute(entity.Definition.AttributeDefinitions[index].Name)
+	return entity.GetAttribute(entity.definition.AttributeDefinitions[index].Name)
 }
 
 func (entity *ManagedEntity) setAttributes(params ...ParamData) error {
-	if len(entity.Attributes) > 0 {
+	if entity.attributes == nil {
+		entity.attributes = make(map[string]interface{})
+	} else if len(entity.attributes) > 0 {
 		return errors.New("attributes have already been set")
 	}
-	eidName := entity.Definition.AttributeDefinitions[0].Name
+	eidName := entity.definition.AttributeDefinitions[0].Name
 	if len(params) == 0 {
-		entity.Attributes[eidName] = 0
+		entity.attributes[eidName] = 0
 		return nil
 	}
-	entity.Attributes[eidName] = params[0].EntityID
+	entity.attributes[eidName] = params[0].EntityID
 
 	for name, value := range params[0].Attributes {
 		if name == eidName {
@@ -123,22 +138,45 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) error {
 }
 
 func (entity *ManagedEntity) SetAttribute(name string, value interface{}) error {
-	_, err := GetAttributeDefinitionByName(entity.Definition.GetAttributeDefinitions(), name)
+	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
 		return err
 	}
 	// TODO: check type and any constraints
-	entity.Attributes[name] = value
+	entity.attributes[name] = value
+	entity.attributeMask |= uint16(1 << (16 - attrDef.GetIndex()))
 	return nil
 }
 
 func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) error {
-	attrDef, ok := entity.Definition.AttributeDefinitions[index]
+	attrDef, ok := entity.definition.AttributeDefinitions[index]
 	if !ok {
 		return errors.New(fmt.Sprintf("invalid attribute index: %d, should be 0..%d",
-			index, len(entity.Definition.AttributeDefinitions)-1))
+			index, len(entity.definition.AttributeDefinitions)-1))
 	}
 	// TODO: Check type and any constraints
-	entity.Attributes[attrDef.Name] = value
+	entity.attributes[attrDef.Name] = value
+	entity.attributeMask |= uint16(1 << (16 - attrDef.GetIndex()))
+	return nil
+}
+
+func (entity *ManagedEntity) DeleteAttribute(name string) error {
+	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
+	if err != nil {
+		return err
+	}
+	delete(entity.attributes, name)
+	entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+	return nil
+}
+
+func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
+	attrDef, ok := entity.definition.AttributeDefinitions[index]
+	if !ok {
+		return errors.New(fmt.Sprintf("invalid attribute index: %d, should be 0..%d",
+			index, len(entity.definition.AttributeDefinitions)-1))
+	}
+	delete(entity.attributes, attrDef.Name)
+	entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
 	return nil
 }

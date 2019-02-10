@@ -46,20 +46,20 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  Uint32Field("VendorId", 0, Read, false, false, false),
-			2:  MultiByteField("Version", 14, nil, Read, false, false, false),
-			3:  Uint64Field("SerialNumber", 0, Read, false, false, false),
-			4:  ByteField("TrafficManagementOption", 0, Read, false, false, false),
-			5:  ByteField("Deprecated", 0, Read, false, false, true),
-			6:  ByteField("BatteryBackup", 0, Read|Write, false, false, false),
-			7:  ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			8:  ByteField("OperationalState", 0, Read, false, false, true),
-			9:  ByteField("OnuSurvivalTime", 0, Read, false, false, true),
-			10: MultiByteField("LogicalOnuId", 24, nil, Read, false, false, true),
-			11: MultiByteField("LogicalPassword", 12, nil, Read, false, false, true),
-			12: ByteField("CredentialsStatus", 0, Read|Write, false, false, true),
-			13: Uint16Field("ExtendedTcLayerOptions", 0, Read, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  Uint32Field("VendorId", 0, Read, false, false, false, 1),
+			2:  MultiByteField("Version", 14, nil, Read, false, false, false, 2),
+			3:  Uint64Field("SerialNumber", 0, Read, false, false, false, 3),
+			4:  ByteField("TrafficManagementOption", 0, Read, false, false, false, 4),
+			5:  ByteField("Deprecated", 0, Read, false, false, true, 5),
+			6:  ByteField("BatteryBackup", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("AdministrativeState", 0, Read|Write, false, false, false, 7),
+			8:  ByteField("OperationalState", 0, Read, false, false, true, 8),
+			9:  ByteField("OnuSurvivalTime", 0, Read, false, false, true, 9),
+			10: MultiByteField("LogicalOnuId", 24, nil, Read, false, false, true, 10),
+			11: MultiByteField("LogicalPassword", 12, nil, Read, false, false, true, 11),
+			12: ByteField("CredentialsStatus", 0, Read|Write, false, false, true, 12),
+			13: Uint16Field("ExtendedTcLayerOptions", 0, Read, false, false, true, 13),
 		},
 	}
 }
@@ -68,12 +68,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuG(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: onugBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(onugBME, params...)
 }

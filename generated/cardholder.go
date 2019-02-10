@@ -43,16 +43,16 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("ActualPlugInUnitType", 0, Read, true, false, false),
-			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write, false, false, false),
-			3: ByteField("ExpectedPortCount", 0, Read|Write, false, false, true),
-			4: MultiByteField("ExpectedEquipmentId", 20, nil, Read|Write, false, false, true),
-			5: MultiByteField("ActualEquipmentId", 20, nil, Read, true, false, true),
-			6: ByteField("ProtectionProfilePointer", 0, Read, false, false, true),
-			7: ByteField("InvokeProtectionSwitch", 0, Read|Write, false, false, true),
-			8: ByteField("AlarmReportingControl", 0, Read|Write, true, false, true),
-			9: ByteField("ArcInterval", 0, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("ActualPlugInUnitType", 0, Read, true, false, false, 1),
+			2: ByteField("ExpectedPlugInUnitType", 0, Read|Write, false, false, false, 2),
+			3: ByteField("ExpectedPortCount", 0, Read|Write, false, false, true, 3),
+			4: MultiByteField("ExpectedEquipmentId", 20, nil, Read|Write, false, false, true, 4),
+			5: MultiByteField("ActualEquipmentId", 20, nil, Read, true, false, true, 5),
+			6: ByteField("ProtectionProfilePointer", 0, Read, false, false, true, 6),
+			7: ByteField("InvokeProtectionSwitch", 0, Read|Write, false, false, true, 7),
+			8: ByteField("AlarmReportingControl", 0, Read|Write, true, false, true, 8),
+			9: ByteField("ArcInterval", 0, Read|Write, false, false, true, 9),
 		},
 	}
 }
@@ -61,12 +61,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCardholder(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: cardholderBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(cardholderBME, params...)
 }

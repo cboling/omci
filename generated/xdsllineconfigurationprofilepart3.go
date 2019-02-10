@@ -45,23 +45,23 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  ByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|SetByCreate|Write, false, false, false),
-			2:  ByteField("AutomodeColdStartForced", 0, Read|SetByCreate|Write, false, false, false),
-			3:  ByteField("L2Atpr", 0, Read|SetByCreate|Write, false, false, false),
-			4:  ByteField("L2Atprt", 0, Read|SetByCreate|Write, false, false, false),
-			5:  ByteField("ForceInpDownstream", 0, Read|Write, false, false, false),
-			6:  ByteField("ForceInpUpstream", 0, Read|Write, false, false, false),
-			7:  ByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write, true, false, true),
-			8:  ByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write, true, false, true),
-			9:  Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write, false, false, true),
-			10: ByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write, false, false, true),
-			11: ByteField("InmClusterContinuationValueUpstream", 0, Read|Write, false, false, true),
-			12: ByteField("InmEquivalentInpModeUpstream", 0, Read|Write, false, false, true),
-			13: Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write, false, false, true),
-			14: ByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write, false, false, true),
-			15: ByteField("InmClusterContinuationValueDownstream", 0, Read|Write, false, false, true),
-			16: ByteField("InmEquivalentInpModeDownstream", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  ByteField("LoopDiagnosticsModeForcedLdsf", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  ByteField("AutomodeColdStartForced", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  ByteField("L2Atpr", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4:  ByteField("L2Atprt", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  ByteField("ForceInpDownstream", 0, Read|Write, false, false, false, 5),
+			6:  ByteField("ForceInpUpstream", 0, Read|Write, false, false, false, 6),
+			7:  ByteField("UpdateRequestFlagForNearEndTestParameters", 0, Read|Write, true, false, true, 7),
+			8:  ByteField("UpdateRequestFlagForFarEndTestParameters", 0, Read|Write, true, false, true, 8),
+			9:  Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, Read|Write, false, false, true, 9),
+			10: ByteField("InmInterArrivalTimeStepUpstream", 0, Read|Write, false, false, true, 10),
+			11: ByteField("InmClusterContinuationValueUpstream", 0, Read|Write, false, false, true, 11),
+			12: ByteField("InmEquivalentInpModeUpstream", 0, Read|Write, false, false, true, 12),
+			13: Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, Read|Write, false, false, true, 13),
+			14: ByteField("InmInterArrivalTimeStepDownstream", 0, Read|Write, false, false, true, 14),
+			15: ByteField("InmClusterContinuationValueDownstream", 0, Read|Write, false, false, true, 15),
+			16: ByteField("InmEquivalentInpModeDownstream", 0, Read|Write, false, false, true, 16),
 		},
 	}
 }
@@ -70,12 +70,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineConfigurationProfilePart3(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdsllineconfigurationprofilepart3BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdsllineconfigurationprofilepart3BME, params...)
 }

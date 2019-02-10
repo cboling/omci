@@ -45,18 +45,18 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint16Field("PrimaryMgc", 0, Read|SetByCreate|Write, false, false, false),
-			2:  Uint16Field("SecondaryMgc", 0, Read|SetByCreate|Write, false, false, false),
-			3:  Uint16Field("TcpUdpPointer", 0, Read|SetByCreate|Write, false, false, false),
-			4:  ByteField("Version", 0, Read|SetByCreate|Write, false, false, false),
-			5:  ByteField("MessageFormat", 0, Read|SetByCreate|Write, false, false, false),
-			6:  Uint16Field("MaximumRetryTime", 0, Read|Write, false, false, true),
-			7:  Uint16Field("MaximumRetryAttempts", 0, Read|SetByCreate|Write, false, false, true),
-			8:  Uint16Field("ServiceChangeDelay", 0, Read|Write, false, false, true),
-			9:  MultiByteField("TerminationIdBase", 25, nil, Read|Write, false, false, true),
-			10: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false),
-			11: Uint16Field("MessageIdPointer", 0, Read|SetByCreate|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint16Field("PrimaryMgc", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  Uint16Field("SecondaryMgc", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  Uint16Field("TcpUdpPointer", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4:  ByteField("Version", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  ByteField("MessageFormat", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6:  Uint16Field("MaximumRetryTime", 0, Read|Write, false, false, true, 6),
+			7:  Uint16Field("MaximumRetryAttempts", 0, Read|SetByCreate|Write, false, false, true, 7),
+			8:  Uint16Field("ServiceChangeDelay", 0, Read|Write, false, false, true, 8),
+			9:  MultiByteField("TerminationIdBase", 25, nil, Read|Write, false, false, true, 9),
+			10: Uint32Field("Softswitch", 0, Read|SetByCreate|Write, false, false, false, 10),
+			11: Uint16Field("MessageIdPointer", 0, Read|SetByCreate|Write, false, false, true, 11),
 		},
 	}
 }
@@ -65,12 +65,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMgcConfigData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: mgcconfigdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(mgcconfigdataBME, params...)
 }

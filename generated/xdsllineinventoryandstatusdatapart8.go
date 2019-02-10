@@ -43,13 +43,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read, false, false, false),
-			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read, false, false, false),
-			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read, false, false, true),
-			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read, false, false, true),
-			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read, false, false, true),
-			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, Read, false, false, false, 1),
+			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, Read, false, false, false, 2),
+			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, Read, false, false, true, 3),
+			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, Read, false, false, true, 4),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, Read, false, false, true, 5),
+			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, Read, false, false, true, 6),
 		},
 	}
 }
@@ -58,12 +58,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdsllineinventoryandstatusdatapart8BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdsllineinventoryandstatusdatapart8BME, params...)
 }

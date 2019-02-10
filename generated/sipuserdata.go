@@ -45,19 +45,19 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint16Field("SipAgentPointer", 0, Read|SetByCreate|Write, false, false, false),
-			2:  Uint16Field("UserPartAor", 0, Read|SetByCreate|Write, false, false, false),
-			3:  MultiByteField("SipDisplayName", 25, nil, Read|Write, false, false, false),
-			4:  Uint16Field("UsernameAndPassword", 0, Read|SetByCreate|Write, false, false, false),
-			5:  Uint16Field("VoicemailServerSipUri", 0, Read|SetByCreate|Write, false, false, false),
-			6:  Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|SetByCreate|Write, false, false, false),
-			7:  Uint16Field("NetworkDialPlanPointer", 0, Read|SetByCreate|Write, false, false, false),
-			8:  Uint16Field("ApplicationServicesProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
-			9:  Uint16Field("FeatureCodePointer", 0, Read|SetByCreate|Write, false, false, false),
-			10: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false),
-			11: ByteField("ReleaseTimer", 0, Read|Write, false, false, true),
-			12: ByteField("ReceiverOffHookRohTimer", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint16Field("SipAgentPointer", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  Uint16Field("UserPartAor", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  MultiByteField("SipDisplayName", 25, nil, Read|Write, false, false, false, 3),
+			4:  Uint16Field("UsernameAndPassword", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  Uint16Field("VoicemailServerSipUri", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6:  Uint32Field("VoicemailSubscriptionExpirationTime", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7:  Uint16Field("NetworkDialPlanPointer", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8:  Uint16Field("ApplicationServicesProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 8),
+			9:  Uint16Field("FeatureCodePointer", 0, Read|SetByCreate|Write, false, false, false, 9),
+			10: Uint16Field("PptpPointer", 0, Read|SetByCreate|Write, false, false, false, 10),
+			11: ByteField("ReleaseTimer", 0, Read|Write, false, false, true, 11),
+			12: ByteField("ReceiverOffHookRohTimer", 0, Read|Write, false, false, true, 12),
 		},
 	}
 }
@@ -66,12 +66,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewSipUserData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: sipuserdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(sipuserdataBME, params...)
 }

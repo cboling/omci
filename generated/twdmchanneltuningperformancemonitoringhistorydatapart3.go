@@ -46,17 +46,17 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  ByteField("IntervalEndTime", 0, Read, false, false, false),
-			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false),
-			3:  Uint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read, false, false, false),
-			4:  Uint32Field("TuningControlRequestsRollbackDsLktp", 0, Read, false, false, false),
-			5:  Uint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read, false, false, false),
-			6:  Uint32Field("TuningControlRequestsRollbackUsVoid", 0, Read, false, false, false),
-			7:  Uint32Field("TuningControlRequestsRollbackUsTunr", 0, Read, false, false, false),
-			8:  Uint32Field("TuningControlRequestsRollbackUsLktp", 0, Read, false, false, false),
-			9:  Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read, false, false, false),
-			10: Uint32Field("TuningControlRequestsRollbackUsLncd", 0, Read, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  ByteField("IntervalEndTime", 0, Read, false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  Uint32Field("TuningControlRequestsRollbackDsAlbl", 0, Read, false, false, false, 3),
+			4:  Uint32Field("TuningControlRequestsRollbackDsLktp", 0, Read, false, false, false, 4),
+			5:  Uint32Field("TuningControlRequestsRollbackUsAlbl", 0, Read, false, false, false, 5),
+			6:  Uint32Field("TuningControlRequestsRollbackUsVoid", 0, Read, false, false, false, 6),
+			7:  Uint32Field("TuningControlRequestsRollbackUsTunr", 0, Read, false, false, false, 7),
+			8:  Uint32Field("TuningControlRequestsRollbackUsLktp", 0, Read, false, false, false, 8),
+			9:  Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, Read, false, false, false, 9),
+			10: Uint32Field("TuningControlRequestsRollbackUsLncd", 0, Read, false, false, false, 10),
 		},
 	}
 }
@@ -65,12 +65,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: twdmchanneltuningperformancemonitoringhistorydatapart3BME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(twdmchanneltuningperformancemonitoringhistorydatapart3BME, params...)
 }

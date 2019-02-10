@@ -46,15 +46,15 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: ByteField("AssociationType", 0, Read|SetByCreate|Write, false, false, false),
-			2: TableField("ReceivedFrameVlanTaggingOperationTableMaxSize", TableInfo{0, 2}, Read, false, false),
-			3: Uint16Field("InputTpid", 0, Read|Write, false, false, false),
-			4: Uint16Field("OutputTpid", 0, Read|Write, false, false, false),
-			5: ByteField("DownstreamMode", 0, Read|Write, false, false, false),
-			6: TableField("ReceivedFrameVlanTaggingOperationTable", TableInfo{nil, 16}, Read|Write, false, false),
-			7: Uint16Field("AssociatedMePointer", 0, Read|SetByCreate|Write, false, false, false),
-			8: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: ByteField("AssociationType", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: TableField("ReceivedFrameVlanTaggingOperationTableMaxSize", TableInfo{0, 2}, Read, false, false, 2),
+			3: Uint16Field("InputTpid", 0, Read|Write, false, false, false, 3),
+			4: Uint16Field("OutputTpid", 0, Read|Write, false, false, false, 4),
+			5: ByteField("DownstreamMode", 0, Read|Write, false, false, false, 5),
+			6: TableField("ReceivedFrameVlanTaggingOperationTable", TableInfo{nil, 16}, Read|Write, false, false, 6),
+			7: Uint16Field("AssociatedMePointer", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8: MultiByteField("DscpToPBitMapping", 24, nil, Read|Write, false, false, true, 8),
 		},
 	}
 }
@@ -63,12 +63,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: extendedvlantaggingoperationconfigurationdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(extendedvlantaggingoperationconfigurationdataBME, params...)
 }

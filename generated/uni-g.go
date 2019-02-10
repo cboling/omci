@@ -43,12 +43,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: Uint16Field("Deprecated", 0, Read|Write, false, false, false),
-			2: ByteField("AdministrativeState", 0, Read|Write, false, false, false),
-			3: ByteField("ManagementCapability", 0, Read, false, false, true),
-			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write, false, false, true),
-			5: Uint16Field("RelayAgentOptions", 0, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: Uint16Field("Deprecated", 0, Read|Write, false, false, false, 1),
+			2: ByteField("AdministrativeState", 0, Read|Write, false, false, false, 2),
+			3: ByteField("ManagementCapability", 0, Read, false, false, true, 3),
+			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write, false, false, true, 4),
+			5: Uint16Field("RelayAgentOptions", 0, Read|Write, false, false, true, 5),
 		},
 	}
 }
@@ -57,12 +57,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewUniG(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: unigBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(unigBME, params...)
 }

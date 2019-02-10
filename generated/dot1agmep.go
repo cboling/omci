@@ -45,21 +45,21 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1:  Uint16Field("Layer2EntityPointer", 0, Read|SetByCreate|Write, false, false, false),
-			2:  ByteField("Layer2Type", 0, Read|SetByCreate|Write, false, false, false),
-			3:  Uint16Field("MaPointer", 0, Read|SetByCreate|Write, false, false, false),
-			4:  Uint16Field("MepId", 0, Read|SetByCreate|Write, false, false, false),
-			5:  ByteField("MepControl", 0, Read|SetByCreate|Write, false, false, false),
-			6:  Uint16Field("PrimaryVlan", 0, Read|SetByCreate|Write, false, false, false),
-			7:  ByteField("AdministrativeState", 0, Read|SetByCreate|Write, false, false, false),
-			8:  ByteField("CcmAndLtmPriority", 0, Read|SetByCreate|Write, false, false, false),
-			9:  Uint64Field("EgressIdentifier", 0, Read|SetByCreate|Write, false, false, false),
-			10: MultiByteField("PeerMepIds", 24, nil, Read|Write, false, false, false),
-			11: ByteField("EthAisControl", 0, Read|SetByCreate|Write, false, false, false),
-			12: ByteField("FaultAlarmThreshold", 0, Read|SetByCreate|Write, false, false, true),
-			13: Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write, false, false, false),
-			14: Uint16Field("AlarmClearSoakTime", 0, Read|Write, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1:  Uint16Field("Layer2EntityPointer", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2:  ByteField("Layer2Type", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3:  Uint16Field("MaPointer", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4:  Uint16Field("MepId", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5:  ByteField("MepControl", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6:  Uint16Field("PrimaryVlan", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7:  ByteField("AdministrativeState", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8:  ByteField("CcmAndLtmPriority", 0, Read|SetByCreate|Write, false, false, false, 8),
+			9:  Uint64Field("EgressIdentifier", 0, Read|SetByCreate|Write, false, false, false, 9),
+			10: MultiByteField("PeerMepIds", 24, nil, Read|Write, false, false, false, 10),
+			11: ByteField("EthAisControl", 0, Read|SetByCreate|Write, false, false, false, 11),
+			12: ByteField("FaultAlarmThreshold", 0, Read|SetByCreate|Write, false, false, true, 12),
+			13: Uint16Field("AlarmDeclarationSoakTime", 0, Read|Write, false, false, false, 13),
+			14: Uint16Field("AlarmClearSoakTime", 0, Read|Write, false, false, false, 14),
 		},
 	}
 }
@@ -68,12 +68,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgMep(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: dot1agmepBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(dot1agmepBME, params...)
 }

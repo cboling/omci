@@ -257,4 +257,7 @@ type IManagedEntity interface {
 
 	SetAttribute(string, interface{}) error
 	SetAttributeByIndex(uint, interface{}) error
+
+	DeleteAttribute(string) error
+	DeleteAttributeByIndex(uint) error
 }

@@ -42,14 +42,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1: ByteField("ItuTG9701ProfileProfile", 0, Read, false, false, false),
-			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read, false, false, false),
-			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read, false, false, false),
-			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read, false, false, true),
-			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read, false, false, true),
-			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read, false, false, true),
-			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1: ByteField("ItuTG9701ProfileProfile", 0, Read, false, false, false, 1),
+			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read, false, false, false, 2),
+			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read, false, false, false, 3),
+			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read, false, false, true, 4),
+			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read, false, false, true, 5),
+			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read, false, false, true, 6),
+			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read, false, false, true, 7),
 		},
 	}
 }
@@ -58,12 +58,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastLineInventoryAndStatusData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: fastlineinventoryandstatusdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(fastlineinventoryandstatusdataBME, params...)
 }

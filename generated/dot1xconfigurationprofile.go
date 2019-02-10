@@ -43,17 +43,17 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  Uint16Field("CircuitIdPrefix", 0, Read|Write, false, false, false),
-			2:  ByteField("FallbackPolicy", 0, Read|Write, false, false, false),
-			3:  Uint16Field("AuthServer1", 0, Read|Write, false, false, false),
-			4:  MultiByteField("SharedSecretAuth1", 25, nil, Read|Write, false, false, false),
-			5:  Uint16Field("AuthServer2", 0, Read|Write, false, false, true),
-			6:  MultiByteField("SharedSecretAuth2", 25, nil, Read|Write, false, false, true),
-			7:  Uint16Field("AuthServer3", 0, Read|Write, false, false, true),
-			8:  MultiByteField("SharedSecretAuth3", 25, nil, Read|Write, false, false, true),
-			9:  Uint32Field("OltProxyAddress", 0, Read|Write, false, false, true),
-			10: Uint16Field("CallingStationIdFormat", 0, Read|Write, false, false, true),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  Uint16Field("CircuitIdPrefix", 0, Read|Write, false, false, false, 1),
+			2:  ByteField("FallbackPolicy", 0, Read|Write, false, false, false, 2),
+			3:  Uint16Field("AuthServer1", 0, Read|Write, false, false, false, 3),
+			4:  MultiByteField("SharedSecretAuth1", 25, nil, Read|Write, false, false, false, 4),
+			5:  Uint16Field("AuthServer2", 0, Read|Write, false, false, true, 5),
+			6:  MultiByteField("SharedSecretAuth2", 25, nil, Read|Write, false, false, true, 6),
+			7:  Uint16Field("AuthServer3", 0, Read|Write, false, false, true, 7),
+			8:  MultiByteField("SharedSecretAuth3", 25, nil, Read|Write, false, false, true, 8),
+			9:  Uint32Field("OltProxyAddress", 0, Read|Write, false, false, true, 9),
+			10: Uint16Field("CallingStationIdFormat", 0, Read|Write, false, false, true, 10),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1XConfigurationProfile(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: dot1xconfigurationprofileBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(dot1xconfigurationprofileBME, params...)
 }

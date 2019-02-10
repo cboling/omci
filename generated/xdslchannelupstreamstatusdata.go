@@ -42,18 +42,18 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false),
-			1:  ByteField("ActualInterleavingDelay", 0, Read, false, false, false),
-			2:  Uint32Field("ActualDataRate", 0, Read, false, false, false),
-			3:  Uint32Field("PreviousDataRate", 0, Read, false, false, false),
-			4:  ByteField("ActualImpulseNoiseProtection", 0, Read, false, false, false),
-			5:  ByteField("ImpulseNoiseProtectionReportingMode", 0, Read, false, false, false),
-			6:  ByteField("ActualSizeOfReedSolomonCodeword", 0, Read, false, false, false),
-			7:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read, false, false, false),
-			8:  Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read, false, false, false),
-			9:  Uint16Field("ActualInterleavingDepth", 0, Read, false, false, false),
-			10: ByteField("ActualInterleavingBlockLength", 0, Read, false, false, false),
-			11: ByteField("ActualLatencyPath", 0, Read, false, false, false),
+			0:  Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			1:  ByteField("ActualInterleavingDelay", 0, Read, false, false, false, 1),
+			2:  Uint32Field("ActualDataRate", 0, Read, false, false, false, 2),
+			3:  Uint32Field("PreviousDataRate", 0, Read, false, false, false, 3),
+			4:  ByteField("ActualImpulseNoiseProtection", 0, Read, false, false, false, 4),
+			5:  ByteField("ImpulseNoiseProtectionReportingMode", 0, Read, false, false, false, 5),
+			6:  ByteField("ActualSizeOfReedSolomonCodeword", 0, Read, false, false, false, 6),
+			7:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, Read, false, false, false, 7),
+			8:  Uint16Field("ActualNumberOfBitsPerSymbol", 0, Read, false, false, false, 8),
+			9:  Uint16Field("ActualInterleavingDepth", 0, Read, false, false, false, 9),
+			10: ByteField("ActualInterleavingBlockLength", 0, Read, false, false, false, 10),
+			11: ByteField("ActualLatencyPath", 0, Read, false, false, false, 11),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslChannelUpstreamStatusData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: xdslchannelupstreamstatusdataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(xdslchannelupstreamstatusdataBME, params...)
 }

@@ -46,14 +46,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false),
-			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false),
-			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
-			4: ByteField("PptpCounter", 0, Read, false, false, true),
-			5: ByteField("OperationalState", 0, Read, true, false, true),
-			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false),
-			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, Read|Write, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false, 2),
+			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: ByteField("PptpCounter", 0, Read, false, false, true, 4),
+			5: ByteField("OperationalState", 0, Read, true, false, true, 5),
+			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, Read|Write, false, true, 7),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: multicastgeminterworkingterminationpointBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(multicastgeminterworkingterminationpointBME, params...)
 }

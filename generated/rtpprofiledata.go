@@ -45,15 +45,15 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false),
-			1: Uint16Field("LocalPortMin", 0, Read|SetByCreate|Write, false, false, false),
-			2: Uint16Field("LocalPortMax", 0, Read|SetByCreate|Write, false, false, true),
-			3: ByteField("DscpMark", 0, Read|SetByCreate|Write, false, false, false),
-			4: ByteField("PiggybackEvents", 0, Read|SetByCreate|Write, false, false, false),
-			5: ByteField("ToneEvents", 0, Read|SetByCreate|Write, false, false, false),
-			6: ByteField("DtmfEvents", 0, Read|SetByCreate|Write, false, false, false),
-			7: ByteField("CasEvents", 0, Read|SetByCreate|Write, false, false, false),
-			8: Uint16Field("IpHostConfigPointer", 0, Read|Write, false, false, true),
+			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
+			1: Uint16Field("LocalPortMin", 0, Read|SetByCreate|Write, false, false, false, 1),
+			2: Uint16Field("LocalPortMax", 0, Read|SetByCreate|Write, false, false, true, 2),
+			3: ByteField("DscpMark", 0, Read|SetByCreate|Write, false, false, false, 3),
+			4: ByteField("PiggybackEvents", 0, Read|SetByCreate|Write, false, false, false, 4),
+			5: ByteField("ToneEvents", 0, Read|SetByCreate|Write, false, false, false, 5),
+			6: ByteField("DtmfEvents", 0, Read|SetByCreate|Write, false, false, false, 6),
+			7: ByteField("CasEvents", 0, Read|SetByCreate|Write, false, false, false, 7),
+			8: Uint16Field("IpHostConfigPointer", 0, Read|Write, false, false, true, 8),
 		},
 	}
 }
@@ -62,12 +62,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRtpProfileData(params ...ParamData) (*ManagedEntity, error) {
-	entity := &ManagedEntity{
-		Definition: rtpprofiledataBME,
-		Attributes: make(map[string]interface{}),
-	}
-	if err := entity.setAttributes(params...); err != nil {
-		return nil, err
-	}
-	return entity, nil
+	return NewManagedEntity(rtpprofiledataBME, params...)
 }
