@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VpNetworkCtpClassId uint16 = 269
 
-var vpnetworkctpBME *BaseManagedEntityDefinition
+var vpnetworkctpBME *ManagedEntityDefinition
 
 // VpNetworkCtp (class ID #269) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VpNetworkCtp struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	vpnetworkctpBME = &BaseManagedEntityDefinition{
+	vpnetworkctpBME = &ManagedEntityDefinition{
 		Name:    "VpNetworkCtp",
 		ClassID: 269,
 		MessageTypes: mapset.NewSetWith(

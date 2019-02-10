@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VoipConfigDataClassId uint16 = 138
 
-var voipconfigdataBME *BaseManagedEntityDefinition
+var voipconfigdataBME *ManagedEntityDefinition
 
 // VoipConfigData (class ID #138) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipConfigData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	voipconfigdataBME = &BaseManagedEntityDefinition{
+	voipconfigdataBME = &ManagedEntityDefinition{
 		Name:    "VoipConfigData",
 		ClassID: 138,
 		MessageTypes: mapset.NewSetWith(

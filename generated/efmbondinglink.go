@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EfmBondingLinkClassId uint16 = 420
 
-var efmbondinglinkBME *BaseManagedEntityDefinition
+var efmbondinglinkBME *ManagedEntityDefinition
 
 // EfmBondingLink (class ID #420) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EfmBondingLink struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	efmbondinglinkBME = &BaseManagedEntityDefinition{
+	efmbondinglinkBME = &ManagedEntityDefinition{
 		Name:    "EfmBondingLink",
 		ClassID: 420,
 		MessageTypes: mapset.NewSetWith(

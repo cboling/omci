@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MulticastSubscriberConfigInfoClassId uint16 = 310
 
-var multicastsubscriberconfiginfoBME *BaseManagedEntityDefinition
+var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 
 // MulticastSubscriberConfigInfo (class ID #310) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MulticastSubscriberConfigInfo struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	multicastsubscriberconfiginfoBME = &BaseManagedEntityDefinition{
+	multicastsubscriberconfiginfoBME = &ManagedEntityDefinition{
 		Name:    "MulticastSubscriberConfigInfo",
 		ClassID: 310,
 		MessageTypes: mapset.NewSetWith(

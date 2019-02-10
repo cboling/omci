@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Aal5ProfileClassId uint16 = 16
 
-var aal5profileBME *BaseManagedEntityDefinition
+var aal5profileBME *ManagedEntityDefinition
 
 // Aal5Profile (class ID #16) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Aal5Profile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	aal5profileBME = &BaseManagedEntityDefinition{
+	aal5profileBME = &ManagedEntityDefinition{
 		Name:    "Aal5Profile",
 		ClassID: 16,
 		MessageTypes: mapset.NewSetWith(

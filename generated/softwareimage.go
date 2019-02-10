@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const SoftwareImageClassId uint16 = 7
 
-var softwareimageBME *BaseManagedEntityDefinition
+var softwareimageBME *ManagedEntityDefinition
 
 // SoftwareImage (class ID #7) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SoftwareImage struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	softwareimageBME = &BaseManagedEntityDefinition{
+	softwareimageBME = &ManagedEntityDefinition{
 		Name:    "SoftwareImage",
 		ClassID: 7,
 		MessageTypes: mapset.NewSetWith(

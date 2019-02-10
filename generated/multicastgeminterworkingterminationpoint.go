@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MulticastGemInterworkingTerminationPointClassId uint16 = 281
 
-var multicastgeminterworkingterminationpointBME *BaseManagedEntityDefinition
+var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 
 // MulticastGemInterworkingTerminationPoint (class ID #281) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MulticastGemInterworkingTerminationPoint struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	multicastgeminterworkingterminationpointBME = &BaseManagedEntityDefinition{
+	multicastgeminterworkingterminationpointBME = &ManagedEntityDefinition{
 		Name:    "MulticastGemInterworkingTerminationPoint",
 		ClassID: 281,
 		MessageTypes: mapset.NewSetWith(

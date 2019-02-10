@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelManagedEntityClassId uint16 = 443
 
-var twdmchannelmanagedentityBME *BaseManagedEntityDefinition
+var twdmchannelmanagedentityBME *ManagedEntityDefinition
 
 // TwdmChannelManagedEntity (class ID #443) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelManagedEntity struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	twdmchannelmanagedentityBME = &BaseManagedEntityDefinition{
+	twdmchannelmanagedentityBME = &ManagedEntityDefinition{
 		Name:    "TwdmChannelManagedEntity",
 		ClassID: 443,
 		MessageTypes: mapset.NewSetWith(

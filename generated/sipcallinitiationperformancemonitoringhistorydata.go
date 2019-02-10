@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const SipCallInitiationPerformanceMonitoringHistoryDataClassId uint16 = 152
 
-var sipcallinitiationperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var sipcallinitiationperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // SipCallInitiationPerformanceMonitoringHistoryData (class ID #152) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SipCallInitiationPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	sipcallinitiationperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	sipcallinitiationperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "SipCallInitiationPerformanceMonitoringHistoryData",
 		ClassID: 152,
 		MessageTypes: mapset.NewSetWith(

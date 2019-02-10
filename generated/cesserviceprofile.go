@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const CesServiceProfileClassId uint16 = 21
 
-var cesserviceprofileBME *BaseManagedEntityDefinition
+var cesserviceprofileBME *ManagedEntityDefinition
 
 // CesServiceProfile (class ID #21) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type CesServiceProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	cesserviceprofileBME = &BaseManagedEntityDefinition{
+	cesserviceprofileBME = &ManagedEntityDefinition{
 		Name:    "CesServiceProfile",
 		ClassID: 21,
 		MessageTypes: mapset.NewSetWith(

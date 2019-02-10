@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const GeneralPurposeBufferClassId uint16 = 308
 
-var generalpurposebufferBME *BaseManagedEntityDefinition
+var generalpurposebufferBME *ManagedEntityDefinition
 
 // GeneralPurposeBuffer (class ID #308) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GeneralPurposeBuffer struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	generalpurposebufferBME = &BaseManagedEntityDefinition{
+	generalpurposebufferBME = &ManagedEntityDefinition{
 		Name:    "GeneralPurposeBuffer",
 		ClassID: 308,
 		MessageTypes: mapset.NewSetWith(

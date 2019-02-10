@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId uint16 = 341
 
-var gemportnetworkctpperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var gemportnetworkctpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // GemPortNetworkCtpPerformanceMonitoringHistoryData (class ID #341) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GemPortNetworkCtpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	gemportnetworkctpperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	gemportnetworkctpperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "GemPortNetworkCtpPerformanceMonitoringHistoryData",
 		ClassID: 341,
 		MessageTypes: mapset.NewSetWith(

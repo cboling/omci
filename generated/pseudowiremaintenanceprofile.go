@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PseudowireMaintenanceProfileClassId uint16 = 284
 
-var pseudowiremaintenanceprofileBME *BaseManagedEntityDefinition
+var pseudowiremaintenanceprofileBME *ManagedEntityDefinition
 
 // PseudowireMaintenanceProfile (class ID #284) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PseudowireMaintenanceProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	pseudowiremaintenanceprofileBME = &BaseManagedEntityDefinition{
+	pseudowiremaintenanceprofileBME = &ManagedEntityDefinition{
 		Name:    "PseudowireMaintenanceProfile",
 		ClassID: 284,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MplsPseudowireTerminationPointClassId uint16 = 333
 
-var mplspseudowireterminationpointBME *BaseManagedEntityDefinition
+var mplspseudowireterminationpointBME *ManagedEntityDefinition
 
 // MplsPseudowireTerminationPoint (class ID #333) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MplsPseudowireTerminationPoint struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	mplspseudowireterminationpointBME = &BaseManagedEntityDefinition{
+	mplspseudowireterminationpointBME = &ManagedEntityDefinition{
 		Name:    "MplsPseudowireTerminationPoint",
 		ClassID: 333,
 		MessageTypes: mapset.NewSetWith(

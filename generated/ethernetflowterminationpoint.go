@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EthernetFlowTerminationPointClassId uint16 = 286
 
-var ethernetflowterminationpointBME *BaseManagedEntityDefinition
+var ethernetflowterminationpointBME *ManagedEntityDefinition
 
 // EthernetFlowTerminationPoint (class ID #286) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetFlowTerminationPoint struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	ethernetflowterminationpointBME = &BaseManagedEntityDefinition{
+	ethernetflowterminationpointBME = &ManagedEntityDefinition{
 		Name:    "EthernetFlowTerminationPoint",
 		ClassID: 286,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId uint16 = 346
 
-var xgponupstreammanagementperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xgponupstreammanagementperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	xgponupstreammanagementperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "XgPonUpstreamManagementPerformanceMonitoringHistoryData",
 		ClassID: 346,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const ThresholdData1ClassId uint16 = 273
 
-var thresholddata1BME *BaseManagedEntityDefinition
+var thresholddata1BME *ManagedEntityDefinition
 
 // ThresholdData1 (class ID #273) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ThresholdData1 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	thresholddata1BME = &BaseManagedEntityDefinition{
+	thresholddata1BME = &ManagedEntityDefinition{
 		Name:    "ThresholdData1",
 		ClassID: 273,
 		MessageTypes: mapset.NewSetWith(

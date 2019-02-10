@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OnuPowerSheddingClassId uint16 = 133
 
-var onupowersheddingBME *BaseManagedEntityDefinition
+var onupowersheddingBME *ManagedEntityDefinition
 
 // OnuPowerShedding (class ID #133) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuPowerShedding struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onupowersheddingBME = &BaseManagedEntityDefinition{
+	onupowersheddingBME = &ManagedEntityDefinition{
 		Name:    "OnuPowerShedding",
 		ClassID: 133,
 		MessageTypes: mapset.NewSetWith(

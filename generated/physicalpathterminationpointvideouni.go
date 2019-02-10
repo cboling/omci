@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PhysicalPathTerminationPointVideoUniClassId uint16 = 82
 
-var physicalpathterminationpointvideouniBME *BaseManagedEntityDefinition
+var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 
 // PhysicalPathTerminationPointVideoUni (class ID #82) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PhysicalPathTerminationPointVideoUni struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	physicalpathterminationpointvideouniBME = &BaseManagedEntityDefinition{
+	physicalpathterminationpointvideouniBME = &ManagedEntityDefinition{
 		Name:    "PhysicalPathTerminationPointVideoUni",
 		ClassID: 82,
 		MessageTypes: mapset.NewSetWith(

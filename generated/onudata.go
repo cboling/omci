@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OnuDataClassId uint16 = 2
 
-var onudataBME *BaseManagedEntityDefinition
+var onudataBME *ManagedEntityDefinition
 
 // OnuData (class ID #2) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onudataBME = &BaseManagedEntityDefinition{
+	onudataBME = &ManagedEntityDefinition{
 		Name:    "OnuData",
 		ClassID: 2,
 		MessageTypes: mapset.NewSetWith(

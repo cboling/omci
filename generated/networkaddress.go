@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const NetworkAddressClassId uint16 = 137
 
-var networkaddressBME *BaseManagedEntityDefinition
+var networkaddressBME *ManagedEntityDefinition
 
 // NetworkAddress (class ID #137) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type NetworkAddress struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	networkaddressBME = &BaseManagedEntityDefinition{
+	networkaddressBME = &ManagedEntityDefinition{
 		Name:    "NetworkAddress",
 		ClassID: 137,
 		MessageTypes: mapset.NewSetWith(

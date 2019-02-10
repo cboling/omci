@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EnhancedSecurityControlClassId uint16 = 332
 
-var enhancedsecuritycontrolBME *BaseManagedEntityDefinition
+var enhancedsecuritycontrolBME *ManagedEntityDefinition
 
 // EnhancedSecurityControl (class ID #332) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EnhancedSecurityControl struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	enhancedsecuritycontrolBME = &BaseManagedEntityDefinition{
+	enhancedsecuritycontrolBME = &ManagedEntityDefinition{
 		Name:    "EnhancedSecurityControl",
 		ClassID: 332,
 		MessageTypes: mapset.NewSetWith(

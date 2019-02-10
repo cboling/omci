@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XdslLineInventoryAndStatusDataPart8ClassId uint16 = 414
 
-var xdsllineinventoryandstatusdatapart8BME *BaseManagedEntityDefinition
+var xdsllineinventoryandstatusdatapart8BME *ManagedEntityDefinition
 
 // XdslLineInventoryAndStatusDataPart8 (class ID #414) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslLineInventoryAndStatusDataPart8 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xdsllineinventoryandstatusdatapart8BME = &BaseManagedEntityDefinition{
+	xdsllineinventoryandstatusdatapart8BME = &ManagedEntityDefinition{
 		Name:    "XdslLineInventoryAndStatusDataPart8",
 		ClassID: 414,
 		MessageTypes: mapset.NewSetWith(

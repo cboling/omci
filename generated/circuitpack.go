@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const CircuitPackClassId uint16 = 6
 
-var circuitpackBME *BaseManagedEntityDefinition
+var circuitpackBME *ManagedEntityDefinition
 
 // CircuitPack (class ID #6) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type CircuitPack struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	circuitpackBME = &BaseManagedEntityDefinition{
+	circuitpackBME = &ManagedEntityDefinition{
 		Name:    "CircuitPack",
 		ClassID: 6,
 		MessageTypes: mapset.NewSetWith(

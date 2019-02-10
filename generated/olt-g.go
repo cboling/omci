@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OltGClassId uint16 = 131
 
-var oltgBME *BaseManagedEntityDefinition
+var oltgBME *ManagedEntityDefinition
 
 // OltG (class ID #131) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OltG struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	oltgBME = &BaseManagedEntityDefinition{
+	oltgBME = &ManagedEntityDefinition{
 		Name:    "OltG",
 		ClassID: 131,
 		MessageTypes: mapset.NewSetWith(

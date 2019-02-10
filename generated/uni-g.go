@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const UniGClassId uint16 = 264
 
-var unigBME *BaseManagedEntityDefinition
+var unigBME *ManagedEntityDefinition
 
 // UniG (class ID #264) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type UniG struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	unigBME = &BaseManagedEntityDefinition{
+	unigBME = &ManagedEntityDefinition{
 		Name:    "UniG",
 		ClassID: 264,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OnuGClassId uint16 = 256
 
-var onugBME *BaseManagedEntityDefinition
+var onugBME *ManagedEntityDefinition
 
 // OnuG (class ID #256) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuG struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onugBME = &BaseManagedEntityDefinition{
+	onugBME = &ManagedEntityDefinition{
 		Name:    "OnuG",
 		ClassID: 256,
 		MessageTypes: mapset.NewSetWith(

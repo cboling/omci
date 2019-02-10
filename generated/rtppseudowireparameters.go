@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const RtpPseudowireParametersClassId uint16 = 283
 
-var rtppseudowireparametersBME *BaseManagedEntityDefinition
+var rtppseudowireparametersBME *ManagedEntityDefinition
 
 // RtpPseudowireParameters (class ID #283) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type RtpPseudowireParameters struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	rtppseudowireparametersBME = &BaseManagedEntityDefinition{
+	rtppseudowireparametersBME = &ManagedEntityDefinition{
 		Name:    "RtpPseudowireParameters",
 		ClassID: 283,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EthernetPerformanceMonitoringHistoryData3ClassId uint16 = 296
 
-var ethernetperformancemonitoringhistorydata3BME *BaseManagedEntityDefinition
+var ethernetperformancemonitoringhistorydata3BME *ManagedEntityDefinition
 
 // EthernetPerformanceMonitoringHistoryData3 (class ID #296) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetPerformanceMonitoringHistoryData3 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	ethernetperformancemonitoringhistorydata3BME = &BaseManagedEntityDefinition{
+	ethernetperformancemonitoringhistorydata3BME = &ManagedEntityDefinition{
 		Name:    "EthernetPerformanceMonitoringHistoryData3",
 		ClassID: 296,
 		MessageTypes: mapset.NewSetWith(

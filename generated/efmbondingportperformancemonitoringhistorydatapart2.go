@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EfmBondingPortPerformanceMonitoringHistoryDataPart2ClassId uint16 = 425
 
-var efmbondingportperformancemonitoringhistorydatapart2BME *BaseManagedEntityDefinition
+var efmbondingportperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
 // EfmBondingPortPerformanceMonitoringHistoryDataPart2 (class ID #425) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EfmBondingPortPerformanceMonitoringHistoryDataPart2 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	efmbondingportperformancemonitoringhistorydatapart2BME = &BaseManagedEntityDefinition{
+	efmbondingportperformancemonitoringhistorydatapart2BME = &ManagedEntityDefinition{
 		Name:    "EfmBondingPortPerformanceMonitoringHistoryDataPart2",
 		ClassID: 425,
 		MessageTypes: mapset.NewSetWith(

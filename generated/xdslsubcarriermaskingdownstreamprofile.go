@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XdslSubcarrierMaskingDownstreamProfileClassId uint16 = 108
 
-var xdslsubcarriermaskingdownstreamprofileBME *BaseManagedEntityDefinition
+var xdslsubcarriermaskingdownstreamprofileBME *ManagedEntityDefinition
 
 // XdslSubcarrierMaskingDownstreamProfile (class ID #108) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslSubcarrierMaskingDownstreamProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xdslsubcarriermaskingdownstreamprofileBME = &BaseManagedEntityDefinition{
+	xdslsubcarriermaskingdownstreamprofileBME = &ManagedEntityDefinition{
 		Name:    "XdslSubcarrierMaskingDownstreamProfile",
 		ClassID: 108,
 		MessageTypes: mapset.NewSetWith(

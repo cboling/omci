@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1XConfigurationProfileClassId uint16 = 291
 
-var dot1xconfigurationprofileBME *BaseManagedEntityDefinition
+var dot1xconfigurationprofileBME *ManagedEntityDefinition
 
 // Dot1XConfigurationProfile (class ID #291) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1XConfigurationProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1xconfigurationprofileBME = &BaseManagedEntityDefinition{
+	dot1xconfigurationprofileBME = &ManagedEntityDefinition{
 		Name:    "Dot1XConfigurationProfile",
 		ClassID: 291,
 		MessageTypes: mapset.NewSetWith(

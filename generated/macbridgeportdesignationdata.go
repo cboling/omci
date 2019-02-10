@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortDesignationDataClassId uint16 = 48
 
-var macbridgeportdesignationdataBME *BaseManagedEntityDefinition
+var macbridgeportdesignationdataBME *ManagedEntityDefinition
 
 // MacBridgePortDesignationData (class ID #48) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortDesignationData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	macbridgeportdesignationdataBME = &BaseManagedEntityDefinition{
+	macbridgeportdesignationdataBME = &ManagedEntityDefinition{
 		Name:    "MacBridgePortDesignationData",
 		ClassID: 48,
 		MessageTypes: mapset.NewSetWith(

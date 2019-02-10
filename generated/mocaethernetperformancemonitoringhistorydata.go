@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MocaEthernetPerformanceMonitoringHistoryDataClassId uint16 = 163
 
-var mocaethernetperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var mocaethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // MocaEthernetPerformanceMonitoringHistoryData (class ID #163) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MocaEthernetPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	mocaethernetperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	mocaethernetperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "MocaEthernetPerformanceMonitoringHistoryData",
 		ClassID: 163,
 		MessageTypes: mapset.NewSetWith(

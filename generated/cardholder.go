@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const CardholderClassId uint16 = 5
 
-var cardholderBME *BaseManagedEntityDefinition
+var cardholderBME *ManagedEntityDefinition
 
 // Cardholder (class ID #5) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Cardholder struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	cardholderBME = &BaseManagedEntityDefinition{
+	cardholderBME = &ManagedEntityDefinition{
 		Name:    "Cardholder",
 		ClassID: 5,
 		MessageTypes: mapset.NewSetWith(

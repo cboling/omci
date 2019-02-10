@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VoiceServiceProfileClassId uint16 = 58
 
-var voiceserviceprofileBME *BaseManagedEntityDefinition
+var voiceserviceprofileBME *ManagedEntityDefinition
 
 // VoiceServiceProfile (class ID #58) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoiceServiceProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	voiceserviceprofileBME = &BaseManagedEntityDefinition{
+	voiceserviceprofileBME = &ManagedEntityDefinition{
 		Name:    "VoiceServiceProfile",
 		ClassID: 58,
 		MessageTypes: mapset.NewSetWith(

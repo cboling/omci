@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const RadiusPerformanceMonitoringHistoryDataClassId uint16 = 293
 
-var radiusperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // RadiusPerformanceMonitoringHistoryData (class ID #293) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type RadiusPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	radiusperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	radiusperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "RadiusPerformanceMonitoringHistoryData",
 		ClassID: 293,
 		MessageTypes: mapset.NewSetWith(

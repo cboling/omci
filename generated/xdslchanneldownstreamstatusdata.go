@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XdslChannelDownstreamStatusDataClassId uint16 = 102
 
-var xdslchanneldownstreamstatusdataBME *BaseManagedEntityDefinition
+var xdslchanneldownstreamstatusdataBME *ManagedEntityDefinition
 
 // XdslChannelDownstreamStatusData (class ID #102) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslChannelDownstreamStatusData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xdslchanneldownstreamstatusdataBME = &BaseManagedEntityDefinition{
+	xdslchanneldownstreamstatusdataBME = &ManagedEntityDefinition{
 		Name:    "XdslChannelDownstreamStatusData",
 		ClassID: 102,
 		MessageTypes: mapset.NewSetWith(

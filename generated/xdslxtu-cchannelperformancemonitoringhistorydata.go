@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XdslXtuCChannelPerformanceMonitoringHistoryDataClassId uint16 = 114
 
-var xdslxtucchannelperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var xdslxtucchannelperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // XdslXtuCChannelPerformanceMonitoringHistoryData (class ID #114) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslXtuCChannelPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xdslxtucchannelperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	xdslxtucchannelperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "XdslXtuCChannelPerformanceMonitoringHistoryData",
 		ClassID: 114,
 		MessageTypes: mapset.NewSetWith(

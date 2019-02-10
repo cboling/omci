@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Aal5PerformanceMonitoringHistoryDataClassId uint16 = 18
 
-var aal5performancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // Aal5PerformanceMonitoringHistoryData (class ID #18) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Aal5PerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	aal5performancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	aal5performancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "Aal5PerformanceMonitoringHistoryData",
 		ClassID: 18,
 		MessageTypes: mapset.NewSetWith(

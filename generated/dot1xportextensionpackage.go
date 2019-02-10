@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1XPortExtensionPackageClassId uint16 = 290
 
-var dot1xportextensionpackageBME *BaseManagedEntityDefinition
+var dot1xportextensionpackageBME *ManagedEntityDefinition
 
 // Dot1XPortExtensionPackage (class ID #290) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1XPortExtensionPackage struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1xportextensionpackageBME = &BaseManagedEntityDefinition{
+	dot1xportextensionpackageBME = &ManagedEntityDefinition{
 		Name:    "Dot1XPortExtensionPackage",
 		ClassID: 290,
 		MessageTypes: mapset.NewSetWith(

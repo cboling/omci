@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TrafficSchedulerClassId uint16 = 278
 
-var trafficschedulerBME *BaseManagedEntityDefinition
+var trafficschedulerBME *ManagedEntityDefinition
 
 // TrafficScheduler (class ID #278) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TrafficScheduler struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	trafficschedulerBME = &BaseManagedEntityDefinition{
+	trafficschedulerBME = &ManagedEntityDefinition{
 		Name:    "TrafficScheduler",
 		ClassID: 278,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PseudowirePerformanceMonitoringHistoryDataClassId uint16 = 285
 
-var pseudowireperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var pseudowireperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // PseudowirePerformanceMonitoringHistoryData (class ID #285) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PseudowirePerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	pseudowireperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	pseudowireperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "PseudowirePerformanceMonitoringHistoryData",
 		ClassID: 285,
 		MessageTypes: mapset.NewSetWith(

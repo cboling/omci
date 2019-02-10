@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TrafficDescriptorClassId uint16 = 280
 
-var trafficdescriptorBME *BaseManagedEntityDefinition
+var trafficdescriptorBME *ManagedEntityDefinition
 
 // TrafficDescriptor (class ID #280) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TrafficDescriptor struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	trafficdescriptorBME = &BaseManagedEntityDefinition{
+	trafficdescriptorBME = &ManagedEntityDefinition{
 		Name:    "TrafficDescriptor",
 		ClassID: 280,
 		MessageTypes: mapset.NewSetWith(

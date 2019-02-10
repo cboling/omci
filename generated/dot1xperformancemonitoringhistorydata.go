@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1XPerformanceMonitoringHistoryDataClassId uint16 = 292
 
-var dot1xperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var dot1xperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // Dot1XPerformanceMonitoringHistoryData (class ID #292) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1XPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1xperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	dot1xperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "Dot1XPerformanceMonitoringHistoryData",
 		ClassID: 292,
 		MessageTypes: mapset.NewSetWith(

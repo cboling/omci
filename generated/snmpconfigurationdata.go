@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const SnmpConfigurationDataClassId uint16 = 335
 
-var snmpconfigurationdataBME *BaseManagedEntityDefinition
+var snmpconfigurationdataBME *ManagedEntityDefinition
 
 // SnmpConfigurationData (class ID #335) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SnmpConfigurationData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	snmpconfigurationdataBME = &BaseManagedEntityDefinition{
+	snmpconfigurationdataBME = &ManagedEntityDefinition{
 		Name:    "SnmpConfigurationData",
 		ClassID: 335,
 		MessageTypes: mapset.NewSetWith(

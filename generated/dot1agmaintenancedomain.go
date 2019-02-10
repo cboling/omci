@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgMaintenanceDomainClassId uint16 = 299
 
-var dot1agmaintenancedomainBME *BaseManagedEntityDefinition
+var dot1agmaintenancedomainBME *ManagedEntityDefinition
 
 // Dot1AgMaintenanceDomain (class ID #299) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgMaintenanceDomain struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1agmaintenancedomainBME = &BaseManagedEntityDefinition{
+	dot1agmaintenancedomainBME = &ManagedEntityDefinition{
 		Name:    "Dot1AgMaintenanceDomain",
 		ClassID: 299,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TcpUdpPerformanceMonitoringHistoryDataClassId uint16 = 342
 
-var tcpudpperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // TcpUdpPerformanceMonitoringHistoryData (class ID #342) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TcpUdpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	tcpudpperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	tcpudpperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "TcpUdpPerformanceMonitoringHistoryData",
 		ClassID: 342,
 		MessageTypes: mapset.NewSetWith(

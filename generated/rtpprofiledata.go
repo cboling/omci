@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const RtpProfileDataClassId uint16 = 143
 
-var rtpprofiledataBME *BaseManagedEntityDefinition
+var rtpprofiledataBME *ManagedEntityDefinition
 
 // RtpProfileData (class ID #143) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type RtpProfileData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	rtpprofiledataBME = &BaseManagedEntityDefinition{
+	rtpprofiledataBME = &ManagedEntityDefinition{
 		Name:    "RtpProfileData",
 		ClassID: 143,
 		MessageTypes: mapset.NewSetWith(

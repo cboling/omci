@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VoipFeatureAccessCodesClassId uint16 = 147
 
-var voipfeatureaccesscodesBME *BaseManagedEntityDefinition
+var voipfeatureaccesscodesBME *ManagedEntityDefinition
 
 // VoipFeatureAccessCodes (class ID #147) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VoipFeatureAccessCodes struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	voipfeatureaccesscodesBME = &BaseManagedEntityDefinition{
+	voipfeatureaccesscodesBME = &ManagedEntityDefinition{
 		Name:    "VoipFeatureAccessCodes",
 		ClassID: 147,
 		MessageTypes: mapset.NewSetWith(

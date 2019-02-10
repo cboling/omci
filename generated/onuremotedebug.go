@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OnuRemoteDebugClassId uint16 = 158
 
-var onuremotedebugBME *BaseManagedEntityDefinition
+var onuremotedebugBME *ManagedEntityDefinition
 
 // OnuRemoteDebug (class ID #158) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuRemoteDebug struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onuremotedebugBME = &BaseManagedEntityDefinition{
+	onuremotedebugBME = &ManagedEntityDefinition{
 		Name:    "OnuRemoteDebug",
 		ClassID: 158,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const GemPortNetworkCtpClassId uint16 = 268
 
-var gemportnetworkctpBME *BaseManagedEntityDefinition
+var gemportnetworkctpBME *ManagedEntityDefinition
 
 // GemPortNetworkCtp (class ID #268) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GemPortNetworkCtp struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	gemportnetworkctpBME = &BaseManagedEntityDefinition{
+	gemportnetworkctpBME = &ManagedEntityDefinition{
 		Name:    "GemPortNetworkCtp",
 		ClassID: 268,
 		MessageTypes: mapset.NewSetWith(

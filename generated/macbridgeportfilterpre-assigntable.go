@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortFilterPreAssignTableClassId uint16 = 79
 
-var macbridgeportfilterpreassigntableBME *BaseManagedEntityDefinition
+var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 
 // MacBridgePortFilterPreAssignTable (class ID #79) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortFilterPreAssignTable struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	macbridgeportfilterpreassigntableBME = &BaseManagedEntityDefinition{
+	macbridgeportfilterpreassigntableBME = &ManagedEntityDefinition{
 		Name:    "MacBridgePortFilterPreAssignTable",
 		ClassID: 79,
 		MessageTypes: mapset.NewSetWith(

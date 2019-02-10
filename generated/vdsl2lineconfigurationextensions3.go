@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Vdsl2LineConfigurationExtensions3ClassId uint16 = 410
 
-var vdsl2lineconfigurationextensions3BME *BaseManagedEntityDefinition
+var vdsl2lineconfigurationextensions3BME *ManagedEntityDefinition
 
 // Vdsl2LineConfigurationExtensions3 (class ID #410) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Vdsl2LineConfigurationExtensions3 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	vdsl2lineconfigurationextensions3BME = &BaseManagedEntityDefinition{
+	vdsl2lineconfigurationextensions3BME = &ManagedEntityDefinition{
 		Name:    "Vdsl2LineConfigurationExtensions3",
 		ClassID: 410,
 		MessageTypes: mapset.NewSetWith(

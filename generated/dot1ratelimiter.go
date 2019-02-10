@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1RateLimiterClassId uint16 = 298
 
-var dot1ratelimiterBME *BaseManagedEntityDefinition
+var dot1ratelimiterBME *ManagedEntityDefinition
 
 // Dot1RateLimiter (class ID #298) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1RateLimiter struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1ratelimiterBME = &BaseManagedEntityDefinition{
+	dot1ratelimiterBME = &ManagedEntityDefinition{
 		Name:    "Dot1RateLimiter",
 		ClassID: 298,
 		MessageTypes: mapset.NewSetWith(

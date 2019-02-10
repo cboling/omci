@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PwEthernetConfigurationDataClassId uint16 = 339
 
-var pwethernetconfigurationdataBME *BaseManagedEntityDefinition
+var pwethernetconfigurationdataBME *ManagedEntityDefinition
 
 // PwEthernetConfigurationData (class ID #339) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PwEthernetConfigurationData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	pwethernetconfigurationdataBME = &BaseManagedEntityDefinition{
+	pwethernetconfigurationdataBME = &ManagedEntityDefinition{
 		Name:    "PwEthernetConfigurationData",
 		ClassID: 339,
 		MessageTypes: mapset.NewSetWith(

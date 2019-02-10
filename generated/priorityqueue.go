@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PriorityQueueClassId uint16 = 277
 
-var priorityqueueBME *BaseManagedEntityDefinition
+var priorityqueueBME *ManagedEntityDefinition
 
 // PriorityQueue (class ID #277) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PriorityQueue struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	priorityqueueBME = &BaseManagedEntityDefinition{
+	priorityqueueBME = &ManagedEntityDefinition{
 		Name:    "PriorityQueue",
 		ClassID: 277,
 		MessageTypes: mapset.NewSetWith(

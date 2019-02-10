@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VlanTaggingFilterDataClassId uint16 = 84
 
-var vlantaggingfilterdataBME *BaseManagedEntityDefinition
+var vlantaggingfilterdataBME *ManagedEntityDefinition
 
 // VlanTaggingFilterData (class ID #84) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VlanTaggingFilterData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	vlantaggingfilterdataBME = &BaseManagedEntityDefinition{
+	vlantaggingfilterdataBME = &ManagedEntityDefinition{
 		Name:    "VlanTaggingFilterData",
 		ClassID: 84,
 		MessageTypes: mapset.NewSetWith(

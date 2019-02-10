@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const IpHostConfigDataClassId uint16 = 134
 
-var iphostconfigdataBME *BaseManagedEntityDefinition
+var iphostconfigdataBME *ManagedEntityDefinition
 
 // IpHostConfigData (class ID #134) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type IpHostConfigData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	iphostconfigdataBME = &BaseManagedEntityDefinition{
+	iphostconfigdataBME = &ManagedEntityDefinition{
 		Name:    "IpHostConfigData",
 		ClassID: 134,
 		MessageTypes: mapset.NewSetWith(

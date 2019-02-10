@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const AniGClassId uint16 = 263
 
-var anigBME *BaseManagedEntityDefinition
+var anigBME *ManagedEntityDefinition
 
 // AniG (class ID #263) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type AniG struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	anigBME = &BaseManagedEntityDefinition{
+	anigBME = &ManagedEntityDefinition{
 		Name:    "AniG",
 		ClassID: 263,
 		MessageTypes: mapset.NewSetWith(

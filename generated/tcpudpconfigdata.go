@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TcpUdpConfigDataClassId uint16 = 136
 
-var tcpudpconfigdataBME *BaseManagedEntityDefinition
+var tcpudpconfigdataBME *ManagedEntityDefinition
 
 // TcpUdpConfigData (class ID #136) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TcpUdpConfigData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	tcpudpconfigdataBME = &BaseManagedEntityDefinition{
+	tcpudpconfigdataBME = &ManagedEntityDefinition{
 		Name:    "TcpUdpConfigData",
 		ClassID: 136,
 		MessageTypes: mapset.NewSetWith(

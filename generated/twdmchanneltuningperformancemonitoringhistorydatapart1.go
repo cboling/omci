@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TwdmChannelTuningPerformanceMonitoringHistoryDataPart1ClassId uint16 = 449
 
-var twdmchanneltuningperformancemonitoringhistorydatapart1BME *BaseManagedEntityDefinition
+var twdmchanneltuningperformancemonitoringhistorydatapart1BME *ManagedEntityDefinition
 
 // TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID #449) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	twdmchanneltuningperformancemonitoringhistorydatapart1BME = &BaseManagedEntityDefinition{
+	twdmchanneltuningperformancemonitoringhistorydatapart1BME = &ManagedEntityDefinition{
 		Name:    "TwdmChannelTuningPerformanceMonitoringHistoryDataPart1",
 		ClassID: 449,
 		MessageTypes: mapset.NewSetWith(

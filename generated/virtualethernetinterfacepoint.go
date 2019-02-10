@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const VirtualEthernetInterfacePointClassId uint16 = 329
 
-var virtualethernetinterfacepointBME *BaseManagedEntityDefinition
+var virtualethernetinterfacepointBME *ManagedEntityDefinition
 
 // VirtualEthernetInterfacePoint (class ID #329) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type VirtualEthernetInterfacePoint struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	virtualethernetinterfacepointBME = &BaseManagedEntityDefinition{
+	virtualethernetinterfacepointBME = &ManagedEntityDefinition{
 		Name:    "VirtualEthernetInterfacePoint",
 		ClassID: 329,
 		MessageTypes: mapset.NewSetWith(

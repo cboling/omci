@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XdslChannelConfigurationProfilePart2ClassId uint16 = 412
 
-var xdslchannelconfigurationprofilepart2BME *BaseManagedEntityDefinition
+var xdslchannelconfigurationprofilepart2BME *ManagedEntityDefinition
 
 // XdslChannelConfigurationProfilePart2 (class ID #412) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XdslChannelConfigurationProfilePart2 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xdslchannelconfigurationprofilepart2BME = &BaseManagedEntityDefinition{
+	xdslchannelconfigurationprofilepart2BME = &ManagedEntityDefinition{
 		Name:    "XdslChannelConfigurationProfilePart2",
 		ClassID: 412,
 		MessageTypes: mapset.NewSetWith(

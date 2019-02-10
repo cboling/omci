@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgePortIcmpv6ProcessPreAssignTableClassId uint16 = 348
 
-var macbridgeporticmpv6processpreassigntableBME *BaseManagedEntityDefinition
+var macbridgeporticmpv6processpreassigntableBME *ManagedEntityDefinition
 
 // MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	macbridgeporticmpv6processpreassigntableBME = &BaseManagedEntityDefinition{
+	macbridgeporticmpv6processpreassigntableBME = &ManagedEntityDefinition{
 		Name:    "MacBridgePortIcmpv6ProcessPreAssignTable",
 		ClassID: 348,
 		MessageTypes: mapset.NewSetWith(

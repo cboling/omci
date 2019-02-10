@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const RtpPerformanceMonitoringHistoryDataClassId uint16 = 144
 
-var rtpperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var rtpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // RtpPerformanceMonitoringHistoryData (class ID #144) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type RtpPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	rtpperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	rtpperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "RtpPerformanceMonitoringHistoryData",
 		ClassID: 144,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const InterworkingVccTerminationPointClassId uint16 = 14
 
-var interworkingvccterminationpointBME *BaseManagedEntityDefinition
+var interworkingvccterminationpointBME *ManagedEntityDefinition
 
 // InterworkingVccTerminationPoint (class ID #14) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type InterworkingVccTerminationPoint struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	interworkingvccterminationpointBME = &BaseManagedEntityDefinition{
+	interworkingvccterminationpointBME = &ManagedEntityDefinition{
 		Name:    "InterworkingVccTerminationPoint",
 		ClassID: 14,
 		MessageTypes: mapset.NewSetWith(

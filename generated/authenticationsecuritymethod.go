@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const AuthenticationSecurityMethodClassId uint16 = 148
 
-var authenticationsecuritymethodBME *BaseManagedEntityDefinition
+var authenticationsecuritymethodBME *ManagedEntityDefinition
 
 // AuthenticationSecurityMethod (class ID #148) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type AuthenticationSecurityMethod struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	authenticationsecuritymethodBME = &BaseManagedEntityDefinition{
+	authenticationsecuritymethodBME = &ManagedEntityDefinition{
 		Name:    "AuthenticationSecurityMethod",
 		ClassID: 148,
 		MessageTypes: mapset.NewSetWith(

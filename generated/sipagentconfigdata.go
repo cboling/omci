@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const SipAgentConfigDataClassId uint16 = 150
 
-var sipagentconfigdataBME *BaseManagedEntityDefinition
+var sipagentconfigdataBME *ManagedEntityDefinition
 
 // SipAgentConfigData (class ID #150) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type SipAgentConfigData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	sipagentconfigdataBME = &BaseManagedEntityDefinition{
+	sipagentconfigdataBME = &ManagedEntityDefinition{
 		Name:    "SipAgentConfigData",
 		ClassID: 150,
 		MessageTypes: mapset.NewSetWith(

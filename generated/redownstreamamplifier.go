@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const ReDownstreamAmplifierClassId uint16 = 316
 
-var redownstreamamplifierBME *BaseManagedEntityDefinition
+var redownstreamamplifierBME *ManagedEntityDefinition
 
 // ReDownstreamAmplifier (class ID #316) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ReDownstreamAmplifier struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	redownstreamamplifierBME = &BaseManagedEntityDefinition{
+	redownstreamamplifierBME = &ManagedEntityDefinition{
 		Name:    "ReDownstreamAmplifier",
 		ClassID: 316,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const ExtendedVlanTaggingOperationConfigurationDataClassId uint16 = 171
 
-var extendedvlantaggingoperationconfigurationdataBME *BaseManagedEntityDefinition
+var extendedvlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 
 // ExtendedVlanTaggingOperationConfigurationData (class ID #171) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ExtendedVlanTaggingOperationConfigurationData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	extendedvlantaggingoperationconfigurationdataBME = &BaseManagedEntityDefinition{
+	extendedvlantaggingoperationconfigurationdataBME = &ManagedEntityDefinition{
 		Name:    "ExtendedVlanTaggingOperationConfigurationData",
 		ClassID: 171,
 		MessageTypes: mapset.NewSetWith(

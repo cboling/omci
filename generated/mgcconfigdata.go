@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MgcConfigDataClassId uint16 = 155
 
-var mgcconfigdataBME *BaseManagedEntityDefinition
+var mgcconfigdataBME *ManagedEntityDefinition
 
 // MgcConfigData (class ID #155) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MgcConfigData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	mgcconfigdataBME = &BaseManagedEntityDefinition{
+	mgcconfigdataBME = &ManagedEntityDefinition{
 		Name:    "MgcConfigData",
 		ClassID: 155,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OnuDynamicPowerManagementControlClassId uint16 = 336
 
-var onudynamicpowermanagementcontrolBME *BaseManagedEntityDefinition
+var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 
 // OnuDynamicPowerManagementControl (class ID #336) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type OnuDynamicPowerManagementControl struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onudynamicpowermanagementcontrolBME = &BaseManagedEntityDefinition{
+	onudynamicpowermanagementcontrolBME = &ManagedEntityDefinition{
 		Name:    "OnuDynamicPowerManagementControl",
 		ClassID: 336,
 		MessageTypes: mapset.NewSetWith(

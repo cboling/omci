@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const OmciClassId uint16 = 287
 
-var omciBME *BaseManagedEntityDefinition
+var omciBME *ManagedEntityDefinition
 
 // Omci (class ID #287) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Omci struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	omciBME = &BaseManagedEntityDefinition{
+	omciBME = &ManagedEntityDefinition{
 		Name:    "Omci",
 		ClassID: 287,
 		MessageTypes: mapset.NewSetWith(

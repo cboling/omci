@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const TContClassId uint16 = 262
 
-var tcontBME *BaseManagedEntityDefinition
+var tcontBME *ManagedEntityDefinition
 
 // TCont (class ID #262) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type TCont struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	tcontBME = &BaseManagedEntityDefinition{
+	tcontBME = &ManagedEntityDefinition{
 		Name:    "TCont",
 		ClassID: 262,
 		MessageTypes: mapset.NewSetWith(

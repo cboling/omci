@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Ieee8021PMapperServiceProfileClassId uint16 = 130
 
-var ieee8021pmapperserviceprofileBME *BaseManagedEntityDefinition
+var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 
 // Ieee8021PMapperServiceProfile (class ID #130) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Ieee8021PMapperServiceProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	ieee8021pmapperserviceprofileBME = &BaseManagedEntityDefinition{
+	ieee8021pmapperserviceprofileBME = &ManagedEntityDefinition{
 		Name:    "Ieee8021PMapperServiceProfile",
 		ClassID: 130,
 		MessageTypes: mapset.NewSetWith(

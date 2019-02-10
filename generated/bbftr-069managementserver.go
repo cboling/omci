@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const BbfTr069ManagementServerClassId uint16 = 340
 
-var bbftr069managementserverBME *BaseManagedEntityDefinition
+var bbftr069managementserverBME *ManagedEntityDefinition
 
 // BbfTr069ManagementServer (class ID #340) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type BbfTr069ManagementServer struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	bbftr069managementserverBME = &BaseManagedEntityDefinition{
+	bbftr069managementserverBME = &ManagedEntityDefinition{
 		Name:    "BbfTr069ManagementServer",
 		ClassID: 340,
 		MessageTypes: mapset.NewSetWith(

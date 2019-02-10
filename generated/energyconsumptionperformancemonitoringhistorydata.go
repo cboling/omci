@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EnergyConsumptionPerformanceMonitoringHistoryDataClassId uint16 = 343
 
-var energyconsumptionperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var energyconsumptionperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EnergyConsumptionPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	energyconsumptionperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	energyconsumptionperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "EnergyConsumptionPerformanceMonitoringHistoryData",
 		ClassID: 343,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const ReAniGClassId uint16 = 313
 
-var reanigBME *BaseManagedEntityDefinition
+var reanigBME *ManagedEntityDefinition
 
 // ReAniG (class ID #313) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type ReAniG struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	reanigBME = &BaseManagedEntityDefinition{
+	reanigBME = &ManagedEntityDefinition{
 		Name:    "ReAniG",
 		ClassID: 313,
 		MessageTypes: mapset.NewSetWith(

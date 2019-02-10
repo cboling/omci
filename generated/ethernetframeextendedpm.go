@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EthernetFrameExtendedPmClassId uint16 = 334
 
-var ethernetframeextendedpmBME *BaseManagedEntityDefinition
+var ethernetframeextendedpmBME *ManagedEntityDefinition
 
 // EthernetFrameExtendedPm (class ID #334) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetFrameExtendedPm struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	ethernetframeextendedpmBME = &BaseManagedEntityDefinition{
+	ethernetframeextendedpmBME = &ManagedEntityDefinition{
 		Name:    "EthernetFrameExtendedPm",
 		ClassID: 334,
 		MessageTypes: mapset.NewSetWith(

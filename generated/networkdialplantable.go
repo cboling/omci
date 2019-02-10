@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const NetworkDialPlanTableClassId uint16 = 145
 
-var networkdialplantableBME *BaseManagedEntityDefinition
+var networkdialplantableBME *ManagedEntityDefinition
 
 // NetworkDialPlanTable (class ID #145) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type NetworkDialPlanTable struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	networkdialplantableBME = &BaseManagedEntityDefinition{
+	networkdialplantableBME = &ManagedEntityDefinition{
 		Name:    "NetworkDialPlanTable",
 		ClassID: 145,
 		MessageTypes: mapset.NewSetWith(

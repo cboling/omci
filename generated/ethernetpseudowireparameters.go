@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EthernetPseudowireParametersClassId uint16 = 400
 
-var ethernetpseudowireparametersBME *BaseManagedEntityDefinition
+var ethernetpseudowireparametersBME *ManagedEntityDefinition
 
 // EthernetPseudowireParameters (class ID #400) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EthernetPseudowireParameters struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	ethernetpseudowireparametersBME = &BaseManagedEntityDefinition{
+	ethernetpseudowireparametersBME = &ManagedEntityDefinition{
 		Name:    "EthernetPseudowireParameters",
 		ClassID: 400,
 		MessageTypes: mapset.NewSetWith(

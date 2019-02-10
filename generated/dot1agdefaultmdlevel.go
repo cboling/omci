@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Dot1AgDefaultMdLevelClassId uint16 = 301
 
-var dot1agdefaultmdlevelBME *BaseManagedEntityDefinition
+var dot1agdefaultmdlevelBME *ManagedEntityDefinition
 
 // Dot1AgDefaultMdLevel (class ID #301) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Dot1AgDefaultMdLevel struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	dot1agdefaultmdlevelBME = &BaseManagedEntityDefinition{
+	dot1agdefaultmdlevelBME = &ManagedEntityDefinition{
 		Name:    "Dot1AgDefaultMdLevel",
 		ClassID: 301,
 		MessageTypes: mapset.NewSetWith(

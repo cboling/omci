@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const GalEthernetProfileClassId uint16 = 272
 
-var galethernetprofileBME *BaseManagedEntityDefinition
+var galethernetprofileBME *ManagedEntityDefinition
 
 // GalEthernetProfile (class ID #272) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type GalEthernetProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	galethernetprofileBME = &BaseManagedEntityDefinition{
+	galethernetprofileBME = &ManagedEntityDefinition{
 		Name:    "GalEthernetProfile",
 		ClassID: 272,
 		MessageTypes: mapset.NewSetWith(

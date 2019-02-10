@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const MacBridgeServiceProfileClassId uint16 = 45
 
-var macbridgeserviceprofileBME *BaseManagedEntityDefinition
+var macbridgeserviceprofileBME *ManagedEntityDefinition
 
 // MacBridgeServiceProfile (class ID #45) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type MacBridgeServiceProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	macbridgeserviceprofileBME = &BaseManagedEntityDefinition{
+	macbridgeserviceprofileBME = &ManagedEntityDefinition{
 		Name:    "MacBridgeServiceProfile",
 		ClassID: 45,
 		MessageTypes: mapset.NewSetWith(

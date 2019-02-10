@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FastVectoringLineConfigurationExtensionsClassId uint16 = 434
 
-var fastvectoringlineconfigurationextensionsBME *BaseManagedEntityDefinition
+var fastvectoringlineconfigurationextensionsBME *ManagedEntityDefinition
 
 // FastVectoringLineConfigurationExtensions (class ID #434) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastVectoringLineConfigurationExtensions struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	fastvectoringlineconfigurationextensionsBME = &BaseManagedEntityDefinition{
+	fastvectoringlineconfigurationextensionsBME = &ManagedEntityDefinition{
 		Name:    "FastVectoringLineConfigurationExtensions",
 		ClassID: 434,
 		MessageTypes: mapset.NewSetWith(

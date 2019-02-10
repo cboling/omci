@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FastDataPathConfigurationProfileClassId uint16 = 433
 
-var fastdatapathconfigurationprofileBME *BaseManagedEntityDefinition
+var fastdatapathconfigurationprofileBME *ManagedEntityDefinition
 
 // FastDataPathConfigurationProfile (class ID #433) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastDataPathConfigurationProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	fastdatapathconfigurationprofileBME = &BaseManagedEntityDefinition{
+	fastdatapathconfigurationprofileBME = &ManagedEntityDefinition{
 		Name:    "FastDataPathConfigurationProfile",
 		ClassID: 433,
 		MessageTypes: mapset.NewSetWith(

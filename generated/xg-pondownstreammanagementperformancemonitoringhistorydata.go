@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const XgPonDownstreamManagementPerformanceMonitoringHistoryDataClassId uint16 = 345
 
-var xgpondownstreammanagementperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var xgpondownstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // XgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID #345) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type XgPonDownstreamManagementPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	xgpondownstreammanagementperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	xgpondownstreammanagementperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "XgPonDownstreamManagementPerformanceMonitoringHistoryData",
 		ClassID: 345,
 		MessageTypes: mapset.NewSetWith(

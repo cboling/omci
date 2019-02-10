@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const PwAtmPerformanceMonitoringHistoryDataClassId uint16 = 338
 
-var pwatmperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var pwatmperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // PwAtmPerformanceMonitoringHistoryData (class ID #338) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type PwAtmPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	pwatmperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	pwatmperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "PwAtmPerformanceMonitoringHistoryData",
 		ClassID: 338,
 		MessageTypes: mapset.NewSetWith(

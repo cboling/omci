@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FileTransferControllerClassId uint16 = 318
 
-var filetransfercontrollerBME *BaseManagedEntityDefinition
+var filetransfercontrollerBME *ManagedEntityDefinition
 
 // FileTransferController (class ID #318) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FileTransferController struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	filetransfercontrollerBME = &BaseManagedEntityDefinition{
+	filetransfercontrollerBME = &ManagedEntityDefinition{
 		Name:    "FileTransferController",
 		ClassID: 318,
 		MessageTypes: mapset.NewSetWith(

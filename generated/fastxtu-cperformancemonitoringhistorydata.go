@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FastXtuCPerformanceMonitoringHistoryDataClassId uint16 = 437
 
-var fastxtucperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var fastxtucperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // FastXtuCPerformanceMonitoringHistoryData (class ID #437) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastXtuCPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	fastxtucperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	fastxtucperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "FastXtuCPerformanceMonitoringHistoryData",
 		ClassID: 437,
 		MessageTypes: mapset.NewSetWith(

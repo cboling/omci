@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const Onu2GClassId uint16 = 257
 
-var onu2gBME *BaseManagedEntityDefinition
+var onu2gBME *ManagedEntityDefinition
 
 // Onu2G (class ID #257) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type Onu2G struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	onu2gBME = &BaseManagedEntityDefinition{
+	onu2gBME = &ManagedEntityDefinition{
 		Name:    "Onu2G",
 		ClassID: 257,
 		MessageTypes: mapset.NewSetWith(

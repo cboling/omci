@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FastLineInventoryAndStatusDataPart2ClassId uint16 = 436
 
-var fastlineinventoryandstatusdatapart2BME *BaseManagedEntityDefinition
+var fastlineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 
 // FastLineInventoryAndStatusDataPart2 (class ID #436) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastLineInventoryAndStatusDataPart2 struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	fastlineinventoryandstatusdatapart2BME = &BaseManagedEntityDefinition{
+	fastlineinventoryandstatusdatapart2BME = &ManagedEntityDefinition{
 		Name:    "FastLineInventoryAndStatusDataPart2",
 		ClassID: 436,
 		MessageTypes: mapset.NewSetWith(

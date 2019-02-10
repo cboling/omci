@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const EquipmentExtensionPackageClassId uint16 = 160
 
-var equipmentextensionpackageBME *BaseManagedEntityDefinition
+var equipmentextensionpackageBME *ManagedEntityDefinition
 
 // EquipmentExtensionPackage (class ID #160) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type EquipmentExtensionPackage struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	equipmentextensionpackageBME = &BaseManagedEntityDefinition{
+	equipmentextensionpackageBME = &ManagedEntityDefinition{
 		Name:    "EquipmentExtensionPackage",
 		ClassID: 160,
 		MessageTypes: mapset.NewSetWith(

@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const FastChannelConfigurationProfileClassId uint16 = 432
 
-var fastchannelconfigurationprofileBME *BaseManagedEntityDefinition
+var fastchannelconfigurationprofileBME *ManagedEntityDefinition
 
 // FastChannelConfigurationProfile (class ID #432) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type FastChannelConfigurationProfile struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	fastchannelconfigurationprofileBME = &BaseManagedEntityDefinition{
+	fastchannelconfigurationprofileBME = &ManagedEntityDefinition{
 		Name:    "FastChannelConfigurationProfile",
 		ClassID: 432,
 		MessageTypes: mapset.NewSetWith(

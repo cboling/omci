@@ -23,18 +23,18 @@ import "github.com/deckarep/golang-set"
 
 const CallControlPerformanceMonitoringHistoryDataClassId uint16 = 140
 
-var callcontrolperformancemonitoringhistorydataBME *BaseManagedEntityDefinition
+var callcontrolperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
 // CallControlPerformanceMonitoringHistoryData (class ID #140) defines the basic
 // Managed Entity definition that is further extended by types that support
 // packet encode/decode and user create managed entities.
 type CallControlPerformanceMonitoringHistoryData struct {
-	BaseManagedEntityDefinition
+	ManagedEntityDefinition
 	Attributes AttributeValueMap
 }
 
 func init() {
-	callcontrolperformancemonitoringhistorydataBME = &BaseManagedEntityDefinition{
+	callcontrolperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "CallControlPerformanceMonitoringHistoryData",
 		ClassID: 140,
 		MessageTypes: mapset.NewSetWith(
