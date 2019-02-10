@@ -1179,7 +1179,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 //
 type MibUploadNextResponse struct {
 	MeBasePacket
-	ReportedME BaseManagedEntityInstance
+	ReportedME ManagedEntityInstance
 }
 
 func (omci *MibUploadNextResponse) String() string {

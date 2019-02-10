@@ -34,22 +34,21 @@ type IManagedEntityInstance interface {
 	SetAttributes(me.AttributeValueMap) error
 }
 
-type BaseManagedEntityInstance struct {
-	Entity  	  me.IManagedEntity
+type ManagedEntityInstance struct {
+	Entity  	  *me.ManagedEntity
 	AttributeMask uint16
-	Attributes    me.AttributeValueMap
 }
 
-func (bme *BaseManagedEntityInstance) String() string {
+func (bme *ManagedEntityInstance) String() string {
 	return fmt.Sprintf("ClassID: %v (%v), Mask: %#x, Attributes: %v",
 		bme.Entity.GetClassID(), bme.Entity.GetName(),
-		bme.AttributeMask, bme.Attributes)
+		bme.AttributeMask, bme.Entity.Attributes)
 }
 
-func (bme *BaseManagedEntityInstance) GetAttributeMask() uint16 {
+func (bme *ManagedEntityInstance) GetAttributeMask() uint16 {
 	return bme.AttributeMask
 }
-func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
+func (bme *ManagedEntityInstance) SetAttributeMask(mask uint16) error {
 	if mask|bme.Entity.GetAllowedAttributeMask() != bme.Entity.GetAllowedAttributeMask() {
 		return errors.New("invalid attribute mask")
 	}
@@ -57,18 +56,18 @@ func (bme *BaseManagedEntityInstance) SetAttributeMask(mask uint16) error {
 	return nil
 }
 
-func (bme *BaseManagedEntityInstance) GetAttributes() me.AttributeValueMap {
-	return bme.Attributes
+func (bme *ManagedEntityInstance) GetAttributes() me.AttributeValueMap {
+	return bme.Entity.Attributes
 }
-func (bme *BaseManagedEntityInstance) SetAttributes(attributes me.AttributeValueMap) error {
+func (bme *ManagedEntityInstance) SetAttributes(attributes me.AttributeValueMap) error {
 	// TODO: Validate attributes
-	bme.Attributes = attributes
+	bme.Entity.Attributes = attributes
 	return nil
 }
 
 // DecodeFromBytes is typically used to decode an ME in a message payload for messages
 // of type MibUploadNextResponse, AVC Notifications, ...
-func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (bme *ManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	if len(data) < 6 {
 		p.SetTruncated()
 		return errors.New("frame too small")
@@ -77,20 +76,17 @@ func (bme *BaseManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.Pa
 	entityID := binary.BigEndian.Uint16(data[2:4])
 	parameters := me.ParamData{EntityID: entityID}
 
-	msgDef, err := me.LoadManagedEntityDefinition(classID, parameters)
+	entity, err := me.LoadManagedEntityDefinition(classID, parameters)
 	if err != nil {
 		return err
 	}
-	bme.MEDefinition = msgDef
+	bme.Entity = entity
 	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
-	bme.Attributes, err = msgDef.DecodeAttributes(bme.AttributeMask, data[6:], p)
-	if err != nil {
-		return err
-	}
-	return nil
+	bme.Entity.Attributes, err = entity.DecodeAttributes(bme.AttributeMask, data[6:], p)
+	return err
 }
 
-func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) error {
+func (bme *ManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)
 	if err != nil {
@@ -102,9 +98,6 @@ func (bme *BaseManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) er
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = bme.Entity.SerializeAttributes(bme.Attributes, bme.AttributeMask, b)
-	if err != nil {
-		return err
-	}
-	return nil
+	err = bme.Entity.SerializeAttributes(bme.Entity.Attributes, bme.AttributeMask, b)
+	return err
 }
