@@ -68,13 +68,13 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 //   Request Type	Behavour
 //	 ------------------------------------------------------------------------
 //	 CreateRequest  A single CreateRequest struct is always returned as the
-//                  CreateRequest message does not have an Attributes Mask
+//                  CreateRequest message does not have an attributes Mask
 //                  field and a Baseline OMCI message is large enough to
 //                  support all Set-By-Create attributes.
 //
 //   SetRequest		If multiple OMCI frames will be needed to support setting
 //					all of the requested attributes, multiple SetRequest
-//					structs will be returned with Attributes encoded in
+//					structs will be returned with attributes encoded in
 //					decreasing Attribute mask bit order. Since this is an
 //					operation that should only occur on an OLT, it is the
 //					responsibility for the OLT application to clone the OMCI
@@ -100,7 +100,7 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 //					contain the attribute data. The ONU application is
 //					responsible for stashing these extra struct(s) away in
 //					anticipation of possible GetNext Requests occuring for
-//					the attribute.  See the discussion on Table Attributes
+//					the attribute.  See the discussion on Table attributes
 //					in the GetResponse section of ITU G.988 for more
 //					information.
 //
@@ -113,7 +113,7 @@ func FailIfTruncated(f bool) FrameOption {
 	}
 }
 
-// AttributeMask determines the attributes to encode into the frame.
+// attributeMask determines the attributes to encode into the frame.
 // The default value is 0xFFFF which specifies all available attributes
 // in the frame
 func AttributeMask(m uint16) FrameOption {
@@ -145,18 +145,6 @@ func SequenceNumber(m uint16) FrameOption {
 	}
 }
 
-//// IManagedEntity provides an interface definition for a simplified ME that can
-//// be used in a variety of applications (MIB database, ONU driver, OLT application, ...)
-//// where the serialization into a packet may not always be desired.
-//type IManagedEntity interface {
-//	GetClassId() uint16
-//	GetInstanceId() uint16
-//	SetInstanceId(uint16) error
-//	GetAttributesMap() *me.AttributeValueMap
-//	GetManagedEntityDefinition() (me.IManagedEntityDefinition, error)
-//	EncodeFrame(messageType byte, opt ...FrameOption) (*OMCI, []interface{}, error)
-//}
-
 // ManagedEntity is intended to be a lighter weight version of a specific managed
 // entity. It is intended to be used by generated Managed Entity classes as a base
 // class which is easier to use within an application outside of just decode and
@@ -165,56 +153,13 @@ type FrameManagedEntity struct {
 	me.ManagedEntity
 }
 
-//func NewManagedEntity(entity me.IManagedEntityDefinition, params ...me.ParamData) (*ManagedEntity, error) {
-//	m := &me.ManagedEntity{
-//		ClassId:    meDef.GetClassID(),
-//		InstanceId: meDef.GetEntityID(),
-//		Attributes: make(me.AttributeValueMap),
-//	}
-//	if len(params) > 0 {
-//		m.GetEntityID() = params[0].EntityID
-//		m.Attributes = params[0].Attributes
-//	}
-//	return m, nil
-//}
-
-// String provides a simple string that describes this struct
-//func (m *FrameManagedEntity) String() string {
-//	return fmt.Sprintf("ManagedEntity: %v/%v (%#x/%#x): Attributes: %v",
-//		m.GetClassID(), m.GetClassID(), m.GetEntityID(), m.GetEntityID(), m.Attributes)
-//}
-//
-//func (m *FrameManagedEntity) GetClassId() uint16 {
-//	return m.GetClassID()
-//}
-//
-//func (m *FrameManagedEntity) GetInstanceId() uint16 {
-//	return m.GetEntityID()
-//}
-//
-//func (m *FrameManagedEntity) SetInstanceId(id uint16) error {
-//	m.GetEntityID() = id
-//	return nil
-//}
-//
-//func (m *FrameManagedEntity) GetAttributesMap() me.AttributeValueMap {
-//	return m.Attributes
-//}
-//
-//// GetManagedEntityDefinition returns a definition of what message types this
-//// ME supports as well as detailed information on the attributes of this ME.
-//func (m *FrameManagedEntity) GetManagedEntityDefinition() (me.IManagedEntityDefinition, error) {
-//	// Just get definition without validation of parameters
-//	return me.LoadManagedEntityDefinition(m.Definition)
-//}
-
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
 func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
-	meDefinition := m.Definition
+	meDefinition := m.GetManagedEntityDefinition()
 
 	if !me.SupportsMsgType(meDefinition, msgType) {
 		msg := fmt.Sprintf("managed entity %v does not support %v Message-Type",
@@ -234,7 +179,7 @@ func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOp
 	}
 	var meInfo interface{}
 	var err error
-	
+
 	// Encode message type specific operation
 	switch messageType {
 	case CreateRequestType:
@@ -349,10 +294,10 @@ func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOp
 // values, and other fields is left to when the frame is actually serialized.
 
 func (m *FrameManagedEntity) checkAttributeMask(mask uint16) (uint16, error) {
-	if mask & m.Definition.GetAllowedAttributeMask() != mask {
+	if mask&m.GetManagedEntityDefinition().GetAllowedAttributeMask() != mask {
 		return 0, errors.New("invalid attribute mask")
 	}
-	return mask & m.Definition.GetAllowedAttributeMask(), nil
+	return mask & m.GetManagedEntityDefinition().GetAllowedAttributeMask(), nil
 }
 
 // return the maximum space that can be used by attributes
@@ -422,9 +367,9 @@ func (m *FrameManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 		return nil, err
 	}
 	results := make([]*SetRequest, 0)
-	meDefinition := m.Definition
+	meDefinition := m.GetManagedEntityDefinition()
 	attrDefs := *meDefinition.GetAttributeDefinitions()
-	attrMap := m.Attributes
+	attrMap := *m.GetAttributeValueMap()
 
 	// Get payload space available
 	maxPayload := m.maxPacketAvailable(opt)
@@ -565,9 +510,9 @@ func (m *FrameManagedEntity) getResponseFrame(opt options) (interface{}, error) 
 		// Get payload space available
 		maxPayload := m.maxPacketAvailable(opt)
 		payloadAvailable := int(maxPayload)
-		meDefinition := m.Definition
+		meDefinition := m.GetManagedEntityDefinition()
 		attrDefs := *meDefinition.GetAttributeDefinitions()
-		attrMap := m.Attributes
+		attrMap := *m.GetAttributeValueMap()
 
 		results = append(results, meLayer)
 

@@ -79,7 +79,7 @@ type CreateRequest struct {
 }
 
 func (omci *CreateRequest) String() string {
-	return fmt.Sprintf("CreateRequest: %v, Attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
+	return fmt.Sprintf("CreateRequest: %v, attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -334,7 +334,7 @@ type SetRequest struct {
 }
 
 func (omci *SetRequest) String() string {
-	return fmt.Sprintf("SetRequest: %v, Mask: %#x, Attributes: %v",
+	return fmt.Sprintf("SetRequest: %v, Mask: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
@@ -563,7 +563,7 @@ type GetResponse struct {
 }
 
 func (omci *GetResponse) String() string {
-	return fmt.Sprintf("GetResponse: %v, Result: %d (%v), Mask: %#x, Unsupported: %#x, Failed: %#x, Attributes: %v",
+	return fmt.Sprintf("GetResponse: %v, Result: %d (%v), Mask: %#x, Unsupported: %#x, Failed: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask,
 		omci.UnsupportedAttributeMask, omci.FailedAttributeMask, omci.Attributes)
 }
@@ -1179,7 +1179,7 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 //
 type MibUploadNextResponse struct {
 	MeBasePacket
-	ReportedME ManagedEntityInstance
+	ReportedME me.ManagedEntity
 }
 
 func (omci *MibUploadNextResponse) String() string {
@@ -1489,7 +1489,7 @@ type AttributeValueChangeMsg struct {
 }
 
 func (omci *AttributeValueChangeMsg) String() string {
-	return fmt.Sprintf("AttributeValueChangeMsg: %v, Mask: %#x, Attributes: %v",
+	return fmt.Sprintf("AttributeValueChangeMsg: %v, Mask: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
@@ -1510,7 +1510,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:40], p)
 	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	// Validate all attributes support AVC
-	//for attrName := range omci.Attributes {
+	//for attrName := range omci.attributes {
 	//	attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
 	//	if err != nil {
 	//		return err
@@ -1543,7 +1543,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	}
 	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	// Validate all attributes support AVC
-	//for attrName := range omci.Attributes {
+	//for attrName := range omci.attributes {
 	//	attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
 	//	if err != nil {
 	//		return err

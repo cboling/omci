@@ -247,9 +247,12 @@ type IManagedEntityDefinition interface {
 
 type IManagedEntity interface {
 	IManagedEntityDefinition
+	GetManagedEntityDefinition() IManagedEntityDefinition
 
 	GetEntityID() uint16
 	SetEntityID(uint16) error
+
+	GetAttributeMask() uint16
 
 	GetAttributeValueMap() *AttributeValueMap
 	GetAttribute(string) (interface{}, error)

@@ -18,7 +18,7 @@ func main() {
 	syncTimeResponse()
 	decodeMorePackets()
 	decodeAnyPacket()
-	mibResetExample()
+	//mibResetExample()					This has some bugs in it
 	createGalEthernetProfileExample()
 	setTContExample()
 	create8021pMapperService_profile()
@@ -83,7 +83,7 @@ func mibResetExample() {
 	fmt.Println("======================================================")
 	fmt.Println("======================================================")
 	// MibResetRequestTest tests decode/encode of a MIB Reset Request
-
+	// TODO Bugs in extended message below (or perhaps our decode) stick to baseline for now
 	mibResetRequest := "000C440B010C010000290400800003010000" +
 		"00000000000000000000000000000000" +
 		"00000000000000000000"
@@ -197,8 +197,8 @@ func setTContExample() {
 		setRequest, ok2 := msgLayer.(*omci.SetRequest)
 		fmt.Printf("SET Request Decode status: %v\n", ok2)
 		fmt.Printf("  EntityID: %v, InstanceID: %#x\n", setRequest.EntityClass, setRequest.EntityInstance)
-		fmt.Printf("  AttributeMask: %#x\n", setRequest.AttributeMask)
-		fmt.Printf("  Attributes: %v\n", setRequest.Attributes)
+		fmt.Printf("  attributeMask: %#x\n", setRequest.AttributeMask)
+		fmt.Printf("  attributes: %v\n", setRequest.Attributes)
 
 		// Test serialization back to former string
 		var options gopacket.SerializeOptions
@@ -317,7 +317,7 @@ func create8021pMapperService_profile() {
 	createRequest, ok2 := msgLayer.(*omci.CreateRequest)
 	fmt.Printf("Create Request Decode status: %v\n", ok2)
 	fmt.Printf("  EntityID: %v, InstanceID: %v\n", createRequest.EntityClass, createRequest.EntityInstance)
-	fmt.Printf("  Attributes: %v\n", createRequest.Attributes)
+	fmt.Printf("  attributes: %v\n", createRequest.Attributes)
 
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions

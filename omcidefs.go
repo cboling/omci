@@ -17,7 +17,6 @@
 package omci
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
@@ -27,41 +26,32 @@ import (
 type IManagedEntityInstance interface {
 	me.IManagedEntity
 
-	GetAttributeMask() uint16
-	SetAttributeMask(uint16) error
-
 	GetAttributes() me.AttributeValueMap // TODO: Can we use interface from generated?
 	SetAttributes(me.AttributeValueMap) error
 }
 
 type ManagedEntityInstance struct {
-	Entity  	  *me.ManagedEntity
-	AttributeMask uint16
+	Entity *me.ManagedEntity
 }
 
 func (bme *ManagedEntityInstance) String() string {
-	return fmt.Sprintf("ClassID: %v (%v), Mask: %#x, Attributes: %v",
+	return fmt.Sprintf("ClassID: %v (%v), Mask: %#x, attributes: %v",
 		bme.Entity.GetClassID(), bme.Entity.GetName(),
-		bme.AttributeMask, bme.Entity.Attributes)
-}
-
-func (bme *ManagedEntityInstance) GetAttributeMask() uint16 {
-	return bme.AttributeMask
-}
-func (bme *ManagedEntityInstance) SetAttributeMask(mask uint16) error {
-	if mask|bme.Entity.GetAllowedAttributeMask() != bme.Entity.GetAllowedAttributeMask() {
-		return errors.New("invalid attribute mask")
-	}
-	bme.AttributeMask = mask
-	return nil
+		bme.Entity.GetAttributeMask(), bme.Entity.GetAttributeDefinitions())
 }
 
 func (bme *ManagedEntityInstance) GetAttributes() me.AttributeValueMap {
-	return bme.Entity.Attributes
+	return *bme.Entity.GetAttributeValueMap()
 }
 func (bme *ManagedEntityInstance) SetAttributes(attributes me.AttributeValueMap) error {
-	// TODO: Validate attributes
-	bme.Entity.Attributes = attributes
+	//bme.Entity.attributes = attributes
+	//keys := make([]interface{}, 0, len(attributes))
+	//for k := range attributes {
+	//	keys = append(keys, k)
+	//}
+	//attrSet := mapset.NewSetFromSlice(keys)
+	//var err error
+	//bme.AttributeMask, err = me.GetAttributeBitmap(*bme.Entity.GetAttributeDefinitions(), attrSet)
 	return nil
 }
 
@@ -72,38 +62,39 @@ func (bme *ManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.Packet
 		p.SetTruncated()
 		return errors.New("frame too small")
 	}
-	classID := binary.BigEndian.Uint16(data[0:2])
-	entityID := binary.BigEndian.Uint16(data[2:4])
-	parameters := me.ParamData{EntityID: entityID}
-
-	entity, err := me.LoadManagedEntityDefinition(classID, parameters)
-	if err != nil {
-		return err
-	}
-	bme.Entity = entity
-	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
-	packetAttributes, err := entity.DecodeAttributes(bme.AttributeMask, data[6:], p)
-	if err != nil {
-		return err
-	}
-	for name, value := range packetAttributes {
-		bme.Entity.Attributes[name] = value
-	}
+	//classID := binary.BigEndian.Uint16(data[0:2])
+	//entityID := binary.BigEndian.Uint16(data[2:4])
+	//parameters := me.ParamData{EntityID: entityID}
+	//
+	//entity, err := me.LoadManagedEntityDefinition(classID, parameters)
+	//if err != nil {
+	//	return err
+	//}
+	//bme.Entity = entity
+	//bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	//packetAttributes, err := entity.DecodeAttributes(bme.Entity.GetAttributeMask(), data[6:], p)
+	//if err != nil {
+	//	return err
+	//}
+	//for name, value := range packetAttributes {
+	//	bme.Entity.attributes[name] = value
+	//}
 	return nil
 }
 
 func (bme *ManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) error {
 	// Add class ID and entity ID
-	bytes, err := b.AppendBytes(6)
-	if err != nil {
-		return err
-	}
-	binary.BigEndian.PutUint16(bytes, bme.Entity.GetClassID())
-	binary.BigEndian.PutUint16(bytes[2:], bme.Entity.GetEntityID())
-	binary.BigEndian.PutUint16(bytes[4:], bme.AttributeMask)
-
-	// TODO: Need to limit number of bytes appended to not exceed packet size
-	// Is there space/metadata info in 'b' parameter to allow this?
-	err = bme.Entity.SerializeAttributes(bme.Entity.Attributes, bme.AttributeMask, b)
-	return err
+	//bytes, err := b.AppendBytes(6)
+	//if err != nil {
+	//	return err
+	//}
+	//binary.BigEndian.PutUint16(bytes, bme.Entity.GetClassID())
+	//binary.BigEndian.PutUint16(bytes[2:], bme.Entity.GetEntityID())
+	//binary.BigEndian.PutUint16(bytes[4:], bme.Entity.GetAttributeMask())
+	//
+	//// TODO: Need to limit number of bytes appended to not exceed packet size
+	//// Is there space/metadata info in 'b' parameter to allow this?
+	//err = bme.Entity.SerializeAttributes(bme.Entity.attributes, bme.Entity.GetAttributeMask(), b)
+	//return err
+	return nil
 }

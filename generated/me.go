@@ -20,6 +20,7 @@
 package generated
 
 import (
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"github.com/deckarep/golang-set"
@@ -49,6 +50,10 @@ func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) 
 		entity = nil
 	}
 	return entity, err
+}
+
+func (entity *ManagedEntity) GetManagedEntityDefinition() *ManagedEntityDefinition {
+	return entity.definition
 }
 
 func (entity *ManagedEntity) GetName() string {
@@ -88,6 +93,10 @@ func (entity *ManagedEntity) GetEntityID() uint16 {
 
 func (entity *ManagedEntity) SetEntityID(eid uint16) error {
 	return entity.SetAttributeByIndex(0, eid)
+}
+
+func (entity *ManagedEntity) GetAttributeMask() uint16 {
+	return entity.attributeMask
 }
 
 func (entity *ManagedEntity) GetAttributeValueMap() *AttributeValueMap {
@@ -179,4 +188,47 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	delete(entity.attributes, attrDef.Name)
 	entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
 	return nil
+}
+
+func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+	if len(data) < 6 {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	classID := binary.BigEndian.Uint16(data[0:2])
+	entityID := binary.BigEndian.Uint16(data[2:4])
+	parameters := ParamData{EntityID: entityID}
+
+	meDefinition, err := LoadManagedEntityDefinition(classID, parameters)
+	if err != nil {
+		return err
+	}
+	entity.definition = meDefinition.definition
+	entity.attributeMask = binary.BigEndian.Uint16(data[4:6])
+	entity.attributes = make(map[string]interface{})
+	entity.SetEntityID(entityID)
+	packetAttributes, err := entity.DecodeAttributes(entity.GetAttributeMask(), data[6:], p)
+	if err != nil {
+		return err
+	}
+	for name, value := range packetAttributes {
+		entity.attributes[name] = value
+	}
+	return nil
+}
+
+func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer) error {
+	// Add class ID and entity ID
+	bytes, err := b.AppendBytes(6)
+	if err != nil {
+		return err
+	}
+	binary.BigEndian.PutUint16(bytes, entity.GetClassID())
+	binary.BigEndian.PutUint16(bytes[2:], entity.GetEntityID())
+	binary.BigEndian.PutUint16(bytes[4:], entity.GetAttributeMask())
+
+	// TODO: Need to limit number of bytes appended to not exceed packet size
+	// Is there space/metadata info in 'b' parameter to allow this?
+	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b)
+	return err
 }
