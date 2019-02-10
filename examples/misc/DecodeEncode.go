@@ -1,4 +1,4 @@
-package misc
+package main
 
 import (
 	"encoding/hex"
@@ -12,6 +12,7 @@ import (
 func main() {
 	//micTest()
 	//micTestFromFrame()
+	mibUploadNextResponses()
 	serializeCreateRequest()
 	syncTimeRequest()
 	syncTimeResponse()
@@ -21,7 +22,6 @@ func main() {
 	createGalEthernetProfileExample()
 	setTContExample()
 	create8021pMapperService_profile()
-	mibUploadNextResponses()
 	// TODO: Hold of on MIC support for the time being
 	//encodeDecodeWithMIC()
 }
@@ -237,7 +237,7 @@ func syncTimeRequest() {
 
 	omciLayer2 := &omci.OMCI{
 		TransactionID:    0x0c,
-		MessageType:      byte(me.Create) | me.AR,
+		MessageType:      omci.CreateRequestType,
 		DeviceIdentifier: omci.BaselineIdent,
 	}
 	request := &omci.CreateRequest{
@@ -283,7 +283,7 @@ func syncTimeResponse() {
 
 	msgLayer := packet.Layer(omci.LayerTypeSynchronizeTimeResponse)
 	fmt.Println(msgLayer)
-	fmt.Println(msgLayer.(*omci.SynchronizeTimeRequest))
+	fmt.Println(msgLayer.(*omci.SynchronizeTimeResponse))
 }
 
 func create8021pMapperService_profile() {
@@ -2190,7 +2190,7 @@ func serializeCreateRequest() {
 	// TODO: Support setting of the length during serialization
 	omciLayer := &omci.OMCI{
 		TransactionID: 0x0c,
-		MessageType:   byte(me.Create) | me.AR,
+		MessageType:   omci.CreateRequestType,
 		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,						// Optional, defaults to 40 octets
 	}

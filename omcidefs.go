@@ -82,8 +82,14 @@ func (bme *ManagedEntityInstance) DecodeFromBytes(data []byte, p gopacket.Packet
 	}
 	bme.Entity = entity
 	bme.AttributeMask = binary.BigEndian.Uint16(data[4:6])
-	bme.Entity.Attributes, err = entity.DecodeAttributes(bme.AttributeMask, data[6:], p)
-	return err
+	packetAttributes, err := entity.DecodeAttributes(bme.AttributeMask, data[6:], p)
+	if err != nil {
+		return err
+	}
+	for name, value := range packetAttributes {
+		bme.Entity.Attributes[name] = value
+	}
+	return nil
 }
 
 func (bme *ManagedEntityInstance) SerializeTo(b gopacket.SerializeBuffer) error {
