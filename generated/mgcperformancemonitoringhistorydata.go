@@ -64,7 +64,7 @@ func init() {
 // NewMgcPerformanceMonitoringHistoryData (class ID 156 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: mgcperformancemonitoringhistorydataBME,
 		Attributes: make(map[string]interface{}),

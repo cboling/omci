@@ -57,7 +57,7 @@ func init() {
 // NewFastLineInventoryAndStatusData (class ID 435 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewFastLineInventoryAndStatusData(params ...ParamData) (IManagedEntity, error) {
+func NewFastLineInventoryAndStatusData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: fastlineinventoryandstatusdataBME,
 		Attributes: make(map[string]interface{}),

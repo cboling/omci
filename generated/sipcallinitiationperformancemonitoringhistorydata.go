@@ -60,7 +60,7 @@ func init() {
 // NewSipCallInitiationPerformanceMonitoringHistoryData (class ID 152 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewSipCallInitiationPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: sipcallinitiationperformancemonitoringhistorydataBME,
 		Attributes: make(map[string]interface{}),

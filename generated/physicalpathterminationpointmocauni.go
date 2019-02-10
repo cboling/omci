@@ -65,7 +65,7 @@ func init() {
 // NewPhysicalPathTerminationPointMocaUni (class ID 162 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: physicalpathterminationpointmocauniBME,
 		Attributes: make(map[string]interface{}),

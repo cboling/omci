@@ -50,7 +50,7 @@ func init() {
 // NewVdsl2LineInventoryAndStatusDataPart4 (class ID 415 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (IManagedEntity, error) {
+func NewVdsl2LineInventoryAndStatusDataPart4(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: vdsl2lineinventoryandstatusdatapart4BME,
 		Attributes: make(map[string]interface{}),

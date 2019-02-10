@@ -69,7 +69,7 @@ func init() {
 // NewEthernetPerformanceMonitoringHistoryData3 (class ID 296 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: ethernetperformancemonitoringhistorydata3BME,
 		Attributes: make(map[string]interface{}),

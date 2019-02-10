@@ -64,7 +64,7 @@ func init() {
 // NewPhysicalPathTerminationPointXdslUniPart1 (class ID 98 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (IManagedEntity, error) {
+func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: physicalpathterminationpointxdslunipart1BME,
 		Attributes: make(map[string]interface{}),

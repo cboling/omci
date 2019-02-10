@@ -64,7 +64,7 @@ func init() {
 // NewReDownstreamAmplifier (class ID 316 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewReDownstreamAmplifier(params ...ParamData) (IManagedEntity, error) {
+func NewReDownstreamAmplifier(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: redownstreamamplifierBME,
 		Attributes: make(map[string]interface{}),

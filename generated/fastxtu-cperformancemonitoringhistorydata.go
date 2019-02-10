@@ -58,7 +58,7 @@ func init() {
 // NewFastXtuCPerformanceMonitoringHistoryData (class ID 437 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewFastXtuCPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewFastXtuCPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: fastxtucperformancemonitoringhistorydataBME,
 		Attributes: make(map[string]interface{}),

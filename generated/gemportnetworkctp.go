@@ -63,7 +63,7 @@ func init() {
 // NewGemPortNetworkCtp (class ID 268 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewGemPortNetworkCtp(params ...ParamData) (IManagedEntity, error) {
+func NewGemPortNetworkCtp(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: gemportnetworkctpBME,
 		Attributes: make(map[string]interface{}),

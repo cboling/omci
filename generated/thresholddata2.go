@@ -60,7 +60,7 @@ func init() {
 // NewThresholdData2 (class ID 274 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewThresholdData2(params ...ParamData) (IManagedEntity, error) {
+func NewThresholdData2(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: thresholddata2BME,
 		Attributes: make(map[string]interface{}),

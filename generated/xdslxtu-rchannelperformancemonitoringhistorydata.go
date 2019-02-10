@@ -61,7 +61,7 @@ func init() {
 // NewXdslXtuRChannelPerformanceMonitoringHistoryData (class ID 115 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslXtuRChannelPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewXdslXtuRChannelPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: xdslxturchannelperformancemonitoringhistorydataBME,
 		Attributes: make(map[string]interface{}),

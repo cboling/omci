@@ -66,7 +66,7 @@ func init() {
 // NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewIeee8021PMapperServiceProfile(params ...ParamData) (IManagedEntity, error) {
+func NewIeee8021PMapperServiceProfile(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: ieee8021pmapperserviceprofileBME,
 		Attributes: make(map[string]interface{}),

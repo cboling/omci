@@ -54,7 +54,7 @@ func init() {
 // NewEthernetPseudowireParameters (class ID 400 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEthernetPseudowireParameters(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetPseudowireParameters(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: ethernetpseudowireparametersBME,
 		Attributes: make(map[string]interface{}),

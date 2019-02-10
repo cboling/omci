@@ -62,7 +62,7 @@ func init() {
 // NewInterworkingVccTerminationPoint (class ID 14 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewInterworkingVccTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewInterworkingVccTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: interworkingvccterminationpointBME,
 		Attributes: make(map[string]interface{}),

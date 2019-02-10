@@ -59,7 +59,7 @@ func init() {
 // NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: macbridgeporticmpv6processpreassigntableBME,
 		Attributes: make(map[string]interface{}),

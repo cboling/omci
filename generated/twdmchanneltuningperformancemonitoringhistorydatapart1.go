@@ -68,7 +68,7 @@ func init() {
 // NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID 449 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (IManagedEntity, error) {
+func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart1(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: twdmchanneltuningperformancemonitoringhistorydatapart1BME,
 		Attributes: make(map[string]interface{}),

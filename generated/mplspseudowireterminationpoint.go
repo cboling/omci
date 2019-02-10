@@ -68,7 +68,7 @@ func init() {
 // NewMplsPseudowireTerminationPoint (class ID 333 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMplsPseudowireTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewMplsPseudowireTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: mplspseudowireterminationpointBME,
 		Attributes: make(map[string]interface{}),

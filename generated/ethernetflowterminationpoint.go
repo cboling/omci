@@ -58,7 +58,7 @@ func init() {
 // NewEthernetFlowTerminationPoint (class ID 286 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEthernetFlowTerminationPoint(params ...ParamData) (IManagedEntity, error) {
+func NewEthernetFlowTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: ethernetflowterminationpointBME,
 		Attributes: make(map[string]interface{}),

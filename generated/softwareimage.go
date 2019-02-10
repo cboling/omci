@@ -57,7 +57,7 @@ func init() {
 // NewSoftwareImage (class ID 7 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewSoftwareImage(params ...ParamData) (IManagedEntity, error) {
+func NewSoftwareImage(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: softwareimageBME,
 		Attributes: make(map[string]interface{}),

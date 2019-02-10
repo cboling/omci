@@ -57,7 +57,7 @@ func init() {
 // NewDot1AgDefaultMdLevel (class ID 301 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgDefaultMdLevel(params ...ParamData) (IManagedEntity, error) {
+func NewDot1AgDefaultMdLevel(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: dot1agdefaultmdlevelBME,
 		Attributes: make(map[string]interface{}),

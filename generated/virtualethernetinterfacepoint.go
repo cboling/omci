@@ -56,7 +56,7 @@ func init() {
 // NewVirtualEthernetInterfacePoint (class ID 329 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVirtualEthernetInterfacePoint(params ...ParamData) (IManagedEntity, error) {
+func NewVirtualEthernetInterfacePoint(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: virtualethernetinterfacepointBME,
 		Attributes: make(map[string]interface{}),

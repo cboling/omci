@@ -53,7 +53,7 @@ func init() {
 // NewOmci (class ID 287 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOmci(params ...ParamData) (IManagedEntity, error) {
+func NewOmci(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: omciBME,
 		Attributes: make(map[string]interface{}),

@@ -63,7 +63,7 @@ func init() {
 // NewMacBridgeServiceProfile (class ID 45 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgeServiceProfile(params ...ParamData) (IManagedEntity, error) {
+func NewMacBridgeServiceProfile(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: macbridgeserviceprofileBME,
 		Attributes: make(map[string]interface{}),

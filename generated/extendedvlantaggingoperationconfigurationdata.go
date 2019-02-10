@@ -62,7 +62,7 @@ func init() {
 // NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (IManagedEntity, error) {
+func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: extendedvlantaggingoperationconfigurationdataBME,
 		Attributes: make(map[string]interface{}),

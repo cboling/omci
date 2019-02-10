@@ -65,7 +65,7 @@ func init() {
 // NewVdsl2LineConfigurationExtensions3 (class ID 410 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (IManagedEntity, error) {
+func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: vdsl2lineconfigurationextensions3BME,
 		Attributes: make(map[string]interface{}),

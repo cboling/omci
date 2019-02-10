@@ -61,7 +61,7 @@ func init() {
 // NewRadiusPerformanceMonitoringHistoryData (class ID 293 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (IManagedEntity, error) {
+func NewRadiusPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: radiusperformancemonitoringhistorydataBME,
 		Attributes: make(map[string]interface{}),

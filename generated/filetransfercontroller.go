@@ -62,7 +62,7 @@ func init() {
 // NewFileTransferController (class ID 318 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewFileTransferController(params ...ParamData) (IManagedEntity, error) {
+func NewFileTransferController(params ...ParamData) (*ManagedEntity, error) {
 	entity := &ManagedEntity{
 		Definition: filetransfercontrollerBME,
 		Attributes: make(map[string]interface{}),
