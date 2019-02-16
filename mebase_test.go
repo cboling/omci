@@ -14,9 +14,10 @@
  * limitations under the License.
  *
  */
-package omci
+package omci_test
 
 import (
+	. "github.com/cboling/omci"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 	"github.com/stretchr/testify/assert"

@@ -14,50 +14,51 @@
  * limitations under the License.
  *
  */
-package omci
+package omci_test
 
 import (
-	me "github.com/cboling/omci/generated"
+	. "github.com/cboling/omci"
+	. "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 )
 
-var allMsgTypes = [...]me.MsgType{
-	me.Create,
-	me.Delete,
-	me.Set,
-	me.Get,
-	me.GetAllAlarms,
-	me.GetAllAlarmsNext,
-	me.MibUpload,
-	me.MibUploadNext,
-	me.MibReset,
-	me.AlarmNotification,
-	me.AttributeValueChange,
-	me.Test,
-	me.StartSoftwareDownload,
-	me.DownloadSection,
-	me.EndSoftwareDownload,
-	me.ActivateSoftware,
-	me.CommitSoftware,
-	me.SynchronizeTime,
-	me.Reboot,
-	me.GetNext,
-	me.TestResult,
-	me.GetCurrentData,
-	me.SetTable}
+var allMsgTypes = [...]MsgType{
+	Create,
+	Delete,
+	Set,
+	Get,
+	GetAllAlarms,
+	GetAllAlarmsNext,
+	MibUpload,
+	MibUploadNext,
+	MibReset,
+	AlarmNotification,
+	AttributeValueChange,
+	Test,
+	StartSoftwareDownload,
+	DownloadSection,
+	EndSoftwareDownload,
+	ActivateSoftware,
+	CommitSoftware,
+	SynchronizeTime,
+	Reboot,
+	GetNext,
+	TestResult,
+	GetCurrentData,
+	SetTable}
 
-var allResults = [...]me.Results{
-	me.Success,
-	me.ProcessingError,
-	me.NotSupported,
-	me.ParameterError,
-	me.UnknownEntity,
-	me.UnknownInstance,
-	me.DeviceBusy,
-	me.InstanceExists}
+var allResults = [...]Results{
+	Success,
+	ProcessingError,
+	NotSupported,
+	ParameterError,
+	UnknownEntity,
+	UnknownInstance,
+	DeviceBusy,
+	InstanceExists}
 
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
 func TestMsgTypeStrings(t *testing.T) {
@@ -154,10 +155,10 @@ func TestOmciSerialization(t *testing.T) {
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityClass:    GemPortNetworkCtpClassId,
 			EntityInstance: uint16(0x100),
 		},
-		Attributes: me.AttributeValueMap{
+		Attributes: AttributeValueMap{
 			"PortId":                                       0x400,
 			"TContPointer":                                 0x8000,
 			"Direction":                                    3,
@@ -214,7 +215,7 @@ func TestCreateRequestDecode(t *testing.T) {
 
 	request, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, request.EntityClass, me.GemPortNetworkCtpClassId)
+	assert.Equal(t, request.EntityClass, GemPortNetworkCtpClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0x100))
 
 	attributes := request.Attributes
@@ -222,7 +223,7 @@ func TestCreateRequestDecode(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(request.EntityClass)
+	meDefinition, err := LoadManagedEntityDefinition(request.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -264,10 +265,10 @@ func TestCreateRequestSerialize(t *testing.T) {
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityClass:    GemPortNetworkCtpClassId,
 			EntityInstance: uint16(0x100),
 		},
-		Attributes: me.AttributeValueMap{
+		Attributes: AttributeValueMap{
 			"PortId":                                       0x400,
 			"TContPointer":                                 0x8000,
 			"Direction":                                    3,
@@ -333,7 +334,7 @@ func TestDeleteRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, byte(me.Delete)|me.AR)
+	//assert.Equal(t, omciMsg.MessageType, byte(Delete)|AR)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeDeleteRequest)
@@ -562,7 +563,7 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, byte(me.GetAllAlarmsNext)|me.AR)
+	//assert.Equal(t, omciMsg.MessageType, byte(GetAllAlarmsNext)|AR)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
@@ -751,7 +752,7 @@ func TestMibResetRequestSerialize(t *testing.T) {
 	}
 	request := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass: me.OnuDataClassId,
+			EntityClass: OnuDataClassId,
 			// Default Instance ID is 0
 		},
 	}
@@ -804,7 +805,7 @@ func TestMibResetResponseSerialize(t *testing.T) {
 	}
 	request := &MibResetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass: me.OnuDataClassId,
+			EntityClass: OnuDataClassId,
 			// Default Instance ID is 0
 		},
 	}
@@ -822,12 +823,12 @@ func TestMibResetResponseSerialize(t *testing.T) {
 }
 
 // TODO: Create request/response tests for all of the following types
-//me.Test,
-//me.StartSoftwareDownload, reqMsg := "0000530a0007000113000f424001000100000000000000000000000000000000000000000000000000000028"
-//me.DownloadSection, reqMsg := '0000140a00070001083534363836393733323036393733323036313230373436353733373400000000000028'
-//me.EndSoftwareDownload, reqMsg := '0000550a00070001ff92a226000f424001000100000000000000000000000000000000000000000000000028'
-//me.ActivateSoftware, reqMsg := '0000560a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
-//me.CommitSoftware, reqMsg := '0000570a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
+//Test,
+//StartSoftwareDownload, reqMsg := "0000530a0007000113000f424001000100000000000000000000000000000000000000000000000000000028"
+//DownloadSection, reqMsg := '0000140a00070001083534363836393733323036393733323036313230373436353733373400000000000028'
+//EndSoftwareDownload, reqMsg := '0000550a00070001ff92a226000f424001000100000000000000000000000000000000000000000000000028'
+//ActivateSoftware, reqMsg := '0000560a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
+//CommitSoftware, reqMsg := '0000570a00070001000000000000000000000000000000000000000000000000000000000000000000000028'
 
 func TestSynchronizeTimeRequestDecode(t *testing.T) {
 	goodMessage := "0109580a0100000007e20c0001301b0000000000000000000000000000000000000000000000000000000028"
@@ -886,14 +887,14 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 }
 
 // TODO: Create request/response tests for all of the following types
-//me.Reboot, msgRequest := '0001590a01000000000000000000000000000000000000000000000000000000000000000000000000000028'
+//Reboot, msgRequest := '0001590a01000000000000000000000000000000000000000000000000000000000000000000000000000028'
 //			msgResponse: '023c390a01000000000000000000000000000000000000000000000000000000000000000000000000000028005999e3'
-//me.GetNext,
-//me.GetCurrentData,
-//me.SetTable}
+//GetNext,
+//GetCurrentData,
+//SetTable}
 
 // TODO: Create notification tests for all of the following types
-//me.AlarmNotification,  (TODO: Include alarm bitmap tests as well)
+//AlarmNotification,  (TODO: Include alarm bitmap tests as well)
 
 func TestAttributeValueChangeDecode(t *testing.T) {
 	goodMessage := "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028"
@@ -908,7 +909,7 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.MessageType, MessageType(me.AttributeValueChange))
+	assert.Equal(t, omciMsg.MessageType, MessageType(AttributeValueChange))
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeAttributeValueChange)
@@ -924,4 +925,4 @@ func TestAttributeValueChangeSerialize(t *testing.T) {
 }
 
 // TODO: Create notification tests for all of the following types
-//me.TestResult,
+//TestResult,

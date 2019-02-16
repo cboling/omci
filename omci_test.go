@@ -15,12 +15,13 @@
  *
  */
 
-package omci
+package omci_test
 
 import (
 	"encoding/hex"
 	"fmt"
-	me "github.com/cboling/omci/generated"
+	. "github.com/cboling/omci"
+	. "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -42,11 +43,11 @@ func packetToString(input []byte) string {
 	return strings.ToLower(hex.EncodeToString(input))
 }
 
-func getSbcMask(meDefinition me.IManagedEntityDefinition) uint16 {
+func getSbcMask(meDefinition IManagedEntityDefinition) uint16 {
 	var sbcMask uint16
 
 	for index, attr := range *meDefinition.GetAttributeDefinitions() {
-		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
+		if SupportsAttributeAccess(attr, SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
 			}
@@ -81,7 +82,7 @@ func TestMibResetRequestMessage(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*MibResetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, me.OnuDataClassId)
+	assert.Equal(t, omciMsg2.EntityClass, OnuDataClassId)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0))
 
 	// Test serialization back to former string
@@ -122,7 +123,7 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, me.GalEthernetProfileClassId)
+	assert.Equal(t, omciMsg2.EntityClass, GalEthernetProfileClassId)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(1))
 
 	// Test serialization back to former string
@@ -163,7 +164,7 @@ func TestSetTCont(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, me.TContClassId)
+	assert.Equal(t, omciMsg2.EntityClass, TContClassId)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
 
 	attributes := omciMsg2.Attributes
@@ -214,7 +215,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, me.Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, createRequest.EntityClass, Ieee8021PMapperServiceProfileClassId)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x8000))
 
 	attributes := createRequest.Attributes
@@ -223,7 +224,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -289,7 +290,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, me.MacBridgeServiceProfileClassId)
+	assert.Equal(t, createRequest.EntityClass, MacBridgeServiceProfileClassId)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x201))
 
 	attributes := createRequest.Attributes
@@ -297,7 +298,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -352,7 +353,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, me.GemPortNetworkCtpClassId)
+	assert.Equal(t, createRequest.EntityClass, GemPortNetworkCtpClassId)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x100))
 
 	attributes := createRequest.Attributes
@@ -360,7 +361,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -448,7 +449,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	setRequest, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, setRequest.EntityClass, me.Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, setRequest.EntityClass, Ieee8021PMapperServiceProfileClassId)
 	assert.Equal(t, setRequest.EntityInstance, uint16(0x8000))
 
 	attributes := setRequest.Attributes
@@ -603,7 +604,7 @@ func TestMibUpload(t *testing.T) {
 
 	uploadRequest, ok2 := msgLayer.(*MibUploadRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, uploadRequest.EntityClass, me.OnuDataClassId)
+	assert.Equal(t, uploadRequest.EntityClass, OnuDataClassId)
 	assert.Equal(t, uploadRequest.EntityInstance, uint16(0))
 
 	// Test serialization back to former string
@@ -651,7 +652,7 @@ func TestMibUpload(t *testing.T) {
 //	omciMsg, ok := omciLayer.(*OMCI)
 //	assert.True(t, ok)
 //	assert.Equal(t, omciMsg.TransactionID, uint16(0))
-//	assert.Equal(t, omciMsg.MessageType, byte(me.AlarmNotification))
+//	assert.Equal(t, omciMsg.MessageType, byte(AlarmNotification))
 //	assert.Equal(t, omciMsg.Length, uint16(40))
 //
 //	msgLayer := packet.Layer(LayerTypeAlarmNotification)
@@ -696,7 +697,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	//
 	//rebootRequest, ok2 := msgLayer.(*RebootRequest)
 	//assert.True(t, ok2)
-	//assert.Equal(t, rebootRequest.EntityClass, me.OnuDataClassId)
+	//assert.Equal(t, rebootRequest.EntityClass, OnuDataClassId)
 	//assert.Equal(t, rebootRequest.EntityInstance, uint16(0x8000))
 
 	// TODO: Test Decoded flags
@@ -988,7 +989,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 
 		uploadResponse, ok2 := msgLayer.(*MibUploadNextResponse)
 		assert.True(t, ok2)
-		assert.Equal(t, uploadResponse.EntityClass, me.OnuDataClassId)
+		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassId)
 		assert.Equal(t, uploadResponse.EntityInstance, uint16(0))
 
 		// Test serialization back to former string
@@ -1032,7 +1033,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 //		omciMsg, ok := omciLayer.(*OMCI)
 //		assert.True(t, ok)
 //		assert.Equal(t, omciMsg.TransactionID, firstTid)
-//		assert.Equal(t, omciMsg.MessageType, byte(me.MibUploadNext))
+//		assert.Equal(t, omciMsg.MessageType, byte(MibUploadNext))
 //		assert.Equal(t, omciMsg.Length, uint16(40))
 //
 //		msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
@@ -1040,7 +1041,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 //
 //		uploadResponse, ok2 := msgLayer.(*MibUploadNextResponse)
 //		assert.True(t, ok2)
-//		assert.Equal(t, uploadResponse.EntityClass, me.OnuDataClassId)
+//		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassId)
 //		assert.Equal(t, uploadResponse.EntityInstance, uint16(0))
 //
 //		// Test serialization back to former string

@@ -15,7 +15,7 @@
  *
  */
 
-package omci
+package omci_test
 
 import (
 	"github.com/stretchr/testify/assert"
