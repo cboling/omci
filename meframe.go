@@ -154,7 +154,7 @@ type ManagedEntityInstance struct {
 	me.ManagedEntity
 }
 
-func ManagedEntityToInstance(entity me.ManagedEntity) (*ManagedEntityInstance, error) {
+func ManagedEntityToInstance(entity *me.ManagedEntity) (*ManagedEntityInstance, error) {
 	omciMe := &ManagedEntityInstance{}
 	omciMe.SetManagedEntityDefinition(entity.GetManagedEntityDefinition())
 	if err := omciMe.SetEntityID(entity.GetEntityID()); err != nil {
