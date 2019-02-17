@@ -149,14 +149,15 @@ func SequenceNumber(m uint16) FrameOption {
 // entity. It is intended to be used by generated Managed Entity classes as a base
 // class which is easier to use within an application outside of just decode and
 // serialization of OMCI Packets
-type FrameManagedEntity struct {
+type ManagedEntityInstance struct {
+	// Only the base class. Defined this way to add EncodeFrame support
 	me.ManagedEntity
 }
 
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
-func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
+func (m *ManagedEntityInstance) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
 	meDefinition := m.GetManagedEntityDefinition()
@@ -293,7 +294,7 @@ func (m *FrameManagedEntity) EncodeFrame(messageType MessageType, opt ...FrameOp
 // For most all create methods below, error checking for valid masks, attribute
 // values, and other fields is left to when the frame is actually serialized.
 
-func (m *FrameManagedEntity) checkAttributeMask(mask uint16) (uint16, error) {
+func (m *ManagedEntityInstance) checkAttributeMask(mask uint16) (uint16, error) {
 	if mask&m.GetManagedEntityDefinition().GetAllowedAttributeMask() != mask {
 		return 0, errors.New("invalid attribute mask")
 	}
@@ -301,7 +302,7 @@ func (m *FrameManagedEntity) checkAttributeMask(mask uint16) (uint16, error) {
 }
 
 // return the maximum space that can be used by attributes
-func (m *FrameManagedEntity) maxPacketAvailable(opt options) uint {
+func (m *ManagedEntityInstance) maxPacketAvailable(opt options) uint {
 	if opt.frameFormat == BaselineIdent {
 		// OMCI Header          - 4 octets
 		// Class ID/Instance ID - 4 octets
@@ -316,7 +317,7 @@ func (m *FrameManagedEntity) maxPacketAvailable(opt options) uint {
 	return MaxExtendedLength - 16
 }
 
-func (m *FrameManagedEntity) createRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) createRequestFrame(opt options) (interface{}, error) {
 	meLayer := &CreateRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -326,7 +327,7 @@ func (m *FrameManagedEntity) createRequestFrame(opt options) (interface{}, error
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) createResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) createResponseFrame(opt options) (interface{}, error) {
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -340,7 +341,7 @@ func (m *FrameManagedEntity) createResponseFrame(opt options) (interface{}, erro
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) deleteRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) deleteRequestFrame(opt options) (interface{}, error) {
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -350,7 +351,7 @@ func (m *FrameManagedEntity) deleteRequestFrame(opt options) (interface{}, error
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) deleteResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) deleteResponseFrame(opt options) (interface{}, error) {
 	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -361,7 +362,7 @@ func (m *FrameManagedEntity) deleteResponseFrame(opt options) (interface{}, erro
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) setRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) setRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -447,7 +448,7 @@ func (m *FrameManagedEntity) setRequestFrame(opt options) (interface{}, error) {
 	return results, nil
 }
 
-func (m *FrameManagedEntity) setResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) setResponseFrame(opt options) (interface{}, error) {
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -462,7 +463,7 @@ func (m *FrameManagedEntity) setResponseFrame(opt options) (interface{}, error) 
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) getRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -481,7 +482,7 @@ func (m *FrameManagedEntity) getRequestFrame(opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) getResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -564,7 +565,7 @@ func (m *FrameManagedEntity) getResponseFrame(opt options) (interface{}, error) 
 	return results, nil
 }
 
-func (m *FrameManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -585,7 +586,7 @@ func (m *FrameManagedEntity) getAllAlarmsRequestFrame(opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getAllAlarmsResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -606,7 +607,7 @@ func (m *FrameManagedEntity) getAllAlarmsResponseFrame(opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -627,7 +628,7 @@ func (m *FrameManagedEntity) getAllAlarmsNextRequestFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getAllAlarmsNextResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -648,7 +649,7 @@ func (m *FrameManagedEntity) getAllAlarmsNextResponseFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) mibUploadRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibUploadRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -669,7 +670,7 @@ func (m *FrameManagedEntity) mibUploadRequestFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) mibUploadResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibUploadResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -690,7 +691,7 @@ func (m *FrameManagedEntity) mibUploadResponseFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibUploadNextRequestFrame(opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
@@ -702,7 +703,7 @@ func (m *FrameManagedEntity) mibUploadNextRequestFrame(opt options) (interface{}
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) mibUploadNextResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibUploadNextResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -723,7 +724,7 @@ func (m *FrameManagedEntity) mibUploadNextResponseFrame(opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) mibResetRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibResetRequestFrame(opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
@@ -734,7 +735,7 @@ func (m *FrameManagedEntity) mibResetRequestFrame(opt options) (interface{}, err
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) mibResetResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) mibResetResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -755,7 +756,7 @@ func (m *FrameManagedEntity) mibResetResponseFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) alarmNotificationFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) alarmNotificationFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -776,7 +777,7 @@ func (m *FrameManagedEntity) alarmNotificationFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) attributeValueChangeFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) attributeValueChangeFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -797,7 +798,7 @@ func (m *FrameManagedEntity) attributeValueChangeFrame(opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) testRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) testRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -818,7 +819,7 @@ func (m *FrameManagedEntity) testRequestFrame(opt options) (interface{}, error) 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) testResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) testResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -839,7 +840,7 @@ func (m *FrameManagedEntity) testResponseFrame(opt options) (interface{}, error)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -860,7 +861,7 @@ func (m *FrameManagedEntity) startSoftwareDownloadRequestFrame(opt options) (int
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) startSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) startSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -881,7 +882,7 @@ func (m *FrameManagedEntity) startSoftwareDownloadResponseFrame(opt options) (in
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) downloadSectionRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) downloadSectionRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -902,7 +903,7 @@ func (m *FrameManagedEntity) downloadSectionRequestFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) downloadSectionResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) downloadSectionResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -923,7 +924,7 @@ func (m *FrameManagedEntity) downloadSectionResponseFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -944,7 +945,7 @@ func (m *FrameManagedEntity) endSoftwareDownloadRequestFrame(opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) endSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) endSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -965,7 +966,7 @@ func (m *FrameManagedEntity) endSoftwareDownloadResponseFrame(opt options) (inte
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) activateSoftwareRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) activateSoftwareRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -986,7 +987,7 @@ func (m *FrameManagedEntity) activateSoftwareRequestFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) activateSoftwareResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) activateSoftwareResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1007,7 +1008,7 @@ func (m *FrameManagedEntity) activateSoftwareResponseFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) commitSoftwareRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) commitSoftwareRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1028,7 +1029,7 @@ func (m *FrameManagedEntity) commitSoftwareRequestFrame(opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) commitSoftwareResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) commitSoftwareResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1049,7 +1050,7 @@ func (m *FrameManagedEntity) commitSoftwareResponseFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1070,7 +1071,7 @@ func (m *FrameManagedEntity) synchronizeTimeRequestFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) synchronizeTimeResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) synchronizeTimeResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1091,7 +1092,7 @@ func (m *FrameManagedEntity) synchronizeTimeResponseFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) rebootRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) rebootRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1112,7 +1113,7 @@ func (m *FrameManagedEntity) rebootRequestFrame(opt options) (interface{}, error
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) rebootResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) rebootResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1133,7 +1134,7 @@ func (m *FrameManagedEntity) rebootResponseFrame(opt options) (interface{}, erro
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getNextRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getNextRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1151,7 +1152,7 @@ func (m *FrameManagedEntity) getNextRequestFrame(opt options) (interface{}, erro
 	return meLayer, nil
 }
 
-func (m *FrameManagedEntity) getNextResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getNextResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1172,7 +1173,7 @@ func (m *FrameManagedEntity) getNextResponseFrame(opt options) (interface{}, err
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) testResultFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) testResultFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1193,7 +1194,7 @@ func (m *FrameManagedEntity) testResultFrame(opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getCurrentDataRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getCurrentDataRequestFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1214,7 +1215,7 @@ func (m *FrameManagedEntity) getCurrentDataRequestFrame(opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) getCurrentDataResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) getCurrentDataResponseFrame(opt options) (interface{}, error) {
 	mask, err := m.checkAttributeMask(opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1235,7 +1236,7 @@ func (m *FrameManagedEntity) getCurrentDataResponseFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) setTableRequestFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) setTableRequestFrame(opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
@@ -1259,7 +1260,7 @@ func (m *FrameManagedEntity) setTableRequestFrame(opt options) (interface{}, err
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *FrameManagedEntity) setTableResponseFrame(opt options) (interface{}, error) {
+func (m *ManagedEntityInstance) setTableResponseFrame(opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
