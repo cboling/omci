@@ -56,6 +56,10 @@ func (entity *ManagedEntity) GetManagedEntityDefinition() *ManagedEntityDefiniti
 	return entity.definition
 }
 
+func (entity *ManagedEntity) SetManagedEntityDefinition(def *ManagedEntityDefinition) {
+	entity.definition = def
+}
+
 func (entity *ManagedEntity) GetName() string {
 	return entity.definition.GetName()
 }

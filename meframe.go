@@ -154,6 +154,20 @@ type ManagedEntityInstance struct {
 	me.ManagedEntity
 }
 
+func ManagedEntityToInstance(entity me.ManagedEntity) (*ManagedEntityInstance, error) {
+	omciMe := &ManagedEntityInstance{}
+	omciMe.SetManagedEntityDefinition(entity.GetManagedEntityDefinition())
+	if err := omciMe.SetEntityID(entity.GetEntityID()); err != nil {
+		return nil, err
+	}
+	for name, value := range *entity.GetAttributeValueMap() {
+		if err := omciMe.SetAttribute(name, value); err != nil {
+			return nil, err
+		}
+	}
+	return omciMe, nil
+}
+
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.

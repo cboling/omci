@@ -320,7 +320,7 @@ func TableField(name string, tableInfo TableInfo, access AttributeAccess,
 		Name:         name,
 		Index:        index,
 		DefValue:     tableInfo.DefValue,
-		Size:         tableInfo.Size,
+		Size:         tableInfo.Size, //Number of elements
 		Access:       access,
 		Avc:          avc,
 		Counter:      false,
