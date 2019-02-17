@@ -20,7 +20,6 @@
 package generated
 
 import (
-	"encoding/binary"
 	"errors"
 	"fmt"
 	"github.com/deckarep/golang-set"
@@ -154,6 +153,8 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) error 
 	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
 		return err
+	} else if entity.attributes == nil {
+		entity.attributes = make(map[string]interface{})
 	}
 	// TODO: check type and any constraints
 	entity.attributes[name] = value
@@ -166,6 +167,8 @@ func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) 
 	if !ok {
 		return errors.New(fmt.Sprintf("invalid attribute index: %d, should be 0..%d",
 			index, len(entity.definition.AttributeDefinitions)-1))
+	} else if entity.attributes == nil {
+		entity.attributes = make(map[string]interface{})
 	}
 	// TODO: Check type and any constraints
 	entity.attributes[attrDef.Name] = value
@@ -178,8 +181,10 @@ func (entity *ManagedEntity) DeleteAttribute(name string) error {
 	if err != nil {
 		return err
 	}
-	delete(entity.attributes, name)
-	entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+	if entity.attributes != nil {
+		delete(entity.attributes, name)
+		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+	}
 	return nil
 }
 
@@ -189,8 +194,10 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 		return errors.New(fmt.Sprintf("invalid attribute index: %d, should be 0..%d",
 			index, len(entity.definition.AttributeDefinitions)-1))
 	}
-	delete(entity.attributes, attrDef.Name)
-	entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+	if entity.attributes != nil {
+		delete(entity.attributes, attrDef.Name)
+		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+	}
 	return nil
 }
 
