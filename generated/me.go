@@ -20,6 +20,7 @@
 package generated
 
 import (
+	"encoding/binary"
 	"errors"
 	"fmt"
 	"github.com/deckarep/golang-set"
