@@ -183,9 +183,9 @@ func init() {
 	nextLayerMapping[GetCurrentDataResponseType] = LayerTypeGetCurrentDataResponse
 	nextLayerMapping[SetTableResponseType] = LayerTypeSetTableResponse
 
-	nextLayerMapping[MessageType(me.AttributeValueChange)] = LayerTypeAttributeValueChange
-	nextLayerMapping[MessageType(me.AlarmNotification)] = LayerTypeAlarmNotification
-	nextLayerMapping[MessageType(me.TestResult)] = LayerTypeTestResult
+	nextLayerMapping[AlarmNotificationType] = LayerTypeAttributeValueChange
+	nextLayerMapping[AttributeValueChangeType] = LayerTypeAlarmNotification
+	nextLayerMapping[TestResultType] = LayerTypeTestResult
 }
 
 func MsgTypeToNextLayer(mt MessageType) (gopacket.LayerType, error) {
