@@ -48,7 +48,7 @@ type AttributeDefinition struct {
 }
 
 func (attr *AttributeDefinition) String() string {
-	return fmt.Sprintf("Definition: %v (%v): Size: %v, Default: %v, Access: %v",
+	return fmt.Sprintf("AttributeDefinition: %v (%v): Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
 func (attr *AttributeDefinition) GetName() string            { return attr.Name }
@@ -308,8 +308,12 @@ func MultiByteField(name string, size uint, defVal []byte, access AttributeAcces
 // An early example of info to track
 //
 type TableInfo struct {
-	DefValue interface{}
-	Size     int
+	Value interface{}
+	Size  int
+}
+
+func (t *TableInfo) String() string {
+	return fmt.Sprintf("TableInfo: Size: %d, Value(s): %v", t.Size, t.Value)
 }
 
 // Now the field
@@ -318,7 +322,7 @@ func TableField(name string, tableInfo TableInfo, access AttributeAccess,
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
-		DefValue:     tableInfo.DefValue,
+		DefValue:     tableInfo.Value,
 		Size:         tableInfo.Size, //Number of elements
 		Access:       access,
 		Avc:          avc,
