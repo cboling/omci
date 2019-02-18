@@ -909,7 +909,7 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.MessageType, MessageType(AttributeValueChange))
+	assert.Equal(t, omciMsg.MessageType, AttributeValueChangeType)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeAttributeValueChange)

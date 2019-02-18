@@ -183,8 +183,8 @@ func init() {
 	nextLayerMapping[GetCurrentDataResponseType] = LayerTypeGetCurrentDataResponse
 	nextLayerMapping[SetTableResponseType] = LayerTypeSetTableResponse
 
-	nextLayerMapping[AlarmNotificationType] = LayerTypeAttributeValueChange
-	nextLayerMapping[AttributeValueChangeType] = LayerTypeAlarmNotification
+	nextLayerMapping[AttributeValueChangeType] = LayerTypeAttributeValueChange
+	nextLayerMapping[AlarmNotificationType] = LayerTypeAlarmNotification
 	nextLayerMapping[TestResultType] = LayerTypeTestResult
 }
 
