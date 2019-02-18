@@ -60,8 +60,7 @@ func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
 	return attr.Constraint
 }
 func (attr *AttributeDefinition) IsTableAttribute() bool {
-	// TODO: Should this be a value we have. Should we check ME for 'GetNext' support
-	return strings.Contains("table", strings.ToLower(attr.Name))
+	return attr.TableSupport
 }
 
 func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback) (interface{}, error) {
