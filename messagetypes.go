@@ -69,6 +69,10 @@ const (
 	GetCurrentDataResponseType        MessageType = MessageType(byte(me.GetCurrentData) | me.AK)
 	SetTableRequestType               MessageType = MessageType(byte(me.SetTable) | me.AR)
 	SetTableResponseType              MessageType = MessageType(byte(me.SetTable) | me.AK)
+	// Autonomous ONU messages
+	AlarmNotificationType    MessageType = MessageType(byte(me.AlarmNotification))
+	AttributeValueChangeType MessageType = MessageType(byte(me.AttributeValueChange))
+	TestResultType           MessageType = MessageType(byte(me.TestResult))
 )
 
 /////////////////////////////////////////////////////////////////////////////
