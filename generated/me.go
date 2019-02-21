@@ -80,12 +80,12 @@ func (entity *ManagedEntity) GetAttributeDefinitions() *AttributeDefinitionMap {
 	return entity.definition.GetAttributeDefinitions()
 }
 
-func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) (AttributeValueMap, error) {
-	return entity.definition.DecodeAttributes(mask, data, p)
+func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
+	return entity.definition.DecodeAttributes(mask, data, p, msgType)
 }
 
-func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer) error {
-	return entity.definition.SerializeAttributes(attr, mask, b)
+func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer, msgType byte) error {
+	return entity.definition.SerializeAttributes(attr, mask, b, msgType)
 }
 
 func (entity *ManagedEntity) GetEntityID() uint16 {
@@ -202,7 +202,7 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	return nil
 }
 
-func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
+func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuilder, msgType byte) error {
 	if len(data) < 6 {
 		p.SetTruncated()
 		return errors.New("frame too small")
@@ -219,7 +219,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	entity.attributeMask = binary.BigEndian.Uint16(data[4:6])
 	entity.attributes = make(map[string]interface{})
 	entity.SetEntityID(entityID)
-	packetAttributes, err := entity.DecodeAttributes(entity.GetAttributeMask(), data[6:], p)
+	packetAttributes, err := entity.DecodeAttributes(entity.GetAttributeMask(), data[6:], p, msgType)
 	if err != nil {
 		return err
 	}
@@ -229,7 +229,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	return nil
 }
 
-func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer) error {
+func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)
 	if err != nil {
@@ -241,6 +241,6 @@ func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer) error {
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b)
+	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b, msgType)
 	return err
 }

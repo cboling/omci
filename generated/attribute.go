@@ -63,7 +63,10 @@ func (attr *AttributeDefinition) IsTableAttribute() bool {
 	return attr.TableSupport
 }
 
-func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback) (interface{}, error) {
+func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback, msgType byte) (interface{}, error) {
+	if attr.IsTableAttribute() {
+		return attr.tableAttributeDecode(data, df, msgType)
+	}
 	// Use negative numbers to indicate signed values
 	size := attr.GetSize()
 	if size < 0 {
@@ -124,7 +127,112 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback)
 	}
 }
 
-func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer) error {
+func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte) error {
+	if attr.IsTableAttribute() {
+		return attr.tableAttributeSerializeTo(value, b, msgType)
+	}
+	// TODO: Check to see if space in buffer here !!!!
+	bytes, err := b.AppendBytes(attr.GetSize())
+	if err != nil {
+		return err
+	}
+	switch attr.GetSize() {
+	default:
+		copy(bytes, value.([]byte))
+	case 1:
+		switch value.(type) {
+		case int:
+			bytes[0] = byte(value.(int))
+		default:
+			bytes[0] = value.(byte)
+		}
+	case 2:
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
+		default:
+			binary.BigEndian.PutUint16(bytes, value.(uint16))
+		}
+	case 4:
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
+		default:
+			binary.BigEndian.PutUint32(bytes, value.(uint32))
+		}
+	case 8:
+		switch value.(type) {
+		case int:
+			binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
+		default:
+			binary.BigEndian.PutUint64(bytes, value.(uint64))
+		}
+	}
+	return nil
+}
+
+func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.DecodeFeedback, msgType byte) (interface{}, error) {
+	// Use negative numbers to indicate signed values
+	size := attr.GetSize()
+	if size < 0 {
+		size = -size
+	}
+	if len(data) < size {
+		df.SetTruncated()
+		return nil, errors.New("packet too small for field")
+	}
+	var err error
+	switch attr.GetSize() {
+	default:
+		value := make([]byte, size)
+		copy(value, data[:size])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 1:
+		value := data[0]
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 2:
+		value := binary.BigEndian.Uint16(data[0:2])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 4:
+		value := binary.BigEndian.Uint32(data[0:4])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	case 8:
+		value := binary.BigEndian.Uint64(data[0:8])
+		if attr.GetConstraints() != nil {
+			err = attr.GetConstraints()(value)
+			if err != nil {
+				return nil, err
+			}
+		}
+		return value, err
+	}
+}
+
+func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte) error {
 	// TODO: Check to see if space in buffer here !!!!
 	bytes, err := b.AppendBytes(attr.GetSize())
 	if err != nil {

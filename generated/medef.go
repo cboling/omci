@@ -57,7 +57,7 @@ func (bme *ManagedEntityDefinition) GetAttributeDefinitions() *AttributeDefiniti
 	return &bme.AttributeDefinitions
 }
 
-func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder) (AttributeValueMap, error) {
+func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return nil, errors.New("unsupported attribute mask")
@@ -71,8 +71,8 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 		}
 		attrDef := bme.AttributeDefinitions[index]
 
-		if mask&(1<<(15-uint(index-1))) != 0 {
-			value, err := attrDef.Decode(data, p)
+		if mask&(1<<(16-uint(index))) != 0 {
+			value, err := attrDef.Decode(data, p, msgType)
 			if err != nil {
 				return nil, err
 			}
@@ -84,7 +84,7 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 	return attrMap, nil
 }
 
-func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer) error {
+func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer, msgType byte) error {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return errors.New("unsupported attribute mask")
@@ -99,13 +99,13 @@ func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, 
 		}
 		attrDef := bme.AttributeDefinitions[index]
 
-		if mask&(1<<(15-uint(index-1))) != 0 {
+		if mask&(1<<(16-uint(index))) != 0 {
 			value, ok := attr[attrDef.GetName()]
 			if !ok {
 				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
 				return errors.New(msg)
 			}
-			err := attrDef.SerializeTo(value, b)
+			err := attrDef.SerializeTo(value, b, msgType)
 			if err != nil {
 				return nil
 			}

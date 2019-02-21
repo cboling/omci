@@ -113,7 +113,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		}
 	}
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[4:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[4:], p, byte(CreateRequestType))
 	return err
 }
 
@@ -145,7 +145,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		}
 	}
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b, byte(CreateRequestType))
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -361,7 +361,7 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p, byte(SetRequestType))
 	if err != nil {
 		return err
 	}
@@ -419,7 +419,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(SetRequestType))
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -592,7 +592,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:32], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:32], p, byte(GetResponseType))
 	if err != nil {
 		return err
 	}
@@ -656,7 +656,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		}
 	}
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
 	if err != nil {
 		return err
 	}
@@ -1221,7 +1221,7 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	// Decode reported ME.  If an out-of-range sequence number was sent, this will
 	// contain an ME with class ID and entity ID of zero and you should get an
 	// error of "managed entity definition not found" returned.
-	return omci.ReportedME.DecodeFromBytes(data[4:], p)
+	return omci.ReportedME.DecodeFromBytes(data[4:], p, byte(MibUploadNextResponseType))
 }
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -1246,7 +1246,7 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
-	return omci.ReportedME.SerializeTo(b)
+	return omci.ReportedME.SerializeTo(b, byte(MibUploadNextResponseType))
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1511,7 +1511,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:40], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:40], p, byte(AttributeValueChangeType))
 	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	// Validate all attributes support AVC
 	//for attrName := range omci.attributes {
@@ -1564,7 +1564,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(AttributeValueChangeType))
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -2845,7 +2845,7 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p, byte(GetNextResponseType))
 	if err != nil {
 		return err
 	}
@@ -2882,7 +2882,7 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetNextResponseType))
 	if err != nil {
 		return err
 	}
@@ -3006,7 +3006,7 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p)
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p, byte(GetCurrentDataResponseType))
 	if err != nil {
 		return err
 	}
@@ -3042,7 +3042,7 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	binary.BigEndian.PutUint16(bytes[0:2], omci.AttributeMask)
 
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b)
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetCurrentDataResponseType))
 	if err != nil {
 		return err
 	}
