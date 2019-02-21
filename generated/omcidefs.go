@@ -61,7 +61,6 @@ const (
 
 const (
 	// Message Types
-	_                             = iota
 	Create                MsgType = 4
 	Delete                MsgType = 6
 	Set                   MsgType = 8
@@ -163,7 +162,6 @@ func IsAutonomousNotification(mt MsgType) bool {
 
 const (
 	// Response status codes
-	_                        = iota
 	Success          Results = 0 // command processed successfully
 	ProcessingError  Results = 1 // command processing error
 	NotSupported     Results = 2 // command not supported
