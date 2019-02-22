@@ -591,8 +591,17 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	omci.Result = me.Results(data[4])
 	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
 
-	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:32], p, byte(GetResponseType))
+	// Attribute decode. Note that the ITU-T G.988 specification states that the
+	//                   Unsupported and Failed attribute masks are always present
+	//                   but only valid if the status code== 9.  However some XGS
+	//                   ONUs (T&W and Alpha, perhaps more) will use these last 4
+	//                   octets for data if the status code == 0.  So accommodate
+	//                   this behaviour in favor of greater interoperability.
+	lastOctet := 36
+	if omci.Result == me.AttributeFailure {
+		lastOctet = 32
+	}
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:lastOctet], p, byte(GetResponseType))
 	if err != nil {
 		return err
 	}
