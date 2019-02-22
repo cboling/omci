@@ -28,52 +28,145 @@ import (
 type MessageType byte
 
 const (
-	_                                             = iota
-	CreateRequestType                 MessageType = MessageType(byte(me.Create) | me.AR)
-	CreateResponseType                MessageType = MessageType(byte(me.Create) | me.AK)
-	DeleteRequestType                 MessageType = MessageType(byte(me.Delete) | me.AR)
-	DeleteResponseType                MessageType = MessageType(byte(me.Delete) | me.AK)
-	SetRequestType                    MessageType = MessageType(byte(me.Set) | me.AR)
-	SetResponseType                   MessageType = MessageType(byte(me.Set) | me.AK)
-	GetRequestType                    MessageType = MessageType(byte(me.Get) | me.AR)
-	GetResponseType                   MessageType = MessageType(byte(me.Get) | me.AK)
-	GetAllAlarmsRequestType           MessageType = MessageType(byte(me.GetAllAlarms) | me.AR)
-	GetAllAlarmsResponseType          MessageType = MessageType(byte(me.GetAllAlarms) | me.AK)
-	GetAllAlarmsNextRequestType       MessageType = MessageType(byte(me.GetAllAlarmsNext) | me.AR)
-	GetAllAlarmsNextResponseType      MessageType = MessageType(byte(me.GetAllAlarmsNext) | me.AK)
-	MibUploadRequestType              MessageType = MessageType(byte(me.MibUpload) | me.AR)
-	MibUploadResponseType             MessageType = MessageType(byte(me.MibUpload) | me.AK)
-	MibUploadNextRequestType          MessageType = MessageType(byte(me.MibUploadNext) | me.AR)
-	MibUploadNextResponseType         MessageType = MessageType(byte(me.MibUploadNext) | me.AK)
-	MibResetRequestType               MessageType = MessageType(byte(me.MibReset) | me.AR)
-	MibResetResponseType              MessageType = MessageType(byte(me.MibReset) | me.AK)
-	TestRequestType                   MessageType = MessageType(byte(me.Test) | me.AR)
-	TestResponseType                  MessageType = MessageType(byte(me.Test) | me.AK)
-	StartSoftwareDownloadRequestType  MessageType = MessageType(byte(me.StartSoftwareDownload) | me.AR)
-	StartSoftwareDownloadResponseType MessageType = MessageType(byte(me.StartSoftwareDownload) | me.AK)
-	DownloadSectionRequestType        MessageType = MessageType(byte(me.DownloadSection) | me.AR)
-	DownloadSectionResponseType       MessageType = MessageType(byte(me.DownloadSection) | me.AK)
-	EndSoftwareDownloadRequestType    MessageType = MessageType(byte(me.EndSoftwareDownload) | me.AR)
-	EndSoftwareDownloadResponseType   MessageType = MessageType(byte(me.EndSoftwareDownload) | me.AK)
-	ActivateSoftwareRequestType       MessageType = MessageType(byte(me.ActivateSoftware) | me.AR)
-	ActivateSoftwareResponseType      MessageType = MessageType(byte(me.ActivateSoftware) | me.AK)
-	CommitSoftwareRequestType         MessageType = MessageType(byte(me.CommitSoftware) | me.AR)
-	CommitSoftwareResponseType        MessageType = MessageType(byte(me.CommitSoftware) | me.AK)
-	SynchronizeTimeRequestType        MessageType = MessageType(byte(me.SynchronizeTime) | me.AR)
-	SynchronizeTimeResponseType       MessageType = MessageType(byte(me.SynchronizeTime) | me.AK)
-	RebootRequestType                 MessageType = MessageType(byte(me.Reboot) | me.AR)
-	RebootResponseType                MessageType = MessageType(byte(me.Reboot) | me.AK)
-	GetNextRequestType                MessageType = MessageType(byte(me.GetNext) | me.AR)
-	GetNextResponseType               MessageType = MessageType(byte(me.GetNext) | me.AK)
-	GetCurrentDataRequestType         MessageType = MessageType(byte(me.GetCurrentData) | me.AR)
-	GetCurrentDataResponseType        MessageType = MessageType(byte(me.GetCurrentData) | me.AK)
-	SetTableRequestType               MessageType = MessageType(byte(me.SetTable) | me.AR)
-	SetTableResponseType              MessageType = MessageType(byte(me.SetTable) | me.AK)
+	CreateRequestType                 = MessageType(byte(me.Create) | me.AR)
+	CreateResponseType                = MessageType(byte(me.Create) | me.AK)
+	DeleteRequestType                 = MessageType(byte(me.Delete) | me.AR)
+	DeleteResponseType                = MessageType(byte(me.Delete) | me.AK)
+	SetRequestType                    = MessageType(byte(me.Set) | me.AR)
+	SetResponseType                   = MessageType(byte(me.Set) | me.AK)
+	GetRequestType                    = MessageType(byte(me.Get) | me.AR)
+	GetResponseType                   = MessageType(byte(me.Get) | me.AK)
+	GetAllAlarmsRequestType           = MessageType(byte(me.GetAllAlarms) | me.AR)
+	GetAllAlarmsResponseType          = MessageType(byte(me.GetAllAlarms) | me.AK)
+	GetAllAlarmsNextRequestType       = MessageType(byte(me.GetAllAlarmsNext) | me.AR)
+	GetAllAlarmsNextResponseType      = MessageType(byte(me.GetAllAlarmsNext) | me.AK)
+	MibUploadRequestType              = MessageType(byte(me.MibUpload) | me.AR)
+	MibUploadResponseType             = MessageType(byte(me.MibUpload) | me.AK)
+	MibUploadNextRequestType          = MessageType(byte(me.MibUploadNext) | me.AR)
+	MibUploadNextResponseType         = MessageType(byte(me.MibUploadNext) | me.AK)
+	MibResetRequestType               = MessageType(byte(me.MibReset) | me.AR)
+	MibResetResponseType              = MessageType(byte(me.MibReset) | me.AK)
+	TestRequestType                   = MessageType(byte(me.Test) | me.AR)
+	TestResponseType                  = MessageType(byte(me.Test) | me.AK)
+	StartSoftwareDownloadRequestType  = MessageType(byte(me.StartSoftwareDownload) | me.AR)
+	StartSoftwareDownloadResponseType = MessageType(byte(me.StartSoftwareDownload) | me.AK)
+	DownloadSectionRequestType        = MessageType(byte(me.DownloadSection) | me.AR)
+	DownloadSectionResponseType       = MessageType(byte(me.DownloadSection) | me.AK)
+	EndSoftwareDownloadRequestType    = MessageType(byte(me.EndSoftwareDownload) | me.AR)
+	EndSoftwareDownloadResponseType   = MessageType(byte(me.EndSoftwareDownload) | me.AK)
+	ActivateSoftwareRequestType       = MessageType(byte(me.ActivateSoftware) | me.AR)
+	ActivateSoftwareResponseType      = MessageType(byte(me.ActivateSoftware) | me.AK)
+	CommitSoftwareRequestType         = MessageType(byte(me.CommitSoftware) | me.AR)
+	CommitSoftwareResponseType        = MessageType(byte(me.CommitSoftware) | me.AK)
+	SynchronizeTimeRequestType        = MessageType(byte(me.SynchronizeTime) | me.AR)
+	SynchronizeTimeResponseType       = MessageType(byte(me.SynchronizeTime) | me.AK)
+	RebootRequestType                 = MessageType(byte(me.Reboot) | me.AR)
+	RebootResponseType                = MessageType(byte(me.Reboot) | me.AK)
+	GetNextRequestType                = MessageType(byte(me.GetNext) | me.AR)
+	GetNextResponseType               = MessageType(byte(me.GetNext) | me.AK)
+	GetCurrentDataRequestType         = MessageType(byte(me.GetCurrentData) | me.AR)
+	GetCurrentDataResponseType        = MessageType(byte(me.GetCurrentData) | me.AK)
+	SetTableRequestType               = MessageType(byte(me.SetTable) | me.AR)
+	SetTableResponseType              = MessageType(byte(me.SetTable) | me.AK)
 	// Autonomous ONU messages
-	AlarmNotificationType    MessageType = MessageType(byte(me.AlarmNotification))
-	AttributeValueChangeType MessageType = MessageType(byte(me.AttributeValueChange))
-	TestResultType           MessageType = MessageType(byte(me.TestResult))
+	AlarmNotificationType    = MessageType(byte(me.AlarmNotification))
+	AttributeValueChangeType = MessageType(byte(me.AttributeValueChange))
+	TestResultType           = MessageType(byte(me.TestResult))
 )
+
+func (mt MessageType) String() string {
+	switch mt {
+	default:
+		return "Unknown"
+
+	case CreateRequestType:
+		return "Create Request"
+	case CreateResponseType:
+		return "Create Response"
+	case DeleteRequestType:
+		return "Delete Request"
+	case DeleteResponseType:
+		return "Delete Response"
+	case SetRequestType:
+		return "Set Request"
+	case SetResponseType:
+		return "Set Response"
+	case GetRequestType:
+		return "Get Request"
+	case GetResponseType:
+		return "Get Response"
+	case GetAllAlarmsRequestType:
+		return "Get All Alarms Request"
+	case GetAllAlarmsResponseType:
+		return "Get All Alarms Response"
+	case GetAllAlarmsNextRequestType:
+		return "Get All Alarms Next Request"
+	case GetAllAlarmsNextResponseType:
+		return "Get All Alarms Next Response"
+	case MibUploadRequestType:
+		return "MIB Upload Request"
+	case MibUploadResponseType:
+		return "MIB Upload Response"
+	case MibUploadNextRequestType:
+		return "MIB Upload Next Request"
+	case MibUploadNextResponseType:
+		return "MIB Upload Next Response"
+	case MibResetRequestType:
+		return "MIB Reset Request"
+	case MibResetResponseType:
+		return "MIB Reset Response"
+	case TestRequestType:
+		return "Test Request"
+	case TestResponseType:
+		return "Test Response"
+	case StartSoftwareDownloadRequestType:
+		return "Start Software Download Request"
+	case StartSoftwareDownloadResponseType:
+		return "Start Software Download Response"
+	case DownloadSectionRequestType:
+		return "Download Section Request"
+	case DownloadSectionResponseType:
+		return "Download Section Response"
+	case EndSoftwareDownloadRequestType:
+		return "End Software Download Request"
+	case EndSoftwareDownloadResponseType:
+		return "End Software Download Response"
+	case ActivateSoftwareRequestType:
+		return "Activate Software Request"
+	case ActivateSoftwareResponseType:
+		return "Activate Software Response"
+	case CommitSoftwareRequestType:
+		return "Commit Software Request"
+	case CommitSoftwareResponseType:
+		return "Commit Software Response"
+	case SynchronizeTimeRequestType:
+		return "Synchronize Time Request"
+	case SynchronizeTimeResponseType:
+		return "Synchronize Time Response"
+	case RebootRequestType:
+		return "Reboot Request"
+	case RebootResponseType:
+		return "Reboot Response"
+	case GetNextRequestType:
+		return "Get Next Request"
+	case GetNextResponseType:
+		return "Get Next Response"
+	case GetCurrentDataRequestType:
+		return "Get Current Data Request"
+	case GetCurrentDataResponseType:
+		return "Get Current Data Response"
+	case SetTableRequestType:
+		return "Set Table Request"
+	case SetTableResponseType:
+		return "Set Table Response"
+	case AlarmNotificationType:
+		return "Alarm Notification"
+	case AttributeValueChangeType:
+		return "Attribute Value Change"
+	case TestResultType:
+		return "Test Result"
+	}
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // CreateRequest
@@ -83,7 +176,7 @@ type CreateRequest struct {
 }
 
 func (omci *CreateRequest) String() string {
-	return fmt.Sprintf("CreateRequest: %v, attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
+	return fmt.Sprintf("%v, attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
 }
 
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -157,7 +250,7 @@ type CreateResponse struct {
 }
 
 func (omci *CreateResponse) String() string {
-	return fmt.Sprintf("CreateResponse: %v, Result: %d (%v), Mask: %#x",
+	return fmt.Sprintf("%v, Result: %d (%v), Mask: %#x",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeExecutionMask)
 }
 
@@ -220,7 +313,7 @@ type DeleteRequest struct {
 }
 
 func (omci *DeleteRequest) String() string {
-	return fmt.Sprintf("DeleteRequest: %v", omci.MeBasePacket.String())
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -275,7 +368,7 @@ type DeleteResponse struct {
 }
 
 func (omci *DeleteResponse) String() string {
-	return fmt.Sprintf("DeleteResponse: %v, Result: %d (%v)",
+	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
@@ -338,7 +431,7 @@ type SetRequest struct {
 }
 
 func (omci *SetRequest) String() string {
-	return fmt.Sprintf("SetRequest: %v, Mask: %#x, attributes: %v",
+	return fmt.Sprintf("%v, Mask: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
@@ -432,7 +525,7 @@ type SetResponse struct {
 }
 
 func (omci *SetResponse) String() string {
-	return fmt.Sprintf("SetResponse: %v, Result: %d (%v), Unsupported Mask: %#x, Failed Mask: %#x",
+	return fmt.Sprintf("%v, Result: %d (%v), Unsupported Mask: %#x, Failed Mask: %#x",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.UnsupportedAttributeMask,
 		omci.FailedAttributeMask)
 }
@@ -502,7 +595,7 @@ type GetRequest struct {
 }
 
 func (omci *GetRequest) String() string {
-	return fmt.Sprintf("GetRequest: %v, Mask: %#x",
+	return fmt.Sprintf("%v, Mask: %#x",
 		omci.MeBasePacket.String(), omci.AttributeMask)
 }
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -567,7 +660,7 @@ type GetResponse struct {
 }
 
 func (omci *GetResponse) String() string {
-	return fmt.Sprintf("GetResponse: %v, Result: %d (%v), Mask: %#x, Unsupported: %#x, Failed: %#x, attributes: %v",
+	return fmt.Sprintf("%v, Result: %d (%v), Mask: %#x, Unsupported: %#x, Failed: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask,
 		omci.UnsupportedAttributeMask, omci.FailedAttributeMask, omci.Attributes)
 }
@@ -691,7 +784,7 @@ type GetAllAlarmsRequest struct {
 }
 
 func (omci *GetAllAlarmsRequest) String() string {
-	return fmt.Sprintf("GetAllAlarmsRequest: %v, Retrieval Mode: %v",
+	return fmt.Sprintf("%v, Retrieval Mode: %v",
 		omci.MeBasePacket.String(), omci.AlarmRetrievalMode)
 }
 
@@ -769,7 +862,7 @@ type GetAllAlarmsResponse struct {
 }
 
 func (omci *GetAllAlarmsResponse) String() string {
-	return fmt.Sprintf("GetAllAlarmsResponse: %v, NumberOfCommands: %d",
+	return fmt.Sprintf("%v, NumberOfCommands: %d",
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
@@ -842,7 +935,7 @@ type GetAllAlarmsNextRequest struct {
 }
 
 func (omci *GetAllAlarmsNextRequest) String() string {
-	return fmt.Sprintf("GetAllAlarmsNextRequest: %v, Sequence Number: %d",
+	return fmt.Sprintf("%v, Sequence Number: %d",
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
@@ -915,7 +1008,7 @@ type GetAllAlarmsNextResponse struct {
 }
 
 func (omci *GetAllAlarmsNextResponse) String() string {
-	return fmt.Sprintf("GetAllAlarmsNextResponse: %v, Bitmap: %v",
+	return fmt.Sprintf("%v, Bitmap: %v",
 		omci.MeBasePacket.String(), omci.AlarmBitMap)
 }
 
@@ -987,7 +1080,7 @@ type MibUploadRequest struct {
 }
 
 func (omci *MibUploadRequest) String() string {
-	return fmt.Sprintf("MibUploadRequest: %v", omci.MeBasePacket.String())
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1050,7 +1143,7 @@ type MibUploadResponse struct {
 }
 
 func (omci *MibUploadResponse) String() string {
-	return fmt.Sprintf("MibUploadResponse: %v, NumberOfCommands: %#v",
+	return fmt.Sprintf("%v, NumberOfCommands: %#v",
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
@@ -1123,7 +1216,7 @@ type MibUploadNextRequest struct {
 }
 
 func (omci *MibUploadNextRequest) String() string {
-	return fmt.Sprintf("MibUploadNextRequest: %v, SequenceNumber: %v",
+	return fmt.Sprintf("%v, SequenceNumber: %v",
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
@@ -1196,7 +1289,7 @@ type MibUploadNextResponse struct {
 }
 
 func (omci *MibUploadNextResponse) String() string {
-	return fmt.Sprintf("MibUploadNextResponse: %v, ReportedME: [%v]",
+	return fmt.Sprintf("%v, ReportedME: [%v]",
 		omci.MeBasePacket.String(), omci.ReportedME)
 }
 
@@ -1265,7 +1358,7 @@ type MibResetRequest struct {
 }
 
 func (omci *MibResetRequest) String() string {
-	return fmt.Sprintf("MibResetRequest: %v", omci.MeBasePacket.String())
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1317,7 +1410,7 @@ type MibResetResponse struct {
 }
 
 func (omci *MibResetResponse) String() string {
-	return fmt.Sprintf("MibResetResponse: %v, Result: %d (%v)",
+	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
@@ -1380,7 +1473,7 @@ type AlarmNotificationMsg struct {
 }
 
 func (omci *AlarmNotificationMsg) String() string {
-	return fmt.Sprintf("AlarmNotificationMsg: %v, SequenceNumber: %d, Alarm Bitmap: %v",
+	return fmt.Sprintf("%v, Sequence Number: %d, Alarm Bitmap: %v",
 		omci.MeBasePacket.String(), omci.AlarmSequenceNumber, omci.AlarmBitmap)
 }
 
@@ -1502,7 +1595,7 @@ type AttributeValueChangeMsg struct {
 }
 
 func (omci *AttributeValueChangeMsg) String() string {
-	return fmt.Sprintf("AttributeValueChangeMsg: %v, Mask: %#x, attributes: %v",
+	return fmt.Sprintf("%v, Mask: %#x, attributes: %v",
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
@@ -1583,7 +1676,7 @@ type TestRequest struct {
 }
 
 func (omci *TestRequest) String() string {
-	return fmt.Sprintf("TestRequest: %v", omci.MeBasePacket.String())
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1614,6 +1707,10 @@ func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 // TestResponse:		TODO: Not yet implemented
 type TestResponse struct {
 	MeBasePacket
+}
+
+func (omci *TestResponse) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1648,6 +1745,11 @@ type StartSoftwareDownloadRequest struct {
 	ImageSize            uint32 // Octets
 	NumberOfCircuitPacks byte
 	MSBInstance          []uint16 // MSB & LSB of software image instance
+}
+
+func (omci *StartSoftwareDownloadRequest) String() string {
+	return fmt.Sprintf("%v, Window Size: %v, Image Size: %v, # Circuit Packs: %v",
+		omci.MeBasePacket.String(), omci.WindowSize, omci.ImageSize, omci.NumberOfCircuitPacks)
 }
 
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1735,12 +1837,22 @@ type downloadResults struct {
 	Result          me.Results
 }
 
+func (dr *downloadResults) String() string {
+	return fmt.Sprintf("ME: %v (%#x), Results: %d (%v)", dr.ManagedEntityID, dr.ManagedEntityID,
+		dr.Result, dr.Result)
+}
+
 type StartSoftwareDownloadResponse struct {
 	MeBasePacket      // Note: EntityInstance for software download is two specific values
 	Result            me.Results
 	WindowSize        byte // Window Size -1
 	NumberOfInstances byte
 	MeResults         []downloadResults
+}
+
+func (omci *StartSoftwareDownloadResponse) String() string {
+	return fmt.Sprintf("%v, Results: %v, Window Size: %v, # of Instances: %v, ME Results: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.WindowSize, omci.NumberOfInstances, omci.MeResults)
 }
 
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1860,6 +1972,11 @@ type DownloadSectionRequest struct {
 	SectionData   [29]byte // 0 padding if final transfer requires only a partial block
 }
 
+func (omci *DownloadSectionRequest) String() string {
+	return fmt.Sprintf("%v, Section #: %v",
+		omci.MeBasePacket.String(), omci.SectionNumber)
+}
+
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1926,6 +2043,11 @@ type DownloadSectionResponse struct {
 	MeBasePacket  // Note: EntityInstance for software download is two specific values
 	Result        me.Results
 	SectionNumber byte
+}
+
+func (omci *DownloadSectionResponse) String() string {
+	return fmt.Sprintf("%v, Result: %d (%v), Section #: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SectionNumber)
 }
 
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2006,6 +2128,11 @@ type EndSoftwareDownloadRequest struct {
 	ImageSize         uint32
 	NumberOfInstances byte
 	ImageInstances    []uint16
+}
+
+func (omci *EndSoftwareDownloadRequest) String() string {
+	return fmt.Sprintf("%v, CRC: %#x, Image Size: %v, Number of Instances: %v, Instances: %v",
+		omci.MeBasePacket.String(), omci.CRC32, omci.ImageSize, omci.NumberOfInstances, omci.ImageInstances)
 }
 
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2096,6 +2223,11 @@ type EndSoftwareDownloadResponse struct {
 	Result            me.Results
 	NumberOfInstances byte
 	MeResults         []downloadResults
+}
+
+func (omci *EndSoftwareDownloadResponse) String() string {
+	return fmt.Sprintf("%v, Result: %d (%v), Number of Instances: %v, ME Results: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.NumberOfInstances, omci.MeResults)
 }
 
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2212,6 +2344,11 @@ type ActivateSoftwareRequest struct {
 	ActivateFlags byte
 }
 
+func (omci *ActivateSoftwareRequest) String() string {
+	return fmt.Sprintf("%v, Flags: %#x",
+		omci.MeBasePacket.String(), omci.ActivateFlags)
+}
+
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2285,6 +2422,11 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 type ActivateSoftwareResponse struct {
 	MeBasePacket
 	Result me.Results
+}
+
+func (omci *ActivateSoftwareResponse) String() string {
+	return fmt.Sprintf("%v, Result: %d (%v)",
+		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2361,6 +2503,10 @@ type CommitSoftwareRequest struct {
 	MeBasePacket
 }
 
+func (omci *CommitSoftwareRequest) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
+}
+
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2417,6 +2563,10 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 //
 type CommitSoftwareResponse struct {
 	MeBasePacket
+}
+
+func (omci *CommitSoftwareResponse) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2481,6 +2631,11 @@ type SynchronizeTimeRequest struct {
 	Hour   uint8
 	Minute uint8
 	Second uint8
+}
+
+func (omci *SynchronizeTimeRequest) String() string {
+	return fmt.Sprintf("%v, Date-Time: %d/%d/%d-%02d:%02d:%02d",
+		omci.MeBasePacket.String(), omci.Year, omci.Month, omci.Day, omci.Hour, omci.Minute, omci.Second)
 }
 
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2556,6 +2711,11 @@ type SynchronizeTimeResponse struct {
 	MeBasePacket
 	Results        me.Results
 	SuccessResults uint8 // Only if 'Results' is 0 -> success
+}
+
+func (omci *SynchronizeTimeResponse) String() string {
+	return fmt.Sprintf("%v, Results: %d (%v), Success: %d",
+		omci.MeBasePacket.String(), omci.Results, omci.Results, omci.SuccessResults)
 }
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2641,6 +2801,11 @@ type RebootRequest struct {
 	RebootCondition byte
 }
 
+func (omci *RebootRequest) String() string {
+	return fmt.Sprintf("%v, Reboot Condition: %v",
+		omci.MeBasePacket.String(), omci.RebootCondition)
+}
+
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2704,6 +2869,11 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 type RebootResponse struct {
 	MeBasePacket
 	Result me.Results
+}
+
+func (omci *RebootResponse) String() string {
+	return fmt.Sprintf("%v, Result: %d (%v)",
+		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2772,6 +2942,11 @@ type GetNextRequest struct {
 	SequenceNumber uint16
 }
 
+func (omci *GetNextRequest) String() string {
+	return fmt.Sprintf("%v, Attribute Mask: %#x, Sequence Number: %v",
+		omci.MeBasePacket.String(), omci.AttributeMask, omci.SequenceNumber)
+}
+
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2832,6 +3007,11 @@ type GetNextResponse struct {
 	MeBasePacket
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
+}
+
+func (omci *GetNextResponse) String() string {
+	return fmt.Sprintf("%v, Attribute Mask: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2904,6 +3084,10 @@ type TestResultMsg struct {
 	MeBasePacket
 }
 
+func (omci *TestResultMsg) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
+}
+
 func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2933,6 +3117,11 @@ func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 type GetCurrentDataRequest struct {
 	MeBasePacket
 	AttributeMask uint16
+}
+
+func (omci *GetCurrentDataRequest) String() string {
+	return fmt.Sprintf("%v, Attribute Mask: %#x",
+		omci.MeBasePacket.String(), omci.AttributeMask)
 }
 
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2994,6 +3183,11 @@ type GetCurrentDataResponse struct {
 	Result        me.Results
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
+}
+
+func (omci *GetCurrentDataResponse) String() string {
+	return fmt.Sprintf("%v, Result: %d (%v), Attribute Mask: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask, omci.Attributes)
 }
 
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -3065,6 +3259,10 @@ type SetTableRequest struct {
 	// TODO: Fix me when extended messages supported)
 }
 
+func (omci *SetTableRequest) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
+}
+
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3094,6 +3292,10 @@ func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 type SetTableResponse struct {
 	MeBasePacket
 	// TODO: Fix me when extended messages supported)
+}
+
+func (omci *SetTableResponse) String() string {
+	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {

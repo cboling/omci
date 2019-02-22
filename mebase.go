@@ -33,9 +33,8 @@ type MeBasePacket struct {
 }
 
 func (msg *MeBasePacket) String() string {
-	return fmt.Sprintf("ClassID: %d, InstanceId: %d/(%#x), LayerType: %d (%d)",
-		msg.EntityClass, msg.EntityInstance, msg.EntityInstance, msg.LayerType(),
-		msg.MsgLayerType)
+	return fmt.Sprintf("ClassID: %d (%#x), InstanceId: %d (%#x)",
+		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
 }
 
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
