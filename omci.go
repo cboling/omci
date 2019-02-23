@@ -106,13 +106,14 @@ type OMCI struct {
 }
 
 func (omci *OMCI) String() string {
-	msgType := me.MsgType(byte(omci.MessageType) & me.MsgTypeMask)
-	if me.IsAutonomousNotification(msgType) {
-		return fmt.Sprintf("OMCI: Type: %v:", msgType)
-	} else if byte(omci.MessageType)&me.AK == me.AK {
-		return fmt.Sprintf("OMCI: Type: %v Response", msgType)
-	}
-	return fmt.Sprintf("OMCI: Type: %v Request", msgType)
+	//msgType := me.MsgType(byte(omci.MessageType) & me.MsgTypeMask)
+	//if me.IsAutonomousNotification(msgType) {
+	//	return fmt.Sprintf("OMCI: Type: %v:", msgType)
+	//} else if byte(omci.MessageType)&me.AK == me.AK {
+	//	return fmt.Sprintf("OMCI: Type: %v Response", msgType)
+	//}
+	return fmt.Sprintf("Type: %v, TID: %d (%#x), Ident: %v",
+		omci.MessageType, omci.TransactionID, omci.TransactionID, omci.DeviceIdentifier)
 }
 
 // LayerType returns LayerTypeOMCI
