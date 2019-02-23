@@ -37,6 +37,8 @@ type options struct {
 	sequenceNumber  uint16 // For get-next request frames
 }
 
+// TODO: Add TID option (default of 0) to allow user to specify TID of frame
+
 var defaultFrameOptions = options{
 	frameFormat:       BaselineIdent,
 	failIfTruncated:   false,
