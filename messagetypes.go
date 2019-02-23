@@ -1290,7 +1290,7 @@ type MibUploadNextResponse struct {
 
 func (omci *MibUploadNextResponse) String() string {
 	return fmt.Sprintf("%v, ReportedME: [%v]",
-		omci.MeBasePacket.String(), omci.ReportedME)
+		omci.MeBasePacket.String(), omci.ReportedME.String())
 }
 
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {

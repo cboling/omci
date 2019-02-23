@@ -35,8 +35,8 @@ type ManagedEntity struct {
 
 // String provides a simple string that describes this struct
 func (entity *ManagedEntity) String() string {
-	return fmt.Sprintf("ManagedEntity: (%v) %v/%v (%#x/%#x): attributes: %v",
-		entity.GetName, entity.GetClassID(), entity.GetEntityID(),
+	return fmt.Sprintf("ManagedEntity: (%v) CID/EID: %v/%v (%#x/%#x): Attributes: %v",
+		entity.GetName(), entity.GetClassID(), entity.GetEntityID(),
 		entity.GetClassID(), entity.GetEntityID(), entity.attributes)
 }
 
