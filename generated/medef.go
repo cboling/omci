@@ -70,15 +70,52 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 			continue // Skip Entity ID
 		}
 		attrDef := bme.AttributeDefinitions[index]
+		name := attrDef.GetName()
 
 		if mask&(1<<(16-uint(index))) != 0 {
 			value, err := attrDef.Decode(data, p, msgType)
 			if err != nil {
 				return nil, err
 			}
-			attrMap[attrDef.GetName()] = value
+			if attrDef.IsTableAttribute() {
+				switch msgType {
+				default:
+					return nil, errors.New(fmt.Sprintf("unsupported Message Type '%v' for table serialization", msgType))
 
-			data = data[attrDef.GetSize():]
+				case byte(Get) | AK: // Get Response
+					attrMap[name] = value
+					data = data[4:]
+
+				case byte(GetNext) | AK: // Get Next Response
+					// Value is a partial octet buffer we need to collect and at
+					// the end (last segment) pull it up into more appropriate table
+					// rows
+					valueBuffer, ok := value.([]byte)
+					if !ok {
+						panic("unexpected type already returned as get-next-response attribute data")
+					}
+					if existing, found := attrMap[name]; found {
+						prev, ok := existing.([]byte)
+						if !ok {
+							panic("unexpected type already in attribute value map")
+						}
+						attrMap[name] = append(prev, valueBuffer...)
+					} else {
+						attrMap[name] = valueBuffer
+					}
+					data = data[len(valueBuffer):]
+
+				case byte(Set) | AR: // Set Request
+					fmt.Println("TODO")
+
+				case byte(SetTable) | AR: // Set Table Request
+					// TODO: Only baseline supported at this time
+					return nil, errors.New("attribute encode for set-table-request not yet supported")
+				}
+			} else {
+				attrMap[name] = value
+				data = data[attrDef.GetSize():]
+			}
 		}
 	}
 	return attrMap, nil

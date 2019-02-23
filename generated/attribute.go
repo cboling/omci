@@ -171,68 +171,120 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	return nil
 }
 
-func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.DecodeFeedback, msgType byte) (interface{}, error) {
-	// Use negative numbers to indicate signed values
-	size := attr.GetSize()
-	if size < 0 {
-		size = -size
-	}
-	if len(data) < size {
-		df.SetTruncated()
-		return nil, errors.New("packet too small for field")
-	}
-	var err error
-	switch attr.GetSize() {
+// BufferToTableAttributes takes the reconstructed octet buffer transmitted for
+// a table attribute (over many GetNextResponses) and converts it into the desired
+// format for each table row
+func (attr *AttributeDefinition) BufferToTableAttributes(data []byte) (interface{}, error) {
+
+	// Source is network byte order octets. Convert to proper array of slices
+	rowSize := attr.GetSize()
+	dataSize := len(data)
+	index := 0
+
+	switch rowSize {
 	default:
-		value := make([]byte, size)
-		copy(value, data[:size])
-		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
-			}
+		value := make([][]byte, dataSize/rowSize)
+		for offset := 0; offset < dataSize; offset += rowSize {
+			value[index] = make([]byte, rowSize)
+			copy(value[index], data[offset:])
+			index++
 		}
-		return value, err
+		return value, nil
 	case 1:
-		value := data[0]
-		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
-			}
-		}
-		return value, err
+		value := make([]byte, dataSize)
+		copy(value, data)
+		return value, nil
 	case 2:
-		value := binary.BigEndian.Uint16(data[0:2])
-		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
-			}
+		value := make([]uint16, dataSize/2)
+		for offset := 0; offset < dataSize; offset += rowSize {
+			value[offset] = binary.BigEndian.Uint16(data[offset:])
+			index++
 		}
-		return value, err
+		return value, nil
 	case 4:
-		value := binary.BigEndian.Uint32(data[0:4])
-		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
-			}
+		value := make([]uint32, dataSize/4)
+		for offset := 0; offset < dataSize; offset += rowSize {
+			value[offset] = binary.BigEndian.Uint32(data[offset:])
+			index++
 		}
-		return value, err
+		return value, nil
 	case 8:
-		value := binary.BigEndian.Uint64(data[0:8])
-		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
-			}
+		value := make([]uint64, dataSize/8)
+		for offset := 0; offset < dataSize; offset += rowSize {
+			value[offset] = binary.BigEndian.Uint64(data[offset:])
+			index++
 		}
-		return value, err
+		return value, nil
 	}
 }
 
+func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.DecodeFeedback, msgType byte) (interface{}, error) {
+	// Serialization of a table depends on the type of message. A
+	// Review of ITU-T G.988 shows that access on tables are
+	// either Read and/or Write, never Set-by-Create
+	switch msgType {
+	default:
+		return nil, errors.New(fmt.Sprintf("unsupported Message Type '%v' for table serialization", msgType))
+
+	case byte(Get) | AK: // Get Response
+		// Size
+		value := binary.BigEndian.Uint32(data[0:4])
+		return value, nil
+
+	case byte(GetNext) | AK: // Get Next Response
+		// Block of data (octets) that need to be reassembled before conversion
+		// to table/row-data
+		return data, nil
+
+	case byte(Set) | AR: // Set Request
+		fmt.Println("TODO")
+
+	case byte(SetTable) | AR: // Set Table Request
+		// TODO: Only baseline supported at this time
+		return nil, errors.New("attribute encode for set-table-request not yet supported")
+	}
+	return nil, errors.New("TODO")
+}
+
 func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte) error {
+	// Serialization of a table depends on the type of message. A
+	// Review of ITU-T G.988 shows that access on tables are
+	// either Read and/or Write, never Set-by-Create
+	switch msgType {
+	default:
+		return errors.New(fmt.Sprintf("unsupported Message Type '%v' for table serialization", msgType))
+
+	case byte(Get) | AK: // Get Response
+		// Size
+		if dwordSize, ok := value.(uint32); ok {
+			bytes, err := b.AppendBytes(4)
+			if err != nil {
+				return err
+			}
+			binary.BigEndian.PutUint32(bytes, dwordSize)
+			return nil
+		}
+		return errors.New("unexpected type for table serialization")
+
+	case byte(GetNext) | AK: // Get Next Response
+		// Values are already in network by order form
+		if data, ok := value.([]byte); ok {
+			bytes, err := b.AppendBytes(len(data))
+			if err != nil {
+				return err
+			}
+			copy(bytes, data)
+			return nil
+		}
+		return errors.New("unexpected type for table serialization")
+
+	case byte(Set) | AR: // Set Request
+		fmt.Println("TODO")
+
+	case byte(SetTable) | AR: // Set Table Request
+		// TODO: Only baseline supported at this time
+		return errors.New("attribute encode for set-table-request not yet supported")
+	}
 	// TODO: Check to see if space in buffer here !!!!
 	bytes, err := b.AppendBytes(attr.GetSize())
 	if err != nil {
