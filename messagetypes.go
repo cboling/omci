@@ -2997,7 +2997,7 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 		return err
 	}
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
-	binary.BigEndian.PutUint16(bytes, omci.SequenceNumber)
+	binary.BigEndian.PutUint16(bytes[2:], omci.SequenceNumber)
 	return nil
 }
 
