@@ -1004,12 +1004,15 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 // GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
-	AlarmBitMap [28]byte // 224 bits
+	AlarmEntityClass    uint16
+	AlarmEntityInstance uint16
+	AlarmBitMap         [28]byte // 224 bits
 }
 
 func (omci *GetAllAlarmsNextResponse) String() string {
-	return fmt.Sprintf("%v, Bitmap: %v",
-		omci.MeBasePacket.String(), omci.AlarmBitMap)
+	return fmt.Sprintf("%v, CID/EID: %d/%d (%#x/%#x), Bitmap: %v",
+		omci.MeBasePacket.String(), omci.AlarmEntityClass, omci.AlarmEntityInstance,
+		omci.AlarmEntityClass, omci.AlarmEntityInstance, omci.AlarmBitMap)
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1039,7 +1042,10 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	copy(omci.AlarmBitMap[:], data[4:32])
+	omci.AlarmEntityClass = binary.BigEndian.Uint16(data[4:6])
+	omci.AlarmEntityInstance = binary.BigEndian.Uint16(data[6:8])
+
+	copy(omci.AlarmBitMap[:], data[8:36])
 	return nil
 }
 
@@ -1065,11 +1071,13 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
 		return me.NewProcessingError("managed entity does not support the Get All Alarms Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(28)
+	bytes, err := b.AppendBytes(2 + 2 + 28)
 	if err != nil {
 		return err
 	}
-	copy(bytes, omci.AlarmBitMap[:])
+	binary.BigEndian.PutUint16(bytes[0:], omci.AlarmEntityClass)
+	binary.BigEndian.PutUint16(bytes[2:], omci.AlarmEntityInstance)
+	copy(bytes[4:], omci.AlarmBitMap[:])
 	return nil
 }
 

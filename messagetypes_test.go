@@ -317,33 +317,69 @@ func TestCreateResponseDecode(t *testing.T) {
 }
 
 func TestCreateResponseSerialize(t *testing.T) {
-	// TODO:Implement
+
+	goodMessage := "0108240a002d0900000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x0108,
+		MessageType:   CreateResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &CreateRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    MacBridgeServiceProfileClassId,
+			EntityInstance: uint16(0x900),
+		},
+		Attributes: AttributeValueMap{
+			"SpanningTreeInd":            0,
+			"LearningInd":                0,
+			"PortBridgingInd":            0,
+			"Priority":                   0,
+			"MaxAge":                     0,
+			"HelloTime":                  0,
+			"ForwardDelay":               0,
+			"UnknownMacAddressDiscard":   0,
+			"MacLearningDepth":           0,
+			"DynamicFilteringAgeingTime": 0,
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestDeleteRequestDecode(t *testing.T) {
-	// TODO:Implement
-	//goodMessage := ""
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, packet)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, byte(Delete)|AR)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeDeleteRequest)
-	//
-	//assert.NotNil(t, msgLayer)
-	//
-	//request, ok2 := msgLayer.(*DeleteRequest)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, request)
+	goodMessage := "0211460a00ab0202000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, DeleteRequestType)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeDeleteRequest)
+
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*DeleteRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
 }
 
 func TestDeleteRequestSerialize(t *testing.T) {
@@ -351,29 +387,28 @@ func TestDeleteRequestSerialize(t *testing.T) {
 }
 
 func TestDeleteResponseDecode(t *testing.T) {
-	// TODO:Implement
-	//goodMessage := ""
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, packet)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, DeleteResponseType)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeDeleteResponse)
-	//
-	//assert.NotNil(t, msgLayer)
-	//
-	//response, ok2 := msgLayer.(*DeleteResponse)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, response)
+	goodMessage := "0211260a00ab0202000000000000000000000000000000000000000000000000000000000000000000000028013437fb"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, DeleteResponseType)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeDeleteResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*DeleteResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
 }
 
 func TestDeleteResponseSerialize(t *testing.T) {
@@ -549,29 +584,28 @@ func TestGetAllAlarmsResponseSerialize(t *testing.T) {
 }
 
 func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
-	// TODO:Implement
-	//goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
-	//
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, packet)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, byte(GetAllAlarmsNext)|AR)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
-	//assert.NotNil(t, msgLayer)
-	//
-	//request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, request)
+	goodMessage := "02344c0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextRequestType)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
 }
 
 func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
@@ -579,28 +613,27 @@ func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
 }
 
 func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
-	// TODO:Implement
-	//goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, packet)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextResponseType)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
-	//assert.NotNil(t, msgLayer)
-	//
-	//response, ok2 := msgLayer.(*GetAllAlarmsResponse)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, response)
+	goodMessage := "02342c0a00020000000b01028000000000000000000000000000000000000000000000000000000000000028f040fc87"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextResponseType)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetAllAlarmsNextResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
 }
 
 func TestGetAllAlarmsNextResponseSerialize(t *testing.T) {

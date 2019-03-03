@@ -12,6 +12,7 @@ import (
 func main() {
 	//micTest()
 	//micTestFromFrame()
+	getAllAlarms()
 	mibUploadNextResponses()
 	serializeCreateRequest()
 	syncTimeRequest()
@@ -284,6 +285,50 @@ func syncTimeResponse() {
 	msgLayer := packet.Layer(omci.LayerTypeSynchronizeTimeResponse)
 	fmt.Println(msgLayer)
 	fmt.Println(msgLayer.(*omci.SynchronizeTimeResponse))
+}
+
+func getAllAlarms() {
+	fmt.Println("======================================================")
+	fmt.Println("======================================================")
+	goodMessage := "02342c0a00020000000b01028000000000000000000000000000000000000000000000000000000000000028f040fc87"
+
+	data, err := stringToPacket(goodMessage)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+
+	omciLayer := packet.Layer(omci.LayerTypeOMCI)
+	fmt.Println(omciLayer)
+	fmt.Println(omciLayer.(*omci.OMCI))
+
+	msgLayer := packet.Layer(omci.LayerTypeGetAllAlarmsNextResponse)
+	fmt.Println(msgLayer)
+	fmt.Println(msgLayer.(*omci.GetAllAlarmsNextResponse))
+
+	omciMsg, ok := omciLayer.(*omci.OMCI)
+	fmt.Printf("OMCI Layer Decode status: %v\n", ok)
+	fmt.Printf("   TransactionID: %v\n", omciMsg.TransactionID)
+	fmt.Printf("   MessageType: %v (%#x)\n", omciMsg.MessageType, omciMsg.MessageType)
+	fmt.Printf("   \n")
+
+	response, ok2 := msgLayer.(*omci.GetAllAlarmsNextResponse)
+	fmt.Printf("Response layer Decode status: %v\n", ok2)
+	fmt.Println(packet)
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, response)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+
+	fmt.Println(goodMessage)
+	fmt.Println(reconstituted)
 }
 
 func create8021pMapperService_profile() {
