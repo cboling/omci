@@ -1678,7 +1678,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 }
 
 /////////////////////////////////////////////////////////////////////////////
-//
+// TestRequest:		TODO: Not yet implemented
 type TestRequest struct {
 	MeBasePacket
 }

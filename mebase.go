@@ -25,7 +25,7 @@ import (
 
 type MeBasePacket struct {
 	EntityClass    uint16
-	EntityInstance uint16 // TODO: Change attribute values to map and move this into the map
+	EntityInstance uint16
 
 	gopacket.Layer
 	layers.BaseLayer

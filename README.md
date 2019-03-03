@@ -8,6 +8,7 @@ The following OMCI message types currently have been coded and are covered
 by unit tests.
 
  - CreateRequest
+ - CreateResponse
  - MibResetRequest
  - MibResetResponse
 
@@ -15,13 +16,16 @@ by unit tests.
 The following OMCI message types currently have been coded and are partially covered
 by unit tests, but work still remains for sufficient unit test coverage.
 
- - CreateResponse
+ - DeleteRequest
+ - DeleteResponse
  - SetRequest
  - SetResponse
  - GetRequest
  - GetResponse
  - GetAllAlarmsRequest
  - GetAllAlarmsResponse
+ - GetAllAlarmsNextRequest
+ - GetAllAlarmsNextResponse
  - MibUploadRequest
  - MibUploadResponse
  - MibUploadNextRequest
@@ -33,10 +37,6 @@ by unit tests, but work still remains for sufficient unit test coverage.
 ## Message Types supported but lacking any unit test
 The following OMCI message types currently have been coded but any unit test coverage.
 
- - DeleteRequest
- - DeleteResponse
- - GetAllAlarmsNextRequest
- - GetAllAlarmsNextResponse
  - RebootRequest
  - RebootResponse
  - StartSoftwareDownloadResponse
