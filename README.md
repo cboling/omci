@@ -9,28 +9,28 @@ by unit tests.
 
  - CreateRequest
  - CreateResponse
+ - DeleteRequest
+ - DeleteResponse
+ - SetRequest
+ - GetRequest
+ - GetAllAlarmsRequest
+ - GetAllAlarmsResponse
+ - GetAllAlarmsNextRequest
+ - MibUploadRequest
+ - MibUploadResponse
+ - MibUploadNextRequest
  - MibResetRequest
  - MibResetResponse
+ - SynchronizeTimeRequest
 
 ## Message Types supported but lacking full unit test
 The following OMCI message types currently have been coded and are partially covered
 by unit tests, but work still remains for sufficient unit test coverage.
 
- - DeleteRequest
- - DeleteResponse
- - SetRequest
  - SetResponse
- - GetRequest
  - GetResponse
- - GetAllAlarmsRequest
- - GetAllAlarmsResponse
- - GetAllAlarmsNextRequest
  - GetAllAlarmsNextResponse
- - MibUploadRequest
- - MibUploadResponse
- - MibUploadNextRequest
  - MibUploadNextResponse
- - SynchronizeTimeRequest
  - SynchronizeTimeResponse
  - AttributeValueChange
 
