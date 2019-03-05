@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FastChannelConfigurationProfileClassId uint16 = 432
+const FastChannelConfigurationProfileClassId ClassID = ClassID(432)
 
 var fastchannelconfigurationprofileBME *ManagedEntityDefinition
 

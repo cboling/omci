@@ -19,12 +19,13 @@ package omci
 import (
 	"encoding/binary"
 	"fmt"
+	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 )
 
 type MeBasePacket struct {
-	EntityClass    uint16
+	EntityClass    me.ClassID
 	EntityInstance uint16
 
 	gopacket.Layer
@@ -33,8 +34,8 @@ type MeBasePacket struct {
 }
 
 func (msg *MeBasePacket) String() string {
-	return fmt.Sprintf("ClassID: %d (%#x), InstanceId: %d (%#x)",
-		msg.EntityClass, msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
+	return fmt.Sprintf("ClassID: %v, InstanceId: %d/%#x",
+		msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
 }
 
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
@@ -58,7 +59,7 @@ func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
 }
 func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Note: Base OMCI frame already checked for frame with at least 10 octets
-	msg.EntityClass = binary.BigEndian.Uint16(data[0:])
+	msg.EntityClass = me.ClassID(binary.BigEndian.Uint16(data[0:]))
 	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
 	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
 	return nil
@@ -69,7 +70,7 @@ func (msg *MeBasePacket) SerializeTo(b gopacket.SerializeBuffer) error {
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, msg.EntityClass)
+	binary.BigEndian.PutUint16(bytes, uint16(msg.EntityClass))
 	binary.BigEndian.PutUint16(bytes[2:], msg.EntityInstance)
 	return nil
 }

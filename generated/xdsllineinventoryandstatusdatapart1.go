@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XdslLineInventoryAndStatusDataPart1ClassId uint16 = 100
+const XdslLineInventoryAndStatusDataPart1ClassId ClassID = ClassID(100)
 
 var xdsllineinventoryandstatusdatapart1BME *ManagedEntityDefinition
 

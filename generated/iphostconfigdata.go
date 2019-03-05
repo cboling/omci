@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const IpHostConfigDataClassId uint16 = 134
+const IpHostConfigDataClassId ClassID = ClassID(134)
 
 var iphostconfigdataBME *ManagedEntityDefinition
 

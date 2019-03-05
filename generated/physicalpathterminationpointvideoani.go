@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PhysicalPathTerminationPointVideoAniClassId uint16 = 90
+const PhysicalPathTerminationPointVideoAniClassId ClassID = ClassID(90)
 
 var physicalpathterminationpointvideoaniBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Vdsl2LineInventoryAndStatusDataPart4ClassId uint16 = 415
+const Vdsl2LineInventoryAndStatusDataPart4ClassId ClassID = ClassID(415)
 
 var vdsl2lineinventoryandstatusdatapart4BME *ManagedEntityDefinition
 

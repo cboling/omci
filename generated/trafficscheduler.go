@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TrafficSchedulerClassId uint16 = 278
+const TrafficSchedulerClassId ClassID = ClassID(278)
 
 var trafficschedulerBME *ManagedEntityDefinition
 

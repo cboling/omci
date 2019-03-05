@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MacBridgePortFilterPreAssignTableClassId uint16 = 79
+const MacBridgePortFilterPreAssignTableClassId ClassID = ClassID(79)
 
 var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 

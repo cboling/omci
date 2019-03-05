@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XdslChannelConfigurationProfilePart2ClassId uint16 = 412
+const XdslChannelConfigurationProfilePart2ClassId ClassID = ClassID(412)
 
 var xdslchannelconfigurationprofilepart2BME *ManagedEntityDefinition
 

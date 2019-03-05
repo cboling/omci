@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EquipmentExtensionPackageClassId uint16 = 160
+const EquipmentExtensionPackageClassId ClassID = ClassID(160)
 
 var equipmentextensionpackageBME *ManagedEntityDefinition
 

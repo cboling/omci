@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VpNetworkCtpClassId uint16 = 269
+const VpNetworkCtpClassId ClassID = ClassID(269)
 
 var vpnetworkctpBME *ManagedEntityDefinition
 

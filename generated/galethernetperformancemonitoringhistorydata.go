@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GalEthernetPerformanceMonitoringHistoryDataClassId uint16 = 276
+const GalEthernetPerformanceMonitoringHistoryDataClassId ClassID = ClassID(276)
 
 var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

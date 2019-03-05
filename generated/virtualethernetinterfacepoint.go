@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VirtualEthernetInterfacePointClassId uint16 = 329
+const VirtualEthernetInterfacePointClassId ClassID = ClassID(329)
 
 var virtualethernetinterfacepointBME *ManagedEntityDefinition
 

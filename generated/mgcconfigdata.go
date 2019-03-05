@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MgcConfigDataClassId uint16 = 155
+const MgcConfigDataClassId ClassID = ClassID(155)
 
 var mgcconfigdataBME *ManagedEntityDefinition
 

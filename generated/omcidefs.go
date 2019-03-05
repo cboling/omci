@@ -20,6 +20,7 @@
 package generated
 
 import (
+	"fmt"
 	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 )
@@ -36,11 +37,23 @@ type Results byte
 // be instantiated in either way, depending on the ONU architecture or
 // circumstances.
 //
-//Attributes of an ME that is auto-instantiated by the ONU can be read (R),
+// Attributes of an ME that is auto-instantiated by the ONU can be read (R),
 // write (W), or read, write (R, W). On the other hand, attributes of a ME
 // that is instantiated by the OLT can be either (R), (W), (R, W),
 // (R, set by create) or (R, W, set by create).
 type AttributeAccess byte
+
+// ClassID is a 16-bit value that uniquely defines a Managed Entity clas
+// from the ITU-T G.988 specification.
+type ClassID uint16
+
+func (cid ClassID) String() string {
+	if entity, err := LoadManagedEntityDefinition(cid); err == nil {
+		return fmt.Sprintf("[%s] (%d/%#x)",
+			entity.GetManagedEntityDefinition().GetName(), uint16(cid), uint16(cid))
+	}
+	return fmt.Sprintf("unknown ClassID")
+}
 
 const (
 	// AK (Bit 6), indicates whether this message is an AK to an action request.
@@ -234,7 +247,7 @@ func SupportsAttributeAccess(attr *AttributeDefinition, acc AttributeAccess) boo
 
 type IManagedEntityDefinition interface {
 	GetName() string
-	GetClassID() uint16
+	GetClassID() ClassID
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() *AttributeDefinitionMap

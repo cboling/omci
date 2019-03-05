@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const NetworkAddressClassId uint16 = 137
+const NetworkAddressClassId ClassID = ClassID(137)
 
 var networkaddressBME *ManagedEntityDefinition
 

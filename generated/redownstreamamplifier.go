@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const ReDownstreamAmplifierClassId uint16 = 316
+const ReDownstreamAmplifierClassId ClassID = ClassID(316)
 
 var redownstreamamplifierBME *ManagedEntityDefinition
 

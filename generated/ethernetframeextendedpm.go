@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EthernetFrameExtendedPmClassId uint16 = 334
+const EthernetFrameExtendedPmClassId ClassID = ClassID(334)
 
 var ethernetframeextendedpmBME *ManagedEntityDefinition
 

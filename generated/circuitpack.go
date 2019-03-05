@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const CircuitPackClassId uint16 = 6
+const CircuitPackClassId ClassID = ClassID(6)
 
 var circuitpackBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const ReCommonAmplifierParametersClassId uint16 = 328
+const ReCommonAmplifierParametersClassId ClassID = ClassID(328)
 
 var recommonamplifierparametersBME *ManagedEntityDefinition
 

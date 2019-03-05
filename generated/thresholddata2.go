@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const ThresholdData2ClassId uint16 = 274
+const ThresholdData2ClassId ClassID = ClassID(274)
 
 var thresholddata2BME *ManagedEntityDefinition
 

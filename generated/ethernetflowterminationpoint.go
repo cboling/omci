@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EthernetFlowTerminationPointClassId uint16 = 286
+const EthernetFlowTerminationPointClassId ClassID = ClassID(286)
 
 var ethernetflowterminationpointBME *ManagedEntityDefinition
 

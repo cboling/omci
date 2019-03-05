@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EthernetFramePerformanceMonitoringHistoryDataDownstreamClassId uint16 = 321
+const EthernetFramePerformanceMonitoringHistoryDataDownstreamClassId ClassID = ClassID(321)
 
 var ethernetframeperformancemonitoringhistorydatadownstreamBME *ManagedEntityDefinition
 

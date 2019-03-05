@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FileTransferControllerClassId uint16 = 318
+const FileTransferControllerClassId ClassID = ClassID(318)
 
 var filetransfercontrollerBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TContClassId uint16 = 262
+const TContClassId ClassID = ClassID(262)
 
 var tcontBME *ManagedEntityDefinition
 

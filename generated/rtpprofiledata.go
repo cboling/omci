@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const RtpProfileDataClassId uint16 = 143
+const RtpProfileDataClassId ClassID = ClassID(143)
 
 var rtpprofiledataBME *ManagedEntityDefinition
 

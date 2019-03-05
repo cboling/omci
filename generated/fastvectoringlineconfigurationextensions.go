@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FastVectoringLineConfigurationExtensionsClassId uint16 = 434
+const FastVectoringLineConfigurationExtensionsClassId ClassID = ClassID(434)
 
 var fastvectoringlineconfigurationextensionsBME *ManagedEntityDefinition
 

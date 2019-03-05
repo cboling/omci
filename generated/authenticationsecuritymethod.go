@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const AuthenticationSecurityMethodClassId uint16 = 148
+const AuthenticationSecurityMethodClassId ClassID = ClassID(148)
 
 var authenticationsecuritymethodBME *ManagedEntityDefinition
 

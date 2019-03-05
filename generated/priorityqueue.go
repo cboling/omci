@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PriorityQueueClassId uint16 = 277
+const PriorityQueueClassId ClassID = ClassID(277)
 
 var priorityqueueBME *ManagedEntityDefinition
 

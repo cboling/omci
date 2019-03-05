@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const NetworkDialPlanTableClassId uint16 = 145
+const NetworkDialPlanTableClassId ClassID = ClassID(145)
 
 var networkdialplantableBME *ManagedEntityDefinition
 

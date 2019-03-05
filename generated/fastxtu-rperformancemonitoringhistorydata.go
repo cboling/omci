@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FastXtuRPerformanceMonitoringHistoryDataClassId uint16 = 438
+const FastXtuRPerformanceMonitoringHistoryDataClassId ClassID = ClassID(438)
 
 var fastxturperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

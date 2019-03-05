@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XdslSubcarrierMaskingDownstreamProfileClassId uint16 = 108
+const XdslSubcarrierMaskingDownstreamProfileClassId ClassID = ClassID(108)
 
 var xdslsubcarriermaskingdownstreamprofileBME *ManagedEntityDefinition
 

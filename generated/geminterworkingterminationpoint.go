@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GemInterworkingTerminationPointClassId uint16 = 266
+const GemInterworkingTerminationPointClassId ClassID = ClassID(266)
 
 var geminterworkingterminationpointBME *ManagedEntityDefinition
 

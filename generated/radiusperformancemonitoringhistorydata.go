@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const RadiusPerformanceMonitoringHistoryDataClassId uint16 = 293
+const RadiusPerformanceMonitoringHistoryDataClassId ClassID = ClassID(293)
 
 var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

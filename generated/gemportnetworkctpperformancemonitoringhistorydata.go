@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId uint16 = 341
+const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(341)
 
 var gemportnetworkctpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

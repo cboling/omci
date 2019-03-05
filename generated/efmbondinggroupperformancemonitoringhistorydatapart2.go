@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId uint16 = 422
+const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId ClassID = ClassID(422)
 
 var efmbondinggroupperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 

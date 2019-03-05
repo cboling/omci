@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1XConfigurationProfileClassId uint16 = 291
+const Dot1XConfigurationProfileClassId ClassID = ClassID(291)
 
 var dot1xconfigurationprofileBME *ManagedEntityDefinition
 

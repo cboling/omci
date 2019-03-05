@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VoipMediaProfileClassId uint16 = 142
+const VoipMediaProfileClassId ClassID = ClassID(142)
 
 var voipmediaprofileBME *ManagedEntityDefinition
 

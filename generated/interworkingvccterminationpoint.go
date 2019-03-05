@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const InterworkingVccTerminationPointClassId uint16 = 14
+const InterworkingVccTerminationPointClassId ClassID = ClassID(14)
 
 var interworkingvccterminationpointBME *ManagedEntityDefinition
 

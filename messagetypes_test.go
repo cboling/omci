@@ -50,6 +50,53 @@ var allMsgTypes = [...]MsgType{
 	GetCurrentData,
 	SetTable}
 
+var allMessageTypes = [...]MessageType{
+	CreateRequestType,
+	CreateResponseType,
+	DeleteRequestType,
+	DeleteResponseType,
+	SetRequestType,
+	SetResponseType,
+	GetRequestType,
+	GetResponseType,
+	GetAllAlarmsRequestType,
+	GetAllAlarmsResponseType,
+	GetAllAlarmsNextRequestType,
+	GetAllAlarmsNextResponseType,
+	MibUploadRequestType,
+	MibUploadResponseType,
+	MibUploadNextRequestType,
+	MibUploadNextResponseType,
+	MibResetRequestType,
+	MibResetResponseType,
+	TestRequestType,
+	TestResponseType,
+	StartSoftwareDownloadRequestType,
+	StartSoftwareDownloadResponseType,
+	DownloadSectionRequestType,
+	DownloadSectionResponseType,
+	EndSoftwareDownloadRequestType,
+	EndSoftwareDownloadResponseType,
+	ActivateSoftwareRequestType,
+	ActivateSoftwareResponseType,
+	CommitSoftwareRequestType,
+	CommitSoftwareResponseType,
+	SynchronizeTimeRequestType,
+	SynchronizeTimeResponseType,
+	RebootRequestType,
+	RebootResponseType,
+	GetNextRequestType,
+	GetNextResponseType,
+	GetCurrentDataRequestType,
+	GetCurrentDataResponseType,
+	SetTableRequestType,
+	SetTableResponseType,
+	// Autonomous ONU messages
+	AlarmNotificationType,
+	AttributeValueChangeType,
+	TestResultType,
+}
+
 var allResults = [...]Results{
 	Success,
 	ProcessingError,
@@ -60,12 +107,27 @@ var allResults = [...]Results{
 	DeviceBusy,
 	InstanceExists}
 
-// MibResetRequestTest tests decode/encode of a MIB Reset Request
+// TestMsgTypeStrings tests that base message types can be printed
 func TestMsgTypeStrings(t *testing.T) {
 	for _, msg := range allMsgTypes {
 		strMsg := msg.String()
 		assert.NotEqual(t, len(strMsg), 0)
 	}
+	unknown := MsgType(0xFF)
+	strMsg := unknown.String()
+	assert.NotEqual(t, len(strMsg), 0)
+}
+
+// TestMessageTypeStrings tests that request/response/notification
+// message types can be printed
+func TestMessageTypeStrings(t *testing.T) {
+	for _, msg := range allMessageTypes {
+		strMsg := msg.String()
+		assert.NotEqual(t, len(strMsg), 0)
+	}
+	unknown := MessageType(0xFF)
+	strMsg := unknown.String()
+	assert.NotEqual(t, len(strMsg), 0)
 }
 
 func TestResultsStrings(t *testing.T) {
@@ -252,6 +314,10 @@ func TestCreateRequestDecode(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestCreateRequestSerialize(t *testing.T) {
@@ -293,7 +359,7 @@ func TestCreateRequestSerialize(t *testing.T) {
 }
 
 func TestCreateResponseDecode(t *testing.T) {
-	goodMessage := "0108240a002d0900000000000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "0157240a01100001000000000000000000000000000000000000000000000000000000000000000000000028a9ccbeb9"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
 
@@ -314,35 +380,28 @@ func TestCreateResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*CreateResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestCreateResponseSerialize(t *testing.T) {
-
-	goodMessage := "0108240a002d0900000000000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "0157240a01100001000000000000000000000000000000000000000000000000000000000000000000000028"
 
 	omciLayer := &OMCI{
-		TransactionID: 0x0108,
+		TransactionID: 0x0157,
 		MessageType:   CreateResponseType,
 		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,						// Optional, defaults to 40 octets
 	}
-	request := &CreateRequest{
+	request := &CreateResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    MacBridgeServiceProfileClassId,
-			EntityInstance: uint16(0x900),
+			EntityClass:    GalEthernetProfileClassId,
+			EntityInstance: uint16(1),
 		},
-		Attributes: AttributeValueMap{
-			"SpanningTreeInd":            0,
-			"LearningInd":                0,
-			"PortBridgingInd":            0,
-			"Priority":                   0,
-			"MaxAge":                     0,
-			"HelloTime":                  0,
-			"ForwardDelay":               0,
-			"UnknownMacAddressDiscard":   0,
-			"MacLearningDepth":           0,
-			"DynamicFilteringAgeingTime": 0,
-		},
+		Result:                 Success,
+		AttributeExecutionMask: uint16(0),
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -380,6 +439,10 @@ func TestDeleteRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*DeleteRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestDeleteRequestSerialize(t *testing.T) {
@@ -433,6 +496,10 @@ func TestDeleteResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*DeleteResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestDeleteResponseSerialize(t *testing.T) {
@@ -486,6 +553,10 @@ func TestSetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestSetRequestSerialize(t *testing.T) {
@@ -540,6 +611,10 @@ func TestSetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*SetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestSetResponseSerialize(t *testing.T) {
@@ -604,6 +679,10 @@ func TestGetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetRequestSerialize(t *testing.T) {
@@ -661,6 +740,10 @@ func TestGetResponseDecode(t *testing.T) {
 	assert.Equal(t, response.AttributeMask, uint16(0x0044))
 	assert.Equal(t, response.Attributes["TransmitOpticalLevel"], uint16(0x05f1))
 	assert.Equal(t, response.Attributes["OpticalSignalLevel"], uint16(0xdbcb))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetResponseSerialize(t *testing.T) {
@@ -741,6 +824,10 @@ func TestGetAllAlarmsRequestDecode(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
 	assert.Equal(t, request.AlarmRetrievalMode, byte(0))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetAllAlarmsRequestSerialize(t *testing.T) {
@@ -795,6 +882,10 @@ func TestGetAllAlarmsResponseDecode(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 	assert.Equal(t, response.NumberOfCommands, uint16(3))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetAllAlarmsResponseSerialize(t *testing.T) {
@@ -849,6 +940,10 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
@@ -908,6 +1003,10 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 	assert.Equal(t, response.AlarmEntityClass, PhysicalPathTerminationPointEthernetUniClassId)
 	assert.Equal(t, response.AlarmEntityInstance, uint16(0x102))
 	assert.Equal(t, response.AlarmBitMap, alarms)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestGetAllAlarmsNextResponseSerialize(t *testing.T) {
@@ -982,6 +1081,10 @@ func TestMibUploadRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibUploadRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestMibUploadRequestSerialize(t *testing.T) {
@@ -1014,6 +1117,7 @@ func TestMibUploadRequestSerialize(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
 func TestMibUploadResponse(t *testing.T) {
 	goodMessage := "03602d0a00020000011200000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -1094,6 +1198,10 @@ func TestMibUploadNextRequestDecode(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
 	assert.Equal(t, request.CommandSequenceNumber, uint16(0x3a))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestMibUploadNextRequestSerialize(t *testing.T) {
@@ -1169,6 +1277,9 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, pktValue, value)
 	}
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestMibUploadNextResponseSerialize(t *testing.T) {
@@ -1257,6 +1368,10 @@ func TestMibResetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibResetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestMibResetRequestSerialize(t *testing.T) {
@@ -1310,6 +1425,10 @@ func TestMibResetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*MibResetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestMibResetResponseSerialize(t *testing.T) {
@@ -1376,6 +1495,10 @@ func TestSynchronizeTimeRequestDecode(t *testing.T) {
 	assert.Equal(t, request.Hour, uint8(01))
 	assert.Equal(t, request.Minute, uint8(48))
 	assert.Equal(t, request.Second, uint8(27))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestSynchronizeTimeRequestSerialize(t *testing.T) {
@@ -1412,7 +1535,7 @@ func TestSynchronizeTimeRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
-func TestSynchronizeTimeResponseEncode(t *testing.T) {
+func TestSynchronizeTimeResponseDecode(t *testing.T) {
 	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -1434,10 +1557,40 @@ func TestSynchronizeTimeResponseEncode(t *testing.T) {
 	response, ok2 := msgLayer.(*SynchronizeTimeResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestSynchronizeTimeResponseSerialize(t *testing.T) {
-	// TODO:Implement
+	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x0109,
+		MessageType:   SynchronizeTimeResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &SynchronizeTimeResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    OnuGClassId,
+			EntityInstance: uint16(0),
+		},
+		Result:         Success,
+		SuccessResults: uint8(0),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 // TODO: Create request/response tests for all of the following types
@@ -1447,11 +1600,80 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 //GetCurrentData,
 //SetTable}
 
-// TODO: Create notification tests for all of the following types
-//AlarmNotification,  (TODO: Include alarm bitmap tests as well)
+func TestAlarmNotificationDecode(t *testing.T) {
+	goodMessage := "0000100a000b0104800000000000000000000000000000000000000000000000000000000000000500000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeAlarmNotification)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*AlarmNotificationMsg)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, request.EntityClass, PhysicalPathTerminationPointEthernetUniClassId)
+	assert.Equal(t, request.EntityInstance, uint16(0x104))
+	assert.Equal(t, request.AlarmBitmap, [28]byte{
+		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	})
+	assert.Equal(t, request.AlarmSequenceNumber, byte(5))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestAlarmNotificationSerialize(t *testing.T) {
+	goodMessage := "0000100a000b0104800000000000000000000000000000000000000000000000000000000000000500000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0,
+		MessageType:   AlarmNotificationType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &AlarmNotificationMsg{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    PhysicalPathTerminationPointEthernetUniClassId,
+			EntityInstance: uint16(0x104),
+		},
+		AlarmBitmap: [28]byte{
+			0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		},
+		AlarmSequenceNumber: byte(5),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
 
 func TestAttributeValueChangeDecode(t *testing.T) {
-	goodMessage := "0000110a0007000080004d4c2d33363236000000000000002020202020202020202020202020202000000028"
+	goodMessage := "0000110a0007000080004d4c2d33363236000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
 
@@ -1472,10 +1694,51 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AttributeValueChangeMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, request.AttributeMask, uint16(0x8000))
+	assert.Equal(t, request.EntityClass, SoftwareImageClassId)
+	assert.Equal(t, request.EntityInstance, uint16(0))
+	assert.Equal(t, request.Attributes["Version"], []byte{
+		0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00})
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestAttributeValueChangeSerialize(t *testing.T) {
-	// TODO:Implement
+	goodMessage := "0000110a0007000080004d4c2d33363236000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0,
+		MessageType:   AttributeValueChangeType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &AttributeValueChangeMsg{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    SoftwareImageClassId,
+			EntityInstance: uint16(0),
+		},
+		AttributeMask: uint16(0x8000),
+		Attributes: AttributeValueMap{
+			"Version": []byte{
+				0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			},
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 // TODO: Create notification tests for all of the following types

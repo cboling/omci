@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GalEthernetProfileClassId uint16 = 272
+const GalEthernetProfileClassId ClassID = ClassID(272)
 
 var galethernetprofileBME *ManagedEntityDefinition
 

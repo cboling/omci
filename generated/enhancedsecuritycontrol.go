@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EnhancedSecurityControlClassId uint16 = 332
+const EnhancedSecurityControlClassId ClassID = ClassID(332)
 
 var enhancedsecuritycontrolBME *ManagedEntityDefinition
 

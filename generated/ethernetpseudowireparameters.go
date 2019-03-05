@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EthernetPseudowireParametersClassId uint16 = 400
+const EthernetPseudowireParametersClassId ClassID = ClassID(400)
 
 var ethernetpseudowireparametersBME *ManagedEntityDefinition
 

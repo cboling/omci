@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TrafficDescriptorClassId uint16 = 280
+const TrafficDescriptorClassId ClassID = ClassID(280)
 
 var trafficdescriptorBME *ManagedEntityDefinition
 

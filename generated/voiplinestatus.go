@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VoipLineStatusClassId uint16 = 141
+const VoipLineStatusClassId ClassID = ClassID(141)
 
 var voiplinestatusBME *ManagedEntityDefinition
 

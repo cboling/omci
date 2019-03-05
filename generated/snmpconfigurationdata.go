@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const SnmpConfigurationDataClassId uint16 = 335
+const SnmpConfigurationDataClassId ClassID = ClassID(335)
 
 var snmpconfigurationdataBME *ManagedEntityDefinition
 

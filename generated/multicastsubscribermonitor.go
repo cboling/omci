@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MulticastSubscriberMonitorClassId uint16 = 311
+const MulticastSubscriberMonitorClassId ClassID = ClassID(311)
 
 var multicastsubscribermonitorBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XgPonTcPerformanceMonitoringHistoryDataClassId uint16 = 344
+const XgPonTcPerformanceMonitoringHistoryDataClassId ClassID = ClassID(344)
 
 var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

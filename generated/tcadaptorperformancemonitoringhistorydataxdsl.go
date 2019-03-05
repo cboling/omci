@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId uint16 = 116
+const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId ClassID = ClassID(116)
 
 var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 

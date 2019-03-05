@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TwdmChannelPhyLodsPerformanceMonitoringHistoryDataClassId uint16 = 444
+const TwdmChannelPhyLodsPerformanceMonitoringHistoryDataClassId ClassID = ClassID(444)
 
 var twdmchannelphylodsperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

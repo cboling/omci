@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Aal5ProfileClassId uint16 = 16
+const Aal5ProfileClassId ClassID = ClassID(16)
 
 var aal5profileBME *ManagedEntityDefinition
 

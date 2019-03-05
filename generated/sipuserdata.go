@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const SipUserDataClassId uint16 = 153
+const SipUserDataClassId ClassID = ClassID(153)
 
 var sipuserdataBME *ManagedEntityDefinition
 

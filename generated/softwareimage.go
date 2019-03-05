@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const SoftwareImageClassId uint16 = 7
+const SoftwareImageClassId ClassID = ClassID(7)
 
 var softwareimageBME *ManagedEntityDefinition
 

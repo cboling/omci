@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const SipCallInitiationPerformanceMonitoringHistoryDataClassId uint16 = 152
+const SipCallInitiationPerformanceMonitoringHistoryDataClassId ClassID = ClassID(152)
 
 var sipcallinitiationperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XdslXtuCPerformanceMonitoringHistoryDataClassId uint16 = 112
+const XdslXtuCPerformanceMonitoringHistoryDataClassId ClassID = ClassID(112)
 
 var xdslxtucperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

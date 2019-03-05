@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Ieee8021PMapperServiceProfileClassId uint16 = 130
+const Ieee8021PMapperServiceProfileClassId ClassID = ClassID(130)
 
 var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 

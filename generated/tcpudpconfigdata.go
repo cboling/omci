@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TcpUdpConfigDataClassId uint16 = 136
+const TcpUdpConfigDataClassId ClassID = ClassID(136)
 
 var tcpudpconfigdataBME *ManagedEntityDefinition
 

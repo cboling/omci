@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EfmBondingLinkClassId uint16 = 420
+const EfmBondingLinkClassId ClassID = ClassID(420)
 
 var efmbondinglinkBME *ManagedEntityDefinition
 

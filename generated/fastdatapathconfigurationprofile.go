@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FastDataPathConfigurationProfileClassId uint16 = 433
+const FastDataPathConfigurationProfileClassId ClassID = ClassID(433)
 
 var fastdatapathconfigurationprofileBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const CesServiceProfileClassId uint16 = 21
+const CesServiceProfileClassId ClassID = ClassID(21)
 
 var cesserviceprofileBME *ManagedEntityDefinition
 

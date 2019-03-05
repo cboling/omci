@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VlanTaggingFilterDataClassId uint16 = 84
+const VlanTaggingFilterDataClassId ClassID = ClassID(84)
 
 var vlantaggingfilterdataBME *ManagedEntityDefinition
 

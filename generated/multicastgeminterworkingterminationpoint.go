@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MulticastGemInterworkingTerminationPointClassId uint16 = 281
+const MulticastGemInterworkingTerminationPointClassId ClassID = ClassID(281)
 
 var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 

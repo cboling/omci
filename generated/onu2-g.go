@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Onu2GClassId uint16 = 257
+const Onu2GClassId ClassID = ClassID(257)
 
 var onu2gBME *ManagedEntityDefinition
 

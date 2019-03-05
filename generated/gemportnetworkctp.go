@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GemPortNetworkCtpClassId uint16 = 268
+const GemPortNetworkCtpClassId ClassID = ClassID(268)
 
 var gemportnetworkctpBME *ManagedEntityDefinition
 

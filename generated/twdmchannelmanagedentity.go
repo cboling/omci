@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TwdmChannelManagedEntityClassId uint16 = 443
+const TwdmChannelManagedEntityClassId ClassID = ClassID(443)
 
 var twdmchannelmanagedentityBME *ManagedEntityDefinition
 

@@ -29,7 +29,7 @@ import (
 
 type ManagedEntityDefinition struct {
 	Name                 string
-	ClassID              uint16
+	ClassID              ClassID
 	EntityID             uint16
 	MessageTypes         mapset.Set
 	AllowedAttributeMask uint16
@@ -37,14 +37,14 @@ type ManagedEntityDefinition struct {
 }
 
 func (bme *ManagedEntityDefinition) String() string {
-	return fmt.Sprintf("Definition: %v: CID: %v (%#x), Attributes: %v",
-		bme.Name, bme.ClassID, bme.ClassID, bme.AttributeDefinitions)
+	return fmt.Sprintf("Definition: %s: CID: %v, Attributes: %v",
+		bme.Name, bme.ClassID, bme.AttributeDefinitions)
 }
 
 func (bme *ManagedEntityDefinition) GetName() string {
 	return bme.Name
 }
-func (bme *ManagedEntityDefinition) GetClassID() uint16 {
+func (bme *ManagedEntityDefinition) GetClassID() ClassID {
 	return bme.ClassID
 }
 func (bme *ManagedEntityDefinition) GetMessageTypes() mapset.Set {

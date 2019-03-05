@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VoipApplicationServiceProfileClassId uint16 = 146
+const VoipApplicationServiceProfileClassId ClassID = ClassID(146)
 
 var voipapplicationserviceprofileBME *ManagedEntityDefinition
 

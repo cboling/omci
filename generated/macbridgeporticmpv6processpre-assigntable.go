@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MacBridgePortIcmpv6ProcessPreAssignTableClassId uint16 = 348
+const MacBridgePortIcmpv6ProcessPreAssignTableClassId ClassID = ClassID(348)
 
 var macbridgeporticmpv6processpreassigntableBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const RtpPseudowireParametersClassId uint16 = 283
+const RtpPseudowireParametersClassId ClassID = ClassID(283)
 
 var rtppseudowireparametersBME *ManagedEntityDefinition
 

@@ -19,7 +19,7 @@
  */
 package generated
 
-import "errors"
+import "fmt"
 
 // ManagedEntityInfo provides ManagedEntity information
 type ManagedEntityInfo struct {
@@ -47,11 +47,11 @@ type ParamData struct {
 // CreateME wraps a function that makes it a creator of a Managed Entity
 type CreateME func(params ...ParamData) (*ManagedEntity, error)
 
-var classToManagedEntityMap map[uint16]CreateME
+var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[uint16]CreateME, 161)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 161)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -216,10 +216,11 @@ func init() {
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
 }
 
-func LoadManagedEntityDefinition(classID uint16, params ...ParamData) (*ManagedEntity, error) {
+func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*ManagedEntity, error) {
 	newFunc, ok := classToManagedEntityMap[classID]
 	if ok {
 		return newFunc(params...)
 	}
-	return nil, errors.New("managed entity definition not found")
+	return nil, NewUnknownEntityError(fmt.Sprintf("managed entity %d (%#x) definition not found",
+		classID, classID))
 }

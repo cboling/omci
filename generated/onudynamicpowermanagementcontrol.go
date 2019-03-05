@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const OnuDynamicPowerManagementControlClassId uint16 = 336
+const OnuDynamicPowerManagementControlClassId ClassID = ClassID(336)
 
 var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 

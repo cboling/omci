@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const XdslChannelDownstreamStatusDataClassId uint16 = 102
+const XdslChannelDownstreamStatusDataClassId ClassID = ClassID(102)
 
 var xdslchanneldownstreamstatusdataBME *ManagedEntityDefinition
 

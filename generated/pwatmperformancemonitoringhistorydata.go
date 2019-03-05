@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PwAtmPerformanceMonitoringHistoryDataClassId uint16 = 338
+const PwAtmPerformanceMonitoringHistoryDataClassId ClassID = ClassID(338)
 
 var pwatmperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

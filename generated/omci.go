@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const OmciClassId uint16 = 287
+const OmciClassId ClassID = ClassID(287)
 
 var omciBME *ManagedEntityDefinition
 

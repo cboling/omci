@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PseudowireMaintenanceProfileClassId uint16 = 284
+const PseudowireMaintenanceProfileClassId ClassID = ClassID(284)
 
 var pseudowiremaintenanceprofileBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const BbfTr069ManagementServerClassId uint16 = 340
+const BbfTr069ManagementServerClassId ClassID = ClassID(340)
 
 var bbftr069managementserverBME *ManagedEntityDefinition
 

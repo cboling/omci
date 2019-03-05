@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1RateLimiterClassId uint16 = 298
+const Dot1RateLimiterClassId ClassID = ClassID(298)
 
 var dot1ratelimiterBME *ManagedEntityDefinition
 

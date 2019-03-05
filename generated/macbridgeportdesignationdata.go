@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MacBridgePortDesignationDataClassId uint16 = 48
+const MacBridgePortDesignationDataClassId ClassID = ClassID(48)
 
 var macbridgeportdesignationdataBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const GeneralPurposeBufferClassId uint16 = 308
+const GeneralPurposeBufferClassId ClassID = ClassID(308)
 
 var generalpurposebufferBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1XPortExtensionPackageClassId uint16 = 290
+const Dot1XPortExtensionPackageClassId ClassID = ClassID(290)
 
 var dot1xportextensionpackageBME *ManagedEntityDefinition
 

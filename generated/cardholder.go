@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const CardholderClassId uint16 = 5
+const CardholderClassId ClassID = ClassID(5)
 
 var cardholderBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const FastLineInventoryAndStatusDataClassId uint16 = 435
+const FastLineInventoryAndStatusDataClassId ClassID = ClassID(435)
 
 var fastlineinventoryandstatusdataBME *ManagedEntityDefinition
 

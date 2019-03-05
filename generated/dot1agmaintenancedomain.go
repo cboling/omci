@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1AgMaintenanceDomainClassId uint16 = 299
+const Dot1AgMaintenanceDomainClassId ClassID = ClassID(299)
 
 var dot1agmaintenancedomainBME *ManagedEntityDefinition
 

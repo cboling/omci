@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PhysicalPathTerminationPointPotsUniClassId uint16 = 53
+const PhysicalPathTerminationPointPotsUniClassId ClassID = ClassID(53)
 
 var physicalpathterminationpointpotsuniBME *ManagedEntityDefinition
 

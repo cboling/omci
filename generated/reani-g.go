@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const ReAniGClassId uint16 = 313
+const ReAniGClassId ClassID = ClassID(313)
 
 var reanigBME *ManagedEntityDefinition
 

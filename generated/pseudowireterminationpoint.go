@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PseudowireTerminationPointClassId uint16 = 282
+const PseudowireTerminationPointClassId ClassID = ClassID(282)
 
 var pseudowireterminationpointBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const TcpUdpPerformanceMonitoringHistoryDataClassId uint16 = 342
+const TcpUdpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(342)
 
 var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

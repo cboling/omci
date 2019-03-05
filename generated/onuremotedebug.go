@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const OnuRemoteDebugClassId uint16 = 158
+const OnuRemoteDebugClassId ClassID = ClassID(158)
 
 var onuremotedebugBME *ManagedEntityDefinition
 

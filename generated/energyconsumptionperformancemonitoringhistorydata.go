@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const EnergyConsumptionPerformanceMonitoringHistoryDataClassId uint16 = 343
+const EnergyConsumptionPerformanceMonitoringHistoryDataClassId ClassID = ClassID(343)
 
 var energyconsumptionperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1AgDefaultMdLevelClassId uint16 = 301
+const Dot1AgDefaultMdLevelClassId ClassID = ClassID(301)
 
 var dot1agdefaultmdlevelBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const MacBridgeConfigurationDataClassId uint16 = 46
+const MacBridgeConfigurationDataClassId ClassID = ClassID(46)
 
 var macbridgeconfigurationdataBME *ManagedEntityDefinition
 

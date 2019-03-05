@@ -35,9 +35,8 @@ type ManagedEntity struct {
 
 // String provides a simple string that describes this struct
 func (entity *ManagedEntity) String() string {
-	return fmt.Sprintf("ManagedEntity: (%v) CID/EID: %v/%v (%#x/%#x): Attributes: %v",
-		entity.GetName(), entity.GetClassID(), entity.GetEntityID(),
-		entity.GetClassID(), entity.GetEntityID(), entity.attributes)
+	return fmt.Sprintf("ManagedEntity: %v, EntityID: (%d/%#x): Attributes: %v",
+		entity.GetClassID(), entity.GetEntityID(), entity.GetEntityID(), entity.attributes)
 }
 
 func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, error) {
@@ -64,7 +63,7 @@ func (entity *ManagedEntity) GetName() string {
 	return entity.definition.GetName()
 }
 
-func (entity *ManagedEntity) GetClassID() uint16 {
+func (entity *ManagedEntity) GetClassID() ClassID {
 	return entity.definition.GetClassID()
 }
 
@@ -207,7 +206,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 		p.SetTruncated()
 		return errors.New("frame too small")
 	}
-	classID := binary.BigEndian.Uint16(data[0:2])
+	classID := ClassID(binary.BigEndian.Uint16(data[0:2]))
 	entityID := binary.BigEndian.Uint16(data[2:4])
 	parameters := ParamData{EntityID: entityID}
 
@@ -235,7 +234,7 @@ func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byt
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, entity.GetClassID())
+	binary.BigEndian.PutUint16(bytes, uint16(entity.GetClassID()))
 	binary.BigEndian.PutUint16(bytes[2:], entity.GetEntityID())
 	binary.BigEndian.PutUint16(bytes[4:], entity.GetAttributeMask())
 

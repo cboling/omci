@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const OltGClassId uint16 = 131
+const OltGClassId ClassID = ClassID(131)
 
 var oltgBME *ManagedEntityDefinition
 

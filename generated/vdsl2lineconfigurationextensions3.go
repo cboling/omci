@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Vdsl2LineConfigurationExtensions3ClassId uint16 = 410
+const Vdsl2LineConfigurationExtensions3ClassId ClassID = ClassID(410)
 
 var vdsl2lineconfigurationextensions3BME *ManagedEntityDefinition
 

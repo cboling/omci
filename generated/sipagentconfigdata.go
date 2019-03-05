@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const SipAgentConfigDataClassId uint16 = 150
+const SipAgentConfigDataClassId ClassID = ClassID(150)
 
 var sipagentconfigdataBME *ManagedEntityDefinition
 

@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const OnuPowerSheddingClassId uint16 = 133
+const OnuPowerSheddingClassId ClassID = ClassID(133)
 
 var onupowersheddingBME *ManagedEntityDefinition
 

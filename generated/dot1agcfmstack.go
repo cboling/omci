@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const Dot1AgCfmStackClassId uint16 = 305
+const Dot1AgCfmStackClassId ClassID = ClassID(305)
 
 var dot1agcfmstackBME *ManagedEntityDefinition
 

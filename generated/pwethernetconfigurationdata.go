@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const PwEthernetConfigurationDataClassId uint16 = 339
+const PwEthernetConfigurationDataClassId ClassID = ClassID(339)
 
 var pwethernetconfigurationdataBME *ManagedEntityDefinition
 

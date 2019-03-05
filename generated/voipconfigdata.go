@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const VoipConfigDataClassId uint16 = 138
+const VoipConfigDataClassId ClassID = ClassID(138)
 
 var voipconfigdataBME *ManagedEntityDefinition
 

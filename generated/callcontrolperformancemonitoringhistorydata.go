@@ -21,7 +21,7 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-const CallControlPerformanceMonitoringHistoryDataClassId uint16 = 140
+const CallControlPerformanceMonitoringHistoryDataClassId ClassID = ClassID(140)
 
 var callcontrolperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

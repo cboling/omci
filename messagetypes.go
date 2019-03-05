@@ -297,7 +297,7 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if !me.SupportsMsgType(entity, me.Create) {
 		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	bytes, err := b.AppendBytes(3)
 	if err != nil {
 		return err
 	}
@@ -1004,15 +1004,15 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 // GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
-	AlarmEntityClass    uint16
+	AlarmEntityClass    me.ClassID
 	AlarmEntityInstance uint16
 	AlarmBitMap         [28]byte // 224 bits
 }
 
 func (omci *GetAllAlarmsNextResponse) String() string {
-	return fmt.Sprintf("%v, CID/EID: %d/%d (%#x/%#x), Bitmap: %v",
+	return fmt.Sprintf("%v, CID: %v, EID: (%d/%#x), Bitmap: %v",
 		omci.MeBasePacket.String(), omci.AlarmEntityClass, omci.AlarmEntityInstance,
-		omci.AlarmEntityClass, omci.AlarmEntityInstance, omci.AlarmBitMap)
+		omci.AlarmEntityInstance, omci.AlarmBitMap)
 }
 
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -1042,7 +1042,7 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.AlarmEntityClass = binary.BigEndian.Uint16(data[4:6])
+	omci.AlarmEntityClass = me.ClassID(binary.BigEndian.Uint16(data[4:6]))
 	omci.AlarmEntityInstance = binary.BigEndian.Uint16(data[6:8])
 
 	copy(omci.AlarmBitMap[:], data[8:36])
@@ -1075,7 +1075,7 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:], omci.AlarmEntityClass)
+	binary.BigEndian.PutUint16(bytes[0:], uint16(omci.AlarmEntityClass))
 	binary.BigEndian.PutUint16(bytes[2:], omci.AlarmEntityInstance)
 	copy(bytes[4:], omci.AlarmBitMap[:])
 	return nil
@@ -2717,13 +2717,13 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 //
 type SynchronizeTimeResponse struct {
 	MeBasePacket
-	Results        me.Results
-	SuccessResults uint8 // Only if 'Results' is 0 -> success
+	Result         me.Results
+	SuccessResults uint8 // Only if 'Result' is 0 -> success
 }
 
 func (omci *SynchronizeTimeResponse) String() string {
 	return fmt.Sprintf("%v, Results: %d (%v), Success: %d",
-		omci.MeBasePacket.String(), omci.Results, omci.Results, omci.SuccessResults)
+		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SuccessResults)
 }
 
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -2749,9 +2749,9 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if omci.EntityInstance != 0 {
 		return me.NewUnknownInstanceError("invalid Entity Instance for Synchronize Time response")
 	}
-	omci.Results = me.Results(data[4])
-	if omci.Results > me.DeviceBusy {
-		msg := fmt.Sprintf("invalid results code: %v, must be 0..8", omci.Results)
+	omci.Result = me.Results(data[4])
+	if omci.Result > me.DeviceBusy {
+		msg := fmt.Sprintf("invalid results code: %v, must be 0..8", omci.Result)
 		return errors.New(msg)
 	}
 	omci.SuccessResults = data[5]
@@ -2788,15 +2788,15 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 		return me.NewProcessingError("managed entity does not support the Synchronize Time Message-Type")
 	}
 	numBytes := 2
-	if omci.Results != me.Success {
+	if omci.Result != me.Success {
 		numBytes = 1
 	}
 	bytes, err := b.AppendBytes(numBytes)
 	if err != nil {
 		return err
 	}
-	bytes[0] = uint8(omci.Results)
-	if omci.Results == me.Success {
+	bytes[0] = uint8(omci.Result)
+	if omci.Result == me.Success {
 		bytes[1] = omci.SuccessResults
 	}
 	return nil
