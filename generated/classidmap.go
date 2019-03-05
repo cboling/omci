@@ -222,5 +222,5 @@ func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*Managed
 		return newFunc(params...)
 	}
 	return nil, NewUnknownEntityError(fmt.Sprintf("managed entity %d (%#x) definition not found",
-		classID, classID))
+		uint16(classID), uint16(classID)))
 }
