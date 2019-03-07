@@ -2,6 +2,17 @@
 
 
 [[projects]]
+  branch = "master"
+  digest = "1:5671867a7f78a839bce5a3a8d4513bdbec7f799ab9c919a2fb50fe6c167cd61e"
+  name = "github.com/aead/cmac"
+  packages = [
+    ".",
+    "aes",
+  ]
+  pruneopts = "UT"
+  revision = "7af84192f0b1d66a78841ebd3e0d2f5212a4a928"
+
+[[projects]]
   digest = "1:ffe9824d294da03b391f44e1ae8281281b4afc1bdaa9588c9097785e3af10cec"
   name = "github.com/davecgh/go-spew"
   packages = ["spew"]
@@ -48,6 +59,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
+    "github.com/aead/cmac/aes",
     "github.com/deckarep/golang-set",
     "github.com/google/gopacket",
     "github.com/google/gopacket/layers",

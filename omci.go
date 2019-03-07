@@ -20,6 +20,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"github.com/aead/cmac/aes"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
@@ -159,14 +160,25 @@ func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	}
 }
 
-func calculateMicCrc32(data []byte) uint32 {
-	return crc32.ChecksumIEEE(data)
-}
+func calculateMicAes128(data []byte) (uint32, error) {
+	// See if upstream or downstream
+	var downstreamCDir = [...]byte{0x01}
+	var upstreamCDir = [...]byte{0x02}
 
-//func calculateAes128(upstream bool, key uint16, data []byte) uint32 {
-//	block, err := aes.NewCipher(key)
-//	return crc32.ChecksumIEEE(data)
-//}
+	tid := binary.BigEndian.Uint16(data[0:2])
+	var sum []byte
+	var err error
+
+	if (data[2]&me.AK) == me.AK || tid == 0 {
+		sum, err = aes.Sum(append(upstreamCDir[:], data[:44]...), OmciIK, 4)
+	} else {
+		sum, err = aes.Sum(append(downstreamCDir[:], data[:44]...), OmciIK, 4)
+	}
+	if err != nil {
+		return 0, err
+	}
+	return binary.BigEndian.Uint32(sum), nil
+}
 
 /////////////////////////////////////////////////////////////////////////////
 //   Baseline Message encode / decode
@@ -215,15 +227,15 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		}
 	}
 	// Extract MIC if present in the data
-	//if len(data) >= micOffset+4 {
-	//	omci.MIC = binary.BigEndian.Uint32(data[micOffset:])
-	//	actual := calculateMicCrc32(data[:micOffset])
-	//	if omci.MIC != actual {
-	//		msg := fmt.Sprintf("invalid MIC, expected %#x, got %#x",
-	//			omci.MIC, actual)
-	//		return errors.New(msg)
-	//	}
-	//}
+	if len(data) >= micOffset+4 {
+		omci.MIC = binary.BigEndian.Uint32(data[micOffset:])
+		actual, _ := calculateMicAes128(data[:micOffset])
+		if omci.MIC != actual {
+			_ := fmt.Sprintf("invalid MIC, expected %#x, got %#x",
+				omci.MIC, actual)
+			//return errors.New(msg)
+		}
+	}
 	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:]}
 	p.AddLayer(omci)
 	nextLayer, err := MsgTypeToNextLayer(omci.MessageType)
@@ -290,8 +302,7 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		if err != nil {
 			return err
 		}
-		// TODO: Look up MIC definition and see if it includes the length
-		omci.MIC = calculateMicCrc32(bytes[:MaxBaselineLength-4])
+		omci.MIC, _ = calculateMicAes128(bytes[:MaxBaselineLength-4])
 		binary.BigEndian.PutUint32(micBytes, omci.MIC)
 	}
 	return nil

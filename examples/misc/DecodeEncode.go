@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/binary"
 	"encoding/hex"
 	"fmt"
+	"github.com/aead/cmac/aes"
 	"github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -10,8 +12,8 @@ import (
 )
 
 func main() {
-	//micTest()
-	//micTestFromFrame()
+	micDownstreamTest()
+	micTestFromFrame()
 	getAllAlarms()
 	mibUploadNextResponses()
 	serializeCreateRequest()
@@ -27,58 +29,84 @@ func main() {
 	//encodeDecodeWithMIC()
 }
 
-//func micTest() {
-//	var downstreamCDir = [...]byte{0x01}
-//	// var upstreamCDir = [...]byte{0x02}
-//	var msg = [...]byte{
-//		0x80, 0x00, 0x49, 0x0A, 						// TID, Msg Type, Device ID
-//		0x01, 0x00, 0x00, 0x00,							// CID, EID
-//		0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,	// Message contents
-//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-//		0x00, 0x00, 0x00, 0x28,							// OMCI Trailer
-//	}
-//	var omciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
-//					     0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
-//
-//	downstream := append(downstreamCDir[:], msg[:]...)
-//	fmt.Println(downstream)
-//	cmac64, err := aes.Sum(downstream, omciIK, 16)
-//	fmt.Println(err)
-//	fmt.Println(cmac64)
-//
-//	expected := uint32(0x78dca53d)
-//	calculated:= binary.BigEndian.Uint32(cmac64)
-//
-//	fmt.Printf("Expected: %#x, Calculated: %#x\n", expected, calculated)
-//	fmt.Println()
-//}
-//
-//func micTestFromFrame() {
-//	frame := "00032e0a0002000000020000800000000000000000000000000000000000000000000000000000000000002828ce00e2"
-//	//var defaultAesKey = []byte{0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
-//	//	0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55}
-//
-//	data, err := stringToPacket(frame)
-//	if err != nil {
-//		fmt.Println(err)
-//		return
-//	}
-//	//var omciIK = []byte {0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
-//	//	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70,}
-//	 var omciIK = []byte {
-//		 0x4f, 0x4d, 0x43, 0x49, 0x49, 0x6e, 0x74, 0x65,
-//		 0x67, 0x72, 0x69, 0x74, 0x79, 0x4b, 0x65, 0x79,}
-//	var downstreamCDir = [...]byte{0x01}
-//	//var upstreamCDir = [...]byte{0x02}
-//	message := append(downstreamCDir[:], data[:44]...)
-//	cmac64, err := aes.Sum(message, omciIK, 16)
-//	expected := binary.BigEndian.Uint32(data[44:])
-//	calculated:= binary.BigEndian.Uint32(cmac64)
-//	fmt.Printf("Expected: %#x, Calculated: %#x\n", expected, calculated)
-//	fmt.Println()
-//}
+func micDownstreamTest() {
+	var downstreamCDir = [...]byte{0x01}
+	// var upstreamCDir = [...]byte{0x02}
+	var msg = [...]byte{
+		0x80, 0x00, 0x49, 0x0A, // TID, Msg Type, Device ID
+		0x01, 0x00, 0x00, 0x00, // CID, EID
+		0x00, 0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // Message contents
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x28, // OMCI Trailer (not part of calc)
+	}
+	downstream := append(downstreamCDir[:], msg[:]...) // Do not include length field
+	fmt.Printf("Downstream data: %v\n", downstream)
+
+	var omciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a,
+		0xf4, 0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70}
+
+	sum, err := aes.Sum(downstream, omciIK, 4)
+	if err != nil {
+		_ = fmt.Errorf("failed to create CMAC struct: %s", err)
+	}
+
+	fmt.Printf("Digest data (%d): ", len(sum))
+	for _, octet := range sum {
+		fmt.Printf("%x ", octet)
+	}
+	fmt.Printf("Calculated: %#x, Expected: %#x\n", sum, uint32(0x78dca53d))
+	fmt.Println()
+}
+
+func micTestFromFrame() {
+	frame := "00032e0a0002000000020000800000000000000000000000000000000000000000000000000000000000002828ce00e2"
+	//var defaultAesKey = []byte{0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55,
+	//	0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55, 0x55}
+
+	msg, err := stringToPacket(frame)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	var downstreamCDir = [...]byte{0x01}
+	downstream := append(downstreamCDir[:], msg[:44]...) // Do not include length field
+	fmt.Printf("Downstream data: %v\n", downstream)
+
+	var omciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a,
+		0xf4, 0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70}
+
+	sum, err := aes.Sum(downstream, omciIK, 4)
+	if err != nil {
+		_ = fmt.Errorf("failed to get CMAC: %s", err)
+	}
+
+	fmt.Printf("Digest data (%d): ", len(sum))
+	for _, octet := range sum {
+		fmt.Printf("%x ", octet)
+	}
+	expected := binary.BigEndian.Uint32(msg[44:48])
+	fmt.Printf("Calculated: %#x, Expected: %#x\n", sum, uint32(expected))
+	fmt.Println()
+
+	var upstreamCDir = [...]byte{0x02}
+	upstream := append(upstreamCDir[:], msg[:44]...) // Do not include length field
+	fmt.Printf("Upstream data: %v\n", upstream)
+
+	sum, err = aes.Sum(upstream, omciIK, 4)
+	if err != nil {
+		_ = fmt.Errorf("failed to get CMAC: %s", err)
+	}
+
+	fmt.Printf("Digest data (%d): ", len(sum))
+	for _, octet := range sum {
+		fmt.Printf("%x ", octet)
+	}
+	expected = binary.BigEndian.Uint32(msg[44:48])
+	fmt.Printf("Calculated: %#x, Expected: %#x\n", sum, uint32(expected))
+	fmt.Println()
+}
 
 func mibResetExample() {
 	fmt.Println("======================================================")
