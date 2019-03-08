@@ -65,6 +65,9 @@ The following OMCI message types currently have not been coded.
  - SetTableRequest
  - SetTableResponse
 
+## Current user-test coverage
+
+
 ## Other outstanding items
 
 Besides OMCI Message decode/serialization, and associated unit tests, the following items
