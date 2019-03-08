@@ -43,20 +43,6 @@ func simpleMock(t *testing.T) *MeBasePacket {
 	}
 }
 
-//func decodeFakeMsg(data []byte, p gopacket.PacketBuilder) error {
-//	omci := &SetResponse{}
-//	omci.layerType = LayerTypeDeleteResponse
-//	return decodingLayerDecoder(omci, data, p)
-//}
-//
-//func TestLayerDecoder(t *testing.T) {
-//	mibResetRequest := "00014F0A000200000000000000000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//	decodingLayerDecoder()
-//	assert.True(t, true)
-//}
-
 func TestNextIsNil(t *testing.T) {
 	mock := simpleMock(t)
 	assert.Equal(t, mock.NextLayerType(), gopacket.LayerTypeZero)
@@ -65,4 +51,9 @@ func TestNextIsNil(t *testing.T) {
 func TestPayloadAlwaysNil(t *testing.T) {
 	mock := simpleMock(t)
 	assert.Nil(t, mock.LayerPayload())
+}
+
+func TestMsgCanBeDecoded(t *testing.T) {
+	mock := simpleMock(t)
+	assert.Equal(t, mock.CanDecode(), mock.MsgLayerType)
 }
