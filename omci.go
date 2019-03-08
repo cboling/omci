@@ -24,7 +24,6 @@ import (
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
-	"hash/crc32"
 )
 
 type DeviceIdent byte
@@ -231,7 +230,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		omci.MIC = binary.BigEndian.Uint32(data[micOffset:])
 		actual, _ := calculateMicAes128(data[:micOffset])
 		if omci.MIC != actual {
-			_ := fmt.Sprintf("invalid MIC, expected %#x, got %#x",
+			_ = fmt.Sprintf("invalid MIC, expected %#x, got %#x",
 				omci.MIC, actual)
 			//return errors.New(msg)
 		}

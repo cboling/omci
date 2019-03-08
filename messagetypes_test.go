@@ -269,6 +269,7 @@ func TestCreateRequestDecode(t *testing.T) {
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.TransactionID, uint16(0xc))
 	assert.Equal(t, omciMsg.MessageType, CreateRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
@@ -370,7 +371,9 @@ func TestCreateResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0157))
 	assert.Equal(t, omciMsg.MessageType, CreateResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeCreateResponse)
@@ -428,7 +431,9 @@ func TestDeleteRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0211))
 	assert.Equal(t, omciMsg.MessageType, DeleteRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeDeleteRequest)
@@ -485,7 +490,9 @@ func TestDeleteResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0211))
 	assert.Equal(t, omciMsg.MessageType, DeleteResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeDeleteResponse)
@@ -543,7 +550,9 @@ func TestSetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0107))
 	assert.Equal(t, omciMsg.MessageType, SetRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
@@ -601,7 +610,9 @@ func TestSetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0107))
 	assert.Equal(t, omciMsg.MessageType, SetResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSetResponse)
@@ -669,7 +680,9 @@ func TestGetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x035e))
 	assert.Equal(t, omciMsg.MessageType, GetRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetRequest)
@@ -726,7 +739,9 @@ func TestGetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x035e))
 	assert.Equal(t, omciMsg.MessageType, GetResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetResponse)
@@ -813,7 +828,9 @@ func TestGetAllAlarmsRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0445))
 	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
@@ -871,7 +888,9 @@ func TestGetAllAlarmsResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0445))
 	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
@@ -930,7 +949,9 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0234))
 	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
@@ -987,7 +1008,9 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0234))
 	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
@@ -1071,7 +1094,9 @@ func TestMibUploadRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0360))
 	assert.Equal(t, omciMsg.MessageType, MibUploadRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
 
@@ -1130,7 +1155,9 @@ func TestMibUploadResponse(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0360))
 	assert.Equal(t, omciMsg.MessageType, MibUploadResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadResponse)
@@ -1187,7 +1214,9 @@ func TestMibUploadNextRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0286))
 	assert.Equal(t, omciMsg.MessageType, MibUploadNextRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextRequest)
@@ -1245,7 +1274,9 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0286))
 	assert.Equal(t, omciMsg.MessageType, MibUploadNextResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
@@ -1362,7 +1393,9 @@ func TestStartSoftwareDownloadRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, StartSoftwareDownloadRequestType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeStartSoftwareDownloadRequest)
@@ -1420,7 +1453,9 @@ func TestStartSoftwareDownloadResponseDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, StartSoftwareDownloadResponseType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeStartSoftwareDownloadResponse)
@@ -1479,7 +1514,9 @@ func TestDownloadSectionRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, DownloadSectionRequestType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeDownloadSectionRequest)
@@ -1537,7 +1574,9 @@ func TestDownloadSectionResponseDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, DownloadSectionResponseType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeDownloadSectionResponse)
@@ -1596,7 +1635,9 @@ func TestEndSoftwareDownloadRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, EndSoftwareDownloadRequestType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeEndSoftwareDownloadRequest)
@@ -1654,7 +1695,9 @@ func TestEndSoftwareDownloadResponseDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, EndSoftwareDownloadResponseType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeEndSoftwareDownloadResponse)
@@ -1713,7 +1756,9 @@ func TestActivateSoftwareRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, ActivateSoftwareRequestType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeActivateSoftwareRequest)
@@ -1771,7 +1816,9 @@ func TestActivateSoftwareResponseDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, ActivateSoftwareResponseType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeActivateSoftwareResponse)
@@ -1830,7 +1877,9 @@ func TestCommitSoftwareRequestDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, CommitSoftwareRequestType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeCommitSoftwareRequest)
@@ -1888,7 +1937,9 @@ func TestCommitSoftwareResponseDecode(t *testing.T) {
 	//
 	//omciMsg, ok := omciLayer.(*OMCI)
 	//assert.True(t, ok)
+	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	//assert.Equal(t, omciMsg.MessageType, CommitSoftwareResponseType)
+	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	//assert.Equal(t, omciMsg.Length, uint16(40))
 	//
 	//msgLayer := packet.Layer(LayerTypeCommitSoftwareResponse)
@@ -2004,6 +2055,7 @@ func TestSynchronizeTimeRequestDecode(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.MessageType, SynchronizeTimeRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSynchronizeTimeRequest)
@@ -2072,6 +2124,7 @@ func TestSynchronizeTimeResponseDecode(t *testing.T) {
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
 	assert.Equal(t, omciMsg.MessageType, SynchronizeTimeResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeSynchronizeTimeResponse)
@@ -2116,11 +2169,268 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
-// TODO: Create request/response tests for all of the following types
-//Reboot, msgRequest := '0001590a01000000000000000000000000000000000000000000000000000000000000000000000000000028'
-//			msgResponse: '023c390a01000000000000000000000000000000000000000000000000000000000000000000000000000028005999e3'
-//GetNext,
-//GetCurrentData,
+func TestRebootRequestDecode(t *testing.T) {
+	goodMessage := "0001590a01000000010000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0001))
+	assert.Equal(t, omciMsg.MessageType, RebootRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeRebootRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*RebootRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, request.EntityClass, OnuGClassId)
+	assert.Equal(t, request.EntityInstance, uint16(0))
+	assert.Equal(t, request.RebootCondition, uint8(1))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestRebootRequestSerialize(t *testing.T) {
+	goodMessage := "0001590a01000000020000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x0001,
+		MessageType:   RebootRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &RebootRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass: OnuGClassId,
+			// Default Instance ID is 0
+		},
+		RebootCondition: uint8(2),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestRebootResponseDecode(t *testing.T) {
+	goodMessage := "023c390a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x023c))
+	assert.Equal(t, omciMsg.MessageType, RebootResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeRebootResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*RebootResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, response.EntityClass, OnuGClassId)
+	assert.Equal(t, response.EntityInstance, uint16(0))
+	assert.Equal(t, response.Result, Success)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestRebootResponseSerialize(t *testing.T) {
+	goodMessage := "023c390a01000000060000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x023c,
+		MessageType:   RebootResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &RebootResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    OnuGClassId,
+			EntityInstance: uint16(0),
+		},
+		Result: DeviceBusy,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetNextRequestDecode(t *testing.T) {
+	goodMessage := "285e5a0a00ab0202040000010000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x285e))
+	assert.Equal(t, omciMsg.MessageType, GetNextRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetNextRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetNextRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, request.EntityClass, ExtendedVlanTaggingOperationConfigurationDataClassId)
+	assert.Equal(t, request.EntityInstance, uint16(0x0202))
+	assert.Equal(t, request.AttributeMask, uint16(0x0400))
+	assert.Equal(t, request.SequenceNumber, uint16(1))
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestGetNextRequestSerialize(t *testing.T) {
+	goodMessage := "285e5a0a00ab0202040000010000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x285e,
+		MessageType:   GetNextRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetNextRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityInstance: uint16(0x0202),
+		},
+		AttributeMask:  uint16(0x0400),
+		SequenceNumber: uint16(1),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetNextResponseDecode(t *testing.T) {
+	goodMessage := "285e3a0a00ab0202000400080334000000000000000000000000000000000000000000000000000000000028"
+
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x285e))
+	assert.Equal(t, omciMsg.MessageType, GetNextResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeGetNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+
+	response, ok2 := msgLayer.(*GetNextResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, response.EntityClass, ExtendedVlanTaggingOperationConfigurationDataClassId)
+	assert.Equal(t, response.EntityInstance, uint16(0x0202))
+	assert.Equal(t, response.Result, Success)
+	assert.Equal(t, response.AttributeMask, uint16(0x0400))
+	assert.Equal(t, response.Attributes["ReceivedFrameVlanTaggingOperationTable"], vlanOpTable)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestGetNextResponseSerialize(t *testing.T) {
+	goodMessage := "285e3a0a00ab0202000400080334000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x285e,
+		MessageType:   GetNextResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+
+	request := &GetNextResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityInstance: uint16(0x0202),
+		},
+		Result:        Success,
+		AttributeMask: uint16(0x0400),
+		Attributes:    AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": vlanOpTable},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+// TODO: Create request/response tests for all of the following types//GetCurrentData,
 //SetTable}
 
 func TestAlarmNotificationDecode(t *testing.T) {
@@ -2136,7 +2446,9 @@ func TestAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
@@ -2208,7 +2520,9 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
 	assert.Equal(t, omciMsg.MessageType, AttributeValueChangeType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeAttributeValueChange)
