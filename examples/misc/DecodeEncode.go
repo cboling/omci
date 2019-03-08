@@ -8,10 +8,12 @@ import (
 	"github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
+	"log"
 	"strings"
 )
 
 func main() {
+	getNextTest()
 	micDownstreamTest()
 	micTestFromFrame()
 	getAllAlarms()
@@ -27,6 +29,58 @@ func main() {
 	create8021pMapperService_profile()
 	// TODO: Hold of on MIC support for the time being
 	//encodeDecodeWithMIC()
+}
+
+func getNextTest() {
+	goodMessage := "285e3a0a00ab0202000400080334000000000000000000000000000000000000000000000000000000000028"
+
+	data, err := stringToPacket(goodMessage)
+	if err != nil {
+		log.Fatal(err)
+	}
+	packet := gopacket.NewPacket(data, omci.LayerTypeOMCI, gopacket.NoCopy)
+	if packet == nil {
+		log.Fatal("decode failed")
+	}
+	log.Println(packet)
+
+	omciLayer := packet.Layer(omci.LayerTypeOMCI)
+	if omciLayer == nil {
+		log.Fatal("decode failed")
+	}
+	log.Println(packet)
+
+	omciMsg, ok := omciLayer.(*omci.OMCI)
+	if !ok {
+		log.Fatal("conversion failed")
+	} else {
+		log.Println(omciMsg)
+	}
+	msgLayer := packet.Layer(omci.LayerTypeGetNextResponse)
+	if msgLayer == nil {
+		log.Fatal("decode failed")
+	}
+
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00}
+
+	response, ok2 := msgLayer.(*omci.GetNextResponse)
+	if !ok2 {
+		log.Fatal("conversion failed")
+	} else {
+		log.Println(response)
+	}
+
+	log.Printf("Expected: %v\n", vlanOpTable)
+	log.Printf("Received: %v\n", response.Attributes["ReceivedFrameVlanTaggingOperationTable"])
+
+	// Verify string output for message
+	packetString := packet.String()
+
+	log.Printf("Expected: %v\n", goodMessage)
+	log.Printf("Created:  %v\n", packetString)
 }
 
 func micDownstreamTest() {

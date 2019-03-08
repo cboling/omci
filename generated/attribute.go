@@ -65,7 +65,16 @@ func (attr *AttributeDefinition) IsTableAttribute() bool {
 
 func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback, msgType byte) (interface{}, error) {
 	if attr.IsTableAttribute() {
-		return attr.tableAttributeDecode(data, df, msgType)
+		value, err := attr.tableAttributeDecode(data, df, msgType)
+		if err != nil {
+			return nil, err
+		}
+		if attr.GetConstraints() != nil {
+			if err = attr.GetConstraints()(value); err != nil {
+				return nil, err
+			}
+		}
+		return value, nil
 	}
 	// Use negative numbers to indicate signed values
 	size := attr.GetSize()
@@ -76,54 +85,49 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 		df.SetTruncated()
 		return nil, errors.New("packet too small for field")
 	}
-	var err error
 	switch attr.GetSize() {
 	default:
 		value := make([]byte, size)
 		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
+			if err := attr.GetConstraints()(value); err != nil {
 				return nil, err
 			}
 		}
-		return value, err
+		return value, nil
 	case 1:
 		value := data[0]
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
+			if err := attr.GetConstraints()(value); err != nil {
 				return nil, err
 			}
 		}
-		return value, err
+		return value, nil
 	case 2:
 		value := binary.BigEndian.Uint16(data[0:2])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
+			if err := attr.GetConstraints()(value); err != nil {
 				return nil, err
 			}
 		}
-		return value, err
+		return value, nil
 	case 4:
 		value := binary.BigEndian.Uint32(data[0:4])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
-			if err != nil {
+			if err := attr.GetConstraints()(value); err != nil {
 				return nil, err
 			}
 		}
-		return value, err
+		return value, nil
 	case 8:
 		value := binary.BigEndian.Uint64(data[0:8])
 		if attr.GetConstraints() != nil {
-			err = attr.GetConstraints()(value)
+			err := attr.GetConstraints()(value)
 			if err != nil {
 				return nil, err
 			}
 		}
-		return value, err
+		return value, nil
 	}
 }
 
@@ -234,10 +238,15 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 	case byte(GetNext) | AK: // Get Next Response
 		// Block of data (octets) that need to be reassembled before conversion
 		// to table/row-data
-		return data, nil
+		if len(data) < attr.GetSize() {
+			df.SetTruncated()
+			return nil, errors.New("packet too small for field")
+		}
+		return data[:attr.GetSize()], nil
 
 	case byte(Set) | AR: // Set Request
 		fmt.Println("TODO")
+		return nil, errors.New("TODO")
 
 	case byte(SetTable) | AR: // Set Table Request
 		// TODO: Only baseline supported at this time

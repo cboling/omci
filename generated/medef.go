@@ -103,6 +103,9 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 					} else {
 						attrMap[name] = valueBuffer
 					}
+					if attrDef.GetSize() != len(valueBuffer) {
+						panic("unexpected size difference")
+					}
 					data = data[len(valueBuffer):]
 
 				case byte(Set) | AR: // Set Request

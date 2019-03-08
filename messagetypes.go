@@ -3013,13 +3013,14 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 //
 type GetNextResponse struct {
 	MeBasePacket
+	Result        me.Results
 	AttributeMask uint16
 	Attributes    me.AttributeValueMap
 }
 
 func (omci *GetNextResponse) String() string {
-	return fmt.Sprintf("%v, Attribute Mask: %#x, Attributes: %v",
-		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
+	return fmt.Sprintf("%v, Result: %v, Attribute Mask: %#x, Attributes: %v",
+		omci.MeBasePacket.String(), omci.Result, omci.AttributeMask, omci.Attributes)
 }
 
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
@@ -3038,11 +3039,16 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
 		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
-	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
+	omci.Result = me.Results(data[4])
+	if omci.Result > 6 {
+		msg := fmt.Sprintf("invalid get next results code: %v, must be 0..6", omci.Result)
+		return errors.New(msg)
+	}
+	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
 	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p, byte(GetNextResponseType))
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:], p, byte(GetNextResponseType))
 	if err != nil {
 		return err
 	}
@@ -3071,11 +3077,16 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
 		return me.NewProcessingError("managed entity does not support the Get Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	bytes, err := b.AppendBytes(3)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:2], omci.AttributeMask)
+	bytes[0] = byte(omci.Result)
+	if omci.Result > 6 {
+		msg := fmt.Sprintf("invalid get next results code: %v, must be 0..6", omci.Result)
+		return errors.New(msg)
+	}
+	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
 	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute serialization
