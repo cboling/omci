@@ -89,3 +89,9 @@ to be done in the generated OMCI ME code as well.
 The following would be 'nice' to have but are not necessary for initial code release
  - Extended message support
  - MIC Encode/Decode support
+
+## Create requests
+Currently the OMCI parser does not decode the default Set-By-Create attribute values
+from the ITU document. So for attributes that do not have a default of zero, you must
+specify the defaults if you use the 'meframe.go' routine to create a CreateRequest
+for a specific Managed Entity Instance.

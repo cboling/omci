@@ -147,6 +147,10 @@ func SequenceNumber(m uint16) FrameOption {
 	}
 }
 
+// TODO: Get rid of ManagedEntityInstance and just used MangedEntity from the
+//       generated subdirectory.  Change all the methods below to simple access
+//		 functions if it makes sense.
+
 // ManagedEntity is intended to be a lighter weight version of a specific managed
 // entity. It is intended to be used by generated Managed Entity classes as a base
 // class which is easier to use within an application outside of just decode and
@@ -340,6 +344,11 @@ func (m *ManagedEntityInstance) createRequestFrame(opt options) (interface{}, er
 			EntityInstance: m.GetEntityID(),
 		},
 	}
+	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
+	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
+	//       you specify all non-zero default values
+
+	// TODO: Need to go through options and encode the set-by-create attributes
 	return meLayer, nil
 }
 

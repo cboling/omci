@@ -24,65 +24,103 @@ import (
 	"testing"
 )
 
-var messageTypeCreators map[MessageType]func(*testing.T)
+var messageTypeTestFuncs map[MessageType]func(*testing.T, *me.ManagedEntity)
 
 func init() {
-	messageTypeCreators = make(map[MessageType]func(*testing.T), 0)
+	messageTypeTestFuncs = make(map[MessageType]func(*testing.T, *me.ManagedEntity), 0)
 	// TODO: Create MessageType to CreateFunc Map entries
-	messageTypeCreators[CreateRequestType] = testCreateRequestTypeMeFrame
-	messageTypeCreators[CreateResponseType] = testCreateResponseTypeMeFrame
-	messageTypeCreators[DeleteRequestType] = testDeleteRequestTypeMeFrame
-	messageTypeCreators[DeleteResponseType] = testDeleteResponseTypeMeFrame
-	messageTypeCreators[SetRequestType] = testSetRequestTypeMeFrame
-	messageTypeCreators[SetResponseType] = testSetResponseTypeMeFrame
-	messageTypeCreators[GetRequestType] = testGetRequestTypeMeFrame
-	messageTypeCreators[GetResponseType] = testGetResponseTypeMeFrame
-	messageTypeCreators[GetAllAlarmsRequestType] = testGetAllAlarmsRequestTypeMeFrame
-	messageTypeCreators[GetAllAlarmsResponseType] = testGetAllAlarmsResponseTypeMeFrame
-	messageTypeCreators[GetAllAlarmsNextRequestType] = testGetAllAlarmsNextRequestTypeMeFrame
-	messageTypeCreators[GetAllAlarmsNextResponseType] = testGetAllAlarmsNextResponseTypeMeFrame
-	messageTypeCreators[MibUploadRequestType] = testMibUploadRequestTypeMeFrame
-	messageTypeCreators[MibUploadResponseType] = testMibUploadResponseTypeMeFrame
-	messageTypeCreators[MibUploadNextRequestType] = testMibUploadNextRequestTypeMeFrame
-	messageTypeCreators[MibUploadNextResponseType] = testMibUploadNextResponseTypeMeFrame
-	messageTypeCreators[MibResetRequestType] = testMibResetRequestTypeMeFrame
-	messageTypeCreators[MibResetResponseType] = testMibResetResponseTypeMeFrame
-	messageTypeCreators[TestRequestType] = testTestRequestTypeMeFrame
-	messageTypeCreators[TestResponseType] = testTestResponseTypeMeFrame
-	messageTypeCreators[StartSoftwareDownloadRequestType] = testStartSoftwareDownloadRequestTypeMeFrame
-	messageTypeCreators[StartSoftwareDownloadResponseType] = testStartSoftwareDownloadResponseTypeMeFrame
-	messageTypeCreators[DownloadSectionRequestType] = testDownloadSectionRequestTypeMeFrame
-	messageTypeCreators[DownloadSectionResponseType] = testDownloadSectionResponseTypeMeFrame
-	messageTypeCreators[EndSoftwareDownloadRequestType] = testEndSoftwareDownloadRequestTypeMeFrame
-	messageTypeCreators[EndSoftwareDownloadResponseType] = testEndSoftwareDownloadResponseTypeMeFrame
-	messageTypeCreators[ActivateSoftwareRequestType] = testActivateSoftwareRequestTypeMeFrame
-	messageTypeCreators[ActivateSoftwareResponseType] = testActivateSoftwareResponseTypeMeFrame
-	messageTypeCreators[CommitSoftwareRequestType] = testCommitSoftwareRequestTypeMeFrame
-	messageTypeCreators[CommitSoftwareResponseType] = testCommitSoftwareResponseTypeMeFrame
-	messageTypeCreators[SynchronizeTimeRequestType] = testSynchronizeTimeRequestTypeMeFrame
-	messageTypeCreators[SynchronizeTimeResponseType] = testSynchronizeTimeResponseTypeMeFrame
-	messageTypeCreators[RebootRequestType] = testRebootRequestTypeMeFrame
-	messageTypeCreators[RebootResponseType] = testRebootResponseTypeMeFrame
-	messageTypeCreators[GetNextRequestType] = testGetNextRequestTypeMeFrame
-	messageTypeCreators[GetNextResponseType] = testGetNextResponseTypeMeFrame
-	messageTypeCreators[GetCurrentDataRequestType] = testGetCurrentDataRequestTypeMeFrame
-	messageTypeCreators[GetCurrentDataResponseType] = testGetCurrentDataResponseTypeMeFrame
-	messageTypeCreators[SetTableRequestType] = testSetTableRequestTypeMeFrame
-	messageTypeCreators[SetTableResponseType] = testSetTableResponseTypeMeFrame
-	messageTypeCreators[AlarmNotificationType] = testAlarmNotificationTypeMeFrame
-	messageTypeCreators[AttributeValueChangeType] = testAttributeValueChangeTypeMeFrame
-	messageTypeCreators[TestResultType] = testTestResultTypeMeFrame
+	messageTypeTestFuncs[CreateRequestType] = testCreateRequestTypeMeFrame
+	messageTypeTestFuncs[CreateResponseType] = testCreateResponseTypeMeFrame
+	messageTypeTestFuncs[DeleteRequestType] = testDeleteRequestTypeMeFrame
+	messageTypeTestFuncs[DeleteResponseType] = testDeleteResponseTypeMeFrame
+	messageTypeTestFuncs[SetRequestType] = testSetRequestTypeMeFrame
+	messageTypeTestFuncs[SetResponseType] = testSetResponseTypeMeFrame
+	messageTypeTestFuncs[GetRequestType] = testGetRequestTypeMeFrame
+	messageTypeTestFuncs[GetResponseType] = testGetResponseTypeMeFrame
+	messageTypeTestFuncs[GetAllAlarmsRequestType] = testGetAllAlarmsRequestTypeMeFrame
+	messageTypeTestFuncs[GetAllAlarmsResponseType] = testGetAllAlarmsResponseTypeMeFrame
+	messageTypeTestFuncs[GetAllAlarmsNextRequestType] = testGetAllAlarmsNextRequestTypeMeFrame
+	messageTypeTestFuncs[GetAllAlarmsNextResponseType] = testGetAllAlarmsNextResponseTypeMeFrame
+	messageTypeTestFuncs[MibUploadRequestType] = testMibUploadRequestTypeMeFrame
+	messageTypeTestFuncs[MibUploadResponseType] = testMibUploadResponseTypeMeFrame
+	messageTypeTestFuncs[MibUploadNextRequestType] = testMibUploadNextRequestTypeMeFrame
+	messageTypeTestFuncs[MibUploadNextResponseType] = testMibUploadNextResponseTypeMeFrame
+	messageTypeTestFuncs[MibResetRequestType] = testMibResetRequestTypeMeFrame
+	messageTypeTestFuncs[MibResetResponseType] = testMibResetResponseTypeMeFrame
+	messageTypeTestFuncs[TestRequestType] = testTestRequestTypeMeFrame
+	messageTypeTestFuncs[TestResponseType] = testTestResponseTypeMeFrame
+	messageTypeTestFuncs[StartSoftwareDownloadRequestType] = testStartSoftwareDownloadRequestTypeMeFrame
+	messageTypeTestFuncs[StartSoftwareDownloadResponseType] = testStartSoftwareDownloadResponseTypeMeFrame
+	messageTypeTestFuncs[DownloadSectionRequestType] = testDownloadSectionRequestTypeMeFrame
+	messageTypeTestFuncs[DownloadSectionResponseType] = testDownloadSectionResponseTypeMeFrame
+	messageTypeTestFuncs[EndSoftwareDownloadRequestType] = testEndSoftwareDownloadRequestTypeMeFrame
+	messageTypeTestFuncs[EndSoftwareDownloadResponseType] = testEndSoftwareDownloadResponseTypeMeFrame
+	messageTypeTestFuncs[ActivateSoftwareRequestType] = testActivateSoftwareRequestTypeMeFrame
+	messageTypeTestFuncs[ActivateSoftwareResponseType] = testActivateSoftwareResponseTypeMeFrame
+	messageTypeTestFuncs[CommitSoftwareRequestType] = testCommitSoftwareRequestTypeMeFrame
+	messageTypeTestFuncs[CommitSoftwareResponseType] = testCommitSoftwareResponseTypeMeFrame
+	messageTypeTestFuncs[SynchronizeTimeRequestType] = testSynchronizeTimeRequestTypeMeFrame
+	messageTypeTestFuncs[SynchronizeTimeResponseType] = testSynchronizeTimeResponseTypeMeFrame
+	messageTypeTestFuncs[RebootRequestType] = testRebootRequestTypeMeFrame
+	messageTypeTestFuncs[RebootResponseType] = testRebootResponseTypeMeFrame
+	messageTypeTestFuncs[GetNextRequestType] = testGetNextRequestTypeMeFrame
+	messageTypeTestFuncs[GetNextResponseType] = testGetNextResponseTypeMeFrame
+	messageTypeTestFuncs[GetCurrentDataRequestType] = testGetCurrentDataRequestTypeMeFrame
+	messageTypeTestFuncs[GetCurrentDataResponseType] = testGetCurrentDataResponseTypeMeFrame
+	messageTypeTestFuncs[SetTableRequestType] = testSetTableRequestTypeMeFrame
+	messageTypeTestFuncs[SetTableResponseType] = testSetTableResponseTypeMeFrame
+	messageTypeTestFuncs[AlarmNotificationType] = testAlarmNotificationTypeMeFrame
+	messageTypeTestFuncs[AttributeValueChangeType] = testAttributeValueChangeTypeMeFrame
+	messageTypeTestFuncs[TestResultType] = testTestResultTypeMeFrame
 }
 
 func TestExample(t *testing.T) {
 	assert.True(t, true)
 }
 
+func getMEsThatSupportAMessageType(msgType MessageType) []*me.ManagedEntity {
+	entities := make([]*me.ManagedEntity, 0)
+	for _, classID := range me.GetSupportedClassIDs() {
+		if managedEntity, err := me.LoadManagedEntityDefinition(classID); err == nil {
+			if managedEntity.GetManagedEntityDefinition().GetMessageTypes().Contains(msgType) {
+				entities = append(entities, managedEntity)
+			}
+		}
+	}
+	return entities
+}
+
+func TestFrameFormat(t *testing.T) {
+	// TODO: Add support here and additional tests for various frame
+	//       options (as individual test functions of course...)
+	//format := omci.FrameFormat(omci.BaselineIdent)
+	assert.True(t, true)
+}
+
+func TestAllMessageTypes(t *testing.T) {
+	// Loop over all message types
+	for _, messageType := range allMessageTypes {
+
+		if testRoutine, ok := messageTypeTestFuncs[messageType]; ok {
+			// Loop over all Managed Entities that support that type
+			for _, managedEntity := range getMEsThatSupportAMessageType(messageType) {
+				// Call the test routine
+				testRoutine(t, managedEntity)
+			}
+		}
+	}
+	// TODO: Create a loop to run through all message types (req/resp)
+	//       and then look at all message types that support that Message
+	//       type and create an MEFrame (serialized) ready for transmission.
+	//       If possible, feed that back to the library and decode and
+	//		 test that it works.
+}
+
 // genFrame is a helper function to make tests a little easier to read.
 // For a real application, use the .../omci/generated/class.go 'New'
 // functions to create your Managed Entity and then use it to call the
 // EncodeFrame method.
-func genFrame(meInstance *ManagedEntityInstance, messageType MessageType, options ...FrameOption) ([]byte, error) {
+func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...FrameOption) ([]byte, error) {
 	//omciParams := me.ParamData{
 	//	EntityID:   eid,
 	//	Attributes: attr,
@@ -91,8 +129,10 @@ func genFrame(meInstance *ManagedEntityInstance, messageType MessageType, option
 	//mask, _ := me.GetAttributeBitmap(*omciInstance.GetAttributeDefinitions(),
 	//	mapset.NewSetWith(attribute))
 	//var mask uint16
-
-	omciLayer, msgLayer, err := meInstance.EncodeFrame(messageType, options...)
+	meInst := &ManagedEntityInstance{
+		ManagedEntity: *meInstance,
+	}
+	omciLayer, msgLayer, err := meInst.EncodeFrame(messageType, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -115,197 +155,216 @@ func genFrame(meInstance *ManagedEntityInstance, messageType MessageType, option
 	return buffer.Bytes(), nil
 }
 
-func getMEsThatSupportAMessageType(msgType MessageType) []*me.ManagedEntity {
-	entities := make([]*me.ManagedEntity, 0)
+func pickAValue(attrDef *me.AttributeDefinition) interface{} {
+	if attrDef.TableSupport {
+		// TODO: Not yet supported
+		return nil
+	}
+	// TODO: Take constraints into account
+	switch attrDef.GetSize() {
+	case 1:
+		return uint8(1)
+	case 2:
+		return uint16(2)
+	case 4:
+		return uint32(4)
+	case 8:
+		return uint64(8)
 
-	// TODO: Loop through class IDs and collect MEs
-
-	return entities
+	default:
+		size := attrDef.GetSize()
+		value := make([]uint8, size)
+		for index := 0; index < size; index++ {
+			value[index] = uint8(index & 0xFF)
+		}
+		return value
+	}
+	return nil
 }
 
-func TestFrameFormat(t *testing.T) {
-	// TODO: Add support here and additional tests for various frame
-	//       options (as individual test functions of course...)
-	//format := omci.FrameFormat(omci.BaselineIdent)
-	assert.True(t, true)
+func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
+	// Generate the frame. Use a default Entity ID of zero, but for the
+	// OMCI library, we need to specify all supported Set-By-Create
+	params := me.ParamData{
+		EntityID:   0,
+		Attributes: me.AttributeValueMap{},
+	}
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+
+	var frame []byte
+	frame, err = genFrame(meInstance, CreateRequestType)
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	// TODO: Implement
+
 }
 
-func TestAllMessageTypes(t *testing.T) {
-	// TODO: Create a loop to run through all message types (req/resp)
-	//       and then look at all message types that support that Message
-	//       type and create an MEFrame (serialized) ready for transmission.
-	//       If possible, feed that back to the library and decode and
-	//		 test that it works.
-}
-
-func testCreateRequestTypeMeFrame(t *testing.T) {
+func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testCreateResponseTypeMeFrame(t *testing.T) {
+func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testDeleteRequestTypeMeFrame(t *testing.T) {
+func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testDeleteResponseTypeMeFrame(t *testing.T) {
+func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSetRequestTypeMeFrame(t *testing.T) {
+func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSetResponseTypeMeFrame(t *testing.T) {
+func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetRequestTypeMeFrame(t *testing.T) {
+func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetResponseTypeMeFrame(t *testing.T) {
+func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetAllAlarmsRequestTypeMeFrame(t *testing.T) {
+func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetAllAlarmsResponseTypeMeFrame(t *testing.T) {
+func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T) {
+func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T) {
+func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibUploadRequestTypeMeFrame(t *testing.T) {
+func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibUploadResponseTypeMeFrame(t *testing.T) {
+func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibUploadNextRequestTypeMeFrame(t *testing.T) {
+func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibUploadNextResponseTypeMeFrame(t *testing.T) {
+func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibResetRequestTypeMeFrame(t *testing.T) {
+func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testMibResetResponseTypeMeFrame(t *testing.T) {
+func testTestRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testTestRequestTypeMeFrame(t *testing.T) {
+func testTestResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testTestResponseTypeMeFrame(t *testing.T) {
+func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T) {
+func testStartSoftwareDownloadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testStartSoftwareDownloadResponseTypeMeFrame(t *testing.T) {
+func testDownloadSectionRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testDownloadSectionRequestTypeMeFrame(t *testing.T) {
+func testDownloadSectionResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testDownloadSectionResponseTypeMeFrame(t *testing.T) {
+func testEndSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testEndSoftwareDownloadRequestTypeMeFrame(t *testing.T) {
+func testEndSoftwareDownloadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testEndSoftwareDownloadResponseTypeMeFrame(t *testing.T) {
+func testActivateSoftwareRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testActivateSoftwareRequestTypeMeFrame(t *testing.T) {
+func testActivateSoftwareResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testActivateSoftwareResponseTypeMeFrame(t *testing.T) {
+func testCommitSoftwareRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testCommitSoftwareRequestTypeMeFrame(t *testing.T) {
+func testCommitSoftwareResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testCommitSoftwareResponseTypeMeFrame(t *testing.T) {
+func testSynchronizeTimeRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSynchronizeTimeRequestTypeMeFrame(t *testing.T) {
+func testSynchronizeTimeResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSynchronizeTimeResponseTypeMeFrame(t *testing.T) {
+func testRebootRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testRebootRequestTypeMeFrame(t *testing.T) {
+func testRebootResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testRebootResponseTypeMeFrame(t *testing.T) {
+func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetNextRequestTypeMeFrame(t *testing.T) {
+func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetNextResponseTypeMeFrame(t *testing.T) {
+func testGetCurrentDataRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetCurrentDataRequestTypeMeFrame(t *testing.T) {
+func testGetCurrentDataResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testGetCurrentDataResponseTypeMeFrame(t *testing.T) {
+func testSetTableRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSetTableRequestTypeMeFrame(t *testing.T) {
+func testSetTableResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testSetTableResponseTypeMeFrame(t *testing.T) {
+func testAlarmNotificationTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testAlarmNotificationTypeMeFrame(t *testing.T) {
+func testAttributeValueChangeTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
 
-func testAttributeValueChangeTypeMeFrame(t *testing.T) {
-	// TODO: Implement
-}
-
-func testTestResultTypeMeFrame(t *testing.T) {
+func testTestResultTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 }
