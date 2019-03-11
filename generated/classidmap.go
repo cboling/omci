@@ -224,3 +224,11 @@ func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*Managed
 	return nil, NewUnknownEntityError(fmt.Sprintf("managed entity %d (%#x) definition not found",
 		uint16(classID), uint16(classID)))
 }
+
+func GetSupportedClassIDs() []ClassID {
+	supported := make([]ClassID, 0, len(classToManagedEntityMap))
+	for k := range classToManagedEntityMap {
+		supported = append(supported, k)
+	}
+	return supported
+}
