@@ -30,7 +30,6 @@ import (
 type ManagedEntityDefinition struct {
 	Name                 string
 	ClassID              ClassID
-	EntityID             uint16
 	MessageTypes         mapset.Set
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
