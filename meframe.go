@@ -26,6 +26,56 @@ import (
 	"github.com/google/gopacket"
 )
 
+var encoderMap map[MessageType]func(*me.ManagedEntity, options) (interface{}, error)
+
+func init() {
+	encoderMap = make(map[MessageType]func(*me.ManagedEntity, options) (interface{}, error))
+
+	encoderMap[CreateRequestType] = createRequestFrame
+	encoderMap[DeleteRequestType] = deleteRequestFrame
+	encoderMap[SetRequestType] = setRequestFrame
+	encoderMap[GetRequestType] = getRequestFrame
+	encoderMap[GetAllAlarmsRequestType] = getAllAlarmsRequestFrame
+	encoderMap[GetAllAlarmsNextRequestType] = getAllAlarmsNextRequestFrame
+	encoderMap[MibUploadRequestType] = mibUploadRequestFrame
+	encoderMap[MibUploadNextRequestType] = mibUploadNextRequestFrame
+	encoderMap[MibResetRequestType] = mibResetRequestFrame
+	encoderMap[TestRequestType] = testRequestFrame
+	encoderMap[StartSoftwareDownloadRequestType] = startSoftwareDownloadRequestFrame
+	encoderMap[DownloadSectionRequestType] = downloadSectionRequestFrame
+	encoderMap[EndSoftwareDownloadRequestType] = endSoftwareDownloadRequestFrame
+	encoderMap[ActivateSoftwareRequestType] = activateSoftwareRequestFrame
+	encoderMap[CommitSoftwareRequestType] = commitSoftwareRequestFrame
+	encoderMap[SynchronizeTimeRequestType] = synchronizeTimeRequestFrame
+	encoderMap[RebootRequestType] = rebootRequestFrame
+	encoderMap[GetNextRequestType] = getNextRequestFrame
+	encoderMap[GetCurrentDataRequestType] = getCurrentDataRequestFrame
+	encoderMap[SetTableRequestType] = setTableRequestFrame
+	encoderMap[CreateResponseType] = createResponseFrame
+	encoderMap[DeleteResponseType] = deleteResponseFrame
+	encoderMap[SetResponseType] = setResponseFrame
+	encoderMap[GetResponseType] = getResponseFrame
+	encoderMap[GetAllAlarmsResponseType] = getAllAlarmsResponseFrame
+	encoderMap[GetAllAlarmsNextResponseType] = getAllAlarmsNextResponseFrame
+	encoderMap[MibUploadResponseType] = mibUploadResponseFrame
+	encoderMap[MibUploadNextResponseType] = mibUploadNextResponseFrame
+	encoderMap[MibResetResponseType] = mibResetResponseFrame
+	encoderMap[TestResponseType] = testResponseFrame
+	encoderMap[StartSoftwareDownloadResponseType] = startSoftwareDownloadResponseFrame
+	encoderMap[DownloadSectionResponseType] = downloadSectionResponseFrame
+	encoderMap[EndSoftwareDownloadResponseType] = endSoftwareDownloadResponseFrame
+	encoderMap[ActivateSoftwareResponseType] = activateSoftwareResponseFrame
+	encoderMap[CommitSoftwareResponseType] = commitSoftwareResponseFrame
+	encoderMap[SynchronizeTimeResponseType] = synchronizeTimeResponseFrame
+	encoderMap[RebootResponseType] = rebootResponseFrame
+	encoderMap[GetNextResponseType] = getNextResponseFrame
+	encoderMap[GetCurrentDataResponseType] = getCurrentDataResponseFrame
+	encoderMap[SetTableResponseType] = setTableResponseFrame
+	encoderMap[AlarmNotificationType] = alarmNotificationFrame
+	encoderMap[AttributeValueChangeType] = attributeValueChangeFrame
+	encoderMap[TestResultType] = testResultFrame
+}
+
 type options struct {
 	frameFormat       DeviceIdent
 	failIfTruncated   bool
@@ -147,37 +197,24 @@ func SequenceNumber(m uint16) FrameOption {
 	}
 }
 
-// TODO: Get rid of ManagedEntityInstance and just used MangedEntity from the
-//       generated subdirectory.  Change all the methods below to simple access
-//		 functions if it makes sense.
-
-// ManagedEntity is intended to be a lighter weight version of a specific managed
-// entity. It is intended to be used by generated Managed Entity classes as a base
-// class which is easier to use within an application outside of just decode and
-// serialization of OMCI Packets
-type ManagedEntityInstance struct {
-	// Only the base class. Defined this way to add EncodeFrame support
-	me.ManagedEntity
-}
-
-func ManagedEntityToInstance(entity *me.ManagedEntity) (*ManagedEntityInstance, error) {
-	omciMe := &ManagedEntityInstance{}
-	omciMe.SetManagedEntityDefinition(entity.GetManagedEntityDefinition())
-	if err := omciMe.SetEntityID(entity.GetEntityID()); err != nil {
-		return nil, err
-	}
-	for name, value := range *entity.GetAttributeValueMap() {
-		if err := omciMe.SetAttribute(name, value); err != nil {
-			return nil, err
-		}
-	}
-	return omciMe, nil
-}
+//func ManagedEntityToInstance(entity *me.ManagedEntity) (*ManagedEntityInstance, error) {
+//	omciMe := &ManagedEntityInstance{}
+//	omciMe.SetManagedEntityDefinition(entity.GetManagedEntityDefinition())
+//	if err := omciMe.SetEntityID(entity.GetEntityID()); err != nil {
+//		return nil, err
+//	}
+//	for name, value := range *entity.GetAttributeValueMap() {
+//		if err := omciMe.SetAttribute(name, value); err != nil {
+//			return nil, err
+//		}
+//	}
+//	return omciMe, nil
+//}
 
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
 // function to be serialized into a buffer for transmission.
-func (m *ManagedEntityInstance) EncodeFrame(messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
+func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOption) (*OMCI, gopacket.SerializableLayer, error) {
 	// Check for message type support
 	msgType := me.MsgType(messageType & me.MsgTypeMask)
 	meDefinition := m.GetManagedEntityDefinition()
@@ -201,112 +238,21 @@ func (m *ManagedEntityInstance) EncodeFrame(messageType MessageType, opt ...Fram
 	var meInfo interface{}
 	var err error
 
-	// Encode message type specific operation
-	switch messageType {
-	case CreateRequestType:
-		meInfo, err = m.createRequestFrame(opts)
-	case DeleteRequestType:
-		meInfo, err = m.deleteRequestFrame(opts)
-	case SetRequestType:
-		meInfo, err = m.setRequestFrame(opts)
-	case GetRequestType:
-		meInfo, err = m.getRequestFrame(opts)
-	case GetAllAlarmsRequestType:
-		meInfo, err = m.getAllAlarmsRequestFrame(opts)
-	case GetAllAlarmsNextRequestType:
-		meInfo, err = m.getAllAlarmsNextRequestFrame(opts)
-	case MibUploadRequestType:
-		meInfo, err = m.mibUploadRequestFrame(opts)
-	case MibUploadNextRequestType:
-		meInfo, err = m.mibUploadNextRequestFrame(opts)
-	case MibResetRequestType:
-		meInfo, err = m.mibResetRequestFrame(opts)
-	case TestRequestType:
-		meInfo, err = m.testRequestFrame(opts)
-	case StartSoftwareDownloadRequestType:
-		meInfo, err = m.startSoftwareDownloadRequestFrame(opts)
-	case DownloadSectionRequestType:
-		meInfo, err = m.downloadSectionRequestFrame(opts)
-	case EndSoftwareDownloadRequestType:
-		meInfo, err = m.endSoftwareDownloadRequestFrame(opts)
-	case ActivateSoftwareRequestType:
-		meInfo, err = m.activateSoftwareRequestFrame(opts)
-	case CommitSoftwareRequestType:
-		meInfo, err = m.commitSoftwareRequestFrame(opts)
-	case SynchronizeTimeRequestType:
-		meInfo, err = m.synchronizeTimeRequestFrame(opts)
-	case RebootRequestType:
-		meInfo, err = m.rebootRequestFrame(opts)
-	case GetNextRequestType:
-		meInfo, err = m.getNextRequestFrame(opts)
-	case GetCurrentDataRequestType:
-		meInfo, err = m.getCurrentDataRequestFrame(opts)
-	case SetTableRequestType:
-		meInfo, err = m.setTableRequestFrame(opts)
-
-	// Response Frames
-	case CreateResponseType:
-		meInfo, err = m.createResponseFrame(opts)
-	case DeleteResponseType:
-		meInfo, err = m.deleteResponseFrame(opts)
-	case SetResponseType:
-		meInfo, err = m.setResponseFrame(opts)
-	case GetResponseType:
-		meInfo, err = m.getResponseFrame(opts)
-	case GetAllAlarmsResponseType:
-		meInfo, err = m.getAllAlarmsResponseFrame(opts)
-	case GetAllAlarmsNextResponseType:
-		meInfo, err = m.getAllAlarmsNextResponseFrame(opts)
-	case MibUploadResponseType:
-		meInfo, err = m.mibUploadResponseFrame(opts)
-	case MibUploadNextResponseType:
-		meInfo, err = m.mibUploadNextResponseFrame(opts)
-	case MibResetResponseType:
-		meInfo, err = m.mibResetResponseFrame(opts)
-	case TestResponseType:
-		meInfo, err = m.testResponseFrame(opts)
-	case StartSoftwareDownloadResponseType:
-		meInfo, err = m.startSoftwareDownloadResponseFrame(opts)
-	case DownloadSectionResponseType:
-		meInfo, err = m.downloadSectionResponseFrame(opts)
-	case EndSoftwareDownloadResponseType:
-		meInfo, err = m.endSoftwareDownloadResponseFrame(opts)
-	case ActivateSoftwareResponseType:
-		meInfo, err = m.activateSoftwareResponseFrame(opts)
-	case CommitSoftwareResponseType:
-		meInfo, err = m.commitSoftwareResponseFrame(opts)
-	case SynchronizeTimeResponseType:
-		meInfo, err = m.synchronizeTimeResponseFrame(opts)
-	case RebootResponseType:
-		meInfo, err = m.rebootResponseFrame(opts)
-	case GetNextResponseType:
-		meInfo, err = m.getNextResponseFrame(opts)
-	case GetCurrentDataResponseType:
-		meInfo, err = m.getCurrentDataResponseFrame(opts)
-	case SetTableResponseType:
-		meInfo, err = m.setTableResponseFrame(opts)
-
-	// Autonomous ONU Frames
-	case MessageType(me.AlarmNotification):
-		meInfo, err = m.alarmNotificationFrame(opts)
-	case MessageType(me.AttributeValueChange):
-		meInfo, err = m.attributeValueChangeFrame(opts)
-	case MessageType(me.TestResult):
-		meInfo, err = m.testResultFrame(opts)
-
-	// Unknown
-	default:
+	if encoder, ok := encoderMap[messageType]; ok {
+		meInfo, err = encoder(m, opts)
+	} else {
 		err = errors.New(fmt.Sprintf("message-type: %v/%#x is not supported", messageType, messageType))
 	}
 	if err != nil {
 		return nil, nil, err
 	}
-	// Some requests return an array of serializable intefaces
+	// Some requests return an array of serializable r
 	if singleResult, ok := meInfo.(gopacket.SerializableLayer); ok {
 		return omci, singleResult, err
+
 	} else if arrayResult, ok := meInfo.([]gopacket.SerializableLayer); ok {
 		// TODO: Support this return type
-		return omci, arrayResult[0], err
+		return omci, arrayResult[0], errors.New("todo: not yet fully supported") // TODO: Support this
 	}
 	return nil, nil, errors.New(fmt.Sprintf("unexpected return type' %t", meInfo))
 }
@@ -314,7 +260,7 @@ func (m *ManagedEntityInstance) EncodeFrame(messageType MessageType, opt ...Fram
 // For most all create methods below, error checking for valid masks, attribute
 // values, and other fields is left to when the frame is actually serialized.
 
-func (m *ManagedEntityInstance) checkAttributeMask(mask uint16) (uint16, error) {
+func checkAttributeMask(m *me.ManagedEntity, mask uint16) (uint16, error) {
 	if mask&m.GetManagedEntityDefinition().GetAllowedAttributeMask() != mask {
 		return 0, errors.New("invalid attribute mask")
 	}
@@ -322,7 +268,7 @@ func (m *ManagedEntityInstance) checkAttributeMask(mask uint16) (uint16, error) 
 }
 
 // return the maximum space that can be used by attributes
-func (m *ManagedEntityInstance) maxPacketAvailable(opt options) uint {
+func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 	if opt.frameFormat == BaselineIdent {
 		// OMCI Header          - 4 octets
 		// Class ID/Instance ID - 4 octets
@@ -337,7 +283,7 @@ func (m *ManagedEntityInstance) maxPacketAvailable(opt options) uint {
 	return MaxExtendedLength - 16
 }
 
-func (m *ManagedEntityInstance) createRequestFrame(opt options) (interface{}, error) {
+func createRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	meLayer := &CreateRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -352,7 +298,7 @@ func (m *ManagedEntityInstance) createRequestFrame(opt options) (interface{}, er
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) createResponseFrame(opt options) (interface{}, error) {
+func createResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -366,7 +312,7 @@ func (m *ManagedEntityInstance) createResponseFrame(opt options) (interface{}, e
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) deleteRequestFrame(opt options) (interface{}, error) {
+func deleteRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -376,7 +322,7 @@ func (m *ManagedEntityInstance) deleteRequestFrame(opt options) (interface{}, er
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) deleteResponseFrame(opt options) (interface{}, error) {
+func deleteResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -387,8 +333,8 @@ func (m *ManagedEntityInstance) deleteResponseFrame(opt options) (interface{}, e
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) setRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func setRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -398,7 +344,7 @@ func (m *ManagedEntityInstance) setRequestFrame(opt options) (interface{}, error
 	attrMap := *m.GetAttributeValueMap()
 
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 	payloadAvailable := int(maxPayload)
 
 	meLayer := &SetRequest{
@@ -473,7 +419,7 @@ func (m *ManagedEntityInstance) setRequestFrame(opt options) (interface{}, error
 	return results, nil
 }
 
-func (m *ManagedEntityInstance) setResponseFrame(opt options) (interface{}, error) {
+func setResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -488,8 +434,8 @@ func (m *ManagedEntityInstance) setResponseFrame(opt options) (interface{}, erro
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) getRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -507,8 +453,8 @@ func (m *ManagedEntityInstance) getRequestFrame(opt options) (interface{}, error
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) getResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -534,7 +480,7 @@ func (m *ManagedEntityInstance) getResponseFrame(opt options) (interface{}, erro
 	if meLayer.Result == me.Success || meLayer.Result == me.AttributeFailure {
 		// Encode results
 		// Get payload space available
-		maxPayload := m.maxPacketAvailable(opt)
+		maxPayload := maxPacketAvailable(m, opt)
 		payloadAvailable := int(maxPayload)
 		meDefinition := m.GetManagedEntityDefinition()
 		attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -590,8 +536,8 @@ func (m *ManagedEntityInstance) getResponseFrame(opt options) (interface{}, erro
 	return results, nil
 }
 
-func (m *ManagedEntityInstance) getAllAlarmsRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -603,7 +549,7 @@ func (m *ManagedEntityInstance) getAllAlarmsRequestFrame(opt options) (interface
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -611,8 +557,8 @@ func (m *ManagedEntityInstance) getAllAlarmsRequestFrame(opt options) (interface
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getAllAlarmsResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -624,7 +570,7 @@ func (m *ManagedEntityInstance) getAllAlarmsResponseFrame(opt options) (interfac
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -632,8 +578,8 @@ func (m *ManagedEntityInstance) getAllAlarmsResponseFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getAllAlarmsNextRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -645,7 +591,7 @@ func (m *ManagedEntityInstance) getAllAlarmsNextRequestFrame(opt options) (inter
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -653,8 +599,8 @@ func (m *ManagedEntityInstance) getAllAlarmsNextRequestFrame(opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getAllAlarmsNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -666,7 +612,7 @@ func (m *ManagedEntityInstance) getAllAlarmsNextResponseFrame(opt options) (inte
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -674,8 +620,8 @@ func (m *ManagedEntityInstance) getAllAlarmsNextResponseFrame(opt options) (inte
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) mibUploadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func mibUploadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -687,7 +633,7 @@ func (m *ManagedEntityInstance) mibUploadRequestFrame(opt options) (interface{},
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -695,8 +641,8 @@ func (m *ManagedEntityInstance) mibUploadRequestFrame(opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) mibUploadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func mibUploadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -708,7 +654,7 @@ func (m *ManagedEntityInstance) mibUploadResponseFrame(opt options) (interface{}
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -716,7 +662,7 @@ func (m *ManagedEntityInstance) mibUploadResponseFrame(opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) mibUploadNextRequestFrame(opt options) (interface{}, error) {
+func mibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
@@ -728,8 +674,8 @@ func (m *ManagedEntityInstance) mibUploadNextRequestFrame(opt options) (interfac
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) mibUploadNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func mibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -741,7 +687,7 @@ func (m *ManagedEntityInstance) mibUploadNextResponseFrame(opt options) (interfa
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -749,7 +695,7 @@ func (m *ManagedEntityInstance) mibUploadNextResponseFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) mibResetRequestFrame(opt options) (interface{}, error) {
+func mibResetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	// Common for all MEs
 	meLayer := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
@@ -760,8 +706,8 @@ func (m *ManagedEntityInstance) mibResetRequestFrame(opt options) (interface{}, 
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) mibResetResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func mibResetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -773,7 +719,7 @@ func (m *ManagedEntityInstance) mibResetResponseFrame(opt options) (interface{},
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -781,8 +727,8 @@ func (m *ManagedEntityInstance) mibResetResponseFrame(opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) alarmNotificationFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func alarmNotificationFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -794,7 +740,7 @@ func (m *ManagedEntityInstance) alarmNotificationFrame(opt options) (interface{}
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -802,8 +748,8 @@ func (m *ManagedEntityInstance) alarmNotificationFrame(opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) attributeValueChangeFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func attributeValueChangeFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -815,7 +761,7 @@ func (m *ManagedEntityInstance) attributeValueChangeFrame(opt options) (interfac
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -823,8 +769,8 @@ func (m *ManagedEntityInstance) attributeValueChangeFrame(opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) testRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func testRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -836,7 +782,7 @@ func (m *ManagedEntityInstance) testRequestFrame(opt options) (interface{}, erro
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -844,8 +790,8 @@ func (m *ManagedEntityInstance) testRequestFrame(opt options) (interface{}, erro
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) testResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func testResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -857,7 +803,7 @@ func (m *ManagedEntityInstance) testResponseFrame(opt options) (interface{}, err
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -865,8 +811,8 @@ func (m *ManagedEntityInstance) testResponseFrame(opt options) (interface{}, err
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) startSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func startSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -878,7 +824,7 @@ func (m *ManagedEntityInstance) startSoftwareDownloadRequestFrame(opt options) (
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -886,8 +832,8 @@ func (m *ManagedEntityInstance) startSoftwareDownloadRequestFrame(opt options) (
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) startSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func startSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -899,7 +845,7 @@ func (m *ManagedEntityInstance) startSoftwareDownloadResponseFrame(opt options) 
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -907,8 +853,8 @@ func (m *ManagedEntityInstance) startSoftwareDownloadResponseFrame(opt options) 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) downloadSectionRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func downloadSectionRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -920,7 +866,7 @@ func (m *ManagedEntityInstance) downloadSectionRequestFrame(opt options) (interf
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -928,8 +874,8 @@ func (m *ManagedEntityInstance) downloadSectionRequestFrame(opt options) (interf
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) downloadSectionResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func downloadSectionResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -941,7 +887,7 @@ func (m *ManagedEntityInstance) downloadSectionResponseFrame(opt options) (inter
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -949,8 +895,8 @@ func (m *ManagedEntityInstance) downloadSectionResponseFrame(opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) endSoftwareDownloadRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func endSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -962,7 +908,7 @@ func (m *ManagedEntityInstance) endSoftwareDownloadRequestFrame(opt options) (in
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -970,8 +916,8 @@ func (m *ManagedEntityInstance) endSoftwareDownloadRequestFrame(opt options) (in
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) endSoftwareDownloadResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func endSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -983,7 +929,7 @@ func (m *ManagedEntityInstance) endSoftwareDownloadResponseFrame(opt options) (i
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -991,8 +937,8 @@ func (m *ManagedEntityInstance) endSoftwareDownloadResponseFrame(opt options) (i
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) activateSoftwareRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func activateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1004,7 +950,7 @@ func (m *ManagedEntityInstance) activateSoftwareRequestFrame(opt options) (inter
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1012,8 +958,8 @@ func (m *ManagedEntityInstance) activateSoftwareRequestFrame(opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) activateSoftwareResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func activateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1025,7 +971,7 @@ func (m *ManagedEntityInstance) activateSoftwareResponseFrame(opt options) (inte
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1033,8 +979,8 @@ func (m *ManagedEntityInstance) activateSoftwareResponseFrame(opt options) (inte
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) commitSoftwareRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func commitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1046,7 +992,7 @@ func (m *ManagedEntityInstance) commitSoftwareRequestFrame(opt options) (interfa
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1054,8 +1000,8 @@ func (m *ManagedEntityInstance) commitSoftwareRequestFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) commitSoftwareResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func commitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1067,7 +1013,7 @@ func (m *ManagedEntityInstance) commitSoftwareResponseFrame(opt options) (interf
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1075,8 +1021,8 @@ func (m *ManagedEntityInstance) commitSoftwareResponseFrame(opt options) (interf
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) synchronizeTimeRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func synchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1088,7 +1034,7 @@ func (m *ManagedEntityInstance) synchronizeTimeRequestFrame(opt options) (interf
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1096,8 +1042,8 @@ func (m *ManagedEntityInstance) synchronizeTimeRequestFrame(opt options) (interf
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) synchronizeTimeResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func synchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1109,7 +1055,7 @@ func (m *ManagedEntityInstance) synchronizeTimeResponseFrame(opt options) (inter
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1117,8 +1063,8 @@ func (m *ManagedEntityInstance) synchronizeTimeResponseFrame(opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) rebootRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func rebootRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1130,7 +1076,7 @@ func (m *ManagedEntityInstance) rebootRequestFrame(opt options) (interface{}, er
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1138,8 +1084,8 @@ func (m *ManagedEntityInstance) rebootRequestFrame(opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) rebootResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func rebootResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1151,7 +1097,7 @@ func (m *ManagedEntityInstance) rebootResponseFrame(opt options) (interface{}, e
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1159,8 +1105,8 @@ func (m *ManagedEntityInstance) rebootResponseFrame(opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getNextRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1177,8 +1123,8 @@ func (m *ManagedEntityInstance) getNextRequestFrame(opt options) (interface{}, e
 	return meLayer, nil
 }
 
-func (m *ManagedEntityInstance) getNextResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1190,7 +1136,7 @@ func (m *ManagedEntityInstance) getNextResponseFrame(opt options) (interface{}, 
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1198,8 +1144,8 @@ func (m *ManagedEntityInstance) getNextResponseFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) testResultFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func testResultFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1211,7 +1157,7 @@ func (m *ManagedEntityInstance) testResultFrame(opt options) (interface{}, error
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1219,8 +1165,8 @@ func (m *ManagedEntityInstance) testResultFrame(opt options) (interface{}, error
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getCurrentDataRequestFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getCurrentDataRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1232,7 +1178,7 @@ func (m *ManagedEntityInstance) getCurrentDataRequestFrame(opt options) (interfa
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1240,8 +1186,8 @@ func (m *ManagedEntityInstance) getCurrentDataRequestFrame(opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) getCurrentDataResponseFrame(opt options) (interface{}, error) {
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+func getCurrentDataResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1253,7 +1199,7 @@ func (m *ManagedEntityInstance) getCurrentDataResponseFrame(opt options) (interf
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1261,11 +1207,11 @@ func (m *ManagedEntityInstance) getCurrentDataResponseFrame(opt options) (interf
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) setTableRequestFrame(opt options) (interface{}, error) {
+func setTableRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1277,7 +1223,7 @@ func (m *ManagedEntityInstance) setTableRequestFrame(opt options) (interface{}, 
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 
@@ -1285,11 +1231,11 @@ func (m *ManagedEntityInstance) setTableRequestFrame(opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func (m *ManagedEntityInstance) setTableResponseFrame(opt options) (interface{}, error) {
+func setTableResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
-	mask, err := m.checkAttributeMask(opt.attributeMask)
+	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
@@ -1301,7 +1247,7 @@ func (m *ManagedEntityInstance) setTableResponseFrame(opt options) (interface{},
 		},
 	}
 	// Get payload space available
-	maxPayload := m.maxPacketAvailable(opt)
+	maxPayload := maxPacketAvailable(m, opt)
 
 	// TODO: Lots of work to do
 

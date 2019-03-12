@@ -28,7 +28,7 @@ var messageTypeTestFuncs map[MessageType]func(*testing.T, *me.ManagedEntity)
 
 func init() {
 	messageTypeTestFuncs = make(map[MessageType]func(*testing.T, *me.ManagedEntity), 0)
-	// TODO: Create MessageType to CreateFunc Map entries
+
 	messageTypeTestFuncs[CreateRequestType] = testCreateRequestTypeMeFrame
 	messageTypeTestFuncs[CreateResponseType] = testCreateResponseTypeMeFrame
 	messageTypeTestFuncs[DeleteRequestType] = testDeleteRequestTypeMeFrame
@@ -72,10 +72,6 @@ func init() {
 	messageTypeTestFuncs[AlarmNotificationType] = testAlarmNotificationTypeMeFrame
 	messageTypeTestFuncs[AttributeValueChangeType] = testAttributeValueChangeTypeMeFrame
 	messageTypeTestFuncs[TestResultType] = testTestResultTypeMeFrame
-}
-
-func TestExample(t *testing.T) {
-	assert.True(t, true)
 }
 
 func getMEsThatSupportAMessageType(msgType MessageType) []*me.ManagedEntity {
@@ -129,10 +125,7 @@ func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...
 	//mask, _ := me.GetAttributeBitmap(*omciInstance.GetAttributeDefinitions(),
 	//	mapset.NewSetWith(attribute))
 	//var mask uint16
-	meInst := &ManagedEntityInstance{
-		ManagedEntity: *meInstance,
-	}
-	omciLayer, msgLayer, err := meInst.EncodeFrame(messageType, options...)
+	omciLayer, msgLayer, err := EncodeFrame(meInstance, messageType, options...)
 	if err != nil {
 		return nil, err
 	}
@@ -156,20 +149,65 @@ func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...
 }
 
 func pickAValue(attrDef *me.AttributeDefinition) interface{} {
+	constraint := attrDef.Constraint
+	defaultVal := attrDef.DefValue
+
 	if attrDef.TableSupport {
 		// TODO: Not yet supported
 		return nil
 	}
-	// TODO: Take constraints into account
 	switch attrDef.GetSize() {
 	case 1:
-		return uint8(1)
+		// Try the default + 1 as a value. Since some defaults are zero
+		// and we want example frames without zeros in them.
+		if value, ok := defaultVal.(uint8); ok {
+			if constraint == nil {
+				return value + 1
+			}
+			if err := constraint(value + 1); err == nil {
+				return value + 1
+			}
+		}
+		return defaultVal.(uint8)
+
 	case 2:
-		return uint16(2)
+		// Try the default + 1 as a value. Since some defaults are zero
+		// and we want example frames without zeros in them.
+		if value, ok := defaultVal.(uint16); ok {
+			if constraint == nil {
+				return value + 1
+			}
+			if err := constraint(value + 1); err == nil {
+				return value + 1
+			}
+		}
+		return defaultVal.(uint16)
+
 	case 4:
-		return uint32(4)
+		// Try the default + 1 as a value. Since some defaults are zero
+		// and we want example frames without zeros in them.
+		if value, ok := defaultVal.(uint32); ok {
+			if constraint == nil {
+				return value + 1
+			}
+			if err := constraint(value + 1); err == nil {
+				return value + 1
+			}
+		}
+		return defaultVal.(uint32)
+
 	case 8:
-		return uint64(8)
+		// Try the default + 1 as a value. Since some defaults are zero
+		// and we want example frames without zeros in them.
+		if value, ok := defaultVal.(uint64); ok {
+			if constraint == nil {
+				return value + 1
+			}
+			if err := constraint(value + 1); err == nil {
+				return value + 1
+			}
+		}
+		return defaultVal.(uint64)
 
 	default:
 		size := attrDef.GetSize()
@@ -189,6 +227,14 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 		EntityID:   0,
 		Attributes: me.AttributeValueMap{},
 	}
+	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+		} else if attrDef.GetAccess()|me.SetByCreate == me.SetByCreate {
+			params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
+		}
+	}
+	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 
 	var frame []byte
