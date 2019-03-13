@@ -109,11 +109,6 @@ func TestAllMessageTypes(t *testing.T) {
 			}
 		}
 	}
-	// TODO: Create a loop to run through all message types (req/resp)
-	//       and then look at all message types that support that Message
-	//       type and create an MEFrame (serialized) ready for transmission.
-	//       If possible, feed that back to the library and decode and
-	//		 test that it works.
 }
 
 // genFrame is a helper function to make tests a little easier to read.
@@ -121,10 +116,6 @@ func TestAllMessageTypes(t *testing.T) {
 // functions to create your Managed Entity and then use it to call the
 // EncodeFrame method.
 func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...FrameOption) ([]byte, error) {
-	//omciParams := me.ParamData{
-	//	EntityID:   eid,
-	//	Attributes: attr,
-	//}
 	//omciMe, _ := omci.ManagedEntityToInstance(omciInstance)
 	//mask, _ := me.GetAttributeBitmap(*omciInstance.GetAttributeDefinitions(),
 	//	mapset.NewSetWith(attribute))
