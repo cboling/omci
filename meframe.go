@@ -23,6 +23,7 @@ import (
 	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
+	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 )
 
@@ -280,18 +281,23 @@ func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 	return MaxExtendedLength - 16
 }
 
+func calculateAttributeMask(m *me.ManagedEntity) (uint16, error) {
+	attrDefs := m.GetAttributeDefinitions()
+	attributes := me.GetAttributeDefinitionMapKeys(*m.GetAttributeValueMap())
+	return me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributes))
+}
+
 func CreateRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
+	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
+	//       you specify all non-zero default values and pass them in appropriate
 	meLayer := &CreateRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		Attributes: *m.GetAttributeValueMap(),
 	}
-	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
-	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
-	//       you specify all non-zero default values
-
-	// TODO: Need to go through options and encode the set-by-create attributes
 	return meLayer, nil
 }
 
@@ -306,6 +312,16 @@ func CreateResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 	if meLayer.Result == me.ParameterError {
 		meLayer.AttributeExecutionMask = opt.attrExecutionMask
 	}
+	//var err error
+	//
+	//// If default mask specified, make sure we verify and set it appropriate
+	//// if needed
+	//if opt.attributeMask == defaultFrameOptions.attributeMask {
+	//	opt.attributeMask, err = calculateAttributeMask(m)
+	//	if err != nil {
+	//		return nil, err
+	//	}
+	//}
 	return meLayer, nil
 }
 
