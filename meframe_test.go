@@ -21,6 +21,7 @@ import (
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
+	"math/rand"
 	"testing"
 )
 
@@ -74,11 +75,14 @@ func init() {
 	messageTypeTestFuncs[TestResultType] = testTestResultTypeMeFrame
 }
 
-func getMEsThatSupportAMessageType(msgType MessageType) []*me.ManagedEntity {
+func getMEsThatSupportAMessageType(messageType MessageType) []*me.ManagedEntity {
+	msgType := me.MsgType(byte(messageType) & me.MsgTypeMask)
+
 	entities := make([]*me.ManagedEntity, 0)
 	for _, classID := range me.GetSupportedClassIDs() {
 		if managedEntity, err := me.LoadManagedEntityDefinition(classID); err == nil {
-			if managedEntity.GetManagedEntityDefinition().GetMessageTypes().Contains(msgType) {
+			supportedTypes := managedEntity.GetManagedEntityDefinition().GetMessageTypes()
+			if supportedTypes.Contains(msgType) {
 				entities = append(entities, managedEntity)
 			}
 		}
@@ -128,13 +132,6 @@ func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...
 	omciLayer, msgLayer, err := EncodeFrame(meInstance, messageType, options...)
 	if err != nil {
 		return nil, err
-	}
-	// Make sure the Transaction ID is set
-	omciLayer.TransactionID = 1
-	if messageType == AlarmNotificationType ||
-		messageType == AttributeValueChangeType ||
-		messageType == TestResultType {
-		omciLayer.TransactionID = 0
 	}
 	// Serialize the frame and send it
 	var serializeOptions gopacket.SerializeOptions
@@ -236,9 +233,10 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	var frame []byte
-	frame, err = genFrame(meInstance, CreateRequestType)
+	frame, err = genFrame(meInstance, CreateRequestType, TransactionID(tid))
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)

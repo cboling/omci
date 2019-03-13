@@ -85,6 +85,7 @@ type options struct {
 	// Set Response only if results == 0
 	unsupportedMask uint16 // Set Response only if results == 9
 	sequenceNumber  uint16 // For get-next request frames
+	transactionID   uint16 // OMCI TID
 }
 
 // TODO: Add TID option (default of 0) to allow user to specify TID of frame
@@ -97,6 +98,7 @@ var defaultFrameOptions = options{
 	attrExecutionMask: 0,
 	unsupportedMask:   0,
 	sequenceNumber:    0,
+	transactionID:     0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -197,19 +199,14 @@ func SequenceNumber(m uint16) FrameOption {
 	}
 }
 
-//func ManagedEntityToInstance(entity *me.ManagedEntity) (*ManagedEntityInstance, error) {
-//	omciMe := &ManagedEntityInstance{}
-//	omciMe.SetManagedEntityDefinition(entity.GetManagedEntityDefinition())
-//	if err := omciMe.SetEntityID(entity.GetEntityID()); err != nil {
-//		return nil, err
-//	}
-//	for name, value := range *entity.GetAttributeValueMap() {
-//		if err := omciMe.SetAttribute(name, value); err != nil {
-//			return nil, err
-//		}
-//	}
-//	return omciMe, nil
-//}
+// TransactionID is to specify the TID in the OMCI header. The default is
+// zero which requires the caller to set it to the appropriate value if this
+// is not an autonomous ONU notification frame
+func TransactionID(tid uint16) FrameOption {
+	return func(o *options) {
+		o.transactionID = tid
+	}
+}
 
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
 // OMCILayer struct. This struct can be provided to the gopacket.SerializeLayers()
@@ -231,7 +228,7 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 	}
 	// Note: Transaction ID should be set before frame serialization
 	omci := &OMCI{
-		TransactionID:    0,
+		TransactionID:    opts.transactionID,
 		MessageType:      messageType,
 		DeviceIdentifier: opts.frameFormat,
 	}
