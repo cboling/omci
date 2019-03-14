@@ -42,7 +42,7 @@ func init() {
 		),
 		AllowedAttributeMask: 0x0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
 		},
 	}
 }

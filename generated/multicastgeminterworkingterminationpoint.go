@@ -46,14 +46,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, Read|SetByCreate|Write, false, false, false, 1),
-			2: ByteField("InterworkingOption", 0, Read|SetByCreate|Write, false, false, false, 2),
-			3: Uint16Field("ServiceProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 3),
-			4: ByteField("PptpCounter", 0, Read, false, false, true, 4),
-			5: ByteField("OperationalState", 0, Read, true, false, true, 5),
-			6: Uint16Field("GalProfilePointer", 0, Read|SetByCreate|Write, false, false, false, 6),
-			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, Read|Write, false, true, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("InterworkingOption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("ServiceProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, 4),
+			5: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, 5),
+			6: Uint16Field("GalProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, mapset.NewSetWith(Read, Write), false, true, 7),
 		},
 	}
 }

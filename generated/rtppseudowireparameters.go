@@ -45,13 +45,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: Uint16Field("ClockReference", 0, Read|SetByCreate|Write, false, false, false, 1),
-			2: ByteField("RtpTimestampMode", 0, Read|SetByCreate|Write, false, false, false, 2),
-			3: Uint16Field("Ptype", 0, Read|SetByCreate|Write, false, false, false, 3),
-			4: Uint64Field("Ssrc", 0, Read|SetByCreate|Write, false, false, false, 4),
-			5: Uint16Field("ExpectedPtype", 0, Read|SetByCreate|Write, false, false, true, 5),
-			6: Uint64Field("ExpectedSsrc", 0, Read|SetByCreate|Write, false, false, true, 6),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("ClockReference", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("RtpTimestampMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("Ptype", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint64Field("Ssrc", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: Uint16Field("ExpectedPtype", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 5),
+			6: Uint64Field("ExpectedSsrc", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 6),
 		},
 	}
 }

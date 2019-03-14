@@ -44,10 +44,10 @@ func init() {
 		),
 		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
-			1: ByteField("CommandFormat", 0, Read, false, false, false, 1),
-			2: MultiByteField("Command", 25, nil, Write, false, false, false, 2),
-			3: TableField("ReplyTable", TableInfo{nil, 0}, Read, false, false, 3),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("CommandFormat", 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: MultiByteField("Command", 25, nil, mapset.NewSetWith(Write), false, false, false, 2),
+			3: TableField("ReplyTable", TableInfo{nil, 0}, mapset.NewSetWith(Read), false, false, 3),
 		},
 	}
 }

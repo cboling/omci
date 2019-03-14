@@ -45,9 +45,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0XC000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, Read|Write, false, false, false, 1),
-			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, Read|Write, false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
 		},
 	}
 }

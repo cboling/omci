@@ -42,14 +42,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
-			1: ByteField("ItuTG9701ProfileProfile", 0, Read, false, false, false, 1),
-			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, Read, false, false, false, 2),
-			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, Read, false, false, false, 3),
-			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, Read, false, false, true, 4),
-			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, Read, false, false, true, 5),
-			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, Read, false, false, true, 6),
-			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, Read, false, false, true, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("ItuTG9701ProfileProfile", 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: MultiByteField("GammaDataRAteGdr", 0.0, nil, mapset.NewSetWith(Read), false, false, false, 2),
+			3: MultiByteField("AttainableGammaDataRaTeAttgdr", 0.0, nil, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint64Field("DpuSystemVendorIdDpuSystemVendor", 0, mapset.NewSetWith(Read), false, false, true, 4),
+			5: Uint64Field("NtSystemVendorIdNtSystemVendor", 0, mapset.NewSetWith(Read), false, false, true, 5),
+			6: MultiByteField("DpuSerialNumberDpuSystemSerialnr", 32, nil, mapset.NewSetWith(Read), false, false, true, 6),
+			7: MultiByteField("NtSerialNumberNtSystemSerialnr", 32, nil, mapset.NewSetWith(Read), false, false, true, 7),
 		},
 	}
 }

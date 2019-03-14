@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: ByteField("MdLevel", 0, Read|SetByCreate|Write, false, false, false, 1),
-			2: ByteField("MdNameFormat", 0, Read|SetByCreate|Write, false, false, false, 2),
-			3: MultiByteField("MdName1MdName2", 25, nil, Read|Write, false, false, false, 3),
-			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, Read|SetByCreate|Write, false, false, false, 4),
-			5: ByteField("SenderIdPermission", 0, Read|SetByCreate|Write, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("MdLevel", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("MdNameFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: MultiByteField("MdName1MdName2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
 		},
 	}
 }

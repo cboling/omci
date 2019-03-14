@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: MultiByteField("DestinationMac", 6, nil, Read|SetByCreate|Write, false, false, false, 1),
-			2: MultiByteField("SourceMac", 6, nil, Read, false, false, false, 2),
-			3: ByteField("TagPolicy", 0, Read|SetByCreate|Write, false, false, false, 3),
-			4: Uint16Field("Tci", 0, Read|Write, false, false, true, 4),
-			5: ByteField("Loopback", 0, Read|Write, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: MultiByteField("DestinationMac", 6, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: MultiByteField("SourceMac", 6, nil, mapset.NewSetWith(Read), false, false, false, 2),
+			3: ByteField("TagPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("Tci", 0, mapset.NewSetWith(Read, Write), false, false, true, 4),
+			5: ByteField("Loopback", 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
 	}
 }

@@ -43,12 +43,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
-			1: ByteField("AdministrativeState", 0, Read|Write, false, false, false, 1),
-			2: ByteField("OperationalState", 0, Read, true, false, true, 2),
-			3: MultiByteField("InterdomainName", 25, nil, Read|Write, false, false, true, 3),
-			4: Uint16Field("TcpUdpPointer", 0, Read|Write, false, false, true, 4),
-			5: Uint16Field("IanaAssignedPort", 0, Read, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, 2),
+			3: MultiByteField("InterdomainName", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, 3),
+			4: Uint16Field("TcpUdpPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, 4),
+			5: Uint16Field("IanaAssignedPort", 0, mapset.NewSetWith(Read), false, false, false, 5),
 		},
 	}
 }

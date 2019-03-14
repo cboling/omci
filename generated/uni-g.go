@@ -43,12 +43,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read, false, false, false, 0),
-			1: Uint16Field("Deprecated", 0, Read|Write, false, false, false, 1),
-			2: ByteField("AdministrativeState", 0, Read|Write, false, false, false, 2),
-			3: ByteField("ManagementCapability", 0, Read, false, false, true, 3),
-			4: Uint16Field("NonOmciManagementIdentifier", 0, Read|Write, false, false, true, 4),
-			5: Uint16Field("RelayAgentOptions", 0, Read|Write, false, false, true, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: Uint16Field("Deprecated", 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField("ManagementCapability", 0, mapset.NewSetWith(Read), false, false, true, 3),
+			4: Uint16Field("NonOmciManagementIdentifier", 0, mapset.NewSetWith(Read, Write), false, false, true, 4),
+			5: Uint16Field("RelayAgentOptions", 0, mapset.NewSetWith(Read, Write), false, false, true, 5),
 		},
 	}
 }

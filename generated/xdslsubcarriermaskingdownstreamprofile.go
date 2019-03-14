@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, Read|SetByCreate|Write, false, false, false, 1),
-			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, Read|Write, false, false, false, 2),
-			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, Read|Write, false, false, false, 3),
-			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, Read|Write, false, false, false, 4),
-			5: ByteField("MaskValid", 0, Read|Write, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: ByteField("MaskValid", 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
 	}
 }

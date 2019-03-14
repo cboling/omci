@@ -37,7 +37,7 @@ type AttributeDefinition struct {
 	Index        uint
 	DefValue     interface{} // Note: Not supported yet
 	Size         int
-	Access       AttributeAccess
+	Access       mapset.Set // AttributeAccess...
 	Constraint   func(interface{}) error
 	Avc          bool // If true, an AVC notification can occur for the attribute
 	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
@@ -51,11 +51,11 @@ func (attr *AttributeDefinition) String() string {
 	return fmt.Sprintf("AttributeDefinition: %v (%v): Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *AttributeDefinition) GetName() string            { return attr.Name }
-func (attr *AttributeDefinition) GetIndex() uint             { return attr.Index }
-func (attr *AttributeDefinition) GetDefault() interface{}    { return attr.DefValue }
-func (attr *AttributeDefinition) GetSize() int               { return attr.Size }
-func (attr *AttributeDefinition) GetAccess() AttributeAccess { return attr.Access }
+func (attr *AttributeDefinition) GetName() string         { return attr.Name }
+func (attr *AttributeDefinition) GetIndex() uint          { return attr.Index }
+func (attr *AttributeDefinition) GetDefault() interface{} { return attr.DefValue }
+func (attr *AttributeDefinition) GetSize() int            { return attr.Size }
+func (attr *AttributeDefinition) GetAccess() mapset.Set   { return attr.Access }
 func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
 	return attr.Constraint
 }
@@ -377,7 +377,7 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 
-func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
+func ByteField(name string, defVal uint16, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -392,7 +392,7 @@ func ByteField(name string, defVal uint16, access AttributeAccess, avc bool,
 	}
 }
 
-func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
+func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -407,7 +407,7 @@ func Uint16Field(name string, defVal uint16, access AttributeAccess, avc bool,
 	}
 }
 
-func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
+func Uint32Field(name string, defVal uint16, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -422,7 +422,7 @@ func Uint32Field(name string, defVal uint16, access AttributeAccess, avc bool,
 	}
 }
 
-func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
+func Uint64Field(name string, defVal uint16, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -437,7 +437,7 @@ func Uint64Field(name string, defVal uint16, access AttributeAccess, avc bool,
 	}
 }
 
-func MultiByteField(name string, size uint, defVal []byte, access AttributeAccess, avc bool,
+func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -486,7 +486,7 @@ func (t *TableInfo) String() string {
 }
 
 // Now the field
-func TableField(name string, tableInfo TableInfo, access AttributeAccess,
+func TableField(name string, tableInfo TableInfo, access mapset.Set,
 	avc bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -501,7 +501,7 @@ func TableField(name string, tableInfo TableInfo, access AttributeAccess,
 	}
 }
 
-func UnknownField(name string, defVal uint16, access AttributeAccess, avc bool,
+func UnknownField(name string, defVal uint16, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,

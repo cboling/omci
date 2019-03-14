@@ -242,7 +242,7 @@ func (access AttributeAccess) String() string {
 // SupportsAttributeAccess returns true if the managed entity attribute
 // supports the desired access
 func SupportsAttributeAccess(attr *AttributeDefinition, acc AttributeAccess) bool {
-	return attr.GetAccess()&acc == acc
+	return attr.GetAccess().Contains(acc)
 }
 
 type IManagedEntityDefinition interface {

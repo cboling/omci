@@ -45,10 +45,10 @@ func init() {
 		),
 		AllowedAttributeMask: 0XE000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: Uint16Field("MplsPseudowireTpPointer", 0, Read|SetByCreate|Write, false, false, false, 1),
-			2: ByteField("TpType", 0, Read|SetByCreate|Write, false, false, false, 2),
-			3: Uint16Field("UniPointer", 0, Read|SetByCreate|Write, false, false, false, 3),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("MplsPseudowireTpPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("UniPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
 		},
 	}
 }

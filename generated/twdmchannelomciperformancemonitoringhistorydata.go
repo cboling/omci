@@ -46,12 +46,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, Read|SetByCreate, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, Read, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, Read|SetByCreate|Write, false, false, false, 2),
-			3: Uint32Field("OmciBaselineMessageCount", 0, Read, false, false, false, 3),
-			4: Uint32Field("OmciExtendedMessageCount", 0, Read, false, false, false, 4),
-			5: Uint32Field("OmciMicErrorCount", 0, Read, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("OmciBaselineMessageCount", 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("OmciExtendedMessageCount", 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint32Field("OmciMicErrorCount", 0, mapset.NewSetWith(Read), false, false, false, 5),
 		},
 	}
 }
