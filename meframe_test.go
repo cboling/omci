@@ -256,7 +256,7 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 
 	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
 	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Attributes, *managedEntity.GetAttributeValueMap())
+	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
 }
 
 func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
