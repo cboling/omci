@@ -377,7 +377,7 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 
-func ByteField(name string, defVal uint16, access mapset.Set, avc bool,
+func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -407,7 +407,7 @@ func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
 	}
 }
 
-func Uint32Field(name string, defVal uint16, access mapset.Set, avc bool,
+func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -422,7 +422,7 @@ func Uint32Field(name string, defVal uint16, access mapset.Set, avc bool,
 	}
 }
 
-func Uint64Field(name string, defVal uint16, access mapset.Set, avc bool,
+func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
@@ -501,7 +501,7 @@ func TableField(name string, tableInfo TableInfo, access mapset.Set,
 	}
 }
 
-func UnknownField(name string, defVal uint16, access mapset.Set, avc bool,
+func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
 	counter bool, optional bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
