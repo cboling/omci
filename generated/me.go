@@ -133,7 +133,7 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) error {
 	}
 	eidName := entity.definition.AttributeDefinitions[0].Name
 	if len(params) == 0 {
-		entity.attributes[eidName] = 0
+		entity.attributes[eidName] = uint16(0)
 		return nil
 	}
 	entity.attributes[eidName] = params[0].EntityID
