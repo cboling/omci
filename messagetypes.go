@@ -207,7 +207,14 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	}
 	// Attribute decode
 	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[4:], p, byte(CreateRequestType))
-	return err
+	if err != nil {
+		return err
+	}
+	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
+		return nil
+	}
+	panic("All Managed Entities have an EntityID attribue")
 }
 
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
