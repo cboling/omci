@@ -205,20 +205,20 @@ func pickAValue(attrDef *me.AttributeDefinition) interface{} {
 		}
 		return value
 	}
-	return nil
 }
 
 func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Generate the frame. Use a default Entity ID of zero, but for the
 	// OMCI library, we need to specify all supported Set-By-Create
 	params := me.ParamData{
-		EntityID:   0,
-		Attributes: me.AttributeValueMap{},
+		EntityID:   uint16(0),
+		Attributes: make(me.AttributeValueMap, 0),
 	}
 	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
-		} else if attrDef.GetAccess()|me.SetByCreate == me.SetByCreate {
+
+		} else if attrDef.GetAccess().Contains(me.SetByCreate) {
 			params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 		}
 	}
@@ -232,8 +232,31 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)
 
-	// TODO: Implement
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
 
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, omciObj.TransactionID, tid)
+	assert.Equal(t, omciObj.MessageType, CreateRequestType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*CreateRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, msgObj.Attributes, *managedEntity.GetAttributeValueMap())
 }
 
 func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

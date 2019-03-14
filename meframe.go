@@ -283,7 +283,7 @@ func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 
 func calculateAttributeMask(m *me.ManagedEntity) (uint16, error) {
 	attrDefs := m.GetAttributeDefinitions()
-	attributes := me.GetAttributeDefinitionMapKeys(*m.GetAttributeValueMap())
+	attributes := me.GetAttributeDefinitionMapKeys(*attrDefs)
 	return me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributes))
 }
 
