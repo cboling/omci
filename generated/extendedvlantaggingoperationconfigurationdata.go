@@ -48,7 +48,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
 			1: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: TableField("ReceivedFrameVlanTaggingOperationTableMaxSize", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, 2),
+			2: Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, mapset.NewSetWith(Read), false, false, false, 2),
 			3: Uint16Field("InputTpid", 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
 			4: Uint16Field("OutputTpid", 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
 			5: ByteField("DownstreamMode", 0, mapset.NewSetWith(Read, Write), false, false, false, 5),

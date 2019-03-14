@@ -48,7 +48,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
 			1: Uint16Field("DialPlanNumber", 0, mapset.NewSetWith(Read), false, false, false, 1),
-			2: TableField("DialPlanTableMaxSize", TableInfo{0, 2}, mapset.NewSetWith(Read, SetByCreate), false, false, 2),
+			2: Uint16Field("DialPlanTableMaxSize", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 2),
 			3: Uint16Field("CriticalDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
 			4: Uint16Field("PartialDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
 			5: ByteField("DialPlanFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
