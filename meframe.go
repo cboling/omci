@@ -285,10 +285,23 @@ func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 	return MaxExtendedLength - 16
 }
 
-func calculateAttributeMask(m *me.ManagedEntity) (uint16, error) {
+func calculateAttributeMask(m *me.ManagedEntity, requestedMask uint16) (uint16, error) {
 	attrDefs := m.GetAttributeDefinitions()
-	attributes := me.GetAttributeDefinitionMapKeys(*attrDefs)
-	return me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributes))
+	attributeNames := make([]interface{}, 0)
+	for _, index := range me.GetAttributeDefinitionMapKeys(*attrDefs) {
+		if index == 0 {
+			continue // No mask for EntityID
+		}
+		if attr, ok := (*attrDefs)[index]; ok {
+			attributeNames = append(attributeNames, attr.GetName())
+		}
+	}
+	calculated_mask, err := me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributeNames...))
+
+	if err != nil {
+		return 0, err
+	}
+	return calculated_mask & requestedMask, nil
 }
 
 func CreateRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
@@ -352,6 +365,10 @@ func DeleteResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 
 func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
+	if err != nil {
+		return nil, err
+	}
+	mask, err = calculateAttributeMask(m, mask)
 	if err != nil {
 		return nil, err
 	}
