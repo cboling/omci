@@ -259,6 +259,10 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 // values, and other fields is left to when the frame is actually serialized.
 
 func checkAttributeMask(m *me.ManagedEntity, mask uint16) (uint16, error) {
+	if mask == defaultFrameOptions.attributeMask {
+		// Scale back to just what is allowed
+		return m.GetAllowedAttributeMask(), nil
+	}
 	if mask&m.GetManagedEntityDefinition().GetAllowedAttributeMask() != mask {
 		return 0, errors.New("invalid attribute mask")
 	}

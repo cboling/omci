@@ -90,11 +90,20 @@ func getMEsThatSupportAMessageType(messageType MessageType) []*me.ManagedEntity 
 	return entities
 }
 
-func TestFrameFormat(t *testing.T) {
-	// TODO: Add support here and additional tests for various frame
-	//       options (as individual test functions of course...)
-	//format := omci.FrameFormat(omci.BaselineIdent)
-	assert.True(t, true)
+func TestFrameFormatNotYetSupported(t *testing.T) {
+	// We do not yet support extended frame formats. Once we do, add a bunch of tests
+	// to cover it
+
+	params := me.ParamData{
+		Attributes: me.AttributeValueMap{"MibDataSync": 0},
+	}
+	managedEntity, err := me.NewOnuData(params)
+	assert.Nil(t, err)
+
+	var buffer []byte
+	buffer, err = genFrame(managedEntity, GetRequestType, FrameFormat(ExtendedIdent), TransactionID(1))
+	assert.Nil(t, buffer)
+	assert.NotNil(t, err)
 }
 
 func TestAllMessageTypes(t *testing.T) {

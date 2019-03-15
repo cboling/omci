@@ -57,6 +57,22 @@ func getSbcMask(meDefinition IManagedEntityDefinition) uint16 {
 	return sbcMask
 }
 
+func TestDeviceIdents(t *testing.T) {
+
+	baselineString := BaselineIdent.String()
+	assert.NotZero(t, len(baselineString))
+
+	extendedString := ExtendedIdent.String()
+	assert.NotZero(t, len(extendedString))
+
+	assert.NotEqual(t, baselineString, extendedString)
+
+	unknownString := DeviceIdent(0xff).String()
+	assert.NotZero(t, len(unknownString))
+	assert.NotEqual(t, unknownString, baselineString)
+	assert.NotEqual(t, unknownString, extendedString)
+}
+
 // MibResetRequestTest tests decode/encode of a MIB Reset Request
 func TestMibResetRequestMessage(t *testing.T) {
 	mibResetRequest := "00014F0A000200000000000000000000" +
@@ -220,7 +236,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	attributes := createRequest.Attributes
 	assert.NotNil(t, attributes)
-	assert.Equal(t, len(attributes), 12)
+	assert.Equal(t, len(attributes), 13)
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else

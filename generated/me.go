@@ -44,11 +44,13 @@ func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) 
 		definition: definition,
 		attributes: make(map[string]interface{}),
 	}
-	err := entity.setAttributes(params...)
-	if err != nil {
-		entity = nil
+	if params != nil {
+		err := entity.setAttributes(params...)
+		if err != nil {
+			return nil, err
+		}
 	}
-	return entity, err
+	return entity, nil
 }
 
 func (entity *ManagedEntity) GetManagedEntityDefinition() *ManagedEntityDefinition {
