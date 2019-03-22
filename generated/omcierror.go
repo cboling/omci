@@ -184,6 +184,22 @@ func NewAttributeFailureError(args ...interface{}) error {
 	}
 }
 
+type MessageTruncatedError struct {
+	OmciError
+}
+
+// NewAttributeFailureError means that the ONU already has a managed entity
+// instance that corresponds to the one the OLT is attempting to create.
+func NewMessageTruncatedError(args ...interface{}) error {
+	defaultValue := "out-of-space. Cannot fit attribute into message"
+	return &MessageTruncatedError{
+		OmciError: OmciError{
+			err:        genMessage(defaultValue, args...),
+			statusCode: ProcessingError,
+		},
+	}
+}
+
 func genMessage(defaultValue string, args ...interface{}) string {
 	switch len(args) {
 	case 0:
