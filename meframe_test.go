@@ -125,10 +125,6 @@ func TestAllMessageTypes(t *testing.T) {
 // functions to create your Managed Entity and then use it to call the
 // EncodeFrame method.
 func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...FrameOption) ([]byte, error) {
-	//omciMe, _ := omci.ManagedEntityToInstance(omciInstance)
-	//mask, _ := me.GetAttributeBitmap(*omciInstance.GetAttributeDefinitions(),
-	//	mapset.NewSetWith(attribute))
-	//var mask uint16
 	omciLayer, msgLayer, err := EncodeFrame(meInstance, messageType, options...)
 	if err != nil {
 		return nil, err
@@ -340,6 +336,12 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	var frame []byte
 	frame, err = genFrame(meInstance, SetRequestType, TransactionID(tid))
+	// some frames cannot fit all the attributes
+	if err != nil {
+		if _, ok := err.(*me.MessageTruncatedError); ok {
+			return
+		}
+	}
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)

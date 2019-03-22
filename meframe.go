@@ -27,10 +27,10 @@ import (
 	"github.com/google/gopacket"
 )
 
-var encoderMap map[MessageType]func(*me.ManagedEntity, options) (interface{}, error)
+var encoderMap map[MessageType]func(*me.ManagedEntity, options) (gopacket.SerializableLayer, error)
 
 func init() {
-	encoderMap = make(map[MessageType]func(*me.ManagedEntity, options) (interface{}, error))
+	encoderMap = make(map[MessageType]func(*me.ManagedEntity, options) (gopacket.SerializableLayer, error))
 
 	encoderMap[CreateRequestType] = CreateRequestFrame
 	encoderMap[DeleteRequestType] = DeleteRequestFrame
@@ -89,8 +89,6 @@ type options struct {
 	transactionID   uint16 // OMCI TID
 }
 
-// TODO: Add TID option (default of 0) to allow user to specify TID of frame
-
 var defaultFrameOptions = options{
 	frameFormat:       BaselineIdent,
 	failIfTruncated:   false,
@@ -127,26 +125,9 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 //                  field and a Baseline OMCI message is large enough to
 //                  support all Set-By-Create attributes.
 //
-//   SetRequest		If multiple OMCI frames will be needed to support setting
-//					all of the requested attributes, multiple SetRequest
-//					structs will be returned with attributes encoded in
-//					decreasing Attribute mask bit order. Since this is an
-//					operation that should only occur on an OLT, it is the
-//					responsibility for the OLT application to clone the OMCI
-//					structure returned should it wish to send more than the
-//					initial SetRequest in the returned array.
-//
 //   GetResponse	If multiple OMCI response frames are needed to return
-//					all requested attributes, multiple GetResponse structs
-//					will be returned. Since this is an operation that should
-//					only occur on an ONU, there are several ways in which
-//					the responses will be encoded.
-//
-//					If this is an ME that simply has simple attributes that
-//					when combined will exceed the OMCI frame size, the first
-//					(and only) GetResponse struct will be encoded with as many
-//					attributes as possible and the Results field set to 1001
-//					(AttributeFailure) and the FailedAttributeMask field
+//					all requested attributes, only the attributes that can
+//					fit will be returned and the FailedAttributeMask field
 //					set to the attributes that could not be returned
 //
 //					If this is an ME with an attribute that is a table, the
@@ -154,7 +135,7 @@ func FrameFormat(ff DeviceIdent) FrameOption {
 //					attribute and the following GetNextResponse structs will
 //					contain the attribute data. The ONU application is
 //					responsible for stashing these extra struct(s) away in
-//					anticipation of possible GetNext Requests occuring for
+//					anticipation of possible GetNext Requests occurring for
 //					the attribute.  See the discussion on Table attributes
 //					in the GetResponse section of ITU G.988 for more
 //					information.
@@ -233,7 +214,7 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 		MessageType:      messageType,
 		DeviceIdentifier: opts.frameFormat,
 	}
-	var meInfo interface{}
+	var meInfo gopacket.SerializableLayer
 	var err error
 
 	if encoder, ok := encoderMap[messageType]; ok {
@@ -244,15 +225,7 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 	if err != nil {
 		return nil, nil, err
 	}
-	// Some requests return an array of serializable r
-	if singleResult, ok := meInfo.(gopacket.SerializableLayer); ok {
-		return omci, singleResult, err
-
-	} else if arrayResult, ok := meInfo.([]gopacket.SerializableLayer); ok {
-		// TODO: Support this return type
-		return omci, arrayResult[0], errors.New("todo: not yet fully supported") // TODO: Support this
-	}
-	return nil, nil, errors.New(fmt.Sprintf("unexpected return type' %t", meInfo))
+	return omci, meInfo, err
 }
 
 // For most all create methods below, error checking for valid masks, attribute
@@ -287,24 +260,28 @@ func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 
 func calculateAttributeMask(m *me.ManagedEntity, requestedMask uint16) (uint16, error) {
 	attrDefs := m.GetAttributeDefinitions()
+	var entityIdName string
+	if entry, ok := (*attrDefs)[0]; ok {
+		entityIdName = entry.GetName()
+	} else {
+		panic("unexpected error") // All attribute definition maps have an entity ID
+	}
 	attributeNames := make([]interface{}, 0)
-	for _, index := range me.GetAttributeDefinitionMapKeys(*attrDefs) {
-		if index == 0 {
+	for attrName := range *m.GetAttributeValueMap() {
+		if attrName == entityIdName {
 			continue // No mask for EntityID
 		}
-		if attr, ok := (*attrDefs)[index]; ok {
-			attributeNames = append(attributeNames, attr.GetName())
-		}
+		attributeNames = append(attributeNames, attrName)
 	}
-	calculated_mask, err := me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributeNames...))
+	calculatedMask, err := me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributeNames...))
 
 	if err != nil {
 		return 0, err
 	}
-	return calculated_mask & requestedMask, nil
+	return calculatedMask & requestedMask, nil
 }
 
-func CreateRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
 	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
 	//       you specify all non-zero default values and pass them in appropriate
@@ -318,7 +295,7 @@ func CreateRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func CreateResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func CreateResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -342,7 +319,7 @@ func CreateResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 	return meLayer, nil
 }
 
-func DeleteRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func DeleteRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -352,7 +329,7 @@ func DeleteRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func DeleteResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func DeleteResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -363,7 +340,7 @@ func DeleteResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 	return meLayer, nil
 }
 
-func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -372,7 +349,6 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	if err != nil {
 		return nil, err
 	}
-	results := make([]*SetRequest, 0)
 	meDefinition := m.GetManagedEntityDefinition()
 	attrDefs := *meDefinition.GetAttributeDefinitions()
 	attrMap := *m.GetAttributeValueMap()
@@ -389,11 +365,8 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 		AttributeMask: 0,
 		Attributes:    make(me.AttributeValueMap),
 	}
-	results = append(results, meLayer)
-
 	for mask != 0 {
 		// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
-		var attrRetry bool
 		var attrIndex uint
 		for attrIndex = 1; attrIndex <= 16; attrIndex++ {
 			// Is this attribute requested
@@ -411,7 +384,6 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 					msg := fmt.Sprintf("Unexpected error, attribute %v not provided in ME %v: %v",
 						attrDef.GetName(), meDefinition.GetName(), m)
 					return nil, errors.New(msg)
-
 				}
 				// Is space available?
 				if attrDef.Size <= payloadAvailable {
@@ -420,40 +392,23 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 					meLayer.AttributeMask |= 1 << (16 - attrIndex)
 					meLayer.Attributes[attrDef.Name] = attrValue
 					payloadAvailable -= attrDef.Size
-					attrRetry = false
-
-				} else if opt.failIfTruncated || attrRetry {
+				} else {
+					// TODO: Should we set truncate?
 					msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
 						attrDef.GetName())
-					return nil, errors.New(msg)
-				} else {
-					// Start another SetRequest frame
-					payloadAvailable = int(maxPayload)
-
-					meLayer := &SetRequest{
-						MeBasePacket: MeBasePacket{
-							EntityClass:    m.GetClassID(),
-							EntityInstance: m.GetEntityID(),
-						},
-						AttributeMask: 0,
-						Attributes:    make(me.AttributeValueMap),
-					}
-					results = append(results, meLayer)
-					// Back up indexing by one and retry
-					attrRetry = true
-					attrIndex--
+					return nil, me.NewMessageTruncatedError(msg)
 				}
 			}
 		}
 	}
-	if err == nil && len(results) == 0 {
+	if err == nil && meLayer.AttributeMask == 0 {
 		// TODO: Is a set request with no attributes valid?
 		return nil, errors.New("no attributes encoded for SetRequest")
 	}
-	return results, nil
+	return meLayer, nil
 }
 
-func SetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -468,7 +423,7 @@ func SetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func GetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -487,7 +442,7 @@ func GetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, nil
 }
 
-func GetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -496,7 +451,6 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 		// TODO: Is a Get request with no attributes valid?
 		return nil, errors.New("no attributes encoded for Get Response")
 	}
-	results := make([]*GetResponse, 0)
 	meLayer := &GetResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
@@ -519,8 +473,6 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 		meDefinition := m.GetManagedEntityDefinition()
 		attrDefs := *meDefinition.GetAttributeDefinitions()
 		attrMap := *m.GetAttributeValueMap()
-
-		results = append(results, meLayer)
 
 		for mask != 0 {
 			// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
@@ -555,9 +507,10 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 						if attrDef.IsTableAttribute() {
 						}
 					} else if opt.failIfTruncated {
-						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into SetRequest message",
+						// TODO: Should we set truncate?
+						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into GetResponse message",
 							attrDef.GetName())
-						return nil, errors.New(msg)
+						return nil, me.NewMessageTruncatedError(msg)
 					} else {
 						// Add to existing 'failed' mask and update result
 						meLayer.FailedAttributeMask |= 1 << (16 - attrIndex)
@@ -567,10 +520,10 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 			}
 		}
 	}
-	return results, nil
+	return meLayer, nil
 }
 
-func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -591,7 +544,7 @@ func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (interface{}, er
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -612,7 +565,7 @@ func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -633,7 +586,7 @@ func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -654,7 +607,7 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -675,7 +628,7 @@ func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -696,7 +649,7 @@ func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, erro
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
@@ -708,7 +661,7 @@ func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, e
 	return meLayer, nil
 }
 
-func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -729,7 +682,7 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func MibResetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibResetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	// Common for all MEs
 	meLayer := &MibResetRequest{
 		MeBasePacket: MeBasePacket{
@@ -740,7 +693,7 @@ func MibResetRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error)
 	return meLayer, nil
 }
 
-func MibResetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func MibResetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -761,7 +714,7 @@ func MibResetResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -782,7 +735,7 @@ func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (interface{}, erro
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -803,7 +756,7 @@ func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (interface{}, e
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func TestRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func TestRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -824,7 +777,7 @@ func TestRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func TestResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func TestResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -845,7 +798,7 @@ func TestResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -866,7 +819,7 @@ func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interf
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func StartSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func StartSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -887,7 +840,7 @@ func StartSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (inter
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func DownloadSectionRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func DownloadSectionRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -908,7 +861,7 @@ func DownloadSectionRequestFrame(m *me.ManagedEntity, opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func DownloadSectionResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func DownloadSectionResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -929,7 +882,7 @@ func DownloadSectionResponseFrame(m *me.ManagedEntity, opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func EndSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func EndSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -950,7 +903,7 @@ func EndSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (interfac
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func EndSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func EndSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -971,7 +924,7 @@ func EndSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (interfa
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func ActivateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func ActivateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -992,7 +945,7 @@ func ActivateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func ActivateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func ActivateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1013,7 +966,7 @@ func ActivateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func CommitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func CommitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1034,7 +987,7 @@ func CommitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func CommitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func CommitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1055,7 +1008,7 @@ func CommitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1076,7 +1029,7 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1097,7 +1050,7 @@ func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (interface{}
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func RebootRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1118,7 +1071,7 @@ func RebootRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func RebootResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func RebootResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1139,7 +1092,7 @@ func RebootResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1157,7 +1110,7 @@ func GetNextRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) 
 	return meLayer, nil
 }
 
-func GetNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1178,7 +1131,7 @@ func GetNextResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func TestResultFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func TestResultFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1199,7 +1152,7 @@ func TestResultFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetCurrentDataRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetCurrentDataRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1220,7 +1173,7 @@ func GetCurrentDataRequestFrame(m *me.ManagedEntity, opt options) (interface{}, 
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func GetCurrentDataResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func GetCurrentDataResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
@@ -1241,7 +1194,7 @@ func GetCurrentDataResponseFrame(m *me.ManagedEntity, opt options) (interface{},
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func SetTableRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SetTableRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
@@ -1265,7 +1218,7 @@ func SetTableRequestFrame(m *me.ManagedEntity, opt options) (interface{}, error)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
-func SetTableResponseFrame(m *me.ManagedEntity, opt options) (interface{}, error) {
+func SetTableResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat != ExtendedIdent {
 		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
 	}
