@@ -325,7 +325,8 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
-
+		} else if attrDef.TableSupport {
+			continue // TODO: Skip table attributes for now
 		} else if attrDef.GetAccess().Contains(me.Write) {
 			params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 		}
@@ -370,6 +371,9 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
 	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	if len(msgObj.Attributes) != len(*meInstance.GetAttributeValueMap()) {
+		assert.True(t, false)
+	}
 	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
 }
 
