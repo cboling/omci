@@ -355,7 +355,7 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 
 	// Get payload space available
 	maxPayload := maxPacketAvailable(m, opt)
-	payloadAvailable := int(maxPayload)
+	payloadAvailable := int(maxPayload) - 2 // Less attribute mask
 
 	meLayer := &SetRequest{
 		MeBasePacket: MeBasePacket{

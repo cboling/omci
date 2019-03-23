@@ -22,6 +22,7 @@ import (
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
+	"reflect"
 	"testing"
 )
 
@@ -373,8 +374,10 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
 	if len(msgObj.Attributes) != len(*meInstance.GetAttributeValueMap()) {
 		assert.True(t, false)
+	} else if !reflect.DeepEqual(msgObj.Attributes, *meInstance.GetAttributeValueMap()) {
+		assert.True(t, false)
 	}
-	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
+	assert.True(t, reflect.DeepEqual(msgObj.Attributes, *meInstance.GetAttributeValueMap()))
 }
 
 func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
