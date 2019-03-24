@@ -51,7 +51,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 161)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 160)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -190,7 +190,6 @@ func init() {
 	classToManagedEntityMap[410] = NewVdsl2LineConfigurationExtensions3
 	classToManagedEntityMap[412] = NewXdslChannelConfigurationProfilePart2
 	classToManagedEntityMap[414] = NewXdslLineInventoryAndStatusDataPart8
-	classToManagedEntityMap[415] = NewVdsl2LineInventoryAndStatusDataPart4
 	classToManagedEntityMap[420] = NewEfmBondingLink
 	classToManagedEntityMap[421] = NewEfmBondingGroupPerformanceMonitoringHistoryData
 	classToManagedEntityMap[422] = NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2
