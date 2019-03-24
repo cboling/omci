@@ -424,7 +424,16 @@ func SetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 }
 
 func GetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
+	// Given mask sent in (could be default of 0xFFFF) get what is allowable.
+	// This will be all allowed if 0xFFFF is passed in, or a subset if a fixed
+	// number of items.
+	maxMask, err := checkAttributeMask(m, opt.attributeMask)
+	if err != nil {
+		return nil, err
+	}
+	// Now scan attributes and reduce mask to only those
+	var mask uint16
+	mask, err = calculateAttributeMask(m, maxMask)
 	if err != nil {
 		return nil, err
 	}

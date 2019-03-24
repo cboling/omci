@@ -22,7 +22,6 @@ import (
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
-	"reflect"
 	"testing"
 )
 
@@ -316,9 +315,6 @@ func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 }
 
 func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-
-	// Generate the frame. Use a default Entity ID of zero, but for the
-	// OMCI library, we need to specify all supported Set-By-Create
 	params := me.ParamData{
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
@@ -372,12 +368,7 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
 	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	if len(msgObj.Attributes) != len(*meInstance.GetAttributeValueMap()) {
-		assert.True(t, false)
-	} else if !reflect.DeepEqual(msgObj.Attributes, *meInstance.GetAttributeValueMap()) {
-		assert.True(t, false)
-	}
-	assert.True(t, reflect.DeepEqual(msgObj.Attributes, *meInstance.GetAttributeValueMap()))
+	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
 }
 
 func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -385,7 +376,53 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 }
 
 func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID:   uint16(0),
+		Attributes: make(me.AttributeValueMap, 0),
+	}
+	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+		} else if attrDef.GetAccess().Contains(me.Read) {
+			// Allow 'nil' as parameter value for GetRequests since we only need names
+			params.Attributes[attrDef.GetName()] = nil
+		}
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetRequestType, TransactionID(tid))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, omciObj.TransactionID, tid)
+	assert.Equal(t, omciObj.MessageType, GetRequestType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeGetRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, msgObj.AttributeMask, meInstance.GetAttributeMask())
 }
 
 func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
