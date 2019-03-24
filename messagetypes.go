@@ -471,7 +471,7 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		if err != nil {
 			return err
 		}
-		if !me.SupportsAttributeAccess(attr, me.Write) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Write) {
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return me.NewProcessingError(msg)
 		}
@@ -511,7 +511,8 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		if err != nil {
 			return err
 		}
-		if !me.SupportsAttributeAccess(attr, me.Write) {
+		// Do not test for write of Entity ID in the attribute list
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Write) {
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return me.NewProcessingError(msg)
 		}
@@ -720,7 +721,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		if err != nil {
 			return err
 		}
-		if !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}
@@ -763,7 +764,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		if err != nil {
 			return err
 		}
-		if !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}
@@ -1640,7 +1641,7 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	//	if err != nil {
 	//		return err
 	//	}
-	//	if !me.SupportsAttributeAVC(attr) {
+	//	if attr.Index != 0 && !me.SupportsAttributeAVC(attr) {
 	//		msg := fmt.Sprintf("attribute '%v' does not support AVC notifications", attrName)
 	//		return me.NewProcessingError(msg)
 	//	}
@@ -1673,7 +1674,7 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	//	if err != nil {
 	//		return err
 	//	}
-	//	if !me.SupportsAttributeAVC(attr) {
+	//	if attr.Index != 0 && !me.SupportsAttributeAVC(attr) {
 	//		msg := fmt.Sprintf("attribute '%v' does not support AVC notifications", attrName)
 	//		return me.NewProcessingError(msg)
 	//	}
