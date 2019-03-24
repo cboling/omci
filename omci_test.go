@@ -184,7 +184,7 @@ func TestSetTCont(t *testing.T) {
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
 
 	attributes := omciMsg2.Attributes
-	assert.Equal(t, len(attributes), 1)
+	assert.Equal(t, len(attributes), 2)
 
 	// TODO: Create generic test to look up the name from definition
 	// Here 1 is the index in the attribute definition map of a TCONT that points
@@ -470,7 +470,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	attributes := setRequest.Attributes
 	assert.NotNil(t, attributes)
-	assert.Equal(t, len(attributes), 1)
+	assert.Equal(t, len(attributes), 2)
 
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
