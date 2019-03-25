@@ -85,8 +85,10 @@ type options struct {
 	attrExecutionMask uint16     // Create Response Only if results == 3 or
 	// Set Response only if results == 0
 	unsupportedMask uint16 // Set Response only if results == 9
-	sequenceNumber  uint16 // For get-next request frames
-	transactionID   uint16 // OMCI TID
+	sequenceNumber  uint16 // For get-next request frames and for
+	// frames that return number of commands or
+	// length
+	transactionID uint16 // OMCI TID
 }
 
 var defaultFrameOptions = options{
@@ -174,7 +176,9 @@ func AttributeUnsupportedMask(m uint16) FrameOption {
 	}
 }
 
-// SequenceNumber is used by the GetNext and MibUploadGetNext request frames
+// SequenceNumber is used by the GetNext and MibUploadGetNext request frames and for
+// frames that return number of commands or length such as Get (table attribute) or
+// MibUpload/GetAllAlarms/...
 func SequenceNumber(m uint16) FrameOption {
 	return func(o *options) {
 		o.sequenceNumber = m
@@ -617,45 +621,26 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 }
 
 func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &MibUploadRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
-			EntityInstance: m.GetEntityID(),
+			EntityInstance: 0,
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &MibUploadResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
-			EntityInstance: m.GetEntityID(),
+			EntityInstance: 0,
 		},
+		NumberOfCommands: opt.sequenceNumber,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
@@ -663,7 +648,7 @@ func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 	meLayer := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
-			EntityInstance: m.GetEntityID(),
+			EntityInstance: 0,
 		},
 		CommandSequenceNumber: opt.sequenceNumber,
 	}
