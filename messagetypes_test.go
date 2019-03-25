@@ -18,7 +18,6 @@ package omci_test
 
 import (
 	. "github.com/cboling/omci"
-	. "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"

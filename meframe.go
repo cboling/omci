@@ -81,7 +81,7 @@ type options struct {
 	frameFormat       DeviceIdent
 	failIfTruncated   bool
 	attributeMask     uint16
-	results           me.Results // Common for many responses
+	result            me.Results // Common for many responses
 	attrExecutionMask uint16     // Create Response Only if results == 3 or
 	// Set Response only if results == 0
 	unsupportedMask uint16 // Set Response only if results == 9
@@ -95,7 +95,7 @@ var defaultFrameOptions = options{
 	frameFormat:       BaselineIdent,
 	failIfTruncated:   false,
 	attributeMask:     0xFFFF,
-	results:           me.Success,
+	result:            me.Success,
 	attrExecutionMask: 0,
 	unsupportedMask:   0,
 	sequenceNumber:    0,
@@ -168,11 +168,11 @@ func AttributeExecutionMask(m uint16) FrameOption {
 	}
 }
 
-// AttributeUnsupportedMask is used by the Set Response frames to indicate attributes
-// that failed to be set by the ONU due to not being supported
-func AttributeUnsupportedMask(m uint16) FrameOption {
+// Result is used to set returned results in responses
+// that have that field
+func Result(r me.Results) FrameOption {
 	return func(o *options) {
-		o.unsupportedMask = m
+		o.result = r
 	}
 }
 
@@ -305,7 +305,7 @@ func CreateResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Result: opt.results,
+		Result: opt.result,
 	}
 	if meLayer.Result == me.ParameterError {
 		meLayer.AttributeExecutionMask = opt.attrExecutionMask
@@ -339,7 +339,7 @@ func DeleteResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Result: opt.results,
+		Result: opt.result,
 	}
 	return meLayer, nil
 }
@@ -418,7 +418,7 @@ func SetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Result: opt.results,
+		Result: opt.result,
 	}
 	if meLayer.Result == me.AttributeFailure {
 		meLayer.UnsupportedAttributeMask = opt.unsupportedMask
@@ -469,7 +469,7 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Result:        opt.results,
+		Result:        opt.result,
 		AttributeMask: 0,
 		Attributes:    make(me.AttributeValueMap),
 	}

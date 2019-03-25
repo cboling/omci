@@ -313,7 +313,46 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 }
 
 func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
+
+	var frame []byte
+	frame, err = genFrame(meInstance, DeleteResponseType, TransactionID(tid), Result(result))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, omciObj.TransactionID, tid)
+	assert.Equal(t, omciObj.MessageType, DeleteResponseType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeDeleteResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*DeleteResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, msgObj.Result, result)
 }
 
 func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
