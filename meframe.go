@@ -168,6 +168,14 @@ func AttributeExecutionMask(m uint16) FrameOption {
 	}
 }
 
+// UnsupportedAttributeMask is used by the Set Response frames to indicate
+// attributes are not supported on this ONU
+func UnsupportedAttributeMask(m uint16) FrameOption {
+	return func(o *options) {
+		o.unsupportedMask = m
+	}
+}
+
 // Result is used to set returned results in responses
 // that have that field
 func Result(r me.Results) FrameOption {

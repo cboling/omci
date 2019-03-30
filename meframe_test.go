@@ -470,7 +470,74 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 }
 
 func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
+
+	// Always pass a failure mask, but should only get encoded if result == ParameterError
+	var unsupportedMask uint16
+	var failedMask uint16
+	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+
+		} else if attrDef.GetAccess().Contains(me.Write) {
+			// Random 10% chance this parameter unsupported and
+			// 1-% it failed
+			switch rand.Int31n(5) {
+			case 0:
+				unsupportedMask |= uint16(1 << (16 - attrDef.Index))
+			case 1:
+				failedMask |= uint16(1 << (16 - attrDef.Index))
+			}
+		}
+	}
+	var frame []byte
+	frame, err = genFrame(meInstance, SetResponseType,
+		TransactionID(tid), Result(result),
+		AttributeExecutionMask(failedMask),
+		UnsupportedAttributeMask(unsupportedMask))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, omciObj.TransactionID, tid)
+	assert.Equal(t, omciObj.MessageType, SetResponseType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeSetResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*SetResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, msgObj.Result, result)
+
+	if result == me.AttributeFailure {
+		assert.Equal(t, msgObj.FailedAttributeMask, failedMask)
+		assert.Equal(t, msgObj.UnsupportedAttributeMask, unsupportedMask)
+	} else {
+		assert.Zero(t, msgObj.FailedAttributeMask)
+		assert.Zero(t, msgObj.UnsupportedAttributeMask)
+	}
 }
 
 func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

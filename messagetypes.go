@@ -521,6 +521,8 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 		}
 		// Do not test for write of Entity ID in the attribute list
 		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Write) {
+			// TODO: Check ITU spec to see if this should be listed as a failed
+			//       attribute and not a processing error.
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return me.NewProcessingError(msg)
 		}
