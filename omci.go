@@ -289,6 +289,11 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 
 	bufLen := len(b.Bytes())
 	padSize := int(omci.Length) - bufLen + 4
+	if padSize < 0 {
+		msg := fmt.Sprintf("invalid OMCI Message Type length, exceeded allowed frame size by %d bytes",
+			-padSize)
+		return errors.New(msg)
+	}
 	padding, err := b.AppendBytes(padSize)
 	copy(padding, lotsOfZeros[:])
 

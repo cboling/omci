@@ -459,9 +459,9 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 	if err != nil {
 		return nil, err
 	}
-	if mask == 0 {
-		// TODO: Is a Get request with no attributes valid?
-		return nil, errors.New("no attributes encoded for Get Response")
+	mask, err = calculateAttributeMask(m, mask)
+	if err != nil {
+		return nil, err
 	}
 	meLayer := &GetResponse{
 		MeBasePacket: MeBasePacket{
@@ -505,7 +505,6 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 						msg := fmt.Sprintf("Unexpected error, attribute %v not provided in ME %v: %v",
 							attrDef.GetName(), meDefinition.GetName(), m)
 						return nil, errors.New(msg)
-
 					}
 					// Is space available?
 					if attrDef.Size <= payloadAvailable {
@@ -515,9 +514,6 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 						meLayer.Attributes[attrDef.Name] = attrValue
 						payloadAvailable -= attrDef.Size
 
-						// If it is a table, set up our getNextResponses now
-						if attrDef.IsTableAttribute() {
-						}
 					} else if opt.failIfTruncated {
 						// TODO: Should we set truncate?
 						msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into GetResponse message",

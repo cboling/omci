@@ -736,7 +736,11 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 			return me.NewProcessingError(msg)
 		}
 	}
-	return nil
+	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
+		return nil
+	}
+	panic("All Managed Entities have an EntityID attribute")
 }
 
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -780,13 +784,27 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		}
 	}
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
-	if err != nil {
-		return err
-	}
-	// If Attribute failed or Unknown, decode optional attribute mask
-	if omci.Result == me.AttributeFailure {
-		bytesLeft := 36 - len(b.Bytes())
+	switch omci.Result {
+	default:
+		break
+
+	case me.AttributeFailure:
+		// TODO: Extended format has failed/unsupported attributes at a different location
+		//       but this serialization layer occurs before we see that. How can we handle
+		//       this better?  Probably define a specific type for GetResponses if extended
+		//       format is specified
+		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
+		if err != nil {
+			return err
+		}
+		// Calculate space left. Max - OMCI header - msgType header - OMCI trailer
+		bytesLeft := MaxBaselineLength - 12 - 8 - len(b.Bytes())
+		if bytesLeft < 4 {
+			// No room left for error messages
+			msg := fmt.Sprintf("Not enough space in Get Response for error trailer, need %d bytes",
+				4-bytesLeft)
+			return errors.New(msg)
+		}
 		bytes, err = b.AppendBytes(bytesLeft)
 		if err != nil {
 			return err
@@ -794,6 +812,12 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		copy(bytes, lotsOfZeros[:])
 		binary.BigEndian.PutUint16(bytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
 		binary.BigEndian.PutUint16(bytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
+
+	case me.Success:
+		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

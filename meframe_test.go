@@ -17,6 +17,7 @@
 package omci_test
 
 import (
+	"fmt"
 	. "github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -250,9 +251,9 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, CreateRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, CreateRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeCreateRequest)
 	assert.NotNil(t, msgLayer)
@@ -261,9 +262,9 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
 func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -306,9 +307,9 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, CreateResponseType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, CreateResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeCreateResponse)
 	assert.NotNil(t, msgLayer)
@@ -317,12 +318,12 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Result, result)
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, result, msgObj.Result)
 
 	if result == me.ParameterError {
-		assert.Equal(t, msgObj.AttributeExecutionMask, mask)
+		assert.Equal(t, mask, msgObj.AttributeExecutionMask)
 	} else {
 		assert.Zero(t, msgObj.AttributeExecutionMask)
 	}
@@ -355,9 +356,9 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, DeleteRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, DeleteRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeDeleteRequest)
 	assert.NotNil(t, msgLayer)
@@ -366,8 +367,8 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -396,9 +397,9 @@ func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, DeleteResponseType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, DeleteResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeDeleteResponse)
 	assert.NotNil(t, msgLayer)
@@ -407,9 +408,9 @@ func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Result, result)
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, result, msgObj.Result)
 }
 
 func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -453,9 +454,9 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, SetRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, SetRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
 	assert.NotNil(t, msgLayer)
@@ -464,9 +465,9 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Attributes, *meInstance.GetAttributeValueMap())
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
 func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -476,7 +477,7 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
-	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
+	result := me.Results(rand.Int31n(10))  // [0, 9] Not all types will be tested
 
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
@@ -487,7 +488,7 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 		} else if attrDef.GetAccess().Contains(me.Write) {
 			// Random 10% chance this parameter unsupported and
-			// 1-% it failed
+			// 10% it failed
 			switch rand.Int31n(5) {
 			case 0:
 				unsupportedMask |= uint16(1 << (16 - attrDef.Index))
@@ -516,9 +517,9 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, SetResponseType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, SetResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeSetResponse)
 	assert.NotNil(t, msgLayer)
@@ -527,13 +528,13 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.Result, result)
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, result, msgObj.Result)
 
 	if result == me.AttributeFailure {
-		assert.Equal(t, msgObj.FailedAttributeMask, failedMask)
-		assert.Equal(t, msgObj.UnsupportedAttributeMask, unsupportedMask)
+		assert.Equal(t, failedMask, msgObj.FailedAttributeMask)
+		assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
 	} else {
 		assert.Zero(t, msgObj.FailedAttributeMask)
 		assert.Zero(t, msgObj.UnsupportedAttributeMask)
@@ -574,9 +575,9 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, GetRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeGetRequest)
 	assert.NotNil(t, msgLayer)
@@ -585,13 +586,106 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
-	assert.Equal(t, msgObj.AttributeMask, meInstance.GetAttributeMask())
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetAttributeMask(), msgObj.AttributeMask)
+}
+func testGetResponseTypeMeFrameX(t *testing.T, managedEntity *me.ManagedEntity) {
 }
 
 func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID:   uint16(0),
+		Attributes: make(me.AttributeValueMap),
+	}
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	result := me.Results(rand.Int31n(10))  // [0, 6] Not all types will be tested
+
+	fmt.Printf("Testing %v\n", managedEntity.GetClassID())
+
+	// Always pass a failure mask, but should only get encoded if result == ParameterError
+	var unsupportedMask uint16
+	var failedMask uint16
+	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+
+		} else if attrDef.GetAccess().Contains(me.Read) {
+			// Random 10% chance this parameter unsupported and
+			// 10% it failed
+			switch rand.Int31n(5) {
+			default:
+				// TODO: Table attributes not yet supported
+				if !attrDef.TableSupport {
+					params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
+				}
+			case 0:
+				unsupportedMask |= uint16(1 << (16 - attrDef.Index))
+			case 1:
+				failedMask |= uint16(1 << (16 - attrDef.Index))
+			}
+		}
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetResponseType,
+		TransactionID(tid), Result(result),
+		AttributeExecutionMask(failedMask),
+		UnsupportedAttributeMask(unsupportedMask))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, result, msgObj.Result)
+
+	switch msgObj.Result {
+	default:
+		assert.Zero(t, msgObj.FailedAttributeMask)
+		assert.Zero(t, msgObj.UnsupportedAttributeMask)
+
+	case me.Success:
+		assert.Zero(t, msgObj.FailedAttributeMask)
+		assert.Zero(t, msgObj.UnsupportedAttributeMask)
+		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+
+	case me.AttributeFailure:
+		assert.Equal(t, failedMask, msgObj.FailedAttributeMask)
+		assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
+
+		// Make sure any successful attributes were requested
+		meMap := *meInstance.GetAttributeValueMap()
+		for name := range msgObj.Attributes {
+			getValue, ok := meMap[name]
+			assert.True(t, ok)
+			assert.NotNil(t, getValue)
+		}
+	}
 }
 
 func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -673,9 +767,9 @@ func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, MibUploadRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, MibUploadRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
 	assert.NotNil(t, msgLayer)
@@ -684,8 +778,8 @@ func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -719,9 +813,9 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	omciObj, omciOk := omciLayer.(*OMCI)
 	assert.NotNil(t, omciObj)
 	assert.True(t, omciOk)
-	assert.Equal(t, omciObj.TransactionID, tid)
-	assert.Equal(t, omciObj.MessageType, MibUploadNextRequestType)
-	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, MibUploadNextRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextRequest)
 	assert.NotNil(t, msgLayer)
@@ -730,9 +824,9 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, msgObj.CommandSequenceNumber, seqNumber)
-	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, seqNumber, msgObj.CommandSequenceNumber)
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
