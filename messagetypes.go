@@ -253,7 +253,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 type CreateResponse struct {
 	MeBasePacket
 	Result                 me.Results
-	AttributeExecutionMask uint16
+	AttributeExecutionMask uint16 // Used when Result == ParameterError
 }
 
 func (omci *CreateResponse) String() string {
@@ -278,7 +278,10 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
 	omci.Result = me.Results(data[4])
-	omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[5:])
+	if omci.Result == me.ParameterError {
+		omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[5:])
+		// TODO: validation that attributes set in mask are SetByCreate would be good here
+	}
 	return nil
 }
 
@@ -309,7 +312,12 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 		return err
 	}
 	bytes[0] = byte(omci.Result)
-	binary.BigEndian.PutUint16(bytes[1:], omci.AttributeExecutionMask)
+	if omci.Result == me.ParameterError {
+		// TODO: validation that attributes set in mask are SetByCreate would be good here
+		binary.BigEndian.PutUint16(bytes[1:], omci.AttributeExecutionMask)
+	} else {
+		binary.BigEndian.PutUint16(bytes[1:], 0)
+	}
 	return nil
 }
 

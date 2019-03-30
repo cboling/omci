@@ -305,21 +305,12 @@ func CreateResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Result: opt.result,
+		Result:                 opt.result,
+		AttributeExecutionMask: opt.attributeMask,
 	}
 	if meLayer.Result == me.ParameterError {
 		meLayer.AttributeExecutionMask = opt.attrExecutionMask
 	}
-	//var err error
-	//
-	//// If default mask specified, make sure we verify and set it appropriate
-	//// if needed
-	//if opt.attributeMask == defaultFrameOptions.attributeMask {
-	//	opt.attributeMask, err = calculateAttributeMask(m)
-	//	if err != nil {
-	//		return nil, err
-	//	}
-	//}
 	return meLayer, nil
 }
 

@@ -267,7 +267,65 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 }
 
 func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
+
+	// Always pass a failure mask, but should only get encoded if result == ParameterError
+	var mask uint16
+	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+
+		} else if attrDef.GetAccess().Contains(me.SetByCreate) {
+			// Random 20% chance this parameter was bad
+			if rand.Int31n(5) == 0 {
+				mask |= uint16(1 << (16 - attrDef.Index))
+			}
+		}
+	}
+	var frame []byte
+	frame, err = genFrame(meInstance, CreateResponseType,
+		TransactionID(tid), Result(result), AttributeExecutionMask(mask))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, omciObj.TransactionID, tid)
+	assert.Equal(t, omciObj.MessageType, CreateResponseType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeCreateResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*CreateResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	assert.Equal(t, msgObj.Result, result)
+
+	if result == me.ParameterError {
+		assert.Equal(t, msgObj.AttributeExecutionMask, mask)
+	} else {
+		assert.Zero(t, msgObj.AttributeExecutionMask)
+	}
 }
 
 func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -313,7 +371,6 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 }
 
 func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-
 	params := me.ParamData{
 		EntityID: uint16(0),
 	}
