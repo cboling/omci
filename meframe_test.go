@@ -629,6 +629,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 
+	fmt.Printf("  serializing %v\n", managedEntity.GetClassID())
 	var frame []byte
 	frame, err = genFrame(meInstance, GetResponseType,
 		TransactionID(tid), Result(result),
@@ -638,8 +639,11 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)
 
+	// TODO: Need to test if err is MessageTruncatedError
+
 	///////////////////////////////////////////////////////////////////
 	// Now decode and compare
+	fmt.Printf("  decoding %v\n", managedEntity.GetClassID())
 	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
 	assert.NotNil(t, packet)
 
@@ -686,6 +690,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			assert.NotNil(t, getValue)
 		}
 	}
+	fmt.Printf("  done %v\n", managedEntity.GetClassID())
 }
 
 func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

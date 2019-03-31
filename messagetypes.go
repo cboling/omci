@@ -803,11 +803,11 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 			// No room left for error messages
 			msg := fmt.Sprintf("Not enough space in Get Response for error trailer, need %d bytes",
 				4-bytesLeft)
-			return errors.New(msg)
+			return me.NewMessageTruncatedError(msg)
 		}
 		bytes, err = b.AppendBytes(bytesLeft)
 		if err != nil {
-			return err
+			return me.NewMessageTruncatedError(err.Error())
 		}
 		copy(bytes, lotsOfZeros[:])
 		binary.BigEndian.PutUint16(bytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
