@@ -694,9 +694,6 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	}
 }
 
-func testGetResponseTypeMeFrameX(t *testing.T, managedEntity *me.ManagedEntity) {
-}
-
 func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
 	//params := me.ParamData{
