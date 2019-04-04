@@ -610,7 +610,10 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			// 10% it failed
 			switch rand.Int31n(5) {
 			default:
-				// TODO: Table attributes not yet supported
+				// TODO: Table attributes not yet supported.  For Table Attributes, figure our a
+				//       good way to unit test this and see if that can be extended to a more
+				//       general operation that provides the 'get-next' frames to the caller who
+				//		 wishes to serialize a table attribute.
 				if !attrDef.TableSupport {
 					params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 				}
@@ -635,8 +638,6 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	if err != nil {
 		if _, ok := err.(*me.MessageTruncatedError); ok {
 			return
-		} else if _, ok := err.(*me.OmciProcessingError); ok {
-			return // TODO: Remove me. should be truncation error above always
 		}
 	}
 	assert.NotNil(t, frame)
