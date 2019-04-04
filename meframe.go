@@ -82,13 +82,11 @@ type options struct {
 	failIfTruncated   bool
 	attributeMask     uint16
 	result            me.Results // Common for many responses
-	attrExecutionMask uint16     // Create Response Only if results == 3 or
-	// Set Response only if results == 0
-	unsupportedMask uint16 // Set Response only if results == 9
-	sequenceNumber  uint16 // For get-next request frames and for
-	// frames that return number of commands or
-	// length
-	transactionID uint16 // OMCI TID
+	attrExecutionMask uint16     // Create Response Only if results == 3 or Set Response only if results == 0
+	unsupportedMask   uint16     // Set Response only if results == 9
+	sequenceNumber    uint16     // For get-next request frames and for frames that return number of commands or length
+	transactionID     uint16     // OMCI TID
+	mode              uint8      // Get All Alarms retrieval mode
 }
 
 var defaultFrameOptions = options{
@@ -100,6 +98,7 @@ var defaultFrameOptions = options{
 	unsupportedMask:   0,
 	sequenceNumber:    0,
 	transactionID:     0,
+	mode:              0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -199,6 +198,13 @@ func SequenceNumber(m uint16) FrameOption {
 func TransactionID(tid uint16) FrameOption {
 	return func(o *options) {
 		o.transactionID = tid
+	}
+}
+
+// RetrievalMode is to specify the the Alarm Retrival Mode in a GetAllAlarms Request
+func RetrievalMode(m uint8) FrameOption {
+	return func(o *options) {
+		o.mode = m
 	}
 }
 
@@ -532,24 +538,15 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 }
 
 func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		AlarmRetrievalMode: opt.mode,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

@@ -18,7 +18,6 @@ package omci_test
 
 import (
 	. "github.com/cboling/omci"
-	. "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -220,10 +219,10 @@ func TestOmciSerialization(t *testing.T) {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: AttributeValueMap{
-			"PortId":                                       0x400,
-			"TContPointer":                                 0x8000,
-			"Direction":                                    3,
-			"TrafficManagementPointerForUpstream":          0x100,
+			"PortId":                              0x400,
+			"TContPointer":                        0x8000,
+			"Direction":                           3,
+			"TrafficManagementPointerForUpstream": 0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -335,10 +334,10 @@ func TestCreateRequestSerialize(t *testing.T) {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: AttributeValueMap{
-			"PortId":                                       0x400,
-			"TContPointer":                                 0x8000,
-			"Direction":                                    3,
-			"TrafficManagementPointerForUpstream":          0x100,
+			"PortId":                              0x400,
+			"TContPointer":                        0x8000,
+			"Direction":                           3,
+			"TrafficManagementPointerForUpstream": 0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -1294,13 +1293,13 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 		"AllocatedQueueSize":                                  uint16(0),
 		"DiscardBlockCounterResetInterval":                    uint16(0),
 		"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-		"RelatedPort":                     uint32(16842752),
-		"TrafficSchedulerPointer":         uint16(0),
-		"Weight":                          byte(1),
-		"BackPressureOperation":           uint16(0),
-		"BackPressureTime":                uint32(0),
-		"BackPressureOccurQueueThreshold": uint16(0),
-		"BackPressureClearQueueThreshold": uint16(0),
+		"RelatedPort":                                         uint32(16842752),
+		"TrafficSchedulerPointer":                             uint16(0),
+		"Weight":                                              byte(1),
+		"BackPressureOperation":                               uint16(0),
+		"BackPressureTime":                                    uint32(0),
+		"BackPressureOccurQueueThreshold":                     uint16(0),
+		"BackPressureClearQueueThreshold":                     uint16(0),
 	}
 	for name, value := range attributes {
 		pktValue, err := response.ReportedME.GetAttribute(name)
@@ -1329,13 +1328,13 @@ func TestMibUploadNextResponseSerialize(t *testing.T) {
 			"AllocatedQueueSize":                                  uint16(0),
 			"DiscardBlockCounterResetInterval":                    uint16(0),
 			"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-			"RelatedPort":                     uint32(16842752),
-			"TrafficSchedulerPointer":         uint16(0),
-			"Weight":                          byte(1),
-			"BackPressureOperation":           uint16(0),
-			"BackPressureTime":                uint32(0),
-			"BackPressureOccurQueueThreshold": uint16(0),
-			"BackPressureClearQueueThreshold": uint16(0),
+			"RelatedPort":                                         uint32(16842752),
+			"TrafficSchedulerPointer":                             uint16(0),
+			"Weight":                                              byte(1),
+			"BackPressureOperation":                               uint16(0),
+			"BackPressureTime":                                    uint32(0),
+			"BackPressureOccurQueueThreshold":                     uint16(0),
+			"BackPressureClearQueueThreshold":                     uint16(0),
 		},
 	}
 	reportedME, err := NewPriorityQueue(paramData)

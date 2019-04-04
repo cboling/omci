@@ -696,44 +696,45 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
-	//params := me.ParamData{
-	//	EntityID:   uint16(0),
-	//}
-	//// Create the managed instance
-	//meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	//tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
-	//mode := uint8(rand.Int31n(2)) // [0, 1]
-	//
-	//var frame []byte
-	//frame, err = genFrame(meInstance, GetAllAlarmsRequestType, TransactionID(tid))
-	//assert.NotNil(t, frame)
-	//assert.NotZero(t, len(frame))
-	//assert.Nil(t, err)
-	//
-	/////////////////////////////////////////////////////////////////////
-	//// Now decode and compare
-	//packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, omciLayer)
-	//
-	//omciObj, omciOk := omciLayer.(*OMCI)
-	//assert.NotNil(t, omciObj)
-	//assert.True(t, omciOk)
-	//assert.Equal(t, omciObj.TransactionID, tid)
-	//assert.Equal(t, omciObj.MessageType, GetAllAlarmsRequestType)
-	//assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
-	//
-	//msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
-	//assert.NotNil(t, msgLayer)
-	//
-	//msgObj, msgOk := msgLayer.(*GetAllAlarmsRequest)
-	//assert.NotNil(t, msgObj)
-	//assert.True(t, msgOk)
-	//
-	//assert.Equal(t, msgObj.EntityClass, managedEntity.GetClassID())
-	//assert.Equal(t, msgObj.EntityInstance, managedEntity.GetEntityID())
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	mode := uint8(rand.Int31n(2))          // [0, 1]
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetAllAlarmsRequestType, TransactionID(tid), RetrievalMode(mode))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetAllAlarmsRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetAllAlarmsRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, mode, msgObj.AlarmRetrievalMode)
 }
 
 func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
