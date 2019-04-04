@@ -486,7 +486,7 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 		attrDefs := *meDefinition.GetAttributeDefinitions()
 		attrMap := *m.GetAttributeValueMap()
 
-		for mask != 0 {
+		if mask != 0 {
 			// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
 			var attrIndex uint
 			for attrIndex = 1; attrIndex <= 16; attrIndex++ {

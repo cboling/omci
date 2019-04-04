@@ -797,21 +797,22 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		if err != nil {
 			return err
 		}
-		// Calculate space left. Max - OMCI header - msgType header - OMCI trailer
-		bytesLeft := MaxBaselineLength - 12 - 8 - len(b.Bytes())
+		// Calculate space left. Max  - msgType header - OMCI trailer - spacedUsedSoFar
+		bytesLeft := MaxBaselineLength - 4 - 8 - len(b.Bytes())
+
 		if bytesLeft < 4 {
 			// No room left for error messages
 			msg := fmt.Sprintf("Not enough space in Get Response for error trailer, need %d bytes",
 				4-bytesLeft)
 			return me.NewMessageTruncatedError(msg)
 		}
-		bytes, err = b.AppendBytes(bytesLeft)
+		remainingBytes, err := b.AppendBytes(bytesLeft)
 		if err != nil {
 			return me.NewMessageTruncatedError(err.Error())
 		}
-		copy(bytes, lotsOfZeros[:])
-		binary.BigEndian.PutUint16(bytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
-		binary.BigEndian.PutUint16(bytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
+		copy(remainingBytes, lotsOfZeros[:])
+		binary.BigEndian.PutUint16(remainingBytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
+		binary.BigEndian.PutUint16(remainingBytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
 
 	case me.Success:
 		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
