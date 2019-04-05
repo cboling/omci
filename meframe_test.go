@@ -598,6 +598,12 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(10))  // [0, 6] Not all types will be tested
 
+	// If success Results selected, set FailIfTruncated 50% of time to test
+	// overflow detection and failures periodically.
+	failIfTruncated := false
+	if result == me.Success && rand.Int31n(2) == 1 {
+		failIfTruncated = true
+	}
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
 	var failedMask uint16
@@ -631,7 +637,8 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	frame, err = genFrame(meInstance, GetResponseType,
 		TransactionID(tid), Result(result),
 		AttributeExecutionMask(failedMask),
-		UnsupportedAttributeMask(unsupportedMask))
+		UnsupportedAttributeMask(unsupportedMask),
+		FailIfTruncated(failIfTruncated))
 
 	// TODO: Need to test if err is MessageTruncatedError. Sometimes reported as
 	//       a proessing error
@@ -660,6 +667,11 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
 	msgLayer := packet.Layer(LayerTypeGetResponse)
+	// If requested Result was Success and FailIfTruncated is true, then we may
+	// fail (get nil layer) if too many attributes to fit in a frame
+	if result == me.Success && failIfTruncated && msgLayer == nil {
+		return // was expected
+	}
 	assert.NotNil(t, msgLayer)
 
 	msgObj, msgOk := msgLayer.(*GetResponse)
@@ -681,9 +693,17 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 
 	case me.AttributeFailure:
-		assert.Equal(t, failedMask, msgObj.FailedAttributeMask)
 		assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
 
+		// Returned may have more bits set in failed mask and less attributes
+		// since failIfTruncated is false and we may add more fail attributes
+		// since they do not fit
+		if failedMask != msgObj.FailedAttributeMask {
+			// Expect more bits in returned mask
+			assert.True(t, failedMask < msgObj.FailedAttributeMask)
+		} else {
+			assert.Equal(t, failedMask, msgObj.FailedAttributeMask)
+		}
 		// Make sure any successful attributes were requested
 		meMap := *meInstance.GetAttributeValueMap()
 		for name := range msgObj.Attributes {
@@ -695,7 +715,6 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 }
 
 func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
 	params := me.ParamData{
 		EntityID: uint16(0),
 	}
