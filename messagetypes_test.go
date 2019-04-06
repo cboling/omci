@@ -18,36 +18,37 @@ package omci_test
 
 import (
 	. "github.com/cboling/omci"
+	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
 	"testing"
 )
 
-var allMsgTypes = [...]MsgType{
-	Create,
-	Delete,
-	Set,
-	Get,
-	GetAllAlarms,
-	GetAllAlarmsNext,
-	MibUpload,
-	MibUploadNext,
-	MibReset,
-	AlarmNotification,
-	AttributeValueChange,
-	Test,
-	StartSoftwareDownload,
-	DownloadSection,
-	EndSoftwareDownload,
-	ActivateSoftware,
-	CommitSoftware,
-	SynchronizeTime,
-	Reboot,
-	GetNext,
-	TestResult,
-	GetCurrentData,
-	SetTable}
+var allMsgTypes = [...]me.MsgType{
+	me.Create,
+	me.Delete,
+	me.Set,
+	me.Get,
+	me.GetAllAlarms,
+	me.GetAllAlarmsNext,
+	me.MibUpload,
+	me.MibUploadNext,
+	me.MibReset,
+	me.AlarmNotification,
+	me.AttributeValueChange,
+	me.Test,
+	me.StartSoftwareDownload,
+	me.DownloadSection,
+	me.EndSoftwareDownload,
+	me.ActivateSoftware,
+	me.CommitSoftware,
+	me.SynchronizeTime,
+	me.Reboot,
+	me.GetNext,
+	me.TestResult,
+	me.GetCurrentData,
+	me.SetTable}
 
 var allMessageTypes = [...]MessageType{
 	CreateRequestType,
@@ -96,15 +97,15 @@ var allMessageTypes = [...]MessageType{
 	TestResultType,
 }
 
-var allResults = [...]Results{
-	Success,
-	ProcessingError,
-	NotSupported,
-	ParameterError,
-	UnknownEntity,
-	UnknownInstance,
-	DeviceBusy,
-	InstanceExists}
+var allResults = [...]me.Results{
+	me.Success,
+	me.ProcessingError,
+	me.NotSupported,
+	me.ParameterError,
+	me.UnknownEntity,
+	me.UnknownInstance,
+	me.DeviceBusy,
+	me.InstanceExists}
 
 // TestMsgTypeStrings tests that base message types can be printed
 func TestMsgTypeStrings(t *testing.T) {
@@ -112,7 +113,7 @@ func TestMsgTypeStrings(t *testing.T) {
 		strMsg := msg.String()
 		assert.NotEqual(t, len(strMsg), 0)
 	}
-	unknown := MsgType(0xFF)
+	unknown := me.MsgType(0xFF)
 	strMsg := unknown.String()
 	assert.NotEqual(t, len(strMsg), 0)
 }
@@ -215,14 +216,14 @@ func TestOmciSerialization(t *testing.T) {
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    GemPortNetworkCtpClassId,
+			EntityClass:    me.GemPortNetworkCtpClassId,
 			EntityInstance: uint16(0x100),
 		},
-		Attributes: AttributeValueMap{
-			"PortId":                              0x400,
-			"TContPointer":                        0x8000,
-			"Direction":                           3,
-			"TrafficManagementPointerForUpstream": 0x100,
+		Attributes: me.AttributeValueMap{
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -276,7 +277,7 @@ func TestCreateRequestDecode(t *testing.T) {
 
 	request, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, request.EntityClass, GemPortNetworkCtpClassId)
+	assert.Equal(t, request.EntityClass, me.GemPortNetworkCtpClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0x100))
 
 	attributes := request.Attributes
@@ -284,7 +285,7 @@ func TestCreateRequestDecode(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := LoadManagedEntityDefinition(request.EntityClass)
+	meDefinition, err := me.LoadManagedEntityDefinition(request.EntityClass)
 	assert.Nil(t, err)
 
 	attrDefs := *meDefinition.GetAttributeDefinitions()
@@ -330,14 +331,14 @@ func TestCreateRequestSerialize(t *testing.T) {
 	}
 	request := &CreateRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    GemPortNetworkCtpClassId,
+			EntityClass:    me.GemPortNetworkCtpClassId,
 			EntityInstance: uint16(0x100),
 		},
-		Attributes: AttributeValueMap{
-			"PortId":                              0x400,
-			"TContPointer":                        0x8000,
-			"Direction":                           3,
-			"TrafficManagementPointerForUpstream": 0x100,
+		Attributes: me.AttributeValueMap{
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -398,10 +399,10 @@ func TestCreateResponseSerialize(t *testing.T) {
 	}
 	request := &CreateResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    GalEthernetProfileClassId,
+			EntityClass:    me.GalEthernetProfileClassId,
 			EntityInstance: uint16(1),
 		},
-		Result:                 Success,
+		Result:                 me.Success,
 		AttributeExecutionMask: uint16(0),
 	}
 	// Test serialization back to former string
@@ -459,7 +460,7 @@ func TestDeleteRequestSerialize(t *testing.T) {
 	}
 	request := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassId,
 			EntityInstance: uint16(0x202),
 		},
 	}
@@ -518,10 +519,10 @@ func TestDeleteResponseSerialize(t *testing.T) {
 	}
 	request := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassId,
 			EntityInstance: uint16(0x202),
 		},
-		Result: Success,
+		Result: me.Success,
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -577,11 +578,11 @@ func TestSetRequestSerialize(t *testing.T) {
 	}
 	request := &SetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuGClassId,
+			EntityClass:    me.OnuGClassId,
 			EntityInstance: uint16(0),
 		},
 		AttributeMask: uint16(0x200),
-		Attributes:    AttributeValueMap{"AdministrativeState": byte(0)},
+		Attributes:    me.AttributeValueMap{"AdministrativeState": byte(0)},
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -637,10 +638,10 @@ func TestSetResponseSerialize(t *testing.T) {
 	}
 	request := &SetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuGClassId,
+			EntityClass:    me.OnuGClassId,
 			EntityInstance: uint16(0),
 		},
-		Result: Success,
+		Result: me.Success,
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -707,7 +708,7 @@ func TestGetRequestSerialize(t *testing.T) {
 	}
 	request := &GetRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    AniGClassId,
+			EntityClass:    me.AniGClassId,
 			EntityInstance: uint16(0),
 		},
 		AttributeMask: uint16(0x0044),
@@ -749,7 +750,7 @@ func TestGetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.Result, Success)
+	assert.Equal(t, response.Result, me.Success)
 	assert.Equal(t, response.AttributeMask, uint16(0x0044))
 	assert.Equal(t, response.Attributes["TransmitOpticalLevel"], uint16(0x05f1))
 	assert.Equal(t, response.Attributes["OpticalSignalLevel"], uint16(0xdbcb))
@@ -770,12 +771,12 @@ func TestGetResponseSerialize(t *testing.T) {
 	}
 	request := &GetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    AniGClassId,
+			EntityClass:    me.AniGClassId,
 			EntityInstance: uint16(0),
 		},
 		Result:        0,
 		AttributeMask: uint16(0x0044),
-		Attributes: AttributeValueMap{
+		Attributes: me.AttributeValueMap{
 			"TransmitOpticalLevel": uint16(0x05f1),
 			"OpticalSignalLevel":   uint16(0xdbcb)},
 	}
@@ -856,7 +857,7 @@ func TestGetAllAlarmsRequestSerialize(t *testing.T) {
 	}
 	request := &GetAllAlarmsRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		AlarmRetrievalMode: byte(1),
@@ -916,7 +917,7 @@ func TestGetAllAlarmsResponseSerialize(t *testing.T) {
 	}
 	request := &GetAllAlarmsResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		NumberOfCommands: uint16(3),
@@ -976,7 +977,7 @@ func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
 	}
 	request := &GetAllAlarmsNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		CommandSequenceNumber: uint16(0),
@@ -1021,7 +1022,7 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 
 	var alarms [224 / 8]byte
 	alarms[0] = 0x80
-	assert.Equal(t, response.AlarmEntityClass, PhysicalPathTerminationPointEthernetUniClassId)
+	assert.Equal(t, response.AlarmEntityClass, me.PhysicalPathTerminationPointEthernetUniClassId)
 	assert.Equal(t, response.AlarmEntityInstance, uint16(0x102))
 	assert.Equal(t, response.AlarmBitMap, alarms)
 
@@ -1044,10 +1045,10 @@ func TestGetAllAlarmsNextResponseSerialize(t *testing.T) {
 
 	request := &GetAllAlarmsNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
-		AlarmEntityClass:    PhysicalPathTerminationPointEthernetUniClassId,
+		AlarmEntityClass:    me.PhysicalPathTerminationPointEthernetUniClassId,
 		AlarmEntityInstance: uint16(0x102),
 		AlarmBitMap:         alarms,
 	}
@@ -1124,7 +1125,7 @@ func TestMibUploadRequestSerialize(t *testing.T) {
 
 	request := &MibUploadRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 	}
@@ -1182,7 +1183,7 @@ func TestMibUploadResponseSerialize(t *testing.T) {
 
 	request := &MibUploadResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		NumberOfCommands: uint16(0x112),
@@ -1242,7 +1243,7 @@ func TestMibUploadNextRequestSerialize(t *testing.T) {
 	}
 	request := &MibUploadNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		CommandSequenceNumber: uint16(0x3a),
@@ -1284,22 +1285,22 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*MibUploadNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.ReportedME.GetClassID(), PriorityQueueClassId)
+	assert.Equal(t, response.ReportedME.GetClassID(), me.PriorityQueueClassId)
 	assert.Equal(t, response.ReportedME.GetEntityID(), uint16(0))
 
-	attributes := AttributeValueMap{
+	attributes := me.AttributeValueMap{
 		"QueueConfigurationOption":                            byte(0),
 		"MaximumQueueSize":                                    uint16(0),
 		"AllocatedQueueSize":                                  uint16(0),
 		"DiscardBlockCounterResetInterval":                    uint16(0),
 		"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-		"RelatedPort":                                         uint32(16842752),
-		"TrafficSchedulerPointer":                             uint16(0),
-		"Weight":                                              byte(1),
-		"BackPressureOperation":                               uint16(0),
-		"BackPressureTime":                                    uint32(0),
-		"BackPressureOccurQueueThreshold":                     uint16(0),
-		"BackPressureClearQueueThreshold":                     uint16(0),
+		"RelatedPort":                     uint32(16842752),
+		"TrafficSchedulerPointer":         uint16(0),
+		"Weight":                          byte(1),
+		"BackPressureOperation":           uint16(0),
+		"BackPressureTime":                uint32(0),
+		"BackPressureOccurQueueThreshold": uint16(0),
+		"BackPressureClearQueueThreshold": uint16(0),
 	}
 	for name, value := range attributes {
 		pktValue, err := response.ReportedME.GetAttribute(name)
@@ -1320,29 +1321,29 @@ func TestMibUploadNextResponseSerialize(t *testing.T) {
 		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
 		// Length:           0x28,						// Optional, defaults to 40 octets
 	}
-	paramData := ParamData{
+	paramData := me.ParamData{
 		EntityID: uint16(0),
-		Attributes: AttributeValueMap{
+		Attributes: me.AttributeValueMap{
 			"QueueConfigurationOption":                            byte(0),
 			"MaximumQueueSize":                                    uint16(0),
 			"AllocatedQueueSize":                                  uint16(0),
 			"DiscardBlockCounterResetInterval":                    uint16(0),
 			"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-			"RelatedPort":                                         uint32(16842752),
-			"TrafficSchedulerPointer":                             uint16(0),
-			"Weight":                                              byte(1),
-			"BackPressureOperation":                               uint16(0),
-			"BackPressureTime":                                    uint32(0),
-			"BackPressureOccurQueueThreshold":                     uint16(0),
-			"BackPressureClearQueueThreshold":                     uint16(0),
+			"RelatedPort":                     uint32(16842752),
+			"TrafficSchedulerPointer":         uint16(0),
+			"Weight":                          byte(1),
+			"BackPressureOperation":           uint16(0),
+			"BackPressureTime":                uint32(0),
+			"BackPressureOccurQueueThreshold": uint16(0),
+			"BackPressureClearQueueThreshold": uint16(0),
 		},
 	}
-	reportedME, err := NewPriorityQueue(paramData)
+	reportedME, err := me.NewPriorityQueue(paramData)
 	assert.NoError(t, err)
 
 	request := &MibUploadNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuDataClassId,
+			EntityClass:    me.OnuDataClassId,
 			EntityInstance: uint16(0),
 		},
 		ReportedME: *reportedME,
@@ -2023,7 +2024,7 @@ func TestMibResetResponseSerialize(t *testing.T) {
 	}
 	request := &MibResetResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass: OnuDataClassId,
+			EntityClass: me.OnuDataClassId,
 			// Default Instance ID is 0
 		},
 	}
@@ -2086,7 +2087,7 @@ func TestSynchronizeTimeRequestSerialize(t *testing.T) {
 	}
 	request := &SynchronizeTimeRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass: OnuGClassId,
+			EntityClass: me.OnuGClassId,
 			// Default Instance ID is 0
 		},
 		Year:   uint16(2018),
@@ -2149,10 +2150,10 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 	}
 	request := &SynchronizeTimeResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuGClassId,
+			EntityClass:    me.OnuGClassId,
 			EntityInstance: uint16(0),
 		},
-		Result:         Success,
+		Result:         me.Success,
 		SuccessResults: uint8(0),
 	}
 	// Test serialization back to former string
@@ -2192,7 +2193,7 @@ func TestRebootRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*RebootRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, OnuGClassId)
+	assert.Equal(t, request.EntityClass, me.OnuGClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0))
 	assert.Equal(t, request.RebootCondition, uint8(1))
 
@@ -2212,7 +2213,7 @@ func TestRebootRequestSerialize(t *testing.T) {
 	}
 	request := &RebootRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass: OnuGClassId,
+			EntityClass: me.OnuGClassId,
 			// Default Instance ID is 0
 		},
 		RebootCondition: uint8(2),
@@ -2254,9 +2255,9 @@ func TestRebootResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*RebootResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.EntityClass, OnuGClassId)
+	assert.Equal(t, response.EntityClass, me.OnuGClassId)
 	assert.Equal(t, response.EntityInstance, uint16(0))
-	assert.Equal(t, response.Result, Success)
+	assert.Equal(t, response.Result, me.Success)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -2274,10 +2275,10 @@ func TestRebootResponseSerialize(t *testing.T) {
 	}
 	request := &RebootResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    OnuGClassId,
+			EntityClass:    me.OnuGClassId,
 			EntityInstance: uint16(0),
 		},
-		Result: DeviceBusy,
+		Result: me.DeviceBusy,
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -2316,7 +2317,7 @@ func TestGetNextRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, ExtendedVlanTaggingOperationConfigurationDataClassId)
+	assert.Equal(t, request.EntityClass, me.ExtendedVlanTaggingOperationConfigurationDataClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0x0202))
 	assert.Equal(t, request.AttributeMask, uint16(0x0400))
 	assert.Equal(t, request.SequenceNumber, uint16(1))
@@ -2337,7 +2338,7 @@ func TestGetNextRequestSerialize(t *testing.T) {
 	}
 	request := &GetNextRequest{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassId,
 			EntityInstance: uint16(0x0202),
 		},
 		AttributeMask:  uint16(0x0400),
@@ -2384,9 +2385,9 @@ func TestGetNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.EntityClass, ExtendedVlanTaggingOperationConfigurationDataClassId)
+	assert.Equal(t, response.EntityClass, me.ExtendedVlanTaggingOperationConfigurationDataClassId)
 	assert.Equal(t, response.EntityInstance, uint16(0x0202))
-	assert.Equal(t, response.Result, Success)
+	assert.Equal(t, response.Result, me.Success)
 	assert.Equal(t, response.AttributeMask, uint16(0x0400))
 	assert.Equal(t, response.Attributes["ReceivedFrameVlanTaggingOperationTable"], vlanOpTable)
 
@@ -2409,12 +2410,12 @@ func TestGetNextResponseSerialize(t *testing.T) {
 
 	request := &GetNextResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassId,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassId,
 			EntityInstance: uint16(0x0202),
 		},
-		Result:        Success,
+		Result:        me.Success,
 		AttributeMask: uint16(0x0400),
-		Attributes:    AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": vlanOpTable},
+		Attributes:    me.AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": vlanOpTable},
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -2456,7 +2457,7 @@ func TestAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, PhysicalPathTerminationPointEthernetUniClassId)
+	assert.Equal(t, request.EntityClass, me.PhysicalPathTerminationPointEthernetUniClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0x104))
 	assert.Equal(t, request.AlarmBitmap, [28]byte{
 		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -2482,7 +2483,7 @@ func TestAlarmNotificationSerialize(t *testing.T) {
 	}
 	request := &AlarmNotificationMsg{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    PhysicalPathTerminationPointEthernetUniClassId,
+			EntityClass:    me.PhysicalPathTerminationPointEthernetUniClassId,
 			EntityInstance: uint16(0x104),
 		},
 		AlarmBitmap: [28]byte{
@@ -2531,7 +2532,7 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
 	assert.Equal(t, request.AttributeMask, uint16(0x8000))
-	assert.Equal(t, request.EntityClass, SoftwareImageClassId)
+	assert.Equal(t, request.EntityClass, me.SoftwareImageClassId)
 	assert.Equal(t, request.EntityInstance, uint16(0))
 	assert.Equal(t, request.Attributes["Version"], []byte{
 		0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
@@ -2553,11 +2554,11 @@ func TestAttributeValueChangeSerialize(t *testing.T) {
 	}
 	request := &AttributeValueChangeMsg{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    SoftwareImageClassId,
+			EntityClass:    me.SoftwareImageClassId,
 			EntityInstance: uint16(0),
 		},
 		AttributeMask: uint16(0x8000),
-		Attributes: AttributeValueMap{
+		Attributes: me.AttributeValueMap{
 			"Version": []byte{
 				0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
 				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
