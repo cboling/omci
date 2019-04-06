@@ -188,7 +188,6 @@ type MessageTruncatedError struct {
 	OmciError
 }
 
-// TODO: Fix comment below.  Not correct
 // NewAttributeFailureError means that the ONU already has a managed entity
 // instance that corresponds to the one the OLT is attempting to create.
 func NewMessageTruncatedError(args ...interface{}) error {

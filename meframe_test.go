@@ -670,7 +670,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	msgLayer := packet.Layer(LayerTypeGetResponse)
 	// If requested Result was Success and FailIfTruncated is true, then we may
 	// fail (get nil layer) if too many attributes to fit in a frame
-	if result == me.Success && failIfTruncated && msgLayer == nil {
+	if result == me.Success && msgLayer == nil {
 		return // was expected
 	}
 	assert.NotNil(t, msgLayer)
@@ -681,19 +681,22 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
 	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
-	assert.Equal(t, result, msgObj.Result)
 
 	switch msgObj.Result {
 	default:
+		assert.Equal(t, result, msgObj.Result)
 		assert.Zero(t, msgObj.FailedAttributeMask)
 		assert.Zero(t, msgObj.UnsupportedAttributeMask)
 
 	case me.Success:
+		assert.Equal(t, result, msgObj.Result)
 		assert.Zero(t, msgObj.FailedAttributeMask)
 		assert.Zero(t, msgObj.UnsupportedAttributeMask)
 		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 
 	case me.AttributeFailure:
+		// Should have been Success or AttributeFailure to start with
+		assert.True(t, result == me.Success || result == me.AttributeFailure)
 		assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
 
 		// Returned may have more bits set in failed mask and less attributes
@@ -759,6 +762,46 @@ func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedE
 
 func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1)  // [1, 0xFFFF]
+	numOfCommands := uint16(rand.Int31n(5)) // [0, 5)
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetAllAlarmsResponseType, TransactionID(tid),
+		SequenceNumberCountOrSize(numOfCommands))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetAllAlarmsResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetAllAlarmsResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, numOfCommands, msgObj.NumberOfCommands)
 }
 
 func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -824,7 +867,7 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 
 	var frame []byte
 	frame, err = genFrame(meInstance, MibUploadNextRequestType, TransactionID(tid),
-		SequenceNumber(seqNumber))
+		SequenceNumberCountOrSize(seqNumber))
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)

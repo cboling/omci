@@ -1271,7 +1271,7 @@ type MibUploadNextRequest struct {
 }
 
 func (omci *MibUploadNextRequest) String() string {
-	return fmt.Sprintf("%v, SequenceNumber: %v",
+	return fmt.Sprintf("%v, SequenceNumberCountOrSize: %v",
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 

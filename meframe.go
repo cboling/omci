@@ -78,27 +78,27 @@ func init() {
 }
 
 type options struct {
-	frameFormat       DeviceIdent
-	failIfTruncated   bool
-	attributeMask     uint16
-	result            me.Results // Common for many responses
-	attrExecutionMask uint16     // Create Response Only if results == 3 or Set Response only if results == 0
-	unsupportedMask   uint16     // Set Response only if results == 9
-	sequenceNumber    uint16     // For get-next request frames and for frames that return number of commands or length
-	transactionID     uint16     // OMCI TID
-	mode              uint8      // Get All Alarms retrieval mode
+	frameFormat               DeviceIdent
+	failIfTruncated           bool
+	attributeMask             uint16
+	result                    me.Results // Common for many responses
+	attrExecutionMask         uint16     // Create Response Only if results == 3 or Set Response only if results == 0
+	unsupportedMask           uint16     // Set Response only if results == 9
+	sequenceNumberCountOrSize uint16     // For get-next request frames and for frames that return number of commands or length
+	transactionID             uint16     // OMCI TID
+	mode                      uint8      // Get All Alarms retrieval mode
 }
 
 var defaultFrameOptions = options{
-	frameFormat:       BaselineIdent,
-	failIfTruncated:   false,
-	attributeMask:     0xFFFF,
-	result:            me.Success,
-	attrExecutionMask: 0,
-	unsupportedMask:   0,
-	sequenceNumber:    0,
-	transactionID:     0,
-	mode:              0,
+	frameFormat:               BaselineIdent,
+	failIfTruncated:           false,
+	attributeMask:             0xFFFF,
+	result:                    me.Success,
+	attrExecutionMask:         0,
+	unsupportedMask:           0,
+	sequenceNumberCountOrSize: 0,
+	transactionID:             0,
+	mode:                      0,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -183,12 +183,12 @@ func Result(r me.Results) FrameOption {
 	}
 }
 
-// SequenceNumber is used by the GetNext and MibUploadGetNext request frames and for
+// SequenceNumberCountOrSize is used by the GetNext and MibUploadGetNext request frames and for
 // frames that return number of commands or length such as Get (table attribute) or
 // MibUpload/GetAllAlarms/...
-func SequenceNumber(m uint16) FrameOption {
+func SequenceNumberCountOrSize(m uint16) FrameOption {
 	return func(o *options) {
-		o.sequenceNumber = m
+		o.sequenceNumberCountOrSize = m
 	}
 }
 
@@ -550,31 +550,18 @@ func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serial
 }
 
 func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		NumberOfCommands: opt.sequenceNumberCountOrSize,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextRequest{
 		MeBasePacket: MeBasePacket{
@@ -582,20 +569,11 @@ func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
 	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
 func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextResponse{
 		MeBasePacket: MeBasePacket{
@@ -603,12 +581,7 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
 	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
@@ -630,7 +603,7 @@ func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializ
 			EntityClass:    m.GetClassID(),
 			EntityInstance: 0,
 		},
-		NumberOfCommands: opt.sequenceNumber,
+		NumberOfCommands: opt.sequenceNumberCountOrSize,
 	}
 	return meLayer, nil
 }
@@ -642,16 +615,12 @@ func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 			EntityClass:    m.GetClassID(),
 			EntityInstance: 0,
 		},
-		CommandSequenceNumber: opt.sequenceNumber,
+		CommandSequenceNumber: opt.sequenceNumberCountOrSize,
 	}
 	return meLayer, nil
 }
 
 func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &MibUploadNextResponse{
 		MeBasePacket: MeBasePacket{
@@ -659,12 +628,7 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
 	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
@@ -680,10 +644,6 @@ func MibResetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializab
 }
 
 func MibResetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &MibResetResponse{
 		MeBasePacket: MeBasePacket{
@@ -691,12 +651,7 @@ func MibResetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializa
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
 	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
@@ -1091,7 +1046,7 @@ func GetNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 			EntityInstance: m.GetEntityID(),
 		},
 		AttributeMask:  mask,
-		SequenceNumber: opt.sequenceNumber,
+		SequenceNumber: opt.sequenceNumberCountOrSize,
 	}
 	return meLayer, nil
 }
