@@ -118,6 +118,7 @@ func TestAllMessageTypes(t *testing.T) {
 				//typeTested = true
 			}
 		}
+		// Verify at least one test ran for this message type
 		// TODO: Enable once all tests are working -> assert.True(t, typeTested)
 	}
 }
