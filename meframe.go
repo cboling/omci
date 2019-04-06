@@ -81,12 +81,13 @@ type options struct {
 	frameFormat               DeviceIdent
 	failIfTruncated           bool
 	attributeMask             uint16
-	result                    me.Results // Common for many responses
-	attrExecutionMask         uint16     // Create Response Only if results == 3 or Set Response only if results == 0
-	unsupportedMask           uint16     // Set Response only if results == 9
-	sequenceNumberCountOrSize uint16     // For get-next request frames and for frames that return number of commands or length
-	transactionID             uint16     // OMCI TID
-	mode                      uint8      // Get All Alarms retrieval mode
+	result                    me.Results  // Common for many responses
+	attrExecutionMask         uint16      // Create Response Only if results == 3 or Set Response only if results == 0
+	unsupportedMask           uint16      // Set Response only if results == 9
+	sequenceNumberCountOrSize uint16      // For get-next request frames and for frames that return number of commands or length
+	transactionID             uint16      // OMCI TID
+	mode                      uint8       // Get All Alarms retrieval mode
+	payload                   interface{} // ME or list of MEs, alarm bitmap, ..
 }
 
 var defaultFrameOptions = options{
@@ -99,6 +100,7 @@ var defaultFrameOptions = options{
 	sequenceNumberCountOrSize: 0,
 	transactionID:             0,
 	mode:                      0,
+	payload:                   nil,
 }
 
 // A FrameOption sets options such as frame format, etc.
@@ -205,6 +207,16 @@ func TransactionID(tid uint16) FrameOption {
 func RetrievalMode(m uint8) FrameOption {
 	return func(o *options) {
 		o.mode = m
+	}
+}
+
+// Payload is used to specify ME payload options that are not simple types. This
+// include the ME (list of MEs) to encode into a GetNextMibUpload response, the
+// alarm bitmap for alarm relates responses/notifications, and for specifying the
+// download section data when performing Software Download
+func Payload(p interface{}) FrameOption {
+	return func(o *options) {
+		o.payload = p
 	}
 }
 
@@ -629,7 +641,28 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 		},
 	}
 	// TODO: Lots of work to do
-	return meLayer, errors.New("todo: Not implemented")
+	if opt.payload == nil {
+		// Shortcut used to specify the request sequence number is out of range, encode
+		// a ME instance with class ID of zero to specify this per ITU G.988
+		meDef := &me.ManagedEntityDefinition{
+			Name:                 "InvalidSequenceNumberManagedEntity",
+			ClassID:              me.ClassID(0),
+			MessageTypes:         nil,
+			AttributeDefinitions: make(me.AttributeDefinitionMap),
+		}
+		opt.payload, _ = me.NewManagedEntity(meDef)
+	}
+	if meList, ok := opt.payload.(*[]me.ManagedEntity); ok {
+		// TODO: List of MEs. valid for extended messages only
+		fmt.Println(meList)
+	} else if managedEntity, ok := opt.payload.(*me.ManagedEntity); ok {
+		// Single ME
+		meLayer.ReportedME = *managedEntity
+	} else {
+		// TODO: Other error, notify caller
+		return nil, errors.New("invalid payoad for MibUploadNextResponse frame")
+	}
+	return meLayer, nil
 }
 
 func MibResetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

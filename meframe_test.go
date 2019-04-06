@@ -761,7 +761,6 @@ func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedE
 }
 
 func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
 	params := me.ParamData{
 		EntityID: uint16(0),
 	}
@@ -900,7 +899,48 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 }
 
 func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+
+	// TODO: Since only baseline messages supported, send only one ME
+	uploadMe := meInstance
+
+	var frame []byte
+	frame, err = genFrame(meInstance, MibUploadNextResponseType, TransactionID(tid), Payload(uploadMe))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, MibUploadNextResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*MibUploadNextResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, uploadMe.GetClassID(), msgObj.ReportedME.GetClassID())
+	assert.Equal(t, uploadMe.GetEntityID(), msgObj.ReportedME.GetEntityID())
 }
 
 func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
