@@ -921,7 +921,7 @@ func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnt
 	assert.Equal(t, MibUploadResponseType, omciObj.MessageType)
 	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
 
-	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
+	msgLayer := packet.Layer(LayerTypeMibUploadResponse)
 	assert.NotNil(t, msgLayer)
 
 	msgObj, msgOk := msgLayer.(*MibUploadResponse)

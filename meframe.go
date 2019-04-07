@@ -640,7 +640,6 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// TODO: Lots of work to do
 	if opt.payload == nil {
 		// Shortcut used to specify the request sequence number is out of range, encode
 		// a ME instance with class ID of zero to specify this per ITU G.988
@@ -652,15 +651,16 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 		}
 		opt.payload, _ = me.NewManagedEntity(meDef)
 	}
-	if meList, ok := opt.payload.(*[]me.ManagedEntity); ok {
+	if _, ok := opt.payload.(*[]me.ManagedEntity); ok {
+		if opt.frameFormat == BaselineIdent {
+			return nil, errors.New("invalid payload for Baseline message")
+		}
 		// TODO: List of MEs. valid for extended messages only
-		fmt.Println(meList)
 	} else if managedEntity, ok := opt.payload.(*me.ManagedEntity); ok {
 		// Single ME
 		meLayer.ReportedME = *managedEntity
 	} else {
-		// TODO: Other error, notify caller
-		return nil, errors.New("invalid payoad for MibUploadNextResponse frame")
+		return nil, errors.New("invalid payload for MibUploadNextResponse frame")
 	}
 	return meLayer, nil
 }
