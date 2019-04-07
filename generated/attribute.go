@@ -76,11 +76,8 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 		}
 		return value, nil
 	}
-	// Use negative numbers to indicate signed values
 	size := attr.GetSize()
-	if size < 0 {
-		size = -size
-	}
+
 	if len(data) < size {
 		df.SetTruncated()
 		return nil, NewMessageTruncatedError("packet too small for field")
