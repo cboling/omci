@@ -580,9 +580,9 @@ func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		CommandSequenceNumber: opt.sequenceNumberCountOrSize,
 	}
-	// TODO: Lots of work to do
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
