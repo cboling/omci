@@ -683,9 +683,9 @@ func MibResetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializa
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		Result: opt.result,
 	}
-	// TODO: Lots of work to do
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

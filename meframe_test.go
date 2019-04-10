@@ -597,7 +597,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		Attributes: make(me.AttributeValueMap),
 	}
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
-	result := me.Results(rand.Int31n(10))  // [0, 6] Not all types will be tested
+	result := me.Results(rand.Int31n(10))  // [0, 9]
 
 	// If success Results selected, set FailIfTruncated 50% of time to test
 	// overflow detection and failures periodically.
@@ -1060,7 +1060,45 @@ func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 }
 
 func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	result := me.Results(rand.Int31n(7))  // [0, 6] Not all types will be tested
+
+	var frame []byte
+	frame, err = genFrame(meInstance, MibResetResponseType, TransactionID(tid), Result(result))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, MibResetResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeMibResetResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*MibResetResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, result, msgObj.Result)
 }
 
 func testTestRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

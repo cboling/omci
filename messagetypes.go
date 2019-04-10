@@ -1512,6 +1512,21 @@ func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
+	var entity me.IManagedEntityDefinition
+	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if err != nil {
+		return err
+	}
+	// ME needs to support Set
+	if !me.SupportsMsgType(entity, me.MibReset) {
+		return me.NewProcessingError("managed entity does not support the MIB Reset Message-Type")
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
 	return nil
 }
 
