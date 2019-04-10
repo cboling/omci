@@ -25,6 +25,7 @@ import (
 	me "github.com/cboling/omci/generated"
 	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
+	"time"
 )
 
 var encoderMap map[MessageType]func(*me.ManagedEntity, options) (gopacket.SerializableLayer, error)
@@ -87,7 +88,7 @@ type options struct {
 	sequenceNumberCountOrSize uint16      // For get-next request frames and for frames that return number of commands or length
 	transactionID             uint16      // OMCI TID
 	mode                      uint8       // Get All Alarms retrieval mode
-	payload                   interface{} // ME or list of MEs, alarm bitmap, ..
+	payload                   interface{} // ME or list of MEs, alarm bitmap, timestamp, ...
 }
 
 var defaultFrameOptions = options{
@@ -983,10 +984,6 @@ func CommitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 }
 
 func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &SynchronizeTimeRequest{
 		MeBasePacket: MeBasePacket{
@@ -994,13 +991,17 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 			EntityInstance: m.GetEntityID(),
 		},
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	// Decode payload option. If nil, no timestamp provided
+	if timestamp, ok := opt.payload.(int64); ok {
+		tm := time.Unix(timestamp, 0)
+		meLayer.Year   = uint16(tm.UTC().Year())
+		meLayer.Month  = uint8(tm.UTC().Month())
+		meLayer.Day    = uint8(tm.UTC().Day())
+		meLayer.Hour   = uint8(tm.UTC().Hour())
+		meLayer.Minute = uint8(tm.UTC().Minute())
+		meLayer.Second = uint8(tm.UTC().Second())
+	}
+	return meLayer, nil
 }
 
 func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

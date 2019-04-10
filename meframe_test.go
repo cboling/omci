@@ -23,6 +23,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"math/rand"
 	"testing"
+	"time"
 )
 
 var messageTypeTestFuncs map[MessageType]func(*testing.T, *me.ManagedEntity)
@@ -1150,7 +1151,52 @@ func testCommitSoftwareResponseTypeMeFrame(t *testing.T, managedEntity *me.Manag
 }
 
 func testSynchronizeTimeRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	tm := time.Now().UTC()
+	tmUnix := tm.Unix()
+
+	var frame []byte
+	frame, err = genFrame(meInstance, SynchronizeTimeRequestType, TransactionID(tid), Payload(tmUnix))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, SynchronizeTimeRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeSynchronizeTimeRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*SynchronizeTimeRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+
+	assert.Equal(t, uint16(tm.Year()), msgObj.Year)
+	assert.Equal(t, uint8(tm.Month()), msgObj.Month)
+	assert.Equal(t, uint8(tm.Day()), msgObj.Day)
+	assert.Equal(t, uint8(tm.Hour()), msgObj.Hour)
+	assert.Equal(t, uint8(tm.Minute()), msgObj.Minute)
+	assert.Equal(t, uint8(tm.Second()), msgObj.Second)
 }
 
 func testSynchronizeTimeResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
