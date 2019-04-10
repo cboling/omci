@@ -123,7 +123,8 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 	return attrMap, nil
 }
 
-func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer, msgType byte) error {
+func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return errors.New("unsupported attribute mask")
@@ -144,10 +145,11 @@ func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, 
 				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
 				return errors.New(msg)
 			}
-			err := attrDef.SerializeTo(value, b, msgType)
+			size, err := attrDef.SerializeTo(value, b, msgType, bytesAvailable)
 			if err != nil {
-				return nil
+				return err
 			}
+			bytesAvailable -= size
 		}
 	}
 	return nil

@@ -128,16 +128,20 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 	}
 }
 
-func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte) error {
+func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer,
+	msgType byte, bytesAvailable int) (int, error) {
 	if attr.IsTableAttribute() {
-		return attr.tableAttributeSerializeTo(value, b, msgType)
+		return attr.tableAttributeSerializeTo(value, b, msgType, bytesAvailable)
 	}
-	// TODO: Check to see if space in buffer here !!!!
-	bytes, err := b.AppendBytes(attr.GetSize())
+	size := attr.GetSize()
+	if bytesAvailable < size {
+		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+	}
+	bytes, err := b.AppendBytes(size)
 	if err != nil {
-		return err
+		return 0, err
 	}
-	switch attr.GetSize() {
+	switch size {
 	default:
 		copy(bytes, value.([]byte))
 	case 1:
@@ -169,14 +173,13 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 			binary.BigEndian.PutUint64(bytes, value.(uint64))
 		}
 	}
-	return nil
+	return size, nil
 }
 
 // BufferToTableAttributes takes the reconstructed octet buffer transmitted for
 // a table attribute (over many GetNextResponses) and converts it into the desired
 // format for each table row
 func (attr *AttributeDefinition) BufferToTableAttributes(data []byte) (interface{}, error) {
-
 	// Source is network byte order octets. Convert to proper array of slices
 	rowSize := attr.GetSize()
 	dataSize := len(data)
@@ -252,49 +255,59 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 	return nil, errors.New("TODO")
 }
 
-func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte) error {
+func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte,
+	bytesAvailable int) (int, error) {
 	// Serialization of a table depends on the type of message. A
 	// Review of ITU-T G.988 shows that access on tables are
 	// either Read and/or Write, never Set-by-Create
 	switch msgType {
 	default:
-		return errors.New(fmt.Sprintf("unsupported Message Type '%v' for table serialization", msgType))
+		return 0, errors.New(fmt.Sprintf("unsupported Message Type '%v' for table serialization", msgType))
 
 	case byte(Get) | AK: // Get Response
 		// Size
+		if bytesAvailable < 4 {
+			return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+		}
 		if dwordSize, ok := value.(uint32); ok {
 			bytes, err := b.AppendBytes(4)
 			if err != nil {
-				return err
+				return 0, err
 			}
 			binary.BigEndian.PutUint32(bytes, dwordSize)
-			return nil
+			return 4, nil
 		}
-		return errors.New("unexpected type for table serialization")
+		return 0, errors.New("unexpected type for table serialization")
 
 	case byte(GetNext) | AK: // Get Next Response
 		// Values are already in network by order form
 		if data, ok := value.([]byte); ok {
+			if bytesAvailable < len(data) {
+				return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+			}
 			bytes, err := b.AppendBytes(len(data))
 			if err != nil {
-				return err
+				return 0, err
 			}
 			copy(bytes, data)
-			return nil
+			return len(data), nil
 		}
-		return errors.New("unexpected type for table serialization")
+		return 0, errors.New("unexpected type for table serialization")
 
 	case byte(Set) | AR: // Set Request
 		fmt.Println("TODO")
 
 	case byte(SetTable) | AR: // Set Table Request
 		// TODO: Only baseline supported at this time
-		return errors.New("attribute encode for set-table-request not yet supported")
+		return 0, errors.New("attribute encode for set-table-request not yet supported")
 	}
-	// TODO: Check to see if space in buffer here !!!!
-	bytes, err := b.AppendBytes(attr.GetSize())
+	size := attr.GetSize()
+	if bytesAvailable < size {
+		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+	}
+	bytes, err := b.AppendBytes(size)
 	if err != nil {
-		return err
+		return 0, err
 	}
 	switch attr.GetSize() {
 	default:
@@ -328,7 +341,7 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 			binary.BigEndian.PutUint64(bytes, value.(uint64))
 		}
 	}
-	return nil
+	return size, nil
 }
 
 // GetAttributeDefinitionByName searches the attribute definition map for the

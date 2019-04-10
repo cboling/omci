@@ -85,8 +85,9 @@ func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopack
 	return entity.definition.DecodeAttributes(mask, data, p, msgType)
 }
 
-func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16, b gopacket.SerializeBuffer, msgType byte) error {
-	return entity.definition.SerializeAttributes(attr, mask, b, msgType)
+func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16,
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
+	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable)
 }
 
 func (entity *ManagedEntity) GetEntityID() uint16 {
@@ -230,7 +231,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	return nil
 }
 
-func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte) error {
+func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)
 	if err != nil {
@@ -242,6 +243,6 @@ func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byt
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b, msgType)
+	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b, msgType, bytesAvailable)
 	return err
 }

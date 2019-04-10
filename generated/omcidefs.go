@@ -253,7 +253,7 @@ type IManagedEntityDefinition interface {
 	GetAttributeDefinitions() *AttributeDefinitionMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder, byte) (AttributeValueMap, error)
-	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte) error
+	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte, int) error
 }
 
 type IManagedEntity interface {

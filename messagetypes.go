@@ -245,7 +245,9 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		}
 	}
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b, byte(CreateRequestType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 8 - 8
+	return meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b, byte(CreateRequestType), bytesAvailable)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -534,7 +536,11 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(SetRequestType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 10 - 8
+
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+		byte(SetRequestType), bytesAvailable)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -788,36 +794,26 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	default:
 		break
 
-	case me.AttributeFailure:
-		// TODO: Extended format has failed/unsupported attributes at a different location
-		//       but this serialization layer occurs before we see that. How can we handle
-		//       this better?  Probably define a specific type for GetResponses if extended
-		//       format is specified
-		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
+	case me.Success, me.AttributeFailure:
+		// TODO: Baseline only supported at this time)
+		bytesAvailable := MaxBaselineLength - 11 - 4 - 8
+
+		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask,
+			b, byte(GetResponseType), bytesAvailable)
 		if err != nil {
 			return err
 		}
 		// Calculate space left. Max  - msgType header - OMCI trailer - spacedUsedSoFar
 		bytesLeft := MaxBaselineLength - 4 - 8 - len(b.Bytes())
 
-		if bytesLeft < 4 {
-			// No room left for error messages
-			msg := fmt.Sprintf("Not enough space in Get Response for error trailer, need %d bytes",
-				4-bytesLeft)
-			return me.NewMessageTruncatedError(msg)
-		}
-		remainingBytes, err := b.AppendBytes(bytesLeft)
+		remainingBytes, err := b.AppendBytes(bytesLeft + 4)
 		if err != nil {
 			return me.NewMessageTruncatedError(err.Error())
 		}
 		copy(remainingBytes, lotsOfZeros[:])
-		binary.BigEndian.PutUint16(remainingBytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
-		binary.BigEndian.PutUint16(remainingBytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
-
-	case me.Success:
-		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetResponseType))
-		if err != nil {
-			return err
+		if omci.Result == me.AttributeFailure {
+			binary.BigEndian.PutUint16(remainingBytes[bytesLeft-4:bytesLeft-2], omci.UnsupportedAttributeMask)
+			binary.BigEndian.PutUint16(remainingBytes[bytesLeft-2:bytesLeft], omci.FailedAttributeMask)
 		}
 	}
 	return nil
@@ -1403,7 +1399,10 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
-	return omci.ReportedME.SerializeTo(b, byte(MibUploadNextResponseType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 8 - 8
+
+	return omci.ReportedME.SerializeTo(b, byte(MibUploadNextResponseType), bytesAvailable)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1721,7 +1720,11 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
 
 	// Attribute serialization
-	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(AttributeValueChangeType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 10 - 8
+
+	return meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+		byte(AttributeValueChangeType), bytesAvailable)
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -3137,7 +3140,11 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetNextResponseType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 11 - 8
+
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+		byte(GetNextResponseType), bytesAvailable)
 	if err != nil {
 		return err
 	}
@@ -3311,7 +3318,11 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	binary.BigEndian.PutUint16(bytes[0:2], omci.AttributeMask)
 
 	// Attribute serialization
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b, byte(GetCurrentDataResponseType))
+	// TODO: Only Baseline supported at this time
+	bytesAvailable := MaxBaselineLength - 9 - 8
+
+	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+		byte(GetCurrentDataResponseType), bytesAvailable)
 	if err != nil {
 		return err
 	}

@@ -697,17 +697,15 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	case me.AttributeFailure:
 		// Should have been Success or AttributeFailure to start with
 		assert.True(t, result == me.Success || result == me.AttributeFailure)
-		assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
-
+		if result == me.AttributeFailure {
+			assert.Equal(t, unsupportedMask, msgObj.UnsupportedAttributeMask)
+		}
 		// Returned may have more bits set in failed mask and less attributes
 		// since failIfTruncated is false and we may add more fail attributes
-		// since they do not fit
-		if failedMask != msgObj.FailedAttributeMask {
-			// Expect more bits in returned mask
-			assert.True(t, failedMask < msgObj.FailedAttributeMask)
-		} else {
-			assert.Equal(t, failedMask, msgObj.FailedAttributeMask)
-		}
+		// since they do not fit. May also set only lower value (lower bits)
+		// if it turns out that the upper bits are already pre-assigned to the
+		// failure bits.
+		//
 		// Make sure any successful attributes were requested
 		meMap := *meInstance.GetAttributeValueMap()
 		for name := range msgObj.Attributes {
@@ -1022,7 +1020,43 @@ func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Manage
 }
 
 func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+
+	var frame []byte
+	frame, err = genFrame(meInstance, MibResetRequestType, TransactionID(tid))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, MibResetRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeMibResetRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*MibResetRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
