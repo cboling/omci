@@ -211,6 +211,13 @@ func RetrievalMode(m uint8) FrameOption {
 	}
 }
 
+// SuccessResult is to specify the the SuccessResult for a SynchronizeTime Response
+func SuccessResult(m uint8) FrameOption {
+	return func(o *options) {
+		o.mode = m
+	}
+}
+
 // Payload is used to specify ME payload options that are not simple types. This
 // include the ME (list of MEs) to encode into a GetNextMibUpload response, the
 // alarm bitmap for alarm relates responses/notifications, and for specifying the
@@ -994,10 +1001,10 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 	// Decode payload option. If nil, no timestamp provided
 	if timestamp, ok := opt.payload.(int64); ok {
 		tm := time.Unix(timestamp, 0)
-		meLayer.Year   = uint16(tm.UTC().Year())
-		meLayer.Month  = uint8(tm.UTC().Month())
-		meLayer.Day    = uint8(tm.UTC().Day())
-		meLayer.Hour   = uint8(tm.UTC().Hour())
+		meLayer.Year = uint16(tm.UTC().Year())
+		meLayer.Month = uint8(tm.UTC().Month())
+		meLayer.Day = uint8(tm.UTC().Day())
+		meLayer.Hour = uint8(tm.UTC().Hour())
 		meLayer.Minute = uint8(tm.UTC().Minute())
 		meLayer.Second = uint8(tm.UTC().Second())
 	}
@@ -1005,24 +1012,17 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 }
 
 func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
+
 	// Common for all MEs
 	meLayer := &SynchronizeTimeResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		Result:         opt.result,
+		SuccessResults: opt.mode,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
