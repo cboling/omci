@@ -218,6 +218,13 @@ func SuccessResult(m uint8) FrameOption {
 	}
 }
 
+// RebootCondition is to specify the the Reboot Condition for a ONU Reboot request
+func RebootCondition(m uint8) FrameOption {
+	return func(o *options) {
+		o.mode = m
+	}
+}
+
 // Payload is used to specify ME payload options that are not simple types. This
 // include the ME (list of MEs) to encode into a GetNextMibUpload response, the
 // alarm bitmap for alarm relates responses/notifications, and for specifying the
@@ -728,6 +735,8 @@ func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		//AttributeMask uint16
+		//Attributes    me.AttributeValueMap
 	}
 	// Get payload space available
 	maxPayload := maxPacketAvailable(m, opt)
@@ -1012,7 +1021,6 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 }
 
 func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-
 	// Common for all MEs
 	meLayer := &SynchronizeTimeResponse{
 		MeBasePacket: MeBasePacket{
@@ -1026,45 +1034,26 @@ func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 }
 
 func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &RebootRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		RebootCondition: opt.mode,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
-
 func RebootResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &RebootResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		Result: opt.result,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	return meLayer, nil
 }
 
 func GetNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

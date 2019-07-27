@@ -35,12 +35,13 @@ by unit tests, but work still remains for sufficient unit test coverage.
  - MibUploadNextResponse
  - SynchronizeTimeResponse
  - AttributeValueChange
-
-## Message Types supported but lacking any unit test
-The following OMCI message types currently have been coded but any unit test coverage.
-
  - RebootRequest
  - RebootResponse
+
+## Message Types supported but lacking any unit test
+The following OMCI message types currently have been coded but do not
+have any unit test coverage.
+
  - StartSoftwareDownloadResponse
  - StartSoftwareDownloadRequest
  - DownloadSectionRequest
