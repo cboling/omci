@@ -1817,7 +1817,7 @@ type StartSoftwareDownloadRequest struct {
 	WindowSize           byte   // Window Size -1
 	ImageSize            uint32 // Octets
 	NumberOfCircuitPacks byte
-	MSBInstance          []uint16 // MSB & LSB of software image instance
+	CircuitPacks         []uint16 // MSB & LSB of software image instance
 }
 
 func (omci *StartSoftwareDownloadRequest) String() string {
@@ -1852,9 +1852,9 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 			omci.NumberOfCircuitPacks)
 		return me.NewAttributeFailureError(msg)
 	}
-	omci.MSBInstance = make([]uint16, omci.NumberOfCircuitPacks)
+	omci.CircuitPacks = make([]uint16, omci.NumberOfCircuitPacks)
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
-		omci.MSBInstance[index] = binary.BigEndian.Uint16(data[10+(index*2):])
+		omci.CircuitPacks[index] = binary.BigEndian.Uint16(data[10+(index*2):])
 	}
 	return nil
 }
@@ -1898,7 +1898,7 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	binary.BigEndian.PutUint32(bytes[5:9], omci.ImageSize)
 	bytes[1] = omci.NumberOfCircuitPacks
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
-		binary.BigEndian.PutUint16(bytes[10+(index*2):], omci.MSBInstance[index])
+		binary.BigEndian.PutUint16(bytes[10+(index*2):], omci.CircuitPacks[index])
 	}
 	return nil
 }

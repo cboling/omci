@@ -22,8 +22,6 @@ by unit tests.
  - MibResetRequest
  - MibResetResponse
  - SynchronizeTimeRequest
- - GetNextRequest
- - GetNextResponse
 
 ## Message Types supported but lacking full unit test
 The following OMCI message types currently have been coded and are partially covered
@@ -42,6 +40,8 @@ by unit tests, but work still remains for sufficient unit test coverage.
 The following OMCI message types currently have been coded but do not
 have any unit test coverage.
 
+ - GetNextRequest
+ - GetNextResponse
  - StartSoftwareDownloadResponse
  - StartSoftwareDownloadRequest
  - DownloadSectionRequest

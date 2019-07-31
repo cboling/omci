@@ -82,13 +82,14 @@ type options struct {
 	frameFormat               DeviceIdent
 	failIfTruncated           bool
 	attributeMask             uint16
-	result                    me.Results  // Common for many responses
-	attrExecutionMask         uint16      // Create Response Only if results == 3 or Set Response only if results == 0
-	unsupportedMask           uint16      // Set Response only if results == 9
-	sequenceNumberCountOrSize uint16      // For get-next request frames and for frames that return number of commands or length
-	transactionID             uint16      // OMCI TID
-	mode                      uint8       // Get All Alarms retrieval mode
-	payload                   interface{} // ME or list of MEs, alarm bitmap, timestamp, ...
+	result                    me.Results      // Common for many responses
+	attrExecutionMask         uint16          // Create Response Only if results == 3 or Set Response only if results == 0
+	unsupportedMask           uint16          // Set Response only if results == 9
+	sequenceNumberCountOrSize uint16          // For get-next request frames and for frames that return number of commands or length
+	transactionID             uint16          // OMCI TID
+	mode                      uint8           // Get All Alarms retrieval mode
+	software                  SoftwareOptions // Software image related frames
+	payload                   interface{}     // ME or list of MEs, alarm bitmap, timestamp, ...
 }
 
 var defaultFrameOptions = options{
@@ -101,10 +102,11 @@ var defaultFrameOptions = options{
 	sequenceNumberCountOrSize: 0,
 	transactionID:             0,
 	mode:                      0,
+	software:                  defaultSoftwareOptions,
 	payload:                   nil,
 }
 
-// A FrameOption sets options such as frame format, etc.
+// FrameOption sets options such as frame format, etc.
 type FrameOption func(*options)
 
 // FrameFormat determines determines the OMCI message format used on the fiber.
@@ -204,7 +206,7 @@ func TransactionID(tid uint16) FrameOption {
 	}
 }
 
-// RetrievalMode is to specify the the Alarm Retrival Mode in a GetAllAlarms Request
+// RetrievalMode is to specify the the Alarm Retrieval Mode in a GetAllAlarms Request
 func RetrievalMode(m uint8) FrameOption {
 	return func(o *options) {
 		o.mode = m
@@ -225,6 +227,14 @@ func RebootCondition(m uint8) FrameOption {
 	}
 }
 
+// Software is used to specify a collection of options related to Software image
+// manipulation
+func Software(so SoftwareOptions) FrameOption {
+	return func(o *options) {
+		o.software = so
+	}
+}
+
 // Payload is used to specify ME payload options that are not simple types. This
 // include the ME (list of MEs) to encode into a GetNextMibUpload response, the
 // alarm bitmap for alarm relates responses/notifications, and for specifying the
@@ -233,6 +243,22 @@ func Payload(p interface{}) FrameOption {
 	return func(o *options) {
 		o.payload = p
 	}
+}
+
+// Software related frames have a wide variety of settable values. Placing them
+// in a separate struct is mainly to keep the base options simple
+type SoftwareOptions struct {
+	WindowSize   uint8 // Window size - 1
+	ImageSize    uint32
+	CircuitPacks []uint16 // slot (upper 8 bits) and instance (lower 8 bits)
+	Results      []downloadResults
+}
+
+var defaultSoftwareOptions = SoftwareOptions{
+	WindowSize:   0,
+	ImageSize:    0,
+	CircuitPacks: nil,
+	Results:      nil,
 }
 
 // EncodeFrame will encode the Managed Entity specific protocol struct and an
@@ -790,45 +816,50 @@ func TestResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableL
 }
 
 func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadRequest{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		WindowSize:           opt.software.WindowSize,
+		ImageSize:            opt.software.ImageSize,
+		NumberOfCircuitPacks: byte(len(opt.software.CircuitPacks)),
+		CircuitPacks:         opt.software.CircuitPacks,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	// TODO: Add length check to insure we do not exceed maximum packet size
+	// payloadAvailable := int(maxPacketAvailable(m, opt))
+	payloadAvailable := 2
+	sizeNeeded := 1
+	if sizeNeeded > payloadAvailable {
+		// TODO: Should we set truncate?
+		msg := "out-of-space. Cannot fit Circuit Pack instances into Start Software Download Request message"
+		return nil, me.NewMessageTruncatedError(msg)
+	}
+	return meLayer, nil
 }
 
 func StartSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
-	mask, err := checkAttributeMask(m, opt.attributeMask)
-	if err != nil {
-		return nil, err
-	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		WindowSize:        opt.software.WindowSize,
+		NumberOfInstances: byte(len(opt.software.CircuitPacks)),
+		MeResults:         opt.software.Results,
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
-
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+	// TODO: Add length check to insure we do not exceed maximum packet size
+	// payloadAvailable := int(maxPacketAvailable(m, opt))
+	payloadAvailable := 2
+	sizeNeeded := 1
+	if sizeNeeded > payloadAvailable {
+		// TODO: Should we set truncate?
+		msg := "out-of-space. Cannot fit Results  into Start Software Download Response message"
+		return nil, me.NewMessageTruncatedError(msg)
+	}
+	return meLayer, nil
 }
 
 func DownloadSectionRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
@@ -1044,6 +1075,7 @@ func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 	}
 	return meLayer, nil
 }
+
 func RebootResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	// Common for all MEs
 	meLayer := &RebootResponse{

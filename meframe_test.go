@@ -1121,7 +1121,56 @@ func testTestResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) 
 }
 
 func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	instance := uint16(0)		// ONU-G
+	image := uint16(1)
+	params := me.ParamData{
+		EntityID:   (instance << 8) + image,
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+	options := SoftwareOptions{
+		WindowSize:   uint8(rand.Int31n(255)),                  // [0, 255]
+		ImageSize:    uint32(rand.Int31n(0x100000) + 0x100000), // [1 Meg, 2M-1]
+		CircuitPacks: []uint16{0},                                 // [1 Meg, 2M-1]
+	}
+	var frame []byte
+	frame, err = genFrame(meInstance, StartSoftwareDownloadRequestType, TransactionID(tid), Software(options))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, StartSoftwareDownloadRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeStartSoftwareDownloadRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*StartSoftwareDownloadRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, options.ImageSize, msgObj.ImageSize)
+	assert.Equal(t, len(options.CircuitPacks), msgObj.NumberOfCircuitPacks)
+
+	for index, circuitPack := range options.CircuitPacks {
+		assert.Equal(t, circuitPack, msgObj.CircuitPacks[index])
+	}
+	assert.Equal(t, options.ImageSize, msgObj.ImageSize)
 }
 
 func testStartSoftwareDownloadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -1265,7 +1314,7 @@ func testRebootRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
-	condition := uint8(rand.Int31n(3)) // [0, 3]
+	condition := uint8(rand.Int31n(3))     // [0, 3]
 
 	var frame []byte
 	frame, err = genFrame(meInstance, RebootRequestType, TransactionID(tid), RebootCondition(condition))
