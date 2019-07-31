@@ -38,8 +38,12 @@ func init() {
 		Name:    "SoftwareImage",
 		ClassID: 7,
 		MessageTypes: mapset.NewSetWith(
+			ActivateSoftware,
+			CommitSoftware,
 			DownloadSection,
+			EndSoftwareDownload,
 			Get,
+			StartSoftwareDownload,
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
