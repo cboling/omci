@@ -1890,15 +1890,15 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 			omci.NumberOfCircuitPacks)
 		return me.NewAttributeFailureError(msg)
 	}
-	bytes, err := b.AppendBytes(8 + (2 * int(omci.NumberOfCircuitPacks)))
+	bytes, err := b.AppendBytes(6 + (2 * int(omci.NumberOfCircuitPacks)))
 	if err != nil {
 		return err
 	}
-	bytes[4] = omci.WindowSize
-	binary.BigEndian.PutUint32(bytes[5:9], omci.ImageSize)
-	bytes[1] = omci.NumberOfCircuitPacks
+	bytes[0] = omci.WindowSize
+	binary.BigEndian.PutUint32(bytes[1:], omci.ImageSize)
+	bytes[5] = omci.NumberOfCircuitPacks
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
-		binary.BigEndian.PutUint16(bytes[10+(index*2):], omci.CircuitPacks[index])
+		binary.BigEndian.PutUint16(bytes[6+(index*2):], omci.CircuitPacks[index])
 	}
 	return nil
 }

@@ -273,8 +273,8 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
@@ -329,8 +329,8 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 
 	if result == me.ParameterError {
@@ -378,8 +378,8 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -419,8 +419,8 @@ func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 }
 
@@ -476,8 +476,8 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
@@ -539,8 +539,8 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 
 	if result == me.AttributeFailure {
@@ -597,8 +597,8 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, meInstance.GetAttributeMask(), msgObj.AttributeMask)
 }
 
@@ -690,8 +690,8 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 
 	switch msgObj.Result {
 	default:
@@ -764,8 +764,8 @@ func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedE
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, mode, msgObj.AlarmRetrievalMode)
 }
 
@@ -807,8 +807,8 @@ func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, numOfCommands, msgObj.NumberOfCommands)
 }
 
@@ -850,8 +850,8 @@ func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Mana
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, sequenceNumber, msgObj.CommandSequenceNumber)
 }
 
@@ -895,8 +895,8 @@ func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -937,8 +937,8 @@ func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnt
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, numOfCommands, msgObj.NumberOfCommands)
 }
 
@@ -981,8 +981,8 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	assert.True(t, msgOk)
 
 	assert.Equal(t, seqNumber, msgObj.CommandSequenceNumber)
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -1024,8 +1024,8 @@ func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Manage
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, uploadMe.GetClassID(), msgObj.ReportedME.GetClassID())
 	assert.Equal(t, uploadMe.GetEntityID(), msgObj.ReportedME.GetEntityID())
 }
@@ -1066,8 +1066,8 @@ func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 }
 
 func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -1107,8 +1107,8 @@ func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 }
 
@@ -1121,10 +1121,10 @@ func testTestResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) 
 }
 
 func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	instance := uint16(0)		// ONU-G
+	instance := uint16(0) // ONU-G
 	image := uint16(1)
 	params := me.ParamData{
-		EntityID:   (instance << 8) + image,
+		EntityID: uint16((instance << 8) + image),
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
@@ -1132,7 +1132,7 @@ func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me
 	options := SoftwareOptions{
 		WindowSize:   uint8(rand.Int31n(255)),                  // [0, 255]
 		ImageSize:    uint32(rand.Int31n(0x100000) + 0x100000), // [1 Meg, 2M-1]
-		CircuitPacks: []uint16{0},                                 // [1 Meg, 2M-1]
+		CircuitPacks: []uint16{0},                              // [1 Meg, 2M-1]
 	}
 	var frame []byte
 	frame, err = genFrame(meInstance, StartSoftwareDownloadRequestType, TransactionID(tid), Software(options))
@@ -1162,15 +1162,14 @@ func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, options.ImageSize, msgObj.ImageSize)
-	assert.Equal(t, len(options.CircuitPacks), msgObj.NumberOfCircuitPacks)
+	assert.Equal(t, len(options.CircuitPacks), int(msgObj.NumberOfCircuitPacks))
 
 	for index, circuitPack := range options.CircuitPacks {
 		assert.Equal(t, circuitPack, msgObj.CircuitPacks[index])
 	}
-	assert.Equal(t, options.ImageSize, msgObj.ImageSize)
 }
 
 func testStartSoftwareDownloadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -1247,8 +1246,8 @@ func testSynchronizeTimeRequestTypeMeFrame(t *testing.T, managedEntity *me.Manag
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 
 	assert.Equal(t, uint16(tm.Year()), msgObj.Year)
 	assert.Equal(t, uint8(tm.Month()), msgObj.Month)
@@ -1297,8 +1296,8 @@ func testSynchronizeTimeResponseTypeMeFrame(t *testing.T, managedEntity *me.Mana
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 	if result == me.Success {
 		assert.Equal(t, successResult, msgObj.SuccessResults)
@@ -1344,8 +1343,8 @@ func testRebootRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, condition, msgObj.RebootCondition)
 }
 
@@ -1386,8 +1385,8 @@ func testRebootResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	assert.NotNil(t, msgObj)
 	assert.True(t, msgOk)
 
-	assert.Equal(t, managedEntity.GetClassID(), msgObj.EntityClass)
-	assert.Equal(t, managedEntity.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
 	assert.Equal(t, result, msgObj.Result)
 }
 
