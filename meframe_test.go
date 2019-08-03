@@ -856,7 +856,58 @@ func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Mana
 }
 
 func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID: uint16(0),
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1)  // [1, 0xFFFF]
+
+	alarmInfo := AlarmOptions{
+		AlarmClassId:  123, // TODO: Real class here?
+		AlarmInstance: 456,
+		AlarmBitmap:   make([]byte, 28),
+	}
+	// TODO: Allow a 1 to 28 octet array to be used and zero fill any remainder...
+	for octet := 0; octet < 28; octet++ {
+		alarmInfo.AlarmBitmap[octet] = uint8(rand.Intn(256))
+	}
+	var frame []byte
+	frame, err = genFrame(meInstance, GetAllAlarmsNextResponseType, TransactionID(tid),
+		Alarm(alarmInfo))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetAllAlarmsNextResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, alarmInfo.AlarmClassId, msgObj.AlarmEntityClass)
+	assert.Equal(t, alarmInfo.AlarmInstance, msgObj.AlarmEntityInstance)
+	for octet := 0; octet < len(alarmInfo.AlarmBitmap); octet++ {
+		assert.Equal(t, alarmInfo.AlarmBitmap[octet], msgObj.AlarmBitMap[octet])
+	}
 }
 
 func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

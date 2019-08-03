@@ -88,6 +88,7 @@ type options struct {
 	sequenceNumberCountOrSize uint16          // For get-next request frames and for frames that return number of commands or length
 	transactionID             uint16          // OMCI TID
 	mode                      uint8           // Get All Alarms retrieval mode
+	alarm                     AlarmOptions    // Alarm related frames
 	software                  SoftwareOptions // Software image related frames
 	payload                   interface{}     // ME or list of MEs, alarm bitmap, timestamp, ...
 }
@@ -103,6 +104,7 @@ var defaultFrameOptions = options{
 	transactionID:             0,
 	mode:                      0,
 	software:                  defaultSoftwareOptions,
+	alarm:                     defaultAlarmOptions,
 	payload:                   nil,
 }
 
@@ -227,6 +229,14 @@ func RebootCondition(m uint8) FrameOption {
 	}
 }
 
+// Alarm is used to specify a collection of options related to Alarm notifications
+func Alarm(ao AlarmOptions) FrameOption {
+	return func(o *options) {
+		o.alarm = ao
+	}
+}
+
+
 // Software is used to specify a collection of options related to Software image
 // manipulation
 func Software(so SoftwareOptions) FrameOption {
@@ -237,12 +247,26 @@ func Software(so SoftwareOptions) FrameOption {
 
 // Payload is used to specify ME payload options that are not simple types. This
 // include the ME (list of MEs) to encode into a GetNextMibUpload response, the
-// alarm bitmap for alarm relates responses/notifications, and for specifying the
-// download section data when performing Software Download
+// alarm bitmap for alarm relates responses/notifications, alarm bitmaps, and
+// for specifying the download section data when performing Software Download.
 func Payload(p interface{}) FrameOption {
 	return func(o *options) {
 		o.payload = p
 	}
+}
+
+// Alarm related frames have a wide variety of settable values. Placing them
+// in a separate struct is mainly to keep the base options simple
+type AlarmOptions struct {
+	AlarmClassId  me.ClassID
+	AlarmInstance uint16
+	AlarmBitmap   []byte // Should be up to 58 octets
+}
+
+var defaultAlarmOptions = AlarmOptions{
+	AlarmClassId:  0,
+	AlarmInstance: 0,
+	AlarmBitmap:   nil,
 }
 
 // Software related frames have a wide variety of settable values. Placing them
@@ -633,9 +657,19 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		AlarmEntityClass:    opt.alarm.AlarmClassId,
+		AlarmEntityInstance: opt.alarm.AlarmInstance,
 	}
-	// TODO: Lots of work to do
-	return meLayer, errors.New("todo: Not implemented")
+	if len(opt.alarm.AlarmBitmap) > 28 {
+		return nil, errors.New("invalid Alarm Bitmap Size. Must be [0..27]")
+	}
+	for octet := 0; octet < len(opt.alarm.AlarmBitmap); octet++ {
+		meLayer.AlarmBitMap[octet] = opt.alarm.AlarmBitmap[octet]
+	}
+	for octet := len(opt.alarm.AlarmBitmap); octet < 28; octet++ {
+		meLayer.AlarmBitMap[octet] =0
+	}
+	return meLayer, nil
 }
 
 func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
