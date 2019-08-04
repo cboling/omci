@@ -19,6 +19,7 @@ package omci_test
 import (
 	. "github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
+	mapset "github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"math/rand"
@@ -124,7 +125,7 @@ func TestAllMessageTypes(t *testing.T) {
 	}
 }
 
-//func TestAllThatSupportAlarms(t *testing.T) {
+//func TestAllThatSupportAlarms(t *testing.T) {  TODO: Future
 //	// Loop over all Managed Entities and test those with Attributes that support
 //
 //	for _, managedEntity := range getMEsThatSupportAMessageType(messageType) {
@@ -153,6 +154,14 @@ func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...
 		return nil, err
 	}
 	return buffer.Bytes(), nil
+}
+
+func getAttributeNameSet(attributes me.AttributeValueMap) mapset.Set {
+	names := mapset.NewSet()
+	for name, _ := range attributes {
+		names.Add(name)
+	}
+	return names
 }
 
 func pickAValue(attrDef *me.AttributeDefinition) interface{} {
@@ -861,7 +870,7 @@ func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Man
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	tid := uint16(rand.Int31n(0xFFFE) + 1)  // [1, 0xFFFF]
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	alarmInfo := AlarmOptions{
 		AlarmClassId:  123, // TODO: Real class here?
@@ -1442,7 +1451,67 @@ func testRebootResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 }
 
 func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID:   uint16(0),
+		Attributes: make(me.AttributeValueMap, 0),
+	}
+	// TODO: Loop over all table attributes for this class ID
+	// Find first attribute that is a table definition
+	// TODO: Test request of more than 1 attribute. G.988 specifies that a status
+	//       code of (3) should be returned.  Raise error during encode instead of
+	//       waiting for compliant ONU.  May want to have an 'ignore' to allow it.
+	attrDefs := *managedEntity.GetAttributeDefinitions()
+	for _, attrDef := range attrDefs {
+		if attrDef.Index == 0 {
+			continue // Skip entity ID, already specified
+		} else if attrDef.IsTableAttribute() {
+			// Allow 'nil' as parameter value for GetNextRequests since we only need names
+			params.Attributes[attrDef.GetName()] = nil
+			break
+		}
+	}
+	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
+	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	assert.Nil(t, attrErr)
+
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	seqNumber := uint16(rand.Int31n(0xFFFF)) // [0, 0xFFFE]
+	tid := uint16(rand.Int31n(0xFFFE) + 1)   // [1, 0xFFFF]
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetNextRequestType, TransactionID(tid), SequenceNumberCountOrSize(seqNumber),
+		AttributeMask(bitmask))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetNextRequestType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetNextRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetNextRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetAttributeMask(), msgObj.AttributeMask)
+	assert.Equal(t, seqNumber, msgObj.SequenceNumber)
 }
 
 func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

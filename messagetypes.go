@@ -3038,6 +3038,8 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	}
 	// Note: G.988 specifies that an error code of (3) should result if more
 	//       than one attribute is requested
+	// TODO: Return error.  Have flag to optionally allow it to be encoded
+	// TODO: Check that the attribute is a table attirbute.  Issue warning or return error
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	omci.SequenceNumber = binary.BigEndian.Uint16(data[6:8])
 	return nil

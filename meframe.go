@@ -236,7 +236,6 @@ func Alarm(ao AlarmOptions) FrameOption {
 	}
 }
 
-
 // Software is used to specify a collection of options related to Software image
 // manipulation
 func Software(so SoftwareOptions) FrameOption {
@@ -303,6 +302,10 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 	for _, o := range opt {
 		o(&opts)
 	}
+	// TODO: If AttributesMask option passed in, check for deprecated options. Allow encoding option
+	//       that will ignore deprecated option.   Add additional in the get and set meframe_test,go
+	//       test functions to test this. Also have it test attribute name(s) to see if the attribute
+	//       is deprecated.  The OMCI-Parser will need to decode deprecated for us...
 	// Note: Transaction ID should be set before frame serialization
 	omci := &OMCI{
 		TransactionID:    opts.transactionID,
@@ -667,7 +670,7 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 		meLayer.AlarmBitMap[octet] = opt.alarm.AlarmBitmap[octet]
 	}
 	for octet := len(opt.alarm.AlarmBitmap); octet < 28; octet++ {
-		meLayer.AlarmBitMap[octet] =0
+		meLayer.AlarmBitMap[octet] = 0
 	}
 	return meLayer, nil
 }
