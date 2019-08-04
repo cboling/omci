@@ -39,7 +39,6 @@ func init() {
 		ClassID: 325,
 		MessageTypes: mapset.NewSetWith(
 			Get,
-			GetNext,
 		),
 		AllowedAttributeMask: 0XFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
