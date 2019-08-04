@@ -36,7 +36,7 @@ by unit tests, but work still remains for sufficient unit test coverage.
  - RebootRequest
  - RebootResponse
  - StartSoftwareDownloadRequest
- - GetNextRequesto
+ - GetNextRequest
 
 ## Message Types supported but lacking any unit test
 The following OMCI message types currently have been coded but do not

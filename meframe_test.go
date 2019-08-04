@@ -438,7 +438,8 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	attrDefs := *managedEntity.GetAttributeDefinitions()
+	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 		} else if attrDef.TableSupport {
@@ -447,12 +448,16 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 		}
 	}
+	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
+	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	assert.Nil(t, attrErr)
+
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	var frame []byte
-	frame, err = genFrame(meInstance, SetRequestType, TransactionID(tid))
+	frame, err = genFrame(meInstance, SetRequestType, TransactionID(tid), AttributeMask(bitmask))
 	// some frames cannot fit all the attributes
 	if err != nil {
 		if _, ok := err.(*me.MessageTruncatedError); ok {
@@ -502,7 +507,8 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
 	var failedMask uint16
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	attrDefs := *managedEntity.GetAttributeDefinitions()
+	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 
@@ -517,9 +523,13 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			}
 		}
 	}
+	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	assert.Nil(t, attrErr)
+
 	var frame []byte
 	frame, err = genFrame(meInstance, SetResponseType,
 		TransactionID(tid), Result(result),
+		AttributeMask(bitmask),
 		AttributeExecutionMask(failedMask),
 		UnsupportedAttributeMask(unsupportedMask))
 	assert.NotNil(t, frame)
@@ -566,7 +576,8 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	attrDefs := *managedEntity.GetAttributeDefinitions()
+	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 		} else if attrDef.GetAccess().Contains(me.Read) {
@@ -574,12 +585,16 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			params.Attributes[attrDef.GetName()] = nil
 		}
 	}
+	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
+	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	assert.Nil(t, attrErr)
+
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	var frame []byte
-	frame, err = genFrame(meInstance, GetRequestType, TransactionID(tid))
+	frame, err = genFrame(meInstance, GetRequestType, TransactionID(tid), AttributeMask(bitmask))
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, err)
@@ -628,7 +643,8 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
 	var failedMask uint16
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	attrDefs := *managedEntity.GetAttributeDefinitions()
+	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 
@@ -651,12 +667,16 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			}
 		}
 	}
+	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	assert.Nil(t, attrErr)
+
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 
 	var frame []byte
 	frame, err = genFrame(meInstance, GetResponseType,
 		TransactionID(tid), Result(result),
+		AttributeMask(bitmask),
 		AttributeExecutionMask(failedMask),
 		UnsupportedAttributeMask(unsupportedMask),
 		FailIfTruncated(failIfTruncated))
