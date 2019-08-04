@@ -157,6 +157,9 @@ func genFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...
 }
 
 func getAttributeNameSet(attributes me.AttributeValueMap) mapset.Set {
+	// TODO: For Classes with attribute masks that can set/get/... more than just
+	//       a single attribute, test a set/get of just a single attribute to verify
+	//       all encoding/decoding methods are working as expected.
 	names := mapset.NewSet()
 	for name, _ := range attributes {
 		names.Add(name)
