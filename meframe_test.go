@@ -170,12 +170,22 @@ func getAttributeNameSet(attributes me.AttributeValueMap) mapset.Set {
 func pickAValue(attrDef *me.AttributeDefinition) interface{} {
 	constraint := attrDef.Constraint
 	defaultVal := attrDef.DefValue
+	size := attrDef.GetSize()
 
 	if attrDef.TableSupport {
-		// TODO: Not yet supported
-		return nil
+		// Table attributes treated as a string of octets.  If size is zero, it is
+		// most likely an attribute with variable size. Pick a random size that will
+		// fit into a simple frame (0-20 octets)
+		if size == 0 {
+			size = rand.Intn(20)
+		}
+		value := make([]byte, size)
+		for octet := 0; octet < size; octet++ {
+			value[octet] = byte(octet & 0xff)
+		}
+		return value
 	}
-	switch attrDef.GetSize() {
+	switch size {
 	case 1:
 		// Try the default + 1 as a value. Since some defaults are zero
 		// and we want example frames without zeros in them.
@@ -656,7 +666,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			// 10% it failed
 			switch rand.Int31n(5) {
 			default:
-				// TODO: Table attributes not yet supported.  For Table Attributes, figure our a
+				// TODO: Table attributes not yet supported.  For Table Attributes, figure out a
 				//       good way to unit test this and see if that can be extended to a more
 				//       general operation that provides the 'get-next' frames to the caller who
 				//		 wishes to serialize a table attribute.
@@ -1538,7 +1548,79 @@ func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 }
 
 func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
-	// TODO: Implement
+	params := me.ParamData{
+		EntityID:   uint16(0xe),
+		Attributes: make(me.AttributeValueMap, 0),
+	}
+	// TODO: Loop over result types (here and other responses with results)
+	result := me.Success // me.Results(rand.Int31n(7))  // [0, 6]
+	bitmask := uint16(0)
+
+	// TODO: Loop over all table attributes for this class ID
+	if result == me.Success {
+		// Find first attribute that is a table definition
+		// TODO: Test request of more than 1 attribute. G.988 specifies that a status
+		//       code of (3) should be returned.  Raise error during encode instead of
+		//       waiting for compliant ONU.  May want to have an 'ignore' to allow it.
+		attrDefs := *managedEntity.GetAttributeDefinitions()
+		for _, attrDef := range attrDefs {
+			if attrDef.Index == 0 {
+				continue // Skip entity ID, already specified
+			} else if attrDef.IsTableAttribute() {
+				params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
+				break
+			}
+		}
+		assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
+		var attrErr error
+		bitmask, attrErr = me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+		assert.Nil(t, attrErr)
+	}
+	// Create the managed instance
+	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
+	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
+
+	var frame []byte
+	frame, err = genFrame(meInstance, GetNextResponseType, TransactionID(tid), Result(result),
+		AttributeMask(bitmask))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, err)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode and compare
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, GetNextResponseType, omciObj.MessageType)
+	assert.Equal(t, BaselineIdent, omciObj.DeviceIdentifier)
+
+	msgLayer := packet.Layer(LayerTypeGetNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*GetNextResponse)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
+	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
+	assert.Equal(t, meInstance.GetAttributeMask(), msgObj.AttributeMask)
+
+	switch msgObj.Result {
+	default:
+		assert.Equal(t, result, msgObj.Result)
+
+	case me.Success:
+		assert.Equal(t, result, msgObj.Result)
+		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+	}
 }
 
 func testGetCurrentDataRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {

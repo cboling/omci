@@ -520,7 +520,7 @@ func GetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 	if err != nil {
 		return nil, err
 	}
-	// Now scan attributes and reduce mask to only those
+	// Now scan attributes and reduce mask to only those requested
 	var mask uint16
 	mask, err = calculateAttributeMask(m, maxMask)
 	if err != nil {
@@ -567,7 +567,7 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 		// Encode results
 		// Get payload space available
 		maxPayload := maxPacketAvailable(m, opt)
-		payloadAvailable := int(maxPayload)
+		payloadAvailable := int(maxPayload) - 2 - 4 // Less attribute mask and attribute error encoding
 		meDefinition := m.GetManagedEntityDefinition()
 		attrDefs := *meDefinition.GetAttributeDefinitions()
 		attrMap := *m.GetAttributeValueMap()
@@ -780,10 +780,11 @@ func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (gopacket.Serializ
 	}
 	// Get payload space available
 	maxPayload := maxPacketAvailable(m, opt)
+	payloadAvailable := int(maxPayload) - 1 // Less alarm sequence number
 
 	// TODO: Lots of work to do
+	fmt.Println(mask, maxPayload, payloadAvailable)
 
-	fmt.Println(mask, maxPayload)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
@@ -798,15 +799,16 @@ func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		//AttributeMask uint16
-		//Attributes    me.AttributeValueMap
+		AttributeMask: 0,
+		Attributes:    make(me.AttributeValueMap),
 	}
 	// Get payload space available
 	maxPayload := maxPacketAvailable(m, opt)
+	payloadAvailable := int(maxPayload) - 2 // Less attribute mask
 
 	// TODO: Lots of work to do
 
-	fmt.Println(mask, maxPayload)
+	fmt.Println(mask, maxPayload, payloadAvailable)
 	return meLayer, errors.New("todo: Not implemented")
 }
 
@@ -1126,11 +1128,20 @@ func RebootResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 }
 
 func GetNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
+	// Validate attribute mask
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
-	// TODO: For GetNext, we may want to make sure that only 1 attribute is being requested
+	// Now scan attributes and reduce mask to only those requested
+	mask, err = calculateAttributeMask(m, mask)
+	if err != nil {
+		return nil, err
+	}
+	if mask == 0 {
+		return nil, errors.New("no attributes requested for GetNextRequest")
+	}
+	// TODO: If more than one attribute or the attribute requested is not a table attribute, return an error
 	// Common for all MEs
 	meLayer := &GetNextRequest{
 		MeBasePacket: MeBasePacket{
@@ -1144,24 +1155,74 @@ func GetNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializabl
 }
 
 func GetNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
+	// Validate attribute mask
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
 		return nil, err
 	}
+	mask, err = calculateAttributeMask(m, mask)
+	if err != nil {
+		return nil, err
+	}
+	//
 	// Common for all MEs
 	meLayer := &GetNextResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
+		Result:        opt.result,
+		AttributeMask: 0,
+		Attributes:    make(me.AttributeValueMap),
 	}
-	// Get payload space available
-	maxPayload := maxPacketAvailable(m, opt)
+	if meLayer.Result == me.Success {
+		// Get payload space available
+		maxPayload := maxPacketAvailable(m, opt)
+		payloadAvailable := int(maxPayload) - 3 // Less results and attribute mask
+		meDefinition := m.GetManagedEntityDefinition()
+		attrDefs := *meDefinition.GetAttributeDefinitions()
+		attrMap := *m.GetAttributeValueMap()
 
-	// TODO: Lots of work to do
-
-	fmt.Println(mask, maxPayload)
-	return meLayer, errors.New("todo: Not implemented")
+		if mask == 0 {
+			return nil, errors.New("no attributes requested for GetNextResponse")
+		}
+		// TODO: If more than one attribute or the attribute requested is not a table attribute, return an error
+		// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
+		var attrIndex uint
+		for attrIndex = 1; attrIndex <= 16; attrIndex++ {
+			// Is this attribute requested
+			if mask&(1<<(16-attrIndex)) != 0 {
+				// Get definitions since we need the name
+				attrDef, ok := attrDefs[attrIndex]
+				if !ok {
+					msg := fmt.Sprintf("Unexpected error, index %v not valued for ME %v",
+						attrIndex, meDefinition.GetName())
+					return nil, errors.New(msg)
+				}
+				var attrValue interface{}
+				attrValue, ok = attrMap[attrDef.Name]
+				if !ok || attrValue == nil {
+					msg := fmt.Sprintf("Unexpected error, attribute %v not provided in ME %v: %v",
+						attrDef.GetName(), meDefinition.GetName(), m)
+					return nil, errors.New(msg)
+				}
+				// Is space available?
+				if attrDef.Size <= payloadAvailable {
+					// Mark bit handled
+					mask &= ^(1 << (16 - attrIndex))
+					meLayer.AttributeMask |= 1 << (16 - attrIndex)
+					meLayer.Attributes[attrDef.Name] = attrValue
+					payloadAvailable -= attrDef.Size
+				} else {
+					// TODO: Should we set truncate?
+					msg := fmt.Sprintf("out-of-space. Cannot fit attribute %v into GetNextResponse message",
+						attrDef.GetName())
+					return nil, me.NewMessageTruncatedError(msg)
+				}
+			}
+		}
+	}
+	return meLayer, nil
 }
 
 func TestResultFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {

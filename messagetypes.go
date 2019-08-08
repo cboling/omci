@@ -3112,14 +3112,28 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 		return errors.New(msg)
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
-	// TODO: Validate attributes support 'Read' access ?
 
 	// Attribute decode
 	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:], p, byte(GetNextResponseType))
 	if err != nil {
 		return err
 	}
-	return nil
+	// Validate all attributes support read
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
+		}
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
+			return me.NewProcessingError(msg)
+		}
+	}
+	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
+		return nil
+	}
+	panic("All Managed Entities have an EntityID attribute")
 }
 
 func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -3154,16 +3168,32 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 		return errors.New(msg)
 	}
 	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
-	// TODO: Validate attributes support 'Read' access ?
 
+	// Validate all attributes support read
+	for attrName := range omci.Attributes {
+		attr, err := me.GetAttributeDefinitionByName(meDefinition.GetAttributeDefinitions(), attrName)
+		if err != nil {
+			return err
+		}
+		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
+			return me.NewProcessingError(msg)
+		}
+	}
 	// Attribute serialization
-	// TODO: Only Baseline supported at this time
-	bytesAvailable := MaxBaselineLength - 11 - 8
+	switch omci.Result {
+	default:
+		break
 
-	err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
-		byte(GetNextResponseType), bytesAvailable)
-	if err != nil {
-		return err
+	case me.Success:
+		// TODO: Only Baseline supported at this time
+		bytesAvailable := MaxBaselineLength - 11 - 8
+
+		err = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+			byte(GetNextResponseType), bytesAvailable)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }
