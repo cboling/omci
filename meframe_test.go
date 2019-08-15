@@ -175,9 +175,9 @@ func pickAValue(attrDef *me.AttributeDefinition) interface{} {
 	if attrDef.TableSupport {
 		// Table attributes treated as a string of octets.  If size is zero, it is
 		// most likely an attribute with variable size. Pick a random size that will
-		// fit into a simple frame (0-20 octets)
+		// fit into a simple frame (1-33 octets)
 		if size == 0 {
-			size = rand.Intn(20)
+			size = rand.Intn(32) + 1
 		}
 		value := make([]byte, size)
 		for octet := 0; octet < size; octet++ {
@@ -1549,12 +1549,13 @@ func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 
 func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	params := me.ParamData{
-		EntityID:   uint16(0xe),
+		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
 	// TODO: Loop over result types (here and other responses with results)
 	result := me.Success // me.Results(rand.Int31n(7))  // [0, 6]
 	bitmask := uint16(0)
+	attrDefs := *managedEntity.GetAttributeDefinitions()
 
 	// TODO: Loop over all table attributes for this class ID
 	if result == me.Success {
@@ -1562,7 +1563,6 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 		// TODO: Test request of more than 1 attribute. G.988 specifies that a status
 		//       code of (3) should be returned.  Raise error during encode instead of
 		//       waiting for compliant ONU.  May want to have an 'ignore' to allow it.
-		attrDefs := *managedEntity.GetAttributeDefinitions()
 		for _, attrDef := range attrDefs {
 			if attrDef.Index == 0 {
 				continue // Skip entity ID, already specified
@@ -1619,7 +1619,22 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 
 	case me.Success:
 		assert.Equal(t, result, msgObj.Result)
-		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+		// The attributes should be equal but for variable length table attribute (size = 0 in structure)
+		// we will have the frame padding returned as well.
+		for attrName, value := range *meInstance.GetAttributeValueMap() {
+			attr, err := me.GetAttributeDefinitionByName(&attrDefs, attrName)
+			assert.Nil(t, err)
+			assert.NotNil(t, attr)
+			assert.Equal(t, attrName, attr.GetName())
+			if attr.IsTableAttribute() {
+				instValue := value.([]byte)
+				msgValue := msgObj.Attributes[attrName].([]byte)
+				assert.True(t, len(instValue) <= len(msgValue))
+				assert.Equal(t, msgValue[:len(instValue)], instValue)
+			} else {
+				assert.Equal(t, value, msgObj.Attributes[attrName])
+			}
+		}
 	}
 }
 

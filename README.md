@@ -5,7 +5,7 @@ messages. It is currently a work in progress.
 
 ## Message Types supported and under unit test
 The following OMCI message types currently have been coded and are covered
-by unit tests.
+satisfactory by unit tests.
 
  - CreateRequest
  - CreateResponse
@@ -25,7 +25,7 @@ by unit tests.
 
 ## Message Types supported but lacking full unit test
 The following OMCI message types currently have been coded and are partially covered
-by unit tests, but work still remains for sufficient unit test coverage.
+by unit tests, but work still remains for sufficient/better unit test coverage.
 
  - SetResponse
  - GetResponse
@@ -37,12 +37,12 @@ by unit tests, but work still remains for sufficient unit test coverage.
  - RebootResponse
  - StartSoftwareDownloadRequest
  - GetNextRequest
+ - GetNextResponse
 
 ## Message Types supported but lacking any unit test
 The following OMCI message types currently have been coded but do not
 have any unit test coverage.
 
- - GetNextResponse
  - StartSoftwareDownloadResponse
  - DownloadSectionRequest
  - DownloadSectionResponse
