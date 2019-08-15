@@ -237,12 +237,21 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 
 	case byte(GetNext) | AK: // Get Next Response
 		// Block of data (octets) that need to be reassembled before conversion
-		// to table/row-data
-		if len(data) < attr.GetSize() {
-			df.SetTruncated()
-			return nil, NewMessageTruncatedError("packet too small for field")
+		// to table/row-data.  If table attribute is not explicitly given a value
+		// we have to assume the entire data buffer is the value. The receiver of
+		// this frame will need to trim off any addtional information at the end
+		// of the last frame sequence since they (and the ONU) are the only ones
+		// who know how long the data really is.
+		size := attr.GetSize()
+		if size != 0 {
+			if len(data) < attr.GetSize() {
+				df.SetTruncated()
+				return nil, NewMessageTruncatedError("packet too small for field")
+			}
+		} else {
+			size = len(data)
 		}
-		return data[:attr.GetSize()], nil
+		return data[:size], nil
 
 	case byte(Set) | AR: // Set Request
 		fmt.Println("TODO")

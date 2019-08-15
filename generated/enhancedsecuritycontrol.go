@@ -51,7 +51,7 @@ func init() {
 			4:  ByteField("OnuSelectedCryptoCapabilities", 0, mapset.NewSetWith(Read), false, false, false, 4),
 			5:  TableField("OnuRandomChallengeTable", TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, 5),
 			6:  TableField("OnuAuthenticationResultTable", TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, 6),
-			7:  TableField("OltAuthenticationResultTable", TableInfo{nil, 17}, mapset.NewSetWith(Write), false, false, 7),
+			7:  TableField("OltAuthenticationResultTable", TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, 7),
 			8:  ByteField("OltResultStatus", 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
 			9:  ByteField("OnuAuthenticationStatus", 0, mapset.NewSetWith(Read), true, false, false, 9),
 			10: MultiByteField("MasterSessionKeyName", 16, nil, mapset.NewSetWith(Read), false, false, false, 10),
