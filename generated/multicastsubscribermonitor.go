@@ -46,13 +46,13 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: Uint32Field("CurrentMulticastBandwidth", 0, mapset.NewSetWith(Read), false, false, true, 2),
-			3: Uint32Field("JoinMessagesCounter", 0, mapset.NewSetWith(Read), false, false, true, 3),
-			4: Uint32Field("BandwidthExceededCounter", 0, mapset.NewSetWith(Read), false, false, true, 4),
-			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, mapset.NewSetWith(Read), false, false, 5),
-			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, mapset.NewSetWith(Read), false, true, 6),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2: Uint32Field("CurrentMulticastBandwidth", 0, mapset.NewSetWith(Read), false, false, true, false, 2),
+			3: Uint32Field("JoinMessagesCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
+			4: Uint32Field("BandwidthExceededCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
+			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, mapset.NewSetWith(Read), false, false, false, 5),
+			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, mapset.NewSetWith(Read), false, true, false, 6),
 		},
 	}
 }

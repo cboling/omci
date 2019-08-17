@@ -43,12 +43,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
-			2: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, 2),
-			3: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, 3),
-			4: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, 4),
-			5: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
+			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
+			2: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 2),
+			3: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 3),
+			4: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
+			5: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
 		},
 	}
 }

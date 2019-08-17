@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint16Field("ParentMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 3),
-			4: Uint16Field("UpstreamBroadcastRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 4),
-			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: Uint16Field("ParentMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
+			4: Uint16Field("UpstreamBroadcastRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
+			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 		},
 	}
 }

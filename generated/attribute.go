@@ -397,7 +397,7 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 // Packet definitions for attributes of various types/sizes
 
 func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -408,11 +408,12 @@ func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
 func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -423,11 +424,12 @@ func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
 func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -438,11 +440,12 @@ func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
 func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -453,11 +456,12 @@ func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
 func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -468,6 +472,7 @@ func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, av
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
@@ -506,7 +511,7 @@ func (t *TableInfo) String() string {
 
 // Now the field
 func TableField(name string, tableInfo TableInfo, access mapset.Set,
-	avc bool, optional bool, index uint) *AttributeDefinition {
+	avc bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -517,11 +522,12 @@ func TableField(name string, tableInfo TableInfo, access mapset.Set,
 		Counter:      false,
 		TableSupport: true,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 
 func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, index uint) *AttributeDefinition {
+	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
 	return &AttributeDefinition{
 		Name:         name,
 		Index:        index,
@@ -532,6 +538,7 @@ func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
 		Counter:      counter,
 		TableSupport: false,
 		Optional:     optional,
+		Deprecated:   deprecated,
 	}
 }
 

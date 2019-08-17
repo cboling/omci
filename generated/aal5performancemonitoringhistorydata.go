@@ -45,14 +45,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: Uint32Field("SumOfInvalidCsFieldErrors", 0, mapset.NewSetWith(Read), false, false, false, 3),
-			4: Uint32Field("CrcViolations", 0, mapset.NewSetWith(Read), false, false, false, 4),
-			5: Uint32Field("ReassemblyTimerExpirations", 0, mapset.NewSetWith(Read), false, false, false, 5),
-			6: Uint32Field("BufferOverflows", 0, mapset.NewSetWith(Read), false, false, false, 6),
-			7: Uint32Field("EncapProtocolErrors", 0, mapset.NewSetWith(Read), false, false, false, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: Uint32Field("SumOfInvalidCsFieldErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
+			4: Uint32Field("CrcViolations", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
+			5: Uint32Field("ReassemblyTimerExpirations", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
+			6: Uint32Field("BufferOverflows", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
+			7: Uint32Field("EncapProtocolErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
 		},
 	}
 }

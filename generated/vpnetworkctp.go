@@ -45,14 +45,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint16Field("VpiValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: Uint16Field("UniPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: ByteField("Direction", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
-			4: Uint16Field("Deprecated1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
-			5: Uint16Field("Deprecated2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
-			6: Uint16Field("Deprecated3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 6),
-			7: ByteField("Deprecated4", 0, mapset.NewSetWith(Read), false, false, true, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: Uint16Field("VpiValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2: Uint16Field("UniPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: ByteField("Direction", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
+			4: Uint16Field("Deprecated1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 4),
+			5: Uint16Field("Deprecated2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 5),
+			6: Uint16Field("Deprecated3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, true, 6),
+			7: ByteField("Deprecated4", 0, mapset.NewSetWith(Read), false, false, true, true, 7),
 		},
 	}
 }

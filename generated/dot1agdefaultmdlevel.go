@@ -44,12 +44,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, 1),
-			2: ByteField("CatchallLevel", 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
-			3: ByteField("CatchallMhfCreation", 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
-			4: ByteField("CatchallSenderIdPermission", 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
-			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
+			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
+			2: ByteField("CatchallLevel", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
+			3: ByteField("CatchallMhfCreation", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
+			4: ByteField("CatchallSenderIdPermission", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
+			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
 	}
 }

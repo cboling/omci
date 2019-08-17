@@ -45,14 +45,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint32Field("ThresholdValue8", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: Uint32Field("ThresholdValue9", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: Uint32Field("ThresholdValue10", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
-			4: Uint32Field("ThresholdValue11", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
-			5: Uint32Field("ThresholdValue12", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
-			6: Uint32Field("ThresholdValue13", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
-			7: Uint32Field("ThresholdValue14", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: Uint32Field("ThresholdValue8", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2: Uint32Field("ThresholdValue9", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: Uint32Field("ThresholdValue10", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
+			4: Uint32Field("ThresholdValue11", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
+			5: Uint32Field("ThresholdValue12", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
+			6: Uint32Field("ThresholdValue13", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
+			7: Uint32Field("ThresholdValue14", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 		},
 	}
 }

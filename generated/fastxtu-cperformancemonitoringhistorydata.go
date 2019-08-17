@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: Uint32Field("SuccessfulFraCounter", 0, mapset.NewSetWith(Read), false, false, false, 3),
-			4: Uint32Field("SuccessfulRpaCounter", 0, mapset.NewSetWith(Read), false, false, true, 4),
-			5: Uint32Field("SuccessfulTigaCounter", 0, mapset.NewSetWith(Read), false, false, true, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: Uint32Field("SuccessfulFraCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
+			4: Uint32Field("SuccessfulRpaCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
+			5: Uint32Field("SuccessfulTigaCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
 		},
 	}
 }

@@ -1589,6 +1589,8 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 
 	///////////////////////////////////////////////////////////////////
 	// Now decode and compare
+	cid := meInstance.GetClassID()
+	assert.NotEqual(t, cid, 0)
 	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
 	assert.NotNil(t, packet)
 

@@ -45,14 +45,14 @@ func init() {
 		),
 		AllowedAttributeMask: 0XFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint16Field("MdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: ByteField("ShortMaNameFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
-			4: ByteField("ContinuityCheckMessageCcmInterval", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
-			5: MultiByteField("AssociatedVlans", 24, nil, mapset.NewSetWith(Read, Write), false, false, false, 5),
-			6: ByteField("MhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
-			7: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: Uint16Field("MdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2: ByteField("ShortMaNameFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
+			4: ByteField("ContinuityCheckMessageCcmInterval", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
+			5: MultiByteField("AssociatedVlans", 24, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
+			6: ByteField("MhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
+			7: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 		},
 	}
 }

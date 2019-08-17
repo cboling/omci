@@ -45,12 +45,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0XF800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("ValidationScheme", 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
-			2: MultiByteField("Username1", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 2),
-			3: MultiByteField("Password", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
-			4: MultiByteField("Realm", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 4),
-			5: MultiByteField("Username2", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, 5),
+			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1: ByteField("ValidationScheme", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
+			2: MultiByteField("Username1", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
+			3: MultiByteField("Password", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
+			4: MultiByteField("Realm", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
+			5: MultiByteField("Username2", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
 		},
 	}
 }
