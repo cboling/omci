@@ -243,11 +243,9 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		// of the last frame sequence since they (and the ONU) are the only ones
 		// who know how long the data really is.
 		size := attr.GetSize()
-		if size != 0 {
-			if len(data) < attr.GetSize() {
-				df.SetTruncated()
-				return nil, NewMessageTruncatedError("packet too small for field")
-			}
+		if size != 0 && len(data) < attr.GetSize() {
+			df.SetTruncated()
+			return nil, NewMessageTruncatedError("packet too small for field")
 		} else {
 			size = len(data)
 		}
