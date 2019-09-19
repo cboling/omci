@@ -360,7 +360,7 @@ func GetAttributeDefinitionByName(attrMap *AttributeDefinitionMap, name string) 
 			return attrVal, nil
 		}
 	}
-	return nil, errors.New("attribute not found")
+	return nil, NewAttributeFailureError(fmt.Sprintf("attribute '%s' not found", name))
 }
 
 // GetAttributeDefinitionMapKeys is a convenience functions since we may need to

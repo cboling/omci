@@ -84,6 +84,7 @@ func NewNotSupportedError(args ...interface{}) error {
 
 type ParamError struct {
 	OmciError
+	FailureMask uint16
 }
 
 // NewParameterError means that the command message received by the
@@ -92,13 +93,14 @@ type ParamError struct {
 // frequently used interchangeably with code 1001. However, the
 // optional attribute and attribute execution masks in the reply
 // messages are only defined for code 1001.
-func NewParameterError(args ...interface{}) error {
+func NewParameterError(mask uint16, args ...interface{}) error {
 	defaultValue := "parameter error"
 	return &ParamError{
 		OmciError: OmciError{
 			err:        genMessage(defaultValue, args...),
 			statusCode: ParameterError,
 		},
+		FailureMask: mask,
 	}
 }
 
