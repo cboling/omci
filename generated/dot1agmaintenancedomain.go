@@ -58,6 +58,6 @@ func init() {
 // NewDot1AgMaintenanceDomain (class ID 299 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgMaintenanceDomain(params ...ParamData) (*ManagedEntity, error) {
+func NewDot1AgMaintenanceDomain(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(dot1agmaintenancedomainBME, params...)
 }

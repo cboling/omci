@@ -60,6 +60,6 @@ func init() {
 // NewCallControlPerformanceMonitoringHistoryData (class ID 140 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
+func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(callcontrolperformancemonitoringhistorydataBME, params...)
 }

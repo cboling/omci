@@ -20,16 +20,26 @@
 package generated
 
 import (
+	"errors"
 	"fmt"
 )
 
 // Custom Go Error messages for common OMCI errors
 //
-// Response Status code releted errors
+// Response Status code related errors
+type OmciErrors interface {
+	Error() string
+	StatusCode() Results
+	GetError() error
+}
 
 type OmciError struct {
 	err        string
 	statusCode Results
+}
+
+func (e *OmciError) GetError() error {
+	return errors.New(e.err)
 }
 
 func (e *OmciError) Error() string {
@@ -40,7 +50,7 @@ func (e *OmciError) StatusCode() Results {
 	return e.statusCode
 }
 
-func NewOmciError(text string, status Results) error {
+func NewOmciError(text string, status Results) OmciErrors {
 	if status == Success {
 		panic("Do not use OmciError to convey successful results")
 	}
@@ -50,13 +60,28 @@ func NewOmciError(text string, status Results) error {
 	}
 }
 
+type OmciNonStatusError struct {
+	OmciError
+}
+
+// NewNonStatusError is for processing errors that do not involve
+// frame processing status & results
+func NewNonStatusError(args ...interface{}) OmciErrors {
+	defaultValue := "command processing error"
+	return &OmciProcessingError{
+		OmciError: OmciError{
+			err: genMessage(defaultValue, args...),
+		},
+	}
+}
+
 type OmciProcessingError struct {
 	OmciError
 }
 
 // NewProcessingError means the command processing failed at the ONU
 // for reasons not described by one of the more specific error codes.
-func NewProcessingError(args ...interface{}) error {
+func NewProcessingError(args ...interface{}) OmciErrors {
 	defaultValue := "command processing error"
 	return &OmciProcessingError{
 		OmciError: OmciError{
@@ -72,7 +97,7 @@ type NotSupportedError struct {
 
 // NewNotSupportedError means that the message type indicated in byte 3 is
 // not supported by the ONU.
-func NewNotSupportedError(args ...interface{}) error {
+func NewNotSupportedError(args ...interface{}) OmciErrors {
 	defaultValue := "command not supported"
 	return &NotSupportedError{
 		OmciError: OmciError{
@@ -93,7 +118,7 @@ type ParamError struct {
 // frequently used interchangeably with code 1001. However, the
 // optional attribute and attribute execution masks in the reply
 // messages are only defined for code 1001.
-func NewParameterError(mask uint16, args ...interface{}) error {
+func NewParameterError(mask uint16, args ...interface{}) OmciErrors {
 	defaultValue := "parameter error"
 	return &ParamError{
 		OmciError: OmciError{
@@ -110,7 +135,7 @@ type UnknownEntityError struct {
 
 // NewUnknownEntityError This result means that the managed entity class
 // (bytes 5..6) is not supported by the ONU.
-func NewUnknownEntityError(args ...interface{}) error {
+func NewUnknownEntityError(args ...interface{}) OmciErrors {
 	defaultValue := "unknown managed entity"
 	return &UnknownEntityError{
 		OmciError: OmciError{
@@ -126,7 +151,7 @@ type UnknownInstanceError struct {
 
 // NewUnknownInstanceError means that the managed entity instance (bytes 7..8)
 // does not exist in the ONU.
-func NewUnknownInstanceError(args ...interface{}) error {
+func NewUnknownInstanceError(args ...interface{}) OmciErrors {
 	defaultValue := "unknown managed entity instance"
 	return &UnknownInstanceError{
 		OmciError: OmciError{
@@ -145,7 +170,7 @@ type DeviceBusyError struct {
 // also be used as a pause indication to the OLT while the ONU
 // conducts a time-consuming operation such as storage of a
 // software image into non-volatile memory.
-func NewDeviceBusyError(args ...interface{}) error {
+func NewDeviceBusyError(args ...interface{}) OmciErrors {
 	defaultValue := "device busy"
 	return &DeviceBusyError{
 		OmciError: OmciError{
@@ -160,7 +185,7 @@ type InstanceExistsError struct {
 }
 
 // NewInstanceExistsError
-func NewInstanceExistsError(args ...interface{}) error {
+func NewInstanceExistsError(args ...interface{}) OmciErrors {
 	defaultValue := "instance exists"
 	return &InstanceExistsError{
 		OmciError: OmciError{
@@ -176,7 +201,7 @@ type AttributeFailureError struct {
 
 // NewAttributeFailureError means that the ONU already has a managed entity
 // instance that corresponds to the one the OLT is attempting to create.
-func NewAttributeFailureError(args ...interface{}) error {
+func NewAttributeFailureError(args ...interface{}) OmciErrors {
 	defaultValue := "attribute(s) failed or unknown"
 	return &AttributeFailureError{
 		OmciError: OmciError{
@@ -192,7 +217,7 @@ type MessageTruncatedError struct {
 
 // NewAttributeFailureError means that the ONU already has a managed entity
 // instance that corresponds to the one the OLT is attempting to create.
-func NewMessageTruncatedError(args ...interface{}) error {
+func NewMessageTruncatedError(args ...interface{}) OmciErrors {
 	defaultValue := "out-of-space. Cannot fit attribute into message"
 	return &MessageTruncatedError{
 		OmciError: OmciError{

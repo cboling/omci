@@ -54,6 +54,6 @@ func init() {
 // NewTCont (class ID 262 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTCont(params ...ParamData) (*ManagedEntity, error) {
+func NewTCont(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(tcontBME, params...)
 }

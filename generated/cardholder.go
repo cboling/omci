@@ -60,6 +60,6 @@ func init() {
 // NewCardholder (class ID 5 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewCardholder(params ...ParamData) (*ManagedEntity, error) {
+func NewCardholder(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(cardholderBME, params...)
 }

@@ -61,6 +61,6 @@ func init() {
 // NewEfmBondingPortPerformanceMonitoringHistoryData (class ID 424 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEfmBondingPortPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
+func NewEfmBondingPortPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(efmbondingportperformancemonitoringhistorydataBME, params...)
 }

@@ -60,6 +60,6 @@ func init() {
 // NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgMaintenanceAssociation(params ...ParamData) (*ManagedEntity, error) {
+func NewDot1AgMaintenanceAssociation(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(dot1agmaintenanceassociationBME, params...)
 }

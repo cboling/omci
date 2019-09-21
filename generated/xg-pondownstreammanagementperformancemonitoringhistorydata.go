@@ -69,6 +69,6 @@ func init() {
 // NewXgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID 345 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
+func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(xgpondownstreammanagementperformancemonitoringhistorydataBME, params...)
 }

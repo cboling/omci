@@ -54,6 +54,6 @@ func init() {
 // NewBbfTr069ManagementServer (class ID 340 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewBbfTr069ManagementServer(params ...ParamData) (*ManagedEntity, error) {
+func NewBbfTr069ManagementServer(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(bbftr069managementserverBME, params...)
 }

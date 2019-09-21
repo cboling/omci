@@ -54,6 +54,6 @@ func init() {
 // NewGalEthernetProfile (class ID 272 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewGalEthernetProfile(params ...ParamData) (*ManagedEntity, error) {
+func NewGalEthernetProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(galethernetprofileBME, params...)
 }

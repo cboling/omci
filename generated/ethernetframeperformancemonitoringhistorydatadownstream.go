@@ -69,6 +69,6 @@ func init() {
 // NewEthernetFramePerformanceMonitoringHistoryDataDownstream (class ID 321 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (*ManagedEntity, error) {
+func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(ethernetframeperformancemonitoringhistorydatadownstreamBME, params...)
 }

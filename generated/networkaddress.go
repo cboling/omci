@@ -55,6 +55,6 @@ func init() {
 // NewNetworkAddress (class ID 137 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewNetworkAddress(params ...ParamData) (*ManagedEntity, error) {
+func NewNetworkAddress(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(networkaddressBME, params...)
 }

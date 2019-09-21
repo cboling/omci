@@ -62,6 +62,6 @@ func init() {
 // NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1 (class ID 446 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (*ManagedEntity, error) {
+func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(twdmchannelploamperformancemonitoringhistorydatapart1BME, params...)
 }

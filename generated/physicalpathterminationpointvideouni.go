@@ -56,6 +56,6 @@ func init() {
 // NewPhysicalPathTerminationPointVideoUni (class ID 82 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (*ManagedEntity, error) {
+func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(physicalpathterminationpointvideouniBME, params...)
 }

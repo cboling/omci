@@ -59,6 +59,6 @@ func init() {
 // NewVoipLineStatus (class ID 141 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVoipLineStatus(params ...ParamData) (*ManagedEntity, error) {
+func NewVoipLineStatus(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(voiplinestatusBME, params...)
 }

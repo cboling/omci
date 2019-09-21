@@ -63,6 +63,6 @@ func init() {
 // NewDot1AgMepCcmDatabase (class ID 304 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1AgMepCcmDatabase(params ...ParamData) (*ManagedEntity, error) {
+func NewDot1AgMepCcmDatabase(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(dot1agmepccmdatabaseBME, params...)
 }

@@ -60,6 +60,6 @@ func init() {
 // NewMulticastSubscriberMonitor (class ID 311 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMulticastSubscriberMonitor(params ...ParamData) (*ManagedEntity, error) {
+func NewMulticastSubscriberMonitor(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(multicastsubscribermonitorBME, params...)
 }

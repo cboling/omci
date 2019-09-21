@@ -65,6 +65,6 @@ func init() {
 // NewEfmBondingGroupPerformanceMonitoringHistoryData (class ID 421 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
+func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(efmbondinggroupperformancemonitoringhistorydataBME, params...)
 }

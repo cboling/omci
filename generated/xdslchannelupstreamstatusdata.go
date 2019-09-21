@@ -61,6 +61,6 @@ func init() {
 // NewXdslChannelUpstreamStatusData (class ID 103 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslChannelUpstreamStatusData(params ...ParamData) (*ManagedEntity, error) {
+func NewXdslChannelUpstreamStatusData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(xdslchannelupstreamstatusdataBME, params...)
 }

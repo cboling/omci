@@ -45,7 +45,7 @@ type ParamData struct {
 }
 
 // CreateME wraps a function that makes it a creator of a Managed Entity
-type CreateME func(params ...ParamData) (*ManagedEntity, error)
+type CreateME func(params ...ParamData) (*ManagedEntity, OmciErrors)
 
 var classToManagedEntityMap map[ClassID]CreateME
 
@@ -215,7 +215,7 @@ func init() {
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
 }
 
-func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*ManagedEntity, error) {
+func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*ManagedEntity, OmciErrors) {
 	newFunc, ok := classToManagedEntityMap[classID]
 	if ok {
 		return newFunc(params...)

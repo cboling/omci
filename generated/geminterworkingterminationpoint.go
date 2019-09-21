@@ -61,6 +61,6 @@ func init() {
 // NewGemInterworkingTerminationPoint (class ID 266 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewGemInterworkingTerminationPoint(params ...ParamData) (*ManagedEntity, error) {
+func NewGemInterworkingTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(geminterworkingterminationpointBME, params...)
 }

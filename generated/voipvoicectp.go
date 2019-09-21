@@ -57,6 +57,6 @@ func init() {
 // NewVoipVoiceCtp (class ID 139 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVoipVoiceCtp(params ...ParamData) (*ManagedEntity, error) {
+func NewVoipVoiceCtp(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(voipvoicectpBME, params...)
 }

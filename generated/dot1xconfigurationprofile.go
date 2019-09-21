@@ -61,6 +61,6 @@ func init() {
 // NewDot1XConfigurationProfile (class ID 291 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewDot1XConfigurationProfile(params ...ParamData) (*ManagedEntity, error) {
+func NewDot1XConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(dot1xconfigurationprofileBME, params...)
 }

@@ -38,7 +38,7 @@ type AttributeDefinition struct {
 	DefValue     interface{} // Note: Not supported yet
 	Size         int
 	Access       mapset.Set // AttributeAccess...
-	Constraint   func(interface{}) error
+	Constraint   func(interface{}) *ParamError
 	Avc          bool // If true, an AVC notification can occur for the attribute
 	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
 	Counter      bool // If true, this attribute is a PM counter
@@ -56,7 +56,7 @@ func (attr *AttributeDefinition) GetIndex() uint          { return attr.Index }
 func (attr *AttributeDefinition) GetDefault() interface{} { return attr.DefValue }
 func (attr *AttributeDefinition) GetSize() int            { return attr.Size }
 func (attr *AttributeDefinition) GetAccess() mapset.Set   { return attr.Access }
-func (attr *AttributeDefinition) GetConstraints() func(interface{}) error {
+func (attr *AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
 	return attr.Constraint
 }
 func (attr *AttributeDefinition) IsTableAttribute() bool {
@@ -70,8 +70,8 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 			return nil, err
 		}
 		if attr.GetConstraints() != nil {
-			if err = attr.GetConstraints()(value); err != nil {
-				return nil, err
+			if omciErr := attr.GetConstraints()(value); omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
@@ -87,41 +87,41 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 		value := make([]byte, size)
 		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
-			if err := attr.GetConstraints()(value); err != nil {
-				return nil, err
+			if omciErr := attr.GetConstraints()(value); omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
 	case 1:
 		value := data[0]
 		if attr.GetConstraints() != nil {
-			if err := attr.GetConstraints()(value); err != nil {
-				return nil, err
+			if omciErr := attr.GetConstraints()(value); omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
 	case 2:
 		value := binary.BigEndian.Uint16(data[0:2])
 		if attr.GetConstraints() != nil {
-			if err := attr.GetConstraints()(value); err != nil {
-				return nil, err
+			if omciErr := attr.GetConstraints()(value); omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
 	case 4:
 		value := binary.BigEndian.Uint32(data[0:4])
 		if attr.GetConstraints() != nil {
-			if err := attr.GetConstraints()(value); err != nil {
-				return nil, err
+			if omciErr := attr.GetConstraints()(value); omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
 	case 8:
 		value := binary.BigEndian.Uint64(data[0:8])
 		if attr.GetConstraints() != nil {
-			err := attr.GetConstraints()(value)
-			if err != nil {
-				return nil, err
+			omciErr := attr.GetConstraints()(value)
+			if omciErr != nil {
+				return nil, omciErr.GetError()
 			}
 		}
 		return value, nil
@@ -353,7 +353,7 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 
 // GetAttributeDefinitionByName searches the attribute definition map for the
 // attribute with the specified name (case insensitive)
-func GetAttributeDefinitionByName(attrMap *AttributeDefinitionMap, name string) (*AttributeDefinition, error) {
+func GetAttributeDefinitionByName(attrMap *AttributeDefinitionMap, name string) (*AttributeDefinition, OmciErrors) {
 	nameLower := strings.ToLower(name)
 	for _, attrVal := range *attrMap {
 		if nameLower == strings.ToLower(attrVal.GetName()) {

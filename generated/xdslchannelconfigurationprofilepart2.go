@@ -66,6 +66,6 @@ func init() {
 // NewXdslChannelConfigurationProfilePart2 (class ID 412 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, error) {
+func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(xdslchannelconfigurationprofilepart2BME, params...)
 }

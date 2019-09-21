@@ -69,6 +69,6 @@ func init() {
 // NewMocaEthernetPerformanceMonitoringHistoryData (class ID 163 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, error) {
+func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(mocaethernetperformancemonitoringhistorydataBME, params...)
 }

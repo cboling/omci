@@ -65,6 +65,6 @@ func init() {
 // NewXdslLineInventoryAndStatusDataPart1 (class ID 100 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (*ManagedEntity, error) {
+func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(xdsllineinventoryandstatusdatapart1BME, params...)
 }

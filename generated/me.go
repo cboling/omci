@@ -39,7 +39,7 @@ func (entity *ManagedEntity) String() string {
 		entity.GetClassID(), entity.GetEntityID(), entity.GetEntityID(), entity.attributes)
 }
 
-func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, error) {
+func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, OmciErrors) {
 	entity := &ManagedEntity{
 		definition: definition,
 		attributes: make(map[string]interface{}),
@@ -128,11 +128,11 @@ func (entity *ManagedEntity) GetAttributeByIndex(index uint) (interface{}, error
 	return entity.GetAttribute(entity.definition.AttributeDefinitions[index].Name)
 }
 
-func (entity *ManagedEntity) setAttributes(params ...ParamData) error {
+func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 	if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	} else if len(entity.attributes) > 0 {
-		return errors.New("attributes have already been set")
+		return NewNonStatusError("attributes have already been set")
 	}
 	eidName := entity.definition.AttributeDefinitions[0].Name
 	if len(params) == 0 {
@@ -152,7 +152,7 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) error {
 	return nil
 }
 
-func (entity *ManagedEntity) SetAttribute(name string, value interface{}) error {
+func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciErrors {
 	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
 		return err
@@ -227,9 +227,9 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	entityID := binary.BigEndian.Uint16(data[2:4])
 	parameters := ParamData{EntityID: entityID}
 
-	meDefinition, err := LoadManagedEntityDefinition(classID, parameters)
-	if err != nil {
-		return err
+	meDefinition, omciErr := LoadManagedEntityDefinition(classID, parameters)
+	if omciErr != nil {
+		return omciErr.GetError()
 	}
 	entity.definition = meDefinition.definition
 	entity.attributeMask = binary.BigEndian.Uint16(data[4:6])

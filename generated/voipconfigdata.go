@@ -59,6 +59,6 @@ func init() {
 // NewVoipConfigData (class ID 138 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewVoipConfigData(params ...ParamData) (*ManagedEntity, error) {
+func NewVoipConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(voipconfigdataBME, params...)
 }

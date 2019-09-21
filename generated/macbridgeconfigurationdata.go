@@ -58,6 +58,6 @@ func init() {
 // NewMacBridgeConfigurationData (class ID 46 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgeConfigurationData(params ...ParamData) (*ManagedEntity, error) {
+func NewMacBridgeConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(macbridgeconfigurationdataBME, params...)
 }

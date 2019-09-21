@@ -55,6 +55,6 @@ func init() {
 // NewOltG (class ID 131 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewOltG(params ...ParamData) (*ManagedEntity, error) {
+func NewOltG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(oltgBME, params...)
 }

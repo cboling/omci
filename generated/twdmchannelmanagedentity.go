@@ -54,6 +54,6 @@ func init() {
 // NewTwdmChannelManagedEntity (class ID 443 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTwdmChannelManagedEntity(params ...ParamData) (*ManagedEntity, error) {
+func NewTwdmChannelManagedEntity(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(twdmchannelmanagedentityBME, params...)
 }

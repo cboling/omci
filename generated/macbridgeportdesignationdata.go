@@ -52,6 +52,6 @@ func init() {
 // NewMacBridgePortDesignationData (class ID 48 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewMacBridgePortDesignationData(params ...ParamData) (*ManagedEntity, error) {
+func NewMacBridgePortDesignationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(macbridgeportdesignationdataBME, params...)
 }

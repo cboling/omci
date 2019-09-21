@@ -57,6 +57,6 @@ func init() {
 // NewTcpUdpConfigData (class ID 136 creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
-func NewTcpUdpConfigData(params ...ParamData) (*ManagedEntity, error) {
+func NewTcpUdpConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(tcpudpconfigdataBME, params...)
 }

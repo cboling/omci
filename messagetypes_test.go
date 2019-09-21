@@ -1353,8 +1353,8 @@ func TestMibUploadNextResponseSerialize(t *testing.T) {
 	options.FixLengths = true
 
 	buffer := gopacket.NewSerializeBuffer()
-	err = gopacket.SerializeLayers(buffer, options, omciLayer, request)
-	assert.NoError(t, err)
+	omciErr := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, omciErr)
 
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
