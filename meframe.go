@@ -379,6 +379,27 @@ func calculateAttributeMask(m *me.ManagedEntity, requestedMask uint16) (uint16, 
 	return calculatedMask & requestedMask, nil
 }
 
+// GenFrame is a helper function to make tests a little easier to read.
+// For a real application, use the .../omci/generated/class.go 'New'
+// functions to create your Managed Entity and then use it to call the
+// EncodeFrame method.
+func GenFrame(meInstance *me.ManagedEntity, messageType MessageType, options ...FrameOption) ([]byte, error) {
+	omciLayer, msgLayer, err := EncodeFrame(meInstance, messageType, options...)
+	if err != nil {
+		return nil, err
+	}
+	// Serialize the frame and send it
+	var serializeOptions gopacket.SerializeOptions
+	serializeOptions.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, serializeOptions, omciLayer, msgLayer)
+	if err != nil {
+		return nil, err
+	}
+	return buffer.Bytes(), nil
+}
+
 func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
 	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
