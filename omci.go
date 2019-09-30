@@ -91,6 +91,10 @@ const MaxManagedEntityMibUploadNextExtendedLength = MaxExtendedLength - 10 - 4
 // message contents and does not include the Result Code & Attribute Mask.
 const MaxAttributeGetNextExtendedLength = MaxExtendedLength - 13 - 4
 
+// NullEntityID is often used as the Null/void Managed Entity ID for attributes
+// that are used to refer to other Managed Entities but are currently not provisioned.
+const NullEntityID = uint16(0xffff)
+
 // OMCI defines the common protocol. Extended will be added once
 // I can get basic working (and layered properly).  See ITU-T G.988 11/2017 section
 // A.3 for more information
