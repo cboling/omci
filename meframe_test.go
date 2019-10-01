@@ -433,14 +433,21 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		Attributes: make(me.AttributeValueMap, 0),
 	}
 	attrDefs := *managedEntity.GetAttributeDefinitions()
+	tableAttrFound := false
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 		} else if attrDef.TableSupport {
+			tableAttrFound = true
 			continue // TODO: Skip table attributes for now
 		} else if attrDef.GetAccess().Contains(me.Write) {
 			params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 		}
+	}
+	if tableAttrFound && len(params.Attributes) == 0 {
+		// The only set attribute may have been a table and we do not have
+		// a test for that right now.
+		return
 	}
 	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
 	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))

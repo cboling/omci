@@ -51,7 +51,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 160)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 165)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -68,6 +68,8 @@ func init() {
 	classToManagedEntityMap[46] = NewMacBridgeConfigurationData
 	classToManagedEntityMap[47] = NewMacBridgePortConfigurationData
 	classToManagedEntityMap[48] = NewMacBridgePortDesignationData
+	classToManagedEntityMap[49] = NewMacBridgePortFilterTableData
+	classToManagedEntityMap[50] = NewMacBridgePortBridgeTableData
 	classToManagedEntityMap[51] = NewMacBridgePerformanceMonitoringHistoryData
 	classToManagedEntityMap[52] = NewMacBridgePortPerformanceMonitoringHistoryData
 	classToManagedEntityMap[53] = NewPhysicalPathTerminationPointPotsUni
@@ -147,6 +149,8 @@ func init() {
 	classToManagedEntityMap[285] = NewPseudowirePerformanceMonitoringHistoryData
 	classToManagedEntityMap[286] = NewEthernetFlowTerminationPoint
 	classToManagedEntityMap[287] = NewOmci
+	classToManagedEntityMap[288] = NewManagedEntityMe
+	classToManagedEntityMap[289] = NewAttributeMe
 	classToManagedEntityMap[290] = NewDot1XPortExtensionPackage
 	classToManagedEntityMap[291] = NewDot1XConfigurationProfile
 	classToManagedEntityMap[292] = NewDot1XPerformanceMonitoringHistoryData
@@ -196,6 +200,7 @@ func init() {
 	classToManagedEntityMap[423] = NewEfmBondingLinkPerformanceMonitoringHistoryData
 	classToManagedEntityMap[424] = NewEfmBondingPortPerformanceMonitoringHistoryData
 	classToManagedEntityMap[425] = NewEfmBondingPortPerformanceMonitoringHistoryDataPart2
+	classToManagedEntityMap[426] = NewEthernetFrameExtendedPm64Bit
 	classToManagedEntityMap[432] = NewFastChannelConfigurationProfile
 	classToManagedEntityMap[433] = NewFastDataPathConfigurationProfile
 	classToManagedEntityMap[434] = NewFastVectoringLineConfigurationExtensions

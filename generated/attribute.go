@@ -246,7 +246,7 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		if size != 0 && len(data) < attr.GetSize() {
 			df.SetTruncated()
 			return nil, NewMessageTruncatedError("packet too small for field")
-		} else {
+		} else if size == 0 {
 			size = len(data)
 		}
 		return data[:size], nil

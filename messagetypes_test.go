@@ -220,10 +220,10 @@ func TestOmciSerialization(t *testing.T) {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{
-			"PortId":                              0x400,
-			"TContPointer":                        0x8000,
-			"Direction":                           3,
-			"TrafficManagementPointerForUpstream": 0x100,
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -335,10 +335,10 @@ func TestCreateRequestSerialize(t *testing.T) {
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{
-			"PortId":                              0x400,
-			"TContPointer":                        0x8000,
-			"Direction":                           3,
-			"TrafficManagementPointerForUpstream": 0x100,
+			"PortId":                                       0x400,
+			"TContPointer":                                 0x8000,
+			"Direction":                                    3,
+			"TrafficManagementPointerForUpstream":          0x100,
 			"TrafficDescriptorProfilePointerForUpstream":   0,
 			"PriorityQueuePointerForDownStream":            0,
 			"TrafficDescriptorProfilePointerForDownstream": 0,
@@ -1294,13 +1294,13 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 		"AllocatedQueueSize":                                  uint16(0),
 		"DiscardBlockCounterResetInterval":                    uint16(0),
 		"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-		"RelatedPort":                                         uint32(16842752),
-		"TrafficSchedulerPointer":                             uint16(0),
-		"Weight":                                              byte(1),
-		"BackPressureOperation":                               uint16(0),
-		"BackPressureTime":                                    uint32(0),
-		"BackPressureOccurQueueThreshold":                     uint16(0),
-		"BackPressureClearQueueThreshold":                     uint16(0),
+		"RelatedPort":                     uint32(16842752),
+		"TrafficSchedulerPointer":         uint16(0),
+		"Weight":                          byte(1),
+		"BackPressureOperation":           uint16(0),
+		"BackPressureTime":                uint32(0),
+		"BackPressureOccurQueueThreshold": uint16(0),
+		"BackPressureClearQueueThreshold": uint16(0),
 	}
 	for name, value := range attributes {
 		pktValue, err := response.ReportedME.GetAttribute(name)
@@ -1329,13 +1329,13 @@ func TestMibUploadNextResponseSerialize(t *testing.T) {
 			"AllocatedQueueSize":                                  uint16(0),
 			"DiscardBlockCounterResetInterval":                    uint16(0),
 			"ThresholdValueForDiscardedBlocksDueToBufferOverflow": uint16(0),
-			"RelatedPort":                                         uint32(16842752),
-			"TrafficSchedulerPointer":                             uint16(0),
-			"Weight":                                              byte(1),
-			"BackPressureOperation":                               uint16(0),
-			"BackPressureTime":                                    uint32(0),
-			"BackPressureOccurQueueThreshold":                     uint16(0),
-			"BackPressureClearQueueThreshold":                     uint16(0),
+			"RelatedPort":                     uint32(16842752),
+			"TrafficSchedulerPointer":         uint16(0),
+			"Weight":                          byte(1),
+			"BackPressureOperation":           uint16(0),
+			"BackPressureTime":                uint32(0),
+			"BackPressureOccurQueueThreshold": uint16(0),
+			"BackPressureClearQueueThreshold": uint16(0),
 		},
 	}
 	reportedME, err := me.NewPriorityQueue(paramData)
@@ -2385,11 +2385,11 @@ func TestGetNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.EntityClass, me.ExtendedVlanTaggingOperationConfigurationDataClassId)
-	assert.Equal(t, response.EntityInstance, uint16(0x0202))
-	assert.Equal(t, response.Result, me.Success)
-	assert.Equal(t, response.AttributeMask, uint16(0x0400))
-	assert.Equal(t, response.Attributes["ReceivedFrameVlanTaggingOperationTable"], vlanOpTable)
+	assert.Equal(t, me.ExtendedVlanTaggingOperationConfigurationDataClassId, response.EntityClass)
+	assert.Equal(t, uint16(0x0202), response.EntityInstance)
+	assert.Equal(t, me.Success, response.Result)
+	assert.Equal(t, uint16(0x0400), response.AttributeMask)
+	assert.Equal(t, vlanOpTable, response.Attributes["ReceivedFrameVlanTaggingOperationTable"])
 
 	// Verify string output for message
 	packetString := packet.String()
