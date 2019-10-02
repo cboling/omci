@@ -39,7 +39,7 @@ func init() {
 		VersionInfo{
 			Name:       "parser",
 			Version:    "0.8.0",
-			CreateTime: 1569950828.822983,
+			CreateTime: 1569980313.6034384,
 			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})
@@ -57,7 +57,7 @@ func init() {
 		VersionInfo{
 			Name:       "code-generator",
 			Version:    "0.8.0",
-			CreateTime: 1569952776.9632022,
+			CreateTime: 1569980354.1964502,
 			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})

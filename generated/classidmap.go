@@ -51,7 +51,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 165)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 160)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -122,7 +122,6 @@ func init() {
 	classToManagedEntityMap[153] = NewSipUserData
 	classToManagedEntityMap[155] = NewMgcConfigData
 	classToManagedEntityMap[156] = NewMgcPerformanceMonitoringHistoryData
-	classToManagedEntityMap[158] = NewOnuRemoteDebug
 	classToManagedEntityMap[160] = NewEquipmentExtensionPackage
 	classToManagedEntityMap[162] = NewPhysicalPathTerminationPointMocaUni
 	classToManagedEntityMap[163] = NewMocaEthernetPerformanceMonitoringHistoryData
@@ -161,14 +160,11 @@ func init() {
 	classToManagedEntityMap[300] = NewDot1AgMaintenanceAssociation
 	classToManagedEntityMap[301] = NewDot1AgDefaultMdLevel
 	classToManagedEntityMap[302] = NewDot1AgMep
-	classToManagedEntityMap[304] = NewDot1AgMepCcmDatabase
 	classToManagedEntityMap[305] = NewDot1AgCfmStack
-	classToManagedEntityMap[308] = NewGeneralPurposeBuffer
 	classToManagedEntityMap[310] = NewMulticastSubscriberConfigInfo
 	classToManagedEntityMap[311] = NewMulticastSubscriberMonitor
 	classToManagedEntityMap[313] = NewReAniG
 	classToManagedEntityMap[316] = NewReDownstreamAmplifier
-	classToManagedEntityMap[318] = NewFileTransferController
 	classToManagedEntityMap[321] = NewEthernetFramePerformanceMonitoringHistoryDataDownstream
 	classToManagedEntityMap[322] = NewEthernetFramePerformanceMonitoringHistoryDataUpstream
 	classToManagedEntityMap[325] = NewXdslLineInventoryAndStatusDataPart5
@@ -204,7 +200,6 @@ func init() {
 	classToManagedEntityMap[432] = NewFastChannelConfigurationProfile
 	classToManagedEntityMap[433] = NewFastDataPathConfigurationProfile
 	classToManagedEntityMap[434] = NewFastVectoringLineConfigurationExtensions
-	classToManagedEntityMap[435] = NewFastLineInventoryAndStatusData
 	classToManagedEntityMap[436] = NewFastLineInventoryAndStatusDataPart2
 	classToManagedEntityMap[437] = NewFastXtuCPerformanceMonitoringHistoryData
 	classToManagedEntityMap[438] = NewFastXtuRPerformanceMonitoringHistoryData
