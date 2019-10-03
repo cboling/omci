@@ -247,9 +247,9 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 			df.SetTruncated()
 			return nil, NewMessageTruncatedError("packet too small for field")
 		} else if size == 0 {
-			size = len(data)
+			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
 		}
-		return data[:size], nil
+		return data, nil
 
 	case byte(Set) | AR: // Set Request
 		fmt.Println("TODO")
