@@ -38,27 +38,27 @@ func init() {
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "parser",
-			Version:    "0.8.0",
-			CreateTime: 1569980313.6034384,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
+			Version:    "0.9.0",
+			CreateTime: 1570304206.346817,
+			ItuDocName: "T-REC-G.988-2017-11.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})
 
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "pre-parser",
-			Version:    "0.7.1",
-			CreateTime: 1569945543.3078544,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
+			Version:    "0.9.0",
+			CreateTime: 1570304142.338239,
+			ItuDocName: "T-REC-G.988-2017-11.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})
 
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "code-generator",
-			Version:    "0.8.0",
-			CreateTime: 1569980354.1964502,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
+			Version:    "0.9.0",
+			CreateTime: 1570305842.186913,
+			ItuDocName: "T-REC-G.988-2017-11.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})
 }

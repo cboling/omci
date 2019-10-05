@@ -25,9 +25,51 @@ const XdslLineInventoryAndStatusDataPart8ClassId ClassID = ClassID(414)
 
 var xdsllineinventoryandstatusdatapart8BME *ManagedEntityDefinition
 
-// XdslLineInventoryAndStatusDataPart8 (class ID #414) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslLineInventoryAndStatusDataPart8 (class ID #414)
+//	This ME extends the attributes defined in the xDSL line inventory and status data parts 1..4.
+//
+//	Relationships
+//		This is one of the status data MEs associated with an xDSL UNI. The ONU automatically creates or
+//		deletes an instance of this ME upon creation or deletion of a PPTP xDSL UNI part 1 that supports
+//		these attributes.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1 ME. (R)
+//			(mandatory) (2 bytes)
+//
+//		Retransmission Used Downstream Rtx_Usedds
+//			Retransmission used downstream (RTX_USEDds): This parameter specifies whether [ITU-T G.998.4]
+//			retransmission is used (i.e., active in showtime) in the downstream transmit direction. The
+//			valid range of values is given in clause 7.5.1.38 of [ITU-T G.997.1]. (R) (mandatory) (1 byte)
+//
+//		Retransmission Used Upstream Rtx_Usedus
+//			Retransmission used upstream (RTX_USEDus): This parameter specifies whether [ITUT G.998.4]
+//			retransmission is used (i.e., active in showtime) in the upstream transmit direction. The valid
+//			range of values is given in clause 7.5.1.38 of [ITU-T G.997.1]. (R) (mandatory) (1 byte)
+//
+//		Date_Time_Stamping Of Near_End Test Parameters Stamp_Test_Ne
+//			(R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Far_End Test Parameters Stamp_Test_Fe
+//			Date/time-stamping of far-end test parameters (STAMP-TEST-FE): This parameter indicates the
+//			date/time when the far-end test parameters that can change during showtime were last updated.
+//			See clause 7.5.1.36.4 of [ITUT G.997.1]. The format of this parameter is the same as STAMP-TEST-
+//			NE. (R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Downstream Olr Operation Stamp_Olr_Ds
+//			Date/time-stamping of last successful downstream OLR operation (STAMP-OLR-ds): This parameter
+//			indicates the date/time of the last successful OLR execution in the downstream direction that
+//			has modified the bits or gains. See clause 7.5.1.37.1 of [ITU-T G.997.1]. The format of this
+//			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Upstream Olr Operation Stamp_Olr_Us
+//			Date/time-stamping of last successful upstream OLR operation (STAMP-OLR-us): This parameter
+//			indicates the date/time of the last successful OLR execution in the upstream direction that has
+//			modified the bits or gains. See clause 7.5.1.37.2 of [ITU-T G.997.1]. The format of this
+//			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
+//
 type XdslLineInventoryAndStatusDataPart8 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

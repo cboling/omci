@@ -25,9 +25,52 @@ const VoipConfigDataClassId ClassID = ClassID(138)
 
 var voipconfigdataBME *ManagedEntityDefinition
 
-// VoipConfigData (class ID #138) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoipConfigData (class ID #138)
+//	The VoIP configuration data ME defines the configuration for VoIP in the ONU. The OLT uses this
+//	ME to discover the VoIP signalling protocols and configuration methods supported by this ONU.
+//	The OLT then uses this ME to select the desired signalling protocol and configuration method.
+//	The entity is conditionally required for ONUs that offer VoIP services.
+//
+//	An ONU that supports VoIP services automatically creates an instance of this ME.
+//
+//	Relationships
+//		One instance of this ME is associated with the ONU.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
+//			one instance, number 0. (R) (mandatory) (2 bytes)
+//
+//		Available Signalling Protocols
+//			(R) (mandatory) (1 byte)
+//
+//		Signalling Protocol Used
+//			(R, W) (mandatory) (1 byte)
+//
+//		Available Voip Configuration Methods
+//			Bits 5..24 are reserved by ITU-T. Bits 25..32 are reserved for proprietary vendor configuration
+//			capabilities. (R) (mandatory) (4 bytes)
+//
+//		Voip Configuration Method Used
+//			(R, W) (mandatory) (1 byte)
+//
+//		Voip Configuration Address Pointer
+//			The default value is 0xFFFF (R, W) (mandatory) (2 bytes)
+//
+//		Voip Configuration State
+//			Other values are reserved. At ME instantiation, the ONU sets this attribute to 0. (R)
+//			(mandatory) (1 byte)
+//
+//		Retrieve Profile
+//			Retrieve profile: This attribute provides a means by which the ONU may be notified that a new
+//			VoIP profile should be retrieved. By setting this attribute, the OLT triggers the ONU to
+//			retrieve a new profile. The actual value in the set action is ignored because it is the action
+//			of setting that is important. (W) (mandatory) (1 byte)
+//
+//		Profile Version
+//			Profile version: This attribute is a character string that identifies the version of the last
+//			retrieved profile. (R) (mandatory) (25 bytes)
+//
 type VoipConfigData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

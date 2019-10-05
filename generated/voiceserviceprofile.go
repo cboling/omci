@@ -25,9 +25,80 @@ const VoiceServiceProfileClassId ClassID = ClassID(58)
 
 var voiceserviceprofileBME *ManagedEntityDefinition
 
-// VoiceServiceProfile (class ID #58) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoiceServiceProfile (class ID #58)
+//	This ME organizes data that describe the voice service functions of the ONU. Instances of this
+//	ME are created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of a VoIP voice CTP by way
+//		of a VoIP media profile.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Announcement Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Jitter Target
+//			Jitter target:	This attribute specifies the target value of the jitter buffer in milliseconds.
+//			The system tries to maintain the jitter buffer at the target value. The value 0 specifies
+//			dynamic jitter buffer sizing. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Jitter Buffer Max
+//			Jitter buffer max: This attribute specifies the maximum depth of the jitter buffer associated
+//			with this service in milliseconds. The value 0 specifies that the ONU uses its internal default.
+//			(R, W, set-by-create) (optional) (2 bytes)
+//
+//		Echo Cancel Ind
+//			Echo cancel ind: The Boolean value true specifies that echo cancellation is on; false specifies
+//			off. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Pstn Protocol Variant
+//			PSTN protocol variant: This attribute controls which variant of POTS signalling is used on the
+//			associated UNIs. Its value is equal to the [ITU-T E.164] country code. The value 0 specifies
+//			that the ONU uses its internal default. (R, W, set-by-create) (optional) (2 bytes)
+//
+//		Dtmf Digit Levels
+//			DTMF digit levels: This attribute specifies the power level of DTMF digits that may be generated
+//			by the ONU towards the subscriber set. It is a 2s complement value referred to 1 mW at the 0
+//			transmission level point (TLP) (dBm0), with resolution 1 dB. The default value 0x8000 selects
+//			the ONU's internal policy. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Dtmf Digit Duration
+//			DTMF digit duration: This attribute specifies the duration of DTMF digits that may be generated
+//			by the ONU towards the subscriber set. It is specified in milliseconds. The default value 0
+//			selects the ONU's internal policy. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Hook Flash Minimum Time
+//			Hook flash minimum time: This attribute defines the minimum duration recognized by the ONU as a
+//			switchhook flash. It is expressed in milliseconds; the default value 0 selects the ONU's
+//			internal policy. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Hook Flash Maximum Time
+//			Hook flash maximum time: This attribute defines the maximum duration recognized by the ONU as a
+//			switchhook flash. It is expressed in milliseconds; the default value 0 selects the ONU's
+//			internal policy. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Tone Pattern Table
+//			(R, W) (optional) (N * 20 bytes)
+//
+//		Tone Event Table
+//			(R, W) (optional) (N * 7 bytes).
+//
+//		Ringing Pattern Table
+//			(R, W) (optional) (N * 5 bytes).
+//
+//		Ringing Event Table
+//			(R, W) (optional) (N * 7 bytes).
+//
+//		Network Specific Extensions Pointer
+//			Network specific extensions pointer: This attribute points to a network address ME that contains
+//			the path and name of a file containing network specific parameters for the associated UNIs. The
+//			default value for this attribute is 0xFFFF, a null pointer. (R, W, set-by-create) (optional)
+//			(2 bytes)
+//
 type VoiceServiceProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

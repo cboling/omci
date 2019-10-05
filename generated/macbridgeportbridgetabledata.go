@@ -25,9 +25,25 @@ const MacBridgePortBridgeTableDataClassId ClassID = ClassID(50)
 
 var macbridgeportbridgetabledataBME *ManagedEntityDefinition
 
-// MacBridgePortBridgeTableData (class ID #50) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MacBridgePortBridgeTableData (class ID #50)
+//	This ME reports status data associated with a bridge port. The ONU automatically creates or
+//	deletes an instance of this ME upon the creation or deletion of a MAC bridge port configuration
+//	data.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of a MAC bridge port configuration data
+//		ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data ME. (R) (mandatory) (2 bytes)
+//
+//		Bridge Table
+//			Upon ME instantiation, this attribute is an empty list. (R) (mandatory) (8 * M bytes, where M is
+//			the number of entries in the list.)
+//
 type MacBridgePortBridgeTableData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

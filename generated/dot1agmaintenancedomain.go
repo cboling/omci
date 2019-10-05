@@ -25,9 +25,48 @@ const Dot1AgMaintenanceDomainClassId ClassID = ClassID(299)
 
 var dot1agmaintenancedomainBME *ManagedEntityDefinition
 
-// Dot1AgMaintenanceDomain (class ID #299) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Dot1AgMaintenanceDomain (class ID #299)
+//	In [IEEE 802.1ag], a maintenance domain (MD) is a context within which configuration fault
+//	management (CFM) connectivity verification can occur. Individual services (maintenance
+//	associations, MAs) exist within an MD. An MD is created and deleted by the OLT. The MD ME is
+//	specified by [IEEE 802.1ag] in such a way that the same provisioning can be used for all
+//	associated systems in a network; the OMCI definition accordingly avoids ONU-specific information
+//	such as pointers.
+//
+//	Relationships
+//		Several MDs may be associated with a given bridge, at various MD levels, and a given MD may be
+//		associated with any number of bridges.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies an instance of this ME. The values 0 and
+//			0xFFFF are reserved. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Md Level
+//			MD level:	This attribute ranges from 0..7 and specifies the maintenance level of this MD. Higher
+//			numbers have wider geographic scope. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Md Name Format
+//			MD name format: This attribute specifies one of several possible formats for the MD name
+//			attribute. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Md Name 1 Md Name 2
+//			MD name 1, MD name 2:These two attributes may be regarded as a 50 byte octet string whose value
+//			is the left-justified maintenance domain name. The MD name may or may not be a printable
+//			character string, so an octet string is the appropriate representation. If the MD name format
+//			specifies a DNS-like name or a character string, the string is null-terminated; otherwise, its
+//			length is determined by the MD name format. If the MD has no name (MD name format = 0), this
+//			attribute is undefined. Note that binary comparisons of the MD name are made in other CFM state
+//			machines, so blanks, alphabetic case, etc., are significant. Also, note that the MD name and the
+//			MA name must be packed (with additional bytes) into 48 byte CFM message headers. (R, W)
+//			(mandatory if MD name format is not 1) (25 bytes * 2 attributes)
+//
+//		Maintenance Domain Intermediate Point Half Function Mhf Creation
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Sender Id Permission
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
 type Dot1AgMaintenanceDomain struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

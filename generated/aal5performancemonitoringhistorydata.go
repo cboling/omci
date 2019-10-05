@@ -25,9 +25,54 @@ const Aal5PerformanceMonitoringHistoryDataClassId ClassID = ClassID(18)
 
 var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// Aal5PerformanceMonitoringHistoryData (class ID #18) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Aal5PerformanceMonitoringHistoryData (class ID #18)
+//	This ME collects PM data as a result of performing segmentation and reassembly (SAR) and
+//	convergence sublayer (CS) level protocol monitoring. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of an IW VCC TP that represents AAL5
+//		functions.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the IW VCC TP. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Sum Of Invalid Cs Field Errors
+//			Sum of invalid CS field errors: This attribute counts the sum of invalid CS field errors. For
+//			AAL type 5, this attribute is a single count of the number of CS PDUs discarded due to one of
+//			the following error conditions: invalid common part indicator (CPI), oversized received SDU, or
+//			length violation. (R) (mandatory) (4 bytes)
+//
+//		Crc Violations
+//			CRC violations: This attribute counts CRC violations detected on incoming SAR PDUs. (R)
+//			(mandatory) (4 bytes)
+//
+//		Reassembly Timer Expirations
+//			Reassembly timer expirations: This attribute counts reassembly timer expirations. (R) (mandatory
+//			if reassembly timer is implemented) (4 bytes)
+//
+//		Buffer Overflows
+//			Buffer overflows: This attribute counts the number of times where there was not enough buffer
+//			space for a reassembled packet. (R) (mandatory) (4 bytes)
+//
+//		Encap Protocol Errors
+//			Encap protocol errors: This attribute counts the number of times that [IETF RFC 2684]
+//			encapsulation protocol detected a bad header. (R) (mandatory) (4 bytes)
+//
 type Aal5PerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

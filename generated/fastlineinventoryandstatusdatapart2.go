@@ -25,9 +25,49 @@ const FastLineInventoryAndStatusDataPart2ClassId ClassID = ClassID(436)
 
 var fastlineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 
-// FastLineInventoryAndStatusDataPart2 (class ID #436) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// FastLineInventoryAndStatusDataPart2 (class ID #436)
+//	This ME contains part 3 of the FAST line inventory and status data with attributes specific to
+//	[ITU T G.997.2]. The ONU automatically creates or deletes an instance of this ME upon the
+//	creation or deletion of a PPTP xDSL UNI part 1.
+//
+//	Relationships
+//		This is one of the status data MEs associated with an xDSL UNI. It is required only if FAST is
+//		supported by the PPTP. The ONU automatically creates or deletes an instance of this ME upon
+//		creation or deletion of a PPTP xDSL UNI part 1 that supports these attributes.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
+//			(mandatory) (2 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Downstream Fra Operation Stamp_Frads
+//			(R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Upstream Fra Operation Stamp_Fraus
+//			Date/time-stamping of last successful upstream FRA operation (STAMP-FRAus): This parameter
+//			reports the date/time of the last successful FTU-O initiated FRA execution that has modified the
+//			bits allocation. See clause 7.10.14.6 of [ITUT G.997.2]. The format of this parameter is the
+//			same as STAMPTESTNE. (R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Downstream Rpa Operation Stamp_Rpads
+//			Date/time-stamping of last successful downstream RPA operation (STAMP-RPAds): This parameter
+//			reports the date/time of the last successful FTU-R initiated RPA execution that has modified the
+//			bits allocation for the RMC. See clause 7.10.14.7 of [ITU-T G.997.2]. The format of this
+//			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Upstream Rpa Operation Stamp_Rpaus
+//			Date/time-stamping of last successful upstream RPA operation (STAMP-RPAus): This parameter
+//			reports the date/time of the last successful FTU-O initiated RPA execution that has modified the
+//			bits allocation for the RMC. See clause 7.10.14.8 of [ITU-T G.997.2]. The format of this
+//			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
+//
+//		Date_Time_Stamping Of Last Successful Downstream Tiga Operation Stamp_Tiga
+//			Date/time-stamping of last successful downstream TIGA operation (STAMP-TIGA): This parameter
+//			reports the date/time of the last successful FTU-O initiated TIGA execution. See clause
+//			7.10.14.9 of [ITU-T G.997.2]. The format of this parameter is the same as STAMP-TEST-NE. (R)
+//			(optional) (7 bytes)
+//
 type FastLineInventoryAndStatusDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

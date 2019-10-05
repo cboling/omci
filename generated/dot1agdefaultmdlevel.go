@@ -25,9 +25,54 @@ const Dot1AgDefaultMdLevelClassId ClassID = ClassID(301)
 
 var dot1agdefaultmdlevelBME *ManagedEntityDefinition
 
-// Dot1AgDefaultMdLevel (class ID #301) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Dot1AgDefaultMdLevel (class ID #301)
+//	The collection of the functionality called a maintenance half-function (MHF) is not explicitly
+//	modelled as a ME by either [IEEE 802.1ag] or the OMCI. The ONU automatically creates MHFs
+//	according to parameters specified in a dot1ag MD or a dot1ag MA ME; the dot1ag default MD level
+//	ME catches the corner cases not covered by other MEs, specifically VLANs not included by any
+//	defined MA.
+//
+//	The dot1ag default MD level comprises a configurable table, each entry of which specifies
+//	default MHF functionality for some set of VLANs. Once a set of VLANs is defined, operations to
+//	different table entries or to dot1ag MAs that conflict with the set membership should be denied.
+//	In addition, catch-all attributes are defined to specify MHF functionality when there is no
+//	match to either a table entry or an MA.
+//
+//	Relationships
+//		An ONU that supports [IEEE 802.1ag] automatically creates one instance of this ME for each MAC
+//		bridge or IEEE 802.1p mapper, depending on the ONU's provisioning model. It should not create an
+//		instance for an IEEE 802.1p mapper that is associated with a MAC bridge.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies an instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge service profile ME
+//			or an IEEE 802.1p mapper ME. It is expected that an ONU will implement CFM on bridges or on
+//			IEEE 802.1p mappers, but not both, depending on its provisioning model. For precision, the
+//			reference is disambiguated by the value of the layer 2 type pointer attribute. (R) (mandatory)
+//			(2 bytes)
+//
+//		Layer 2 Type
+//			Layer 2 type: This attribute specifies whether the dot1ag default MD level ME is associated with
+//			a MAC bridge service profile (value 0) or an IEEE 802.1p mapper (value 1). (R) (mandatory)
+//			(1 byte)
+//
+//		Catchall Level
+//			Catchall level: This attribute ranges from 0..7 and specifies the MD level of MHFs created when
+//			no specific match is found. (R, W) (mandatory) (1 byte)
+//
+//		Catchall Mhf Creation
+//			(R, W) (mandatory) (1 byte)
+//
+//		Catchall Sender Id Permission
+//			Catchall sender ID permission: This attribute determines the contents of the sender ID TLV
+//			included in CFM messages transmitted by MPs when no more specific match is found. This attribute
+//			is identical to that defined in the description of the dot1ag MD ME (i.e., excluding code point
+//			5, defer). (R, W) (mandatory) (1 byte)
+//
+//		Default Md Level Table
+//			(R, W) (mandatory) (29 bytes * N entries)
+//
 type Dot1AgDefaultMdLevel struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

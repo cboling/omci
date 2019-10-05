@@ -25,9 +25,71 @@ const MocaEthernetPerformanceMonitoringHistoryDataClassId ClassID = ClassID(163)
 
 var mocaethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// MocaEthernetPerformanceMonitoringHistoryData (class ID #163) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MocaEthernetPerformanceMonitoringHistoryData (class ID #163)
+//	This ME collects PM data for an MoCA Ethernet interface. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the PPTP MoCA UNI ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP MoCA UNI. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Incoming Unicast Packets
+//			Incoming unicast packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Discarded Packets
+//			Incoming discarded packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Errored Packets
+//			Incoming errored packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Unknown Packets
+//			Incoming unknown packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Multicast Packets
+//			Incoming multicast packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Broadcast Packets
+//			Incoming broadcast packets:	(R) (optional) (4 bytes)
+//
+//		Incoming Octets
+//			Incoming octets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Unicast Packets
+//			Outgoing unicast packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Discarded Packets
+//			Outgoing discarded packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Errored Packets
+//			Outgoing errored packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Unknown Packets
+//			Outgoing unknown packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Multicast Packets
+//			Outgoing multicast packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Broadcast Packets
+//			Outgoing broadcast packets:	(R) (optional) (4 bytes)
+//
+//		Outgoing Octets
+//			Outgoing octets:	(R) (optional) (4 bytes)
+//
 type MocaEthernetPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

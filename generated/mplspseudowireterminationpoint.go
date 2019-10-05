@@ -25,9 +25,79 @@ const MplsPseudowireTerminationPointClassId ClassID = ClassID(333)
 
 var mplspseudowireterminationpointBME *ManagedEntityDefinition
 
-// MplsPseudowireTerminationPoint (class ID #333) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MplsPseudowireTerminationPoint (class ID #333)
+//	This ME contains the configuration data of a pseudowire whose underlying transport method is
+//	MPLS. Instances of this ME are created and deleted by the OLT.
+//
+//	Relationships
+//		Zero or one instance of this ME is associated with each instance of the pseudowire TP ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Tp Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Tp Pointer
+//			TP pointer:	This attribute points to the instance of the TP associated with this MPLS PW TP. The
+//			type of the associated TP is determined by the TP type attribute. (R, W, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Mpls Label Indicator
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Mpls Pw Direction
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Mpls Pw Uplink Label
+//			MPLS PW uplink label: This attribute specifies the label of the inner MPLS pseudowire upstream.
+//			The attribute is not meaningful for unidirectional downstream PWs. (R, W, setbycreate)
+//			(mandatory) (4 bytes)
+//
+//		Mpls Pw Downlink Label
+//			MPLS PW downlink label: This attribute specifies the label of the inner MPLS pseudowire
+//			downstream. The attribute is not meaningful for unidirectional upstream PWs. (R, W, setbycreate)
+//			(mandatory) (4 bytes)
+//
+//		Mpls Pw Tc
+//			NOTE 1 – The TC field was previously known as EXP. Refer to [bIETF RFC 5462].
+//
+//		Mpls Tunnel Direction
+//			(R, W, setbycreate) (mandatory for double-labelled case) (1 byte)
+//
+//		Mpls Tunnel Uplink Label
+//			MPLS tunnel uplink label: This attribute specifies the (outer) label for the upstream MPLS
+//			tunnel. If the MPLS tunnel is downstream only, this attribute should be set to 0. (R, W,
+//			setbycreate) (mandatory for double-labelled case) (4 bytes)
+//
+//		Mpls Tunnel Downlink Label
+//			MPLS tunnel downlink label: This attribute specifies the (outer) label for the downstream MPLS
+//			tunnel. If the MPLS tunnel is upstream only, this attribute should be set to 0. (R, W,
+//			setbycreate) (mandatory for double-labelled case) (4 bytes)
+//
+//		Mpls Tunnel Tc
+//			NOTE 2 – The TC field was previously known as EXP. Refer to [bIETF RFC 5462].
+//
+//		Pseudowire Type
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Pseudowire Control Word Preference
+//			Pseudowire control word preference: When set to true, this Boolean attribute specifies that a
+//			control word is to be sent with each packet. Some PW types mandate the use of a control word in
+//			any event. In such cases, the value configured for this attribute has no effect on the presence
+//			of the control word. (R, W, setbycreate) (optional) (1 byte)
+//
+//		Administrative State
+//			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by the
+//			MPLS pseudowire TP. Administrative state is further described in clause A.1.6. (R, W) (optional)
+//			(1 byte)
+//
+//		Operational State
+//			Operational state: This attribute reports whether the ME is currently capable of performing its
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//
 type MplsPseudowireTerminationPoint struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

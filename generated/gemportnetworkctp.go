@@ -25,9 +25,79 @@ const GemPortNetworkCtpClassId ClassID = ClassID(268)
 
 var gemportnetworkctpBME *ManagedEntityDefinition
 
-// GemPortNetworkCtp (class ID #268) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// GemPortNetworkCtp (class ID #268)
+//	This ME represents the termination of a GEM port on an ONU. This ME aggregates connectivity
+//	functionality from the network view and alarms from the network element view as well as
+//	artefacts from trails.
+//
+//	Instances of the GEM port network CTP ME are created and deleted by the OLT. An instance of GEM
+//	port network CTP can be deleted only when no GEM IW TP or GEM port network CTP PM history data
+//	are associated with it. It is the responsibility of the OLT to make sure that the ONU
+//	configuration meets this condition.
+//
+//	In ITU-T G.984 systems, when a GEM port network CTP is created, its encryption state is by
+//	default not encrypted. If the OLT wishes to configure the GEM port to use encryption, it must
+//	send the appropriate PLOAM message. This applies equally to new CTPs and to CTPs that are re-
+//	created after an MIB reset.
+//
+//	In ITU-T G.987 systems, GEM ports are dynamically encrypted. If it is intended to encrypt the
+//	GEM port, the OLT must configure a key ring to be used, and the key must be known to the ONU at
+//	run time.
+//
+//	Relationships
+//		An instance of the GEM port network CTP ME may be associated with an instance of the T-CONT and
+//		GEM IW TP MEs.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Port_Id
+//			NOTE 1 – While nothing forbids the existence of several GEM port network CTPs with the same
+//			port-ID value, downstream traffic is modelled as being delivered to all such GEM port network
+//			CTPs. Be aware of potential difficulties associated with defining downstream flows and
+//			aggregating PM statistics.
+//
+//		T_Cont Pointer
+//			T-CONT pointer: This attribute points to a T-CONT instance. (R, W, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Direction
+//			Direction:	This attribute specifies whether the GEM port is used for UNI-to-ANI (1), ANI-to-UNI
+//			(2), or bidirectional (3) connection. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Traffic Management Pointer For Upstream
+//			Traffic management pointer for upstream: If the traffic management option attribute in the ONU-G
+//			ME is 0 (priority controlled) or 2 (priority and rate controlled), this pointer specifies the
+//			priority queue ME serving this GEM port network CTP. If the traffic management option attribute
+//			is 1 (rate controlled), this attribute redundantly points to the TCONT serving this GEM port
+//			network CTP. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Traffic Descriptor Profile Pointer For Upstream
+//			See also Appendix II.
+//
+//		Uni Counter
+//			UNI counter: This attribute reports the number of instances of UNI-G ME associated with this GEM
+//			port network CTP. (R) (optional) (1 byte)
+//
+//		Priority Queue Pointer For Down Stream
+//			NOTE 2 – If the GEM port network CTP is associated with more than one UNI (downstream
+//			multicast), the downstream priority queue pointer defines a pattern (e.g., queue number 3 for a
+//			given UNI) to be replicated (i.e., to queue number 3) at the other affected UNIs.
+//
+//		Encryption State
+//			Encryption state: This attribute indicates the current state of the GEM port network CTP's
+//			encryption. Legal values are defined to be the same as those of the security mode attribute of
+//			the ONU2-G, with the exception that attribute value 0 indicates an unencrypted GEM port. (R)
+//			(optional) (1 byte)
+//
+//		Traffic Descriptor Profile Pointer For Downstream
+//			See also Appendix II.
+//
+//		Encryption Key Ring
+//			Other values are reserved.
+//
 type GemPortNetworkCtp struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

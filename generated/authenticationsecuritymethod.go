@@ -25,9 +25,42 @@ const AuthenticationSecurityMethodClassId ClassID = ClassID(148)
 
 var authenticationsecuritymethodBME *ManagedEntityDefinition
 
-// AuthenticationSecurityMethod (class ID #148) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// AuthenticationSecurityMethod (class ID #148)
+//	The authentication security method defines the user ID and password configuration to establish a
+//	session between a client and a server. This object may be used in the role of the client or
+//	server. An instance of this ME is created by the OLT if authenticated communication is
+//	necessary.
+//
+//	Relationships
+//		One instance of this management entity may be associated with a network address ME. This ME may
+//		also be cited by other MEs that require authentication parameter management.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0xFFFF
+//			is reserved. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Validation Scheme
+//			(R, W) (mandatory) (1 byte)
+//
+//		Username 1
+//			Username 1:	This string attribute is the user name. If the string is shorter than 25 bytes, it
+//			must be null terminated (Note). (R, W) (mandatory) (25 bytes)
+//
+//		Password
+//			Password:	This string attribute is the password. If the string is shorter than 25 bytes, it must
+//			be null terminated. (R, W) (mandatory) (25 bytes)
+//
+//		Realm
+//			Realm:	This string attribute specifies the realm used in digest authentication. If the string is
+//			shorter than 25 bytes, it must be null terminated. (R, W) (mandatory) (25 bytes)
+//
+//		Username 2
+//			NOTE – The total username is the concatenation of the username 1 and username 2 attributes if
+//			and only if: a) username 1 comprises 25 non-null characters; b) username 2 is supported by the
+//			ONU; and c) username 2 contains a leading non-null character string. Otherwise, the total
+//			username is simply the value of the username 1 attribute.
+//
 type AuthenticationSecurityMethod struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

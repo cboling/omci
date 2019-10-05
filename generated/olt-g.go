@@ -25,9 +25,43 @@ const OltGClassId ClassID = ClassID(131)
 
 var oltgBME *ManagedEntityDefinition
 
-// OltG (class ID #131) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// OltG (class ID #131)
+//	This optional ME identifies the OLT to which an ONU is connected. This ME provides a way for the
+//	ONU to configure itself for operability with a particular OLT. It also provides a way for the
+//	OLT to communicate the time of day to the ONU.
+//
+//	An ONU that supports this ME automatically creates an instance of it. Immediately following the
+//	start-up phase, the OLT should set the ONU to the desired configuration. Interpretation of the
+//	OLT vendor ID, equipment ID and version attributes is a matter for negotiation between the two
+//	vendors involved.
+//
+//	Relationships
+//		The single instance of this ME is associated with the ONU ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
+//			one instance, number 0. (R) (mandatory) (2 bytes)
+//
+//		Olt Vendor Id
+//			OLT vendor ID: This attribute identifies the OLT vendor. It is the same as the four most
+//			significant bytes of an ONU serial number specified in the respective TC layer specification.
+//			Upon instantiation, this attribute comprises all spaces. (R, W) (mandatory) (4 bytes)
+//
+//		Equipment Id
+//			Equipment ID: This attribute may be used to identify the specific type of OLT. The default value
+//			of all spaces indicates that equipment ID information is not available or applicable to the OLT
+//			being represented. (R, W) (mandatory) (20 bytes)
+//
+//		Version
+//			Version:	This attribute identifies the version of the OLT as defined by the vendor. The default
+//			left-justified ASCII string "0" (padded with trailing nulls) indicates that version information
+//			is not available or applicable to the OLT being represented. (R, W) (mandatory) (14 bytes)
+//
+//		Time Of Day Information
+//			NOTE – In ITU-T G.987/ITU-T G.989 systems, the superframe count field of the time of day
+//			information attribute contains the 32 LSBs of the actual counter.
+//
 type OltG struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

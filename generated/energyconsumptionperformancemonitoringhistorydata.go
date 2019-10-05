@@ -25,9 +25,49 @@ const EnergyConsumptionPerformanceMonitoringHistoryDataClassId ClassID = ClassID
 
 var energyconsumptionperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EnergyConsumptionPerformanceMonitoringHistoryData (class ID #343)
+//	This ME collects PM data associated with the ONU's energy consumption. The time spent in various
+//	low-power states is recorded as a measure of their utility. Furthermore, the ONU may also
+//	include the equivalent of a watt-hour meter, which can be sampled from time to time to measure
+//	actual power consumed.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with the ONU in its entirety.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The ME ID must
+//			be 0. (R, set-by-create) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: No thresholds are defined for this ME. For uniformity with other PMs, the
+//			attribute is retained and shown as mandatory, but it should be set to a null pointer. (R, W,
+//			set-by-create) (mandatory) (2 bytes)
+//
+//		Doze Time
+//			Doze time: This attribute records the time during which the ONU was in doze energy conservation
+//			mode, measured in microseconds. If watchful sleep is enabled in the ONU dynamic power management
+//			control ME, the ONU ignores this attribute. (R) (mandatory) (4 bytes)
+//
+//		Cyclic Sleep Time
+//			Cyclic sleep time: This attribute records the time during which the ONU was in cyclic sleep
+//			energy conservation mode, measured in microseconds. If watchful sleep is enabled in the ONU
+//			dynamic power management control ME, the ONU ignores this attribute. (R) (mandatory) (4 bytes)
+//
+//		Watchful Sleep Time
+//			Watchful sleep time: This attribute records the time during which the ONU was in watchful sleep
+//			energy conservation mode, measured in microseconds. (R) (mandatory) (4 bytes)
+//
+//		Energy Consumed
+//			Energy consumed: This attribute records the energy consumed by the ONU, measured in millijoules.
+//			(R) (optional) (4 bytes)
+//
 type EnergyConsumptionPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

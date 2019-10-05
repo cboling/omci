@@ -25,9 +25,30 @@ const Aal5ProfileClassId ClassID = ClassID(16)
 
 var aal5profileBME *ManagedEntityDefinition
 
-// Aal5Profile (class ID #16) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Aal5Profile (class ID #16)
+//	This ME organizes data that describe the AAL type 5 processing functions of the ONU. It is used
+//	with the IW VCC TP ME.
+//
+//	This ME is created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of the IW VCC TP.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Max Cpcs Pdu Size
+//			Max CPCS PDU size: This attribute specifies the maximum CPCS PDU size to be transmitted over the
+//			connection in both upstream and downstream directions. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Aal Mode
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Sscs Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
 type Aal5Profile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

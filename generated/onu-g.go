@@ -25,9 +25,84 @@ const OnuGClassId ClassID = ClassID(256)
 
 var onugBME *ManagedEntityDefinition
 
-// OnuG (class ID #256) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// OnuG (class ID #256)
+//	This ME represents the ONU as equipment. The ONU automatically creates an instance of this ME.
+//	It assigns values to read-only attributes according to data within the ONU itself.
+//
+//	This ME has evolved from the ONT-G of [ITUT G.984.4].
+//
+//	Relationships
+//		In ITU-T GTC based PON applications, all other MEs in this Recommendation are related directly
+//		or indirectly to the ONU-G entity.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
+//			one instance, number 0. (R) (mandatory) (2 bytes)
+//
+//		Vendor Id
+//			Vendor ID:	This attribute identifies the vendor of the ONU. It is the same as the four most
+//			significant bytes of the ONU serial number as specified in the respective transmission
+//			convergence (TC) layer specification. (R) (mandatory) (4 bytes)
+//
+//		Version
+//			Version:	This attribute identifies the version of the ONU as defined by the vendor. The
+//			character value 0 indicates that version information is not available or applicable. (R)
+//			(mandatory) (14 bytes)
+//
+//		Serial Number
+//			Serial number: The serial number is unique for each ONU. It is defined in the respective TC
+//			layer specification and contains the vendor ID and version number. The first four bytes are an
+//			ASCII-encoded four-letter vendor ID. The second four bytes are a binary encoded serial number,
+//			under the control of the ONU vendor. (R) (mandatory) (8 bytes)
+//
+//		Traffic Management Option
+//			Upon ME instantiation, the ONU sets this attribute to the value that describes its
+//			implementation. The OLT must adapt its model to conform to the ONU's selection. (R) (mandatory)
+//			(1 byte)
+//
+//		Deprecated
+//			Deprecated:	This attribute is not used. If it is present, it should be set to 0. (R) (optional)
+//			(1 byte)
+//
+//		Battery Backup
+//			Battery backup: This Boolean attribute controls whether the ONU performs backup battery
+//			monitoring (assuming it is capable of doing so). False disables battery alarm monitoring; true
+//			enables battery alarm monitoring. (R, W) (mandatory) (1 byte)
+//
+//		Administrative State
+//			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by the
+//			ONU as an entirety. Administrative state is further described in clause A.1.6. (R, W)
+//			(mandatory) (1 byte)
+//
+//		Operational State
+//			Operational state: This attribute reports whether the ME is currently capable of performing its
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//
+//		Onu Survival Time
+//			ONU survival time: This attribute indicates the minimum guaranteed time in milliseconds between
+//			the loss of external power and the silence of the ONU. This does not include survival time
+//			attributable to a backup battery. The value zero implies that the actual time is not known. (R)
+//			(optional) (1 byte)
+//
+//		Logical Onu Id
+//			Logical ONU ID: This attribute provides a way for the ONU to identify itself. It is a text
+//			string, null terminated if it is shorter than 24 bytes, with a null default value. The mechanism
+//			for creation or modification of this information is beyond the scope of this Recommendation, but
+//			might include, for example, a web page displayed to a user. (R) (optional) (24 bytes)
+//
+//		Logical Password
+//			Logical password: This attribute provides a way for the ONU to submit authentication
+//			credentials. It is a text string, null terminated if it is shorter than 12 bytes, with a null
+//			default value. The mechanism for creation or modification of this information is beyond the
+//			scope of this Recommendation. (R) (optional) (12 bytes)
+//
+//		Credentials Status
+//			Other values are reserved.
+//
+//		Extended Tc_Layer Options
+//			(R) (optional) (2 bytes)
+//
 type OnuG struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

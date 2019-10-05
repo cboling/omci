@@ -25,9 +25,51 @@ const MacBridgePortPerformanceMonitoringHistoryDataClassId ClassID = ClassID(52)
 
 var macbridgeportperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// MacBridgePortPerformanceMonitoringHistoryData (class ID #52) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MacBridgePortPerformanceMonitoringHistoryData (class ID #52)
+//	This ME collects PM data associated with a MAC bridge port. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of a MAC bridge port configuration data
+//		ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data ME. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Forwarded Frame Counter
+//			Forwarded frame counter: This attribute counts frames transmitted successfully on this port. (R)
+//			(mandatory) (4 bytes)
+//
+//		Delay Exceeded Discard Counter
+//			Delay exceeded discard counter: This attribute counts frames discarded on this port because
+//			transmission was delayed. (R) (mandatory) (4 bytes)
+//
+//		Maximum Transmission U Nit Mtu Exceeded Discard Counter
+//			Maximum transmission unit (MTU) exceeded discard counter: This attribute counts frames discarded
+//			on this port because the MTU was exceeded. (R) (mandatory) (4 bytes)
+//
+//		Received Frame Counter
+//			Received frame counter: This attribute counts frames received on this port. (R) (mandatory)
+//			(4 bytes)
+//
+//		Received And Discarded Counter
+//			Received and discarded counter: This attribute counts frames received on this port that were
+//			discarded due to errors. (R) (mandatory) (4 bytes)
+//
 type MacBridgePortPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

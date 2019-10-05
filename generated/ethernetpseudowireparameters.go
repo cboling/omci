@@ -25,9 +25,24 @@ const EthernetPseudowireParametersClassId ClassID = ClassID(400)
 
 var ethernetpseudowireparametersBME *ManagedEntityDefinition
 
-// EthernetPseudowireParameters (class ID #400) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EthernetPseudowireParameters (class ID #400)
+//	This ME contains the Ethernet pseudowire parameters. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the PW Ethernet configuration data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID:	This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PW Ethernet configuration data
+//			ME. (R, set-by-create) (mandatory) (2 bytes)
+//
+//		Mtu
+//			MTU:	This attribute identifies the maximum transmission unit (bytes) that can be received from
+//			the CPE in the upstream direction. Larger frames are discarded. (R, W, set-by-create)
+//			(mandatory) (2 bytes)
+//
 type EthernetPseudowireParameters struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

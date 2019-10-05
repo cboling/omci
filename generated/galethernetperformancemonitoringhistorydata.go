@@ -25,9 +25,35 @@ const GalEthernetPerformanceMonitoringHistoryDataClassId ClassID = ClassID(276)
 
 var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// GalEthernetPerformanceMonitoringHistoryData (class ID #276) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// GalEthernetPerformanceMonitoringHistoryData (class ID #276)
+//	This ME collects PM data associated with a GEM IW TP when the GEM layer supports an Ethernet
+//	service. Instances of this ME are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the GEM IW TP ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the GEM IW TP. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Discarded Frames
+//			Discarded frames: This attribute counts the number of downstream GEM frames discarded for any
+//			reason [erroneous frame check sequence (FCS), too long length, buffer overflow, etc.]. (R)
+//			(mandatory) (4 bytes)
+//
 type GalEthernetPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

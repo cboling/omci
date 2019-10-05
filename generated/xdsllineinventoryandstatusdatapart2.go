@@ -25,9 +25,103 @@ const XdslLineInventoryAndStatusDataPart2ClassId ClassID = ClassID(101)
 
 var xdsllineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 
-// XdslLineInventoryAndStatusDataPart2 (class ID #101) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslLineInventoryAndStatusDataPart2 (class ID #101)
+//	This ME contains part 2 of the line inventory and status data for an xDSL UNI. The ONU
+//	automatically creates or deletes an instance of this ME upon the creation or deletion of a PPTP
+//	xDSL UNI part 1.
+//
+//	NOTE 1 – [ITU-T G.997.1] specifies that bit rate attributes have granularity of 1000 bit/s. If
+//	ITUT G.997.1 compliance is required, the ONU should only report values with this granularity.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
+//			(mandatory) (2 bytes)
+//
+//		Xdsl Transmission System
+//			NOTE 2 – This attribute is only 7 bytes long. An eighth byte identifying VDSL2 capabilities in
+//			use is defined in the VDSL2 line inventory and status data part 1 ME.
+//
+//		Line Power Management State
+//			(R) (mandatory) (1 byte)
+//
+//		Downstream Line Attenuation
+//			NOTE 3 – [ITU-T G.993.2] specifies a per-band array to represent this attribute. The array is
+//			defined in the VDSL2 line inventory and status data part 3 ME. In an ITU-T G.993.2 context, the
+//			downstream line attenuation attribute should be set to 0 here, and populated in the VDSL2 line
+//			inventory and status data part 3 ME instead.
+//
+//		Upstream Line Attenuation
+//			NOTE 4 – [ITU-T G.993.2] specifies a per-band array to represent this attribute. The array is
+//			defined in the VDSL2 line inventory and status data part 3 ME. In an ITU-T G.993.2 context, the
+//			upstream line attenuation attribute should be set to 0 here, and populated in the VDSL2 line
+//			inventory and status data part 3 ME instead.
+//
+//		Downstream Signal Attenuation
+//			NOTE 6 – [ITU-T G.993.2] specifies a per-band array to represent this attribute. The array is
+//			defined in the VDSL2 line inventory and status data part 3 ME. In an ITU-T G.993.2 context, the
+//			downstream signal attenuation attribute should be set to 0 here, and populated in the VDSL2 line
+//			inventory and status data part 3 ME instead.
+//
+//		Upstream Signal Attenuation
+//			NOTE 8 – [ITU-T G.993.2] specifies a per-band array to represent this attribute. The array is
+//			defined in the VDSL2 line inventory and status data part 3 ME. In an ITU-T G.993.2 context, the
+//			upstream signal attenuation attribute should be set to 0 here, and populated in the VDSL2 line
+//			inventory and status data part 3 ME instead.
+//
+//		Downstream Snr Ratio Margin
+//			Downstream SNR ratio margin: The downstream SNR margin SNRMds is the maximum increase of noise
+//			power received at the xTUR, such that the BER requirements can still be met for all downstream
+//			bearer channels. The attribute value ranges from 0 (–64.0 dB) to 1270 (+63.0 dB). The special
+//			value 0xFFFF indicates that the attribute is out of range (R) (mandatory) (2 bytes)
+//
+//		Upstream Snr Margin
+//			Upstream SNR margin: The upstream SNR margin SNRMus is the maximum increase of noise power
+//			received at the xTUC, such that the BER requirements can still be met for all upstream bearer
+//			channels. The attribute value ranges from 0 (–64.0 dB) to 1270 (+63.0 dB). The special value
+//			0xFFFF indicates that the attribute is out of range. (R) (mandatory) (2 bytes)
+//
+//		Downstream Maximum Attainable Data Rate
+//			Downstream maximum attainable data rate: The ATTNDRds attribute indicates the maximum downstream
+//			net data rate currently attainable. The rate is coded in bits per second. (R) (mandatory)
+//			(4 bytes)
+//
+//		Upstream Maximum Attainable Data Rate
+//			Upstream maximum attainable data rate: The ATTNDRus attribute indicates the maximum upstream net
+//			data rate currently attainable. The rate is coded in bits per second. (R) (mandatory) (4 bytes)
+//
+//		Downstream Actual Power Spectrum Density
+//			Downstream actual power spectrum density: The ACTPSDds attribute is the average downstream
+//			transmit power spectrum density over the subcarriers in use (subcarriers to which downstream
+//			user data are allocated) delivered by the xTUC at the UC reference point, at the instant of
+//			measurement. The attribute value ranges from 0 (–90.0 dBm/Hz) to 900 (0.0 dBm/Hz). The special
+//			value (0xFFFF) indicates that the parameter is out of range. (R) (mandatory) (2 bytes)
+//
+//		Upstream Actual Power Spectrum Density
+//			Upstream actual power spectrum density: The ACTPSDus attribute is the average upstream transmit
+//			power spectrum density over the subcarriers in use (subcarriers to which upstream user data are
+//			allocated) delivered by the xTUR at the UR reference point, at the instant of measurement. The
+//			attribute value ranges from 0 (–90.0 dBm/Hz) to 900 (0.0 dBm/Hz). The special value 0xFFFF
+//			indicates that the attribute is out of range. (R) (mandatory) (2 bytes)
+//
+//		Downstream Actual Aggregate Transmit Power
+//			NOTE 9 – The downstream nominal aggregate transmit power may be taken as a best estimate of the
+//			parameter.
+//
+//		Upstream Actual Aggregate Transmit Power
+//			NOTE 10 – The upstream nominal aggregate transmit power may be taken as a best estimate of the
+//			parameter.
+//
+//		Initialization _ Last State Transmitted Downstream
+//			(R) (mandatory) (1 byte)
+//
+//		Initialization _ Last State Transmitted Upstream
+//			(R) (mandatory) (1 byte)
+//
 type XdslLineInventoryAndStatusDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,55 @@ const MacBridgePortFilterPreAssignTableClassId ClassID = ClassID(79)
 
 var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 
-// MacBridgePortFilterPreAssignTable (class ID #79) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MacBridgePortFilterPreAssignTable (class ID #79)
+//	This ME provides an alternate approach to DA filtering from that supported through the MAC
+//	bridge port filter table data ME. This alternate approach is useful when all groups of addresses
+//	are stored beforehand in the ONU, and the MAC bridge port filter pre-assign table ME designates
+//	which groups are valid or invalid for filtering. On a circuit pack in which all groups of
+//	addresses are pre-assigned and stored locally, the ONU creates or deletes an instance of this ME
+//	automatically upon creation or deletion of a MAC bridge port configuration data ME.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of a MAC bridge port configuration data
+//		ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data ME. (R) (mandatory) (2 bytes)
+//
+//		Ipv4 Multicast Filtering
+//			IPv4 multicast filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Ipv6 Multicast Filtering
+//			IPv6 multicast filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Ipv4 Broadcast Filtering
+//			IPv4 broadcast filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Rarp Filtering
+//			RARP filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Ipx Filtering
+//			IPX filtering:		(R, W) (mandatory) (1 byte)
+//
+//		Netbeui Filtering
+//			NetBEUI filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Appletalk Filtering
+//			AppleTalk filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Bridge Management Information Filtering
+//			2	Addresses from 01.80.C2.00.00.20 to 01.80.C2.00.00.2F are used for generic attribute
+//			registration protocol (GARP) applications.
+//
+//		Arp Filtering
+//			ARP filtering:	(R, W) (mandatory) (1 byte)
+//
+//		Point_To_Point Protocol Over Ethernet Pppoe Broadcast Filtering
+//			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R, W) (mandatory) (1 byte)
+//
 type MacBridgePortFilterPreAssignTable struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,43 @@ const TcpUdpConfigDataClassId ClassID = ClassID(136)
 
 var tcpudpconfigdataBME *ManagedEntityDefinition
 
-// TcpUdpConfigData (class ID #136) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TcpUdpConfigData (class ID #136)
+//	The TCP/UDP config data ME configures services based on the transmission control protocol (TCP)
+//	and user datagram protocol (UDP) that are offered from an IP host. If a non-OMCI interface is
+//	used to manage an IP service, this ME is unnecessary; the non-OMCI interface supplies the
+//	necessary data.
+//
+//	An instance of this ME is created and deleted on request of the OLT.
+//
+//	Relationships
+//		One or more instances of this ME may be associated with an instance of an IP host config data or
+//		IPv6 host config data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. It is
+//			recommended that the ME ID be the same as the port number. (R, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Port Id
+//			Port ID:	This attribute specifies the port number that offers the TCP/UDP service. (R, W,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Protocol
+//			Protocol:	This attribute specifies the protocol type as defined by [b-IANA] (protocol numbers),
+//			for example UDP (0x11). (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Tos_Diffserv Field
+//			TOS/diffserv field: This attribute specifies the value of the TOS/diffserv field of the IPv4
+//			header. The contents of this attribute may contain the type of service per [IETF RFC 2474] or a
+//			DSCP. Valid values for DSCP are as defined by [b-IANA] (differentiated services field code
+//			points). (R, W, set-by-create) (mandatory) (1 byte)
+//
+//		Ip Host Pointer
+//			IP host pointer: This attribute points to the IP host config data or IPv6 host config data ME
+//			associated with this TCP/UDP data. Any number of ports and protocols may be associated with an
+//			IP host. (R, W, set-by-create) (mandatory) (2 bytes)
+//
 type TcpUdpConfigData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

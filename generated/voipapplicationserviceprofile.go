@@ -25,9 +25,57 @@ const VoipApplicationServiceProfileClassId ClassID = ClassID(146)
 
 var voipapplicationserviceprofileBME *ManagedEntityDefinition
 
-// VoipApplicationServiceProfile (class ID #146) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoipApplicationServiceProfile (class ID #146)
+//	The VoIP application service profile defines attributes of calling features used in conjunction
+//	with a VoIP line service. It is optional for ONUs that support VoIP services. If a non-OMCI
+//	interface is used to manage SIP for VoIP, this ME is unnecessary.
+//
+//	An instance of this ME is created and deleted by the OLT. A VoIP application service profile
+//	instance is needed for each unique set of profile attributes.
+//
+//	Relationships
+//		An instance of this ME is associated with zero or more SIP user data MEs.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Cid Features
+//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Call Waiting Features
+//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Call Progress Or Transfer Features
+//			The recommended default value is 0x0000. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Call Presentation Features
+//			The recommended default value is 0x0000. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Direct Connect Feature
+//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Direct Connect Uri Pointer
+//			Direct connect URI pointer: This attribute points to a network address ME that specifies the URI
+//			of the direct connect. If this attribute is set to a null pointer, no URI is defined. (R, W,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Bridged Line Agent Uri Pointer
+//			Bridged line agent URI pointer: This attribute points to a network address ME that specifies the
+//			URI of the bridged line agent. If this attribute is set to a null pointer, no URI is defined.
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Conference Factory Uri Pointer
+//			Conference factory URI pointer: This attribute points to a network address ME that specifies the
+//			URI of the conference factory. If this attribute is set to a null pointer, no URI is defined.
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Dial Tone Feature Delay_ W Armline Timer New
+//			Dial tone feature delay/warmline timer (new): This attribute defines the warmline timer/dial
+//			tone feature delay timer (seconds). The default value 0 specifies vendor-specific
+//			implementation. (R, W) (optional) (2 bytes)
+//
 type VoipApplicationServiceProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,56 @@ const XdslXtuCChannelPerformanceMonitoringHistoryDataClassId ClassID = ClassID(1
 
 var xdslxtucchannelperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// XdslXtuCChannelPerformanceMonitoringHistoryData (class ID #114) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslXtuCChannelPerformanceMonitoringHistoryData (class ID #114)
+//	This ME collects PM data of an xTUC to xTUR channel as seen from the xTU-C. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL bearer channel. Several instances may
+//		therefore be associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The two MSBs of
+//			the first byte are the bearer channel ID. Excluding the first 2 bits of the first byte, the
+//			remaining part of the ME ID is identical to that of this ME's parent PPTP xDSL UNI part 1. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Corrected Blocks
+//			Corrected blocks: This attribute counts blocks received with errors that were corrected on this
+//			channel. (R) (mandatory) (4 bytes)
+//
+//		Uncorrected Blocks
+//			Uncorrected blocks: This attribute counts blocks received with uncorrectable errors on this
+//			channel. (R) (mandatory) (4 bytes)
+//
+//		Transmitted Blocks
+//			Transmitted blocks:	This attribute counts encoded blocks transmitted on this channel. (R)
+//			(mandatory) (4 bytes)
+//
+//		Received Blocks
+//			Received blocks: This attribute counts encoded blocks received on this channel. (R) (mandatory)
+//			(4 bytes)
+//
+//		Code Violations
+//			Code violations: This attribute counts CRC-8 anomalies in the bearer channel. (R) (mandatory)
+//			(2 bytes)
+//
+//		Forward Error Corrections
+//			Forward error corrections: This attribute counts FEC anomalies in the bearer channel. (R)
+//			(mandatory) (2 bytes)
+//
 type XdslXtuCChannelPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,77 @@ const VoipMediaProfileClassId ClassID = ClassID(142)
 
 var voipmediaprofileBME *ManagedEntityDefinition
 
-// VoipMediaProfile (class ID #142) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoipMediaProfile (class ID #142)
+//	The VoIP media profile ME contains settings that apply to VoIP voice encoding. This entity is
+//	conditionally required for ONUs that offer VoIP services. If a non-OMCI interface is used to
+//	manage VoIP signalling, this ME is unnecessary.
+//
+//	An instance of this ME is created and deleted by the OLT. A VoIP media profile is needed for
+//	each unique set of profile attributes.
+//
+//	Relationships
+//		An instance of this ME may be associated with one or more VoIP voice CTP MEs.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Fax Mode
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Voice Service Profile Pointer
+//			Voice service profile pointer: Pointer to a voice service profile, which defines parameters such
+//			as jitter buffering and echo cancellation. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Codec Selection 1st Order
+//			(R, W, set-by-create) (mandatory) (1 byte)
+//
+//		Packet Period Selection 1st Order
+//			Packet period selection (1st order): This attribute specifies the packet period selection
+//			interval in milliseconds. The recommended default value is 10 ms. Valid values are 10..30 ms.
+//			(R, W, set-by-create) (mandatory) (1 byte)
+//
+//		Silence Suppression 1st Order
+//			Silence suppression (1st order): This attribute specifies whether silence suppression is on or
+//			off. Valid values are 0 = off and 1 = on. (R, W, set-by-create) (mandatory) (1 byte)
+//
+//		Codec Selection 2nd Order
+//			Codec selection (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Packet Period Selection 2nd Order
+//			Packet period selection (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Silence Suppression 2nd Order
+//			Silence suppression (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Codec Selection 3rd Order
+//			Codec selection (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Packet Period Selection 3rd Order
+//			Packet period selection (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Silence Suppression 3rd Order
+//			Silence suppression (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Codec Selection 4th Order
+//			Codec selection (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Packet Period Selection 4th Order
+//			Packet period selection (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Silence Suppression 4th Order
+//			Silence suppression (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Oob Dtmf
+//			OOB DTMF:	This attribute specifies out-of-band DMTF carriage. When enabled (1), DTMF signals are
+//			carried out of band via RTP or the associated signalling protocol. When disabled (0), DTMF tones
+//			are carried in the PCM stream. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Rtp Profile Pointer
+//			RTP profile pointer: This attribute points to the associated RTP profile data ME. (R, W,
+//			setbycreate) (mandatory) (2 bytes)
+//
 type VoipMediaProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

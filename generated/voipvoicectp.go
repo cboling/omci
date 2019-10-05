@@ -25,9 +25,41 @@ const VoipVoiceCtpClassId ClassID = ClassID(139)
 
 var voipvoicectpBME *ManagedEntityDefinition
 
-// VoipVoiceCtp (class ID #139) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoipVoiceCtp (class ID #139)
+//	The VoIP voice CTP defines the attributes necessary to associate a specified VoIP service (SIP,
+//	ITUT H.248) with a POTS UNI. This entity is conditionally required for ONUs that offer VoIP
+//	services. If a non-OMCI interface is used to manage VoIP signalling, this ME is unnecessary.
+//
+//	An instance of this ME is created and deleted by the OLT. A VoIP voice CTP ME is needed for each
+//	PPTP POTS UNI served by VoIP.
+//
+//	Relationships
+//		An instance of this ME links a PPTP POTS UNI ME with a VoIP media profile and a SIP user data or
+//		media gateway controller (MGC) config data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		User Protocol Pointer
+//			User protocol pointer: This attribute points to signalling protocol data. If the signalling
+//			protocol used attribute of the VoIP config data ME specifies that the ONU's signalling protocol
+//			is SIP, this attribute points to a SIP user data ME, which in turn points to a SIP agent config
+//			data ME. If the signalling protocol is ITU-T H.248, this attribute points directly to an MGC
+//			config data ME. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Pptp Pointer
+//			PPTP pointer: This attribute points to the PPTP POTS UNI ME that serves the analogue telephone
+//			port. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		V O Ip Media Profile Pointer
+//			VoIP media profile pointer: This attribute points to an associated VoIP media profile. (R, W,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Signalling Code
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
 type VoipVoiceCtp struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

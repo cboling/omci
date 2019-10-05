@@ -25,9 +25,35 @@ const VlanTaggingFilterDataClassId ClassID = ClassID(84)
 
 var vlantaggingfilterdataBME *ManagedEntityDefinition
 
-// VlanTaggingFilterData (class ID #84) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VlanTaggingFilterData (class ID #84)
+//	This ME organizes data associated with VLAN tagging. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of a MAC bridge port configuration data
+//		ME. By definition, tag filtering occurs closer to the MAC bridge than the tagging operation.
+//		Schematically, the ordering of the functions is as given in Figure 9.3.11-1:////		Figure 9.3.11-1
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data ME. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Vlan Filter List
+//			VLAN filter list: This attribute is a list of provisioned tag control information (TCI) values
+//			for the bridge port. A TCI, comprising user priority, canonical format indicator (CFI) and
+//			virtual local area network identifier (VID), is represented by 2 bytes. This attribute supports
+//			up to 12 VLAN entries. The first N are valid, where N is given by the number of entries
+//			attribute. (R, W, setbycreate) (mandatory) (24 bytes)
+//
+//		Forward Operation
+//			Table 9.3.11-1 and the actions listed are discussed in detail in the following.
+//
+//		Number Of Entries
+//			Number of entries: This attribute specifies the number of valid entries in the VLAN filter list.
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
 type VlanTaggingFilterData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

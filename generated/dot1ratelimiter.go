@@ -25,9 +25,42 @@ const Dot1RateLimiterClassId ClassID = ClassID(298)
 
 var dot1ratelimiterBME *ManagedEntityDefinition
 
-// Dot1RateLimiter (class ID #298) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Dot1RateLimiter (class ID #298)
+//	This ME allows rate limits to be defined for various types of upstream traffic that are
+//	processed by IEEE 802.1 bridges or related structures.
+//
+//	Relationships
+//		An instance of this ME may be linked to an instance of a MAC bridge service profile or an IEEE
+//		802.1p mapper.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Parent Me Pointer
+//			Parent ME pointer: This attribute points to an instance of a ME. The type of ME is determined by
+//			the TP type attribute. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Tp Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Upstream Unicast Flood Rate Pointer
+//			Upstream unicast flood rate pointer: This attribute points to an instance of the traffic
+//			descriptor that governs the rate of upstream unicast packets whose DA is unknown to the bridge.
+//			A null pointer specifies that no administrative limit is to be imposed. (R, W, setbycreate)
+//			(optional) (2 bytes)
+//
+//		Upstream Broadcast Rate Pointer
+//			Upstream broadcast rate pointer: This attribute points to an instance of the traffic descriptor
+//			that governs the rate of upstream broadcast packets. A null pointer specifies that no
+//			administrative limit is to be imposed. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Upstream Multicast Payload Rate Pointer
+//			Upstream multicast payload rate pointer: This attribute points to an instance of the traffic
+//			descriptor that governs the rate of upstream multicast payload packets. A null pointer specifies
+//			that no administrative limit is to be imposed. (R, W, setbycreate) (optional) (2 bytes)
+//
 type Dot1RateLimiter struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

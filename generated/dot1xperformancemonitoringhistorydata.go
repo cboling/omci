@@ -25,9 +25,81 @@ const Dot1XPerformanceMonitoringHistoryDataClassId ClassID = ClassID(292)
 
 var dot1xperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// Dot1XPerformanceMonitoringHistoryData (class ID #292) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Dot1XPerformanceMonitoringHistoryData (class ID #292)
+//	This ME collects performance statistics on an ONU's IEEE 802.1X CPE authentication operation.
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME may be associated with each UNI that can perform IEEE 802.1X
+//		authentication of CPE.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of a PPTP. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Eapol Frames Received
+//			EAPOL frames received: This attribute counts received valid EAPOL frames of any type. (R)
+//			(mandatory) (4 bytes)
+//
+//		Eapol Frames Transmitted
+//			EAPOL frames transmitted: This attribute counts transmitted EAPOL frames of any type. (R)
+//			(mandatory) (4 bytes)
+//
+//		Eapol Start Frames Received
+//			EAPOL start frames received: This attribute counts received EAPOL start frames. (R) (mandatory)
+//			(4 bytes)
+//
+//		Eapol Logoff Frames Received
+//			EAPOL logoff frames received: This attribute counts received EAPOL logoff frames. (R)
+//			(mandatory) (4 bytes)
+//
+//		Invalid Eapol Frames Received
+//			Invalid EAPOL frames received: This attribute counts received EAPOL frames in which the frame
+//			type was not recognized. (R) (mandatory) (4 bytes)
+//
+//		Eap Resp_Id Frames Received
+//			EAP resp/id frames received: This attribute counts received EAP response frames containing an
+//			identifier type field. (R) (mandatory) (4 bytes)
+//
+//		Eap Response Frames Received
+//			EAP response frames received: This attribute counts received EAP response frames, other than
+//			resp/id frames. (R) (mandatory) (4 bytes)
+//
+//		Eap Initial Request Frames Transmitted
+//			EAP initial request frames transmitted: This attribute counts transmitted request frames
+//			containing an identifier type field. In [IEEE 802.1X], this is also called ReqId. (R)
+//			(mandatory) (4 bytes)
+//
+//		Eap Request Frames Transmitted
+//			EAP request frames transmitted: This attribute counts transmitted request frames, other than
+//			request/id frames. (R) (mandatory) (4 bytes)
+//
+//		Eap Length Error Frames Received
+//			EAP length error frames received: This attribute counts received EAPOL frames whose packet body
+//			length field was invalid. (R) (mandatory) (4 bytes)
+//
+//		Eap Success Frames Generated Autonomously
+//			EAP success frames generated autonomously: This attribute counts EAPOL success frames generated
+//			according to the local fallback policy because no radius server was available. (R) (mandatory)
+//			(4 bytes)
+//
+//		Eap Failure Frames Generated Autonomously
+//			EAP failure frames generated autonomously: This attribute counts EAPOL failure frames generated
+//			according to the local fallback policy because no radius server was available. (R) (mandatory)
+//			(4 bytes)
+//
 type Dot1XPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

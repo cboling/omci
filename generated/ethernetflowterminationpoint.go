@@ -25,9 +25,41 @@ const EthernetFlowTerminationPointClassId ClassID = ClassID(286)
 
 var ethernetflowterminationpointBME *ManagedEntityDefinition
 
-// EthernetFlowTerminationPoint (class ID #286) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EthernetFlowTerminationPoint (class ID #286)
+//	The Ethernet flow TP contains the attributes necessary to originate and terminate Ethernet
+//	frames in the ONU. It is appropriate when transporting pseudowire services via layer 2.
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	Relationships
+//		One Ethernet flow TP ME exists for each distinct pseudowire service that is transported via
+//		layer 2.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to a pseudowire TP ME. (R, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Destination Mac
+//			Destination MAC: This attribute specifies the destination MAC address of upstream Ethernet
+//			frames. (R, W, setbycreate) (mandatory) (6 bytes)
+//
+//		Source Mac
+//			Source MAC: This attribute specifies the near-end MAC address. It is established by nonOMCI
+//			means (e.g., factory programmed into ONU flash memory) and is included here for information
+//			only. (R) (mandatory) (6 bytes)
+//
+//		Tag Policy
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Tci
+//			TCI:	If the tag policy calls for tagging of upstream Ethernet frames, this attribute specifies
+//			the tag control information, which includes the VLAN tag, P bits and CFI bit. (R, W) (optional)
+//			(2 bytes)
+//
+//		Loopback
+//			(R, W) (mandatory) (1 byte)
+//
 type EthernetFlowTerminationPoint struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

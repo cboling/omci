@@ -25,9 +25,67 @@ const TrafficDescriptorClassId ClassID = ClassID(280)
 
 var trafficdescriptorBME *ManagedEntityDefinition
 
-// TrafficDescriptor (class ID #280) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TrafficDescriptor (class ID #280)
+//	The traffic descriptor is a profile that allows for traffic management. A priority controlled
+//	ONU can point from a MAC bridge port configuration data ME to a traffic descriptor in order to
+//	implement traffic management (marking, policing). A rate controlled ONU can point to a traffic
+//	descriptor from either a MAC bridge port configuration data ME or a GEM port network CTP to
+//	implement traffic management (marking, shaping).
+//
+//	Packets are determined to be green, yellow or red as a function of the ingress packet rate and
+//	the settings in this ME. The colour indicates drop precedence (eligibility), subsequently used
+//	by the priority queue ME to drop packets conditionally during congestion conditions. Packet
+//	colour is also used by the optional mode 1 DBA status reporting function described in [ITUT
+//	G.984.3]. Red packets are dropped immediately. Yellow packets are marked as drop eligible, and
+//	green packets are marked as not drop eligible, according to the egress colour marking attribute.
+//
+//	The algorithm used to determine the colour marking is specified by the meter type attribute. If
+//	[bIETF RFC 4115] is used, then:
+//
+//	CIR4115 = CIR
+//
+//	EIR4115 = PIR – CIR (EIR: excess information rate)
+//
+//	CBS4115 = CBS
+//
+//	EBS4115 = PBS – CBS.
+//
+//	Relationships
+//		This ME is associated with a GEM port network CTP or a MAC bridge port configuration data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Cir
+//			CIR:	This attribute specifies the committed information rate, in bytes per second. The default
+//			is 0. (R, W, setbycreate) (optional) (4 bytes)
+//
+//		Pir
+//			PIR:	This attribute specifies the peak information rate, in bytes per second. The default value
+//			0 accepts the ONU's factory policy. (R, W, setbycreate) (optional) (4 bytes)
+//
+//		Cbs
+//			CBS:	This attribute specifies the committed burst size, in bytes. The default is 0. (R, W,
+//			setbycreate) (optional) (4 bytes)
+//
+//		Pbs
+//			PBS:	This attribute specifies the peak burst size, in bytes. The default value 0 accepts the
+//			ONU's factory policy. (R, W, setbycreate) (optional) (4 bytes)
+//
+//		Colour Mode
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		Ingress Colour Marking
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		Egress Colour Marking
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		Meter Type
+//			(R, setbycreate) (optional) (1 byte)
+//
 type TrafficDescriptor struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

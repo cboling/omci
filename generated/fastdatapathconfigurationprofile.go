@@ -25,9 +25,24 @@ const FastDataPathConfigurationProfileClassId ClassID = ClassID(433)
 
 var fastdatapathconfigurationprofileBME *ManagedEntityDefinition
 
-// FastDataPathConfigurationProfile (class ID #433) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// FastDataPathConfigurationProfile (class ID #433)
+//	This ME contains FAST the data path configuration profile for an xDSL UNI. An instance of this
+//	ME is created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of the PPTP xDSL UNI part
+//		1.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
+//			reserved. (R, set-by-create) (mandatory) (2 bytes)
+//
+//		Tps_Tc Testmode Tps_Testmode
+//			TPS-TC testmode (TPS_TESTMODE): This Boolean attribute specifies whether the TPSTC test mode
+//			defined in clause 8.3.1 [ITU-T G.9701] is enabled (true) or disabled (disabled). See clause
+//			7.3.1 of [ITUT G.997.2]. (R, W) (mandatory) (1 byte)
+//
 type FastDataPathConfigurationProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

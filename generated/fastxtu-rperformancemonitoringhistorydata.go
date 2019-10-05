@@ -25,9 +25,38 @@ const FastXtuRPerformanceMonitoringHistoryDataClassId ClassID = ClassID(438)
 
 var fastxturperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// FastXtuRPerformanceMonitoringHistoryData (class ID #438) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// FastXtuRPerformanceMonitoringHistoryData (class ID #438)
+//	This ME collects PM data of the xTU C to xTU R path as seen from the xTU-R. Instances of this ME
+//	are created and deleted by the OLT. For a complete discussion of generic PM architecture, refer
+//	to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R, set-
+//			by-create) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, set-by-create) (mandatory) (2 bytes)
+//
+//		Successful Fra Counter
+//			Successful FRA counter: This attribute counts the successful FRA primitives (success_FRA). The
+//			successful FRA primitive (success_FRA) is defined in clause 11.3.1.6 of [ITU-T G.9701]. See
+//			clause 7.7.22 of [ITU-T G.997.2] (R) (mandatory) (4 bytes)
+//
+//		Successful Rpa Counter
+//			Successful RPA counter: This attribute counts the successful RPA primitives (success_RPA). The
+//			successful RPA primitive (success_RPA) is defined in clause 11.3.1.6 of [ITU-T G.9701]. See
+//			clause 7.7.23 of [ITU-T G.997.2] (R) (optional) (4 bytes)
+//
 type FastXtuRPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

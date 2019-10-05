@@ -25,9 +25,44 @@ const XdslXtuCPerformanceMonitoringHistoryDataPart2ClassId ClassID = ClassID(408
 
 var xdslxtucperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// XdslXtuCPerformanceMonitoringHistoryDataPart2 (class ID #408) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslXtuCPerformanceMonitoringHistoryDataPart2 (class ID #408)
+//	This ME collects PM data on the xTUC to xTUR path as seen from the xTU-C. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Leftr Defect Seconds
+//			"leftr" defect seconds: If retransmission is used, this attribute is a count of the seconds with
+//			a near-end ''leftr'' defect present – see clause 7.2.1.1.6 of [ITU-T G.997.1]. (R) (mandatory)
+//			(2 bytes)
+//
+//		Error_Free Bits Counter
+//			Error-free bits counter: If retransmission is used, this attribute is a count of the number of
+//			error-free bits passed over the β1 reference point, divided by 216 – see clause 7.2.1.1.7 of
+//			[ITU-T G.997.1]. (R) (mandatory) (4 bytes)
+//
+//		Minimum Error_Free Throughput Mineftr
+//			Minimum error-free throughput (MINEFTR): If retransmission is used, this attribute is the
+//			minimum error-free throughput in bits per second – see clause 7.2.1.1.8 of [ITUT G.997.1]. (R)
+//			(mandatory) (4 bytes)
+//
 type XdslXtuCPerformanceMonitoringHistoryDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

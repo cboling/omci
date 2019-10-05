@@ -25,9 +25,95 @@ const MulticastGemInterworkingTerminationPointClassId ClassID = ClassID(281)
 
 var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 
-// MulticastGemInterworkingTerminationPoint (class ID #281) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MulticastGemInterworkingTerminationPoint (class ID #281)
+//	An instance of this ME represents a point in a G-PON ONU where a multicast service interworks
+//	with the GEM layer. At this point, a multicast bit stream is reconstructed from GEM packets.
+//
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	Multicast interworking GEM modes of operation
+//
+//	The default multicast operation of the PON is where all the multicast content streams are
+//	carried in one PON layer connection (GEM port). This connection is then specified in the first
+//	entry of the IPv4 or IPv6 multicast address table, as the case may be. This single entry also
+//	specifies an all-inclusive IP multicast destination address (DA) range (e.g., 224.0.0.0 to
+//	239.255.255.255 in the case of IPv4). The ONU then filters the traffic based on either Ethernet
+//	MAC addresses or IP addresses. The associated GEM port network CTP ME specifies the GEM port-ID
+//	that supports all multicast connections.
+//
+//	In the default multicast operation, all multicast content streams are placed in one PON layer
+//	connection (GEM port). The OLT sets up a completely conventional model, a pointer from the
+//	multicast GEM IW termination to a GEM port network CTP. The OLT configures the GEM port-ID of
+//	the GEM port network CTP into the appropriate multicast address table attribute(s), along with
+//	the other table fields that specify the range of IP multicast DAs. The ONU accepts the entire
+//	multicast stream through the designated GEM port, then filters the traffic based on either the
+//	Ethernet MAC address or IP DA.
+//
+//	An optional multicast configuration supports separate multicast streams carried over separate
+//	PON layer connections, i.e., on separate GEM ports. This permits the ONU to filter multicast
+//	streams at the GEM level, which is efficient in hardware, while ignoring other multicast streams
+//	that may be of interest to other ONUs on the PON.
+//
+//	After configuring the explicit model for the first multicast GEM port, the OLT supports multiple
+//	multicast GEM ports by then configuring additional entries into the multicast address table(s),
+//	entries with different GEM port-IDs. The OMCI model is defined such that these ports are
+//	implicitly grouped together and served by the single explicit GEM port network CTP. No
+//	additional GEM network CTPs need be created or linked for the additional GEM ports.
+//
+//	Several multicast GEM IW TPs can exist, each linked to separate bridge ports or mappers to serve
+//	different communities of interest in a complex ONU.
+//
+//	Discovery of multicast support
+//
+//	The OLT uses the multicast GEM IW TP entity as the means to discover the ONU's multicast
+//	capability. This entity is mandatory if multicast is supported by the ONU. If the OLT attempts
+//	to create this entity on an ONU that does not support multicast, the create command fails. The
+//	create or set command also fails if the OLT attempts to exploit optional features that the ONU
+//	does not support, e.g., in attempting to write a multicast address table with more than a single
+//	entry or to create multiple multicast GEM IW TPs.
+//
+//	This ME is defined by a similarity to the unicast GEM IW TP, and a number of its attributes are
+//	not meaningful in a multicast context. These attributes are set to 0 and not used, as indicated
+//	in the following.
+//
+//	Relationships
+//		An instance of this ME exists for each occurrence of transformation of GEM packets into a
+//		multicast data stream.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0xFFFF
+//			is reserved. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Gem Port Network Ctp Connectivity Pointer
+//			GEM port network CTP connectivity pointer: This attribute points to an instance of the GEM port
+//			network CTP that is associated with this multicast GEM IW TP. (R, W, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Interworking Option
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Service Profile Pointer
+//			Service profile pointer: This attribute is set to 0 and not used. For backward compatibility, it
+//			may also be set to point to a MAC bridge service profile or IEEE 802.1p mapper service profile.
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Pptp Counter
+//			PPTP counter: This attribute represents the number of instances of PPTP MEs associated with this
+//			instance of the multicast GEM IW TP. This attribute conveys no information that is not available
+//			elsewhere; it may be set to 0xFF and not used. (R) (optional) (1 byte)
+//
+//		Operational State
+//			Operational state: This attribute indicates whether the ME is capable of performing its
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//
+//		Gal Profile Pointer
+//			GAL profile pointer: This attribute is set to 0 and not used. For backward compatibility, it may
+//			also be set to point to a GAL Ethernet profile. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Ipv6 Multicast Address Table
+//			(R, W) (optional) (24N bytes, where N is the number of entries in the list.)
+//
 type MulticastGemInterworkingTerminationPoint struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

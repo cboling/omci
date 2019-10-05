@@ -25,9 +25,29 @@ const MacBridgePortDesignationDataClassId ClassID = ClassID(48)
 
 var macbridgeportdesignationdataBME *ManagedEntityDefinition
 
-// MacBridgePortDesignationData (class ID #48) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MacBridgePortDesignationData (class ID #48)
+//	This ME records data associated with a bridge port. The ONU automatically creates or deletes an
+//	instance of this managed entity upon the creation or deletion of a MAC bridge port configuration
+//	data ME.
+//
+//	Relationships
+//		An instance of this managed entity is associated with one MAC bridge port configuration data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data. (R) (mandatory) (2 bytes)
+//
+//		Designated Bridge Root Cost Port
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R) (mandatory) (24 bytes)
+//
+//		Port State
+//			The value (R)stp_off is introduced to denote the port status where the (rapid) spanning tree
+//			protocol has been disabled by setting the port spanning tree ind attribute of the MAC bridge
+//			port configuration data to false, and the Ethernet link state is up. This value distinguishes
+//			whether frame forwarding is under the control of (R)STP.
+//
 type MacBridgePortDesignationData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

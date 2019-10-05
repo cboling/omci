@@ -25,9 +25,29 @@ const EfmBondingLinkClassId ClassID = ClassID(420)
 
 var efmbondinglinkBME *ManagedEntityDefinition
 
-// EfmBondingLink (class ID #420) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EfmBondingLink (class ID #420)
+//	The EFM bonding link represents a link that can be bonded with other links to form a group. In
+//	[IEEE 802.3], a bonding group is known as a PAF and a link is known as a PME. Instances of this
+//	ME are created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or one instance of an EFM bonding group.
+//
+//	Attributes
+//		Managed Entity Id
+//			NOTE – This attribute has the same meaning as the Stream ID in clause C.3.1.2 of [ITU-T
+//			G.998.2], except that it cannot be changed. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Associated Group Me Id
+//			Associated group ME ID: This attribute is the ME ID of the bonding group to which this link is
+//			associated. Changing this attribute moves the link from one group to another. Setting this
+//			attribute to an ME ID that has not yet been provisioned will result in this link being placed in
+//			a single-link group that contains only this link. The default value for this attribute is the
+//			null pointer, 0xFFFF. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Link Alarm Enable
+//			(R, W, setbycreate) (mandatory) (1 bytes)
+//
 type EfmBondingLink struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

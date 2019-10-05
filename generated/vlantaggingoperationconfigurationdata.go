@@ -25,9 +25,52 @@ const VlanTaggingOperationConfigurationDataClassId ClassID = ClassID(78)
 
 var vlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 
-// VlanTaggingOperationConfigurationData (class ID #78) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VlanTaggingOperationConfigurationData (class ID #78)
+//	This ME organizes data associated with VLAN tagging. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	NOTE 1 – The extended VLAN tagging operation configuration data of clause 9.3.13 is preferred
+//	for new implementations.
+//
+//	Relationships
+//		Zero or one instance of this ME may exist for an instance of any ME that can terminate or modify
+//		an Ethernet stream.////		When this ME is associated with a UNI-side TP, it performs its upstream classification and
+//		tagging operations before offering the upstream frame to other filtering, bridging or switching
+//		functions. In the downstream direction, the defined inverse operation is the last operation
+//		performed on the frame before offering it to the UNI-side termination.////		When this ME is associated with an ANI-side TP, it performs its upstream classification and
+//		tagging operations as the last step before queueing for transmission to the OLT, after having
+//		received the upstream frame from other filtering, bridging or switching functions. In the
+//		downstream direction, the defined inverse operation is the first operation performed on the
+//		frame before offering it to possible filter, bridge or switch functions.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. When the
+//			optional association type attribute is 0 or undefined, this attribute's value is the same as the
+//			ID of the ME with which this VLAN tagging operation configuration data instance is associated,
+//			which may be either a PPTP Ethernet UNI or an IP host config data or an IPv6 host config data
+//			ME. Otherwise, the value of the ME ID is unconstrained except by the need to be unique. (R, set-
+//			by-create) (mandatory) (2 bytes)
+//
+//		Upstream Vlan Tagging Operation Mode
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Upstream Vlan Tag Tci Value
+//			Upstream VLAN tag TCI value: This attribute specifies the TCI for upstream VLAN tagging. It is
+//			used when the upstream VLAN tagging operation mode is 1 or 2. (R, W, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Downstream Vlan Tagging Operation Mode
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Association Type
+//			The associated ME instance is identified by the associated ME pointer. (R, W, setbycreate)
+//			(optional) (1 byte)
+//
+//		Associated Me Pointer
+//			NOTE 3 – When the association type is xDSL, the two MSBs may be used to indicate a bearer
+//			channel.
+//
 type VlanTaggingOperationConfigurationData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

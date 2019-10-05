@@ -25,9 +25,55 @@ const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId ClassID = C
 
 var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346)
+//	This ME collects PM data associated with the XG-PON TC layer. It counts upstream PLOAM messages
+//	transmitted by the ONU.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an ANI-G.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the ANI-G. (R, set-by-create)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: No thresholds are defined for this ME. For uniformity with other PM, the
+//			attribute is retained and shown as mandatory, but it should be set to a null pointer. (R, W,
+//			set-by-create) (mandatory) (2 bytes)
+//
+//		Upstream Ploam Message Count
+//			Upstream PLOAM message count: This attribute counts PLOAM messages transmitted upstream,
+//			excluding acknowledge messages. (R) (optional) (4 bytes)
+//
+//		Serial_Number_Onu Message Count
+//			Serial_number_ONU message count: This attribute counts Serial_number_ONU PLOAM messages
+//			transmitted. (R) (optional) (4 bytes)
+//
+//		Registration Message Count
+//			Registration message count: This attribute counts Registration PLOAM messages transmitted. (R)
+//			(optional) (4 bytes)
+//
+//		Key_Report Message Count
+//			Key_report message count: This attribute counts key_report PLOAM messages transmitted. (R)
+//			(optional) (4 bytes)
+//
+//		Acknowledge Message Count
+//			Acknowledge message count: This attribute counts acknowledge PLOAM messages transmitted. It
+//			includes all forms of acknowledgement (AK), including those transmitted in response to a PLOAM
+//			grant when the ONU has nothing to send. (R) (optional) (4 bytes)
+//
+//		Sleep_Request Message Count
+//			Sleep_request message count: This attribute counts sleep_request PLOAM messages transmitted. (R)
+//			(optional) (4 bytes)
+//
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

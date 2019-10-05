@@ -25,9 +25,77 @@ const ReCommonAmplifierParametersClassId ClassID = ClassID(328)
 
 var recommonamplifierparametersBME *ManagedEntityDefinition
 
-// ReCommonAmplifierParameters (class ID #328) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// ReCommonAmplifierParameters (class ID #328)
+//	This ME organizes data associated with each OA supported by the RE. The management ONU
+//	automatically creates one instance of this ME for each upstream or downstream OA.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the RE downstream amplifier or RE
+//		upstream amplifier ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			NOTE – The type of the linked ME can be determined by uniqueness of slot and port.
+//
+//		Gain
+//			Gain:	This attribute reports the current measurement of the OA's gain, in decibels. Its value is
+//			a 2s complement integer with 0.25 dB granularity, and with a range from –32 dB to 31.5 dB. The
+//			value 0x7F indicates that the current measured gain is 0, i.e., negative infinity in decibels
+//			terms. (R) (optional) (1 byte)
+//
+//		Lower Gain Threshold
+//			Lower gain threshold: This attribute specifies the gain the RE uses to declare the low gain
+//			alarm. Valid values are 0 dB (coded as 0x00) to 63.5 dB (coded as 0xFE). The default value 0xFF
+//			selects the RE's internal policy. (R, W) (optional) (1 byte)
+//
+//		Upper Gain Threshold
+//			Upper gain threshold: This attribute specifies the gain the RE uses to declare the high gain
+//			alarm. Valid values are 0 dB (coded as 0x00) to 63.5 dB (coded as 0xFE). The default value 0xFF
+//			selects the RE's internal policy. (R, W) (optional) (1 byte)
+//
+//		Target Gain
+//			Target gain:	This attribute specifies the target gain, when the operational mode of the parent
+//			RE downstream or upstream amplifier is set to constant gain mode. Valid values are 0 dB (coded
+//			as 0x00) to 63.5 dB (coded as 0xFE). The default value 0xFF selects the RE's internal policy.
+//			(R, W) (optional) (1 byte)
+//
+//		Device Temperature
+//			Device temperature: This attribute reports the temperature in degrees Celcius of the active
+//			device (SOA or pump) in the OA. Its value is a 2s complement integer with granularity 1/256 °C.
+//			(R) (optional) (2 bytes)
+//
+//		Lower Device Temperature Threshold
+//			Lower device temperature threshold: This attribute is a 2s complement integer that specifies the
+//			temperature the RE uses to declare the low temperature alarm. Valid values are –64 to +63 °C in
+//			0.5 °C increments. The default value 0x7F selects the RE's internal policy. (R, W) (optional)
+//			(1 byte)
+//
+//		Upper Device Temperature Threshold
+//			Upper device temperature threshold: This attribute is a 2s complement integer that specifies the
+//			temperature the RE uses to declare the high temperature alarm. Valid values are –64 to +63 °C in
+//			0.5 °C increments. The default value 0x7F selects the RE's internal policy. (R, W) (optional)
+//			(1 byte)
+//
+//		Device Bias Current
+//			Device bias current: This attribute contains the measured bias current applied to the SOA or
+//			pump laser. Its value is an unsigned integer with granularity 2 mA. Valid values are 0 to
+//			512 mA. (R) (optional) (1 byte)
+//
+//		Amplifier Saturation Output Power
+//			Amplifier saturation output power: This attribute reports the saturation output power of the
+//			amplifier as specified by the manufacturer. Its value is an unsigned integer referred to 1 mW
+//			(i.e., dBm), with 0.1 dB granularity. (R) (optional) (2 bytes)
+//
+//		Amplifier Noise Figure
+//			Amplifier noise figure: This attribute reports the intrinsic noise figure of the amplifier, as
+//			specified by the manufacturer. Its value is an unsigned integer with 0.1 dB granularity (R)
+//			(optional) (1 byte)
+//
+//		Amplifier Saturation Gain
+//			Amplifier saturation gain: This attribute reports the gain of the amplifier at saturation, as
+//			specified by the manufacturer. Its value is an unsigned integer with 0.25 dB granularity, and
+//			with a range from 0 to 63.75 dB. (R) (optional) (1 byte)
+//
 type ReCommonAmplifierParameters struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

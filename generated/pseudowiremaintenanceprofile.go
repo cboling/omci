@@ -25,9 +25,89 @@ const PseudowireMaintenanceProfileClassId ClassID = ClassID(284)
 
 var pseudowiremaintenanceprofileBME *ManagedEntityDefinition
 
-// PseudowireMaintenanceProfile (class ID #284) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// PseudowireMaintenanceProfile (class ID #284)
+//	The pseudowire maintenance profile permits the configuration of pseudowire service exception
+//	handling. It is created and deleted by the OLT.
+//
+//	The settings, and indeed existence, of a pseudowire maintenance profile affect the behaviour of
+//	the pseudowire PM history data ME only in establishing criteria for counting SESs, but in no
+//	other way. The pseudowire maintenance profile primarily affects the alarms declared by the
+//	subscribing pseudowire TP.
+//
+//	Relationships
+//		One or more instances of the pseudowire TP may point to an instance of the pseudowire
+//		maintenance profile. If the pseudowire TP does not refer to a pseudowire maintenance profile,
+//		the ONU's default exception handling is implied.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
+//			reserved. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Jitter Buffer Maximum Depth
+//			Jitter buffer maximum depth: This attribute specifies the desired maximum depth of the playout
+//			buffer in the PSN to the TDM direction. The value is expressed as a multiple of the 125 μs frame
+//			rate. The default value 0 selects the ONU's internal policy. (R, W, setbycreate) (optional)
+//			(2 bytes)
+//
+//		Jitter Buffer Desired Depth
+//			Jitter buffer desired depth: This attribute specifies the desired nominal fill depth of the
+//			playout buffer in the PSN to the TDM direction. The value is expressed as a multiple of the
+//			125 μs frame rate. The default value 0 selects the ONU's internal policy. (R, W, setbycreate)
+//			(optional) (2 bytes)
+//
+//		Fill Policy
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		Misconnected Packets Declaration Policy
+//			Misconnected packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Misconnected Packets Clear Policy
+//			Misconnected packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Loss Of Packets Declaration Policy
+//			Loss of packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Loss Of Packets Clear Policy
+//			Loss of packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Buffer Overrun_Underrun Declaration Policy
+//			Buffer overrun/underrun declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Buffer Overrun_Underrun Clear Policy
+//			Buffer overrun/underrun clear policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Malformed Packets Declaration Policy
+//			Malformed packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		Malformed Packets Clear Policy
+//			Malformed packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//
+//		R_Bit Transmit Set Policy
+//			R-bit transmit set policy: This attribute defines the number of consecutive lost packets that
+//			causes the transmitted R bit to be set in the TDM to the PSN direction, indicating lost packets
+//			to the far end. The default value 0 selects the ONU's internal policy. (R, W, setbycreate)
+//			(optional) (1 byte)
+//
+//		R_Bit Transmit Clear Policy
+//			R-bit transmit clear policy: This attribute defines the number of consecutive valid packets that
+//			causes the transmitted R bit to be cleared in the TDM to the PSN direction, removing the remote
+//			failure indication to the far end. The default value 0 selects the ONU's internal policy. (R, W,
+//			setbycreate) (optional) (1 byte)
+//
+//		R_Bit Receive Policy
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		L Bit Receive Policy
+//			(R, W, setbycreate) (optional) (1 byte)
+//
+//		Ses Threshold
+//			SES threshold: Number of lost, malformed or otherwise unusable packets expected in the PSN to
+//			the TDM direction within a 1 s interval that causes an SES to be counted. Stray packets do not
+//			count towards an SES, nor do packets whose L bit is set at the far end. The value 0 specifies
+//			that the ONU uses its internal default, which is not necessarily the same as the recommended
+//			default value 3. (R, W, set-by-create) (optional) (2 bytes)
+//
 type PseudowireMaintenanceProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

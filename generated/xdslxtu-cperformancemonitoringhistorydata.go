@@ -25,9 +25,90 @@ const XdslXtuCPerformanceMonitoringHistoryDataClassId ClassID = ClassID(112)
 
 var xdslxtucperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// XdslXtuCPerformanceMonitoringHistoryData (class ID #112) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslXtuCPerformanceMonitoringHistoryData (class ID #112)
+//	This ME collects PM data on the xTUC to xTUR path as seen from the xTU-C. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Loss Of Frame Seconds
+//			Loss of frame seconds: (R) (mandatory) (2 bytes)
+//
+//		Loss Of Signal Seconds
+//			Loss of signal seconds: (R) (mandatory) (2 bytes)
+//
+//		Loss Of Link Seconds
+//			Loss of link seconds: (R) (mandatory) (2 bytes)
+//
+//		Loss Of Power Seconds
+//			Loss of power seconds: (R) (mandatory) (2 bytes)
+//
+//		Errored Seconds Es
+//			Errored seconds (ES): This attribute counts 1 s intervals with one or more CRC8 anomalies summed
+//			over all received bearer channels, or one or more loss of signal (LOS) defects, or one or more
+//			SEF defects, or one or more LPR defects. (R) (mandatory) (2 bytes)
+//
+//		Severely Errored Seconds
+//			(R) (mandatory) (2 bytes)
+//
+//		Line Initializations
+//			Line initializations: This attribute counts the total number of full initializations attempted
+//			on the line, both successful and failed. (R) (mandatory) (2 bytes)
+//
+//		Failed Line Initializations
+//			Failed line initializations: This attribute counts the total number of failed full
+//			initializations during the accumulation period. A failed full initialization occurs when
+//			showtime is not reached at the end of the full initialization procedure. (R) (mandatory)
+//			(2 bytes)
+//
+//		Short Initializations
+//			Short initializations: This attribute counts the total number of fast retrains or short
+//			initializations attempted on the line, successful and failed. Fast retrain is defined in [ITUT
+//			G.992.2]. Short initialization is defined in [ITUT G.992.3] and [ITUT G.992.4]. (R) (optional)
+//			(2 bytes)
+//
+//		Failed Short Initializations
+//			(R) (optional) (2 bytes)
+//
+//		Fec Seconds
+//			FEC seconds: This attribute counts seconds during which there was an FEC anomaly. (R)
+//			(mandatory) (2 bytes)
+//
+//		Unavailable Seconds
+//			Unavailable seconds: This attribute counts 1 s intervals during which the xDSL UNI is
+//			unavailable. The line becomes unavailable at the onset of 10 contiguous SES-Ls. The 10 SES-Ls
+//			are included in unavailable time. Once unavailable, the line becomes available at the onset of
+//			10 contiguous seconds that are not severely errored. The 10 s with no SESLs are excluded from
+//			unavailable time. Some attribute counts are inhibited during unavailability – see clause
+//			7.2.7.13 of [ITUT G.997.1]. (R) (mandatory) (2 bytes)
+//
+//		Sos Success Count, Near End
+//			SOS success count, near end: The SOS-SUCCESS-NE attribute is a count of the total number of
+//			successful SOS procedures initiated by the near-end xTU on the line during the accumulation
+//			period. Successful SOS is defined in clause 12.1.4 of [ITUT G.993.2]. (R) (optional) (2 bytes)
+//
+//		Sos Success Count, Far End
+//			SOS success count, far end: The SOS-SUCCESS-FE attribute is a count of the total number of
+//			successful SOS procedures initiated by the far-end xTU on the line during the accumulation
+//			period. Successful SOS is defined in clause 12.1.4 of [ITUT G.993.2]. (R) (optional) (2 bytes)
+//
 type XdslXtuCPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

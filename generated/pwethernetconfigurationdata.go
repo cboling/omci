@@ -25,9 +25,30 @@ const PwEthernetConfigurationDataClassId ClassID = ClassID(339)
 
 var pwethernetconfigurationdataBME *ManagedEntityDefinition
 
-// PwEthernetConfigurationData (class ID #339) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// PwEthernetConfigurationData (class ID #339)
+//	This ME contains the Ethernet pseudowire configuration data. Instances of this ME are created
+//	and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the MPLS pseudowire TP ME with a
+//		pseudowire type attribute equal to the following.////		5	Ethernet
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Mpls Pseudowire Tp Pointer
+//			MPLS pseudowire TP pointer: This attribute points to an instance of the MPLS pseudowire TP ME
+//			associated with this ME. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Tp Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Uni Pointer
+//			UNI pointer: This attribute points to the associated instance of a UNI-side ME. The type of UNI
+//			is determined by the TP type attribute. (R, W, setbycreate) (mandatory) (2 bytes)
+//
 type PwEthernetConfigurationData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

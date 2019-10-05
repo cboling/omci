@@ -25,9 +25,51 @@ const EfmBondingLinkPerformanceMonitoringHistoryDataClassId ClassID = ClassID(42
 
 var efmbondinglinkperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// EfmBondingLinkPerformanceMonitoringHistoryData (class ID #423) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EfmBondingLinkPerformanceMonitoringHistoryData (class ID #423)
+//	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
+//	the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the EFM bonding link. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Rx Errored Fragments
+//			Rx errored fragments: Clause 45.2.3.29 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Small Fragments
+//			Rx small fragments: Clause 45.2.3.30 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Large Fragments
+//			Rx large fragments: Clause 45.2.3.31 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Discarded Fragments
+//			Rx discarded fragments: Clause 45.2.3.32 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Fcs Errors
+//			Rx FCS errors: Clause 45.2.6.11 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Coding Errors
+//			Rx coding errors: Clause 45.2.6.12 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//
+//		Rx Fragments
+//			Rx fragments: Number of fragments received over this link. (R) (mandatory) (4 bytes)
+//
+//		Tx Fragments
+//			Tx fragments: Number of fragments transmitted over this link. (R) (mandatory) (4 bytes)
+//
 type EfmBondingLinkPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

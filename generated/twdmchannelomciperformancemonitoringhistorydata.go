@@ -25,9 +25,44 @@ const TwdmChannelOmciPerformanceMonitoringHistoryDataClassId ClassID = ClassID(4
 
 var twdmchannelomciperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// TwdmChannelOmciPerformanceMonitoringHistoryData (class ID #452) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TwdmChannelOmciPerformanceMonitoringHistoryData (class ID #452)
+//	This ME collects OMCI-related PM data associated with the slot/circuit pack, hosting one or more
+//	ANI-G MEs, for a specific TWDM channel. Instances of this ME are created and deleted by the OLT.
+//
+//	The counters maintained by this ME are characterized as optional in Clause 14 of
+//	[ITU-T G.989.3].
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of TWDM channel ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Omci Baseline Message Count
+//			OMCI baseline message count: The counter of baseline format OMCI messages directed to the given
+//			ONU. (R) (mandatory) (4 byte)
+//
+//		Omci Extended Message Count
+//			OMCI extended message count: The counter of extended format OMCI messages directed to the given
+//			ONU. (R) (mandatory) (4 byte)
+//
+//		Omci Mic Error Count
+//			OMCI MIC error count: The counter of OMCI messages received with MIC errors. (R) (mandatory)
+//			(4 byte)
+//
 type TwdmChannelOmciPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

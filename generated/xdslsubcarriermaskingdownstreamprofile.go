@@ -25,9 +25,37 @@ const XdslSubcarrierMaskingDownstreamProfileClassId ClassID = ClassID(108)
 
 var xdslsubcarriermaskingdownstreamprofileBME *ManagedEntityDefinition
 
-// XdslSubcarrierMaskingDownstreamProfile (class ID #108) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslSubcarrierMaskingDownstreamProfile (class ID #108)
+//	This ME contains the subcarrier masking downstream profile for an xDSL UNI. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of the PPTP xDSL UNI part
+//		1.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
+//			reserved. (R, set-by-create) (mandatory) (2 bytes)
+//
+//		Downstream Subcarrier Mask 1
+//			Downstream subcarrier mask 1: Subcarriers 1 to 128. (R, W, set-by-create) (mandatory) (16 bytes)
+//
+//		Downstream Subcarrier Mask 2
+//			Downstream subcarrier mask 2: Subcarriers 129 to 256. (R, W) (mandatory for modems that support
+//			NSCds > 128) (16 bytes)
+//
+//		Downstream Subcarrier Mask 3
+//			Downstream subcarrier mask 3: Subcarriers 257 to 384. (R, W) (mandatory for modems that support
+//			NSCds > 256) (16 bytes)
+//
+//		Downstream Subcarrier Mask 4
+//			Downstream subcarrier mask 4: Subcarriers 385 to 512. (R, W) (mandatory for modems that support
+//			NSCds > 384) (16 bytes)
+//
+//		Mask Valid
+//			(R, W) (mandatory) (1 byte)
+//
 type XdslSubcarrierMaskingDownstreamProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

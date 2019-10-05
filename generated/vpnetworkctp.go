@@ -25,9 +25,50 @@ const VpNetworkCtpClassId ClassID = ClassID(269)
 
 var vpnetworkctpBME *ManagedEntityDefinition
 
-// VpNetworkCtp (class ID #269) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VpNetworkCtp (class ID #269)
+//	NOTE – In [ITU-T G.984.4], this ME is called VP network CTP-G.
+//
+//	This ME represents the termination of VP links on an ONU. It aggregates connectivity
+//	functionality from the network view and alarms from the network element view as well as
+//	artefacts from trails. Instances of this ME are created and deleted by the OLT.
+//
+//	An instance of the VP network CTP ME can be deleted only when no ATM IW VCC TP is associated
+//	with it. It is the responsibility of the OLT to ensure that this condition is met.
+//
+//	Relationships
+//		Zero or more instances of the VP network CTP ME may exist for each instance of the IW VCC TP ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Vpi Value
+//			VPI value:	This attribute identifies the VPI value associated with the VP link being terminated.
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Uni Pointer
+//			UNI pointer: This pointer indicates the xDSL PPTP UNI associated with this VP TP. The bearer
+//			channel may be indicated by the two MSBs of the pointer. (R, W, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Direction
+//			Direction:	This attribute specifies whether the VP link is used for UNI-to-ANI (value 1), ANI-
+//			to-UNI (value 2), or bidirectional (value 3) connection. (R, W, setbycreate) (mandatory)
+//			(1 byte)
+//
+//		Deprecated 1
+//			Deprecated 1: Not used; should be set to 0. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Deprecated 2
+//			Deprecated 2: Not used; should be set to 0. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Deprecated 3
+//			Deprecated 3: Not used; should be set to 0. (R, W, setbycreate) (optional) (2 bytes)
+//
+//		Deprecated 4
+//			Deprecated 4: Not used; if present, should be set to 0. (R) (optional) (1 byte)
+//
 type VpNetworkCtp struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

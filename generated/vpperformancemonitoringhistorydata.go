@@ -25,9 +25,58 @@ const VpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(62)
 
 var vpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// VpPerformanceMonitoringHistoryData (class ID #62) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VpPerformanceMonitoringHistoryData (class ID #62)
+//	This ME collects PM data associated with a VP network CTP. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the VP network CTP ME. The performance
+//		of upstream ATM flows is reported.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the VP network CTP. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Lost C 0 1 Cells
+//			Lost C = 0 + 1 cells: This attribute counts all cell loss. It cannot distinguish between cells
+//			lost because of header bit errors, ATM-level header errors, cell policing, or buffer overflows.
+//			It records only loss of information, independent of the priority of the cell. (R) (mandatory)
+//			(2 bytes)
+//
+//		Lost C_= 0 Cells
+//			Lost C = 0 cells: This attribute counts loss of high priority cells. It cannot distinguish
+//			between cells lost because of header bit errors, ATM-level header errors, cell policing, or
+//			buffer overflows. It records only loss of high priority cells. (R) (mandatory) (2 bytes)
+//
+//		Misinserted Cells
+//			Misinserted cells: This attribute counts cells that are misrouted to a monitored VP. (R)
+//			(mandatory) (2 bytes)
+//
+//		Transmitted C_= 0 _ 1 Cells
+//			Transmitted C = 0 + 1 cells: This attribute counts cells originated by the transmitting end
+//			point (i.e., backward reporting is assumed). (R) (mandatory) (5 bytes)
+//
+//		Transmitted C_= 0 Cells
+//			Transmitted C = 0 cells: This attribute counts high priority cells originated by the
+//			transmitting end point (i.e., backward reporting is assumed). (R) (mandatory) (5 bytes)
+//
+//		Impaired Block
+//			Impaired blocks: This severely errored cell block counter is incremented whenever one of the
+//			following events takes place: the number of misinserted cells reaches its threshold; the number
+//			of bipolar violations reaches its threshold; or the number of lost cells reaches its threshold.
+//			Threshold values are based on vendor-operator negotiation. (R) (mandatory) (2 bytes)
+//
 type VpPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

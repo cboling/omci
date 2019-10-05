@@ -25,9 +25,94 @@ const PhysicalPathTerminationPointVideoAniClassId ClassID = ClassID(90)
 
 var physicalpathterminationpointvideoaniBME *ManagedEntityDefinition
 
-// PhysicalPathTerminationPointVideoAni (class ID #90) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// PhysicalPathTerminationPointVideoAni (class ID #90)
+//	This ME represents an RF video ANI in the ONU, where physical paths terminate and physical path
+//	level functions are performed.
+//
+//	The ONU automatically creates an instance of this ME per port as follows.
+//
+//	•	When the ONU has video ANI ports built into its factory configuration.
+//
+//	•	When a cardholder is provisioned to expect a circuit pack of the video ANI type.
+//
+//	•	When a cardholder provisioned for plug-and-play is equipped with a circuit pack of the video
+//	ANI type. Note that the installation of a plug-and-play card may indicate the presence of video
+//	ANI ports via equipment ID as well as its type, and indeed may cause the ONU to instantiate a
+//	port-mapping package that specifies video ANI ports.
+//
+//	The ONU automatically deletes instances of this ME when a cardholder is neither provisioned to
+//	expect a video ANI circuit pack, nor is it equipped with a video ANI circuit pack.
+//
+//	Relationships
+//		An instance of this ME is associated with each instance of a real or pre-provisioned video ANI
+//		port.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			number indicates the physical position of the ANI. The first byte is the slot ID (defined in
+//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2 bytes)
+//
+//		Administrative State
+//			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
+//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//
+//		Operational State
+//			Operational state: This attribute indicates whether the ME is capable of performing its
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//
+//		Arc
+//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//
+//		Arc Interval
+//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//
+//		Frequency Range Low
+//			(R) (mandatory) (1 byte)
+//
+//		Frequency Range High
+//			(R) (mandatory) (1 byte)
+//
+//		Signal Capability
+//			(R) (mandatory) (1 byte)
+//
+//		Optical Signal Level
+//			(R) (optional) (1 byte)
+//
+//		Pilot Signal Level
+//			(R) (optional) (1 byte)
+//
+//		Signal Level Min
+//			Signal level min: This attribute indicates the minimum optical RF power per channel that results
+//			in a CNR of 47 dBc for a channel of 4.5 MHz bandwidth at a receive optical power of –5 dBm. The
+//			unit of this attribute is decibel-microwatt optical. (R) (mandatory) (1 byte)
+//
+//		Signal Level Max
+//			Signal level max: This attribute indicates the maximum optical RF power per channel that results
+//			in a CTB of –57 dBc for an 80-channel ensemble of carriers at a perchannel optical modulation
+//			index (OMI) of 3.5%. The unit of this attribute is decibel-microwatt optical. (R) (mandatory)
+//			(1 byte)
+//
+//		Pilot Frequency
+//			(R, W) (optional) (4 bytes)
+//
+//		Agc Mode
+//			(R, W) (optional) (1 byte)
+//
+//		Agc Setting
+//			(R, W) (optional) (1 byte)
+//
+//		Video Lower Optical Threshold
+//			NOTE – Because the power measurement returned in the optical signal level attribute has a
+//			resolution of 1 dB, it is possible that the measured value could appear to be in-range, even
+//			though an out-of-range alarm has been declared against a threshold with 0.1 dB resolution.
+//
+//		Video Upper Optical Threshold
+//			Video upper optical threshold: This attribute specifies the optical level used to declare the
+//			video OOR high alarm. Valid values are –12 to +6 dBm in 0.1 dB increments, represented as a 2s
+//			complement integer. (Coding –120 to +60, 0x00 = 0 dBm, 0x88 = –12.0 dBm, etc.) Upon ME
+//			instantiation, the ONU sets this attribute to 0x19 (+2.5 dBm). (R, W) (optional) (1 byte)
+//
 type PhysicalPathTerminationPointVideoAni struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

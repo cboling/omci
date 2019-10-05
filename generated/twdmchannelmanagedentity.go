@@ -25,9 +25,44 @@ const TwdmChannelManagedEntityClassId ClassID = ClassID(443)
 
 var twdmchannelmanagedentityBME *ManagedEntityDefinition
 
-// TwdmChannelManagedEntity (class ID #443) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TwdmChannelManagedEntity (class ID #443)
+//	This ME provides an anchor for the MEs involved in collection of PM statistics per TWDM channel,
+//	as stipulated by clause 14 of [ITU-T G.989.3]. Instances of this ME are instantiated
+//	autonomously by the ONU.
+//
+//	Relationships
+//		One or more instances of this ME are implicitly associated with the TWDM System profile ME. The
+//		number of instances created is announced by the total TWDM channel number attribute of the TWDM
+//		system profile ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			number is represented as 0xSSBB, where SS indicates the ONU slot ID, and BB is the TWDM channel
+//			ME number assigned by the ONU itself, starting from 0 in the ascending order. (R) (mandatory)
+//			(2 bytes)
+//
+//		Active Channel Indication
+//			Active channel indication: The default value is false. The ONU sets the attribute to true when
+//			it receives the Channel_Profile PLOAM messages for that channel. The ONU clears the attribute
+//			when it receives the Channel_Profile PLOAM message marked “void” for that channel. (R)
+//			(mandatory) (1 byte)
+//
+//		Operational Channel Indication
+//			Operational channel indication: A Boolean attribute that is set to true for an active TWDM
+//			channel in which the ONT is currently operating. The operational statistic is accumulated in the
+//			PM history data MEs associated with that TWDM channel. (R) (mandatory) (1 byte)
+//
+//		Downstream Wavelength Channel
+//			Downstream wavelength channel: For an active TWDM channel, this attribute identifies the
+//			downstream wavelength channel in reference to Table 11-2 of [ITU-T G.989.2]. For an inactive
+//			channel it has value 0xFF. (R) (mandatory) (1 byte)
+//
+//		Upstream Wavelength Channel
+//			Upstream wavelength channel: For an active TWDM channel, this attribute identifies the upstream
+//			wavelength channel in reference to Table VIII-5 of [ITU-T G.989.2]. For an inactive channel its
+//			value of 0xFF. (R) (mandatory) (1 byte)
+//
 type TwdmChannelManagedEntity struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

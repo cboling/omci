@@ -25,9 +25,98 @@ const TwdmChannelPloamPerformanceMonitoringHistoryDataPart2ClassId ClassID = Cla
 
 var twdmchannelploamperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID #447) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID #447)
+//	This ME collects additional PLOAM-related PM data associated with the slot/circuit pack, hosting
+//	one or more ANI-G MEs, for a specific TWDM channel. Instances of this ME are created and deleted
+//	by the OLT.
+//
+//	The downstream PLOAM message counts of this ME include only the received PLOAM messages
+//	pertaining to the given ONU, i.e.:
+//
+//	–	unicast PLOAM messages, addressed by ONU-ID;
+//
+//	–	broadcast PLOAM messages, addressed by serial number;
+//
+//	–	broadcast PLOAM messages, addressed to all ONUs on the PON.
+//
+//	All these counters are characterized as optional in clause 14 of [ITU-T  G.989.3].
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of TWDM channel ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		System_Profile Message Count
+//			System_Profile message count: The counter of received System_Profile PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Channel_Profile Message Count
+//			Channel_Profile message count: The counter of received Channel_Profile PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Burst_Profile Message Count
+//			Burst_Profile message count: The counter of received Burst_Profile PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Assign_Onu_Id Message Count
+//			Assign_ONU-ID message count: The counter of received Assign_ONU-ID PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Unsatisfied Adjust_Tx_Wavelength Requests
+//			Unsatisfied Adjust_Tx_Wavelength requests: The counter of Adjust_Tx_Wavelength requests not
+//			applied or partially applied due to target US wavelength being out of Tx tuning range.  (R)
+//			(mandatory) (4 byte)
+//
+//		Deactivate_Onu_Id Message Count
+//			Deactivate_ONU-ID message count: The counter of received Deactivate_ONU-ID PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Disable_Serial_Number Message Count
+//			Disable_Serial_Number message count: The counter of received Disable_Serial_Number PLOAM
+//			messages. (R) (mandatory) (4 byte)
+//
+//		Request_Registration Message Count
+//			Request_Registration message count: The counter of received Request_Registration PLOAM messages.
+//			(R) (mandatory) (4 byte)
+//
+//		Assign_Alloc_Id Message Count
+//			Assign_Alloc-ID message count: The counter of received Assign_Alloc-ID PLOAM messages. (R)
+//			(mandatory) (4 byte)
+//
+//		Key_Control Message Count
+//			Key_Control message count: The counter of received Key_Control PLOAM messages. (R) (mandatory)
+//			(4 byte)
+//
+//		Sleep_Allow Message Count
+//			Sleep_Allow message count: The counter of received Sleep_Allow PLOAM messages. (R) (mandatory)
+//			(4 byte)
+//
+//		Tuning_Control_Request Message Count
+//			Tuning_Control/Request message count: The counter of received Tuning_Control PLOAM messages with
+//			Request operation code. (R) (mandatory) (4 byte)
+//
+//		Tuning_Control_Complete_D Message Count
+//			Tuning_Control/Complete_d message count: The counter of received Tuning_Control PLOAM messages
+//			with Complete_d operation code. (R) (mandatory) (4 byte)
+//
+//		Calibration_Request Message Count
+//			Calibration_Request message count: The counter of received Calibration_Request PLOAM messages.
+//			(R) (mandatory) (4 byte)
+//
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,45 @@ const MulticastSubscriberMonitorClassId ClassID = ClassID(311)
 
 var multicastsubscribermonitorBME *ManagedEntityDefinition
 
-// MulticastSubscriberMonitor (class ID #311) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MulticastSubscriberMonitor (class ID #311)
+//	This ME provides the current status of each port with respect to its multicast subscriptions. It
+//	may be useful for status monitoring or debugging purposes. The status table includes all dynamic
+//	groups currently subscribed by the port.
+//
+//	Relationships
+//		Instances of this ME are created and deleted at the request of the OLT. One instance may exist
+//		for each IEEE 802.1 UNI configured to support multicast subscription.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data or IEEE 802.1p mapper ME. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Me Type
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Current Multicast Bandwidth
+//			Current multicast bandwidth: This attribute is the ONU's (BE) estimate of the actual bandwidth
+//			currently being delivered to this particular MAC bridge port over all dynamic multicast groups.
+//			(R) (optional) (4 bytes)
+//
+//		Join Messages Counter
+//			Join messages counter: This attribute counts the number of times the corresponding subscriber
+//			sent a join message that was accepted. When full, the counter rolls over to 0. (R) (optional)
+//			(4 bytes)
+//
+//		Bandwidth Exceeded Counter
+//			Bandwidth exceeded counter: This attribute counts the number of join messages that did exceed,
+//			or would have exceeded, the max multicast bandwidth, whether accepted or denied. When full, the
+//			counter rolls over to 0. (R) (optional) (4 bytes)
+//
+//		Ipv4 Active Group List Table
+//			(R) (mandatory) (24N bytes)
+//
+//		Ipv6 Active Group List Table
+//			(R) (optional) (58N bytes)
+//
 type MulticastSubscriberMonitor struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,42 @@ const UniGClassId ClassID = ClassID(264)
 
 var unigBME *ManagedEntityDefinition
 
-// UniG (class ID #264) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// UniG (class ID #264)
+//	This ME organizes data associated with UNIs supported by GEM. One instance of the UNI-G ME
+//	exists for each UNI supported by the ONU.
+//
+//	The ONU automatically creates or deletes instances of this ME upon the creation or deletion of a
+//	real or virtual circuit pack ME, one per port.
+//
+//	Relationships
+//		An instance of the UNI-G ME exists for each instance of a PPTP ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of a PPTP. (R) (mandatory) (2 bytes)
+//
+//		Deprecated
+//			Deprecated:	This attribute is not used. It should be set to 0 by the OLT and ignored by the ONU.
+//			(R, W) (mandatory) (2 bytes)
+//
+//		Administrative State
+//			NOTE – PPTP MEs also have an administrative state attribute. The user port is unlocked only if
+//			both administrative state attributes are set to unlocked. It is recommended that this attribute
+//			not be used: that the OLT set it to 0 and that the ONU ignore it.
+//
+//		Management Capability
+//			(R) (optional) (1 byte)
+//
+//		Non_Omci Management Identifier
+//			Non-OMCI management identifier: If a PPTP can be managed either directly by the OMCI or a non-
+//			OMCI management environment, this attribute specifies how it is in fact to be managed. This
+//			attribute is either 0 (default = OMCI management), or it is a pointer to a VEIP, which in turn
+//			links to a non-OMCI management environment. (R, W) (optional) (2 bytes)
+//
+//		Relay Agent Options
+//			2/3/4:atm/123.4567
+//
 type UniG struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

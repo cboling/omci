@@ -25,9 +25,26 @@ const XdslSubcarrierMaskingUpstreamProfileClassId ClassID = ClassID(109)
 
 var xdslsubcarriermaskingupstreamprofileBME *ManagedEntityDefinition
 
-// XdslSubcarrierMaskingUpstreamProfile (class ID #109) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslSubcarrierMaskingUpstreamProfile (class ID #109)
+//	This ME contains the subcarrier masking upstream profile for an xDSL UNI. An instance of this ME
+//	is created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of the PPTP xDSL UNI part
+//		1.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
+//			reserved. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Upstream Subcarrier Mask
+//			Subcarrier number 1 is the lowest, and the number of xDSL subcarriers, upstream (NSCus) is the
+//			highest subcarrier that can be transmitted in the upstream direction. For [ITUT G.992.3],
+//			[ITUT G.992.4] and [ITUT G.992.5], it is defined in the corresponding Recommendation. For Annex
+//			A of [ITUT G.992.1] and [ITUT G.992.2], NSCus = 32 and for Annex B of [ITUT G.992.1], NSCus =
+//			64. (R, W, setbycreate) (mandatory) (8 bytes)
+//
 type XdslSubcarrierMaskingUpstreamProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

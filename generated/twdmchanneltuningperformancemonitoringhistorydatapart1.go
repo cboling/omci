@@ -25,9 +25,102 @@ const TwdmChannelTuningPerformanceMonitoringHistoryDataPart1ClassId ClassID = Cl
 
 var twdmchanneltuningperformancemonitoringhistorydatapart1BME *ManagedEntityDefinition
 
-// TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID #449) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 (class ID #449)
+//	This ME collects certain tuning-control-related PM data associated with the slot/circuit pack,
+//	hosting one or more ANI-G MEs, for a specific TWDM channel. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	The relevant events this ME is concerned with are counted towards the PM statistics associated
+//	with the source TWDM channel. The attribute descriptions refer to the ONU activation cycle
+//	states and timers specified in clause 12 of [ITU-T  G.989.3]. This ME contains the counters
+//	characterized as mandatory in clause 14 of [ITU-T  G.989.3].
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of TWDM channel ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Tuning Control Requests For Rx Only Or Rx And Tx
+//			Tuning control requests for Rx only or Rx and Tx: The counter of received Tuning_Control PLOAM
+//			messages with Request operation code that contain tuning instructions either for receiver only
+//			or for both receiver and transmitter. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests For Tx Only
+//			Tuning control requests for Tx only: The counter of received Tuning_Control PLOAM messages with
+//			Request operation code that contain tuning instructions for transmitter only. (R) (mandatory)
+//			(4 byte)
+//
+//		Tuning Control Requests Rejected_Int_Sfc
+//			Tuning control requests rejected/INT_SFC: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and INT_SFC response code, indicating inability to start
+//			transceiver tuning by the specified time (SFC). (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Xxx
+//			Tuning control requests rejected/DS_xxx: The aggregate counter of transmitted Tuning_Response
+//			PLOAM messages with NACK operation code and any DS_xxx response code, indicating target
+//			downstream wavelength channel inconsistency. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Xxx
+//			Tuning control requests rejected/US_xxx: The aggregate counter of transmitted Tuning_Response
+//			PLOAM messages with NACK operation code and any US_xxx response code, indicating target upstream
+//			wavelength channel inconsistency. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Fulfilled With Onu Reacquired At Target Channel
+//			Tuning control requests fulfilled with ONU reacquired at target channel: The counter of
+//			controlled tuning attempts for which an upstream tuning confirmation has been obtained in the
+//			target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Failed Due To Target Ds Wavelength Channel Not Found
+//			Tuning control requests failed due to target DS wavelength channel not found: The counter of
+//			controlled tuning attempts that failed due to timer TO4 expiration in the DS Tuning state (O8)
+//			in the target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Failed Due To No Feedback In Target Ds Wavelength Channel
+//			Tuning control requests failed due to no feedback in target DS wavelength channel: The counter
+//			of controlled tuning attempts that failed due to timer TO5 expiration in the US Tuning state
+//			(O9) in the target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Resolved With Onu Reacquired At Discretionary Channel
+//			Tuning control requests resolved with ONU reacquired at discretionary channel: The counter of
+//			controlled tuning attempts for which an upstream tuning confirmation has been obtained in the
+//			discretionary channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rollback_Com_Ds
+//			Tuning control requests Rollback/COM_DS: The counter of controlled tuning attempts that failed
+//			due to communication condition in the target channel, as indicated by the Tuning_Response PLOAM
+//			message with Rollback operation code and COM_DS response code. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rollback_Ds_Xxx
+//			Tuning control requests Rollback/DS_xxx: The aggregate counter of controlled tuning attempts
+//			that failed due to target downstream wavelength channel inconsistency, as indicated by the
+//			Tuning_Response PLOAM message with Rollback operation code and any DS_xxx response code. (R)
+//			(mandatory) (4 byte)
+//
+//		Tuning Control Requests Rollback_Us_Xxx
+//			Tuning control requests Rollback/US_xxx: The aggregate counter of controlled tuning attempts
+//			that failed due to target upstream wavelength channel parameter violation, as indicated by the
+//			Tuning_Response PLOAM message with Rollback operation code and US_xxx response code. (R)
+//			(mandatory) (4 byte)
+//
+//		Tuning Control Requests Failed With Onu Reactivation
+//			Tuning control requests failed with ONU reactivation: The counter of controlled tuning attempts
+//			that failed on any reason, with expiration of timers TO4 or TO5 causing the ONU transition into
+//			state O1. (R) (mandatory) (4 byte)
+//
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart1 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,69 @@ const XdslXtuRPerformanceMonitoringHistoryDataClassId ClassID = ClassID(113)
 
 var xdslxturperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// XdslXtuRPerformanceMonitoringHistoryData (class ID #113) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// XdslXtuRPerformanceMonitoringHistoryData (class ID #113)
+//	This ME collects PM data of the xTUC to xTUR path as seen from the xTU-R. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Loss Of Frame Seconds
+//			Loss of frame seconds: (R) (mandatory) (2 bytes)
+//
+//		Loss Of Signal Seconds
+//			Loss of signal seconds: (R) (mandatory) (2 bytes)
+//
+//		Loss Of Power Seconds
+//			Loss of power seconds: (R) (mandatory) (2 bytes)
+//
+//		Errored Seconds
+//			Errored seconds: This attribute counts 1 s intervals with one or more far end block error (FEBE)
+//			anomalies summed over all transmitted bearer channels, or one or more LOSFE defects, or one or
+//			more RDI defects, or one or more LPR-FE defects. (R) (mandatory) (2 bytes)
+//
+//		Severely Errored Seconds
+//			(R) (mandatory) (2 bytes)
+//
+//		Fec Seconds
+//			FEC seconds: This attribute counts seconds during which there was an FEC anomaly. (R)
+//			(mandatory) (2 bytes)
+//
+//		Unavailable Seconds
+//			(R) (mandatory) (2 bytes)
+//
+//		Leftr Defect Seconds
+//			"leftr" defect seconds: If retransmission is used, this parameter is a count of the seconds with
+//			a near-end ''leftr'' defect present – see clause 7.2.1.1.6 of [ITUT G.997.1]. (R) (optional)
+//			(2 bytes)
+//
+//		Error_Free Bits Counter
+//			Error-free bits counter: If retransmission is used, this parameter is a count of the number of
+//			error-free bits passed over the β1 reference point, divided by 216 – see clause 7.2.1.1.7 of
+//			[ITU-T G.997.1]. (R) (optional) (4 bytes)
+//
+//		Minimum Error_Free Throughput Mineftr
+//			Minimum error-free throughput (MINEFTR): If retransmission is used, this parameter is the
+//			minimum error-free throughput in bits per second – see clause 7.2.1.1.8 of [ITUT G.997.1]. (R)
+//			(optional) (4 bytes)
+//
 type XdslXtuRPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,56 @@ const RadiusPerformanceMonitoringHistoryDataClassId ClassID = ClassID(293)
 
 var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// RadiusPerformanceMonitoringHistoryData (class ID #293) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// RadiusPerformanceMonitoringHistoryData (class ID #293)
+//	This ME collects performance statistics on an ONU's radius client, particularly as related to
+//	its IEEE 802.1X operation.
+//
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an ONU.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID (namely 0), this ME is implicitly linked to an instance of a dot1X configuration
+//			profile. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Access_Request Packets Transmitted
+//			Access-request packets transmitted: This attribute counts transmitted radius access-request
+//			messages, including retransmissions. (R) (mandatory) (4 bytes)
+//
+//		Access_Request Retransmission Count
+//			Access-request retransmission count: This attribute counts radius access-request
+//			retransmissions. (R) (mandatory) (4 bytes)
+//
+//		Access_Challenge Packets Received
+//			Access-challenge packets received: This attribute counts received radius access-challenge
+//			messages. (R) (mandatory) (4 bytes)
+//
+//		Access_Accept Packets Received
+//			Access-accept packets received: This attribute counts received radius access-accept messages.
+//			(R) (mandatory) (4 bytes)
+//
+//		Access_Reject Packets Received
+//			Access-reject packets received: This attribute counts received radius access-reject messages.
+//			(R) (mandatory) (4 bytes)
+//
+//		Invalid Radius Packets Received
+//			Invalid radius packets received: This attribute counts received invalid radius messages. (R)
+//			(mandatory) (4 bytes)
+//
 type RadiusPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

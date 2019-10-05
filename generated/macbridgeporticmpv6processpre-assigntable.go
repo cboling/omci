@@ -25,9 +25,56 @@ const MacBridgePortIcmpv6ProcessPreAssignTableClassId ClassID = ClassID(348)
 
 var macbridgeporticmpv6processpreassigntableBME *ManagedEntityDefinition
 
-// MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// MacBridgePortIcmpv6ProcessPreAssignTable (class ID #348)
+//	This ME provides an approach to ICMPv6 message processing configuration to those ONUs that
+//	support IPv6 awareness. For every message, the MAC bridge port ICMPv6 process pre-assign table
+//	can designate a forward, discard or snoop operation. The ONU creates or deletes an instance of
+//	this ME automatically upon creation or deletion of a MAC bridge port configuration data ME.
+//
+//	The MAC bridge port ICMPv6 process pre-assign table ME filters layer 2 traffic between the UNI
+//	and ANI. The operation of this ME is completely independent of the operation and traffic
+//	generated or received by a possible IPv6 host config data ME.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of a MAC bridge port configuration data
+//		ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
+//			data ME. (R) (mandatory) (2 bytes)
+//
+//		Icmpv6 Error Messages Processing
+//			ICMPv6 error messages processing:	(R, W) (mandatory) (1 byte)
+//
+//		Icmpv6 Informational Messages Processing
+//			ICMPv6 informational messages processing:	(R, W) (mandatory) (1 byte)
+//
+//		Router Solicitation Processing
+//			Router solicitation processing:	(R, W) (mandatory) (1 byte)
+//
+//		Router Advertisement Processing
+//			Router advertisement processing:	(R, W) (mandatory) (1 byte)
+//
+//		Neighbour Solicitation Processing
+//			Neighbour solicitation processing:	(R, W) (mandatory) (1 byte)
+//
+//		Neighbour Advertisement Processing
+//			Neighbour advertisement processing:	(R, W) (mandatory) (1 byte)
+//
+//		Redirect Processing
+//			Redirect processing:	(R, W) (mandatory) (1 byte)
+//
+//		Multicast Listener Query Processing
+//			NOTE – If the ONU participates in multicast services, MLD queries should be controlled through
+//			the multicast operations profile ME. In such a case, it is strongly recommended not to provision
+//			the downstream direction of the multicast listener query processing attribute to any value other
+//			than forwarding.
+//
+//		Unknown Icmpv6 Processing
+//			Unknown ICMPv6 processing:	(R, W) (mandatory) (1 byte)
+//
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

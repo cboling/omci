@@ -25,9 +25,25 @@ const GalEthernetProfileClassId ClassID = ClassID(272)
 
 var galethernetprofileBME *ManagedEntityDefinition
 
-// GalEthernetProfile (class ID #272) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// GalEthernetProfile (class ID #272)
+//	This ME organizes data that describe the gigabit-capable passive optical network transmission
+//	convergence layer (GTC) adaptation layer processing functions of the ONU for Ethernet services.
+//	It is used with the GEM IW TP ME.
+//
+//	Instances of this ME are created and deleted on request of the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of the GEM IW TP ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Maximum Gem Payload Size
+//			Maximum GEM payload size: This attribute defines the maximum payload size generated in the
+//			associated GEM IW TP ME. (R, W, setbycreate) (mandatory) (2 bytes)
+//
 type GalEthernetProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

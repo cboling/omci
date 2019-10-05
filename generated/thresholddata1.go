@@ -25,9 +25,45 @@ const ThresholdData1ClassId ClassID = ClassID(273)
 
 var thresholddata1BME *ManagedEntityDefinition
 
-// ThresholdData1 (class ID #273) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// ThresholdData1 (class ID #273)
+//	Threshold data are partitioned into two MEs for historical reasons. An instance of this ME,
+//	together with an optional instance of the threshold data 2 ME, contains threshold values for
+//	counters in PM history data MEs.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be related to multiple instances of PM history data type MEs.////		Paired instances of threshold data 1 ME and threshold data 2 ME are implicitly linked together
+//		through a common ME ID.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Threshold Value_1
+//			Threshold value 1: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_2
+//			Threshold value 2: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_3
+//			Threshold value 3: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_4
+//			Threshold value 4: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_5
+//			Threshold value 5: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_6
+//			Threshold value 6: (R, W, setbycreate) (mandatory) (4 bytes)
+//
+//		Threshold Value_7
+//			Threshold value 7: (R, W, setbycreate) (mandatory) (4 bytes)
+//
 type ThresholdData1 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

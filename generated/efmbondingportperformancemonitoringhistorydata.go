@@ -25,9 +25,50 @@ const EfmBondingPortPerformanceMonitoringHistoryDataClassId ClassID = ClassID(42
 
 var efmbondingportperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// EfmBondingPortPerformanceMonitoringHistoryData (class ID #424) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EfmBondingPortPerformanceMonitoringHistoryData (class ID #424)
+//	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
+//	the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The two MSBs of
+//			the first byte are the bearer channel ID. Excluding the first 2 bits of the first byte, the
+//			remaining part of the ME ID is identical to that of this ME's parent PPTP xDSL UNI part 1. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Rx Frames
+//			Rx frames: Number of Ethernet frames received over this port. (R) (mandatory) (4 bytes)
+//
+//		Tx Frames
+//			Tx frames: Number of Ethernet frames transmitted over this port. (R) (mandatory) (4 bytes)
+//
+//		Rx Bytes
+//			Rx bytes: Number of bytes contained in the Ethernet frames received over this port. (R)
+//			(mandatory) (4 bytes)
+//
+//		Tx Bytes
+//			Tx bytes: Number of bytes contained in the Ethernet frames transmitted over this port. (R)
+//			(mandatory) (4 bytes)
+//
+//		Tx Discarded Frames
+//			Tx discarded frames: Number of Ethernet frames discarded by the port transmit function. (R)
+//			(mandatory) (4 bytes)
+//
+//		Tx Discarded Bytes
+//			Tx discarded bytes: Number of bytes contained in the Ethernet frames discarded by the port
+//			transmit function. (R) (mandatory) (4 bytes)
+//
 type EfmBondingPortPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

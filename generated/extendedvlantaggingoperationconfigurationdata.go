@@ -25,9 +25,64 @@ const ExtendedVlanTaggingOperationConfigurationDataClassId ClassID = ClassID(171
 
 var extendedvlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 
-// ExtendedVlanTaggingOperationConfigurationData (class ID #171) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// ExtendedVlanTaggingOperationConfigurationData (class ID #171)
+//	This ME organizes data associated with VLAN tagging. Regardless of its point of attachment, the
+//	specified tagging operations refer to the upstream direction. Instances of this ME are created
+//	and deleted by the OLT.
+//
+//	Relationships
+//		Zero or one instance of this ME may exist for an instance of any ME that can terminate or modify
+//		an Ethernet stream.////		When this ME is associated with a UNI-side TP, it performs its upstream classification and
+//		tagging operations before offering the upstream frame to other filtering, bridging or switching
+//		functions. In the downstream direction, the defined inverse operation is the last operation
+//		performed on the frame before offering it to the UNI-side termination.////		When this ME is associated with an ANI-side TP, it performs its upstream classification and
+//		tagging operations as the last step before transmission to the OLT, after having received the
+//		upstream frame from other filtering, bridging or switching functions. In the downstream
+//		direction, the defined inverse operation is the first operation performed on the frame before
+//		offering it to possible filter, bridge or switch functions.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute provides a unique number for each instance of this ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Association Type
+//			When the extended VLAN tagging ME is associated with the ANI side, it behaves as an upstream
+//			egress rule, and as a downstream ingress rule when the downstream mode attribute is equal to 0.
+//			When the extended VLAN tagging ME is associated with the UNI side, the extended VLAN tagging ME
+//			behaves as an upstream ingress rule, and as a downstream egress rule when the downstream mode
+//			attribute is equal to 0.
+//
+//		Received Frame Vlan Tagging Operation Table Max Size
+//			Received frame VLAN tagging operation table max size: This attribute indicates the maximum
+//			number of entries that can be set in the received frame VLAN tagging operation table. (R)
+//			(mandatory) (2 bytes)
+//
+//		Input Tpid
+//			Input TPID:	This attribute gives the special TPID value for operations on the input (filtering)
+//			side of the table. Typical values include 0x88A8 and 0x9100. (R, W) (mandatory) (2 bytes)
+//
+//		Output Tpid
+//			Output TPID: This attribute gives the special TPID value for operations on the output (tagging)
+//			side of the table. Typical values include 0x88A8 and 0x9100. (R, W) (mandatory) (2 bytes)
+//
+//		Downstream Mode
+//			All other values are reserved. (R, W) (mandatory) (1 byte)
+//
+//		Received Frame Vlan Tagging Operation Table
+//			111	Set TPID = output TPID, DEI = 1
+//
+//		Associated Me Pointer
+//			NOTE 5 – When the association type is xDSL, the two MSBs may be used to indicate a bearer
+//			channel.
+//
+//		Dscp To P Bit Mapping
+//			NOTE 6 – If certain bits in the DSCP field are to be ignored in the mapping process, the
+//			attribute should be provisioned such that all possible values of those bits produce the same
+//			P-bit mapping. This can be applied to the case where instead of full DSCP, the operator wishes
+//			to adopt the priority mechanism based on IP precedence, which needs only the three MSBs of the
+//			DSCP field.
+//
 type ExtendedVlanTaggingOperationConfigurationData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

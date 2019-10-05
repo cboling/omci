@@ -25,9 +25,43 @@ const NetworkDialPlanTableClassId ClassID = ClassID(145)
 
 var networkdialplantableBME *ManagedEntityDefinition
 
-// NetworkDialPlanTable (class ID #145) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// NetworkDialPlanTable (class ID #145)
+//	The network dial plan table ME is optional for ONUs providing VoIP services. This ME is used to
+//	provision dial plans from the OLT. Instances of this ME are created and deleted by the OLT. If a
+//	non-OMCI interface is used to manage SIP for VoIP, this ME is unnecessary.
+//
+//	Relationships
+//		An instance of this ME may be associated with one or more instances of the SIP user data ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Dial Plan Number
+//			Dial plan number: This attribute indicates the current number of dial plans in the dial plan
+//			table. (R) (mandatory) (2 bytes)
+//
+//		Dial Plan Table Max Size
+//			Dial plan table max size: This attribute defines the maximum number of dial plans that can be
+//			stored in the dial plan table. (R, setbycreate) (mandatory) (2 bytes)
+//
+//		Critical Dial Timeout
+//			Critical dial timeout: This attribute defines the critical dial timeout for digit map
+//			processing, in milliseconds. The recommended default value is 4000 ms. (R, W, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Partial Dial Timeout
+//			Partial dial timeout: This attribute defines the partial dial timeout for digit map processing,
+//			in milliseconds. The recommended default value is 16000 ms. (R, W, setbycreate) (mandatory)
+//			(2 bytes)
+//
+//		Dial Plan Format
+//			(R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Dial Plan Table
+//			(R, W) (mandatory) (30 * N bytes, where N is the number of dial plans)
+//
 type NetworkDialPlanTable struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

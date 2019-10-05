@@ -25,9 +25,99 @@ const TwdmChannelTuningPerformanceMonitoringHistoryDataPart2ClassId ClassID = Cl
 
 var twdmchanneltuningperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID #450) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID #450)
+//	This ME collects additional tuning-control-related PM data associated with the slot/circuit
+//	pack, hosting one or more ANI-G MEs, for a specific TWDM channel. Instances of this ME are
+//	created and deleted by the OLT.
+//
+//	The relevant events this ME is concerned with are counted towards the PM statistics associated
+//	with the source TWDM channel. This ME contains the counters characterized as optional in clause
+//	14 of [ITU-T  G.989.3].
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of TWDM channel ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Tuning Control Requests Rejected_Ds_Albl
+//			Tuning control requests rejected/DS_ALBL: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_ALBL response code, indicating downstream
+//			administrative label inconsistency. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Void
+//			Tuning control requests rejected/DS_VOID: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_VOID response code, indicating that the target
+//			downstream wavelength channel descriptor is void. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Part
+//			Tuning control requests rejected/DS_PART: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_PART response code, indicating that tuning request
+//			involves channel partition violation. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Tunr
+//			Tuning control requests rejected/DS_TUNR: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_TUNR response code, indicating that the target DS
+//			wavelength channel is out of receiver tuning range. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Lnrt
+//			Tuning control requests rejected/DS_LNRT: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_LNRT response code, indicating downstream line rate
+//			inconsistency in the target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Ds_Lncd
+//			Tuning control requests rejected/DS_LNCD: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and DS_LNCD response code, indicating downstream line code
+//			inconsistency in the target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Albl
+//			Tuning control requests rejected/US_ALBL: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_ALBL response code, indicating upstream administrative
+//			label inconsistency. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Void
+//			Tuning control requests rejected/US_VOID: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_VOID response code, indicating that the target upstream
+//			wavelength channel descriptor is void. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Tunr
+//			Tuning control requests rejected/US_TUNR: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_TUNR response code, indicating that the target US
+//			wavelength channel is out of transmitter tuning range. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Clbr
+//			Tuning control requests rejected/US_CLBR: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_CLBR response code, indicating that the transmitter has
+//			insufficient calibration accuracy in the target US wavelength channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Lktp
+//			Tuning control requests rejected/US_LKTP: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_LKTP response code, indicating upstream optical link
+//			type inconsistency. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Lnrt
+//			Tuning control requests rejected/US_LNRT: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_LNRT response code, indicating upstream line rate
+//			inconsistency in the target channel. (R) (mandatory) (4 byte)
+//
+//		Tuning Control Requests Rejected_Us_Lncd
+//			Tuning control requests rejected/US_LNCD: The counter of transmitted Tuning_Response PLOAM
+//			messages with NACK operation code and US_LNCD response code, indicating upstream line code
+//			inconsistency in the target channel. (R) (mandatory) (4 byte)
+//
 type TwdmChannelTuningPerformanceMonitoringHistoryDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

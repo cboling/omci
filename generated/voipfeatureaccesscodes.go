@@ -25,9 +25,58 @@ const VoipFeatureAccessCodesClassId ClassID = ClassID(147)
 
 var voipfeatureaccesscodesBME *ManagedEntityDefinition
 
-// VoipFeatureAccessCodes (class ID #147) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// VoipFeatureAccessCodes (class ID #147)
+//	The VoIP feature access codes ME defines administrable feature access codes for the VoIP
+//	subscriber. It is optional for ONUs that support VoIP services. If a non-OMCI interface is used
+//	to manage VoIP signalling, this ME is unnecessary.
+//
+//	Instances of this ME are created and deleted by the OLT. A VoIP feature access codes instance is
+//	needed for each unique set of feature access code attributes.
+//
+//	Relationships
+//		An instance of this ME may be associated with one or more SIP user data MEs.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R) (mandatory)
+//			(2 bytes)
+//
+//		Cancel Call Waiting
+//			Cancel call waiting:	(R, W) (optional) (5 bytes)
+//
+//		Call Hold
+//			Call hold:		(R, W) (optional) (5 bytes)
+//
+//		Call Park
+//			Call park:		(R, W) (optional) (5 bytes)
+//
+//		Caller Id Activate
+//			Caller ID activate:	(R, W) (optional) (5 bytes)
+//
+//		Caller Id Deactivate
+//			Caller ID deactivate:	(R, W) (optional) (5 bytes)
+//
+//		Do Not Disturb Activation
+//			Do not disturb activation:	(R, W) (optional) (5 bytes)
+//
+//		Do Not Disturb Deactivation
+//			Do not disturb deactivation:	(R, W) (optional) (5 bytes)
+//
+//		Do Not Disturb Pin Change
+//			Do not disturb PIN change:	(R, W) (optional) (5 bytes)
+//
+//		Emergency Service Number
+//			Emergency service number:	(R, W) (optional) (5 bytes)
+//
+//		Intercom Service
+//			Intercom service:	(R, W) (optional) (5 bytes)
+//
+//		Unattended_Blind Call Transfer
+//			Unattended/blind call transfer:	(R, W) (optional) (5 bytes)
+//
+//		Attended Call Transfer
+//			Attended call transfer:	(R, W) (optional) (5 bytes)
+//
 type VoipFeatureAccessCodes struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

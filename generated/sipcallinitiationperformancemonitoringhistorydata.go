@@ -25,9 +25,53 @@ const SipCallInitiationPerformanceMonitoringHistoryDataClassId ClassID = ClassID
 
 var sipcallinitiationperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// SipCallInitiationPerformanceMonitoringHistoryData (class ID #152) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// SipCallInitiationPerformanceMonitoringHistoryData (class ID #152)
+//	This ME collects PM data related to call initiations of a VoIP SIP agent. Instances of this ME
+//	are created and deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an instance of the SIP agent config data or SIP config
+//		portal ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the SIP agent config data or the
+//			SIP config portal ME. If a nonOMCI configuration method is used for VoIP, there can be only one
+//			live ME instance, associated with the SIP config portal, and with ME ID 0. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Failed To Connect Counter
+//			Failed to connect counter: This attribute counts the number of times that the SIP UA failed to
+//			reach/connect its TCP/UDP peer during SIP call initiations. (R) (mandatory) (4 bytes)
+//
+//		Failed To Validate Counter
+//			Failed to validate counter: This attribute counts the number of times that the SIP UA failed to
+//			validate its peer during SIP call initiations. (R) (mandatory) (4 bytes)
+//
+//		Timeout Counter
+//			Timeout counter: This attribute counts the number of times that the SIP UA timed out during SIP
+//			call initiations. (R) (mandatory) (4 bytes)
+//
+//		Failure Received Counter
+//			Failure received counter: This attribute counts the number of times that the SIP UA received a
+//			failure error code during SIP call initiations. (R) (mandatory) (4 bytes)
+//
+//		Failed To Authenticate Counter
+//			Failed to authenticate counter: This attribute counts the number of times that the SIP UA failed
+//			to authenticate itself during SIP call initiations. (R) (mandatory) (4 bytes)
+//
 type SipCallInitiationPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

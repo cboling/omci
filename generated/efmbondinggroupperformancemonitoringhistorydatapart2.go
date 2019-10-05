@@ -25,9 +25,75 @@ const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId ClassID = Clas
 
 var efmbondinggroupperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #422) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #422)
+//	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
+//	the OLT.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the EFM bonding group. (R,
+//			setbycreate) (mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1_2 Id
+//			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
+//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Rx Unicast Frames
+//			Rx unicast frames: Number of unicast Ethernet frames received over this group. (R) (mandatory)
+//			(4 bytes)
+//
+//		Tx Unicast Frames
+//			Tx unicast frames: Number of unicast Ethernet frames transmitted over this group. (R)
+//			(mandatory) (4 bytes)
+//
+//		Rx Unicast Bytes
+//			Rx unicast bytes: Number of bytes contained in the unicast Ethernet frames received over this
+//			group. (R) (mandatory) (8 bytes)
+//
+//		Tx Unicast Bytes
+//			Tx unicast bytes: Number of bytes contained in the unicast Ethernet frames transmitted over this
+//			group. (R) (mandatory) (8 bytes)
+//
+//		Rx Broadcast Frames
+//			Rx broadcast frames: Number of broadcast Ethernet frames received over this group. (R)
+//			(mandatory) (4 bytes)
+//
+//		Tx Broadcast Frames
+//			Tx broadcast frames: Number of broadcast Ethernet frames transmitted over this group. (R)
+//			(mandatory) (4 bytes)
+//
+//		Rx Broadcast Bytes
+//			Rx broadcast bytes: Number of bytes contained in the broadcast Ethernet frames received over
+//			this group. (R) (mandatory) (8 bytes)
+//
+//		Tx Broadcast Bytes
+//			Tx broadcast bytes: Number of bytes contained in the broadcast Ethernet frames transmitted over
+//			this group. (R) (mandatory) (8 bytes)
+//
+//		Rx Multicast Frames
+//			Rx multicast frames: Number of multicast Ethernet frames received over this group. (R)
+//			(mandatory) (4 bytes)
+//
+//		Tx Multicast Frames
+//			Tx multicast frames: Number of multicast Ethernet frames transmitted over this group. (R)
+//			(mandatory) (4 bytes)
+//
+//		Rx Multicast Bytes
+//			Rx multicast bytes: Number of bytes contained in the multicast Ethernet frames received over
+//			this group. (R) (mandatory) (8 bytes)
+//
+//		Tx Multicast Bytes
+//			Tx multicast bytes: Number of bytes contained in the multicast Ethernet frames transmitted over
+//			this group. (R) (mandatory) (8 bytes)
+//
 type EfmBondingGroupPerformanceMonitoringHistoryDataPart2 struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

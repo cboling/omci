@@ -25,9 +25,68 @@ const OnuPowerSheddingClassId ClassID = ClassID(133)
 
 var onupowersheddingBME *ManagedEntityDefinition
 
-// OnuPowerShedding (class ID #133) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// OnuPowerShedding (class ID #133)
+//	This ME models the ONU's ability to shed services when the ONU goes into battery operation mode
+//	after AC power failure. Shedding classes are defined in the following table, which may span
+//	multiple circuit pack types. This feature works in conjunction with the power shed override
+//	attribute of the circuit pack ME, which can selectively prevent power shedding of priority
+//	ports.
+//
+//	An ONU that supports power shedding automatically creates an instance of this ME.
+//
+//	The following table defines the binding of shedding class and PPTP type. The coding is taken
+//	from Table 9.1.5-1. In the case of hybrid circuit pack types, multiple shedding classes may
+//	affect a circuit pack if the hardware is capable of partial power shedding.
+//
+//	An ONU may choose to model its ports with the port-mapping package of clause 9.1.8, rather than
+//	with real or virtual circuit packs. In this case, power shedding pertains to individual PPTPs
+//	(listed in column 2 of the table).
+//
+//	Relationships
+//		One instance of this ME is associated with the ONU ME.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
+//			one instance, number 0. (R) (mandatory) (2 bytes)
+//
+//		Restore Power Timer Reset Interval
+//			Restore power timer reset interval: The time delay, in seconds, before resetting the power-
+//			shedding timers after full power restoration. Upon ME instantiation, the ONU sets this attribute
+//			to 0. (R, W) (mandatory) (2 bytes)
+//
+//		Data Class Shedding Interval
+//			Data class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Voice Class Shedding Interval
+//			Voice class shedding interval: This attribute only pertains to voice services that terminate on
+//			the ONU and are under the management control of the OMCI. (R, W) (mandatory) (2 bytes)
+//
+//		Video Overlay Class Shedding Interval
+//			Video overlay class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Video Return Class Shedding Interval
+//			Video return class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Digital Subscriber Line Class Shedding Interval
+//			Digital subscriber line (DSL) class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Atm Class Shedding Interval
+//			ATM class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Ces Class Shedding Interval
+//			CES class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Frame Class Shedding Interval
+//			Frame class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Sdh_Sonet Class Shedding Interval
+//			Sdh-sonet class shedding interval:	(R, W) (mandatory) (2 bytes)
+//
+//		Shedding Status
+//			The ONU sets each bit to 1 when power shedding is active, and clears it to 0 when the service is
+//			restored. (R) (optional) (2 bytes)
+//
 type OnuPowerShedding struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

@@ -25,9 +25,72 @@ const Ieee8021PMapperServiceProfileClassId ClassID = ClassID(130)
 
 var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 
-// Ieee8021PMapperServiceProfile (class ID #130) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// Ieee8021PMapperServiceProfile (class ID #130)
+//	This ME associates the priorities of IEEE 802.1p [IEEE 802.1D] priority tagged frames with
+//	specific connections. This ME directs upstream traffic to the designated GEM ports. Downstream
+//	traffic arriving on any of the IEEE 802.1p mapper's GEM ports is directed to the mapper's root
+//	TP. Other mechanisms exist to direct downstream traffic, specifically a direct pointer to a
+//	downstream queue from the GEM port network CTP. If such an alternative is used, it should be
+//	provisioned to be consistent with the flow model of the mapper.
+//
+//	Instances of this ME are created and deleted by the OLT.
+//
+//	Relationships
+//		At its root, an instance of this ME may be associated with zero or one instance of a PPTP UNI,
+//		MAC bridge port configuration data, or any type of IW TP ME that carries IEEE 802 traffic. Each
+//		of its eight branches is associated with zero or one GEM IW TP.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
+//			(mandatory) (2 bytes)
+//
+//		Tp Pointer
+//			(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 0
+//			Interwork TP pointer for P-bit priority 0:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 1
+//			Interwork TP pointer for P-bit priority 1:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 2
+//			Interwork TP pointer for P-bit priority 2:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 3
+//			Interwork TP pointer for P-bit priority 3:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 4
+//			Interwork TP pointer for P-bit priority 4:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 5
+//			Interwork TP pointer for P-bit priority 5:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 6
+//			Interwork TP pointer for P-bit priority 6:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Interwork Tp Pointer For P_Bit Priority 7
+//			Interwork TP pointer for P-bit priority 7:	(R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Unmarked Frame Option
+//			Untagged downstream frames are passed through the mapper transparently.
+//
+//		Dscp To P Bit Mapping
+//			NOTE – If certain bits in the DSCP field are to be ignored in the mapping process, the attribute
+//			should be provisioned such that all possible values of those bits produce the same P-bit
+//			mapping. This can be applied to the case where instead of full DSCP, the operator wishes to
+//			adopt the priority mechanism based on IP precedence, which needs only the three MSBs of the DSCP
+//			field.
+//
+//		Default P Bit Assumption
+//			Default P-bit assumption: This attribute is valid when the unmarked frame option attribute is
+//			set to 1. In its LSBs, the default Pbit assumption attribute contains the default PCP field to
+//			be assumed. The unmodified frame is then directed to the GEM IW TP indicated by the interwork TP
+//			pointer mappings. (R, W, setbycreate) (mandatory) (1 byte)
+//
+//		Tp Type
+//			(R, W, setbycreate) (optional) (1 byte)
+//
 type Ieee8021PMapperServiceProfile struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

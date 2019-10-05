@@ -25,9 +25,30 @@ const EquipmentExtensionPackageClassId ClassID = ClassID(160)
 
 var equipmentextensionpackageBME *ManagedEntityDefinition
 
-// EquipmentExtensionPackage (class ID #160) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// EquipmentExtensionPackage (class ID #160)
+//	This ME supports optional extensions to circuit pack MEs. If the circuit pack supports these
+//	features, the ONU creates and deletes this ME along with its associated real or virtual circuit
+//	pack.
+//
+//	Relationships
+//		An equipment extension package may be contained by an ONU-G or cardholder.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the ONU-G or cardholder. (R)
+//			(mandatory) (2 bytes)
+//
+//		Environmental Sense
+//			NOTE – Some specific sense point applications are already defined on the ONU-G ME. It is the
+//			vendor's choice how to configure and report sense points that appear both generically and
+//			specifically.
+//
+//		Contact Closure Output
+//			On read, the left bit in each pair should be set to 0 at the ONU and ignored at the OLT. The
+//			right bit indicates a released output point with 0 and an operated contact point with 1. (R, W)
+//			(optional) (2 bytes)
+//
 type EquipmentExtensionPackage struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

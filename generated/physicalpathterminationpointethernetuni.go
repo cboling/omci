@@ -25,9 +25,93 @@ const PhysicalPathTerminationPointEthernetUniClassId ClassID = ClassID(11)
 
 var physicalpathterminationpointethernetuniBME *ManagedEntityDefinition
 
-// PhysicalPathTerminationPointEthernetUni (class ID #11) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// PhysicalPathTerminationPointEthernetUni (class ID #11)
+//	This ME represents the point at an Ethernet UNI where the physical path terminates and Ethernet
+//	physical level functions are performed.
+//
+//	The ONU automatically creates an instance of this ME per port:
+//
+//	•	when the ONU has Ethernet ports built into its factory configuration;
+//
+//	•	when a cardholder is provisioned to expect a circuit pack of the Ethernet type;
+//
+//	•	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the
+//	Ethernet type. Note that the installation of a plug-and-play card may indicate the presence of
+//	Ethernet ports via equipment ID as well as its type, and indeed may cause the ONU to instantiate
+//	a port-mapping package that specifies Ethernet ports.
+//
+//	The ONU automatically deletes instances of this ME when a cardholder is neither provisioned to
+//	expect an Ethernet circuit pack, nor is it equipped with an Ethernet circuit pack.
+//
+//	Relationships
+//		An instance of this ME is associated with each instance of a pre-provisioned or real Ethernet
+//		port.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			number indicates the physical position of the UNI. The first byte is the slot ID (defined in
+//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2 bytes)
+//
+//		Expected Type
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//
+//		Sensed Type
+//			(R) (mandatory if the ONU supports circuit packs with configurable interface types, e.g., 10/100
+//			BASE-T card) (1 byte)
+//
+//		Auto Detection Configuration
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory for interfaces with
+//			autodetection options) (1 byte)
+//
+//		Ethernet Loopback Configuration
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//
+//		Administrative State
+//			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
+//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//
+//		Operational State
+//			Operational state: This attribute indicates whether the ME is capable of performing its
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//
+//		Configuration Ind
+//			The value 0 indicates that the configuration status is unknown (e.g., Ethernet link is not
+//			established or the circuit pack is not yet installed). Upon ME instantiation, the ONU sets this
+//			attribute to 0. (R) (mandatory) (1 byte)
+//
+//		Max Frame Size
+//			Max frame size: This attribute denotes the maximum frame size allowed across this interface.
+//			Upon ME instantiation, the ONU sets the attribute to 1518. (R, W) (mandatory for G-PON, optional
+//			for ITU-T G.986 systems) (2 bytes)
+//
+//		Dte Or Dce Ind
+//			(R, W) (mandatory) (1 byte)
+//
+//		Pause Time
+//			Pause time:	This attribute allows the PPTP to ask the subscriber terminal to temporarily suspend
+//			sending data. Units are in pause quanta (1 pause quantum is 512 bit times of the particular
+//			implementation). Values: 0..0xFFFF. Upon ME instantiation, the ONU sets this attribute to 0.
+//			(R, W) (optional) (2 bytes)
+//
+//		Bridged Or Ip Ind
+//			Upon ME instantiation, the ONU sets this attribute to 2. (R, W) (optional) (1 byte)
+//
+//		Arc
+//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//
+//		Arc Interval
+//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//
+//		Pppoe Filter
+//			PPPoE filter: This attribute controls filtering of PPPoE packets on this Ethernet port. The
+//			value 0 allows packets of all types. The value 1 discards everything but PPPoE packets. The
+//			default value is 0. (R, W) (optional) (1 byte)
+//
+//		Power Control
+//			NOTE – This attribute is the equivalent of the acPSEAdminControl variable defined in clause
+//			30.9.1.2.1 of [IEEE 802.3]. Other variables related to PoE appear in the PoE control ME.
+//
 type PhysicalPathTerminationPointEthernetUni struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

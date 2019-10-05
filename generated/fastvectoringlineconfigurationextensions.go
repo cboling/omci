@@ -25,9 +25,32 @@ const FastVectoringLineConfigurationExtensionsClassId ClassID = ClassID(434)
 
 var fastvectoringlineconfigurationextensionsBME *ManagedEntityDefinition
 
-// FastVectoringLineConfigurationExtensions (class ID #434) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// FastVectoringLineConfigurationExtensions (class ID #434)
+//	This ME extends FAST line configuration MEs with attributes that are specific to vectoring. An
+//	instance of this ME is created and deleted by the OLT.
+//
+//	Relationships
+//		An instance of this ME may be associated with zero or more instances of an xDSL UNI.////		The overall FAST line configuration MEs is modelled in several parts, all of which are
+//		associated together through a common ME ID (the client PPTP xDSL UNI part 3 has a single
+//		pointer, which refers to the entire set of line configuration parts).
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
+//			reserved. (R, set-by-create) (mandatory) (2 bytes)
+//
+//		Fext Cancellation Enabling_Disabling Upstream Fext_To_Cancel_Enableus
+//			FEXT cancellation enabling/disabling upstream (FEXT_TO_CANCEL_ENABLEus): A value of 1 enables
+//			and a value of 0 disables FEXT cancellation in the upstream direction from all the other
+//			vectored lines into the line in the vectored group. See clause 7.1.7.2 of [ITU-T G.997.2].
+//			(R, W) (mandatory) (1 byte)
+//
+//		Fext Cancellation Enabling_Disabling Downstream Fext_To_Cancel_Enableds
+//			FEXT cancellation enabling/disabling downstream (FEXT_TO_CANCEL_ENABLEds): A value of 1 enables
+//			and a value of 0 disables FEXT cancellation in the downstream direction from all the other
+//			vectored lines into the line in the vectored group. See clause 7.1.7.1 of [ITUT G.997.2]. (R, W)
+//			(mandatory) (1 byte)
+//
 type FastVectoringLineConfigurationExtensions struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap

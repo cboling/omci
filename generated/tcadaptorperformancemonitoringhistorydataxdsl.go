@@ -25,9 +25,64 @@ const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId ClassID = ClassID(116
 
 var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 
-// TcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID #116) defines the basic
-// Managed Entity definition that is further extended by types that support
-// packet encode/decode and user create managed entities.
+// TcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID #116)
+//	This ME collects PM data of an xTUC to xTUR ATM data path. Instances of this ME are created and
+//	deleted by the OLT.
+//
+//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//
+//	Relationships
+//		An instance of this ME is associated with an xDSL UNI.
+//
+//	Attributes
+//		Managed Entity Id
+//			Managed entity ID:	This attribute uniquely identifies each instance of this ME. Through an
+//			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
+//			(mandatory) (2 bytes)
+//
+//		Interval End Time
+//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			(mandatory) (1 byte)
+//
+//		Threshold Data 1 _2 Id
+//			Threshold data1/2 ID: This attribute points to an instance of the threshold data1 ME that
+//			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
+//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//
+//		Near_End Hec Violation Count
+//			Near-end HEC violation count: This attribute counts near-end HEC anomalies in the ATM data path.
+//			(R) (mandatory) (2 bytes)
+//
+//		Near_End Delineated Total Cell Count Cd P
+//			Near-end delineated total cell count (CDP): This attribute counts the total number of cells
+//			passed through the cell delineation and HEC function process operating on the ATM data path
+//			while in the SYNC state. (R) (mandatory) (4 bytes)
+//
+//		Near_End User Total Cell Count Cu_P
+//			Near-end user total cell count(CU-P): This attribute counts the total number of cells in the ATM
+//			data path delivered at the V-C interface. (R) (mandatory) (4 bytes)
+//
+//		Near_End Idle Cell Bit Error Count
+//			Near-end idle cell bit error count: This attribute counts cells with bit errors in the ATM data
+//			path idle payload received at the near end. (R) (mandatory) (2 bytes)
+//
+//		Far_End Hec Violation Count
+//			Far-end HEC violation count: This attribute counts far-end HEC anomalies in the ATM data path.
+//			(R) (mandatory) (2 bytes)
+//
+//		Far_End Delineated Total Cell Count Cd_Pfe
+//			Far-end delineated total cell count (CD-PFE): This attribute counts the total number of cells
+//			passed through the cell delineation process and HEC function operating on the ATM data path
+//			while in the SYNC state. (R) (mandatory) (4 bytes)
+//
+//		Far_End User Total Cell Count Cu_Pfe
+//			Far-end user total cell count (CU-PFE): This attribute counts the total number of cells in the
+//			ATM data path delivered at the T-R interface. (R) (mandatory) (4 bytes)
+//
+//		Far_End Idle Cell Bit Error Count
+//			Far-end idle cell bit error count: This attribute counts cells with bit errors in the ATM data
+//			path idle payload received at the far end. (R) (mandatory) (2 bytes)
+//
 type TcAdaptorPerformanceMonitoringHistoryDataXdsl struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap
