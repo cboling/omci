@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+
 package omci
 
 import (
@@ -179,6 +180,7 @@ func (omci *CreateRequest) String() string {
 	return fmt.Sprintf("%v, attributes: %v", omci.MeBasePacket.String(), omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of a Create Request into this layer
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -223,6 +225,7 @@ func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Create Request Message
 func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -263,6 +266,7 @@ func (omci *CreateResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeExecutionMask)
 }
 
+// DecodeFromBytes decodes the given bytes of a Create Response into this layer
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -293,6 +297,7 @@ func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Create Response message
 func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -333,6 +338,7 @@ func (omci *DeleteRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Delete Request into this layer
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -358,6 +364,7 @@ func decodeDeleteRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Delete Request message
 func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -389,6 +396,7 @@ func (omci *DeleteResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
+// DecodeFromBytes decodes the given bytes of a Delete Response into this layer
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -415,6 +423,7 @@ func decodeDeleteResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Delete Response message
 func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -452,6 +461,7 @@ func (omci *SetRequest) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of a Set Request into this layer
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -499,6 +509,7 @@ func decodeSetRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Set Request message
 func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -558,6 +569,7 @@ func (omci *SetResponse) String() string {
 		omci.FailedAttributeMask)
 }
 
+// DecodeFromBytes decodes the given bytes of a Set Response into this layer
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -589,6 +601,7 @@ func decodeSetResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Set Response message
 func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -626,6 +639,8 @@ func (omci *GetRequest) String() string {
 	return fmt.Sprintf("%v, Mask: %#x",
 		omci.MeBasePacket.String(), omci.AttributeMask)
 }
+
+// DecodeFromBytes decodes the given bytes of a Get Request into this layer
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -652,6 +667,7 @@ func decodeGetRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Request message
 func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -693,6 +709,7 @@ func (omci *GetResponse) String() string {
 		omci.UnsupportedAttributeMask, omci.FailedAttributeMask, omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get Response into this layer
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -755,6 +772,7 @@ func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Response message
 func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -831,6 +849,7 @@ func (omci *GetAllAlarmsRequest) String() string {
 		omci.MeBasePacket.String(), omci.AlarmRetrievalMode)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get All Alarms Request into this layer
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -873,6 +892,7 @@ func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get All Alarms Request message
 func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -909,6 +929,7 @@ func (omci *GetAllAlarmsResponse) String() string {
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get All Alarms Response into this layer
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -946,6 +967,7 @@ func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get All Alarms Response message
 func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -982,6 +1004,7 @@ func (omci *GetAllAlarmsNextRequest) String() string {
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get All Alarms Next Request into this layer
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1019,6 +1042,7 @@ func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error 
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get All Alarms Next Request message
 func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1058,6 +1082,7 @@ func (omci *GetAllAlarmsNextResponse) String() string {
 		omci.AlarmEntityInstance, omci.AlarmBitMap)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get All Alarms Next Response into this layer
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1098,6 +1123,7 @@ func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get All Alarms Next Response message
 func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1134,6 +1160,7 @@ func (omci *MibUploadRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Upload Request into this layer
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1167,6 +1194,7 @@ func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Upload Request message
 func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1198,6 +1226,7 @@ func (omci *MibUploadResponse) String() string {
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Upload Response into this layer
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1235,6 +1264,7 @@ func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Upload Response message
 func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1271,6 +1301,7 @@ func (omci *MibUploadNextRequest) String() string {
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Upload Next Request into this layer
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1308,6 +1339,7 @@ func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Upload Next Request message
 func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1344,6 +1376,7 @@ func (omci *MibUploadNextResponse) String() string {
 		omci.MeBasePacket.String(), omci.ReportedME.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Upload Next Response into this layer
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1383,6 +1416,7 @@ func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Upload Next Response message
 func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1415,6 +1449,7 @@ func (omci *MibResetRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Reset Request into this layer
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1451,6 +1486,7 @@ func decodeMibResetRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Reset Request message
 func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Add class ID and entity ID
 	return omci.MeBasePacket.SerializeTo(b)
@@ -1468,6 +1504,7 @@ func (omci *MibResetResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
+// DecodeFromBytes decodes the given bytes of a MIB Reset Response into this layer
 func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1506,6 +1543,7 @@ func decodeMibResetResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an MIB Reset Response message
 func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1588,6 +1626,7 @@ func (omci *AlarmNotificationMsg) ClearAlarm(alarmNumber uint8) error {
 	return nil
 }
 
+// DecodeFromBytes decodes the given bytes of an Alarm Notification into this layer
 func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1623,6 +1662,7 @@ func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Alarm Notification message
 func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1668,6 +1708,7 @@ func (omci *AttributeValueChangeMsg) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of an Attribute Value Change notification into this layer
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1704,6 +1745,7 @@ func decodeAttributeValueChange(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Attribute Value Change Notification message
 func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1752,6 +1794,7 @@ func (omci *TestRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Test Request into this layer
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1767,6 +1810,7 @@ func decodeTestRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Test Request message
 func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1786,6 +1830,7 @@ func (omci *TestResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Test Response into this layer
 func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1801,6 +1846,7 @@ func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Test Response message
 func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1825,6 +1871,7 @@ func (omci *StartSoftwareDownloadRequest) String() string {
 		omci.MeBasePacket.String(), omci.WindowSize, omci.ImageSize, omci.NumberOfCircuitPacks)
 }
 
+// DecodeFromBytes decodes the given bytes of a Start Software Download Request into this layer
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
 	if err != nil {
@@ -1865,6 +1912,7 @@ func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) e
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Start Software Download Request message
 func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -1928,6 +1976,7 @@ func (omci *StartSoftwareDownloadResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.WindowSize, omci.NumberOfInstances, omci.MeResults)
 }
 
+// DecodeFromBytes decodes the given bytes of a Start Software Download Response into this layer
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -1984,6 +2033,7 @@ func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) 
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Start Software Download Response message
 func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2050,6 +2100,7 @@ func (omci *DownloadSectionRequest) String() string {
 		omci.MeBasePacket.String(), omci.SectionNumber)
 }
 
+// DecodeFromBytes decodes the given bytes of a Download Section Request into this layer
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2081,6 +2132,7 @@ func decodeDownloadSectionRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Download Section Request message
 func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2123,6 +2175,7 @@ func (omci *DownloadSectionResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SectionNumber)
 }
 
+// DecodeFromBytes decodes the given bytes of a Download Section Response into this layer
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2159,6 +2212,7 @@ func decodeDownloadSectionResponse(data []byte, p gopacket.PacketBuilder) error 
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Download Section Response message
 func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2208,6 +2262,7 @@ func (omci *EndSoftwareDownloadRequest) String() string {
 		omci.MeBasePacket.String(), omci.CRC32, omci.ImageSize, omci.NumberOfInstances, omci.ImageInstances)
 }
 
+// DecodeFromBytes decodes the given bytes of an End Software Download Request into this layer
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2251,6 +2306,7 @@ func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) err
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an End Software Download Request message
 func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2303,6 +2359,7 @@ func (omci *EndSoftwareDownloadResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.NumberOfInstances, omci.MeResults)
 }
 
+// DecodeFromBytes decodes the given bytes of an End Software Download Response into this layer
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2358,6 +2415,7 @@ func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) er
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an End Software Download Response message
 func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2422,6 +2480,7 @@ func (omci *ActivateSoftwareRequest) String() string {
 		omci.MeBasePacket.String(), omci.ActivateFlags)
 }
 
+// DecodeFromBytes decodes the given bytes of an Activate Software Request into this layer
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2457,6 +2516,7 @@ func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error 
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Activate Software message
 func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2502,6 +2562,7 @@ func (omci *ActivateSoftwareResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
+// DecodeFromBytes decodes the given bytes of an Activate Softwre Response into this layer
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2537,6 +2598,7 @@ func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Activate Software Response message
 func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2580,6 +2642,7 @@ func (omci *CommitSoftwareRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Commit Software Request into this layer
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2609,6 +2672,7 @@ func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Commit Software Request message
 func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2642,6 +2706,7 @@ func (omci *CommitSoftwareResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Commit Softwar Response into this layer
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2671,6 +2736,7 @@ func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Commit Software Response message
 func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2711,6 +2777,7 @@ func (omci *SynchronizeTimeRequest) String() string {
 		omci.MeBasePacket.String(), omci.Year, omci.Month, omci.Day, omci.Hour, omci.Minute, omci.Second)
 }
 
+// DecodeFromBytes decodes the given bytes of a Synchronize Time Request into this layer
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2749,6 +2816,7 @@ func decodeSynchronizeTimeRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Synchronize Time Request message
 func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2791,6 +2859,7 @@ func (omci *SynchronizeTimeResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SuccessResults)
 }
 
+// DecodeFromBytes decodes the given bytes of a Synchronize Time Response into this layer
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2829,6 +2898,7 @@ func decodeSynchronizeTimeResponse(data []byte, p gopacket.PacketBuilder) error 
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Synchronize Time Response message
 func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2879,6 +2949,7 @@ func (omci *RebootRequest) String() string {
 		omci.MeBasePacket.String(), omci.RebootCondition)
 }
 
+// DecodeFromBytes decodes the given bytes of a Reboot Request into this layer
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2909,6 +2980,7 @@ func decodeRebootRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Reboot Request message
 func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -2944,11 +3016,13 @@ type RebootResponse struct {
 	Result me.Results
 }
 
+// DecodeFromBytes decodes the given bytes of a Reboot Response into this layer
 func (omci *RebootResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
+// DecodeFromBytes decodes the given bytes of a Reboot Response into this layer
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -2979,6 +3053,7 @@ func decodeRebootResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Reboot Response message
 func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3020,6 +3095,7 @@ func (omci *GetNextRequest) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.SequenceNumber)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get Next Request into this layer
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3051,6 +3127,7 @@ func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Next Message Type Request
 func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3085,11 +3162,13 @@ type GetNextResponse struct {
 	Attributes    me.AttributeValueMap
 }
 
+// SerializeTo provides serialization of an Get Next Message Type Response
 func (omci *GetNextResponse) String() string {
 	return fmt.Sprintf("%v, Result: %v, Attribute Mask: %#x, Attributes: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.AttributeMask, omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get Next Response into this layer
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3142,6 +3221,7 @@ func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Next Message Type Response
 func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3208,6 +3288,7 @@ func (omci *TestResultMsg) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Test Result Notification into this layer
 func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3223,6 +3304,7 @@ func decodeTestResult(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Test Result notification message
 func (omci *TestResultMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3244,6 +3326,7 @@ func (omci *GetCurrentDataRequest) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get Current Data Request into this layer
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3272,6 +3355,7 @@ func decodeGetCurrentDataRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Current Data Request message
 func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3310,6 +3394,7 @@ func (omci *GetCurrentDataResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask, omci.Attributes)
 }
 
+// DecodeFromBytes decodes the given bytes of a Get Current Data Respnse into this layer
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3342,6 +3427,7 @@ func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Get Current Data Message Type Response
 func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3387,6 +3473,7 @@ func (omci *SetTableRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Set Table Request into this layer
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3402,6 +3489,7 @@ func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Set Table Message Type Request
 func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3422,6 +3510,7 @@ func (omci *SetTableResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// DecodeFromBytes decodes the given bytes of a Set Table Response into this layer
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p)
@@ -3437,6 +3526,7 @@ func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+// SerializeTo provides serialization of an Set Table Message Type Response
 func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
@@ -3453,10 +3543,12 @@ type UnsupportedMessageTypeResponse struct {
 	Result me.Results
 }
 
+// DecodeFromBytes decodes the given bytes of an Unsupported Message Type Response into this layer
 func (omci *UnsupportedMessageTypeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	return errors.New("you should never really decode this")
 }
 
+// SerializeTo provides serialization of an Unsupported Message Type Response
 func (omci *UnsupportedMessageTypeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)

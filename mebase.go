@@ -14,6 +14,7 @@
  * limitations under the License.
  *
  */
+
 package omci
 
 import (
@@ -38,25 +39,32 @@ func (msg *MeBasePacket) String() string {
 		msg.EntityClass, msg.EntityInstance, msg.EntityInstance)
 }
 
+// CanDecode returns the set of layer types that this DecodingLayer can decode
 func (msg *MeBasePacket) CanDecode() gopacket.LayerClass {
 	return msg.MsgLayerType
 }
 
-// Layer Interface implementations
+// LayerType returns MsgLayerType. It partially satisfies Layer and SerializableLayer
 func (msg *MeBasePacket) LayerType() gopacket.LayerType {
 	return msg.MsgLayerType
 }
+
+// LayerContents returns the bytes of the packet layer.
 func (msg *MeBasePacket) LayerContents() []byte {
 	return msg.Contents
 }
+
+// LayerPayload returns the bytes contained within the packet layer
 func (msg *MeBasePacket) LayerPayload() []byte {
 	return msg.Payload
 }
 
-// layerDecodingLayer Interface implementations
+// NextLayerType returns the layer type contained by this DecodingLayer
 func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
 	return gopacket.LayerTypeZero
 }
+
+// DecodeFromBytes decodes the given bytes into this layer
 func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Note: Base OMCI frame already checked for frame with at least 10 octets
 	msg.EntityClass = me.ClassID(binary.BigEndian.Uint16(data[0:]))
@@ -64,6 +72,8 @@ func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
 	return nil
 }
+
+// SerializeTo provides serialization of this message layer
 func (msg *MeBasePacket) SerializeTo(b gopacket.SerializeBuffer) error {
 	// Add class ID and entity ID
 	bytes, err := b.PrependBytes(4)

@@ -14,6 +14,9 @@
  * limitations under the License.
  *
  */
+
+// Package omci provides a library of routines to create, manipulate, serialize, and
+// decode ITU-T G.988 OMCI messages/packets
 package omci
 
 import (
@@ -26,8 +29,10 @@ import (
 	"github.com/google/gopacket/layers"
 )
 
+// DeviceIdent identifies the OMCI message format. Currently either baseline or extended.
 type DeviceIdent byte
 
+// LayerTypeOmci provide a gopacket LayerType for OMCI messages
 var (
 	LayerTypeOMCI gopacket.LayerType
 )
@@ -42,12 +47,16 @@ func init() {
 
 const (
 	// Device Identifiers
-	_                         = iota
-	BaselineIdent DeviceIdent = 0x0A // All G-PON OLTs and ONUs support the baseline message set
+	_ = iota
+	// BaselineIdent message are composed of a fixed 40 octet packet + 8-octet trailer. All
+	// G-PON OLTs and ONUs support the baseline message set
+	BaselineIdent DeviceIdent = 0x0A
+
+	// ExtendedIdent messager are up to 1920 octets but may not be supported by all ONUs or OLTs.
 	ExtendedIdent DeviceIdent = 0x0B
 )
 
-var OmciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
+var omciIK = []byte{0x18, 0x4b, 0x8a, 0xd4, 0xd1, 0xac, 0x4a, 0xf4,
 	0xdd, 0x4b, 0x33, 0x9e, 0xcc, 0x0d, 0x33, 0x70}
 
 func (di DeviceIdent) String() string {
@@ -80,7 +89,7 @@ const MaxAttributeMibUploadNextBaselineLength = MaxBaselineLength - 14 - 8
 // message contents and does not include the Result Code & Attribute Mask.
 const MaxAttributeGetNextBaselineLength = MaxBaselineLength - 11 - 8
 
-// MaxAttributeMibUploadNextExtendedLength is the maximum payload size for ME
+// MaxManagedEntityMibUploadNextExtendedLength is the maximum payload size for ME
 // entries for an Extended MIB Upload Next message. Extended messages differ from
 // the baseline as multiple MEs can be reported in a single frame, just not multiple
 // attributes.
@@ -125,6 +134,7 @@ func (omci *OMCI) LayerType() gopacket.LayerType {
 	return LayerTypeOMCI
 }
 
+// LayerContents returns the OMCI specific layer information
 func (omci *OMCI) LayerContents() []byte {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint16(b, omci.TransactionID)
@@ -133,6 +143,7 @@ func (omci *OMCI) LayerContents() []byte {
 	return b
 }
 
+// CanDecode returns the layers that this class can decode
 func (omci *OMCI) CanDecode() gopacket.LayerClass {
 	return LayerTypeOMCI
 }
@@ -173,9 +184,9 @@ func calculateMicAes128(data []byte) (uint32, error) {
 	var err error
 
 	if (data[2]&me.AK) == me.AK || tid == 0 {
-		sum, err = aes.Sum(append(upstreamCDir[:], data[:44]...), OmciIK, 4)
+		sum, err = aes.Sum(append(upstreamCDir[:], data[:44]...), omciIK, 4)
 	} else {
-		sum, err = aes.Sum(append(downstreamCDir[:], data[:44]...), OmciIK, 4)
+		sum, err = aes.Sum(append(downstreamCDir[:], data[:44]...), omciIK, 4)
 	}
 	if err != nil {
 		return 0, err
@@ -185,8 +196,8 @@ func calculateMicAes128(data []byte) (uint32, error) {
 
 /////////////////////////////////////////////////////////////////////////////
 //   Baseline Message encode / decode
-//
 
+// DecodeFromBytes will decode the OMCI layer of a packet/message
 func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	if len(data) < 10 {
 		p.SetTruncated()

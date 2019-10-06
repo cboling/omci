@@ -1027,7 +1027,7 @@ func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Man
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	alarmInfo := AlarmOptions{
-		AlarmClassId:  123, // TODO: Real class here?
+		AlarmClassID:  123, // TODO: Real class here?
 		AlarmInstance: 456,
 		AlarmBitmap:   make([]byte, 28),
 	}
@@ -1065,7 +1065,7 @@ func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Man
 
 	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
 	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
-	assert.Equal(t, alarmInfo.AlarmClassId, msgObj.AlarmEntityClass)
+	assert.Equal(t, alarmInfo.AlarmClassID, msgObj.AlarmEntityClass)
 	assert.Equal(t, alarmInfo.AlarmInstance, msgObj.AlarmEntityInstance)
 	for octet := 0; octet < len(alarmInfo.AlarmBitmap); octet++ {
 		assert.Equal(t, alarmInfo.AlarmBitmap[octet], msgObj.AlarmBitMap[octet])
