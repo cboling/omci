@@ -39,7 +39,7 @@ var fastlineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Date_Time_Stamping Of Last Successful Downstream Fra Operation Stamp_Frads
 //			(R) (optional) (7 bytes)
@@ -47,19 +47,19 @@ var fastlineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 //		Date_Time_Stamping Of Last Successful Upstream Fra Operation Stamp_Fraus
 //			Date/time-stamping of last successful upstream FRA operation (STAMP-FRAus): This parameter
 //			reports the date/time of the last successful FTU-O initiated FRA execution that has modified the
-//			bits allocation. See clause 7.10.14.6 of [ITUT G.997.2]. The format of this parameter is the
+//			bits allocation. See clause 7.10.14.6 of [ITUT-G.997.2]. The format of this parameter is the
 //			same as STAMPTESTNE. (R) (optional) (7 bytes)
 //
 //		Date_Time_Stamping Of Last Successful Downstream Rpa Operation Stamp_Rpads
 //			Date/time-stamping of last successful downstream RPA operation (STAMP-RPAds): This parameter
 //			reports the date/time of the last successful FTU-R initiated RPA execution that has modified the
-//			bits allocation for the RMC. See clause 7.10.14.7 of [ITU-T G.997.2]. The format of this
+//			bits allocation for the RMC. See clause-7.10.14.7 of [ITU-T G.997.2]. The format of this
 //			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
 //
 //		Date_Time_Stamping Of Last Successful Upstream Rpa Operation Stamp_Rpaus
 //			Date/time-stamping of last successful upstream RPA operation (STAMP-RPAus): This parameter
 //			reports the date/time of the last successful FTU-O initiated RPA execution that has modified the
-//			bits allocation for the RMC. See clause 7.10.14.8 of [ITU-T G.997.2]. The format of this
+//			bits allocation for the RMC. See clause-7.10.14.8 of [ITU-T G.997.2]. The format of this
 //			parameter is the same as STAMP-TEST-NE. (R) (optional) (7 bytes)
 //
 //		Date_Time_Stamping Of Last Successful Downstream Tiga Operation Stamp_Tiga
@@ -96,5 +96,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(fastlineinventoryandstatusdatapart2BME, params...)
+	return NewManagedEntity(*fastlineinventoryandstatusdatapart2BME, params...)
 }

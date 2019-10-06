@@ -38,19 +38,19 @@ var dot1agcfmstackBME *ManagedEntityDefinition
 //	Relationships
 //		An ONU that supports [IEEE 802.1ag] creates one instance of this ME for each MAC bridge or IEEE
 //		802.1p mapper, depending on its provisioning model. It should not create an instance for an
-//		IEEE 802.1p mapper that is associated with a MAC bridge.
+//		IEEE-802.1p mapper that is associated with a MAC bridge.
 //
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies an instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge service profile ME
 //			or an IEEE 802.1p mapper ME. It is expected that an ONU will implement CFM on bridges or on
-//			IEEE 802.1p mappers, but not both. For precision, the reference is disambiguated by the value of
-//			the layer 2 type pointer attribute. (R) (mandatory) (2 bytes)
+//			IEEE-802.1p mappers, but not both. For precision, the reference is disambiguated by the value of
+//			the layer 2 type pointer attribute. (R) (mandatory) (2-bytes)
 //
 //		Layer 2 Type
 //			Layer 2 type:	This attribute specifies whether the dot1ag CFM stack is associated with a MAC
-//			bridge service profile (value 0) or an IEEE 802.1p mapper (value 1). (R) (mandatory) (1 byte)
+//			bridge service profile (value 0) or an IEEE 802.1p mapper (value 1). (R) (mandatory) (1-byte)
 //
 //		Mp Status Table
 //			(R) (mandatory) (18N bytes)
@@ -85,5 +85,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgCfmStack(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(dot1agcfmstackBME, params...)
+	return NewManagedEntity(*dot1agcfmstackBME, params...)
 }

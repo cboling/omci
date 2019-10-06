@@ -38,52 +38,52 @@ var onugBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Vendor Id
 //			Vendor ID:	This attribute identifies the vendor of the ONU. It is the same as the four most
 //			significant bytes of the ONU serial number as specified in the respective transmission
-//			convergence (TC) layer specification. (R) (mandatory) (4 bytes)
+//			convergence (TC) layer specification. (R) (mandatory) (4-bytes)
 //
 //		Version
 //			Version:	This attribute identifies the version of the ONU as defined by the vendor. The
 //			character value 0 indicates that version information is not available or applicable. (R)
-//			(mandatory) (14 bytes)
+//			(mandatory) (14-bytes)
 //
 //		Serial Number
 //			Serial number: The serial number is unique for each ONU. It is defined in the respective TC
 //			layer specification and contains the vendor ID and version number. The first four bytes are an
 //			ASCII-encoded four-letter vendor ID. The second four bytes are a binary encoded serial number,
-//			under the control of the ONU vendor. (R) (mandatory) (8 bytes)
+//			under the control of the ONU vendor. (R) (mandatory) (8-bytes)
 //
 //		Traffic Management Option
 //			Upon ME instantiation, the ONU sets this attribute to the value that describes its
 //			implementation. The OLT must adapt its model to conform to the ONU's selection. (R) (mandatory)
-//			(1 byte)
+//			(1-byte)
 //
 //		Deprecated
 //			Deprecated:	This attribute is not used. If it is present, it should be set to 0. (R) (optional)
-//			(1 byte)
+//			(1-byte)
 //
 //		Battery Backup
 //			Battery backup: This Boolean attribute controls whether the ONU performs backup battery
 //			monitoring (assuming it is capable of doing so). False disables battery alarm monitoring; true
-//			enables battery alarm monitoring. (R, W) (mandatory) (1 byte)
+//			enables battery alarm monitoring. (R,-W) (mandatory) (1-byte)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by the
-//			ONU as an entirety. Administrative state is further described in clause A.1.6. (R, W)
-//			(mandatory) (1 byte)
+//			ONU as an entirety. Administrative state is further described in clause A.1.6. (R,-W)
+//			(mandatory) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute reports whether the ME is currently capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Onu Survival Time
 //			ONU survival time: This attribute indicates the minimum guaranteed time in milliseconds between
 //			the loss of external power and the silence of the ONU. This does not include survival time
 //			attributable to a backup battery. The value zero implies that the actual time is not known. (R)
-//			(optional) (1 byte)
+//			(optional) (1-byte)
 //
 //		Logical Onu Id
 //			Logical ONU ID: This attribute provides a way for the ONU to identify itself. It is a text
@@ -95,13 +95,13 @@ var onugBME *ManagedEntityDefinition
 //			Logical password: This attribute provides a way for the ONU to submit authentication
 //			credentials. It is a text string, null terminated if it is shorter than 12 bytes, with a null
 //			default value. The mechanism for creation or modification of this information is beyond the
-//			scope of this Recommendation. (R) (optional) (12 bytes)
+//			scope of this Recommendation. (R) (optional) (12-bytes)
 //
 //		Credentials Status
 //			Other values are reserved.
 //
 //		Extended Tc_Layer Options
-//			(R) (optional) (2 bytes)
+//			(R) (optional) (2-bytes)
 //
 type OnuG struct {
 	ManagedEntityDefinition
@@ -143,5 +143,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuG(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(onugBME, params...)
+	return NewManagedEntity(*onugBME, params...)
 }

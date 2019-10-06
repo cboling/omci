@@ -36,14 +36,14 @@ var pwethernetconfigurationdataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate)-(mandatory) (2 bytes)
 //
 //		Mpls Pseudowire Tp Pointer
 //			MPLS pseudowire TP pointer: This attribute points to an instance of the MPLS pseudowire TP ME
 //			associated with this ME. (R, W, setbycreate) (mandatory) (2 bytes)
 //
 //		Tp Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Uni Pointer
 //			UNI pointer: This attribute points to the associated instance of a UNI-side ME. The type of UNI
@@ -78,5 +78,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPwEthernetConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(pwethernetconfigurationdataBME, params...)
+	return NewManagedEntity(*pwethernetconfigurationdataBME, params...)
 }

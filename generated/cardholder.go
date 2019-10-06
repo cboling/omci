@@ -66,55 +66,55 @@ var cardholderBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			NOTE 1 – Some xDSL MEs use the two MSBs of the slot number for other purposes. An ONU that
+//			NOTE 1 - Some xDSL MEs use the two MSBs of the slot number for other purposes. An ONU that
 //			supports these services may have slot limitations or restrictions.
 //
 //		Actual Plug In Unit Type
 //			Actual plugin unit type: This attribute is equal to the type of the circuit pack in the
 //			cardholder, or 0 if the cardholder is empty. When the cardholder is populated, this attribute is
 //			the same as the type attribute of the corresponding circuit pack ME. Circuit pack types are
-//			defined in Table 9.1.5-1. (R) (mandatory) (1 byte)
+//			defined in Table 9.1.5-1. (R) (mandatory) (1-byte)
 //
 //		Expected Plug_In Unit Type
 //			Expected plug-in unit type: This attribute provisions the type of circuit pack for the slot. For
 //			type coding, see Table 9.1.5-1. The value 0 means that the cardholder is not provisioned to
 //			contain a circuit pack. The value 255 means that the cardholder is configured for plug-and-play.
 //			Upon ME instantiation, the ONU sets this attribute to 0. For integrated interfaces, this
-//			attribute may be used to represent the type of interface. (R, W) (mandatory) (1 byte)
+//			attribute may be used to represent the type of interface. (R,-W) (mandatory) (1-byte)
 //
 //		Expected Port Count
 //			Expected port count: This attribute permits the OLT to specify the number of ports it expects in
 //			a circuit pack. Prior to provisioning by the OLT, the ONU initializes this attribute to 0.
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 //		Expected Equipment Id
 //			Expected equipment ID: This attribute provisions the specific type of expected circuit pack.
 //			This attribute applies only to ONUs that do not have integrated interfaces. In some
 //			environments, this may contain the expected CLEI code. Upon ME instantiation, the ONU sets this
-//			attribute to all spaces. (R, W) (optional) (20 bytes)
+//			attribute to all spaces. (R,-W) (optional) (20-bytes)
 //
 //		Actual Equipment Id
 //			Actual equipment ID: This attribute identifies the specific type of circuit pack, once it is
 //			installed. This attribute applies only to ONUs that do not have integrated interfaces. In some
 //			environments, this may include the CLEI code. When the slot is empty or the equipment ID is not
-//			known, this attribute should be set to all spaces. (R) (optional) (20 bytes)
+//			known, this attribute should be set to all spaces. (R) (optional) (20-bytes)
 //
 //		Protection Profile Pointer
 //			Protection profile pointer: This attribute specifies an equipment protection profile that may be
 //			associated with the cardholder. Its value is the least significant byte of the ME ID of the
 //			equipment protection profile with which it is associated, or 0 if equipment protection is not
-//			used. (R) (optional) (1 byte)
+//			used. (R) (optional) (1-byte)
 //
 //		Invoke Protection Switch
 //			When circuit packs that support a PON interface (IF) function are switched, the response should
 //			be returned on the same PON that received the command. However, the OLT should also be prepared
-//			to accept a response on the redundant PON. (R, W) (optional) (1 byte)
+//			to accept a response on the redundant PON. (R,-W) (optional) (1-byte)
 //
 //		Alarm _ Reporting Control
-//			Alarm-reporting control (ARC): See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			Alarm-reporting control (ARC): See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 type Cardholder struct {
 	ManagedEntityDefinition
@@ -149,5 +149,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCardholder(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(cardholderBME, params...)
+	return NewManagedEntity(*cardholderBME, params...)
 }

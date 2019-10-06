@@ -41,38 +41,38 @@ var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R) (mandatory) (2 bytes)
+//			data ME. (R) (mandatory) (2-bytes)
 //
 //		Ipv4 Multicast Filtering
-//			IPv4 multicast filtering:	(R, W) (mandatory) (1 byte)
+//			IPv4 multicast filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Ipv6 Multicast Filtering
-//			IPv6 multicast filtering:	(R, W) (mandatory) (1 byte)
+//			IPv6 multicast filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Ipv4 Broadcast Filtering
-//			IPv4 broadcast filtering:	(R, W) (mandatory) (1 byte)
+//			IPv4 broadcast filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Rarp Filtering
-//			RARP filtering:	(R, W) (mandatory) (1 byte)
+//			RARP filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Ipx Filtering
-//			IPX filtering:		(R, W) (mandatory) (1 byte)
+//			IPX filtering:		(R,-W) (mandatory) (1-byte)
 //
 //		Netbeui Filtering
-//			NetBEUI filtering:	(R, W) (mandatory) (1 byte)
+//			NetBEUI filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Appletalk Filtering
-//			AppleTalk filtering:	(R, W) (mandatory) (1 byte)
+//			AppleTalk filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Bridge Management Information Filtering
 //			2	Addresses from 01.80.C2.00.00.20 to 01.80.C2.00.00.2F are used for generic attribute
 //			registration protocol (GARP) applications.
 //
 //		Arp Filtering
-//			ARP filtering:	(R, W) (mandatory) (1 byte)
+//			ARP filtering:	(R,-W) (mandatory) (1-byte)
 //
 //		Point_To_Point Protocol Over Ethernet Pppoe Broadcast Filtering
-//			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R, W) (mandatory) (1 byte)
+//			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R,-W) (mandatory) (1-byte)
 //
 type MacBridgePortFilterPreAssignTable struct {
 	ManagedEntityDefinition
@@ -108,5 +108,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportfilterpreassigntableBME, params...)
+	return NewManagedEntity(*macbridgeportfilterpreassigntableBME, params...)
 }

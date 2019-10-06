@@ -41,28 +41,28 @@ var thresholddata1BME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Threshold Value_1
-//			Threshold value 1: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-1: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_2
-//			Threshold value 2: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-2: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_3
-//			Threshold value 3: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-3: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_4
-//			Threshold value 4: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-4: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_5
-//			Threshold value 5: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-5: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_6
-//			Threshold value 6: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-6: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_7
-//			Threshold value 7: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-7: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 type ThresholdData1 struct {
 	ManagedEntityDefinition
@@ -97,5 +97,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewThresholdData1(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(thresholddata1BME, params...)
+	return NewManagedEntity(*thresholddata1BME, params...)
 }

@@ -36,39 +36,39 @@ var efmbondinglinkperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the EFM bonding link. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
-//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//			that contain PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Rx Errored Fragments
-//			Rx errored fragments: Clause 45.2.3.29 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx errored fragments: Clause 45.2.3.29 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Small Fragments
-//			Rx small fragments: Clause 45.2.3.30 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx small fragments: Clause 45.2.3.30 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Large Fragments
-//			Rx large fragments: Clause 45.2.3.31 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx large fragments: Clause 45.2.3.31 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Discarded Fragments
-//			Rx discarded fragments: Clause 45.2.3.32 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx discarded fragments: Clause 45.2.3.32 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Fcs Errors
-//			Rx FCS errors: Clause 45.2.6.11 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx FCS errors: Clause 45.2.6.11 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Coding Errors
-//			Rx coding errors: Clause 45.2.6.12 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx coding errors: Clause 45.2.6.12 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Fragments
-//			Rx fragments: Number of fragments received over this link. (R) (mandatory) (4 bytes)
+//			Rx fragments: Number of fragments received over this link. (R) (mandatory) (4-bytes)
 //
 //		Tx Fragments
-//			Tx fragments: Number of fragments transmitted over this link. (R) (mandatory) (4 bytes)
+//			Tx fragments: Number of fragments transmitted over this link. (R) (mandatory) (4-bytes)
 //
 type EfmBondingLinkPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -106,5 +106,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(efmbondinglinkperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*efmbondinglinkperformancemonitoringhistorydataBME, params...)
 }

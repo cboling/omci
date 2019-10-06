@@ -36,25 +36,25 @@ var xdslsubcarriermaskingdownstreamprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
-//			reserved. (R, set-by-create) (mandatory) (2 bytes)
+//			reserved. (R, set-by-create) (mandatory) (2-bytes)
 //
 //		Downstream Subcarrier Mask 1
-//			Downstream subcarrier mask 1: Subcarriers 1 to 128. (R, W, set-by-create) (mandatory) (16 bytes)
+//			Downstream subcarrier mask 1: Subcarriers 1 to 128. (R,-W, set-by-create) (mandatory) (16-bytes)
 //
 //		Downstream Subcarrier Mask 2
-//			Downstream subcarrier mask 2: Subcarriers 129 to 256. (R, W) (mandatory for modems that support
-//			NSCds > 128) (16 bytes)
+//			Downstream subcarrier mask 2: Subcarriers 129 to 256. (R,-W) (mandatory for modems that support
+//			NSCds-> 128) (16-bytes)
 //
 //		Downstream Subcarrier Mask 3
-//			Downstream subcarrier mask 3: Subcarriers 257 to 384. (R, W) (mandatory for modems that support
-//			NSCds > 256) (16 bytes)
+//			Downstream subcarrier mask 3: Subcarriers 257 to 384. (R,-W) (mandatory for modems that support
+//			NSCds-> 256) (16-bytes)
 //
 //		Downstream Subcarrier Mask 4
-//			Downstream subcarrier mask 4: Subcarriers 385 to 512. (R, W) (mandatory for modems that support
-//			NSCds > 384) (16 bytes)
+//			Downstream subcarrier mask 4: Subcarriers 385 to 512. (R,-W) (mandatory for modems that support
+//			NSCds-> 384) (16-bytes)
 //
 //		Mask Valid
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 type XdslSubcarrierMaskingDownstreamProfile struct {
 	ManagedEntityDefinition
@@ -87,5 +87,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xdslsubcarriermaskingdownstreamprofileBME, params...)
+	return NewManagedEntity(*xdslsubcarriermaskingdownstreamprofileBME, params...)
 }

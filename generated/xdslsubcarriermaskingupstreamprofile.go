@@ -36,14 +36,14 @@ var xdslsubcarriermaskingupstreamprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
-//			reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Upstream Subcarrier Mask
 //			Subcarrier number 1 is the lowest, and the number of xDSL subcarriers, upstream (NSCus) is the
-//			highest subcarrier that can be transmitted in the upstream direction. For [ITUT G.992.3],
-//			[ITUT G.992.4] and [ITUT G.992.5], it is defined in the corresponding Recommendation. For Annex
-//			A of [ITUT G.992.1] and [ITUT G.992.2], NSCus = 32 and for Annex B of [ITUT G.992.1], NSCus =
-//			64. (R, W, setbycreate) (mandatory) (8 bytes)
+//			highest subcarrier that can be transmitted in the upstream direction. For [ITUT-G.992.3],
+//			[ITUT-G.992.4] and [ITUT-G.992.5], it is defined in the corresponding Recommendation. For Annex
+//			A of [ITUT-G.992.1] and [ITUT G.992.2], NSCus-= 32 and for Annex B of [ITUT-G.992.1], NSCus-=
+//			64. (R, W, setbycreate) (mandatory) (8-bytes)
 //
 type XdslSubcarrierMaskingUpstreamProfile struct {
 	ManagedEntityDefinition
@@ -72,5 +72,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xdslsubcarriermaskingupstreamprofileBME, params...)
+	return NewManagedEntity(*xdslsubcarriermaskingupstreamprofileBME, params...)
 }

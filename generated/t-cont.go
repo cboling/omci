@@ -52,26 +52,26 @@ var tcontBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
 //			number indicates the physical capability that realizes the TCONT. It may be represented as
 //			0xSSBB, where SS indicates the slot ID that contains this T-CONT (0 for the ONU as a whole), and
 //			BB is the TCONT ID, numbered by the ONU itself. T-CONTs are numbered in ascending order, with
-//			the range 0..255 in each slot. (R) (mandatory) (2 bytes)
+//			the range 0..255 in each slot. (R) (mandatory) (2-bytes)
 //
 //		Alloc_Id
 //			Alloc-ID:	This attribute links the T-CONT with the alloc-ID assigned by the OLT in the
 //			assign_alloc-ID PLOAM message. The respective TC layer specification should be referenced for
 //			the legal values for that system. Prior to the setting of this attribute by the OLT, this
 //			attribute has an unambiguously unusable initial value, namely the value 0x00FF or 0xFFFF for
-//			ITU-T G.984 systems, and the value 0xFFFF for all other ITU-T GTC based PON systems. (R, W)
-//			(mandatory) (2 bytes)
+//			ITU-T G.984 systems, and the value 0xFFFF for all other ITU-T GTC based PON systems. (R,-W)
+//			(mandatory) (2-bytes)
 //
 //		Deprecated
 //			Deprecated:	The ONU should set this attribute to the value 1, and the OLT should ignore it. (R)
-//			(mandatory) (1 byte)
+//			(mandatory) (1-byte)
 //
 //		Policy
-//			NOTE – This attribute is read-only, unless otherwise specified by the QoS configuration
+//			NOTE - This attribute is read-only, unless otherwise specified by the QoS configuration
 //			flexibility attribute of the ONU2-G ME. If flexible configuration is not supported, the ONU
 //			should reject an attempt to set it with a parameter error result-reason code.
 //
@@ -102,5 +102,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTCont(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(tcontBME, params...)
+	return NewManagedEntity(*tcontBME, params...)
 }

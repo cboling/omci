@@ -41,25 +41,25 @@ var oltgBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Olt Vendor Id
 //			OLT vendor ID: This attribute identifies the OLT vendor. It is the same as the four most
 //			significant bytes of an ONU serial number specified in the respective TC layer specification.
-//			Upon instantiation, this attribute comprises all spaces. (R, W) (mandatory) (4 bytes)
+//			Upon instantiation, this attribute comprises all spaces. (R,-W) (mandatory) (4-bytes)
 //
 //		Equipment Id
 //			Equipment ID: This attribute may be used to identify the specific type of OLT. The default value
 //			of all spaces indicates that equipment ID information is not available or applicable to the OLT
-//			being represented. (R, W) (mandatory) (20 bytes)
+//			being represented. (R,-W) (mandatory) (20-bytes)
 //
 //		Version
 //			Version:	This attribute identifies the version of the OLT as defined by the vendor. The default
 //			left-justified ASCII string "0" (padded with trailing nulls) indicates that version information
-//			is not available or applicable to the OLT being represented. (R, W) (mandatory) (14 bytes)
+//			is not available or applicable to the OLT being represented. (R,-W) (mandatory) (14-bytes)
 //
 //		Time Of Day Information
-//			NOTE – In ITU-T G.987/ITU-T G.989 systems, the superframe count field of the time of day
+//			NOTE - In ITU-T G.987/ITU-T G.989 systems, the superframe count field of the time of day
 //			information attribute contains the 32 LSBs of the actual counter.
 //
 type OltG struct {
@@ -90,5 +90,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOltG(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(oltgBME, params...)
+	return NewManagedEntity(*oltgBME, params...)
 }

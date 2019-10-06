@@ -38,43 +38,43 @@ var pwatmperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to the instance of the PW ATM configuration data ME.
-//			(R, setbycreate) (mandatory) (2 bytes)
+//			(R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Downstream Missing Packets Counter
 //			Downstream missing packets counter: This attribute counts missing packets, as detected via
-//			control word sequence number gaps. (R) (mandatory) (4 bytes)
+//			control word sequence number gaps. (R) (mandatory) (4-bytes)
 //
 //		Downstream Reordered Packets Counter
 //			Downstream reordered packets counter: This attribute counts packets detected out of sequence via
 //			the control word sequence number, but successfully reordered. Some implementations may not
-//			support this feature. (R) (optional) (4 bytes)
+//			support this feature. (R) (optional) (4-bytes)
 //
 //		Downstream Misordered Packets Counter
 //			Downstream misordered packets counter: This attribute counts packets detected out of order via
-//			the control word sequence numbers. (R) (mandatory) (4 bytes)
+//			the control word sequence numbers. (R) (mandatory) (4-bytes)
 //
 //		Upstream Timeout Packets Counter
 //			Upstream timeout packets counter: This attribute counts packets transmitted due to timeout
-//			expiration while attempting to collect cells. (R) (mandatory) (4 bytes)
+//			expiration while attempting to collect cells. (R) (mandatory) (4-bytes)
 //
 //		Upstream Transmitted Cells Counter
 //			Upstream transmitted cells counter: This attribute counts transmitted cells. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Upstream Dropped Cells Counter
-//			Upstream dropped cells counter: This attribute counts dropped cells. (R) (mandatory) (4 bytes)
+//			Upstream dropped cells counter: This attribute counts dropped cells. (R) (mandatory) (4-bytes)
 //
 //		Upstream Received Cells Counter
-//			Upstream received cells counter: This attribute counts received cells. (R) (mandatory) (4 bytes)
+//			Upstream received cells counter: This attribute counts received cells. (R) (mandatory) (4-bytes)
 //
 type PwAtmPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -111,5 +111,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(pwatmperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*pwatmperformancemonitoringhistorydataBME, params...)
 }

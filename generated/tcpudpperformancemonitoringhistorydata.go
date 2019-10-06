@@ -38,36 +38,36 @@ var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the TCP/UDP config data ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Socket Failed
 //			Socket failed:	This attribute is incremented when an attempt to create a socket associated with
-//			a port fails. (R) (mandatory) (2 bytes)
+//			a port fails. (R) (mandatory) (2-bytes)
 //
 //		Listen Failed
 //			Listen failed:	This attribute is incremented when an attempt by a service to listen for a
-//			request on a port fails. (R) (mandatory) (2 bytes)
+//			request on a port fails. (R) (mandatory) (2-bytes)
 //
 //		Bind Failed
 //			Bind failed:	This attribute is incremented when an attempt by a service to bind to a port fails.
-//			(R) (mandatory) (2 bytes)
+//			(R) (mandatory) (2-bytes)
 //
 //		Accept Failed
 //			Accept failed: This attribute is incremented when an attempt to accept a connection on a port
-//			fails. (R) (mandatory) (2 bytes)
+//			fails. (R) (mandatory) (2-bytes)
 //
 //		Select Failed
 //			Select failed:	This attribute is incremented when an attempt to perform a select on a group of
-//			ports fails. (R) (mandatory) (2 bytes)
+//			ports fails. (R) (mandatory) (2-bytes)
 //
 type TcpUdpPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -102,5 +102,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTcpUdpPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(tcpudpperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*tcpudpperformancemonitoringhistorydataBME, params...)
 }

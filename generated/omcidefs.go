@@ -241,7 +241,7 @@ func (access AttributeAccess) String() string {
 
 // SupportsAttributeAccess returns true if the managed entity attribute
 // supports the desired access
-func SupportsAttributeAccess(attr *AttributeDefinition, acc AttributeAccess) bool {
+func SupportsAttributeAccess(attr AttributeDefinition, acc AttributeAccess) bool {
 	return attr.GetAccess().Contains(acc)
 }
 
@@ -250,7 +250,7 @@ type IManagedEntityDefinition interface {
 	GetClassID() ClassID
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
-	GetAttributeDefinitions() *AttributeDefinitionMap
+	GetAttributeDefinitions() AttributeDefinitionMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder, byte) (AttributeValueMap, error)
 	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte, int) error
@@ -265,7 +265,7 @@ type IManagedEntity interface {
 
 	GetAttributeMask() uint16
 
-	GetAttributeValueMap() *AttributeValueMap
+	GetAttributeValueMap() AttributeValueMap
 	GetAttribute(string) (interface{}, error)
 	GetAttributeByIndex(uint) (interface{}, error)
 

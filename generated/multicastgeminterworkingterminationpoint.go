@@ -83,36 +83,36 @@ var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0xFFFF
-//			is reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			is reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Gem Port Network Ctp Connectivity Pointer
 //			GEM port network CTP connectivity pointer: This attribute points to an instance of the GEM port
-//			network CTP that is associated with this multicast GEM IW TP. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			network CTP that is associated with this multicast GEM IW TP. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Interworking Option
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Service Profile Pointer
 //			Service profile pointer: This attribute is set to 0 and not used. For backward compatibility, it
 //			may also be set to point to a MAC bridge service profile or IEEE 802.1p mapper service profile.
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Pptp Counter
 //			PPTP counter: This attribute represents the number of instances of PPTP MEs associated with this
 //			instance of the multicast GEM IW TP. This attribute conveys no information that is not available
-//			elsewhere; it may be set to 0xFF and not used. (R) (optional) (1 byte)
+//			elsewhere; it may be set to 0xFF and not used. (R) (optional) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Gal Profile Pointer
 //			GAL profile pointer: This attribute is set to 0 and not used. For backward compatibility, it may
-//			also be set to point to a GAL Ethernet profile. (R, W, setbycreate) (mandatory) (2 bytes)
+//			also be set to point to a GAL Ethernet profile. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Ipv6 Multicast Address Table
-//			(R, W) (optional) (24N bytes, where N is the number of entries in the list.)
+//			(R,-W) (optional) (24N bytes, where N is the number of entries in the list.)
 //
 type MulticastGemInterworkingTerminationPoint struct {
 	ManagedEntityDefinition
@@ -148,5 +148,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastGemInterworkingTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(multicastgeminterworkingterminationpointBME, params...)
+	return NewManagedEntity(*multicastgeminterworkingterminationpointBME, params...)
 }

@@ -36,64 +36,64 @@ var pseudowireterminationpointBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Underlying Transport
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Service Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Signalling
-//			(R, W, setbycreate) (mandatory for structured service type) (1 byte)
+//			(R,-W, setbycreate) (mandatory for structured service type) (1-byte)
 //
 //		Tdm Uni Pointer
-//			TDM UNI pointer: If service type = structured, this attribute points to a logical N × 64 kbit/s
-//			subport CTP. Otherwise, this attribute points to a PPTP CES UNI. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			TDM UNI pointer: If service type-= structured, this attribute points to a logical N-* 64-kbit/s
+//			subport CTP. Otherwise, this attribute points to a PPTP CES UNI. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		North_Side Pointer
 //			North-side pointer: When the pseudowire service is transported via IP, as indicated by the
 //			underlying transport attribute, the northside pointer attribute points to an instance of the
 //			TCP/UDP config data ME. When the pseudowire service is transported directly over Ethernet, the
-//			north-side pointer attribute is not used – the linkage to the Ethernet flow TP is implicit in
+//			north-side pointer attribute is not used - the linkage to the Ethernet flow TP is implicit in
 //			the ME IDs. When the pseudowire service is transported over MPLS, the northside pointer
 //			attribute points to an instance of the MPLS PW TP. (R, W, setbycreate) (mandatory) (2 bytes)
 //
 //		Far_End Ip Info
-//			A null pointer is appropriate if the pseudowire is not transported via IP. (R, W, setbycreate)
-//			(mandatory for IP transport) (2 bytes)
+//			A null pointer is appropriate if the pseudowire is not transported via IP. (R,-W, setbycreate)
+//			(mandatory for IP transport) (2-bytes)
 //
 //		Payload Size
-//			(R, W, setbycreate) (mandatory for unstructured service) (2 bytes)
+//			(R,-W, setbycreate) (mandatory for unstructured service) (2-bytes)
 //
 //		Payload Encapsulation Delay
-//			(R, W, setbycreate) (mandatory for structured service) (1 byte)
+//			(R,-W, setbycreate) (mandatory for structured service) (1-byte)
 //
 //		Timing Mode
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Transmit Circuit Id
-//			(R, W) (mandatory for MEF 8 transport) (8 bytes)
+//			(R,-W) (mandatory for MEF 8 transport) (8-bytes)
 //
 //		Expected Circuit Id
-//			(R, W) (optional for MEF 8 transport) (8 bytes)
+//			(R,-W) (optional for MEF 8 transport) (8-bytes)
 //
 //		Received Circuit Id
 //			Received circuit ID: This attribute indicates the actual ECID(s) received on the payload and
 //			signalling channels, respectively. It may be used for diagnostic purposes. (R) (optional for MEF
-//			8 transport) (8 bytes)
+//			8 transport) (8-bytes)
 //
 //		Exception Policy
 //			Exception policy: This attribute points to an instance of the pseudowire maintenance profile ME.
-//			If the pointer has its default value 0, the ONU's internal defaults apply. (R, W) (optional)
-//			(2 bytes)
+//			If the pointer has its default value 0, the ONU's internal defaults apply. (R,-W) (optional)
+//			(2-bytes)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 type PseudowireTerminationPoint struct {
 	ManagedEntityDefinition
@@ -136,5 +136,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPseudowireTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(pseudowireterminationpointBME, params...)
+	return NewManagedEntity(*pseudowireterminationpointBME, params...)
 }

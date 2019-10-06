@@ -39,34 +39,34 @@ var energyconsumptionperformancemonitoringhistorydataBME *ManagedEntityDefinitio
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The ME ID must
-//			be 0. (R, set-by-create) (mandatory) (2 bytes)
+//			be 0. (R, set-by-create) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: No thresholds are defined for this ME. For uniformity with other PMs, the
-//			attribute is retained and shown as mandatory, but it should be set to a null pointer. (R, W,
-//			set-by-create) (mandatory) (2 bytes)
+//			attribute is retained and shown as mandatory, but it should be set to a null pointer. (R,-W,
+//			set-by-create) (mandatory) (2-bytes)
 //
 //		Doze Time
 //			Doze time: This attribute records the time during which the ONU was in doze energy conservation
 //			mode, measured in microseconds. If watchful sleep is enabled in the ONU dynamic power management
-//			control ME, the ONU ignores this attribute. (R) (mandatory) (4 bytes)
+//			control ME, the ONU ignores this attribute. (R) (mandatory) (4-bytes)
 //
 //		Cyclic Sleep Time
 //			Cyclic sleep time: This attribute records the time during which the ONU was in cyclic sleep
 //			energy conservation mode, measured in microseconds. If watchful sleep is enabled in the ONU
-//			dynamic power management control ME, the ONU ignores this attribute. (R) (mandatory) (4 bytes)
+//			dynamic power management control ME, the ONU ignores this attribute. (R) (mandatory) (4-bytes)
 //
 //		Watchful Sleep Time
 //			Watchful sleep time: This attribute records the time during which the ONU was in watchful sleep
-//			energy conservation mode, measured in microseconds. (R) (mandatory) (4 bytes)
+//			energy conservation mode, measured in microseconds. (R) (mandatory) (4-bytes)
 //
 //		Energy Consumed
 //			Energy consumed: This attribute records the energy consumed by the ONU, measured in millijoules.
-//			(R) (optional) (4 bytes)
+//			(R) (optional) (4-bytes)
 //
 type EnergyConsumptionPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -100,5 +100,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(energyconsumptionperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*energyconsumptionperformancemonitoringhistorydataBME, params...)
 }

@@ -33,14 +33,14 @@ var twdmchannelploamperformancemonitoringhistorydatapart1BME *ManagedEntityDefin
 //	The downstream PLOAM message counts of this ME include only the received PLOAM messages
 //	pertaining to the given ONU, i.e.:
 //
-//	–	unicast PLOAM messages, addressed by ONU-ID;
+//	-	unicast PLOAM messages, addressed by ONU-ID;
 //
-//	–	broadcast PLOAM messages, addressed by serial number;
+//	-	broadcast PLOAM messages, addressed by serial number;
 //
-//	–	broadcast PLOAM messages, addressed to all ONUs on the PON.
+//	-	broadcast PLOAM messages, addressed to all ONUs on the PON.
 //
-//	This ME includes all PLOAM PM counters characterized as mandatory in clause 14 of
-//	[ITU-T G.989.3].
+//	This ME includes all PLOAM PM counters characterized as mandatory in clause 14 of [ITU-
+//	T-G.989.3].
 //
 //	For a complete discussion of generic PM architecture, refer to clause I.4.
 //
@@ -51,39 +51,39 @@ var twdmchannelploamperformancemonitoringhistorydatapart1BME *ManagedEntityDefin
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
-//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//			that contains PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Ploam Mic Errors
 //			PLOAM MIC errors: The counter of received PLOAM messages that remain unparsable due to MIC
-//			error. (R) (mandatory) (4 byte)
+//			error. (R) (mandatory) (4-byte)
 //
 //		Downstream Ploam Message Count
 //			Downstream PLOAM message count: The counter of received broadcast and unicast PLOAM messages
-//			pertaining to the given ONU. (R) (mandatory) (4 byte)
+//			pertaining to the given ONU. (R) (mandatory) (4-byte)
 //
 //		Ranging_Time Message Count
 //			Ranging_Time message count: The counter of received Ranging_Time PLOAM messages. (R) (mandatory)
-//			(4 byte)
+//			(4-byte)
 //
 //		Protection_Control Message Count
 //			Protection_Control message count: The counter of received Protection_Control PLOAM messages. (R)
-//			(mandatory) (4 byte)
+//			(mandatory) (4-byte)
 //
 //		Adjust_Tx_Wavelength Message Count
 //			Adjust_Tx_Wavelength message count: The counter of received Adjust_Tx_Wavelength PLOAM messages.
-//			(R) (mandatory) (4 byte)
+//			(R) (mandatory) (4-byte)
 //
 //		Adjust_Tx_Wavelength Adjustment Amplitude
 //			Adjust_Tx_Wavelength adjustment amplitude: An estimator of the absolute value of the
-//			transmission wavelength adjustment. (R) (mandatory) (4 byte)
+//			transmission wavelength adjustment. (R) (mandatory) (4-byte)
 //
 type TwdmChannelPloamPerformanceMonitoringHistoryDataPart1 struct {
 	ManagedEntityDefinition
@@ -120,5 +120,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(twdmchannelploamperformancemonitoringhistorydatapart1BME, params...)
+	return NewManagedEntity(*twdmchannelploamperformancemonitoringhistorydatapart1BME, params...)
 }

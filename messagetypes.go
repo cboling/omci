@@ -197,7 +197,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		return me.NewProcessingError("managed entity does not support Create Message-Type")
 	}
 	var sbcMask uint16
-	for index, attr := range *meDefinition.GetAttributeDefinitions() {
+	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
@@ -210,7 +210,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+	if eidDef, eidDefOK := meDefinition.GetAttributeDefinitions()[0]; eidDefOK {
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
@@ -236,7 +236,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		return err
 	}
 	var sbcMask uint16
-	for index, attr := range *meDefinition.GetAttributeDefinitions() {
+	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
@@ -481,12 +481,12 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 		if err != nil {
 			return err
 		}
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Write) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Write) {
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
 			return me.NewProcessingError(msg)
 		}
 	}
-	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+	if eidDef, eidDefOK := meDefinition.GetAttributeDefinitions()[0]; eidDefOK {
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
@@ -522,7 +522,7 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 			return err
 		}
 		// Do not test for write of Entity ID in the attribute list
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Write) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Write) {
 			// TODO: Check ITU spec to see if this should be listed as a failed
 			//       attribute and not a processing error.
 			msg := fmt.Sprintf("attribute '%v' does not support write access", attrName)
@@ -737,12 +737,12 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		if err != nil {
 			return err
 		}
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}
 	}
-	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+	if eidDef, eidDefOK := meDefinition.GetAttributeDefinitions()[0]; eidDefOK {
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
@@ -784,7 +784,7 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 		if err != nil {
 			return err
 		}
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}
@@ -3124,12 +3124,12 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 		if err != nil {
 			return err
 		}
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}
 	}
-	if eidDef, eidDefOK := (*meDefinition.GetAttributeDefinitions())[0]; eidDefOK {
+	if eidDef, eidDefOK := meDefinition.GetAttributeDefinitions()[0]; eidDefOK {
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
@@ -3175,7 +3175,7 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 		if err != nil {
 			return err
 		}
-		if attr.Index != 0 && !me.SupportsAttributeAccess(attr, me.Read) {
+		if attr.Index != 0 && !me.SupportsAttributeAccess(*attr, me.Read) {
 			msg := fmt.Sprintf("attribute '%v' does not support read access", attrName)
 			return me.NewProcessingError(msg)
 		}

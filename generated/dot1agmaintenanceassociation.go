@@ -41,17 +41,17 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies an instance of this ME. The values 0 and
-//			0xFFFF are reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			0xFFFF are reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Md Pointer
 //			MD pointer:	This pointer specifies the dot1ag maintenance domain with which this MA is
-//			associated. A null pointer specifies that the MA is not associated with an MD. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			associated. A null pointer specifies that the MA is not associated with an MD. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Short Ma Name Format
 //			Short MA name format: This attribute specifies one of several possible formats for the short MA
-//			name attribute. Value 1, the primary VLAN ID, is recommended to be the default. (R, W,
-//			setbycreate) (mandatory) (1 byte)
+//			name attribute. Value 1, the primary VLAN ID, is recommended to be the default. (R,-W,
+//			setbycreate) (mandatory) (1-byte)
 //
 //		Short Ma Name 1, Short Ma Name 2
 //			Short MA name 1, Short MA name 2: These two attributes may be regarded as an octet string whose
@@ -60,13 +60,13 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //			a character string, the string is null-terminated; otherwise, its length is determined by the
 //			short MA name format. Note that binary comparisons of the short MA name are made in other CFM
 //			state machines, so blanks, alphabetic case, etc., are significant. Also, note that the MD name
-//			and the MA short name must be packed (with additional bytes) into 48 byte CFM message headers.
-//			(R, W) (mandatory) (25 bytes * 2 attributes)
+//			and the MA short name must be packed (with additional bytes) into 48-byte CFM message headers.
+//			(R,-W) (mandatory) (25-bytes * 2 attributes)
 //
 //		Continuity Check Message Ccm Interval
 //			Short intervals should be used judiciously, as they can interfere with the network's ability to
-//			handle subscriber traffic. The recommended value is 1 s. (R, W, setbycreate) (mandatory)
-//			(1 byte)
+//			handle subscriber traffic. The recommended value is 1-s. (R,-W, setbycreate) (mandatory)
+//			(1-byte)
 //
 //		Associated Vlans
 //			Associated VLANs: This attribute is a list of up to 12 VLAN IDs with which this MA is
@@ -74,14 +74,14 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //			or dot1ag default MD level entries that conflict with the set membership. The all-zeros value
 //			indicates that this MA is not associated with any VLANs. Assuming that the attribute is not 0,
 //			the first entry is understood to be the primary VLAN. Except forwarded linktrace messages
-//			(LTMs), CFM messages emitted by MPs in this MA are tagged with the primary VLAN ID. (R, W)
-//			(mandatory) (2 bytes/entry * 12 entries = 24 bytes)
+//			(LTMs), CFM messages emitted by MPs in this MA are tagged with the primary VLAN ID. (R,-W)
+//			(mandatory) (2-bytes/entry * 12-entries-=-24-bytes)
 //
 //		Mhf Creation
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Sender Id Permission
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 type Dot1AgMaintenanceAssociation struct {
 	ManagedEntityDefinition
@@ -116,5 +116,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgMaintenanceAssociation(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(dot1agmaintenanceassociationBME, params...)
+	return NewManagedEntity(*dot1agmaintenanceassociationBME, params...)
 }

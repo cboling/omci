@@ -39,53 +39,53 @@ var macbridgeserviceprofileBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The first byte
 //			is the slot ID. In an integrated ONU, this value is 0. The second byte is the bridge group ID.
-//			(R, setbycreate) (mandatory) (2 bytes)
+//			(R, setbycreate) (mandatory) (2-bytes)
 //
 //		Spanning Tree Ind
 //			Spanning tree ind: The Boolean value true specifies that a spanning tree algorithm is enabled.
-//			The value false disables (rapid) spanning tree. (R, W, setbycreate) (mandatory) (1 byte)
+//			The value false disables (rapid) spanning tree. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Learning Ind
 //			Learning ind: The Boolean value true specifies that bridge learning functions are enabled. The
-//			value false disables bridge learning. (R, W, setbycreate) (mandatory) (1 byte)
+//			value false disables bridge learning. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Port Bridging Ind
 //			Port bridging ind: The Boolean value true specifies that bridging between UNI ports is enabled.
-//			The value false disables local bridging. (R, W, setbycreate) (mandatory) (1 byte)
+//			The value false disables local bridging. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Priority
 //			Priority:	This attribute specifies the bridge priority in the range 0..65535. The value of this
 //			attribute is copied to the bridge priority attribute of the associated MAC bridge configuration
-//			data ME. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data ME. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Max Age
 //			Max age:	This attribute specifies the maximum age (in 256ths of a second) of received protocol
 //			information before its entry in the spanning tree listing is discarded. The range is 0x0600 to
-//			0x2800 (6..40 s) in accordance with [IEEE 802.1D]. (R, W, setbycreate) (mandatory) (2 bytes)
+//			0x2800 (6..40-s) in accordance with [IEEE-802.1D]. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Hello Time
-//			NOTE – [IEEE 802.1D] specifies the compatibility range for hello time to be 1..2 s.
+//			NOTE - [IEEE 802.1D] specifies the compatibility range for hello time to be 1..2-s.
 //
 //		Forward Delay
 //			Forward delay: This attribute specifies the forwarding delay (in 256ths of a second) when the
-//			bridge acts as the root. The range is 0x0400 to 0x1E00 (4..30 s) in accordance with [IEEE
-//			802.1D]. (R, W, set-by-create) (mandatory) (2 bytes)
+//			bridge acts as the root. The range is 0x0400 to 0x1E00 (4..30-s) in accordance with [IEEE
+//			802.1D]. (R,-W, set-by-create) (mandatory) (2-bytes)
 //
 //		Unknown Mac Address Discard
 //			Unknown MAC address discard: The Boolean value true specifies that MAC frames with unknown DAs
 //			be discarded. The value false specifies that such frames be forwarded to all allowed ports.
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Mac Learning Depth
 //			MAC learning depth: This attribute specifies the maximum number of UNI MAC addresses to be
 //			learned by the bridge. The default value 0 specifies that there is no administratively imposed
-//			limit. (R, W, setbycreate) (optional) (1 byte)
+//			limit. (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Dynamic Filtering Ageing Time
 //			Dynamic filtering ageing time: This attribute specifies the age of dynamic filtering entries in
 //			the bridge database, after which unrefreshed entries are discarded. In accordance with clause
-//			7.9.2 of [IEEE 802.1D] and clause 8.8.3 of [IEEE 802.1Q], the range is 10..1 000 000 s, with a
-//			resolution of 1 s and a default of 300 s. The value 0 specifies that the ONU uses its internal
+//			7.9.2 of [IEEE 802.1D] and clause 8.8.3 of [IEEE 802.1Q], the range is 10..1 000 000-s, with a
+//			resolution of 1-s and a default of 300-s. The value 0 specifies that the ONU uses its internal
 //			default. (R, W, set-by-create) (optional) (4 bytes)
 //
 type MacBridgeServiceProfile struct {
@@ -124,5 +124,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgeServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeserviceprofileBME, params...)
+	return NewManagedEntity(*macbridgeserviceprofileBME, params...)
 }

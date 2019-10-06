@@ -43,40 +43,40 @@ var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Tp Pointer
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 0
-//			Interwork TP pointer for P-bit priority 0:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 0:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 1
-//			Interwork TP pointer for P-bit priority 1:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 1:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 2
-//			Interwork TP pointer for P-bit priority 2:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 2:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 3
-//			Interwork TP pointer for P-bit priority 3:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 3:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 4
-//			Interwork TP pointer for P-bit priority 4:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 4:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 5
-//			Interwork TP pointer for P-bit priority 5:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 5:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 6
-//			Interwork TP pointer for P-bit priority 6:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 6:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interwork Tp Pointer For P_Bit Priority 7
-//			Interwork TP pointer for P-bit priority 7:	(R, W, setbycreate) (mandatory) (2 bytes)
+//			Interwork TP pointer for P-bit priority 7:	(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Unmarked Frame Option
 //			Untagged downstream frames are passed through the mapper transparently.
 //
 //		Dscp To P Bit Mapping
-//			NOTE – If certain bits in the DSCP field are to be ignored in the mapping process, the attribute
+//			NOTE - If certain bits in the DSCP field are to be ignored in the mapping process, the attribute
 //			should be provisioned such that all possible values of those bits produce the same P-bit
 //			mapping. This can be applied to the case where instead of full DSCP, the operator wishes to
 //			adopt the priority mechanism based on IP precedence, which needs only the three MSBs of the DSCP
@@ -86,10 +86,10 @@ var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 //			Default P-bit assumption: This attribute is valid when the unmarked frame option attribute is
 //			set to 1. In its LSBs, the default Pbit assumption attribute contains the default PCP field to
 //			be assumed. The unmodified frame is then directed to the GEM IW TP indicated by the interwork TP
-//			pointer mappings. (R, W, setbycreate) (mandatory) (1 byte)
+//			pointer mappings. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tp Type
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 type Ieee8021PMapperServiceProfile struct {
 	ManagedEntityDefinition
@@ -130,5 +130,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewIeee8021PMapperServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ieee8021pmapperserviceprofileBME, params...)
+	return NewManagedEntity(*ieee8021pmapperserviceprofileBME, params...)
 }

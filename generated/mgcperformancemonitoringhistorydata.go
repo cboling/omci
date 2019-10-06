@@ -41,53 +41,53 @@ var mgcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			identical ID, this ME is implicitly linked to an instance of the associated MGC config data or
 //			to the MGC config portal ME. If a non-OMCI configuration method is used for VoIP, there can be
 //			only one live ME instance, associated with the MGC config portal, and with ME ID 0. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Received Messages
 //			Received messages: This attribute counts the number of received Megaco messages on this
-//			association, as defined by [ITUT H.341]. (R) (mandatory) (4 bytes)
+//			association, as defined by [ITUT H.341]. (R) (mandatory) (4-bytes)
 //
 //		Received Octets
 //			Received octets: This attribute counts the total number of octets received on this association,
-//			as defined by [ITU-T H.341]. (R) (mandatory) (4 bytes)
+//			as defined by [ITU-T H.341]. (R) (mandatory) (4-bytes)
 //
 //		Sent Messages
 //			Sent messages: This attribute counts the total number of Megaco messages sent over this
-//			association, as defined by [ITU-T H.341]. (R) (mandatory) (4 bytes)
+//			association, as defined by [ITU-T H.341]. (R) (mandatory) (4-bytes)
 //
 //		Sent Octets
 //			Sent octets:	This attribute counts the total number of octets sent over this association, as
-//			defined by [ITU-T H.341]. (R) (mandatory) (4 bytes)
+//			defined by [ITU-T H.341]. (R) (mandatory) (4-bytes)
 //
 //		Protocol Errors
-//			(R) (mandatory) (4 bytes)
+//			(R) (mandatory) (4-bytes)
 //
 //		Transport Losses
 //			Transport losses: This attribute counts the total number of transport losses (e.g., socket
 //			problems) detected on this association. A link loss is defined as loss of communication with the
 //			remote entity due to hardware/transient problems, or problems in related software. (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 //		Last Detected Event
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Last Detected Event Time
 //			Last detected event time: This attribute reports the time in seconds since the last event on
-//			this association was detected, as defined by [ITU-T H.341]. (R) (mandatory) (4 bytes)
+//			this association was detected, as defined by [ITU-T H.341]. (R) (mandatory) (4-bytes)
 //
 //		Last Detected Reset Time
 //			Last detected reset time: This attribute reports the time in seconds since these statistics were
 //			last reset, as defined by [ITU-T H.341]. Under normal circumstances, a get action on this
-//			attribute would return 900 s to indicate a completed 15 min interval. (R) (mandatory) (4 bytes)
+//			attribute would return 900-s to indicate a completed 15-min interval. (R) (mandatory) (4-bytes)
 //
 type MgcPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -126,5 +126,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMgcPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(mgcperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*mgcperformancemonitoringhistorydataBME, params...)
 }

@@ -38,40 +38,40 @@ var rtpprofiledataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Local Port Min
 //			Local port min: This attribute defines the base UDP port that should be used by RTP for voice
-//			traffic. The recommended default is 50000 (R, W, set-by-create) (mandatory) (2 bytes)
+//			traffic. The recommended default is 50000 (R,-W, set-by-create) (mandatory) (2-bytes)
 //
 //		Local Port Max
 //			Local port max: This attribute defines the highest UDP port used by RTP for voice traffic. The
 //			value must be greater than the local port minimum. The value 0 specifies that the local port
-//			maximum be equal to the local port minimum. (R, W, set-by-create) (optional) (2 bytes)
+//			maximum be equal to the local port minimum. (R,-W, set-by-create) (optional) (2-bytes)
 //
 //		Dscp Mark
 //			DSCP mark:	Diffserv code point to be used for outgoing RTP packets for this profile. The
-//			recommended default value is expedited forwarding (EF) = 0x2E. (R, W, setbycreate) (mandatory)
-//			(1 byte)
+//			recommended default value is expedited forwarding (EF)-= 0x2E. (R,-W, setbycreate) (mandatory)
+//			(1-byte)
 //
 //		Piggyback Events
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tone Events
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Dtmf Events
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Cas Events
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Ip Host Config Pointer
 //			IP host config pointer: This optional pointer associates the bearer (voice) flow with an IP host
 //			config data or IPv6 host config data ME. If this attribute is not present or is not populated
 //			with a valid pointer value, the bearer flow uses the same IP stack that is used for signalling,
 //			indicated by the TCP/UDP pointer in the associated SIP agent or MGC config data. The default
-//			value is 0xFFFF, a null pointer. (R, W) (optional) (2 bytes)
+//			value is 0xFFFF, a null pointer. (R,-W) (optional) (2-bytes)
 //
 type RtpProfileData struct {
 	ManagedEntityDefinition
@@ -107,5 +107,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRtpProfileData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(rtpprofiledataBME, params...)
+	return NewManagedEntity(*rtpprofiledataBME, params...)
 }

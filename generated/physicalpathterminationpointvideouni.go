@@ -31,11 +31,11 @@ var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 //
 //	The ONU automatically creates an instance of this ME per port:
 //
-//	•	when the ONU has RF video UNI ports built into its factory configuration;
+//	o	when the ONU has RF video UNI ports built into its factory configuration;
 //
-//	•	when a cardholder is provisioned to expect a circuit pack of the video UNI type;
+//	o	when a cardholder is provisioned to expect a circuit pack of the video UNI type;
 //
-//	•	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the video
+//	o	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the video
 //	UNI type. Note that the installation of a plug-and-play card may indicate the presence of video
 //	ports via equipment ID as well as its type, and indeed may cause the ONU to instantiate a port-
 //	mapping package that specifies video ports.
@@ -49,28 +49,28 @@ var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
 //			number indicates the physical position of the UNI. The first byte is the slot ID (defined in
-//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2 bytes)
+//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2-bytes)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//			ME. Administrative state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Power Control
 //			Power control: This attribute controls whether power is provided from the ONU to an external
 //			equipment over the video PPTP. Value 1 enables power over coaxial cable. The default value 0
-//			disables power feed. (R, W) (optional) (1 byte)
+//			disables power feed. (R,-W) (optional) (1-byte)
 //
 type PhysicalPathTerminationPointVideoUni struct {
 	ManagedEntityDefinition
@@ -101,5 +101,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointvideouniBME, params...)
+	return NewManagedEntity(*physicalpathterminationpointvideouniBME, params...)
 }

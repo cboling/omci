@@ -40,7 +40,7 @@ var ethernetframeextendedpm64bitBME *ManagedEntityDefinition
 //			setbycreate) (mandatory) (2 bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. If
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. If
 //			continuous accumulation is enabled in the control block, this attribute is not used and has the
 //			fixed value 0. (R) (mandatory) (1 byte)
 //
@@ -85,8 +85,8 @@ var ethernetframeextendedpm64bitBME *ManagedEntityDefinition
 //			(mandatory) (4 bytes)
 //
 //		Frames 64 Octets
-//			Frames 64 octets: The total number of received frames (including bad frames) that were 64 octets
-//			long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			Frames 64 octets: The total number of received frames (including bad frames) that were 64-octets
+//			long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Frames 65 To 127 Octets
 //			Frames 65 to 127 octets: The total number of received frames (including bad frames) that were
@@ -101,8 +101,8 @@ var ethernetframeextendedpm64bitBME *ManagedEntityDefinition
 //			256..511 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
 //
 //		Frames 512 To 1 023 Octets
-//			Frames 512 to 1 023 octets: The total number of frames (including bad frames) received that were
-//			512..1 023 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			Frames 512 to 1-023 octets: The total number of frames (including bad frames) received that were
+//			512..1-023 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
 //
 //		Frames 1024 To 1518 Octets
 //			Frames 1024 to 1518 octets: The total number of frames (including bad frames) received that were
@@ -150,5 +150,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetFrameExtendedPm64Bit(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ethernetframeextendedpm64bitBME, params...)
+	return NewManagedEntity(*ethernetframeextendedpm64bitBME, params...)
 }

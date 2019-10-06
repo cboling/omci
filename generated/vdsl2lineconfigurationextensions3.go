@@ -39,74 +39,74 @@ var vdsl2lineconfigurationextensions3BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. All xDSL and
 //			VDSL2 line configuration profiles and extensions that pertain to a given PPTP xDSL UNI must
-//			share a common ME ID. (R, setbycreate) (mandatory) (2 bytes)
+//			share a common ME ID. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Ripolicyds
 //			RIPOLICYds: This attribute indicates which policy shall be applied to determine the triggers for
 //			re-initialization in the downstream direction. A valid range of values is given in clause
-//			7.3.1.1.12.1 of [ITU-T G.997.1]. (R, W) (optional) (1 byte)
+//			7.3.1.1.12.1 of [ITU-T G.997.1]. (R,-W) (optional) (1-byte)
 //
 //		Ripolicyus
 //			RIPOLICYus: This attribute indicates which policy shall be applied to determine the triggers for
 //			re-initialization in the upstream direction. A valid range of values is given in clause
-//			7.3.1.1.12.2 of [ITU-T G.997.1]. (R, W) (optional) (1 byte)
+//			7.3.1.1.12.2 of [ITU-T G.997.1]. (R,-W) (optional) (1-byte)
 //
 //		Reinit_Time_Thresholdds
 //			REINIT_TIME_THRESHOLDds: This attribute indicates defines the downstream threshold for re-
 //			initialization based on SES, to be used by the VTU receiver when re-initialization policy 1 is
 //			used in downstream. A valid range of values is given in clause 7.3.1.1.13.1 of [ITU-T G.997.1].
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 //		Reinit_Time_Thresholdus
 //			REINIT_TIME_THRESHOLDus: This attribute indicates defines the upstream threshold for re-
 //			initialization based on SES, to be used by the VTU receiver when reinitialization policy 1 is
 //			used in upstream. A valid range of values is given in clause 7.3.1.1.13.2 of [ITU-T G.997.1].
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 //		Rxrefvnsfus
 //			RXREFVNSFus: If SNRM_MODE = 4, this attribute defines the upstream receiver-referred virtual
-//			noise scaling factor. The attribute value ranges from 0 (–64.0 dBm) to 255 (+63.5 dBm) – see
-//			clause 7.3.1.7.5 of [ITU-T G.997.1]. (R, W) (optional) (1 byte)
+//			noise scaling factor. The attribute value ranges from 0  (-64.0-dBm) to 255 (+63.5-dBm) - see
+//			clause 7.3.1.7.5 of [ITU-T G.997.1]. (R,-W) (optional) (1-byte)
 //
 //		Txrefvnsfds
 //			TXREFVNSFds: If SNRM_MODE = 4, this attribute defines the downstream transmitter referred
-//			virtual noise scaling factor. The attribute value ranges from 0 (–64.0 dBm) to 255 (+63.5 dBm)
-//			– see clause 7.3.1.7.6 of [ITU-T G.997.1]. (R, W) (optional) (1 byte)
+//			virtual noise scaling factor. The attribute value ranges from 0  (-64.0-dBm) to 255 (+63.5-dBm)
+//			- see clause 7.3.1.7.6 of [ITU-T G.997.1]. (R,-W) (optional) (1-byte)
 //
 //		Rtx_Modeds
 //			RTX_MODEds: This attribute controls the mode of operation of [ITU-T G.998.4] retransmission in
 //			the downstream direction. A valid range of values is given in clause 7.3.1.11 of [ITU-T
-//			G.997.1]. (R, W) (mandatory) (1 byte)
+//			G.997.1]. (R,-W) (mandatory) (1-byte)
 //
 //		Rtx_Modeus
 //			RTX_MODEus: This attribute controls the mode of operation of [ITU-T G.998.4] retransmission in
 //			the upstream direction. A valid range of values is given in clause 7.3.1.11 of [ITU-T G.997.1].
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Leftr_Thresh
 //			LEFTR_THRESH: If retransmission is used in a given transmit direction, LEFTR_THRESH specifies
 //			the threshold for declaring a near-end ''leftr'' defect. LEFTR_THRESH is equal to the integer
 //			value of this attribute multiplied by 0.01. Valid values and usage are given in clause 7.3.1.12
-//			of [ITU-T G.997.1]. (R, W) (mandatory) (1 byte)
+//			of [ITU-T G.997.1]. (R,-W) (mandatory) (1-byte)
 //
 //		Maxdelayoctet_Split Parameter Mdosplit
 //			MAXDELAYOCTET-split parameter (MDOSPLIT): This attribute defines the percentage of the
 //			MAXDELAYOCTET_ext if operating in [ITU-T G.998.4] or MAXDELAYOCTET in other cases allocated to
 //			the downstream direction. MDOSPLIT is equal to the integer value of this attribute multiplied by
-//			1%. Valid values and usage are given in clause 7.3.1.14 of [ITUT G.997.1]. (R, W) (optional)
-//			(1 byte)
+//			1%. Valid values and usage are given in clause 7.3.1.14 of [ITUT-G.997.1]. (R,-W) (optional)
+//			(1-byte)
 //
 //		Attndr Method Attndr_Method
 //			ATTNDR Method (ATTNDR_METHOD): This attribute specifies the method to be used for the
 //			calculation of the ATTNDR in the downstream and upstream direction. Valid values are given in
-//			clause 7.3.1.15.1 of [ITU-T G.997.1]. (R, W) (optional) (1 byte)
+//			clause 7.3.1.15.1 of [ITU-T G.997.1]. (R,-W) (optional) (1-byte)
 //
 //		Attndr Maxdelayoctet_Split Parameter Attndr_Mdosplit
 //			ATTNDR MAXDELAYOCTET-split parameter (ATTNDR_MDOSPLIT): This attribute defines the percentage of
 //			the MAXDELAYOCTET_ext if operating in [ITU-T G.998.4] or MAXDELAYOCTET in other cases allocated
 //			to the downstream direction to be used in the improved method for calculation of the ATTNDR. The
 //			valid values are identical to the values of the line configuration parameter MDOSPLIT. See
-//			clause 7.3.1.15.2 of [ITUT G.997.1]. (R, W) (optional) (1 byte)
+//			clause 7.3.1.15.2 of [ITUT-G.997.1]. (R,-W) (optional) (1-byte)
 //
 type Vdsl2LineConfigurationExtensions3 struct {
 	ManagedEntityDefinition
@@ -146,5 +146,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(vdsl2lineconfigurationextensions3BME, params...)
+	return NewManagedEntity(*vdsl2lineconfigurationextensions3BME, params...)
 }

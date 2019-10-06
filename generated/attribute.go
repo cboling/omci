@@ -29,7 +29,7 @@ import (
 	"strings"
 )
 
-type AttributeDefinitionMap map[uint]*AttributeDefinition
+type AttributeDefinitionMap map[uint]AttributeDefinition
 
 // AttributeDefinition defines a single specific Managed Entity's attributes
 type AttributeDefinition struct {
@@ -51,15 +51,15 @@ func (attr *AttributeDefinition) String() string {
 	return fmt.Sprintf("AttributeDefinition: %v (%v): Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
-func (attr *AttributeDefinition) GetName() string         { return attr.Name }
-func (attr *AttributeDefinition) GetIndex() uint          { return attr.Index }
-func (attr *AttributeDefinition) GetDefault() interface{} { return attr.DefValue }
-func (attr *AttributeDefinition) GetSize() int            { return attr.Size }
-func (attr *AttributeDefinition) GetAccess() mapset.Set   { return attr.Access }
-func (attr *AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
+func (attr AttributeDefinition) GetName() string         { return attr.Name }
+func (attr AttributeDefinition) GetIndex() uint          { return attr.Index }
+func (attr AttributeDefinition) GetDefault() interface{} { return attr.DefValue }
+func (attr AttributeDefinition) GetSize() int            { return attr.Size }
+func (attr AttributeDefinition) GetAccess() mapset.Set   { return attr.Access }
+func (attr AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
 	return attr.Constraint
 }
-func (attr *AttributeDefinition) IsTableAttribute() bool {
+func (attr AttributeDefinition) IsTableAttribute() bool {
 	return attr.TableSupport
 }
 
@@ -353,11 +353,11 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 
 // GetAttributeDefinitionByName searches the attribute definition map for the
 // attribute with the specified name (case insensitive)
-func GetAttributeDefinitionByName(attrMap *AttributeDefinitionMap, name string) (*AttributeDefinition, OmciErrors) {
+func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (*AttributeDefinition, OmciErrors) {
 	nameLower := strings.ToLower(name)
-	for _, attrVal := range *attrMap {
+	for _, attrVal := range attrMap {
 		if nameLower == strings.ToLower(attrVal.GetName()) {
-			return attrVal, nil
+			return &attrVal, nil
 		}
 	}
 	return nil, NewAttributeFailureError(fmt.Sprintf("attribute '%s' not found", name))
@@ -395,8 +395,8 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (
 // Packet definitions for attributes of various types/sizes
 
 func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,
@@ -411,8 +411,8 @@ func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
 }
 
 func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,
@@ -427,8 +427,8 @@ func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
 }
 
 func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,
@@ -443,8 +443,8 @@ func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
 }
 
 func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,
@@ -459,8 +459,8 @@ func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
 }
 
 func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,
@@ -509,8 +509,8 @@ func (t *TableInfo) String() string {
 
 // Now the field
 func TableField(name string, tableInfo TableInfo, access mapset.Set,
-	avc bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	avc bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     tableInfo.Value,
@@ -525,8 +525,8 @@ func TableField(name string, tableInfo TableInfo, access mapset.Set,
 }
 
 func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) *AttributeDefinition {
-	return &AttributeDefinition{
+	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+	return AttributeDefinition{
 		Name:         name,
 		Index:        index,
 		DefValue:     defVal,

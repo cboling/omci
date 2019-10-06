@@ -29,7 +29,7 @@ var thresholddata2BME *ManagedEntityDefinition
 //	Together with an instance of the threshold data 1 ME, an instance of this ME contains threshold
 //	values for counters maintained in one or more instances of PM history data MEs.
 //
-//	For a complete discussion of generic PM architecture, refer to clause I.4.
+//	For a complete discussion of generic PM architecture, refer to clause-I.4.
 //
 //	Instances of this ME are created and deleted by the OLT.
 //
@@ -39,28 +39,28 @@ var thresholddata2BME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Its value is the
-//			same as that of the paired threshold data 1 instance. (R, setbycreate) (mandatory) (2 bytes)
+//			same as that of the paired threshold data-1-instance. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Threshold Value_8
-//			Threshold value 8: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-8: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_9
-//			Threshold value 9: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-9: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_10
-//			Threshold value 10: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-10: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_11
-//			Threshold value 11: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-11: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_12
-//			Threshold value 12: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-12: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_13
-//			Threshold value 13: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-13: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 //		Threshold Value_14
-//			Threshold value 14: (R, W, setbycreate) (mandatory) (4 bytes)
+//			Threshold value-14: (R,-W, setbycreate) (mandatory) (4-bytes)
 //
 type ThresholdData2 struct {
 	ManagedEntityDefinition
@@ -95,5 +95,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewThresholdData2(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(thresholddata2BME, params...)
+	return NewManagedEntity(*thresholddata2BME, params...)
 }

@@ -26,7 +26,7 @@ const CesServiceProfileClassId ClassID = ClassID(21)
 var cesserviceprofileBME *ManagedEntityDefinition
 
 // CesServiceProfile (class ID #21)
-//	NOTE – In [ITU-T G.984.4], this ME is called a CES service profile-G.
+//	NOTE - In [ITU-T G.984.4], this ME is called a CES service profile-G.
 //
 //	An instance of this ME organizes data that describe the CES service functions of the ONU.
 //	Instances of this ME are created and deleted by the OLT.
@@ -37,16 +37,16 @@ var cesserviceprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Ces Buffered Cdv Tolerance
 //			CES buffered CDV tolerance: This attribute represents the duration of user data that must be
-//			buffered by the CES IW entity to offset packet delay variation. It is expressed in 10 µs
-//			increments. 75 (750 μs) is suggested as a default value. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			buffered by the CES IW entity to offset packet delay variation. It is expressed in 10-us
+//			increments. 75 (750-vs) is suggested as a default value. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Channel Associated Signalling Cas
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 type CesServiceProfile struct {
 	ManagedEntityDefinition
@@ -76,5 +76,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewCesServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(cesserviceprofileBME, params...)
+	return NewManagedEntity(*cesserviceprofileBME, params...)
 }

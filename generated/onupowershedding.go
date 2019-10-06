@@ -48,44 +48,44 @@ var onupowersheddingBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Restore Power Timer Reset Interval
 //			Restore power timer reset interval: The time delay, in seconds, before resetting the power-
 //			shedding timers after full power restoration. Upon ME instantiation, the ONU sets this attribute
-//			to 0. (R, W) (mandatory) (2 bytes)
+//			to 0. (R,-W) (mandatory) (2-bytes)
 //
 //		Data Class Shedding Interval
-//			Data class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Data class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Voice Class Shedding Interval
 //			Voice class shedding interval: This attribute only pertains to voice services that terminate on
-//			the ONU and are under the management control of the OMCI. (R, W) (mandatory) (2 bytes)
+//			the ONU and are under the management control of the OMCI. 	(R,-W) (mandatory) (2-bytes)
 //
 //		Video Overlay Class Shedding Interval
-//			Video overlay class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Video overlay class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Video Return Class Shedding Interval
-//			Video return class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Video return class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Digital Subscriber Line Class Shedding Interval
-//			Digital subscriber line (DSL) class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Digital subscriber line (DSL) class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Atm Class Shedding Interval
-//			ATM class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			ATM class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Ces Class Shedding Interval
-//			CES class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			CES class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Frame Class Shedding Interval
-//			Frame class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Frame class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Sdh_Sonet Class Shedding Interval
-//			Sdh-sonet class shedding interval:	(R, W) (mandatory) (2 bytes)
+//			Sdh-sonet class shedding interval:	(R,-W) (mandatory) (2-bytes)
 //
 //		Shedding Status
 //			The ONU sets each bit to 1 when power shedding is active, and clears it to 0 when the service is
-//			restored. (R) (optional) (2 bytes)
+//			restored. (R) (optional) (2-bytes)
 //
 type OnuPowerShedding struct {
 	ManagedEntityDefinition
@@ -122,5 +122,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuPowerShedding(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(onupowersheddingBME, params...)
+	return NewManagedEntity(*onupowersheddingBME, params...)
 }

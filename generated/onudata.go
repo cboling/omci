@@ -38,14 +38,14 @@ var onudataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Mib Data Sync
 //			MIB data sync: This attribute is used to check the alignment of the MIB of the ONU with the
 //			corresponding MIB in the OLT. MIB data sync relies on this attribute, which is a sequence number
 //			that can be checked by the OLT to see if the MIB snapshots for the OLT and ONU match. Refer to
 //			clause I.1.2.1 for a detailed description of this attribute. Upon ME instantiation, the ONU sets
-//			this attribute to 0. (R, W) (mandatory) (1 byte)
+//			this attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 type OnuData struct {
 	ManagedEntityDefinition
@@ -77,5 +77,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnuData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(onudataBME, params...)
+	return NewManagedEntity(*onudataBME, params...)
 }

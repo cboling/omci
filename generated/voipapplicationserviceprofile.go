@@ -39,42 +39,42 @@ var voipapplicationserviceprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Cid Features
-//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//			The recommended default value is 0x00. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Call Waiting Features
-//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//			The recommended default value is 0x00. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Call Progress Or Transfer Features
-//			The recommended default value is 0x0000. (R, W, setbycreate) (mandatory) (2 bytes)
+//			The recommended default value is 0x0000. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Call Presentation Features
-//			The recommended default value is 0x0000. (R, W, setbycreate) (mandatory) (2 bytes)
+//			The recommended default value is 0x0000. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Direct Connect Feature
-//			The recommended default value is 0x00. (R, W, setbycreate) (mandatory) (1 byte)
+//			The recommended default value is 0x00. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Direct Connect Uri Pointer
 //			Direct connect URI pointer: This attribute points to a network address ME that specifies the URI
-//			of the direct connect. If this attribute is set to a null pointer, no URI is defined. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			of the direct connect. If this attribute is set to a null pointer, no URI is defined. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Bridged Line Agent Uri Pointer
 //			Bridged line agent URI pointer: This attribute points to a network address ME that specifies the
 //			URI of the bridged line agent. If this attribute is set to a null pointer, no URI is defined.
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Conference Factory Uri Pointer
 //			Conference factory URI pointer: This attribute points to a network address ME that specifies the
 //			URI of the conference factory. If this attribute is set to a null pointer, no URI is defined.
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Dial Tone Feature Delay_ W Armline Timer New
 //			Dial tone feature delay/warmline timer (new): This attribute defines the warmline timer/dial
 //			tone feature delay timer (seconds). The default value 0 specifies vendor-specific
-//			implementation. (R, W) (optional) (2 bytes)
+//			implementation. (R,-W) (optional) (2-bytes)
 //
 type VoipApplicationServiceProfile struct {
 	ManagedEntityDefinition
@@ -111,5 +111,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipApplicationServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(voipapplicationserviceprofileBME, params...)
+	return NewManagedEntity(*voipapplicationserviceprofileBME, params...)
 }

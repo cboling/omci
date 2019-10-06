@@ -42,13 +42,13 @@ var trafficdescriptorBME *ManagedEntityDefinition
 //	The algorithm used to determine the colour marking is specified by the meter type attribute. If
 //	[bIETF RFC 4115] is used, then:
 //
-//	CIR4115 = CIR
+//	CIR4115-=-CIR
 //
-//	EIR4115 = PIR – CIR (EIR: excess information rate)
+//	EIR4115-=-PIR - CIR (EIR: excess information rate)
 //
-//	CBS4115 = CBS
+//	CBS4115-=-CBS
 //
-//	EBS4115 = PBS – CBS.
+//	EBS4115-=-PBS - CBS.
 //
 //	Relationships
 //		This ME is associated with a GEM port network CTP or a MAC bridge port configuration data ME.
@@ -56,35 +56,35 @@ var trafficdescriptorBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Cir
 //			CIR:	This attribute specifies the committed information rate, in bytes per second. The default
-//			is 0. (R, W, setbycreate) (optional) (4 bytes)
+//			is 0. (R,-W, setbycreate) (optional) (4-bytes)
 //
 //		Pir
 //			PIR:	This attribute specifies the peak information rate, in bytes per second. The default value
-//			0 accepts the ONU's factory policy. (R, W, setbycreate) (optional) (4 bytes)
+//			0 accepts the ONU's factory policy. (R,-W, setbycreate) (optional) (4-bytes)
 //
 //		Cbs
-//			CBS:	This attribute specifies the committed burst size, in bytes. The default is 0. (R, W,
-//			setbycreate) (optional) (4 bytes)
+//			CBS:	This attribute specifies the committed burst size, in bytes. The default is 0. (R,-W,
+//			setbycreate) (optional) (4-bytes)
 //
 //		Pbs
 //			PBS:	This attribute specifies the peak burst size, in bytes. The default value 0 accepts the
-//			ONU's factory policy. (R, W, setbycreate) (optional) (4 bytes)
+//			ONU's factory policy. (R,-W, setbycreate) (optional) (4-bytes)
 //
 //		Colour Mode
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		Ingress Colour Marking
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		Egress Colour Marking
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		Meter Type
-//			(R, setbycreate) (optional) (1 byte)
+//			(R, setbycreate) (optional) (1-byte)
 //
 type TrafficDescriptor struct {
 	ManagedEntityDefinition
@@ -120,5 +120,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTrafficDescriptor(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(trafficdescriptorBME, params...)
+	return NewManagedEntity(*trafficdescriptorBME, params...)
 }

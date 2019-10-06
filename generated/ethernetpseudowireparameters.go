@@ -70,5 +70,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetPseudowireParameters(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ethernetpseudowireparametersBME, params...)
+	return NewManagedEntity(*ethernetpseudowireparametersBME, params...)
 }

@@ -37,28 +37,28 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the ANI-G. (R, set-by-create)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
-//			contains PM threshold values. (R, W, set-by-create) (mandatory) (2 bytes)
+//			contains PM threshold values. (R,-W, set-by-create) (mandatory) (2-bytes)
 //
 //		Psbd Hec Error Count
 //			PSBd HEC error count: This attribute counts HEC errors in any of the fields of the downstream
-//			physical sync block. (R) (optional) (4 bytes)
+//			physical sync block. (R) (optional) (4-bytes)
 //
 //		Xgtc Hec Error Count
 //			XGTC HEC error count: This attribute counts HEC errors detected in the XGTC header. In [ITU-T
 //			G.9807.1], this attribute is used for framing sublayer (FS) HEC error count management. (R)
-//			(optional) (4 bytes)
+//			(optional) (4-bytes)
 //
 //		Unknown Profile Count
 //			Unknown profile count: This attribute counts the number of grants received whose specified
-//			profile was not known to the ONU. (R) (optional) (4 bytes)
+//			profile was not known to the ONU. (R) (optional) (4-bytes)
 //
 //		Transmitted Xg_Pon Encapsulation Method Xgem Frames
 //			Transmitted XG-PON encapsulation method (XGEM) frames: This attribute counts the number of non-
@@ -67,10 +67,10 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //		Fragment Xgem Frames
 //			Fragment XGEM frames: This attribute counts the number of XGEM frames that represent fragmented
-//			SDUs, as indicated by the LF bit = 0. (R) (optional) (4 bytes)
+//			SDUs, as indicated by the LF bit-= 0. (R) (optional) (4-bytes)
 //
 //		Xgem Hec Lost Words Count
-//			XGEM HEC lost words count: This attribute counts the number of 4 byte words lost because of an
+//			XGEM HEC lost words count: This attribute counts the number of 4-byte words lost because of an
 //			XGEM frame HEC error. In general, all XGTC payload following the error is lost, until the next
 //			PSBd event. (R) (optional) (4 bytes)
 //
@@ -91,15 +91,15 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //		Loss Of Downstream Synchronization Lods Event Count
 //			Loss of downstream synchronization (LODS) event count: This attribute counts the number of state
-//			transitions from O5.1 to O6. (R) (optional) (4 bytes)
+//			transitions from O5.1 to O6. (R) (optional) (4-bytes)
 //
 //		Lods Event Restored Count
 //			LODS event restored count: This attribute counts the number of LODS cleared events. (R)
-//			(optional) (4 bytes)
+//			(optional) (4-bytes)
 //
 //		Onu Reactivation By Lods Events
 //			ONU reactivation by LODS events: This attribute counts the number of LODS events resulting in
-//			ONU reactivation without synchronization being reacquired. (R) (optional) (4 bytes)
+//			ONU reactivation without synchronization being reacquired. (R) (optional) (4-bytes)
 //
 type XgPonTcPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -142,5 +142,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xgpontcperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*xgpontcperformancemonitoringhistorydataBME, params...)
 }

@@ -40,7 +40,7 @@ var fastxturperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			by-create) (mandatory) (2 bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1 byte)
 //
 //		Threshold Data 1_2 Id
@@ -50,7 +50,7 @@ var fastxturperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Successful Fra Counter
 //			Successful FRA counter: This attribute counts the successful FRA primitives (success_FRA). The
 //			successful FRA primitive (success_FRA) is defined in clause 11.3.1.6 of [ITU-T G.9701]. See
-//			clause 7.7.22 of [ITU-T G.997.2] (R) (mandatory) (4 bytes)
+//			clause 7.7.22 of [ITU-T G.997.2] (R) (mandatory) (4-bytes)
 //
 //		Successful Rpa Counter
 //			Successful RPA counter: This attribute counts the successful RPA primitives (success_RPA). The
@@ -87,5 +87,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastXtuRPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(fastxturperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*fastxturperformancemonitoringhistorydataBME, params...)
 }

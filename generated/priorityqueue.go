@@ -26,7 +26,7 @@ const PriorityQueueClassId ClassID = ClassID(277)
 var priorityqueueBME *ManagedEntityDefinition
 
 // PriorityQueue (class ID #277)
-//	NOTE 1 – In [ITU-T G.984.4], this is called a priority queue-G.
+//	NOTE 1 - In [ITU-T G.984.4], this is called a priority queue-G.
 //
 //	This ME specifies the priority queue used by a GEM port network CTP in the upstream direction.
 //	The upstream priority queue ME is also related to a T-CONT ME. By default, this relationship is
@@ -85,20 +85,20 @@ var priorityqueueBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The MSB
-//			represents the direction (1: upstream, 0: downstream). The 15 LSBs represent a queue ID. The
+//			represents the direction (1: upstream, 0:-downstream). The 15 LSBs represent a queue ID. The
 //			queue ID is numbered in ascending order by the ONU itself. It is strongly encouraged that the
 //			queue ID be formulated to simplify finding related queues. One way to do this is to number the
 //			queues such that the related port attributes are in ascending order (for the downstream and
 //			upstream queues separately). The range of downstream queue ids is 0 to 0x7FFF and the range of
-//			upstream queue ids is 0x8000 to 0xFFFF. (R) (mandatory) (2 bytes)
+//			upstream queue ids is 0x8000 to 0xFFFF. (R) (mandatory) (2-bytes)
 //
 //		Queue Configuration Option
 //			Queue configuration option: This attribute identifies the buffer partitioning policy. The value
 //			1 means that several queues share one buffer of maximum queue size, while the value 0 means that
-//			each queue has an individual buffer of maximum queue size. (R) (mandatory) (1 byte)
+//			each queue has an individual buffer of maximum queue size. (R) (mandatory) (1-byte)
 //
 //		Maximum Queue Size
-//			NOTE 2 – In this and the other similar attributes of the priority queue ME, some legacy
+//			NOTE 2 - In this and the other similar attributes of the priority queue ME, some legacy
 //			implementations may take the queue scale factor from the GEM block length attribute of the ANI-G
 //			ME. This option is discouraged in new implementations.
 //
@@ -108,13 +108,13 @@ var priorityqueueBME *ManagedEntityDefinition
 //
 //		Discard_Block Counter Reset Interval
 //			Discard-block counter reset interval: This attribute represents the interval in milliseconds at
-//			which the counter resets itself. (R, W) (optional) (2 bytes)
+//			which the counter resets itself. (R,-W) (optional) (2-bytes)
 //
 //		Threshold Value For Discarded Blocks Due To Buffer Overflow
 //			Threshold value for discarded blocks due to buffer overflow: This attribute specifies the
 //			threshold for the number of bytes (scaled by the priority queue scale factor attribute of the
 //			ONU2G) discarded on this queue due to buffer overflow. Its value controls the declaration of the
-//			block loss alarm. (R, W) (optional) (2 bytes)
+//			block loss alarm. (R, W) (optional) (2-bytes)
 //
 //		Related Port
 //			If flexible configuration is not supported, the ONU should reject an attempt to set the related
@@ -129,29 +129,29 @@ var priorityqueueBME *ManagedEntityDefinition
 //			is distributed to non-empty queues in proportion to their weights. In the upstream direction,
 //			this weight is meaningful if several priority queues are associated with a traffic scheduler or
 //			T-CONT whose policy is WRR. In the downstream direction, this weight is used by a UNI in a WRR
-//			fashion. Upon ME instantiation, the ONU sets this attribute to 1. (R, W) (mandatory) (1 byte)
+//			fashion. Upon ME instantiation, the ONU sets this attribute to 1. (R,-W) (mandatory) (1-byte)
 //
 //		Back Pressure Operation
 //			Back pressure operation: This attribute enables (0) or disables (1) back pressure operation. Its
-//			default value is 0. (R, W) (mandatory) (2 bytes)
+//			default value is 0. (R,-W) (mandatory) (2-bytes)
 //
 //		Back Pressure Time
 //			Back pressure time: This attribute specifies the duration in microseconds of the backpressure
 //			signal. It can be used as a pause time for an Ethernet UNI. Upon ME instantiation, the ONU sets
-//			this attribute to 0. (R, W) (mandatory) (4 bytes)
+//			this attribute to 0. (R,-W) (mandatory) (4-bytes)
 //
 //		Back Pressure Occur Queue Threshold
 //			Back pressure occur queue threshold: This attribute identifies the threshold queue occupancy, in
 //			bytes, scaled by the priority queue scale factor attribute of the ONU2G, to start sending a
-//			back-pressure signal. (R, W) (mandatory) (2 bytes)
+//			back-pressure signal. (R, W) (mandatory) (2-bytes)
 //
 //		Back Pressure Clear Queue Threshold
 //			Back pressure clear queue threshold: This attribute identifies the threshold queue occupancy, in
 //			bytes, scaled by the priority queue scale factor attribute of the ONU2G, to stop sending a back-
-//			pressure signal. (R, W) (mandatory) (2 bytes)
+//			pressure signal. (R, W) (mandatory) (2-bytes)
 //
 //		Packet Drop Queue Thresholds
-//			Packet drop queue thresholds: This attribute is a composite of four 2 byte values, a minimum and
+//			Packet drop queue thresholds: This attribute is a composite of four 2-byte values, a minimum and
 //			a maximum threshold, measured in bytes, scaled by the priority queue scale factor attribute of
 //			the ONU2-G, for green and yellow packets. The first value is the minimum green threshold, the
 //			queue occupancy below which all green packets are admitted to the queue. The second value is the
@@ -159,24 +159,24 @@ var priorityqueueBME *ManagedEntityDefinition
 //			The third value is the minimum yellow threshold, the queue occupancy below which all yellow
 //			packets are admitted to the queue. The fourth value is the maximum yellow threshold, the queue
 //			occupancy at or above which all yellow packets are discarded. The default is that all thresholds
-//			take the value of the maximum queue size. (R, W) (optional) (8 bytes)
+//			take the value of the maximum queue size. (R,-W) (optional) (8-bytes)
 //
 //		Packet Drop Max_P
-//			Packet drop max_p: This attribute is a composite of two 1 byte values, the probability of
+//			Packet drop max_p: This attribute is a composite of two 1-byte values, the probability of
 //			dropping a coloured packet when the queue occupancy lies just below the maximum threshold for
 //			packets of that colour. The first value is the green packet max_p, and the second value is the
 //			yellow packet max_p. The probability, max_p, is determined by adding one to the unsigned value
 //			(0..255) of this attribute and dividing the result by 256. The default for each value is 255.
-//			(R, W) (optional) (2 bytes)
+//			(R,-W) (optional) (2-bytes)
 //
 //		Queue Drop W_Q
 //			Queue drop w_q: This attribute determines the averaging coefficient, w_q, as described in
 //			[b-Floyd]. The averaging coefficient, w_q, is equal to 2Queue_drop_w_q. For example, when queue
-//			drop_w_q has the value 9, the averaging coefficient, w_q, is 1/512 = 0.001 9. The default value
-//			is 9. (R, W) (optional) (1 byte)
+//			drop_w_q has the value 9, the averaging coefficient, w_q, is 1/512-= 0.001-9. The default value
+//			is 9. (R,-W) (optional) (1-byte)
 //
 //		Drop Precedence Colour Marking
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 type PriorityQueue struct {
 	ManagedEntityDefinition
@@ -218,5 +218,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPriorityQueue(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(priorityqueueBME, params...)
+	return NewManagedEntity(*priorityqueueBME, params...)
 }

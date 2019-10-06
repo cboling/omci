@@ -37,38 +37,38 @@ var voiplinestatusBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the PPTP POTS UNI. (R) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		Voip Codec Used
-//			(R) (mandatory) (2 bytes)
+//			(R) (mandatory) (2-bytes)
 //
 //		Voip Voice Server Status
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Voip Port Session Type
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Voip Call 1 Packet Period
 //			Voip call 1 packet period: This attribute reports the packet period for the first call on the
-//			VoIP POTS port. The value is defined in milliseconds. (R) (mandatory) (2 bytes)
+//			VoIP POTS port. The value is defined in milliseconds. (R) (mandatory) (2-bytes)
 //
 //		Voip Call 2 Packet Period
 //			Voip call 2 packet period: This attribute reports the packet period for the second call on the
-//			VoIP POTS port. The value is defined in milliseconds. (R) (mandatory) (2 bytes)
+//			VoIP POTS port. The value is defined in milliseconds. (R) (mandatory) (2-bytes)
 //
 //		Voip Call 1 Dest Addr
 //			Voip call 1 dest addr: This attribute reports the DA for the first call on the VoIP POTS port.
-//			The value is an ASCII string. (R) (mandatory) (25 bytes)
+//			The value is an ASCII string. (R) (mandatory) (25-bytes)
 //
 //		Voip Call 2 Dest Addr
 //			Voip call 2 dest addr: This attribute reports the DA for the second call on the VoIP POTS port.
-//			The value is an ASCII string. (R) (mandatory) (25 bytes)
+//			The value is an ASCII string. (R) (mandatory) (25-bytes)
 //
 //		Voip Line State
 //			(R) (optional) (1 byte)
 //
 //		Emergency Call Status
-//			(R) (Optional) (1 byte)
+//			(R) (Optional) (1-byte)
 //
 type VoipLineStatus struct {
 	ManagedEntityDefinition
@@ -102,5 +102,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipLineStatus(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(voiplinestatusBME, params...)
+	return NewManagedEntity(*voiplinestatusBME, params...)
 }

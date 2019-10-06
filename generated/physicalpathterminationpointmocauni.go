@@ -31,11 +31,11 @@ var physicalpathterminationpointmocauniBME *ManagedEntityDefinition
 //
 //	The ONU automatically creates an instance of this ME per port as follows.
 //
-//	•	When the ONU has MoCA ports built into its factory configuration.
+//	o	When the ONU has MoCA ports built into its factory configuration.
 //
-//	•	When a cardholder is provisioned to expect a circuit pack of the MoCA type.
+//	o	When a cardholder is provisioned to expect a circuit pack of the MoCA type.
 //
-//	•	When a cardholder provisioned for plug-and-play is equipped with a circuit pack of the MoCA
+//	o	When a cardholder provisioned for plug-and-play is equipped with a circuit pack of the MoCA
 //	type. Note that the installation of a plug-and-play card may indicate the presence of MoCA ports
 //	via equipment ID as well as its type, and indeed may cause the ONU to instantiate a port-mapping
 //	package that specifies MoCA ports.
@@ -48,69 +48,69 @@ var physicalpathterminationpointmocauniBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
 //			number is directly associated with the physical position of the UNI. The first byte is the slot
 //			ID (defined in clause 9.1.5). The second byte is the port ID, with the range 1..255. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Loopback Configuration
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (optional) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (optional) (1-byte)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//			ME. Administrative state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Max Frame Size
 //			Max frame size: This attribute denotes the maximum frame size allowed across this interface.
-//			Upon ME instantiation, the ONU sets this attribute to 1518. (R, W) (mandatory) (2 bytes)
+//			Upon ME instantiation, the ONU sets this attribute to 1518. (R,-W) (mandatory) (2-bytes)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Pppoe Filter
 //			PPPoE filter: This attribute controls filtering of PPPoE packets on this MoCA port. When its
 //			value is 1, all packets other than PPPoE packets are discarded. The default 0 accepts packets of
-//			all types. (R, W) (optional) (1 byte)
+//			all types. (R,-W) (optional) (1-byte)
 //
 //		Network Status
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Password
 //			Password:	This attribute specifies the MoCA encryption key. It is an ASCII string of 17 decimal
-//			digits. Upon ME instantiation, the ONU sets this attribute to 17 null bytes. (R, W) (mandatory)
-//			(17 bytes)
+//			digits. Upon ME instantiation, the ONU sets this attribute to 17 null bytes. (R,-W) (mandatory)
+//			(17-bytes)
 //
 //		Privacy Enabled
 //			Privacy enabled: This attribute activates (1) link-layer security. The default value 0
-//			deactivates it. (R, W) (mandatory) (1 byte)
+//			deactivates it. (R,-W) (mandatory) (1-byte)
 //
 //		Minimum Bandwidth Alarm Threshold
 //			Minimum bandwidth alarm threshold: This attribute specifies the minimum desired PHY link
 //			bandwidth between two nodes. If the actual bandwidth is lower, an LL alarm is declared. Valid
-//			values are 0 to 0x0410 (260 Mbit/s) in 0.25 Mbit/s increments. The default value is 0x02D0
-//			(180 Mbit/s). The value 0 disables the threshold. (R, W) (optional) (2 bytes)
+//			values are 0 to 0x0410 (260-Mbit/s) in 0.25-Mbit/s increments. The default value is 0x02D0
+//			(180-Mbit/s). The value 0 disables the threshold. (R,-W) (optional) (2-bytes)
 //
 //		Frequency Mask
 //			Frequency mask: This attribute is a bit map of the centre frequencies that the interface is
 //			permitted to use, where each bit represents a centre frequency. The LSB (b[1]) corresponds to
-//			centre frequency 800 MHz. The next significant bit (b[2]) corresponds to centre frequency
-//			825 MHz. The 28th bit (b[28]) corresponds to centre frequency 1500 MHz. The four MSBs are not
-//			used. (R, W) (optional) (4 bytes)
+//			centre frequency 800-MHz. The next significant bit (b[2]) corresponds to centre frequency
+//			825-MHz. The 28th bit (b[28]) corresponds to centre frequency 1500-MHz. The four MSBs are not
+//			used. (R,-W) (optional) (4-bytes)
 //
 //		Rf Channel
 //			RF channel:	This attribute reports the frequency to which the MoCA interface is currently tuned,
-//			in megahertz. (R) (mandatory) (2 bytes)
+//			in megahertz. (R) (mandatory) (2-bytes)
 //
 //		Last Operational Frequency
 //			Last operational frequency: This attribute reports the frequency to which the MoCA interface was
-//			tuned when last operational, in megahertz. (R) (mandatory) (2 bytes)
+//			tuned when last operational, in megahertz. (R) (mandatory) (2-bytes)
 //
 type PhysicalPathTerminationPointMocaUni struct {
 	ManagedEntityDefinition
@@ -150,5 +150,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointmocauniBME, params...)
+	return NewManagedEntity(*physicalpathterminationpointmocauniBME, params...)
 }

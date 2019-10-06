@@ -37,7 +37,7 @@ var xdsllineconfigurationprofilepart3BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. All xDSL and
 //			VDSL2 line configuration profiles and extensions that pertain to a given PPTP xDSL UNI must
-//			share a common ME ID. (R, setbycreate) (mandatory) (2 bytes)
+//			share a common ME ID. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Loop Diagnostics Mode Forced Ldsf
 //			Only while the line power management state is L3 can the line be forced into loop diagnostic
@@ -47,20 +47,20 @@ var xdsllineconfigurationprofilepart3BME *ManagedEntityDefinition
 //			successfully, attempts are made to do so, until the loop diagnostic mode is no longer forced on
 //			the line through this configuration parameter. If loop diagnostic procedures cannot be completed
 //			successfully after a vendordiscretionary number of retries or within a vendor-discretionary
-//			timeout, then an initialization failure occurs. (R, W, setbycreate) (mandatory) (1 byte)
+//			timeout, then an initialization failure occurs. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Automode Cold Start Forced
 //			Automode is defined as the case where multiple operation modes are enabled in xTSE (Table
 //			9.7.12-1) and where the selection of the operation mode to be used for transmission depends, not
 //			only on the common capabilities of both xTUs (as exchanged in [ITU-T G.994.1]), but also on
-//			achievable data rates under given loop conditions. (R, W, setbycreate) (mandatory if automode is
-//			supported) (1 byte)
+//			achievable data rates under given loop conditions. (R,-W, setbycreate) (mandatory if automode is
+//			supported) (1-byte)
 //
 //		L2 Atpr
 //			L2ATPR:	This parameter specifies the maximum aggregate transmit power reduction that can be
 //			performed in the L2 request (i.e., at the transition of L0 to L2 state) or through a single
-//			power trim in the L2 state. It is only valid for [ITUT G.992.3], [ITUT G.992.4] and
-//			[ITUT G.992.5]. This attribute ranges from 0 (0 dB) dB to 31 (31 dB). (R, W, setbycreate)
+//			power trim in the L2 state. It is only valid for [ITUT-G.992.3], [ITUT-G.992.4] and
+//			[ITUT-G.992.5]. This attribute ranges from 0 (0-dB) dB to 31 (31-dB). (R, W, setbycreate)
 //			(mandatory) (1 byte)
 //
 //		L2 Atprt
@@ -87,64 +87,64 @@ var xdsllineconfigurationprofilepart3BME *ManagedEntityDefinition
 //			Update request flag for near-end test parameters: The UPDATE-TEST-NE attribute forces an update
 //			of all near-end test parameters that can be updated during showtime in [ITU-T G.993.2]. Update
 //			is triggered by setting this attribute to 1, whereupon the near-end test parameters are expected
-//			to be updated within 10 s, and the ONU should reset the attribute value to 0. The update request
+//			to be updated within 10-s, and the ONU should reset the attribute value to 0. The update request
 //			flag is independent of any autonomous update process in the system. The update request attribute
-//			must be prepared to accept another set after a period not to exceed 3 min, a period that starts
-//			when the flag is set via the OMCI or by an autonomous process in the system. (R, W) (optional)
-//			(1 byte)
+//			must be prepared to accept another set after a period not to exceed 3-min, a period that starts
+//			when the flag is set via the OMCI or by an autonomous process in the system. (R,-W) (optional)
+//			(1-byte)
 //
 //		Update Request Flag For Far_End Test Parameters
 //			Update request flag for far-end test parameters: The UPDATE-TEST-FE attribute forces an update
 //			of all far-end test parameters that can be updated during showtime in [ITU-T G.993.2]. Update is
 //			triggered by setting this attribute to 1, whereupon the far-end test parameters are expected to
-//			be updated within 10 s, and the ONU should reset the attribute value to 0. The update request
+//			be updated within 10-s, and the ONU should reset the attribute value to 0. The update request
 //			flag is independent of any autonomous update process in the system. The update request attribute
-//			must be prepared to accept another set after a period not to exceed 3 min, a period that starts
-//			when the flag is set via the OMCI or by an autonomous process in the system. (R, W) (optional)
-//			(1 byte)
+//			must be prepared to accept another set after a period not to exceed 3-min, a period that starts
+//			when the flag is set via the OMCI or by an autonomous process in the system. (R,-W) (optional)
+//			(1-byte)
 //
 //		Inm Inter Arrival Time Offset Upstream
 //			INM inter-arrival time offset upstream: INMIATOus is the inter-arrival time (IAT) offset that
 //			the xTU-C receiver uses to determine in which bin of the IAT histogram the IAT is reported.
 //			Valid values for INMIATO range from 3 to 511 discrete multi-tone (DMT) symbols in steps of 1 DMT
-//			symbol. (R, W) (optional) (2 bytes)
+//			symbol. (R,-W) (optional) (2-bytes)
 //
 //		Inm Inter_Arrival Time Step Upstream
 //			INM inter-arrival time step upstream: INMIATSus is the IAT step that the xTU-C receiver uses to
 //			determine in which bin of the IAT histogram the IAT is reported. Valid values for INMIATS range
-//			from 0 to 7 in steps of 1. (R, W) (optional) (1 byte)
+//			from 0 to 7 in steps of 1. (R,-W) (optional) (1-byte)
 //
 //		Inm Cluster Continuation Value Upstream
 //			INM cluster continuation value upstream: INMCCus is the cluster continuation value that the
 //			xTU-C receiver uses in the cluster indication process described in the applicable
 //			Recommendation. Valid values for INMCC range from 0 to 64 DMT symbols in steps of 1 DMT symbol.
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 //		Inm Equivalent Inp Mode Upstream
 //			INM equivalent INP mode upstream: INM_INPEQ_MODEus is the INM equivalent INP mode that the xTU-C
 //			receiver uses in the computation of the equivalent INP, as defined in the applicable
-//			Recommendation. Valid values for INM_INPEQ_MODE are 0..4. (R, W) (optional) (1 byte)
+//			Recommendation. Valid values for INM_INPEQ_MODE are 0..4. (R,-W) (optional) (1-byte)
 //
 //		Inm Inter Arrival Time Offset Downstream
 //			INM inter-arrival time offset downstream: INMIATOds is the IAT offset that the xTU-R receiver
 //			uses to determine in which bin of the IAT histogram the IAT is reported. Valid values for
-//			INMIATO range from 3 to 511 DMT symbols in steps of 1 DMT symbol. (R, W) (optional) (2 bytes)
+//			INMIATO range from 3 to 511 DMT symbols in steps of 1 DMT symbol. (R,-W) (optional) (2-bytes)
 //
 //		Inm Inter_Arrival Time Step Downstream
 //			INM inter-arrival time step downstream: INMIATSds is the IAT step that the xTU-R receiver uses
 //			to determine in which bin of the IAT histogram the IAT is reported. Valid values for INMIATS
-//			range from 0 to 7 in steps of 1. (R, W) (optional) (1 byte)
+//			range from 0 to 7 in steps of 1. (R,-W) (optional) (1-byte)
 //
 //		Inm Cluster Continuation Value Downstream
 //			INM cluster continuation value downstream: INMCCds is the cluster continuation value that the
 //			xTU-R receiver uses in the cluster indication process described in the applicable
 //			Recommendation. Valid values for INMCC range from 0 to 64 DMT symbols in steps of 1 DMT symbol.
-//			(R, W) (optional) (1 byte)
+//			(R,-W) (optional) (1-byte)
 //
 //		Inm Equivalent Inp Mode Downstream
 //			INM equivalent INP mode downstream: INM_INPEQ_MODEds is the INM equivalent INP mode that the
 //			xTU-R receiver uses in the computation of the equivalent INP, as defined in the applicable
-//			Recommendation. Valid values for INM_INPEQ_MODE are 0..4. (R, W) (optional) (1 byte)
+//			Recommendation. Valid values for INM_INPEQ_MODE are 0..4. (R,-W) (optional) (1-byte)
 //
 type XdslLineConfigurationProfilePart3 struct {
 	ManagedEntityDefinition
@@ -188,5 +188,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineConfigurationProfilePart3(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xdsllineconfigurationprofilepart3BME, params...)
+	return NewManagedEntity(*xdsllineconfigurationprofilepart3BME, params...)
 }

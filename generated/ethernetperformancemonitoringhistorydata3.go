@@ -31,7 +31,7 @@ var ethernetperformancemonitoringhistorydata3BME *ManagedEntityDefinition
 //	defined Ethernet monitoring MEs. The received direction is from the CPE towards the network
 //	(upstream).
 //
-//	NOTE 1 – Several of the same counters are available from the Ethernet frame PM history data MEs,
+//	NOTE 1 - Several of the same counters are available from the Ethernet frame PM history data MEs,
 //	which are associated with MAC bridge ports. MAC bridge port association allows those MEs to be
 //	used for any Ethernet flow, in both upstream and downstream directions, while the Ethernet PM
 //	history data 3 ME can only be used on a physical IEEE 802.3 port.
@@ -40,8 +40,8 @@ var ethernetperformancemonitoringhistorydata3BME *ManagedEntityDefinition
 //
 //	For a complete discussion of generic PM architecture, refer to clause I.4.
 //
-//	NOTE 2 – Implementers are encouraged to consider the Ethernet frame extended PM ME defined in
-//	clause 9.3.32, which collects the same counters in a more generalized way.
+//	NOTE 2 - Implementers are encouraged to consider the Ethernet frame extended PM ME defined in
+//	clause-9.3.32, which collects the same counters in a more generalized way.
 //
 //	Relationships
 //		An instance of this ME is associated with an instance of the PPTP Ethernet UNI.
@@ -50,79 +50,79 @@ var ethernetperformancemonitoringhistorydata3BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the PPTP Ethernet UNI. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Drop Events
 //			Drop events:	The total number of events in which packets were dropped due to a lack of
 //			resources. This is not necessarily the number of packets dropped; it is the number of times this
-//			event was detected. (R) (mandatory) (4 bytes)
+//			event was detected. (R) (mandatory) (4-bytes)
 //
 //		Octets
 //			Octets:	The total number of octets received from the CPE, including those in bad packets,
-//			excluding framing bytes, but including FCS. (R) (mandatory) (4 bytes)
+//			excluding framing bytes, but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets
 //			Packets:	The total number of packets received, including bad packets, broadcast packets and
-//			multicast packets. (R) (mandatory) (4 bytes)
+//			multicast packets. (R) (mandatory) (4-bytes)
 //
 //		Broadcast Packets
 //			Broadcast packets: The total number of received good packets directed to the broadcast address.
-//			This does not include multicast packets. (R) (mandatory) (4 bytes)
+//			This does not include multicast packets. (R) (mandatory) (4-bytes)
 //
 //		Multicast Packets
 //			Multicast packets: The total number of received good packets directed to a multicast address.
-//			This does not include broadcast packets. (R) (mandatory) (4 bytes)
+//			This does not include broadcast packets. (R) (mandatory) (4-bytes)
 //
 //		Undersize Packets
 //			Undersize packets: The total number of packets received that were less than 64 octets long, but
 //			were otherwise well formed (excluding framing bits, but including FCS). (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Fragments
 //			Fragments:	The total number of packets received that were less than 64 octets long, excluding
 //			framing bits but including FCS octets, and had either a bad FCS with an integral number of
 //			octets (FCS error) or a bad FCS with a non-integral number of octets (alignment error). It is
 //			entirely normal for this attribute to increment. This is because it counts both runts (which are
-//			normal occurrences due to collisions) and noise hits. (R) (mandatory) (4 bytes)
+//			normal occurrences due to collisions) and noise hits. (R) (mandatory) (4-bytes)
 //
 //		Jabbers
 //			Jabbers:	The total number of packets received that were longer than 1518 octets, excluding
 //			framing bits but including FCS octets, and had either a bad FCS with an integral number of
 //			octets (FCS error) or a bad FCS with a non-integral number of octets (alignment error). The
-//			range to detect jabber is between 20 ms and 150 ms. (R) (mandatory) (4 bytes)
+//			range to detect jabber is between 20 ms and 150 ms. (R) (mandatory) (4-bytes)
 //
 //		Packets 64 Octets
 //			Packets 64 octets: The total number of received packets (including bad packets) that were
-//			64 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			64-octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 65 To 127 Octets
 //			Packets 65 to 127 octets: The total number of received packets (including bad packets) that were
-//			65..127 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			65..127 octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 128 To 255 Octets
 //			Packets 128 to 255 octets: The total number of packets (including bad packets) received that
-//			were 128..255 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			were 128..255 octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 256 To 511 Octets
 //			Packets 256 to 511 octets: The total number of packets (including bad packets) received that
-//			were 256..511 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			were 256..511 octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 512 To 1023 Octets
 //			Packets 512 to 1023 octets: The total number of packets (including bad packets) received that
-//			were 512..1023 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			were 512..1023 octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 1024 To 1518 Octets
 //			Packets 1024 to 1518 octets: The total number of packets (including bad packets) received that
-//			were 1024..1518 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			were 1024..1518 octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 type EthernetPerformanceMonitoringHistoryData3 struct {
 	ManagedEntityDefinition
@@ -166,5 +166,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetPerformanceMonitoringHistoryData3(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ethernetperformancemonitoringhistorydata3BME, params...)
+	return NewManagedEntity(*ethernetperformancemonitoringhistorydata3BME, params...)
 }

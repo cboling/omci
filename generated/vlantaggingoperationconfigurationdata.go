@@ -29,7 +29,7 @@ var vlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 //	This ME organizes data associated with VLAN tagging. Instances of this ME are created and
 //	deleted by the OLT.
 //
-//	NOTE 1 – The extended VLAN tagging operation configuration data of clause 9.3.13 is preferred
+//	NOTE 1 - The extended VLAN tagging operation configuration data of clause 9.3.13 is preferred
 //	for new implementations.
 //
 //	Relationships
@@ -53,22 +53,22 @@ var vlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 //			by-create) (mandatory) (2 bytes)
 //
 //		Upstream Vlan Tagging Operation Mode
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Upstream Vlan Tag Tci Value
 //			Upstream VLAN tag TCI value: This attribute specifies the TCI for upstream VLAN tagging. It is
-//			used when the upstream VLAN tagging operation mode is 1 or 2. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			used when the upstream VLAN tagging operation mode is 1 or 2. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Downstream Vlan Tagging Operation Mode
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Association Type
-//			The associated ME instance is identified by the associated ME pointer. (R, W, setbycreate)
-//			(optional) (1 byte)
+//			The associated ME instance is identified by the associated ME pointer. (R,-W, setbycreate)
+//			(optional) (1-byte)
 //
 //		Associated Me Pointer
-//			NOTE 3 – When the association type is xDSL, the two MSBs may be used to indicate a bearer
+//			NOTE 3 - When the association type is xDSL, the two MSBs may be used to indicate a bearer
 //			channel.
 //
 type VlanTaggingOperationConfigurationData struct {
@@ -102,5 +102,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(vlantaggingoperationconfigurationdataBME, params...)
+	return NewManagedEntity(*vlantaggingoperationconfigurationdataBME, params...)
 }

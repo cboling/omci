@@ -36,49 +36,49 @@ var efmbondinggroupperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the EFM bonding group. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
-//			that contain PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//			that contain PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Rx Bad Fragments
-//			Rx bad fragments: Clause 45.2.3.33 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx bad fragments: Clause 45.2.3.33 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Fragments
-//			Rx lost fragments: Clause 45.2.3.34 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx lost fragments: Clause 45.2.3.34 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Starts
-//			Rx lost starts: Clause 45.2.3.35 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx lost starts: Clause 45.2.3.35 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Ends
-//			Rx lost ends: Clause 45.2.3.36 of [IEEE 802.3]. (R) (mandatory) (4 bytes)
+//			Rx lost ends: Clause 45.2.3.36 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Frames
-//			Rx frames: Number of Ethernet frames received over this group. (R) (mandatory) (4 bytes)
+//			Rx frames: Number of Ethernet frames received over this group. (R) (mandatory) (4-bytes)
 //
 //		Tx Frames
-//			Tx frames: Number of Ethernet frames transmitted over this group. (R) (mandatory) (4 bytes)
+//			Tx frames: Number of Ethernet frames transmitted over this group. (R) (mandatory) (4-bytes)
 //
 //		Rx Bytes
 //			Rx bytes: Number of bytes contained in the Ethernet frames received over this group. (R)
-//			(mandatory) (8 bytes)
+//			(mandatory) (8-bytes)
 //
 //		Tx Bytes
 //			Tx bytes: Number of bytes contained in the Ethernet frames transmitted over this group. (R)
-//			(mandatory) (8 bytes)
+//			(mandatory) (8-bytes)
 //
 //		Tx Discarded Frames
 //			Tx discarded frames: Number of Ethernet frames discarded by the group transmit function. (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 //		Tx Discarded Bytes
 //			Tx discarded bytes: Number of bytes contained in the Ethernet frames discarded by the group
-//			transmit function. (R) (mandatory) (4 bytes)
+//			transmit function. (R) (mandatory) (4-bytes)
 //
 type EfmBondingGroupPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -118,5 +118,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEfmBondingGroupPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(efmbondinggroupperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*efmbondinggroupperformancemonitoringhistorydataBME, params...)
 }

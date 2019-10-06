@@ -41,21 +41,21 @@ var tcpudpconfigdataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. It is
 //			recommended that the ME ID be the same as the port number. (R, setbycreate) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		Port Id
-//			Port ID:	This attribute specifies the port number that offers the TCP/UDP service. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			Port ID:	This attribute specifies the port number that offers the TCP/UDP service. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Protocol
 //			Protocol:	This attribute specifies the protocol type as defined by [b-IANA] (protocol numbers),
-//			for example UDP (0x11). (R, W, setbycreate) (mandatory) (1 byte)
+//			for example UDP (0x11). (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tos_Diffserv Field
 //			TOS/diffserv field: This attribute specifies the value of the TOS/diffserv field of the IPv4
 //			header. The contents of this attribute may contain the type of service per [IETF RFC 2474] or a
 //			DSCP. Valid values for DSCP are as defined by [b-IANA] (differentiated services field code
-//			points). (R, W, set-by-create) (mandatory) (1 byte)
+//			points). (R,-W, set-by-create) (mandatory) (1-byte)
 //
 //		Ip Host Pointer
 //			IP host pointer: This attribute points to the IP host config data or IPv6 host config data ME
@@ -92,5 +92,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTcpUdpConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(tcpudpconfigdataBME, params...)
+	return NewManagedEntity(*tcpudpconfigdataBME, params...)
 }

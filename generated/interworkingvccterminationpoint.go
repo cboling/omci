@@ -38,40 +38,40 @@ var interworkingvccterminationpointBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R,-setbycreate)
+//			(mandatory) (2-bytes)
 //
 //		Vci Value
-//			VCI value:	This attribute identifies the VCI value associated with this IW VCC TP. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			VCI value:	This attribute identifies the VCI value associated with this IW VCC TP. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Vp Network Ctp Connectivity Pointer
 //			VP network CTP connectivity pointer: This attribute points to the VP network CTP associated with
-//			this IW VCC TP. (R, W, setbycreate) (mandatory) (2 bytes)
+//			this IW VCC TP. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Deprecated 1
-//			Deprecated 1: Not used; should be set to 0. (R, W, setbycreate) (mandatory) (1 byte)
+//			Deprecated 1: Not used; should be set to 0. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Deprecated 2
-//			Deprecated 2: Not used; should be set to 0. (R, W, setbycreate) (mandatory) (2 bytes)
+//			Deprecated 2: Not used; should be set to 0. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Aal5 Profile Pointer
-//			AAL5 profile pointer: This attribute points to an instance of the AAL5 profile. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			AAL5 profile pointer: This attribute points to an instance of the AAL5 profile. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Deprecated 3
-//			Deprecated 3: Not used; should be set to 0. (R, W, setbycreate) (mandatory) (2 bytes)
+//			Deprecated 3: Not used; should be set to 0. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Aal Loopback Configuration
-//			The default value of this attribute is 0. (R, W) (mandatory) (1 byte)
+//			The default value of this attribute is 0. (R,-W) (mandatory) (1-byte)
 //
 //		Pptp Counter
 //			PPTP counter: This value is the number of instances of PPTP MEs associated with this instance of
-//			the IW VCC TP. (R) (optional) (1 byte)
+//			the IW VCC TP. (R) (optional) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 type InterworkingVccTerminationPoint struct {
 	ManagedEntityDefinition
@@ -108,5 +108,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewInterworkingVccTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(interworkingvccterminationpointBME, params...)
+	return NewManagedEntity(*interworkingvccterminationpointBME, params...)
 }

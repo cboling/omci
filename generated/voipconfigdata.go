@@ -39,37 +39,37 @@ var voipconfigdataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Available Signalling Protocols
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Signalling Protocol Used
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Available Voip Configuration Methods
 //			Bits 5..24 are reserved by ITU-T. Bits 25..32 are reserved for proprietary vendor configuration
-//			capabilities. (R) (mandatory) (4 bytes)
+//			capabilities. (R) (mandatory) (4-bytes)
 //
 //		Voip Configuration Method Used
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Voip Configuration Address Pointer
-//			The default value is 0xFFFF (R, W) (mandatory) (2 bytes)
+//			The default value is 0xFFFF (R,-W) (mandatory) (2-bytes)
 //
 //		Voip Configuration State
 //			Other values are reserved. At ME instantiation, the ONU sets this attribute to 0. (R)
-//			(mandatory) (1 byte)
+//			(mandatory) (1-byte)
 //
 //		Retrieve Profile
 //			Retrieve profile: This attribute provides a means by which the ONU may be notified that a new
 //			VoIP profile should be retrieved. By setting this attribute, the OLT triggers the ONU to
 //			retrieve a new profile. The actual value in the set action is ignored because it is the action
-//			of setting that is important. (W) (mandatory) (1 byte)
+//			of setting that is important. (W) (mandatory) (1-byte)
 //
 //		Profile Version
 //			Profile version: This attribute is a character string that identifies the version of the last
-//			retrieved profile. (R) (mandatory) (25 bytes)
+//			retrieved profile. (R) (mandatory) (25-bytes)
 //
 type VoipConfigData struct {
 	ManagedEntityDefinition
@@ -103,5 +103,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(voipconfigdataBME, params...)
+	return NewManagedEntity(*voipconfigdataBME, params...)
 }

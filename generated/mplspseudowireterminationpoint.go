@@ -35,7 +35,7 @@ var mplspseudowireterminationpointBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate)-(mandatory) (2 bytes)
 //
 //		Tp Type
 //			(R, W, setbycreate) (mandatory) (1 byte)
@@ -62,7 +62,7 @@ var mplspseudowireterminationpointBME *ManagedEntityDefinition
 //			(mandatory) (4 bytes)
 //
 //		Mpls Pw Tc
-//			NOTE 1 – The TC field was previously known as EXP. Refer to [bIETF RFC 5462].
+//			NOTE 1 - The TC field was previously known as EXP. Refer to [bIETF-RFC-5462].
 //
 //		Mpls Tunnel Direction
 //			(R, W, setbycreate) (mandatory for double-labelled case) (1 byte)
@@ -78,7 +78,7 @@ var mplspseudowireterminationpointBME *ManagedEntityDefinition
 //			setbycreate) (mandatory for double-labelled case) (4 bytes)
 //
 //		Mpls Tunnel Tc
-//			NOTE 2 – The TC field was previously known as EXP. Refer to [bIETF RFC 5462].
+//			NOTE 2 - The TC field was previously known as EXP. Refer to [bIETF-RFC-5462].
 //
 //		Pseudowire Type
 //			(R, W, setbycreate) (mandatory) (2 bytes)
@@ -91,12 +91,12 @@ var mplspseudowireterminationpointBME *ManagedEntityDefinition
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by the
-//			MPLS pseudowire TP. Administrative state is further described in clause A.1.6. (R, W) (optional)
-//			(1 byte)
+//			MPLS pseudowire TP. Administrative state is further described in clause-A.1.6. (R,-W) (optional)
+//			(1-byte)
 //
 //		Operational State
 //			Operational state: This attribute reports whether the ME is currently capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 type MplsPseudowireTerminationPoint struct {
 	ManagedEntityDefinition
@@ -139,5 +139,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMplsPseudowireTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(mplspseudowireterminationpointBME, params...)
+	return NewManagedEntity(*mplspseudowireterminationpointBME, params...)
 }

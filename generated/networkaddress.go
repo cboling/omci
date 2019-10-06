@@ -43,19 +43,19 @@ var networkaddressBME *ManagedEntityDefinition
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Instances of
 //			this ME created autonomously by the ONU have IDs in the range 0..0x7FFF. Instances created by
 //			the OLT have IDs in the range 0x8000..0xFFFE. The value 0xFFFF is reserved. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Security Pointer
 //			Security pointer: This attribute points to an authentication security method ME. The
 //			authentication security method indicates the username and password to be used when retrieving
 //			the network address indicated by this ME. A null pointer indicates that security attributes are
-//			not defined for this network address. (R, W, setbycreate) (mandatory) (2 bytes)
+//			not defined for this network address. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Address Pointer
 //			Address pointer: This attribute points to the large string ME that contains the network address.
 //			It may contain a fully qualified domain name, URI or IP address. The URI may also contain a port
 //			identifier (e.g., "x.y.z.com:5060"). A null pointer indicates that no network address is
-//			defined. (R, W, setbycreate) (mandatory) (2 bytes)
+//			defined. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 type NetworkAddress struct {
 	ManagedEntityDefinition
@@ -85,5 +85,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewNetworkAddress(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(networkaddressBME, params...)
+	return NewManagedEntity(*networkaddressBME, params...)
 }

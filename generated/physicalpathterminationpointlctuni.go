@@ -31,18 +31,18 @@ var physicalpathterminationpointlctuniBME *ManagedEntityDefinition
 //
 //	The ONU automatically creates an instance of this ME per port:
 //
-//	•	when the ONU has an LCT port built into its factory configuration;
+//	o	when the ONU has an LCT port built into its factory configuration;
 //
-//	•	when a cardholder is provisioned to expect a circuit pack of the LCT type;
+//	o	when a cardholder is provisioned to expect a circuit pack of the LCT type;
 //
-//	•	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the LCT
+//	o	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the LCT
 //	type;
 //
-//	NOTE – The installation of a plug-and-play card may indicate the presence of LCT ports via
+//	NOTE - The installation of a plug-and-play card may indicate the presence of LCT ports via
 //	equipment ID as well as its type, and indeed may cause the ONU to instantiate a port-mapping
 //	package that specifies LCT ports.
 //
-//	•	when the ONU supports debug access through some other physical or logical means.
+//	o	when the ONU supports debug access through some other physical or logical means.
 //
 //	The ONU automatically deletes an instance of this ME when a cardholder is neither provisioned to
 //	expect an LCT circuit pack, nor is it equipped with an LCT circuit pack, or if the ONU is
@@ -57,18 +57,18 @@ var physicalpathterminationpointlctuniBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
 //			number indicates the physical position of the UNI. The first byte is the slot ID (defined in
 //			clause 9.1.5). The second byte is the port ID, with the range 1..255. If the LCT UNI is
 //			associated with the ONU as a whole, its ME ID should be 0. (R) (mandatory) (2 bytes)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is described generically in clause A.1.6. The LCT has additional
+//			ME. Administrative state is described generically in clause-A.1.6. The LCT has additional
 //			administrative state behaviour. When the administrative state is set to lock, debug access
 //			through all physical or logical means is blocked, except that the operation of a possible ONU
 //			remote debug ME is not affected. Administrative lock of ME instance 0 overrides administrative
-//			lock of any other PPTP LCT UNIs that may exist. (R, W) (mandatory) (1 byte)
+//			lock of any other PPTP LCT UNIs that may exist. (R, W) (mandatory) (1-byte)
 //
 type PhysicalPathTerminationPointLctUni struct {
 	ManagedEntityDefinition
@@ -95,5 +95,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointLctUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointlctuniBME, params...)
+	return NewManagedEntity(*physicalpathterminationpointlctuniBME, params...)
 }

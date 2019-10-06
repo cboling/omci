@@ -38,10 +38,10 @@ var macbridgeportbridgetabledataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R) (mandatory) (2 bytes)
+//			data ME. (R) (mandatory) (2-bytes)
 //
 //		Bridge Table
-//			Upon ME instantiation, this attribute is an empty list. (R) (mandatory) (8 * M bytes, where M is
+//			Upon ME instantiation, this attribute is an empty list. (R) (mandatory) (8-*-M-bytes, where M is
 //			the number of entries in the list.)
 //
 type MacBridgePortBridgeTableData struct {
@@ -69,5 +69,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortBridgeTableData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportbridgetabledataBME, params...)
+	return NewManagedEntity(*macbridgeportbridgetabledataBME, params...)
 }

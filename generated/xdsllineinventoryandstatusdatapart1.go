@@ -37,33 +37,33 @@ var xdsllineinventoryandstatusdatapart1BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Xtu_C G.994.1 Vendor Id
-//			xTU-C G.994.1 vendor ID: This is the vendor ID as inserted by the xTU-C in the ITUT G.994.1 CL
+//			xTU-C G.994.1 vendor ID: This is the vendor ID as inserted by the xTU-C in the ITUT-G.994.1 CL
 //			message. It comprises 8 octets, including a country code followed by a (regionally allocated)
-//			provider code, as defined in [ITUT T.35]. (R) (mandatory) (8 bytes)
+//			provider code, as defined in [ITUT-T.35]. (R) (mandatory) (8-bytes)
 //
 //		Xtu_R G.994.1 Vendor Id
-//			xTU-R G.994.1 vendor ID: This is the vendor ID as inserted by the xTU-R in the ITUT G.994.1 CLR
+//			xTU-R G.994.1 vendor ID: This is the vendor ID as inserted by the xTU-R in the ITUT-G.994.1 CLR
 //			message. It comprises 8 binary octets, with the same format as the xTUC ITUT G.994.1 vendor ID.
-//			(R) (mandatory) (8 bytes)
+//			(R) (mandatory) (8-bytes)
 //
 //		Xtu_C System Vendor Id
 //			xTU-C system vendor ID: This is the vendor ID as inserted by the xTU-C in the overhead messages
 //			of [ITU-T G.992.3] and [ITU-T G.992.4]. It comprises 8 binary octets, with the same format as
-//			the xTU-C ITUT G.994.1 vendor ID. (R) (mandatory) (8 bytes)
+//			the xTU-C ITUT-G.994.1 vendor ID. (R) (mandatory) (8-bytes)
 //
 //		Xtu_R System Vendor Id
 //			xTU-R system vendor ID: This is the vendor ID as inserted by the xTU-R in the embedded
-//			operations channel and overhead messages of [ITU-T G.992.3] and [ITUT G.992.4]. It comprises 8
-//			binary octets, with the same format as the xTU-C ITUT G.994.1 vendor ID. (R) (mandatory)
-//			(8 bytes)
+//			operations channel and overhead messages of [ITU-T G.992.3] and [ITUT-G.992.4]. It comprises 8
+//			binary octets, with the same format as the xTU-C ITUT-G.994.1 vendor ID. (R) (mandatory)
+//			(8-bytes)
 //
 //		Xtu_C Version Number
 //			xTU-C version number: This is the vendorspecific version number as inserted by the xTUC in the
 //			overhead messages of [ITU-T G.992.3] and [ITU-T G.992.4]. It comprises up to 16 binary octets.
-//			(R) (mandatory) (16 bytes)
+//			(R) (mandatory) (16-bytes)
 //
 //		Xtu_R Version Number
 //			xTU-R version number: This is the version number as inserted by the xTUR in the embedded
@@ -73,54 +73,54 @@ var xdsllineinventoryandstatusdatapart1BME *ManagedEntityDefinition
 //			is shorter than 16. The string should contain the xTU-R firmware version and the xTU-R model,
 //			encoded in that order and separated by a space character: "<xTU-R firmware version><xTU-R
 //			model>". It is recognized that legacy xTU-Rs may not support this format. (R) (mandatory)
-//			(16 bytes)
+//			(16-bytes)
 //
 //		Xtu_C Serial Number Part 1
 //			xTU-C serial number part 1: The vendorspecific serial number inserted by the xTU-C in the
 //			overhead messages of [ITU-T G.992.3] and [ITU-T G.992.4] comprises up to 32 ASCII characters,
 //			null terminated if it is shorter than 32 characters. This attribute contains the first 16
-//			characters. (R) (mandatory) (16 bytes)
+//			characters. (R) (mandatory) (16-bytes)
 //
 //		Xtu_C Serial Number Part 2
 //			xTU-C serial number part 2: This attribute contains the second 16 characters of the xTU-C serial
-//			number. (R) (mandatory) (16 bytes)
+//			number. (R) (mandatory) (16-bytes)
 //
 //		Xtu_R Serial Number Part 1
 //			xTU-R serial number part 1: The serial number inserted by the xTU-R in the embedded operations
 //			channel of [ITU-T G.992.1] or [ITU-T G.992.2], or the overhead messages of [ITU-T G.992.3],
-//			[ITU-T G.992.4], [ITU-T G.992.5] and [ITUT G.993.2], comprises up to 32 ASCII characters,
+//			[ITU-T G.992.4], [ITU-T G.992.5] and [ITUT-G.993.2], comprises up to 32 ASCII characters,
 //			nullterminated if it is shorter than 32. It is recommended that the equipment serial number, the
 //			equipment model and the equipment firmware version, encoded in that order and separated by space
 //			characters, be contained: "<equipment serial number><equipment model><equipment firmware
 //			version>". It is recognized that legacy xTU-Rs may not support this format. This attribute
-//			contains the first 16 characters. (R) (mandatory) (16 bytes)
+//			contains the first 16 characters. (R) (mandatory) (16-bytes)
 //
 //		Xtu_R Serial Number Part 2
 //			xTU-R serial number part 2: This attribute contains the second 16 characters of the xTU-R serial
-//			number. (R) (mandatory) (16 bytes)
+//			number. (R) (mandatory) (16-bytes)
 //
 //		Xtu_C Self Test Results
 //			xTU-C selftest results: This parameter reports the xTU-C self-test result. It is coded in two
 //			fields. The most significant octet is 0 if the self-test passed and 1 if it failed. The three
 //			least significant octets are a vendor-discretionary integer that can be interpreted in
-//			combination with [ITU-T G.994.1] and the system vendor ID. (R) (mandatory) (4 bytes)
+//			combination with [ITU-T G.994.1] and the system vendor ID. (R) (mandatory) (4-bytes)
 //
 //		Xtu_R Self Test Results
 //			xTU-R selftest results: This parameter defines the xTU-R self-test result. It is coded in two
 //			fields. The most significant octet is 0 if the self-test passed and 1 if it failed. The three
 //			least significant octets are a vendor-discretionary integer that can be interpreted in
-//			combination with [ITU-T G.994.1] and the system vendor ID. (R) (mandatory) (4 bytes)
+//			combination with [ITU-T G.994.1] and the system vendor ID. (R) (mandatory) (4-bytes)
 //
 //		Xtu_C Transmission System Capability
-//			NOTE 1 – This attribute is only 7 bytes long. An eighth byte identifying VDSL2 capabilities is
+//			NOTE 1 - This attribute is only 7-bytes long. An eighth byte identifying VDSL2 capabilities is
 //			defined in the VDSL2 line inventory and status data part 1 ME.
 //
 //		Xtu_R Transmission System Capability
-//			NOTE 2 – This attribute is only 7 bytes long. An eighth byte identifying VDSL2 capabilities is
+//			NOTE 2 - This attribute is only 7-bytes long. An eighth byte identifying VDSL2 capabilities is
 //			defined in the VDSL2 line inventory and status data part 2 ME.
 //
 //		Initialization Success_Failure Cause
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 type XdslLineInventoryAndStatusDataPart1 struct {
 	ManagedEntityDefinition
@@ -160,5 +160,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xdsllineinventoryandstatusdatapart1BME, params...)
+	return NewManagedEntity(*xdsllineinventoryandstatusdatapart1BME, params...)
 }

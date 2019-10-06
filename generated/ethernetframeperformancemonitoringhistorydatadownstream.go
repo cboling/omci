@@ -33,81 +33,81 @@ var ethernetframeperformancemonitoringhistorydatadownstreamBME *ManagedEntityDef
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of a MAC bridge port configuration
-//			data. (R, setbycreate) (mandatory) (2 bytes)
+//			data. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Drop Events
 //			Drop events:	The total number of events in which packets were dropped due to a lack of
 //			resources. This is not necessarily the number of packets dropped; it is the number of times this
-//			event was detected. (R) (mandatory) (4 bytes)
+//			event was detected. (R) (mandatory) (4-bytes)
 //
 //		Octets
 //			Octets:	The total number of upstream octets received, including those in bad packets, excluding
-//			framing bits, but including FCS. (R) (mandatory) (4 bytes)
+//			framing bits, but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets
 //			Packets:	The total number of upstream packets received, including bad packets, broadcast packets
-//			and multicast packets. (R) (mandatory) (4 bytes)
+//			and multicast packets. (R) (mandatory) (4-bytes)
 //
 //		Broadcast Packets
 //			Broadcast packets: The total number of upstream good packets received that were directed to the
-//			broadcast address. This does not include multicast packets. (R) (mandatory) (4 bytes)
+//			broadcast address. This does not include multicast packets. (R) (mandatory) (4-bytes)
 //
 //		Multicast Packets
 //			Multicast packets: The total number of upstream good packets received that were directed to a
-//			multicast address. This does not include broadcast packets. (R) (mandatory) (4 bytes)
+//			multicast address. This does not include broadcast packets. (R) (mandatory) (4-bytes)
 //
 //		Crc Errored Packets
 //			CRC errored packets: The total number of upstream packets received that had a length (excluding
-//			framing bits, but including FCS octets) of between 64 octets and 1518 octets, inclusive, but had
+//			framing bits, but including FCS octets) of between 64-octets and 1518-octets, inclusive, but had
 //			either a bad FCS with an integral number of octets (FCS error) or a bad FCS with a non-integral
-//			number of octets (alignment error). (R) (mandatory) (4 bytes)
+//			number of octets (alignment error). (R) (mandatory) (4-bytes)
 //
 //		Undersize Packets
-//			Undersize packets: The total number of upstream packets received that were less than 64 octets
+//			Undersize packets: The total number of upstream packets received that were less than 64-octets
 //			long, but were otherwise well formed (excluding framing bits, but including FCS). (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 //		Oversize Packets
-//			NOTE 2 – If 2 000 byte Ethernet frames are supported, counts in this performance parameter are
+//			NOTE 2 - If 2-000-byte Ethernet frames are supported, counts in this performance parameter are
 //			not necessarily errors.
 //
 //		Packets 64 Octets
 //			Packets 64 octets: The total number of upstream received packets (including bad packets) that
-//			were 64 octets long, excluding framing bits but including FCS. (R) (mandatory) (4 bytes)
+//			were 64-octets long, excluding framing bits but including FCS. (R) (mandatory) (4-bytes)
 //
 //		Packets 65 To 127 Octets
 //			Packets 65 to 127 octets: The total number of upstream received packets (including bad packets)
 //			that were 65..127 octets long, excluding framing bits but including FCS. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Packets 128 To 255 Octets
 //			Packets 128 to 255 octets: The total number of upstream packets (including bad packets) received
 //			that were 128..255 octets long, excluding framing bits but including FCS. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Packets 256 To 511 Octets
 //			Packets 256 to 511 octets: The total number of upstream packets (including bad packets) received
 //			that were 256..511 octets long, excluding framing bits but including FCS. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Packets 512 To 1023 Octets
 //			Packets 512 to 1023 octets: The total number of upstream packets (including bad packets)
-//			received that were 512..1 023 octets long, excluding framing bits but including FCS. (R)
-//			(mandatory) (4 bytes)
+//			received that were 512..1-023 octets long, excluding framing bits but including FCS. (R)
+//			(mandatory) (4-bytes)
 //
 //		Packets 1024 To 1518 Octets
 //			Packets 1024 to 1518 octets: The total number of upstream packets (including bad packets)
 //			received that were 1024..1518 octets long, excluding framing bits, but including FCS. (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 type EthernetFramePerformanceMonitoringHistoryDataDownstream struct {
 	ManagedEntityDefinition
@@ -151,5 +151,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetFramePerformanceMonitoringHistoryDataDownstream(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ethernetframeperformancemonitoringhistorydatadownstreamBME, params...)
+	return NewManagedEntity(*ethernetframeperformancemonitoringhistorydatadownstreamBME, params...)
 }

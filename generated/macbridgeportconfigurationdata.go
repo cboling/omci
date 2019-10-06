@@ -30,65 +30,65 @@ var macbridgeportconfigurationdataBME *ManagedEntityDefinition
 //
 //	Relationships
 //		An instance of this ME is linked to an instance of the MAC bridge service profile. Additional
-//		bridge port control capabilities are provided by implicitly linked instances of some or all of:////		•	MAC bridge port filter table data;////		•	MAC bridge port filter pre-assign table;////		•	VLAN tagging filter data;////		•	Dot1 rate limiter.////		Real-time status of the bridge port is provided by implicitly linked instances of:////		•	MAC bridge port designation data;////		•	MAC bridge port bridge table data;////		•	Multicast subscriber monitor.////		Bridge port PM collection is provided by implicitly linked instances of:////		•	MAC bridge port PM history data;////		•	Ethernet frame PM history data upstream and downstream;////		•	Ethernet frame extended PM (preferred).
+//		bridge port control capabilities are provided by implicitly linked instances of some or all of:////		o	MAC bridge port filter table data;////		o	MAC bridge port filter pre-assign table;////		o	VLAN tagging filter data;////		o	Dot1 rate limiter.////		Real-time status of the bridge port is provided by implicitly linked instances of:////		o	MAC bridge port designation data;////		o	MAC bridge port bridge table data;////		o	Multicast subscriber monitor.////		Bridge port PM collection is provided by implicitly linked instances of:////		o	MAC bridge port PM history data;////		o	Ethernet frame PM history data upstream and downstream;////		o	Ethernet frame extended PM (preferred).
 //
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Bridge Id Pointer
 //			Bridge ID pointer: This attribute points to an instance of the MAC bridge service profile.
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Port Num
 //			Port num:	This attribute is the bridge port number. It must be unique among all ports associated
-//			with a particular MAC bridge service profile. (R, W, setbycreate) (mandatory) (1 byte)
+//			with a particular MAC bridge service profile. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tp Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tp Pointer
-//			NOTE 1 – When the TP type is very high-speed digital subscriber line (VDSL) or xDSL, the two
+//			NOTE 1 - When the TP type is very high-speed digital subscriber line (VDSL) or xDSL, the two
 //			MSBs may be used to indicate a bearer channel.
 //
 //		Port Priority
 //			Port priority:	This attribute denotes the priority of the port for use in (rapid) spanning tree
-//			algorithms. The range is 0..255. (R, W, setbycreate) (optional) (2 bytes)
+//			algorithms. The range is 0..255. (R,-W, setbycreate) (optional) (2-bytes)
 //
 //		Port Path Cost
 //			Port path cost: This attribute specifies the contribution of the port to the path cost towards
-//			the spanning tree root bridge. The range is 1..65535. (R, W, setbycreate) (mandatory) (2 bytes)
+//			the spanning tree root bridge. The range is 1..65535. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Port Spanning Tree Ind
 //			Port spanning tree ind: The Boolean value true enables (R)STP LAN topology change detection at
-//			this port. The value false disables topology change detection. (R, W, setbycreate) (mandatory)
-//			(1 byte)
+//			this port. The value false disables topology change detection. (R,-W, setbycreate) (mandatory)
+//			(1-byte)
 //
 //		Deprecated 1
 //			Deprecated 1: This attribute is not used. If present, it should be ignored by both the ONU and
-//			the OLT, except as necessary to comply with OMCI message definitions. (R, W, setbycreate)
-//			(optional) (1 byte)
+//			the OLT, except as necessary to comply with OMCI message definitions. (R,-W, setbycreate)
+//			(optional) (1-byte)
 //
 //		Deprecated 2
 //			Deprecated 2: This attribute is not used. If present, it should be ignored by both the ONU and
-//			the OLT, except as necessary to comply with OMCI message definitions. (R, W, setbycreate)
-//			(1 byte) (optional)
+//			the OLT, except as necessary to comply with OMCI message definitions. (R,-W, setbycreate)
+//			(1-byte) (optional)
 //
 //		Port Mac Address
 //			Port MAC address: If the TP associated with this port has a MAC address, this attribute
-//			specifies it. (R) (optional) (6 bytes)
+//			specifies it. (R) (optional) (6-bytes)
 //
 //		Outbound Td Pointer
 //			Outbound TD pointer: This attribute points to a traffic descriptor that limits the traffic rate
-//			leaving the MAC bridge. (R, W) (optional) (2 byte)
+//			leaving the MAC bridge. (R,-W) (optional) (2-byte)
 //
 //		Inbound Td Pointer
 //			Inbound TD pointer: This attribute points to a traffic descriptor that limits the traffic rate
-//			entering the MAC bridge. (R, W) (optional) (2 byte)
+//			entering the MAC bridge. (R,-W) (optional) (2-byte)
 //
 //		Mac Learning Depth
-//			NOTE 2 – If this attribute is not zero, its value overrides the value set in the MAC learning
+//			NOTE 2 - If this attribute is not zero, its value overrides the value set in the MAC learning
 //			depth attribute of the MAC bridge service profile.
 //
 type MacBridgePortConfigurationData struct {
@@ -130,5 +130,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportconfigurationdataBME, params...)
+	return NewManagedEntity(*macbridgeportconfigurationdataBME, params...)
 }

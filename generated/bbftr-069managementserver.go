@@ -29,7 +29,7 @@ var bbftr069managementserverBME *ManagedEntityDefinition
 //	If functions within the ONU are managed by [BBF TR-069], this ME allows OMCI configuration of
 //	the autoconfiguration server (ACS) URL and related authentication information for an ACS
 //	connection initiated by the ONU. [BBF TR-069] supports other means to discover its ACS, so not
-//	all BBF TR069-compatible ONUs necessarily support this ME. Furthermore, even if the ONU does
+//	all BBF-TR069-compatible ONUs necessarily support this ME. Furthermore, even if the ONU does
 //	support this ME, some operators may choose not to use it.
 //
 //	An ONU that supports OMCI configuration of ACS information automatically creates instances of
@@ -43,13 +43,13 @@ var bbftr069managementserverBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of a VEIP that links to the BBF TR-069
-//			management domain. (R) (mandatory) (2 bytes)
+//			management domain. (R) (mandatory) (2-bytes)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
 //			ME. When the administrative state is locked, the functions of this ME are disabled. BBF TR-069
 //			connectivity to an ACS may be possible through means that do not depend on this ME. The default
-//			value of this attribute is locked. (R,W) (mandatory) (1 byte)
+//			value of this attribute is locked. (R,W) (mandatory) (1-byte)
 //
 //		Acs Network Address
 //			ACS network address: This attribute points to an instance of a network address ME that contains
@@ -57,9 +57,9 @@ var bbftr069managementserverBME *ManagedEntityDefinition
 //
 //		Associated Tag
 //			Associated tag: This attribute is a TCI value for BBF TR-069 management traffic passing through
-//			the VEIP. A TCI, comprising user priority, CFI and VID, is represented by 2 bytes. The value
+//			the VEIP. A TCI, comprising user priority, CFI and VID, is represented by 2-bytes. The value
 //			0xFFFF specifies that BBF TR-069 management traffic passes through the VEIP with neither a VLAN
-//			nor a priority tag. (R, W) (mandatory) (2 bytes)
+//			nor a priority tag. (R, W) (mandatory) (2-bytes)
 //
 type BbfTr069ManagementServer struct {
 	ManagedEntityDefinition
@@ -88,5 +88,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewBbfTr069ManagementServer(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(bbftr069managementserverBME, params...)
+	return NewManagedEntity(*bbftr069managementserverBME, params...)
 }

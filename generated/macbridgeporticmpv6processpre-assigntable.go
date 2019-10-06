@@ -43,37 +43,37 @@ var macbridgeporticmpv6processpreassigntableBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R) (mandatory) (2 bytes)
+//			data ME. (R) (mandatory) (2-bytes)
 //
 //		Icmpv6 Error Messages Processing
-//			ICMPv6 error messages processing:	(R, W) (mandatory) (1 byte)
+//			ICMPv6 error messages processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Icmpv6 Informational Messages Processing
-//			ICMPv6 informational messages processing:	(R, W) (mandatory) (1 byte)
+//			ICMPv6 informational messages processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Router Solicitation Processing
-//			Router solicitation processing:	(R, W) (mandatory) (1 byte)
+//			Router solicitation processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Router Advertisement Processing
-//			Router advertisement processing:	(R, W) (mandatory) (1 byte)
+//			Router advertisement processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Neighbour Solicitation Processing
-//			Neighbour solicitation processing:	(R, W) (mandatory) (1 byte)
+//			Neighbour solicitation processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Neighbour Advertisement Processing
-//			Neighbour advertisement processing:	(R, W) (mandatory) (1 byte)
+//			Neighbour advertisement processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Redirect Processing
-//			Redirect processing:	(R, W) (mandatory) (1 byte)
+//			Redirect processing:	(R,-W) (mandatory) (1-byte)
 //
 //		Multicast Listener Query Processing
-//			NOTE – If the ONU participates in multicast services, MLD queries should be controlled through
+//			NOTE - If the ONU participates in multicast services, MLD queries should be controlled through
 //			the multicast operations profile ME. In such a case, it is strongly recommended not to provision
 //			the downstream direction of the multicast listener query processing attribute to any value other
 //			than forwarding.
 //
 //		Unknown Icmpv6 Processing
-//			Unknown ICMPv6 processing:	(R, W) (mandatory) (1 byte)
+//			Unknown ICMPv6 processing:	(R,-W) (mandatory) (1-byte)
 //
 type MacBridgePortIcmpv6ProcessPreAssignTable struct {
 	ManagedEntityDefinition
@@ -107,5 +107,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeporticmpv6processpreassigntableBME, params...)
+	return NewManagedEntity(*macbridgeporticmpv6processpreassigntableBME, params...)
 }

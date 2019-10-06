@@ -27,7 +27,7 @@ var ethernetflowterminationpointBME *ManagedEntityDefinition
 
 // EthernetFlowTerminationPoint (class ID #286)
 //	The Ethernet flow TP contains the attributes necessary to originate and terminate Ethernet
-//	frames in the ONU. It is appropriate when transporting pseudowire services via layer 2.
+//	frames in the ONU. It is appropriate when transporting pseudowire services via layer-2.
 //	Instances of this ME are created and deleted by the OLT.
 //
 //	Relationships
@@ -38,27 +38,27 @@ var ethernetflowterminationpointBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to a pseudowire TP ME. (R, setbycreate) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		Destination Mac
 //			Destination MAC: This attribute specifies the destination MAC address of upstream Ethernet
-//			frames. (R, W, setbycreate) (mandatory) (6 bytes)
+//			frames. (R,-W, setbycreate) (mandatory) (6-bytes)
 //
 //		Source Mac
 //			Source MAC: This attribute specifies the near-end MAC address. It is established by nonOMCI
 //			means (e.g., factory programmed into ONU flash memory) and is included here for information
-//			only. (R) (mandatory) (6 bytes)
+//			only. (R) (mandatory) (6-bytes)
 //
 //		Tag Policy
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Tci
 //			TCI:	If the tag policy calls for tagging of upstream Ethernet frames, this attribute specifies
-//			the tag control information, which includes the VLAN tag, P bits and CFI bit. (R, W) (optional)
-//			(2 bytes)
+//			the tag control information, which includes the VLAN tag, P bits and CFI bit. (R,-W) (optional)
+//			(2-bytes)
 //
 //		Loopback
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 type EthernetFlowTerminationPoint struct {
 	ManagedEntityDefinition
@@ -91,5 +91,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEthernetFlowTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(ethernetflowterminationpointBME, params...)
+	return NewManagedEntity(*ethernetflowterminationpointBME, params...)
 }

@@ -39,36 +39,36 @@ var macbridgeportperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R, setbycreate) (mandatory) (2 bytes)
+//			data ME. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Forwarded Frame Counter
 //			Forwarded frame counter: This attribute counts frames transmitted successfully on this port. (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 //		Delay Exceeded Discard Counter
 //			Delay exceeded discard counter: This attribute counts frames discarded on this port because
-//			transmission was delayed. (R) (mandatory) (4 bytes)
+//			transmission was delayed. (R) (mandatory) (4-bytes)
 //
 //		Maximum Transmission U Nit Mtu Exceeded Discard Counter
 //			Maximum transmission unit (MTU) exceeded discard counter: This attribute counts frames discarded
-//			on this port because the MTU was exceeded. (R) (mandatory) (4 bytes)
+//			on this port because the MTU was exceeded. (R) (mandatory) (4-bytes)
 //
 //		Received Frame Counter
 //			Received frame counter: This attribute counts frames received on this port. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Received And Discarded Counter
 //			Received and discarded counter: This attribute counts frames received on this port that were
-//			discarded due to errors. (R) (mandatory) (4 bytes)
+//			discarded due to errors. (R) (mandatory) (4-bytes)
 //
 type MacBridgePortPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -103,5 +103,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*macbridgeportperformancemonitoringhistorydataBME, params...)
 }

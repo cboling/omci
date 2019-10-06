@@ -40,31 +40,31 @@ var physicalpathterminationpointxdslunipart2BME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the PPTP xDSL UNI part 1. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 0 Downstream
-//			xDSL channel configuration profile for bearer channel 0 downstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 0 downstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 1 Downstream
-//			xDSL channel configuration profile for bearer channel 1 downstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 1 downstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 2 Downstream
-//			xDSL channel configuration profile for bearer channel 2 downstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 2 downstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 3 Downstream
-//			xDSL channel configuration profile for bearer channel 3 downstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 3 downstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 0 Upstream
-//			xDSL channel configuration profile for bearer channel 0 upstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 0 upstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 1 Upstream
-//			xDSL channel configuration profile for bearer channel 1 upstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 1 upstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 2 Upstream
-//			xDSL channel configuration profile for bearer channel 2 upstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 2 upstream: 	(R,-W) (optional) (2-bytes)
 //
 //		Xdsl Channel Configuration Profile For Bearer Channel 3 Upstream
-//			xDSL channel configuration profile for bearer channel 3 upstream:	(R, W) (optional) (2 bytes)
+//			xDSL channel configuration profile for bearer channel 3 upstream: 	(R,-W) (optional) (2-bytes)
 //
 type PhysicalPathTerminationPointXdslUniPart2 struct {
 	ManagedEntityDefinition
@@ -98,5 +98,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointxdslunipart2BME, params...)
+	return NewManagedEntity(*physicalpathterminationpointxdslunipart2BME, params...)
 }

@@ -35,7 +35,7 @@ var omciBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Me Type Table
 //			ME type table: This attribute lists the ME classes supported by the ONU. Each entry contains the
@@ -44,7 +44,7 @@ var omciBME *ManagedEntityDefinition
 //
 //		Message Type Table
 //			Message type table: This attribute is a list of message types (MTs) supported by the ONU. Each
-//			entry contains the MT of an OMCI message (see Table 11.2.2-1). (R) (mandatory) (M bytes, where M
+//			entry contains the MT of an OMCI message (see Table-11.2.2-1). (R) (mandatory) (M bytes, where M
 //			is the number of entries in the list.)
 //
 type Omci struct {
@@ -73,5 +73,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOmci(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(omciBME, params...)
+	return NewManagedEntity(*omciBME, params...)
 }

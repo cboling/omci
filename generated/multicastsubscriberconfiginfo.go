@@ -26,8 +26,8 @@ const MulticastSubscriberConfigInfoClassId ClassID = ClassID(310)
 var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 
 // MulticastSubscriberConfigInfo (class ID #310)
-//	This ME organizes data associated with multicast management at subscriber ports of IEEE 802.1
-//	bridges, including IEEE 802.1p mappers when the provisioning model is mapper-based rather than
+//	This ME organizes data associated with multicast management at subscriber ports of IEEE-802.1
+//	bridges, including IEEE-802.1p mappers when the provisioning model is mapper-based rather than
 //	bridge-based. Instances of this ME are created and deleted by the OLT. Because of backward
 //	compatibility considerations, a subscriber port without an associated multicast subscriber
 //	config info ME would be expected to support unrestricted multicast access; this ME may therefore
@@ -41,16 +41,16 @@ var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 //
 //	Relationships
 //		An instance of this ME is associated with one instance of the MAC bridge port configuration data
-//		or the IEEE 802.1p mapper service profile.
+//		or the IEEE-802.1p mapper service profile.
 //
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data or IEEE 802.1p mapper ME. (R, setbycreate) (mandatory) (2 bytes)
+//			data or IEEE-802.1p mapper ME. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Me Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Multicast Operations Profile Pointer
 //			Multicast operations profile pointer: This attribute points to an instance of the multicast
@@ -60,24 +60,24 @@ var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 //		Max Simultaneous Groups
 //			Max simultaneous groups: This attribute specifies the maximum number of dynamic multicast groups
 //			that may be replicated to the client port at any one time. The recommended default value 0
-//			specifies that no administrative limit is to be imposed. (R, W, setbycreate) (optional)
-//			(2 bytes)
+//			specifies that no administrative limit is to be imposed. (R,-W, setbycreate) (optional)
+//			(2-bytes)
 //
 //		Max Multicast Bandwidth
 //			Max multicast bandwidth: This attribute specifies the maximum imputed dynamic bandwidth, in
 //			bytes per second, that may be delivered to the client port at any one time. The recommended
-//			default value 0 specifies that no administrative limit is to be imposed. (R, W, setbycreate)
-//			(optional) (4 bytes)
+//			default value 0 specifies that no administrative limit is to be imposed. (R,-W, setbycreate)
+//			(optional) (4-bytes)
 //
 //		Bandwidth Enforcement
 //			Bandwidth enforcement: The recommended default value of this Boolean attribute is false, and
 //			specifies that attempts to exceed the max multicast bandwidth be counted but honoured. The value
 //			true specifies that such attempts be counted and denied. The imputed bandwidth value is taken
 //			from the dynamic access control list table, both for a new join request and for pre-existing
-//			groups. (R, W, setbycreate) (optional) (1 byte)
+//			groups. (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Multicast Service Package Table
-//			(R, W) (optional) (20N bytes, where N is the number of entries in the table)
+//			(R,-W) (optional) (20N bytes, where N is the number of entries in the table)
 //
 type MulticastSubscriberConfigInfo struct {
 	ManagedEntityDefinition
@@ -112,5 +112,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMulticastSubscriberConfigInfo(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(multicastsubscriberconfiginfoBME, params...)
+	return NewManagedEntity(*multicastsubscriberconfiginfoBME, params...)
 }

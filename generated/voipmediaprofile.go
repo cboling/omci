@@ -39,62 +39,62 @@ var voipmediaprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Fax Mode
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Voice Service Profile Pointer
 //			Voice service profile pointer: Pointer to a voice service profile, which defines parameters such
-//			as jitter buffering and echo cancellation. (R, W, setbycreate) (mandatory) (2 bytes)
+//			as jitter buffering and echo cancellation. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Codec Selection 1st Order
-//			(R, W, set-by-create) (mandatory) (1 byte)
+//			(R,-W, set-by-create) (mandatory) (1-byte)
 //
 //		Packet Period Selection 1st Order
 //			Packet period selection (1st order): This attribute specifies the packet period selection
-//			interval in milliseconds. The recommended default value is 10 ms. Valid values are 10..30 ms.
-//			(R, W, set-by-create) (mandatory) (1 byte)
+//			interval in milliseconds. The recommended default value is 10-ms. Valid values are 10..30-ms.
+//			(R,-W, set-by-create) (mandatory) (1-byte)
 //
 //		Silence Suppression 1st Order
 //			Silence suppression (1st order): This attribute specifies whether silence suppression is on or
-//			off. Valid values are 0 = off and 1 = on. (R, W, set-by-create) (mandatory) (1 byte)
+//			off. Valid values are 0-= off and 1-= on. (R,-W, set-by-create) (mandatory) (1-byte)
 //
 //		Codec Selection 2nd Order
-//			Codec selection (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Codec selection (2nd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Packet Period Selection 2nd Order
-//			Packet period selection (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Packet period selection (2nd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Silence Suppression 2nd Order
-//			Silence suppression (2nd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Silence suppression (2nd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Codec Selection 3rd Order
-//			Codec selection (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Codec selection (3rd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Packet Period Selection 3rd Order
-//			Packet period selection (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Packet period selection (3rd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Silence Suppression 3rd Order
-//			Silence suppression (3rd order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Silence suppression (3rd order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Codec Selection 4th Order
-//			Codec selection (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Codec selection (4th order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Packet Period Selection 4th Order
-//			Packet period selection (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Packet period selection (4th order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Silence Suppression 4th Order
-//			Silence suppression (4th order):	(R, W, setbycreate) (mandatory) (1 byte)
+//			Silence suppression (4th order):	(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Oob Dtmf
 //			OOB DTMF:	This attribute specifies out-of-band DMTF carriage. When enabled (1), DTMF signals are
 //			carried out of band via RTP or the associated signalling protocol. When disabled (0), DTMF tones
-//			are carried in the PCM stream. (R, W, setbycreate) (mandatory) (1 byte)
+//			are carried in the PCM stream. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Rtp Profile Pointer
-//			RTP profile pointer: This attribute points to the associated RTP profile data ME. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			RTP profile pointer: This attribute points to the associated RTP profile data ME. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 type VoipMediaProfile struct {
 	ManagedEntityDefinition
@@ -138,5 +138,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipMediaProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(voipmediaprofileBME, params...)
+	return NewManagedEntity(*voipmediaprofileBME, params...)
 }

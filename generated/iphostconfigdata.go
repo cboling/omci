@@ -45,63 +45,63 @@ var iphostconfigdataBME *ManagedEntityDefinition
 //			attribute to link with either. (R) (mandatory) (2 bytes)
 //
 //		Ip Options
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Mac Address
 //			MAC address: This attribute indicates the MAC address used by the IP node. (R) (mandatory)
-//			(6 bytes)
+//			(6-bytes)
 //
 //		Onu Identifier
 //			Onu identifier: A unique ONU identifier string. If set to a non-null value, this string is used
 //			instead of the MAC address in retrieving dynamic host configuration protocol (DHCP) parameters.
 //			If the string is shorter than 25 characters, it must be null terminated. Its default value is 25
-//			null bytes. (R, W) (mandatory) (25 bytes)
+//			null bytes. (R,-W) (mandatory) (25-bytes)
 //
 //		Ip Address
 //			IP address:	The address used for IP host services; this attribute has the default value 0.
-//			(R, W) (mandatory) (4 bytes)
+//			(R,-W) (mandatory) (4-bytes)
 //
 //		Mask
-//			Mask:	The subnet mask for IP host services; this attribute has the default value 0. (R, W)
-//			(mandatory) (4 bytes)
+//			Mask:	The subnet mask for IP host services; this attribute has the default value 0. (R,-W)
+//			(mandatory) (4-bytes)
 //
 //		Gateway
 //			Gateway:	The default gateway address used for IP host services; this attribute has the default
-//			value 0. (R, W) (mandatory) (4 bytes)
+//			value 0. (R,-W) (mandatory) (4-bytes)
 //
 //		Primary Dns
 //			Primary DNS: The address of the primary DNS server; this attribute has the default value 0.
-//			(R, W) (mandatory) (4 bytes)
+//			(R,-W) (mandatory) (4-bytes)
 //
 //		Secondary Dns
 //			Secondary DNS: The address of the secondary DNS server; this attribute has the default value 0.
-//			(R, W) (mandatory) (4 bytes)
+//			(R,-W) (mandatory) (4-bytes)
 //
 //		Current Address
-//			Current address: Current address of the IP host service. (R) (optional) (4 bytes)
+//			Current address: Current address of the IP host service. (R) (optional) (4-bytes)
 //
 //		Current Mask
-//			Current mask: Current subnet mask for the IP host service. (R) (optional) (4 bytes)
+//			Current mask: Current subnet mask for the IP host service. (R) (optional) (4-bytes)
 //
 //		Current Gateway
 //			Current gateway: Current default gateway address for the IP host service. (R) (optional)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Current Primary Dns
-//			Current primary DNS: Current primary DNS server address. (R) (optional) (4 bytes)
+//			Current primary DNS: Current primary DNS server address. (R) (optional) (4-bytes)
 //
 //		Current Secondary Dns
-//			Current secondary DNS: Current secondary DNS server address. (R) (optional) (4 bytes)
+//			Current secondary DNS: Current secondary DNS server address. (R) (optional) (4-bytes)
 //
 //		Domain Name
 //			Domain name: If DHCP indicates a domain name, it is presented here. If no domain name is
-//			indicated, this attribute is set to a null string. If the string is shorter than 25 bytes, it
-//			must be null terminated. The default value is 25 null bytes. (R) (mandatory) (25 bytes)
+//			indicated, this attribute is set to a null string. If the string is shorter than 25-bytes, it
+//			must be null terminated. The default value is 25 null bytes. (R) (mandatory) (25-bytes)
 //
 //		Host Name
 //			Host name:	If DHCP indicates a host name, it is presented here. If no host name is indicated,
-//			this attribute is set to a null string. If the string is shorter than 25 bytes, it must be null
-//			terminated. The default value is 25 null bytes. (R) (mandatory) (25 bytes)
+//			this attribute is set to a null string. If the string is shorter than 25-bytes, it must be null
+//			terminated. The default value is 25 null bytes. (R) (mandatory) (25-bytes)
 //
 //		Relay Agent Options
 //			2/3/4:atm/123.4567
@@ -146,5 +146,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewIpHostConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(iphostconfigdataBME, params...)
+	return NewManagedEntity(*iphostconfigdataBME, params...)
 }

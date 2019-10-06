@@ -38,81 +38,81 @@ var twdmchannelphylodsperformancemonitoringhistorydataBME *ManagedEntityDefiniti
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
-//			that contains PM threshold values. (R, W, setbycreate) (mandatory) (2 bytes)
+//			that contains PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Total Received Words Protected By Bit_Interleaved Parity _32 Bip_32
-//			Total received words protected by bit-interleaved parity-32 (BIP-32): The count of 4 byte words
+//			Total received words protected by bit-interleaved parity-32 (BIP-32): The count of 4-byte words
 //			included in BIP-32 check. This is a product of the number of downstream FS frames received by
 //			the size of the downstream FS frame after the FEC parity byte, if any, have been removed. The
 //			count applies to the entire downstream data flow, whether or not addressed to that ONT. (R)
-//			(mandatory) (8 bytes)
+//			(mandatory) (8-bytes)
 //
 //		Bip_32 Bit Error Count
 //			BIP-32 bit error count: Count of the bit errors in the received downstream FS frames as measured
 //			using BIP-32. If FEC is supported in the downstream direction, the BIP-32 count applies to the
 //			downstream FS frame after the FEC correction has been applied and the FEC parity bytes have been
-//			removed. (R) (mandatory) (4 bytes)
+//			removed. (R) (mandatory) (4-bytes)
 //
 //		Corrected Psbd Hec Error Count
 //			Corrected PSBd HEC error count: The count of the errors in either CFC or OCS fields of the PSBd
-//			block that have been corrected using the HEC technique. (R) (mandatory) (4 bytes)
+//			block that have been corrected using the HEC technique. (R) (mandatory) (4-bytes)
 //
 //		Uncorrectable Psbd Hec Error Count
 //			Uncorrectable PSBd HEC error count: The count of the errors in either CFC or OCS fields of the
-//			PSBd block that could not be corrected using the HEC technique. (R) (mandatory) (4 bytes)
+//			PSBd block that could not be corrected using the HEC technique. (R) (mandatory) (4-bytes)
 //
 //		Corrected Downstream Fs Header Hec Error Count
 //			Corrected downstream FS header HEC error count: The count of the errors in the downstream FS
-//			header that have been corrected using the HEC technique. (R) (mandatory) (4 bytes)
+//			header that have been corrected using the HEC technique. (R) (mandatory) (4-bytes)
 //
 //		Uncorrectable Downstream Fs Header Hec Error Count
 //			Uncorrectable downstream FS header HEC error count: The count of the errors in the downstream FS
-//			header that could not be corrected using the HEC technique. (R) (mandatory) (4 bytes)
+//			header that could not be corrected using the HEC technique. (R) (mandatory) (4-bytes)
 //
 //		Total Number Of Lods Events
 //			Total number of LODS events: The count of the state transitions from O5.1/O5.2 to O6, referring
-//			to the ONU activation cycle state machine, clause 12 of [ITU-T G.989.3]. (R) (mandatory)
-//			(4 bytes)
+//			to the ONU activation cycle state machine, clause 12 of [ITU-T-G.989.3]. (R) (mandatory)
+//			(4-bytes)
 //
 //		Lods Events Restored In Operating Twdm Channel
 //			LODS events restored in operating TWDM channel: The count of LODS events cleared automatically
-//			without retuning. (R) (mandatory) (4 bytes)
+//			without retuning. (R) (mandatory) (4-bytes)
 //
 //		Lods Events Restored In Protection Twdm Channel
 //			LODS events restored in protection TWDM channel: The count of LODS events resolved by retuning
 //			to a pre-configured protection TWDM channel. The event is counted against the original operating
-//			channel. (R) (mandatory) (4 bytes)
+//			channel. (R) (mandatory) (4-bytes)
 //
 //		Lods Events Restored In Discretionary Twdm Channel
 //			LODS events restored in discretionary TWDM channel: The count of LODS events resolved by
 //			retuning to a TWDM channel chosen by the ONU, without retuning. Implies that the wavelength
 //			channel protection for the operating channel is not active. The event is counted against the
-//			original operating channel (R) (mandatory) (4 bytes)
+//			original operating channel (R) (mandatory) (4-bytes)
 //
 //		Lods Events Resulting In Reactivation
 //			LODS events resulting in reactivation: The count of LODS events resolved through ONU
-//			reactivation; that is, either TO2 (without WLCP) or TO3 + TO4 (with WLCP) expires before the
+//			reactivation; that is, either TO2 (without WLCP) or TO3-+ TO4 (with WLCP) expires before the
 //			downstream channel is reacquired, referring to the ONU activation cycle state machine, clause 12
-//			of [ITU-T G.989.3]. The event is counted against the original operating channel (R) (mandatory)
-//			(4 bytes)
+//			of [ITU-T-G.989.3]. The event is counted against the original operating channel (R) (mandatory)
+//			(4-bytes)
 //
 //		Lods Events Resulting In Reactivation After Retuning To Protection Twdm Channel
 //			LODS events resulting in reactivation after retuning to protection TWDM channel: The count of
 //			LODS events resolved through ONU reactivation after attempted protection switching, which turns
-//			unsuccessful due to a handshake failure. (R) (mandatory) (4 bytes)
+//			unsuccessful due to a handshake failure. (R) (mandatory) (4-bytes)
 //
 //		Lods Events Resulting In Reactivation After Retuning To Discretionary Twdm Channel
 //			LODS events resulting in reactivation after retuning to discretionary TWDM channel: The count of
 //			LODS events resolved through ONU reactivation after attempted retuning to a discretionary
-//			channel, which turns unsuccessful due to a handshake failure. (R) (mandatory) (4 bytes)
+//			channel, which turns unsuccessful due to a handshake failure. (R) (mandatory) (4-bytes)
 //
 type TwdmChannelPhyLodsPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -156,5 +156,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(twdmchannelphylodsperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*twdmchannelphylodsperformancemonitoringhistorydataBME, params...)
 }

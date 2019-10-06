@@ -37,55 +37,55 @@ var onu2gBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2 bytes)
+//			one instance, number 0. (R) (mandatory) (2-bytes)
 //
 //		Equipment Id
 //			Equipment ID: This attribute may be used to identify the specific type of ONU. In some
 //			environments, this attribute may include the common language equipment identification (CLEI)
-//			code. (R) (optional) (20 bytes)
+//			code. (R) (optional) (20-bytes)
 //
 //		Optical Network Unit Management And Control Channel Omcc Version
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Vendor Product Code
 //			Vendor product code: This attribute contains a vendor-specific product code for the ONU. (R)
-//			(optional) (2 bytes)
+//			(optional) (2-bytes)
 //
 //		Security Capability
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Security Mode
 //			Upon ME instantiation, the ONU sets this attribute to 1, AES-128. Attribute value 1 does not
 //			imply that any channels are encrypted; that process is negotiated at the PLOAM layer. It only
-//			signifies that the advanced encryption standard (AES) with 128 bit keys is the security mode to
-//			be used on any channels that the OLT may choose to encrypt. (R, W) (mandatory) (1 byte)
+//			signifies that the advanced encryption standard (AES) with 128-bit keys is the security mode to
+//			be used on any channels that the OLT may choose to encrypt. (R,-W) (mandatory) (1-byte)
 //
 //		Total Priority Queue Number
 //			Total priority queue number: This attribute reports the total number of upstream priority queues
 //			that are not associated with a circuit pack, but with the ONU in its entirety. Upon ME
 //			instantiation, the ONU sets this attribute to the value that represents its capabilities. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Total Traffic Scheduler Number
 //			Total traffic scheduler number: This attribute reports the total number of traffic schedulers
 //			that are not associated with a circuit pack, but with the ONU in its entirety. The ONU supports
 //			null function, strict priority scheduling and weighted round robin (WRR) from the priority
 //			control and guarantee of minimum rate control points of view, respectively. If the ONU has no
-//			global traffic schedulers, this attribute is 0. (R) (mandatory) (1 byte)
+//			global traffic schedulers, this attribute is 0. (R) (mandatory) (1-byte)
 //
 //		Deprecated
 //			Deprecated:	This attribute should always be set to 1 by the ONU and ignored by the OLT. (R)
-//			(mandatory) (1 byte)
+//			(mandatory) (1-byte)
 //
 //		Total Gem Port_Id Number
 //			Total GEM port-ID number: This attribute reports the total number of GEM port-IDs supported by
 //			the ONU. The maximum value is specified in the corresponding TC recommendations. Upon ME
 //			instantiation, the ONU sets this attribute to the value that represents its capabilities. (R)
-//			(optional) (2 bytes)
+//			(optional) (2-bytes)
 //
 //		Sysuptime
 //			SysUpTime:	This attribute counts 10 ms intervals since the ONU was last initialized. It rolls
-//			over to 0 when full (see [IETF RFC 1213]). (R) (optional) (4 bytes)
+//			over to 0 when full (see [IETF RFC 1213]). (R) (optional) (4-bytes)
 //
 //		Connectivity Capability
 //			(R) (optional) (2 bytes)
@@ -100,7 +100,7 @@ var onu2gBME *ManagedEntityDefinition
 //			directionality of an upstream queue to downstream or vice versa.
 //
 //		Priority Queue Scale Factor
-//			NOTE 3 – Some legacy implementations may take the queue scale factor from the GEM block length
+//			NOTE 3 - Some legacy implementations may take the queue scale factor from the GEM block length
 //			attribute of the ANI-G ME. That option is discouraged in new implementations.
 //
 type Onu2G struct {
@@ -141,5 +141,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewOnu2G(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(onu2gBME, params...)
+	return NewManagedEntity(*onu2gBME, params...)
 }

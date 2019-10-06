@@ -38,11 +38,11 @@ var galethernetprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Maximum Gem Payload Size
 //			Maximum GEM payload size: This attribute defines the maximum payload size generated in the
-//			associated GEM IW TP ME. (R, W, setbycreate) (mandatory) (2 bytes)
+//			associated GEM IW TP ME. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 type GalEthernetProfile struct {
 	ManagedEntityDefinition
@@ -71,5 +71,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewGalEthernetProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(galethernetprofileBME, params...)
+	return NewManagedEntity(*galethernetprofileBME, params...)
 }

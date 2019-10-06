@@ -46,7 +46,7 @@ func packetToString(input []byte) string {
 func getSbcMask(meDefinition IManagedEntityDefinition) uint16 {
 	var sbcMask uint16
 
-	for index, attr := range *meDefinition.GetAttributeDefinitions() {
+	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if SupportsAttributeAccess(attr, SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
@@ -243,7 +243,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
-	attrDefs := *meDefinition.GetAttributeDefinitions()
+	attrDefs := meDefinition.GetAttributeDefinitions()
 
 	for index := uint(1); index <= uint(9); index++ {
 		attrName := attrDefs[index].GetName()
@@ -317,7 +317,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
-	attrDefs := *meDefinition.GetAttributeDefinitions()
+	attrDefs := meDefinition.GetAttributeDefinitions()
 
 	sbcMask := getSbcMask(meDefinition)
 	for index := uint(1); index < uint(len(attrDefs)); index++ {
@@ -380,7 +380,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
 	assert.Nil(t, err)
 
-	attrDefs := *meDefinition.GetAttributeDefinitions()
+	attrDefs := meDefinition.GetAttributeDefinitions()
 
 	sbcMask := getSbcMask(meDefinition)
 	for index := uint(1); index < uint(len(attrDefs)); index++ {

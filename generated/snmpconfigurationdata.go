@@ -37,11 +37,11 @@ var snmpconfigurationdataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The ME IDs 0 and
-//			0xFFFF are reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			0xFFFF are reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Snmp Version
-//			SNMP version: This integer attribute is the SNMP protocol version to be supported. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			SNMP version: This integer attribute is the SNMP protocol version to be supported. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Snmp Agent Address
 //			SNMP agent address: This attribute is a pointer to a TCP/UDP config data ME, which provides the
@@ -70,7 +70,7 @@ var snmpconfigurationdataBME *ManagedEntityDefinition
 //
 //		Sys Name Pointer
 //			Sys name pointer: This attribute points to a large string whose content identifies the SNMP
-//			system name. SysName is defined in [b-IETF RFC 3418]. (R, W, setbycreate) (mandatory) (2 bytes)
+//			system name. SysName is defined in [b-IETF RFC-3418]. (R, W, setbycreate) (mandatory) (2 bytes)
 //
 type SnmpConfigurationData struct {
 	ManagedEntityDefinition
@@ -106,5 +106,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewSnmpConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(snmpconfigurationdataBME, params...)
+	return NewManagedEntity(*snmpconfigurationdataBME, params...)
 }

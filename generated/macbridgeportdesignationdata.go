@@ -37,10 +37,10 @@ var macbridgeportdesignationdataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data. (R) (mandatory) (2 bytes)
+//			data. (R) (mandatory) (2-bytes)
 //
 //		Designated Bridge Root Cost Port
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R) (mandatory) (24 bytes)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R) (mandatory) (24-bytes)
 //
 //		Port State
 //			The value (R)stp_off is introduced to denote the port status where the (rapid) spanning tree
@@ -73,5 +73,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortDesignationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportdesignationdataBME, params...)
+	return NewManagedEntity(*macbridgeportdesignationdataBME, params...)
 }

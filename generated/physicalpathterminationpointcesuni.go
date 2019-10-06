@@ -31,11 +31,11 @@ var physicalpathterminationpointcesuniBME *ManagedEntityDefinition
 //
 //	The ONU automatically creates an instance of this ME per port:
 //
-//	•	when the ONU has CES ports built into its factory configuration;
+//	o	when the ONU has CES ports built into its factory configuration;
 //
-//	•	when a cardholder is provisioned to expect a circuit pack of a CES type;
+//	o	when a cardholder is provisioned to expect a circuit pack of a CES type;
 //
-//	•	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of a CES type.
+//	o	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of a CES type.
 //	Note that the installation of a plug-and-play card may indicate the presence of CES ports via
 //	equipment ID as well as its type and indeed may cause the ONU to instantiate a port-mapping
 //	package that specifies CES ports.
@@ -45,42 +45,42 @@ var physicalpathterminationpointcesuniBME *ManagedEntityDefinition
 //
 //	Relationships
 //		An instance of this ME is associated with each real or pre-provisioned CES port. It can be
-//		linked from a GEM IW TP, a pseudowire TP or a logical N × 64 kbit/s CTP.
+//		linked from a GEM IW TP, a pseudowire TP or a logical N * 64 kbit/s CTP.
 //
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
 //			number indicates the physical position of the UNI. The first byte is the slot ID (defined in
-//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2 bytes)
+//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2-bytes)
 //
 //		Expected Type
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 //		Sensed Type
 //			Sensed type:	If the value of expected type is not 0, then the value of sensed type equals the
-//			value of expected type. If expected type = 0, then the value of sensed type is one of the
-//			compatible values from Table 9.1.5-1. Upon ME instantiation, the ONU sets this attribute to 0 or
+//			value of expected type. If expected type-= 0, then the value of sensed type is one of the
+//			compatible values from Table-9.1.5-1. Upon ME instantiation, the ONU sets this attribute to 0 or
 //			to the value that reflects the physically present equipment. (R) (mandatory if the ONU supports
-//			circuit packs with configurable interface types, e.g., C1.5/2/6.3) (1 byte)
+//			circuit packs with configurable interface types, e.g., C1.5/2/6.3) (1-byte)
 //
 //		Ces Loopback Configuration
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//			ME. Administrative state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Framing
 //			Upon ME instantiation, the ONU sets this attribute to a value that reflects the vendor's
-//			default. (R, W) (optional) (1 byte)
+//			default. (R,-W) (optional) (1-byte)
 //
 //		Encoding
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory for DS1 and DS3
-//			interfaces) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (mandatory for DS1 and DS3
+//			interfaces) (1-byte)
 //
 //		Line Length
 //			Line length:	This attribute specifies the length of the twisted pair cable from a DS1 physical
@@ -88,23 +88,23 @@ var physicalpathterminationpointcesuniBME *ManagedEntityDefinition
 //			the DSX-3 cross-connect point. Valid values are given in Table 9.8.1-1. Upon ME instantiation
 //			for a DS1 interface, the ONU assigns the value 0 for non-power feed type DS1 and the value 6 for
 //			power feed type DS1. Upon ME instantiation for a DS3 interface, the ONU sets this attribute to
-//			0x0F. (R, W) (optional) (1 byte)
+//			0x0F. (R,-W) (optional) (1-byte)
 //
 //		Ds1 Mode
 //			In the event of conflicting values between this attribute and the (also optional) line length
 //			attribute, the line length attribute is taken to be valid. This permits the separation of line
 //			build-out (LBO) and power settings from smart jack and FDL behaviour. Upon ME instantiation, the
-//			ONU sets this attribute to 0. (R, W) (optional) (1 byte)
+//			ONU sets this attribute to 0. (R,-W) (optional) (1-byte)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Line Type
-//			(R, W) (mandatory for DS3, E3 and multi-configuration interfaces, not applicable to other
-//			interfaces) (1 byte)
+//			(R,-W) (mandatory for DS3, E3 and multi-configuration interfaces, not applicable to other
+//			interfaces) (1-byte)
 //
 type PhysicalPathTerminationPointCesUni struct {
 	ManagedEntityDefinition
@@ -142,5 +142,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointcesuniBME, params...)
+	return NewManagedEntity(*physicalpathterminationpointcesuniBME, params...)
 }

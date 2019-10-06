@@ -38,45 +38,45 @@ var xdslxturchannelperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The two MSBs of
-//			the first byte are the bearer channel ID. Excluding the first 2 bits of the first byte, the
+//			the first byte are the bearer channel ID. Excluding the first 2-bits of the first byte, the
 //			remaining part of the ME ID is identical to that of this ME's parent PPTP xDSL UNI part 1. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, setbycreate) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Corrected Blocks
 //			Corrected blocks: This attribute counts blocks received with errors that were corrected on this
-//			channel. (R) (mandatory) (4 bytes)
+//			channel. (R) (mandatory) (4-bytes)
 //
 //		Uncorrected Blocks
 //			Uncorrected blocks: This attribute counts blocks received with uncorrectable errors on this
-//			channel. (R) (mandatory) (4 bytes)
+//			channel. (R) (mandatory) (4-bytes)
 //
 //		Transmitted Blocks
 //			Transmitted blocks: This attribute counts encoded blocks transmitted on this channel. (R)
-//			(mandatory) (4 bytes)
+//			(mandatory) (4-bytes)
 //
 //		Received Blocks
 //			Received blocks: This attribute counts encoded blocks received on this channel. (R) (mandatory)
-//			(4 bytes)
+//			(4-bytes)
 //
 //		Code Violations
 //			Code violations: This attribute counts FEBE anomalies reported in the downstream bearer channel.
 //			If the CRC is applied over multiple bearer channels, then each related FEBE anomaly increments
-//			each of the counters related to the individual bearer channels. (R) (mandatory) (2 bytes)
+//			each of the counters related to the individual bearer channels. (R) (mandatory) (2-bytes)
 //
 //		Forward Error Corrections
 //			Forward error corrections: This attribute counts FFEC anomalies reported in the downstream
 //			bearer channel. If FEC is applied over multiple bearer channels, each related FFEC anomaly
 //			increments each of the counters related to the individual bearer channels. (R) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 type XdslXtuRChannelPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -112,5 +112,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewXdslXtuRChannelPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(xdslxturchannelperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*xdslxturchannelperformancemonitoringhistorydataBME, params...)
 }

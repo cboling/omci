@@ -36,30 +36,30 @@ var dot1ratelimiterBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Parent Me Pointer
 //			Parent ME pointer: This attribute points to an instance of a ME. The type of ME is determined by
-//			the TP type attribute. (R, W, setbycreate) (mandatory) (2 bytes)
+//			the TP type attribute. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Tp Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Upstream Unicast Flood Rate Pointer
 //			Upstream unicast flood rate pointer: This attribute points to an instance of the traffic
 //			descriptor that governs the rate of upstream unicast packets whose DA is unknown to the bridge.
-//			A null pointer specifies that no administrative limit is to be imposed. (R, W, setbycreate)
-//			(optional) (2 bytes)
+//			A null pointer specifies that no administrative limit is to be imposed. (R,-W, setbycreate)
+//			(optional) (2-bytes)
 //
 //		Upstream Broadcast Rate Pointer
 //			Upstream broadcast rate pointer: This attribute points to an instance of the traffic descriptor
 //			that governs the rate of upstream broadcast packets. A null pointer specifies that no
-//			administrative limit is to be imposed. (R, W, setbycreate) (optional) (2 bytes)
+//			administrative limit is to be imposed. (R,-W, setbycreate) (optional) (2-bytes)
 //
 //		Upstream Multicast Payload Rate Pointer
 //			Upstream multicast payload rate pointer: This attribute points to an instance of the traffic
 //			descriptor that governs the rate of upstream multicast payload packets. A null pointer specifies
-//			that no administrative limit is to be imposed. (R, W, setbycreate) (optional) (2 bytes)
+//			that no administrative limit is to be imposed. (R,-W, setbycreate) (optional) (2-bytes)
 //
 type Dot1RateLimiter struct {
 	ManagedEntityDefinition
@@ -92,5 +92,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1RateLimiter(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(dot1ratelimiterBME, params...)
+	return NewManagedEntity(*dot1ratelimiterBME, params...)
 }

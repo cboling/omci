@@ -59,11 +59,11 @@ var softwareimageBME *ManagedEntityDefinition
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The first byte
 //			indicates the physical location of the equipment hosting the software image, either the ONU (0)
 //			or a cardholder (1..254). The second byte distinguishes between the two software image ME
-//			instances (0..1). (R) (mandatory) (2 bytes)
+//			instances (0..1). (R) (mandatory) (2-bytes)
 //
 //		Version
 //			Version:	This string attribute identifies the version of the software. (R) (mandatory)
-//			(14 bytes)
+//			(14-bytes)
 //
 //		Is Committed
 //			Is committed: This attribute indicates whether the associated software image is committed (1) or
@@ -73,7 +73,7 @@ var softwareimageBME *ManagedEntityDefinition
 //			committed at the same time. On the other hand, both software images could be uncommitted at the
 //			same time if both were invalid. Upon ME instantiation, instance 0 is initialized to committed,
 //			while instance 1 is initialized to uncommitted (i.e., the ONU ships from the factory with image
-//			0 committed). (R) (mandatory) (1 byte)
+//			0 committed). (R) (mandatory) (1-byte)
 //
 //		Is Active
 //			Is active:	This attribute indicates whether the associated software image is active (1) or
@@ -81,7 +81,7 @@ var softwareimageBME *ManagedEntityDefinition
 //			executing in the ONU or circuit pack. Under normal operation, one software image is always
 //			active while the other is inactive. Under no circumstances are both software images allowed to
 //			be active at the same time. On the other hand, both software images could be inactive at the
-//			same time if both were invalid. (R) (mandatory) (1 byte)
+//			same time if both were invalid. (R) (mandatory) (1-byte)
 //
 //		Is Valid
 //			Is valid:	This attribute indicates whether the associated software image is valid (1) or invalid
@@ -89,7 +89,7 @@ var softwareimageBME *ManagedEntityDefinition
 //			image. The verification mechanism is not subject to standardization; however, it should include
 //			at least a data integrity check [e.g., a cyclic redundancy check (CRC)] of the entire code
 //			image. Upon ME instantiation or software download completion, the ONU validates the associated
-//			code image and sets this attribute according to the result. (R) (mandatory) (1 byte)
+//			code image and sets this attribute according to the result. (R) (mandatory) (1-byte)
 //
 //		Product Code
 //			Product code:	This attribute provides a way for a vendor to indicate product code information on
@@ -98,7 +98,7 @@ var softwareimageBME *ManagedEntityDefinition
 //
 //		Image Hash
 //			Image hash:	This attribute is an MD5 hash of the software image. It is computed at completion of
-//			the end download action. (R) (optional) (16 bytes)
+//			the end download action. (R) (optional) (16-bytes)
 //
 type SoftwareImage struct {
 	ManagedEntityDefinition
@@ -134,5 +134,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewSoftwareImage(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(softwareimageBME, params...)
+	return NewManagedEntity(*softwareimageBME, params...)
 }

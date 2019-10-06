@@ -38,25 +38,25 @@ var unigBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of a PPTP. (R) (mandatory) (2 bytes)
+//			identical ID, this ME is implicitly linked to an instance of a PPTP. (R) (mandatory) (2-bytes)
 //
 //		Deprecated
 //			Deprecated:	This attribute is not used. It should be set to 0 by the OLT and ignored by the ONU.
-//			(R, W) (mandatory) (2 bytes)
+//			(R,-W) (mandatory) (2-bytes)
 //
 //		Administrative State
-//			NOTE – PPTP MEs also have an administrative state attribute. The user port is unlocked only if
+//			NOTE - PPTP MEs also have an administrative state attribute. The user port is unlocked only if
 //			both administrative state attributes are set to unlocked. It is recommended that this attribute
 //			not be used: that the OLT set it to 0 and that the ONU ignore it.
 //
 //		Management Capability
-//			(R) (optional) (1 byte)
+//			(R) (optional) (1-byte)
 //
 //		Non_Omci Management Identifier
 //			Non-OMCI management identifier: If a PPTP can be managed either directly by the OMCI or a non-
 //			OMCI management environment, this attribute specifies how it is in fact to be managed. This
-//			attribute is either 0 (default = OMCI management), or it is a pointer to a VEIP, which in turn
-//			links to a non-OMCI management environment. (R, W) (optional) (2 bytes)
+//			attribute is either 0 (default-=-OMCI management), or it is a pointer to a VEIP, which in turn
+//			links to a non-OMCI management environment. (R,-W) (optional) (2-bytes)
 //
 //		Relay Agent Options
 //			2/3/4:atm/123.4567
@@ -90,5 +90,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewUniG(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(unigBME, params...)
+	return NewManagedEntity(*unigBME, params...)
 }

@@ -30,11 +30,11 @@ var reanigBME *ManagedEntityDefinition
 //	OEO regeneration in either direction. The management ONU automatically creates one instance of
 //	this ME for each R'/S' physical port (uni- or bidirectional) as follows.
 //
-//	•	When the RE has mid-span PON RE ANI interface ports built into its 	factory configuration.
+//	o	When the RE has mid-span PON RE ANI interface ports built into its 	factory configuration.
 //
-//	•	When a cardholder is provisioned to expect a circuit pack of the mid-span PON RE ANI type.
+//	o	When a cardholder is provisioned to expect a circuit pack of the mid-span PON RE ANI type.
 //
-//	•	When a cardholder provisioned for plug-and-play is equipped with a circuit pack of the midspan
+//	o	When a cardholder provisioned for plug-and-play is equipped with a circuit pack of the midspan
 //	PON RE ANI type. Note that the installation of a plug-and-play card may indicate the presence of
 //	a mid-span PON RE ANI port via equipment ID as well as its type attribute, and indeed may cause
 //	the management ONU to instantiate a port-mapping package to specify the ports precisely.
@@ -62,11 +62,11 @@ var reanigBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			NOTE 1 – This ME ID may be identical to that of an RE downstream amplifier if it shares the same
+//			NOTE 1 - This ME ID may be identical to that of an RE downstream amplifier if it shares the same
 //			physical slot and port.
 //
 //		Administrative State
-//			NOTE 2 – When an RE supports multiple PONs, or protected access to a single PON, its primary
+//			NOTE 2 - When an RE supports multiple PONs, or protected access to a single PON, its primary
 //			ANI-G cannot be completely shut down, due to a loss of the management communications capability.
 //			Complete blocking of service and removal of power may nevertheless be appropriate for secondary
 //			RE ANI-Gs. Administrative lock suppresses alarms and notifications for an RE ANI-G, be it either
@@ -74,47 +74,47 @@ var reanigBME *ManagedEntityDefinition
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Optical Signal Level
 //			Optical signal level: This attribute reports the current measurement of total downstream optical
-//			power. Its value is a 2s complement integer referred to 1 mW (i.e., dBm), with 0.002 dB
-//			granularity. (R) (optional) (2 bytes)
+//			power. Its value is a 2s complement integer referred to 1-mW (i.e., dBm), with 0.002-dB
+//			granularity. (R) (optional) (2-bytes)
 //
 //		Lower Optical Threshold
 //			Lower optical threshold: This attribute specifies the optical level that the RE uses to declare
-//			the downstream low received optical power alarm. Valid values are –127 dBm (coded as 254) to
-//			0 dBm (coded as 0) in 0.5 dB increments. The default value 0xFF selects the RE's internal
-//			policy. (R, W) (optional) (1 byte)
+//			the downstream low received optical power alarm. Valid values are  -127-dBm (coded as 254) to
+//			0-dBm (coded as 0) in 0.5-dB increments. The default value 0xFF selects the RE's internal
+//			policy. (R,-W) (optional) (1-byte)
 //
 //		Upper Optical Threshold
 //			Upper optical threshold: This attribute specifies the optical level that the RE uses to declare
-//			the downstream high received optical power alarm. Valid values are –127 dBm (coded as 254) to
-//			0 dBm (coded as 0) in 0.5 dB increments. The default value 0xFF selects the RE's internal
-//			policy. (R, W) (optional) (1 byte)
+//			the downstream high received optical power alarm. Valid values are  -127-dBm (coded as 254) to
+//			0-dBm (coded as 0) in 0.5 dB increments. The default value 0xFF selects the RE's internal
+//			policy. (R,-W) (optional) (1-byte)
 //
 //		Transmit Optical Level
 //			Transmit optical level: This attribute reports the current measurement of mean optical launch
-//			power. Its value is a 2s complement integer referred to 1 mW (i.e., dBm), with 0.002 dB
-//			granularity. (R) (optional) (2 bytes)
+//			power. Its value is a 2s complement integer referred to 1-mW (i.e., dBm), with 0.002-dB
+//			granularity. (R) (optional) (2-bytes)
 //
 //		Lower Transmit Power Threshold
 //			Lower transmit power threshold: This attribute specifies the minimum mean optical launch power
-//			that the RE uses to declare the low transmit optical power alarm. Its value is a 2s complement
-//			integer referred to 1 mW (i.e., dBm), with 0.5 dB granularity. The default value 0x7F selects
-//			the RE's internal policy. (R, W) (optional) (1 byte)
+//			that the RE uses to declare the low transmit optical power alarm. Its value is a 2s-complement
+//			integer referred to 1-mW (i.e., dBm), with 0.5-dB granularity. The default value 0x7F selects
+//			the RE's internal policy. (R,-W) (optional) (1-byte)
 //
 //		Upper Transmit Power Threshold
 //			Upper transmit power threshold: This attribute specifies the maximum mean optical launch power
-//			that the RE uses to declare the high transmit optical power alarm. Its value is a 2s complement
-//			integer referred to 1 mW (i.e., dBm), with 0.5 dB granularity. The default value 0x7F selects
-//			the RE's internal policy. (R, W) (optional) (1 byte)
+//			that the RE uses to declare the high transmit optical power alarm. Its value is a 2s-complement
+//			integer referred to 1-mW (i.e., dBm), with 0.5-dB granularity. The default value 0x7F selects
+//			the RE's internal policy. (R,-W) (optional) (1-byte)
 //
 //		Usage Mode
 //			3	This R'/S' interface is used as the uplink for both the embedded management ONU and one or
@@ -184,5 +184,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewReAniG(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(reanigBME, params...)
+	return NewManagedEntity(*reanigBME, params...)
 }

@@ -359,19 +359,19 @@ func maxPacketAvailable(m *me.ManagedEntity, opt options) uint {
 func calculateAttributeMask(m *me.ManagedEntity, requestedMask uint16) (uint16, error) {
 	attrDefs := m.GetAttributeDefinitions()
 	var entityIdName string
-	if entry, ok := (*attrDefs)[0]; ok {
+	if entry, ok := attrDefs[0]; ok {
 		entityIdName = entry.GetName()
 	} else {
 		panic("unexpected error") // All attribute definition maps have an entity ID
 	}
 	attributeNames := make([]interface{}, 0)
-	for attrName := range *m.GetAttributeValueMap() {
+	for attrName := range m.GetAttributeValueMap() {
 		if attrName == entityIdName {
 			continue // No mask for EntityID
 		}
 		attributeNames = append(attributeNames, attrName)
 	}
-	calculatedMask, err := me.GetAttributeBitmap(*attrDefs, mapset.NewSetWith(attributeNames...))
+	calculatedMask, err := me.GetAttributeBitmap(attrDefs, mapset.NewSetWith(attributeNames...))
 
 	if err != nil {
 		return 0, err
@@ -409,7 +409,7 @@ func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 			EntityClass:    m.GetClassID(),
 			EntityInstance: m.GetEntityID(),
 		},
-		Attributes: *m.GetAttributeValueMap(),
+		Attributes: m.GetAttributeValueMap(),
 	}
 	return meLayer, nil
 }
@@ -460,8 +460,8 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 		return nil, err
 	}
 	meDefinition := m.GetManagedEntityDefinition()
-	attrDefs := *meDefinition.GetAttributeDefinitions()
-	attrMap := *m.GetAttributeValueMap()
+	attrDefs := meDefinition.GetAttributeDefinitions()
+	attrMap := m.GetAttributeValueMap()
 
 	// Get payload space available
 	maxPayload := maxPacketAvailable(m, opt)
@@ -590,8 +590,8 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 		maxPayload := maxPacketAvailable(m, opt)
 		payloadAvailable := int(maxPayload) - 2 - 4 // Less attribute mask and attribute error encoding
 		meDefinition := m.GetManagedEntityDefinition()
-		attrDefs := *meDefinition.GetAttributeDefinitions()
-		attrMap := *m.GetAttributeValueMap()
+		attrDefs := meDefinition.GetAttributeDefinitions()
+		attrMap := m.GetAttributeValueMap()
 
 		if mask != 0 {
 			// Iterate down the attributes (Attribute 0 is the ManagedEntity ID)
@@ -742,7 +742,7 @@ func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 	if opt.payload == nil {
 		// Shortcut used to specify the request sequence number is out of range, encode
 		// a ME instance with class ID of zero to specify this per ITU G.988
-		meDef := &me.ManagedEntityDefinition{
+		meDef := me.ManagedEntityDefinition{
 			Name:                 "InvalidSequenceNumberManagedEntity",
 			ClassID:              me.ClassID(0),
 			MessageTypes:         nil,
@@ -1201,8 +1201,8 @@ func GetNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializab
 		maxPayload := maxPacketAvailable(m, opt)
 		payloadAvailable := int(maxPayload) - 3 // Less results and attribute mask
 		meDefinition := m.GetManagedEntityDefinition()
-		attrDefs := *meDefinition.GetAttributeDefinitions()
-		attrMap := *m.GetAttributeValueMap()
+		attrDefs := meDefinition.GetAttributeDefinitions()
+		attrMap := m.GetAttributeValueMap()
 
 		if mask == 0 {
 			return nil, errors.New("no attributes requested for GetNextResponse")

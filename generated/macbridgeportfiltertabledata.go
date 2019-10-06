@@ -29,7 +29,7 @@ var macbridgeportfiltertabledataBME *ManagedEntityDefinition
 //	This ME organizes data associated with a bridge port. The ONU automatically creates or deletes
 //	an instance of this ME upon the creation or deletion of a MAC bridge port configuration data ME.
 //
-//	NOTE – The OLT should disable the learning mode in the MAC bridge service profile before writing
+//	NOTE - The OLT should disable the learning mode in the MAC bridge service profile before writing
 //	to the MAC filter table.
 //
 //	Relationships
@@ -40,10 +40,10 @@ var macbridgeportfiltertabledataBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R) (mandatory) (2 bytes)
+//			data ME. (R) (mandatory) (2-bytes)
 //
 //		Mac Filter Table
-//			(R, W) (Mandatory) (8N bytes, where N is the number of entries in the list)
+//			(R,-W) (Mandatory) (8N bytes, where N is the number of entries in the list)
 //
 type MacBridgePortFilterTableData struct {
 	ManagedEntityDefinition
@@ -71,5 +71,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewMacBridgePortFilterTableData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(macbridgeportfiltertabledataBME, params...)
+	return NewManagedEntity(*macbridgeportfiltertabledataBME, params...)
 }

@@ -48,30 +48,30 @@ var dot1agdefaultmdlevelBME *ManagedEntityDefinition
 //			Managed entity ID: This attribute uniquely identifies an instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the MAC bridge service profile ME
 //			or an IEEE 802.1p mapper ME. It is expected that an ONU will implement CFM on bridges or on
-//			IEEE 802.1p mappers, but not both, depending on its provisioning model. For precision, the
+//			IEEE-802.1p mappers, but not both, depending on its provisioning model. For precision, the
 //			reference is disambiguated by the value of the layer 2 type pointer attribute. (R) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		Layer 2 Type
 //			Layer 2 type: This attribute specifies whether the dot1ag default MD level ME is associated with
-//			a MAC bridge service profile (value 0) or an IEEE 802.1p mapper (value 1). (R) (mandatory)
-//			(1 byte)
+//			a MAC bridge service profile (value 0) or an IEEE 802.1p mapper (value-1). (R) (mandatory)
+//			(1-byte)
 //
 //		Catchall Level
 //			Catchall level: This attribute ranges from 0..7 and specifies the MD level of MHFs created when
-//			no specific match is found. (R, W) (mandatory) (1 byte)
+//			no specific match is found. (R,-W) (mandatory) (1-byte)
 //
 //		Catchall Mhf Creation
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Catchall Sender Id Permission
 //			Catchall sender ID permission: This attribute determines the contents of the sender ID TLV
 //			included in CFM messages transmitted by MPs when no more specific match is found. This attribute
 //			is identical to that defined in the description of the dot1ag MD ME (i.e., excluding code point
-//			5, defer). (R, W) (mandatory) (1 byte)
+//			5, defer). (R,-W) (mandatory) (1-byte)
 //
 //		Default Md Level Table
-//			(R, W) (mandatory) (29 bytes * N entries)
+//			(R,-W) (mandatory) (29-bytes * N entries)
 //
 type Dot1AgDefaultMdLevel struct {
 	ManagedEntityDefinition
@@ -103,5 +103,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewDot1AgDefaultMdLevel(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(dot1agdefaultmdlevelBME, params...)
+	return NewManagedEntity(*dot1agdefaultmdlevelBME, params...)
 }

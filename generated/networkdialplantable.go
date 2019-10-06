@@ -36,31 +36,31 @@ var networkdialplantableBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Dial Plan Number
 //			Dial plan number: This attribute indicates the current number of dial plans in the dial plan
-//			table. (R) (mandatory) (2 bytes)
+//			table. (R) (mandatory) (2-bytes)
 //
 //		Dial Plan Table Max Size
 //			Dial plan table max size: This attribute defines the maximum number of dial plans that can be
-//			stored in the dial plan table. (R, setbycreate) (mandatory) (2 bytes)
+//			stored in the dial plan table. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Critical Dial Timeout
 //			Critical dial timeout: This attribute defines the critical dial timeout for digit map
-//			processing, in milliseconds. The recommended default value is 4000 ms. (R, W, setbycreate)
-//			(mandatory) (2 bytes)
+//			processing, in milliseconds. The recommended default value is 4000-ms. (R,-W, setbycreate)
+//			(mandatory) (2-bytes)
 //
 //		Partial Dial Timeout
 //			Partial dial timeout: This attribute defines the partial dial timeout for digit map processing,
-//			in milliseconds. The recommended default value is 16000 ms. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			in milliseconds. The recommended default value is 16000-ms. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Dial Plan Format
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Dial Plan Table
-//			(R, W) (mandatory) (30 * N bytes, where N is the number of dial plans)
+//			(R,-W) (mandatory) (30 * N bytes, where N is the number of dial plans)
 //
 type NetworkDialPlanTable struct {
 	ManagedEntityDefinition
@@ -95,5 +95,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewNetworkDialPlanTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(networkdialplantableBME, params...)
+	return NewManagedEntity(*networkdialplantableBME, params...)
 }

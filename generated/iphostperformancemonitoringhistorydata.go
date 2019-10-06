@@ -42,19 +42,19 @@ var iphostperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			IPv6 host configuration data ME. (R, set-by-create) (mandatory) (2 bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15 min interval. (R)
-//			(mandatory) (1 byte)
+//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
+//			(mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
-//			data 2 ME is optional. (R, W, set-by-create) (mandatory) (2 bytes)
+//			data 2 ME is optional. (R,-W, set-by-create) (mandatory) (2-bytes)
 //
 //		Icmp Errors
-//			ICMP errors: This attribute counts ICMP errors received. (R) (mandatory) (4 bytes)
+//			ICMP errors: This attribute counts ICMP errors received. (R) (mandatory) (4-bytes)
 //
 //		Dns Errors
-//			DNS errors:	This attribute counts DNS errors received. (R) (mandatory) (4 bytes)
+//			DNS errors:	This attribute counts DNS errors received. (R) (mandatory) (4-bytes)
 //
 //		Dhcp Timeouts
 //			DHCP timeouts:	This attribute counts DHCP timeouts. (R) (optional) (2 bytes)
@@ -70,7 +70,7 @@ var iphostperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //		Internal Error
 //			Internal error: This attribute is incremented whenever the ONU encounters an internal error
-//			condition such as a driver interface failure in the IP stack. (R) (optional) (2 bytes)
+//			condition such as a driver interface failure in the IP stack. (R) (optional) (2-bytes)
 //
 type IpHostPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -106,5 +106,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(iphostperformancemonitoringhistorydataBME, params...)
+	return NewManagedEntity(*iphostperformancemonitoringhistorydataBME, params...)
 }

@@ -41,7 +41,7 @@ var fastdatapathconfigurationprofileBME *ManagedEntityDefinition
 //		Tps_Tc Testmode Tps_Testmode
 //			TPS-TC testmode (TPS_TESTMODE): This Boolean attribute specifies whether the TPSTC test mode
 //			defined in clause 8.3.1 [ITU-T G.9701] is enabled (true) or disabled (disabled). See clause
-//			7.3.1 of [ITUT G.997.2]. (R, W) (mandatory) (1 byte)
+//			7.3.1 of [ITUT-G.997.2]. (R,-W) (mandatory) (1 byte)
 //
 type FastDataPathConfigurationProfile struct {
 	ManagedEntityDefinition
@@ -70,5 +70,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastDataPathConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(fastdatapathconfigurationprofileBME, params...)
+	return NewManagedEntity(*fastdatapathconfigurationprofileBME, params...)
 }

@@ -36,18 +36,18 @@ var managedentitymeBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Its value is
 //			equal to the ME type value, and is the same as the code found in the ME type table attribute of
-//			the OMCI ME and Table 11.2.41. (R) (mandatory) (2 bytes)
+//			the OMCI ME and Table-11.2.41. (R) (mandatory) (2-bytes)
 //
 //		Name
-//			Name:	This attribute contains a 25 byte ASCII coded mnemonic tag for the ME type. Strings
-//			shorter than 25 bytes are padded with null characters. (R) (mandatory) (25 bytes)
+//			Name:	This attribute contains a 25-byte ASCII coded mnemonic tag for the ME type. Strings
+//			shorter than 25-bytes are padded with null characters. (R) (mandatory) (25-bytes)
 //
 //		Attributes Table
-//			NOTE – The ME ID attribute is not included in the list, since the type of this attribute is
+//			NOTE - The ME ID attribute is not included in the list, since the type of this attribute is
 //			fixed.
 //
 //		Access
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 //		Alarms Table
 //			Alarms table: This attribute lists the alarm codes that are supported. (R) (mandatory) (Y bytes,
@@ -59,15 +59,15 @@ var managedentitymeBME *ManagedEntityDefinition
 //
 //		Actions
 //			Actions:	This attribute lists the action codes supported on this object, formatted as a bit map.
-//			The action codes are the MTs from Table 11.2.2-1. The LSB represents action 0, and so on. (R)
-//			(mandatory) (4 bytes)
+//			The action codes are the MTs from Table-11.2.2-1. The LSB represents action 0, and so on. (R)
+//			(mandatory) (4-bytes)
 //
 //		Instances Table
 //			Instances table: This attribute is a list of pointers to all instances of this ME. (R)
 //			(mandatory) (2 * V bytes, where V is the number of entries in the table.)
 //
 //		Support
-//			(R) (mandatory) (1 byte)
+//			(R) (mandatory) (1-byte)
 //
 type ManagedEntityMe struct {
 	ManagedEntityDefinition
@@ -101,5 +101,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewManagedEntityMe(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(managedentitymeBME, params...)
+	return NewManagedEntity(*managedentitymeBME, params...)
 }

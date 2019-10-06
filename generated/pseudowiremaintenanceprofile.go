@@ -42,68 +42,68 @@ var pseudowiremaintenanceprofileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
-//			reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Jitter Buffer Maximum Depth
 //			Jitter buffer maximum depth: This attribute specifies the desired maximum depth of the playout
-//			buffer in the PSN to the TDM direction. The value is expressed as a multiple of the 125 μs frame
-//			rate. The default value 0 selects the ONU's internal policy. (R, W, setbycreate) (optional)
-//			(2 bytes)
+//			buffer in the PSN to the TDM direction. The value is expressed as a multiple of the 125-vs frame
+//			rate. The default value 0 selects the ONU's internal policy. (R,-W, setbycreate) (optional)
+//			(2-bytes)
 //
 //		Jitter Buffer Desired Depth
 //			Jitter buffer desired depth: This attribute specifies the desired nominal fill depth of the
 //			playout buffer in the PSN to the TDM direction. The value is expressed as a multiple of the
-//			125 μs frame rate. The default value 0 selects the ONU's internal policy. (R, W, setbycreate)
-//			(optional) (2 bytes)
+//			125-vs frame rate. The default value 0 selects the ONU's internal policy. (R,-W, setbycreate)
+//			(optional) (2-bytes)
 //
 //		Fill Policy
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		Misconnected Packets Declaration Policy
-//			Misconnected packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//			Misconnected packets declaration policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Misconnected Packets Clear Policy
-//			Misconnected packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//			Misconnected packets clear policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Loss Of Packets Declaration Policy
-//			Loss of packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//			Loss of packets declaration policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Loss Of Packets Clear Policy
-//			Loss of packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//			Loss of packets clear policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Buffer Overrun_Underrun Declaration Policy
-//			Buffer overrun/underrun declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//			Buffer overrun/underrun declaration policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Buffer Overrun_Underrun Clear Policy
-//			Buffer overrun/underrun clear policy: (R, W, setbycreate) (optional) (1 byte)
+//			Buffer overrun/underrun clear policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Malformed Packets Declaration Policy
-//			Malformed packets declaration policy: (R, W, setbycreate) (optional) (1 byte)
+//			Malformed packets declaration policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		Malformed Packets Clear Policy
-//			Malformed packets clear policy: (R, W, setbycreate) (optional) (1 byte)
+//			Malformed packets clear policy: (R,-W, setbycreate) (optional) (1-byte)
 //
 //		R_Bit Transmit Set Policy
 //			R-bit transmit set policy: This attribute defines the number of consecutive lost packets that
 //			causes the transmitted R bit to be set in the TDM to the PSN direction, indicating lost packets
-//			to the far end. The default value 0 selects the ONU's internal policy. (R, W, setbycreate)
-//			(optional) (1 byte)
+//			to the far end. The default value 0 selects the ONU's internal policy. (R,-W, setbycreate)
+//			(optional) (1-byte)
 //
 //		R_Bit Transmit Clear Policy
 //			R-bit transmit clear policy: This attribute defines the number of consecutive valid packets that
 //			causes the transmitted R bit to be cleared in the TDM to the PSN direction, removing the remote
-//			failure indication to the far end. The default value 0 selects the ONU's internal policy. (R, W,
-//			setbycreate) (optional) (1 byte)
+//			failure indication to the far end. The default value 0 selects the ONU's internal policy. (R,-W,
+//			setbycreate) (optional) (1-byte)
 //
 //		R_Bit Receive Policy
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		L Bit Receive Policy
-//			(R, W, setbycreate) (optional) (1 byte)
+//			(R,-W, setbycreate) (optional) (1-byte)
 //
 //		Ses Threshold
 //			SES threshold: Number of lost, malformed or otherwise unusable packets expected in the PSN to
-//			the TDM direction within a 1 s interval that causes an SES to be counted. Stray packets do not
+//			the TDM direction within a 1-s interval that causes an SES to be counted. Stray packets do not
 //			count towards an SES, nor do packets whose L bit is set at the far end. The value 0 specifies
 //			that the ONU uses its internal default, which is not necessarily the same as the recommended
 //			default value 3. (R, W, set-by-create) (optional) (2 bytes)
@@ -150,5 +150,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPseudowireMaintenanceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(pseudowiremaintenanceprofileBME, params...)
+	return NewManagedEntity(*pseudowiremaintenanceprofileBME, params...)
 }

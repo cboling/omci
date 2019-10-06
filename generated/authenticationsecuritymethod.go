@@ -38,25 +38,25 @@ var authenticationsecuritymethodBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0xFFFF
-//			is reserved. (R, setbycreate) (mandatory) (2 bytes)
+//			is reserved. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Validation Scheme
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Username 1
-//			Username 1:	This string attribute is the user name. If the string is shorter than 25 bytes, it
-//			must be null terminated (Note). (R, W) (mandatory) (25 bytes)
+//			Username 1:	This string attribute is the user name. If the string is shorter than 25-bytes, it
+//			must be null terminated (Note). (R,-W) (mandatory) (25-bytes)
 //
 //		Password
-//			Password:	This string attribute is the password. If the string is shorter than 25 bytes, it must
-//			be null terminated. (R, W) (mandatory) (25 bytes)
+//			Password:	This string attribute is the password. If the string is shorter than 25-bytes, it must
+//			be null terminated. (R,-W) (mandatory) (25-bytes)
 //
 //		Realm
 //			Realm:	This string attribute specifies the realm used in digest authentication. If the string is
-//			shorter than 25 bytes, it must be null terminated. (R, W) (mandatory) (25 bytes)
+//			shorter than 25-bytes, it must be null terminated. (R,-W) (mandatory) (25-bytes)
 //
 //		Username 2
-//			NOTE – The total username is the concatenation of the username 1 and username 2 attributes if
+//			NOTE - The total username is the concatenation of the username 1 and username 2 attributes if
 //			and only if: a) username 1 comprises 25 non-null characters; b) username 2 is supported by the
 //			ONU; and c) username 2 contains a leading non-null character string. Otherwise, the total
 //			username is simply the value of the username 1 attribute.
@@ -92,5 +92,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewAuthenticationSecurityMethod(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(authenticationsecuritymethodBME, params...)
+	return NewManagedEntity(*authenticationsecuritymethodBME, params...)
 }

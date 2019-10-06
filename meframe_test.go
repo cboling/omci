@@ -272,7 +272,7 @@ func getAttributeNameSet(attributes me.AttributeValueMap) mapset.Set {
 	return names
 }
 
-func pickAValue(attrDef *me.AttributeDefinition) interface{} {
+func pickAValue(attrDef me.AttributeDefinition) interface{} {
 	constraint := attrDef.Constraint
 	defaultVal := attrDef.DefValue
 	size := attrDef.GetSize()
@@ -360,7 +360,7 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	for _, attrDef := range managedEntity.GetAttributeDefinitions() {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 
@@ -402,7 +402,7 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 
 	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
 	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
-	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+	assert.Equal(t, meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
 func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -418,7 +418,7 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var mask uint16
-	for _, attrDef := range *managedEntity.GetAttributeDefinitions() {
+	for _, attrDef := range managedEntity.GetAttributeDefinitions() {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
 
@@ -559,7 +559,7 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 	tableAttrFound := false
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
@@ -620,7 +620,7 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	assert.Equal(t, meInstance.GetClassID(), msgObj.EntityClass)
 	assert.Equal(t, meInstance.GetEntityID(), msgObj.EntityInstance)
-	assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+	assert.Equal(t, meInstance.GetAttributeValueMap(), msgObj.Attributes)
 }
 
 func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
@@ -637,7 +637,7 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
 	var failedMask uint16
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
@@ -705,7 +705,7 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		EntityID:   uint16(0),
 		Attributes: make(me.AttributeValueMap, 0),
 	}
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
@@ -773,7 +773,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	// Always pass a failure mask, but should only get encoded if result == ParameterError
 	var unsupportedMask uint16
 	var failedMask uint16
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
@@ -861,7 +861,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		assert.Equal(t, result, msgObj.Result)
 		assert.Zero(t, msgObj.FailedAttributeMask)
 		assert.Zero(t, msgObj.UnsupportedAttributeMask)
-		assert.Equal(t, *meInstance.GetAttributeValueMap(), msgObj.Attributes)
+		assert.Equal(t, meInstance.GetAttributeValueMap(), msgObj.Attributes)
 
 	case me.AttributeFailure:
 		// Should have been Success or AttributeFailure to start with
@@ -876,7 +876,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		// failure bits.
 		//
 		// Make sure any successful attributes were requested
-		meMap := *meInstance.GetAttributeValueMap()
+		meMap := meInstance.GetAttributeValueMap()
 		for name := range msgObj.Attributes {
 			getValue, ok := meMap[name]
 			assert.True(t, ok)
@@ -1630,7 +1630,7 @@ func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	// TODO: Test request of more than 1 attribute. G.988 specifies that a status
 	//       code of (3) should be returned.  Raise error during encode instead of
 	//       waiting for compliant ONU.  May want to have an 'ignore' to allow it.
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
@@ -1699,7 +1699,7 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 	// TODO: Loop over result types (here and other responses with results)
 	result := me.Success // me.Results(rand.Int31n(7))  // [0, 6]
 	bitmask := uint16(0)
-	attrDefs := *managedEntity.GetAttributeDefinitions()
+	attrDefs := managedEntity.GetAttributeDefinitions()
 
 	// TODO: Loop over all table attributes for this class ID
 	if result == me.Success {
@@ -1775,8 +1775,8 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 		assert.Equal(t, result, msgObj.Result)
 		// The attributes should be equal but for variable length table attribute (size = 0 in structure)
 		// we will have the frame padding returned as well.
-		for attrName, value := range *meInstance.GetAttributeValueMap() {
-			attr, err := me.GetAttributeDefinitionByName(&attrDefs, attrName)
+		for attrName, value := range meInstance.GetAttributeValueMap() {
+			attr, err := me.GetAttributeDefinitionByName(attrDefs, attrName)
 			assert.Nil(t, err)
 			assert.NotNil(t, attr)
 			assert.Equal(t, attrName, attr.GetName())

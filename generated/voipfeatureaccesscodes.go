@@ -39,37 +39,37 @@ var voipfeatureaccesscodesBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		Cancel Call Waiting
-//			Cancel call waiting:	(R, W) (optional) (5 bytes)
+//			Cancel call waiting:	(R,-W) (optional) (5-bytes)
 //
 //		Call Hold
-//			Call hold:		(R, W) (optional) (5 bytes)
+//			Call hold:		(R,-W) (optional) (5-bytes)
 //
 //		Call Park
-//			Call park:		(R, W) (optional) (5 bytes)
+//			Call park:		(R,-W) (optional) (5-bytes)
 //
 //		Caller Id Activate
-//			Caller ID activate:	(R, W) (optional) (5 bytes)
+//			Caller ID activate:	(R,-W) (optional) (5-bytes)
 //
 //		Caller Id Deactivate
-//			Caller ID deactivate:	(R, W) (optional) (5 bytes)
+//			Caller ID deactivate:	(R,-W) (optional) (5-bytes)
 //
 //		Do Not Disturb Activation
-//			Do not disturb activation:	(R, W) (optional) (5 bytes)
+//			Do not disturb activation:	(R,-W) (optional) (5-bytes)
 //
 //		Do Not Disturb Deactivation
-//			Do not disturb deactivation:	(R, W) (optional) (5 bytes)
+//			Do not disturb deactivation:	(R,-W) (optional) (5-bytes)
 //
 //		Do Not Disturb Pin Change
-//			Do not disturb PIN change:	(R, W) (optional) (5 bytes)
+//			Do not disturb PIN change:	(R,-W) (optional) (5-bytes)
 //
 //		Emergency Service Number
-//			Emergency service number:	(R, W) (optional) (5 bytes)
+//			Emergency service number:	(R,-W) (optional) (5-bytes)
 //
 //		Intercom Service
-//			Intercom service:	(R, W) (optional) (5 bytes)
+//			Intercom service:	(R,-W) (optional) (5-bytes)
 //
 //		Unattended_Blind Call Transfer
 //			Unattended/blind call transfer:	(R, W) (optional) (5 bytes)
@@ -115,5 +115,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewVoipFeatureAccessCodes(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(voipfeatureaccesscodesBME, params...)
+	return NewManagedEntity(*voipfeatureaccesscodesBME, params...)
 }

@@ -35,18 +35,18 @@ var efmbondinglinkBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			NOTE – This attribute has the same meaning as the Stream ID in clause C.3.1.2 of [ITU-T
-//			G.998.2], except that it cannot be changed. (R, setbycreate) (mandatory) (2 bytes)
+//			NOTE - This attribute has the same meaning as the Stream ID in clause C.3.1.2 of [ITU-T
+//			G.998.2], except that it cannot be changed. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Associated Group Me Id
 //			Associated group ME ID: This attribute is the ME ID of the bonding group to which this link is
 //			associated. Changing this attribute moves the link from one group to another. Setting this
 //			attribute to an ME ID that has not yet been provisioned will result in this link being placed in
 //			a single-link group that contains only this link. The default value for this attribute is the
-//			null pointer, 0xFFFF. (R, W, setbycreate) (mandatory) (2 bytes)
+//			null pointer, 0xFFFF. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Link Alarm Enable
-//			(R, W, setbycreate) (mandatory) (1 bytes)
+//			(R,-W, setbycreate) (mandatory) (1-bytes)
 //
 type EfmBondingLink struct {
 	ManagedEntityDefinition
@@ -76,5 +76,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEfmBondingLink(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(efmbondinglinkBME, params...)
+	return NewManagedEntity(*efmbondinglinkBME, params...)
 }

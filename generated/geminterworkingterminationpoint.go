@@ -39,37 +39,37 @@ var geminterworkingterminationpointBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Gem Port Network Ctp Connectivity Pointer
 //			GEM port network CTP connectivity pointer: This attribute points to an instance of the GEM port
-//			network CTP. (R, W, setbycreate) (mandatory) (2 bytes)
+//			network CTP. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Interworking Option
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Service Profile Pointer
-//			NOTE – The video return path (VRP) service profile is defined in [ITU-T G.984.4].
+//			NOTE - The video return path (VRP) service profile is defined in [ITU-T G.984.4].
 //
 //		Interworking Termination Point Pointer
 //			In all other GEM services, the relationship between the related service TP and this GEM IW TP is
-//			derived from other ME relations; this attribute is set to a null pointer and not used. (R, W,
-//			setbycreate) (mandatory) (2 bytes)
+//			derived from other ME relations; this attribute is set to a null pointer and not used. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Pptp Counter
 //			PPTP counter: This value reports the number of PPTP ME instances associated with this GEM IW TP.
-//			(R) (optional) (1 byte)
+//			(R) (optional) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Gal Profile Pointer
-//			(R, W, setbycreate) (mandatory) (2 bytes)
+//			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Gal Loopback Configuration
 //			The default value of this attribute is 0. When the IW option is 6 (downstream broadcast), this
-//			attribute is not used. (R, W) (mandatory) (1 byte)
+//			attribute is not used. (R,-W) (mandatory) (1-byte)
 //
 type GemInterworkingTerminationPoint struct {
 	ManagedEntityDefinition
@@ -105,5 +105,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewGemInterworkingTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(geminterworkingterminationpointBME, params...)
+	return NewManagedEntity(*geminterworkingterminationpointBME, params...)
 }

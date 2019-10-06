@@ -39,41 +39,41 @@ var rtppseudowireparametersBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the pseudowire TP ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Clock Reference
 //			Clock reference: This attribute specifies the frequency of the common timing reference, in
-//			multiples of 8 kHz. (R, W, setbycreate) (mandatory) (2 bytes)
+//			multiples of 8 kHz. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Rtp Timestamp Mode
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Ptype
 //			PTYPE:	This attribute specifies the RTP payload type in the TDM to the PSN direction. It
-//			comprises two 1 byte values. The first is for the payload channel, the second, for the optional
+//			comprises two 1-byte values. The first is for the payload channel, the second, for the optional
 //			separate signalling channel. Assignable PTYPEs lie in the dynamic range 96..127. If signalling
-//			is not transported in its own channel, the second value should be set to 0. (R, W, setbycreate)
-//			(mandatory) (2 bytes)
+//			is not transported in its own channel, the second value should be set to 0. (R,-W, setbycreate)
+//			(mandatory) (2-bytes)
 //
 //		Ssrc
 //			SSRC:	This attribute specifies the RTP synchronization source in the TDM to the PSN direction.
-//			It comprises two 4 byte values. The first is for the payload channel, the second, for the
+//			It comprises two 4-byte values. The first is for the payload channel, the second, for the
 //			optional separate signalling channel. If signalling is not transported in its own channel, the
-//			second value should be set to 0. (R, W, setbycreate) (mandatory) (8 bytes)
+//			second value should be set to 0. (R,-W, setbycreate) (mandatory) (8-bytes)
 //
 //		Expected Ptype
 //			Expected PTYPE: This attribute specifies the RTP payload type in the PSN to the TDM direction.
-//			The received payload type may be used to detect malformed packets. It comprises two 1 byte
+//			The received payload type may be used to detect malformed packets. It comprises two 1-byte
 //			values. The first is for the payload channel, the second, for the optional separate signalling
 //			channel. To disable either or both of the check functions, set the corresponding value to its
-//			default value 0. (R, W, setbycreate) (optional) (2 bytes)
+//			default value 0. (R,-W, setbycreate) (optional) (2-bytes)
 //
 //		Expected Ssrc
 //			Expected SSRC: This attribute specifies the RTP synchronization source in the PSN to the TDM
 //			direction. The received SSRC may be used to detect misconnection (stray packets). It comprises
-//			two 4 byte values. The first is for the payload channel, the second, for the optional separate
+//			two 4-byte values. The first is for the payload channel, the second, for the optional separate
 //			signalling channel. To disable either or both of the check functions, set the corresponding
-//			value to its default value 0. (R, W, setbycreate) (optional) (8 bytes)
+//			value to its default value 0. (R,-W, setbycreate) (optional) (8-bytes)
 //
 type RtpPseudowireParameters struct {
 	ManagedEntityDefinition
@@ -107,5 +107,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewRtpPseudowireParameters(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(rtppseudowireparametersBME, params...)
+	return NewManagedEntity(*rtppseudowireparametersBME, params...)
 }

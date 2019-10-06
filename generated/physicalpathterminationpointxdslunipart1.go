@@ -32,11 +32,11 @@ var physicalpathterminationpointxdslunipart1BME *ManagedEntityDefinition
 //
 //	The ONU automatically creates an instance of this ME per port:
 //
-//	•	when the ONU has xDSL ports built into its factory configuration;
+//	o	when the ONU has xDSL ports built into its factory configuration;
 //
-//	•	when a cardholder is provisioned to expect a circuit pack of the xDSL type;
+//	o	when a cardholder is provisioned to expect a circuit pack of the xDSL type;
 //
-//	•	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the xDSL
+//	o	when a cardholder provisioned for plug-and-play is equipped with a circuit pack of the xDSL
 //	type. Note that the installation of a plug-and-play card may indicate the presence of xDSL ports
 //	via equipment ID as well as its type, and indeed may cause the ONU to instantiate a port-mapping
 //	package that specifies xDSL ports.
@@ -53,66 +53,66 @@ var physicalpathterminationpointxdslunipart1BME *ManagedEntityDefinition
 //			number indicates the physical position of the UNI. The six LSBs of the first byte are the slot
 //			ID, defined in clause 9.1.5. The two MSBs indicate the channel number in some of the implicitly
 //			linked MEs, and must be 0 in the PPTP itself. This reduces the possible number of physical slots
-//			to 64. The second byte is the port ID, with the range 1..255. (R) (mandatory) (2 bytes)
+//			to 64. The second byte is the port ID, with the range 1..255. (R) (mandatory) (2-bytes)
 //
 //		Loopback Configuration
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 //		Administrative State
 //			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is further described in clause A.1.6. (R, W) (mandatory) (1 byte)
+//			ME. Administrative state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
 //
 //		Operational State
 //			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1 byte)
+//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Xdsl Line Configuration Profile
 //			xDSL line configuration profile: This attribute points to an instance of the xDSL line
 //			configuration profiles (part 1, 2 and 3) MEs, and if necessary, also to VDSL2 line configuration
 //			extensions (1 and 2) MEs, also to vectoring line configuration extension MEs. Upon ME
-//			instantiation, the ONU sets this attribute to 0, a null pointer. (R, W) (mandatory) (2 bytes)
+//			instantiation, the ONU sets this attribute to 0, a null pointer. (R,-W) (mandatory) (2-bytes)
 //
 //		Xdsl Subcarrier Masking Downstream Profile
 //			xDSL subcarrier masking downstream profile: This attribute points to an instance of the xDSL
 //			subcarrier masking downstream profile ME. Upon ME instantiation, the ONU sets this attribute to
-//			0, a null pointer. (R, W) (mandatory) (2 bytes)
+//			0, a null pointer. (R,-W) (mandatory) (2-bytes)
 //
 //		Xdsl Subcarrier Masking Upstream Profile
 //			xDSL subcarrier masking upstream profile: This attribute points to an instance of the xDSL
 //			subcarrier masking upstream profile ME. Upon ME instantiation, the ONU sets this attribute to 0,
-//			a null pointer. (R, W) (mandatory) (2 bytes)
+//			a null pointer. (R,-W) (mandatory) (2-bytes)
 //
 //		Xdsl Downstream Power Spectral Density Psd Mask Profile
 //			xDSL downstream power spectral density (PSD) mask profile: This attribute points to an instance
 //			of the xDSL PSD mask profile ME that defines downstream parameters. Upon ME instantiation, the
-//			ONU sets this attribute to 0, a null pointer. (R, W) (mandatory) (2 bytes)
+//			ONU sets this attribute to 0, a null pointer. (R,-W) (mandatory) (2-bytes)
 //
 //		Xdsl Downstream Rfi Bands Profile
 //			xDSL downstream RFI bands profile: This attribute points to an instance of the xDSL downstream
 //			RFI bands profile ME. Upon ME instantiation, the ONU sets this attribute to 0, a null pointer.
-//			(R, W) (mandatory) (2 bytes)
+//			(R,-W) (mandatory) (2-bytes)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R, W) (optional) (1 byte)
+//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Modem Type
-//			NOTE – Many newer VDSL2 chip sets support only PTM. The ATM default is retained for backward
+//			NOTE - Many newer VDSL2 chip sets support only PTM. The ATM default is retained for backward
 //			compatibility, but implementers should be aware that the default may need to be overridden by
 //			provisioning before the xDSL UNI can be brought into service.
 //
 //		Upstream Psd Mask Profile
 //			Upstream PSD mask profile: This attribute points to an instance of the xDSL PSD mask profile
 //			that defines upstream parameters. Upon ME instantiation, the ONU sets this attribute to 0, a
-//			null pointer. (R, W) (optional) (2 bytes)
+//			null pointer. (R,-W) (optional) (2-bytes)
 //
 //		Network Specific Extensions Pointer
 //			Network specific extensions pointer: This attribute points to a network address ME that contains
 //			the path and name of a file containing network specific parameters for the associated UNI. Upon
-//			ME instantiation, the ONU sets this attribute to 0xFFFF, a null pointer. (R, W) (optional)
-//			(2 bytes)
+//			ME instantiation, the ONU sets this attribute to 0xFFFF, a null pointer. (R,-W) (optional)
+//			(2-bytes)
 //
 type PhysicalPathTerminationPointXdslUniPart1 struct {
 	ManagedEntityDefinition
@@ -151,5 +151,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(physicalpathterminationpointxdslunipart1BME, params...)
+	return NewManagedEntity(*physicalpathterminationpointxdslunipart1BME, params...)
 }

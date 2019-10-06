@@ -37,17 +37,17 @@ var aal5profileBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Max Cpcs Pdu Size
 //			Max CPCS PDU size: This attribute specifies the maximum CPCS PDU size to be transmitted over the
-//			connection in both upstream and downstream directions. (R, W, setbycreate) (mandatory) (2 bytes)
+//			connection in both upstream and downstream directions. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Aal Mode
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Sscs Type
-//			(R, W, setbycreate) (mandatory) (1 byte)
+//			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 type Aal5Profile struct {
 	ManagedEntityDefinition
@@ -78,5 +78,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewAal5Profile(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(aal5profileBME, params...)
+	return NewManagedEntity(*aal5profileBME, params...)
 }

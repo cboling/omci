@@ -28,7 +28,7 @@ import (
 )
 
 type ManagedEntity struct {
-	definition    *ManagedEntityDefinition
+	definition    ManagedEntityDefinition
 	attributeMask uint16
 	attributes    AttributeValueMap
 }
@@ -39,7 +39,7 @@ func (entity *ManagedEntity) String() string {
 		entity.GetClassID(), entity.GetEntityID(), entity.GetEntityID(), entity.attributes)
 }
 
-func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, OmciErrors) {
+func NewManagedEntity(definition ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, OmciErrors) {
 	entity := &ManagedEntity{
 		definition: definition,
 		attributes: make(map[string]interface{}),
@@ -53,31 +53,27 @@ func NewManagedEntity(definition *ManagedEntityDefinition, params ...ParamData) 
 	return entity, nil
 }
 
-func (entity *ManagedEntity) GetManagedEntityDefinition() *ManagedEntityDefinition {
+func (entity *ManagedEntity) GetManagedEntityDefinition() ManagedEntityDefinition {
 	return entity.definition
 }
 
-func (entity *ManagedEntity) SetManagedEntityDefinition(def *ManagedEntityDefinition) {
-	entity.definition = def
-}
-
-func (entity *ManagedEntity) GetName() string {
+func (entity ManagedEntity) GetName() string {
 	return entity.definition.GetName()
 }
 
-func (entity *ManagedEntity) GetClassID() ClassID {
+func (entity ManagedEntity) GetClassID() ClassID {
 	return entity.definition.GetClassID()
 }
 
-func (entity *ManagedEntity) GetMessageTypes() mapset.Set {
+func (entity ManagedEntity) GetMessageTypes() mapset.Set {
 	return entity.definition.GetMessageTypes()
 }
 
-func (entity *ManagedEntity) GetAllowedAttributeMask() uint16 {
+func (entity ManagedEntity) GetAllowedAttributeMask() uint16 {
 	return entity.definition.GetAllowedAttributeMask()
 }
 
-func (entity *ManagedEntity) GetAttributeDefinitions() *AttributeDefinitionMap {
+func (entity ManagedEntity) GetAttributeDefinitions() AttributeDefinitionMap {
 	return entity.definition.GetAttributeDefinitions()
 }
 
@@ -105,8 +101,8 @@ func (entity *ManagedEntity) GetAttributeMask() uint16 {
 	return entity.attributeMask
 }
 
-func (entity *ManagedEntity) GetAttributeValueMap() *AttributeValueMap {
-	return &entity.attributes
+func (entity *ManagedEntity) GetAttributeValueMap() AttributeValueMap {
+	return entity.attributes
 }
 
 func (entity *ManagedEntity) GetAttribute(name string) (interface{}, error) {

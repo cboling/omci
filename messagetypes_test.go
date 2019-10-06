@@ -288,7 +288,7 @@ func TestCreateRequestDecode(t *testing.T) {
 	meDefinition, err := me.LoadManagedEntityDefinition(request.EntityClass)
 	assert.Nil(t, err)
 
-	attrDefs := *meDefinition.GetAttributeDefinitions()
+	attrDefs := meDefinition.GetAttributeDefinitions()
 
 	sbcMask := getSbcMask(meDefinition)
 	for index := uint(1); index < uint(len(attrDefs)); index++ {

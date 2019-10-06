@@ -44,7 +44,7 @@ var extendedvlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute provides a unique number for each instance of this ME. (R,
-//			setbycreate) (mandatory) (2 bytes)
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Association Type
 //			When the extended VLAN tagging ME is associated with the ANI side, it behaves as an upstream
@@ -56,28 +56,28 @@ var extendedvlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 //		Received Frame Vlan Tagging Operation Table Max Size
 //			Received frame VLAN tagging operation table max size: This attribute indicates the maximum
 //			number of entries that can be set in the received frame VLAN tagging operation table. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Input Tpid
 //			Input TPID:	This attribute gives the special TPID value for operations on the input (filtering)
-//			side of the table. Typical values include 0x88A8 and 0x9100. (R, W) (mandatory) (2 bytes)
+//			side of the table. Typical values include 0x88A8 and 0x9100. (R,-W) (mandatory) (2-bytes)
 //
 //		Output Tpid
 //			Output TPID: This attribute gives the special TPID value for operations on the output (tagging)
-//			side of the table. Typical values include 0x88A8 and 0x9100. (R, W) (mandatory) (2 bytes)
+//			side of the table. Typical values include 0x88A8 and 0x9100. (R,-W) (mandatory) (2-bytes)
 //
 //		Downstream Mode
 //			All other values are reserved. (R, W) (mandatory) (1 byte)
 //
 //		Received Frame Vlan Tagging Operation Table
-//			111	Set TPID = output TPID, DEI = 1
+//			111	Set TPID-=-output TPID, DEI = 1
 //
 //		Associated Me Pointer
-//			NOTE 5 – When the association type is xDSL, the two MSBs may be used to indicate a bearer
+//			NOTE 5 - When the association type is xDSL, the two MSBs may be used to indicate a bearer
 //			channel.
 //
 //		Dscp To P Bit Mapping
-//			NOTE 6 – If certain bits in the DSCP field are to be ignored in the mapping process, the
+//			NOTE 6 - If certain bits in the DSCP field are to be ignored in the mapping process, the
 //			attribute should be provisioned such that all possible values of those bits produce the same
 //			P-bit mapping. This can be applied to the case where instead of full DSCP, the operator wishes
 //			to adopt the priority mechanism based on IP precedence, which needs only the three MSBs of the
@@ -118,5 +118,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(extendedvlantaggingoperationconfigurationdataBME, params...)
+	return NewManagedEntity(*extendedvlantaggingoperationconfigurationdataBME, params...)
 }

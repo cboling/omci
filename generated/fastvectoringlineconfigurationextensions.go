@@ -43,13 +43,13 @@ var fastvectoringlineconfigurationextensionsBME *ManagedEntityDefinition
 //			FEXT cancellation enabling/disabling upstream (FEXT_TO_CANCEL_ENABLEus): A value of 1 enables
 //			and a value of 0 disables FEXT cancellation in the upstream direction from all the other
 //			vectored lines into the line in the vectored group. See clause 7.1.7.2 of [ITU-T G.997.2].
-//			(R, W) (mandatory) (1 byte)
+//			(R,-W) (mandatory) (1-byte)
 //
 //		Fext Cancellation Enabling_Disabling Downstream Fext_To_Cancel_Enableds
 //			FEXT cancellation enabling/disabling downstream (FEXT_TO_CANCEL_ENABLEds): A value of 1 enables
 //			and a value of 0 disables FEXT cancellation in the downstream direction from all the other
-//			vectored lines into the line in the vectored group. See clause 7.1.7.1 of [ITUT G.997.2]. (R, W)
-//			(mandatory) (1 byte)
+//			vectored lines into the line in the vectored group. See clause 7.1.7.1 of [ITUT-G.997.2]. (R,-W)
+//			(mandatory) (1-byte)
 //
 type FastVectoringLineConfigurationExtensions struct {
 	ManagedEntityDefinition
@@ -79,5 +79,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(fastvectoringlineconfigurationextensionsBME, params...)
+	return NewManagedEntity(*fastvectoringlineconfigurationextensionsBME, params...)
 }

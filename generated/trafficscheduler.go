@@ -26,7 +26,7 @@ const TrafficSchedulerClassId ClassID = ClassID(278)
 var trafficschedulerBME *ManagedEntityDefinition
 
 // TrafficScheduler (class ID #278)
-//	NOTE 1 – In [ITU-T G.984.4], this ME is called a traffic scheduler-G.
+//	NOTE 1 - In [ITU-T G.984.4], this ME is called a traffic scheduler-G.
 //
 //	An instance of this ME represents a logical object that can control upstream GEM packets. A
 //	traffic scheduler can accommodate GEM packets after a priority queue or other traffic scheduler
@@ -44,16 +44,16 @@ var trafficschedulerBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2 byte
+//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
 //			number indicates the physical capability that realizes the traffic scheduler. The first byte is
 //			the slot ID of the circuit pack with which this traffic scheduler is associated. For a traffic
 //			scheduler that is not associated with a circuit pack, the first byte is 0xFF. The second byte is
 //			the traffic scheduler id, assigned by the ONU itself. Traffic schedulers are numbered in
 //			ascending order with the range 0..0xFF in each circuit pack or in the ONU core. (R) (mandatory)
-//			(2 bytes)
+//			(2-bytes)
 //
 //		T_Cont Pointer
-//			NOTE 2 – This attribute is read-only unless otherwise specified by the QoS configuration
+//			NOTE 2 - This attribute is read-only unless otherwise specified by the QoS configuration
 //			flexibility attribute of the ONU2-G ME. If flexible configuration is not supported, the ONU
 //			should reject an attempt to set the TCONT pointer attribute with a parameter error result-reason
 //			code.
@@ -61,15 +61,15 @@ var trafficschedulerBME *ManagedEntityDefinition
 //		Traffic Scheduler Pointer
 //			Traffic scheduler pointer: This attribute points to another traffic scheduler ME instance that
 //			may serve this traffic scheduler. This pointer is used when this traffic scheduler is connected
-//			to another traffic scheduler; it is null (0) otherwise. (R) (mandatory) (2 bytes)
+//			to another traffic scheduler; it is null (0) otherwise. (R) (mandatory) (2-bytes)
 //
 //		Policy
-//			NOTE 3 – This attribute is read-only unless otherwise specified by the QoS configuration
+//			NOTE 3 - This attribute is read-only unless otherwise specified by the QoS configuration
 //			flexibility attribute of the ONU2-G ME. If flexible configuration is not supported, the ONU
 //			should reject an attempt to set the policy attribute with a parameter error result-reason code.
 //
 //		Priority_Weight
-//			Upon ME instantiation, the ONU sets this attribute to 0. (R, W) (mandatory) (1 byte)
+//			Upon ME instantiation, the ONU sets this attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 type TrafficScheduler struct {
 	ManagedEntityDefinition
@@ -99,5 +99,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewTrafficScheduler(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(trafficschedulerBME, params...)
+	return NewManagedEntity(*trafficschedulerBME, params...)
 }

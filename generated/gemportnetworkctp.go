@@ -51,38 +51,38 @@ var gemportnetworkctpBME *ManagedEntityDefinition
 //	Attributes
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Port_Id
-//			NOTE 1 – While nothing forbids the existence of several GEM port network CTPs with the same
+//			NOTE 1 - While nothing forbids the existence of several GEM port network CTPs with the same
 //			port-ID value, downstream traffic is modelled as being delivered to all such GEM port network
 //			CTPs. Be aware of potential difficulties associated with defining downstream flows and
 //			aggregating PM statistics.
 //
 //		T_Cont Pointer
-//			T-CONT pointer: This attribute points to a T-CONT instance. (R, W, setbycreate) (mandatory)
-//			(2 bytes)
+//			T-CONT pointer: This attribute points to a T-CONT instance. (R,-W, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Direction
 //			Direction:	This attribute specifies whether the GEM port is used for UNI-to-ANI (1), ANI-to-UNI
-//			(2), or bidirectional (3) connection. (R, W, setbycreate) (mandatory) (1 byte)
+//			(2), or bidirectional (3) connection. (R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Traffic Management Pointer For Upstream
 //			Traffic management pointer for upstream: If the traffic management option attribute in the ONU-G
 //			ME is 0 (priority controlled) or 2 (priority and rate controlled), this pointer specifies the
 //			priority queue ME serving this GEM port network CTP. If the traffic management option attribute
 //			is 1 (rate controlled), this attribute redundantly points to the TCONT serving this GEM port
-//			network CTP. (R, W, setbycreate) (mandatory) (2 bytes)
+//			network CTP. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Traffic Descriptor Profile Pointer For Upstream
 //			See also Appendix II.
 //
 //		Uni Counter
 //			UNI counter: This attribute reports the number of instances of UNI-G ME associated with this GEM
-//			port network CTP. (R) (optional) (1 byte)
+//			port network CTP. (R) (optional) (1-byte)
 //
 //		Priority Queue Pointer For Down Stream
-//			NOTE 2 – If the GEM port network CTP is associated with more than one UNI (downstream
+//			NOTE 2 - If the GEM port network CTP is associated with more than one UNI (downstream
 //			multicast), the downstream priority queue pointer defines a pattern (e.g., queue number 3 for a
 //			given UNI) to be replicated (i.e., to queue number 3) at the other affected UNIs.
 //
@@ -90,7 +90,7 @@ var gemportnetworkctpBME *ManagedEntityDefinition
 //			Encryption state: This attribute indicates the current state of the GEM port network CTP's
 //			encryption. Legal values are defined to be the same as those of the security mode attribute of
 //			the ONU2-G, with the exception that attribute value 0 indicates an unencrypted GEM port. (R)
-//			(optional) (1 byte)
+//			(optional) (1-byte)
 //
 //		Traffic Descriptor Profile Pointer For Downstream
 //			See also Appendix II.
@@ -134,5 +134,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewGemPortNetworkCtp(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(gemportnetworkctpBME, params...)
+	return NewManagedEntity(*gemportnetworkctpBME, params...)
 }

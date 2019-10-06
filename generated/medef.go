@@ -41,23 +41,23 @@ func (bme *ManagedEntityDefinition) String() string {
 		bme.Name, bme.ClassID, bme.AttributeDefinitions)
 }
 
-func (bme *ManagedEntityDefinition) GetName() string {
+func (bme ManagedEntityDefinition) GetName() string {
 	return bme.Name
 }
-func (bme *ManagedEntityDefinition) GetClassID() ClassID {
+func (bme ManagedEntityDefinition) GetClassID() ClassID {
 	return bme.ClassID
 }
-func (bme *ManagedEntityDefinition) GetMessageTypes() mapset.Set {
+func (bme ManagedEntityDefinition) GetMessageTypes() mapset.Set {
 	return bme.MessageTypes
 }
-func (bme *ManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
+func (bme ManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
 	return bme.AllowedAttributeMask
 }
-func (bme *ManagedEntityDefinition) GetAttributeDefinitions() *AttributeDefinitionMap {
-	return &bme.AttributeDefinitions
+func (bme ManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinitionMap {
+	return bme.AttributeDefinitions
 }
 
-func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
+func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
 		return nil, errors.New("unsupported attribute mask")
@@ -124,7 +124,7 @@ func (bme *ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p
 	return attrMap, nil
 }
 
-func (bme *ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,
+func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,
 	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded

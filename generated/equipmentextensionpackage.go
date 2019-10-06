@@ -37,17 +37,17 @@ var equipmentextensionpackageBME *ManagedEntityDefinition
 //		Managed Entity Id
 //			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
 //			identical ID, this ME is implicitly linked to an instance of the ONU-G or cardholder. (R)
-//			(mandatory) (2 bytes)
+//			(mandatory) (2-bytes)
 //
 //		Environmental Sense
-//			NOTE – Some specific sense point applications are already defined on the ONU-G ME. It is the
+//			NOTE - Some specific sense point applications are already defined on the ONU-G ME. It is the
 //			vendor's choice how to configure and report sense points that appear both generically and
 //			specifically.
 //
 //		Contact Closure Output
 //			On read, the left bit in each pair should be set to 0 at the ONU and ignored at the OLT. The
-//			right bit indicates a released output point with 0 and an operated contact point with 1. (R, W)
-//			(optional) (2 bytes)
+//			right bit indicates a released output point with 0 and an operated contact point with 1. (R,-W)
+//			(optional) (2-bytes)
 //
 type EquipmentExtensionPackage struct {
 	ManagedEntityDefinition
@@ -75,5 +75,5 @@ func init() {
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from the wire, about to be sent on the wire.
 func NewEquipmentExtensionPackage(params ...ParamData) (*ManagedEntity, OmciErrors) {
-	return NewManagedEntity(equipmentextensionpackageBME, params...)
+	return NewManagedEntity(*equipmentextensionpackageBME, params...)
 }
