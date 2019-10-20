@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// GemPortNetworkCtpClassId is the 16-bit ID for the OMCI
+// GemPortNetworkCtpClassID is the 16-bit ID for the OMCI
 // Managed entity GEM port network CTP
-const GemPortNetworkCtpClassId ClassID = ClassID(268)
+const GemPortNetworkCtpClassID ClassID = ClassID(268)
 
 var gemportnetworkctpBME *ManagedEntityDefinition
 

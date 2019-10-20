@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// CesServiceProfileClassId is the 16-bit ID for the OMCI
+// CesServiceProfileClassID is the 16-bit ID for the OMCI
 // Managed entity CES service profile
-const CesServiceProfileClassId ClassID = ClassID(21)
+const CesServiceProfileClassID ClassID = ClassID(21)
 
 var cesserviceprofileBME *ManagedEntityDefinition
 

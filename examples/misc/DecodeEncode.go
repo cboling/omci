@@ -325,7 +325,7 @@ func syncTimeRequest() {
 	}
 	request := &omci.CreateRequest{
 		MeBasePacket: omci.MeBasePacket{
-			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityClass:    me.GemPortNetworkCtpClassID,
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{
@@ -2323,7 +2323,7 @@ func serializeCreateRequest() {
 	}
 	request := &omci.CreateRequest{
 		MeBasePacket: omci.MeBasePacket{
-			EntityClass:    me.GemPortNetworkCtpClassId,
+			EntityClass:    me.GemPortNetworkCtpClassID,
 			EntityInstance: uint16(0x100),
 		},
 		Attributes: me.AttributeValueMap{

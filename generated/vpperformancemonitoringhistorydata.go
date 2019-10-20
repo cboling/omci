@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VpPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// VpPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity VP performance monitoring history data
-const VpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(62)
+const VpPerformanceMonitoringHistoryDataClassID ClassID = ClassID(62)
 
 var vpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

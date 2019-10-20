@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TContClassId is the 16-bit ID for the OMCI
+// TContClassID is the 16-bit ID for the OMCI
 // Managed entity T-CONT
-const TContClassId ClassID = ClassID(262)
+const TContClassID ClassID = ClassID(262)
 
 var tcontBME *ManagedEntityDefinition
 

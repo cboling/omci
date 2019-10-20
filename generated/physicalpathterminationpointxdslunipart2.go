@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PhysicalPathTerminationPointXdslUniPart2ClassId is the 16-bit ID for the OMCI
+// PhysicalPathTerminationPointXdslUniPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity Physical path termination point xDSL UNI part 2
-const PhysicalPathTerminationPointXdslUniPart2ClassId ClassID = ClassID(99)
+const PhysicalPathTerminationPointXdslUniPart2ClassID ClassID = ClassID(99)
 
 var physicalpathterminationpointxdslunipart2BME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Vdsl2LineConfigurationExtensions3ClassId is the 16-bit ID for the OMCI
+// Vdsl2LineConfigurationExtensions3ClassID is the 16-bit ID for the OMCI
 // Managed entity VDSL2 line configuration extensions 3
-const Vdsl2LineConfigurationExtensions3ClassId ClassID = ClassID(410)
+const Vdsl2LineConfigurationExtensions3ClassID ClassID = ClassID(410)
 
 var vdsl2lineconfigurationextensions3BME *ManagedEntityDefinition
 

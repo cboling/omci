@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EthernetFramePerformanceMonitoringHistoryDataUpstreamClassId is the 16-bit ID for the OMCI
+// EthernetFramePerformanceMonitoringHistoryDataUpstreamClassID is the 16-bit ID for the OMCI
 // Managed entity Ethernet frame performance monitoring history data upstream
-const EthernetFramePerformanceMonitoringHistoryDataUpstreamClassId ClassID = ClassID(322)
+const EthernetFramePerformanceMonitoringHistoryDataUpstreamClassID ClassID = ClassID(322)
 
 var ethernetframeperformancemonitoringhistorydataupstreamBME *ManagedEntityDefinition
 

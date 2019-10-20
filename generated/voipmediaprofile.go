@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VoipMediaProfileClassId is the 16-bit ID for the OMCI
+// VoipMediaProfileClassID is the 16-bit ID for the OMCI
 // Managed entity VoIP media profile
-const VoipMediaProfileClassId ClassID = ClassID(142)
+const VoipMediaProfileClassID ClassID = ClassID(142)
 
 var voipmediaprofileBME *ManagedEntityDefinition
 

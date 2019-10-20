@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TcpUdpPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// TcpUdpPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity TCP/UDP performance monitoring history data
-const TcpUdpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(342)
+const TcpUdpPerformanceMonitoringHistoryDataClassID ClassID = ClassID(342)
 
 var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

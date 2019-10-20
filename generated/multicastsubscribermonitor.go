@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MulticastSubscriberMonitorClassId is the 16-bit ID for the OMCI
+// MulticastSubscriberMonitorClassID is the 16-bit ID for the OMCI
 // Managed entity Multicast subscriber monitor
-const MulticastSubscriberMonitorClassId ClassID = ClassID(311)
+const MulticastSubscriberMonitorClassID ClassID = ClassID(311)
 
 var multicastsubscribermonitorBME *ManagedEntityDefinition
 

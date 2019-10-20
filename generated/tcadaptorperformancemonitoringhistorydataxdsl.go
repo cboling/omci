@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TcAdaptorPerformanceMonitoringHistoryDataXdslClassId is the 16-bit ID for the OMCI
+// TcAdaptorPerformanceMonitoringHistoryDataXdslClassID is the 16-bit ID for the OMCI
 // Managed entity TC adaptor performance monitoring history data xDSL
-const TcAdaptorPerformanceMonitoringHistoryDataXdslClassId ClassID = ClassID(116)
+const TcAdaptorPerformanceMonitoringHistoryDataXdslClassID ClassID = ClassID(116)
 
 var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 

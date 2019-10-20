@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PwEthernetConfigurationDataClassId is the 16-bit ID for the OMCI
+// PwEthernetConfigurationDataClassID is the 16-bit ID for the OMCI
 // Managed entity PW Ethernet configuration data
-const PwEthernetConfigurationDataClassId ClassID = ClassID(339)
+const PwEthernetConfigurationDataClassID ClassID = ClassID(339)
 
 var pwethernetconfigurationdataBME *ManagedEntityDefinition
 

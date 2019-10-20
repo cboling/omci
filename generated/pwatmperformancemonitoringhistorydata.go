@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PwAtmPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// PwAtmPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity PW ATM performance monitoring history data
-const PwAtmPerformanceMonitoringHistoryDataClassId ClassID = ClassID(338)
+const PwAtmPerformanceMonitoringHistoryDataClassID ClassID = ClassID(338)
 
 var pwatmperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

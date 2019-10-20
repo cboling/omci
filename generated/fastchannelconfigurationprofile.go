@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// FastChannelConfigurationProfileClassId is the 16-bit ID for the OMCI
+// FastChannelConfigurationProfileClassID is the 16-bit ID for the OMCI
 // Managed entity FAST channel configuration profile
-const FastChannelConfigurationProfileClassId ClassID = ClassID(432)
+const FastChannelConfigurationProfileClassID ClassID = ClassID(432)
 
 var fastchannelconfigurationprofileBME *ManagedEntityDefinition
 

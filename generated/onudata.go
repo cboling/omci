@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// OnuDataClassId is the 16-bit ID for the OMCI
+// OnuDataClassID is the 16-bit ID for the OMCI
 // Managed entity ONU data
-const OnuDataClassId ClassID = ClassID(2)
+const OnuDataClassID ClassID = ClassID(2)
 
 var onudataBME *ManagedEntityDefinition
 

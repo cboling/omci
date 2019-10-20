@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// AniGClassId is the 16-bit ID for the OMCI
+// AniGClassID is the 16-bit ID for the OMCI
 // Managed entity ANI-G
-const AniGClassId ClassID = ClassID(263)
+const AniGClassID ClassID = ClassID(263)
 
 var anigBME *ManagedEntityDefinition
 

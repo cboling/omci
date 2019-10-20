@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// GemPortNetworkCtpPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity GEM port network CTP performance monitoring history data
-const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(341)
+const GemPortNetworkCtpPerformanceMonitoringHistoryDataClassID ClassID = ClassID(341)
 
 var gemportnetworkctpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

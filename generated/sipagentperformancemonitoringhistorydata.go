@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// SipAgentPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// SipAgentPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity SIP agent performance monitoring history data
-const SipAgentPerformanceMonitoringHistoryDataClassId ClassID = ClassID(151)
+const SipAgentPerformanceMonitoringHistoryDataClassID ClassID = ClassID(151)
 
 var sipagentperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

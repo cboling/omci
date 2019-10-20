@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TrafficDescriptorClassId is the 16-bit ID for the OMCI
+// TrafficDescriptorClassID is the 16-bit ID for the OMCI
 // Managed entity Traffic descriptor
-const TrafficDescriptorClassId ClassID = ClassID(280)
+const TrafficDescriptorClassID ClassID = ClassID(280)
 
 var trafficdescriptorBME *ManagedEntityDefinition
 

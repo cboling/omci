@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PhysicalPathTerminationPointVideoUniClassId is the 16-bit ID for the OMCI
+// PhysicalPathTerminationPointVideoUniClassID is the 16-bit ID for the OMCI
 // Managed entity Physical path termination point video UNI
-const PhysicalPathTerminationPointVideoUniClassId ClassID = ClassID(82)
+const PhysicalPathTerminationPointVideoUniClassID ClassID = ClassID(82)
 
 var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 

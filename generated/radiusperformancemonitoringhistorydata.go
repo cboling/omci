@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// RadiusPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// RadiusPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Radius performance monitoring history data
-const RadiusPerformanceMonitoringHistoryDataClassId ClassID = ClassID(293)
+const RadiusPerformanceMonitoringHistoryDataClassID ClassID = ClassID(293)
 
 var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// CircuitPackClassId is the 16-bit ID for the OMCI
+// CircuitPackClassID is the 16-bit ID for the OMCI
 // Managed entity Circuit pack
-const CircuitPackClassId ClassID = ClassID(6)
+const CircuitPackClassID ClassID = ClassID(6)
 
 var circuitpackBME *ManagedEntityDefinition
 

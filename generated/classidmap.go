@@ -216,6 +216,8 @@ func init() {
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
 }
 
+// LoadManagedEntityDefinition returns a function to create a Managed Entity for a specific
+// Managed Entity class ID
 func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*ManagedEntity, OmciErrors) {
 	newFunc, ok := classToManagedEntityMap[classID]
 	if ok {
@@ -225,6 +227,7 @@ func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*Managed
 		uint16(classID), uint16(classID)))
 }
 
+// GetSupportedClassIDs returns an array of Managed Entity Class IDs supported
 func GetSupportedClassIDs() []ClassID {
 	supported := make([]ClassID, 0, len(classToManagedEntityMap))
 	for k := range classToManagedEntityMap {

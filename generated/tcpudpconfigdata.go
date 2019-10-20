@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TcpUdpConfigDataClassId is the 16-bit ID for the OMCI
+// TcpUdpConfigDataClassID is the 16-bit ID for the OMCI
 // Managed entity TCP/UDP config data
-const TcpUdpConfigDataClassId ClassID = ClassID(136)
+const TcpUdpConfigDataClassID ClassID = ClassID(136)
 
 var tcpudpconfigdataBME *ManagedEntityDefinition
 

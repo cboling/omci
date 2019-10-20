@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MplsPseudowireTerminationPointClassId is the 16-bit ID for the OMCI
+// MplsPseudowireTerminationPointClassID is the 16-bit ID for the OMCI
 // Managed entity MPLS pseudowire termination point
-const MplsPseudowireTerminationPointClassId ClassID = ClassID(333)
+const MplsPseudowireTerminationPointClassID ClassID = ClassID(333)
 
 var mplspseudowireterminationpointBME *ManagedEntityDefinition
 

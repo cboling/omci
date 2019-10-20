@@ -28,6 +28,7 @@ import (
 	"math/bits"
 )
 
+// ManagedEntityDefinition defines a Manage Entity
 type ManagedEntityDefinition struct {
 	Name         string
 	ClassID      ClassID
@@ -42,18 +43,28 @@ func (bme *ManagedEntityDefinition) String() string {
 		bme.Name, bme.ClassID, bme.AttributeDefinitions)
 }
 
+// GetName retrieves the name of a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetName() string {
 	return bme.Name
 }
+
+// GetClassID retrieves the 16-bit class ID of a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetClassID() ClassID {
 	return bme.ClassID
 }
+
+// GetMessageTypes retrieves the OMCI Message Types supporte3d by a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetMessageTypes() mapset.Set {
 	return bme.MessageTypes
 }
+
+// GetAllowedAttributeMask retrieves the allowed/valid 16-bit attribute mask of a managed entity
+// from a ME Definition
 func (bme ManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
 	return bme.AllowedAttributeMask
 }
+
+// GetAttributeDefinitions retrieves the attribute definitions of a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinitionMap {
 	return bme.AttributeDefinitions
 }

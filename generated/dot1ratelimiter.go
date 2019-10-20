@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1RateLimiterClassId is the 16-bit ID for the OMCI
+// Dot1RateLimiterClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1 rate limiter
-const Dot1RateLimiterClassId ClassID = ClassID(298)
+const Dot1RateLimiterClassID ClassID = ClassID(298)
 
 var dot1ratelimiterBME *ManagedEntityDefinition
 

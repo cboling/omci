@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// FastLineInventoryAndStatusDataPart2ClassId is the 16-bit ID for the OMCI
+// FastLineInventoryAndStatusDataPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity FAST line inventory and status data part 2
-const FastLineInventoryAndStatusDataPart2ClassId ClassID = ClassID(436)
+const FastLineInventoryAndStatusDataPart2ClassID ClassID = ClassID(436)
 
 var fastlineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MulticastGemInterworkingTerminationPointClassId is the 16-bit ID for the OMCI
+// MulticastGemInterworkingTerminationPointClassID is the 16-bit ID for the OMCI
 // Managed entity Multicast GEM interworking termination point
-const MulticastGemInterworkingTerminationPointClassId ClassID = ClassID(281)
+const MulticastGemInterworkingTerminationPointClassID ClassID = ClassID(281)
 
 var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 

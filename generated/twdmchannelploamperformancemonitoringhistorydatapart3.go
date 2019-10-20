@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassId is the 16-bit ID for the OMCI
+// TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassID is the 16-bit ID for the OMCI
 // Managed entity TWDM channel PLOAM performance monitoring history data part 3
-const TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassId ClassID = ClassID(448)
+const TwdmChannelPloamPerformanceMonitoringHistoryDataPart3ClassID ClassID = ClassID(448)
 
 var twdmchannelploamperformancemonitoringhistorydatapart3BME *ManagedEntityDefinition
 

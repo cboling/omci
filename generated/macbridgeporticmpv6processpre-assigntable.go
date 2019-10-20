@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MacBridgePortIcmpv6ProcessPreAssignTableClassId is the 16-bit ID for the OMCI
+// MacBridgePortIcmpv6ProcessPreAssignTableClassID is the 16-bit ID for the OMCI
 // Managed entity MAC bridge port ICMPv6 process pre-assign table
-const MacBridgePortIcmpv6ProcessPreAssignTableClassId ClassID = ClassID(348)
+const MacBridgePortIcmpv6ProcessPreAssignTableClassID ClassID = ClassID(348)
 
 var macbridgeporticmpv6processpreassigntableBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// SoftwareImageClassId is the 16-bit ID for the OMCI
+// SoftwareImageClassID is the 16-bit ID for the OMCI
 // Managed entity Software image
-const SoftwareImageClassId ClassID = ClassID(7)
+const SoftwareImageClassID ClassID = ClassID(7)
 
 var softwareimageBME *ManagedEntityDefinition
 

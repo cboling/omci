@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1AgDefaultMdLevelClassId is the 16-bit ID for the OMCI
+// Dot1AgDefaultMdLevelClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1ag default MD level
-const Dot1AgDefaultMdLevelClassId ClassID = ClassID(301)
+const Dot1AgDefaultMdLevelClassID ClassID = ClassID(301)
 
 var dot1agdefaultmdlevelBME *ManagedEntityDefinition
 

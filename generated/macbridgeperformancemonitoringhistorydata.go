@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MacBridgePerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// MacBridgePerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity MAC bridge performance monitoring history data
-const MacBridgePerformanceMonitoringHistoryDataClassId ClassID = ClassID(51)
+const MacBridgePerformanceMonitoringHistoryDataClassID ClassID = ClassID(51)
 
 var macbridgeperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

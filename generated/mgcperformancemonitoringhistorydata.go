@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MgcPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// MgcPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity MGC performance monitoring history data
-const MgcPerformanceMonitoringHistoryDataClassId ClassID = ClassID(156)
+const MgcPerformanceMonitoringHistoryDataClassID ClassID = ClassID(156)
 
 var mgcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

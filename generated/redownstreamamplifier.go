@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// ReDownstreamAmplifierClassId is the 16-bit ID for the OMCI
+// ReDownstreamAmplifierClassID is the 16-bit ID for the OMCI
 // Managed entity RE downstream amplifier
-const ReDownstreamAmplifierClassId ClassID = ClassID(316)
+const ReDownstreamAmplifierClassID ClassID = ClassID(316)
 
 var redownstreamamplifierBME *ManagedEntityDefinition
 

@@ -26,10 +26,13 @@ import (
 	"fmt"
 	"github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
+	"reflect"
 	"sort"
 	"strings"
 )
 
+// AttributeDefinitionMap is a map of attribute definitions with the attribute index (0..15)
+// as the key
 type AttributeDefinitionMap map[uint]AttributeDefinition
 
 // AttributeDefinition defines a single specific Managed Entity's attributes
@@ -150,6 +153,54 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 	}
 }
 
+// IOctetStream interface defines a way to convert a custom type to/from an octet
+// stream.
+type IOctetStream interface {
+	ToOctetString() ([]byte, error)
+	FromOctetString([]byte) (interface{}, error)
+}
+
+// InterfaceToOctets converts an attribute value to a string of octets
+func InterfaceToOctets(input interface{}) ([]byte, error) {
+	switch values := input.(type) {
+	case []byte:
+		return values, nil
+
+	case []uint16:
+		stream := make([]byte, 2*len(values))
+		for index, value := range values {
+			binary.BigEndian.PutUint16(stream[index*2:], value)
+		}
+		return stream, nil
+
+	case []uint32:
+		stream := make([]byte, 4*len(values))
+		for index, value := range values {
+			binary.BigEndian.PutUint32(stream[index*4:], value)
+		}
+		return stream, nil
+
+	case []uint64:
+		stream := make([]byte, 8*len(values))
+		for index, value := range values {
+			binary.BigEndian.PutUint64(stream[index*8:], value)
+		}
+		return stream, nil
+
+	case IOctetStream:
+		return values.ToOctetString()
+
+	default:
+		var typeName string
+		if t := reflect.TypeOf(input); t.Kind() == reflect.Ptr {
+			typeName = "*" + t.Elem().Name()
+		} else {
+			typeName = t.Name()
+		}
+		return nil, fmt.Errorf("unable to convert input to octet string: %v", typeName)
+	}
+}
+
 // SerializeTo takes an attribute value and converts it to a slice of bytes ready
 // for transmission
 func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.SerializeBuffer,
@@ -167,7 +218,11 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	}
 	switch size {
 	default:
-		copy(bytes, value.([]byte))
+		byteStream, err := InterfaceToOctets(value)
+		if err != nil {
+			return 0, err
+		}
+		copy(bytes, byteStream)
 	case 1:
 		switch value.(type) {
 		case int:

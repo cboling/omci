@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MgcConfigDataClassId is the 16-bit ID for the OMCI
+// MgcConfigDataClassID is the 16-bit ID for the OMCI
 // Managed entity MGC config data
-const MgcConfigDataClassId ClassID = ClassID(155)
+const MgcConfigDataClassID ClassID = ClassID(155)
 
 var mgcconfigdataBME *ManagedEntityDefinition
 

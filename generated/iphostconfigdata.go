@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// IpHostConfigDataClassId is the 16-bit ID for the OMCI
+// IpHostConfigDataClassID is the 16-bit ID for the OMCI
 // Managed entity IP host config data
-const IpHostConfigDataClassId ClassID = ClassID(134)
+const IpHostConfigDataClassID ClassID = ClassID(134)
 
 var iphostconfigdataBME *ManagedEntityDefinition
 

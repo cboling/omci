@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// CardholderClassId is the 16-bit ID for the OMCI
+// CardholderClassID is the 16-bit ID for the OMCI
 // Managed entity Cardholder
-const CardholderClassId ClassID = ClassID(5)
+const CardholderClassID ClassID = ClassID(5)
 
 var cardholderBME *ManagedEntityDefinition
 

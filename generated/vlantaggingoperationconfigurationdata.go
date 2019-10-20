@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VlanTaggingOperationConfigurationDataClassId is the 16-bit ID for the OMCI
+// VlanTaggingOperationConfigurationDataClassID is the 16-bit ID for the OMCI
 // Managed entity VLAN tagging operation configuration data
-const VlanTaggingOperationConfigurationDataClassId ClassID = ClassID(78)
+const VlanTaggingOperationConfigurationDataClassID ClassID = ClassID(78)
 
 var vlantaggingoperationconfigurationdataBME *ManagedEntityDefinition
 

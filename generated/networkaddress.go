@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// NetworkAddressClassId is the 16-bit ID for the OMCI
+// NetworkAddressClassID is the 16-bit ID for the OMCI
 // Managed entity Network address
-const NetworkAddressClassId ClassID = ClassID(137)
+const NetworkAddressClassID ClassID = ClassID(137)
 
 var networkaddressBME *ManagedEntityDefinition
 

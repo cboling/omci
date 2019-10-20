@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// UniGClassId is the 16-bit ID for the OMCI
+// UniGClassID is the 16-bit ID for the OMCI
 // Managed entity UNI-G
-const UniGClassId ClassID = ClassID(264)
+const UniGClassID ClassID = ClassID(264)
 
 var unigBME *ManagedEntityDefinition
 

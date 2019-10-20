@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// AuthenticationSecurityMethodClassId is the 16-bit ID for the OMCI
+// AuthenticationSecurityMethodClassID is the 16-bit ID for the OMCI
 // Managed entity Authentication security method
-const AuthenticationSecurityMethodClassId ClassID = ClassID(148)
+const AuthenticationSecurityMethodClassID ClassID = ClassID(148)
 
 var authenticationsecuritymethodBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// InterworkingVccTerminationPointClassId is the 16-bit ID for the OMCI
+// InterworkingVccTerminationPointClassID is the 16-bit ID for the OMCI
 // Managed entity Interworking VCC termination point
-const InterworkingVccTerminationPointClassId ClassID = ClassID(14)
+const InterworkingVccTerminationPointClassID ClassID = ClassID(14)
 
 var interworkingvccterminationpointBME *ManagedEntityDefinition
 

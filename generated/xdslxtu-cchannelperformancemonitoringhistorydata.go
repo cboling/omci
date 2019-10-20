@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XdslXtuCChannelPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// XdslXtuCChannelPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL xTU-C channel performance monitoring history data
-const XdslXtuCChannelPerformanceMonitoringHistoryDataClassId ClassID = ClassID(114)
+const XdslXtuCChannelPerformanceMonitoringHistoryDataClassID ClassID = ClassID(114)
 
 var xdslxtucchannelperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

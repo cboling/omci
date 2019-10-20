@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// ThresholdData2ClassId is the 16-bit ID for the OMCI
+// ThresholdData2ClassID is the 16-bit ID for the OMCI
 // Managed entity Threshold data 2
-const ThresholdData2ClassId ClassID = ClassID(274)
+const ThresholdData2ClassID ClassID = ClassID(274)
 
 var thresholddata2BME *ManagedEntityDefinition
 

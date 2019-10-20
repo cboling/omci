@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity XG-PON upstream management performance monitoring history data
-const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassId ClassID = ClassID(346)
+const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassID ClassID = ClassID(346)
 
 var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

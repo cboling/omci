@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EnhancedSecurityControlClassId is the 16-bit ID for the OMCI
+// EnhancedSecurityControlClassID is the 16-bit ID for the OMCI
 // Managed entity Enhanced security control
-const EnhancedSecurityControlClassId ClassID = ClassID(332)
+const EnhancedSecurityControlClassID ClassID = ClassID(332)
 
 var enhancedsecuritycontrolBME *ManagedEntityDefinition
 

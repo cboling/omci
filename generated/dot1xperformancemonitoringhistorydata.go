@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1XPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// Dot1XPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1X performance monitoring history data
-const Dot1XPerformanceMonitoringHistoryDataClassId ClassID = ClassID(292)
+const Dot1XPerformanceMonitoringHistoryDataClassID ClassID = ClassID(292)
 
 var dot1xperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

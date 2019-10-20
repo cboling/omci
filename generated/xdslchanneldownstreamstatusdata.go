@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XdslChannelDownstreamStatusDataClassId is the 16-bit ID for the OMCI
+// XdslChannelDownstreamStatusDataClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL channel downstream status data
-const XdslChannelDownstreamStatusDataClassId ClassID = ClassID(102)
+const XdslChannelDownstreamStatusDataClassID ClassID = ClassID(102)
 
 var xdslchanneldownstreamstatusdataBME *ManagedEntityDefinition
 

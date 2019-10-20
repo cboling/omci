@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EthernetPseudowireParametersClassId is the 16-bit ID for the OMCI
+// EthernetPseudowireParametersClassID is the 16-bit ID for the OMCI
 // Managed entity Ethernet pseudowire parameters
-const EthernetPseudowireParametersClassId ClassID = ClassID(400)
+const EthernetPseudowireParametersClassID ClassID = ClassID(400)
 
 var ethernetpseudowireparametersBME *ManagedEntityDefinition
 

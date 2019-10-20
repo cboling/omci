@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// RtpPseudowireParametersClassId is the 16-bit ID for the OMCI
+// RtpPseudowireParametersClassID is the 16-bit ID for the OMCI
 // Managed entity RTP pseudowire parameters
-const RtpPseudowireParametersClassId ClassID = ClassID(283)
+const RtpPseudowireParametersClassID ClassID = ClassID(283)
 
 var rtppseudowireparametersBME *ManagedEntityDefinition
 

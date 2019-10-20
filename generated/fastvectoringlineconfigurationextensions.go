@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// FastVectoringLineConfigurationExtensionsClassId is the 16-bit ID for the OMCI
+// FastVectoringLineConfigurationExtensionsClassID is the 16-bit ID for the OMCI
 // Managed entity FAST vectoring line configuration extensions
-const FastVectoringLineConfigurationExtensionsClassId ClassID = ClassID(434)
+const FastVectoringLineConfigurationExtensionsClassID ClassID = ClassID(434)
 
 var fastvectoringlineconfigurationextensionsBME *ManagedEntityDefinition
 

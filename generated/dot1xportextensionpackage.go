@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1XPortExtensionPackageClassId is the 16-bit ID for the OMCI
+// Dot1XPortExtensionPackageClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1X port extension package
-const Dot1XPortExtensionPackageClassId ClassID = ClassID(290)
+const Dot1XPortExtensionPackageClassID ClassID = ClassID(290)
 
 var dot1xportextensionpackageBME *ManagedEntityDefinition
 

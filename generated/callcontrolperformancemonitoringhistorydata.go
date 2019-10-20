@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// CallControlPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// CallControlPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Call control performance monitoring history data
-const CallControlPerformanceMonitoringHistoryDataClassId ClassID = ClassID(140)
+const CallControlPerformanceMonitoringHistoryDataClassID ClassID = ClassID(140)
 
 var callcontrolperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

@@ -23,6 +23,7 @@ package generated
 import (
 	"errors"
 	"fmt"
+	mapset "github.com/deckarep/golang-set"
 )
 
 // Custom Go Error messages for common OMCI errors
@@ -32,11 +33,15 @@ type OmciErrors interface {
 	Error() string
 	StatusCode() Results
 	GetError() error
+	GetAttributeExecutionErrors() mapset.Set   // Attribute Names
+	GetAttributeUnsupportedErrors() mapset.Set // Attribute Names
 }
 
 type OmciError struct {
-	err        string
-	statusCode Results
+	err               string
+	statusCode        Results
+	executionErrors   mapset.Set
+	unsupportedErrors mapset.Set
 }
 
 func (e *OmciError) GetError() error {
@@ -51,13 +56,23 @@ func (e *OmciError) StatusCode() Results {
 	return e.statusCode
 }
 
+func (e *OmciError) GetAttributeExecutionErrors() mapset.Set {
+	return e.executionErrors
+}
+
+func (e *OmciError) GetAttributeUnsupportedErrors() mapset.Set {
+	return e.unsupportedErrors
+}
+
 func NewOmciError(text string, status Results) OmciErrors {
 	if status == Success {
 		panic("Do not use OmciError to convey successful results")
 	}
 	return &OmciError{
-		err:        text,
-		statusCode: status,
+		err:               text,
+		statusCode:        status,
+		executionErrors:   mapset.NewSet(),
+		unsupportedErrors: mapset.NewSet(),
 	}
 }
 
@@ -105,6 +120,7 @@ func NewNotSupportedError(args ...interface{}) OmciErrors {
 			err:        genMessage(defaultValue, args...),
 			statusCode: NotSupported,
 		},
+		// TODO: Add attribute name (error) set
 	}
 }
 
@@ -127,6 +143,7 @@ func NewParameterError(mask uint16, args ...interface{}) OmciErrors {
 			statusCode: ParameterError,
 		},
 		FailureMask: mask,
+		// TODO: Add attribute name (error) set
 	}
 }
 
@@ -140,8 +157,10 @@ func NewUnknownEntityError(args ...interface{}) OmciErrors {
 	defaultValue := "unknown managed entity"
 	return &UnknownEntityError{
 		OmciError: OmciError{
-			err:        genMessage(defaultValue, args...),
-			statusCode: UnknownEntity,
+			err:               genMessage(defaultValue, args...),
+			statusCode:        UnknownEntity,
+			executionErrors:   mapset.NewSet(),
+			unsupportedErrors: mapset.NewSet(),
 		},
 	}
 }
@@ -200,8 +219,7 @@ type AttributeFailureError struct {
 	OmciError
 }
 
-// NewAttributeFailureError means that the ONU already has a managed entity
-// instance that corresponds to the one the OLT is attempting to create.
+// NewAttributeFailureError means that the requested attribute does not exist
 func NewAttributeFailureError(args ...interface{}) OmciErrors {
 	defaultValue := "attribute(s) failed or unknown"
 	return &AttributeFailureError{
@@ -216,8 +234,8 @@ type MessageTruncatedError struct {
 	OmciError
 }
 
-// NewAttributeFailureError means that the ONU already has a managed entity
-// instance that corresponds to the one the OLT is attempting to create.
+// NewMessageTruncatedError means that the requested attributes could not
+// be added to the frame due to size limitations
 func NewMessageTruncatedError(args ...interface{}) OmciErrors {
 	defaultValue := "out-of-space. Cannot fit attribute into message"
 	return &MessageTruncatedError{

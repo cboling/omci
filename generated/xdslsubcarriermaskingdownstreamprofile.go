@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XdslSubcarrierMaskingDownstreamProfileClassId is the 16-bit ID for the OMCI
+// XdslSubcarrierMaskingDownstreamProfileClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL subcarrier masking downstream profile
-const XdslSubcarrierMaskingDownstreamProfileClassId ClassID = ClassID(108)
+const XdslSubcarrierMaskingDownstreamProfileClassID ClassID = ClassID(108)
 
 var xdslsubcarriermaskingdownstreamprofileBME *ManagedEntityDefinition
 

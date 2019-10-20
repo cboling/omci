@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VoipLineStatusClassId is the 16-bit ID for the OMCI
+// VoipLineStatusClassID is the 16-bit ID for the OMCI
 // Managed entity VoIP line status
-const VoipLineStatusClassId ClassID = ClassID(141)
+const VoipLineStatusClassID ClassID = ClassID(141)
 
 var voiplinestatusBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// BbfTr069ManagementServerClassId is the 16-bit ID for the OMCI
+// BbfTr069ManagementServerClassID is the 16-bit ID for the OMCI
 // Managed entity BBF TR-069 management server
-const BbfTr069ManagementServerClassId ClassID = ClassID(340)
+const BbfTr069ManagementServerClassID ClassID = ClassID(340)
 
 var bbftr069managementserverBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// GalEthernetProfileClassId is the 16-bit ID for the OMCI
+// GalEthernetProfileClassID is the 16-bit ID for the OMCI
 // Managed entity GAL Ethernet profile
-const GalEthernetProfileClassId ClassID = ClassID(272)
+const GalEthernetProfileClassID ClassID = ClassID(272)
 
 var galethernetprofileBME *ManagedEntityDefinition
 

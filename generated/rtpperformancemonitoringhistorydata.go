@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// RtpPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// RtpPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity RTP performance monitoring history data
-const RtpPerformanceMonitoringHistoryDataClassId ClassID = ClassID(144)
+const RtpPerformanceMonitoringHistoryDataClassID ClassID = ClassID(144)
 
 var rtpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

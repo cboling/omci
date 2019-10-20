@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// ReAniGClassId is the 16-bit ID for the OMCI
+// ReAniGClassID is the 16-bit ID for the OMCI
 // Managed entity RE ANI-G
-const ReAniGClassId ClassID = ClassID(313)
+const ReAniGClassID ClassID = ClassID(313)
 
 var reanigBME *ManagedEntityDefinition
 

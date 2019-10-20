@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// ReCommonAmplifierParametersClassId is the 16-bit ID for the OMCI
+// ReCommonAmplifierParametersClassID is the 16-bit ID for the OMCI
 // Managed entity RE common amplifier parameters
-const ReCommonAmplifierParametersClassId ClassID = ClassID(328)
+const ReCommonAmplifierParametersClassID ClassID = ClassID(328)
 
 var recommonamplifierparametersBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Aal5PerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// Aal5PerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity AAL5 performance monitoring history data
-const Aal5PerformanceMonitoringHistoryDataClassId ClassID = ClassID(18)
+const Aal5PerformanceMonitoringHistoryDataClassID ClassID = ClassID(18)
 
 var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 

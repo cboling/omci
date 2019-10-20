@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Ieee8021PMapperServiceProfileClassId is the 16-bit ID for the OMCI
+// Ieee8021PMapperServiceProfileClassID is the 16-bit ID for the OMCI
 // Managed entity IEEE 802.1p mapper service profile
-const Ieee8021PMapperServiceProfileClassId ClassID = ClassID(130)
+const Ieee8021PMapperServiceProfileClassID ClassID = ClassID(130)
 
 var ieee8021pmapperserviceprofileBME *ManagedEntityDefinition
 

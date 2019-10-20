@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// OnuPowerSheddingClassId is the 16-bit ID for the OMCI
+// OnuPowerSheddingClassID is the 16-bit ID for the OMCI
 // Managed entity ONU power shedding
-const OnuPowerSheddingClassId ClassID = ClassID(133)
+const OnuPowerSheddingClassID ClassID = ClassID(133)
 
 var onupowersheddingBME *ManagedEntityDefinition
 

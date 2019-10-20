@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// OnuDynamicPowerManagementControlClassId is the 16-bit ID for the OMCI
+// OnuDynamicPowerManagementControlClassID is the 16-bit ID for the OMCI
 // Managed entity ONU dynamic power management control
-const OnuDynamicPowerManagementControlClassId ClassID = ClassID(336)
+const OnuDynamicPowerManagementControlClassID ClassID = ClassID(336)
 
 var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 

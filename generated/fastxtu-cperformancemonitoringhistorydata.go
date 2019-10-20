@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// FastXtuCPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// FastXtuCPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity FAST xTU-C performance monitoring history data
-const FastXtuCPerformanceMonitoringHistoryDataClassId ClassID = ClassID(437)
+const FastXtuCPerformanceMonitoringHistoryDataClassID ClassID = ClassID(437)
 
 var fastxtucperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// NetworkDialPlanTableClassId is the 16-bit ID for the OMCI
+// NetworkDialPlanTableClassID is the 16-bit ID for the OMCI
 // Managed entity Network dial plan table
-const NetworkDialPlanTableClassId ClassID = ClassID(145)
+const NetworkDialPlanTableClassID ClassID = ClassID(145)
 
 var networkdialplantableBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Aal5ProfileClassId is the 16-bit ID for the OMCI
+// Aal5ProfileClassID is the 16-bit ID for the OMCI
 // Managed entity AAL5 profile
-const Aal5ProfileClassId ClassID = ClassID(16)
+const Aal5ProfileClassID ClassID = ClassID(16)
 
 var aal5profileBME *ManagedEntityDefinition
 

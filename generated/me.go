@@ -28,6 +28,7 @@ import (
 	"github.com/google/gopacket"
 )
 
+// ManagedEntity provides a complete instance of a Managed Entity
 type ManagedEntity struct {
 	definition    ManagedEntityDefinition
 	attributeMask uint16
@@ -40,6 +41,7 @@ func (entity *ManagedEntity) String() string {
 		entity.GetClassID(), entity.GetEntityID(), entity.GetEntityID(), entity.attributes)
 }
 
+// NewManagedEntity creates a ManagedEntity given an ME Definition and parameter/attribute data
 func NewManagedEntity(definition ManagedEntityDefinition, params ...ParamData) (*ManagedEntity, OmciErrors) {
 	entity := &ManagedEntity{
 		definition: definition,
@@ -54,39 +56,48 @@ func NewManagedEntity(definition ManagedEntityDefinition, params ...ParamData) (
 	return entity, nil
 }
 
+// GetManagedEntityDefinition provides the ME definition of a Managed Entity
 func (entity *ManagedEntity) GetManagedEntityDefinition() ManagedEntityDefinition {
 	return entity.definition
 }
 
+// GetName provides the ME Name of a Managed Entity
 func (entity ManagedEntity) GetName() string {
 	return entity.definition.GetName()
 }
 
+// GetClassID returns the 16-bit class ID of a Managed Entity
 func (entity ManagedEntity) GetClassID() ClassID {
 	return entity.definition.GetClassID()
 }
 
+// GetMessageTypes returns the OMCI message types that a Managed Entity supports
 func (entity ManagedEntity) GetMessageTypes() mapset.Set {
 	return entity.definition.GetMessageTypes()
 }
 
+// GetAllowedAttributeMask returns the 16-bit bitmask of attributes a Managed Entity supports
 func (entity ManagedEntity) GetAllowedAttributeMask() uint16 {
 	return entity.definition.GetAllowedAttributeMask()
 }
 
+// GetAttributeDefinitions returns the attribute definition map for a Managed Entity
 func (entity ManagedEntity) GetAttributeDefinitions() AttributeDefinitionMap {
 	return entity.definition.GetAttributeDefinitions()
 }
 
+// DecodeAttributes will decode the attributes portion of a Managed Entity frame/packet
 func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
 	return entity.definition.DecodeAttributes(mask, data, p, msgType)
 }
 
+// SerializeAttributes will serialize the attributes of a Managed Entity type
 func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16,
 	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
 	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable)
 }
 
+// GetEntityID will return the Entity/Instance ID for a Managed Entity
 func (entity *ManagedEntity) GetEntityID() uint16 {
 	if eid, err := entity.GetAttributeByIndex(0); err == nil {
 		return eid.(uint16)
@@ -94,18 +105,22 @@ func (entity *ManagedEntity) GetEntityID() uint16 {
 	return 0
 }
 
+// SetEntityID will set the Entity/Instance ID for a Managed Entity
 func (entity *ManagedEntity) SetEntityID(eid uint16) error {
 	return entity.SetAttributeByIndex(0, eid)
 }
 
+// GetAttributeMask will return the 16-bit attribute mask of a Managed Entity
 func (entity *ManagedEntity) GetAttributeMask() uint16 {
 	return entity.attributeMask
 }
 
+// GetAttributeValueMap will return the map of attributes of a Managed Entity
 func (entity *ManagedEntity) GetAttributeValueMap() AttributeValueMap {
 	return entity.attributes
 }
 
+// GetAttribute will return the value of a specific attribute for the specified attribute by name
 func (entity *ManagedEntity) GetAttribute(name string) (interface{}, error) {
 	value, ok := entity.attributes[name]
 	if !ok {
@@ -114,6 +129,7 @@ func (entity *ManagedEntity) GetAttribute(name string) (interface{}, error) {
 	return value, nil
 }
 
+// GetAttributeByIndex will return the value of a specific attribute for the specified attribute by index
 func (entity *ManagedEntity) GetAttributeByIndex(index uint) (interface{}, error) {
 	if len(entity.attributes) == 0 {
 		return nil, errors.New("attributes have already been set")
@@ -149,6 +165,7 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 	return nil
 }
 
+// SetAttribute can be uses to set the value of a specific attribute by name
 func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciErrors {
 	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
@@ -169,6 +186,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	return nil
 }
 
+// SetAttributeByIndex can be uses to set the value of a specific attribute by attribute index (0..15)
 func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) error {
 	attrDef, ok := entity.definition.AttributeDefinitions[index]
 	if !ok {
@@ -190,6 +208,7 @@ func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) 
 	return nil
 }
 
+// DeleteAttribute is used to remove a specific attribute from a Managed Index by name
 func (entity *ManagedEntity) DeleteAttribute(name string) error {
 	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
@@ -202,6 +221,7 @@ func (entity *ManagedEntity) DeleteAttribute(name string) error {
 	return nil
 }
 
+// DeleteAttributeByIndex is used to remove a specific attribute from a Managed Index by attribute index (0..15)
 func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	attrDef, ok := entity.definition.AttributeDefinitions[index]
 	if !ok {
@@ -215,6 +235,7 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	return nil
 }
 
+// DecodeFromBytes decodes a Managed Entity give an octet stream pointing to the ME within a frame
 func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuilder, msgType byte) error {
 	if len(data) < 6 {
 		p.SetTruncated()
@@ -242,6 +263,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	return nil
 }
 
+// SerializeTo serializes a Managed Entity into an octet stream
 func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XdslLineInventoryAndStatusDataPart2ClassId is the 16-bit ID for the OMCI
+// XdslLineInventoryAndStatusDataPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL line inventory and status data part 2
-const XdslLineInventoryAndStatusDataPart2ClassId ClassID = ClassID(101)
+const XdslLineInventoryAndStatusDataPart2ClassID ClassID = ClassID(101)
 
 var xdsllineinventoryandstatusdatapart2BME *ManagedEntityDefinition
 

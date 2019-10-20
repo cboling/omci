@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EnergyConsumptionPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// EnergyConsumptionPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Energy consumption performance monitoring history data
-const EnergyConsumptionPerformanceMonitoringHistoryDataClassId ClassID = ClassID(343)
+const EnergyConsumptionPerformanceMonitoringHistoryDataClassID ClassID = ClassID(343)
 
 var energyconsumptionperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

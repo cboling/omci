@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PseudowireMaintenanceProfileClassId is the 16-bit ID for the OMCI
+// PseudowireMaintenanceProfileClassID is the 16-bit ID for the OMCI
 // Managed entity Pseudowire maintenance profile
-const PseudowireMaintenanceProfileClassId ClassID = ClassID(284)
+const PseudowireMaintenanceProfileClassID ClassID = ClassID(284)
 
 var pseudowiremaintenanceprofileBME *ManagedEntityDefinition
 

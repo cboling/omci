@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VpNetworkCtpClassId is the 16-bit ID for the OMCI
+// VpNetworkCtpClassID is the 16-bit ID for the OMCI
 // Managed entity VP network CTP
-const VpNetworkCtpClassId ClassID = ClassID(269)
+const VpNetworkCtpClassID ClassID = ClassID(269)
 
 var vpnetworkctpBME *ManagedEntityDefinition
 

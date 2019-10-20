@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1AgMaintenanceDomainClassId is the 16-bit ID for the OMCI
+// Dot1AgMaintenanceDomainClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1ag maintenance domain
-const Dot1AgMaintenanceDomainClassId ClassID = ClassID(299)
+const Dot1AgMaintenanceDomainClassID ClassID = ClassID(299)
 
 var dot1agmaintenancedomainBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1AgCfmStackClassId is the 16-bit ID for the OMCI
+// Dot1AgCfmStackClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1ag CFM stack
-const Dot1AgCfmStackClassId ClassID = ClassID(305)
+const Dot1AgCfmStackClassID ClassID = ClassID(305)
 
 var dot1agcfmstackBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// OltGClassId is the 16-bit ID for the OMCI
+// OltGClassID is the 16-bit ID for the OMCI
 // Managed entity OLT-G
-const OltGClassId ClassID = ClassID(131)
+const OltGClassID ClassID = ClassID(131)
 
 var oltgBME *ManagedEntityDefinition
 

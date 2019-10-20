@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1AgMepClassId is the 16-bit ID for the OMCI
+// Dot1AgMepClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1ag MEP
-const Dot1AgMepClassId ClassID = ClassID(302)
+const Dot1AgMepClassID ClassID = ClassID(302)
 
 var dot1agmepBME *ManagedEntityDefinition
 

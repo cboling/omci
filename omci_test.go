@@ -98,7 +98,7 @@ func TestMibResetRequestMessage(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*MibResetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, OnuDataClassId)
+	assert.Equal(t, omciMsg2.EntityClass, OnuDataClassID)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0))
 
 	// Test serialization back to former string
@@ -139,7 +139,7 @@ func TestCreateGalEthernetProfile(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, GalEthernetProfileClassId)
+	assert.Equal(t, omciMsg2.EntityClass, GalEthernetProfileClassID)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(1))
 
 	// Test serialization back to former string
@@ -180,7 +180,7 @@ func TestSetTCont(t *testing.T) {
 
 	omciMsg2, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, omciMsg2.EntityClass, TContClassId)
+	assert.Equal(t, omciMsg2.EntityClass, TContClassID)
 	assert.Equal(t, omciMsg2.EntityInstance, uint16(0x8000))
 
 	attributes := omciMsg2.Attributes
@@ -231,7 +231,7 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, createRequest.EntityClass, Ieee8021PMapperServiceProfileClassID)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x8000))
 
 	attributes := createRequest.Attributes
@@ -306,7 +306,7 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, MacBridgeServiceProfileClassId)
+	assert.Equal(t, createRequest.EntityClass, MacBridgeServiceProfileClassID)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x201))
 
 	attributes := createRequest.Attributes
@@ -369,7 +369,7 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	createRequest, ok2 := msgLayer.(*CreateRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, createRequest.EntityClass, GemPortNetworkCtpClassId)
+	assert.Equal(t, createRequest.EntityClass, GemPortNetworkCtpClassID)
 	assert.Equal(t, createRequest.EntityInstance, uint16(0x100))
 
 	attributes := createRequest.Attributes
@@ -465,7 +465,7 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 
 	setRequest, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, setRequest.EntityClass, Ieee8021PMapperServiceProfileClassId)
+	assert.Equal(t, setRequest.EntityClass, Ieee8021PMapperServiceProfileClassID)
 	assert.Equal(t, setRequest.EntityInstance, uint16(0x8000))
 
 	attributes := setRequest.Attributes
@@ -620,7 +620,7 @@ func TestMibUpload(t *testing.T) {
 
 	uploadRequest, ok2 := msgLayer.(*MibUploadRequest)
 	assert.True(t, ok2)
-	assert.Equal(t, uploadRequest.EntityClass, OnuDataClassId)
+	assert.Equal(t, uploadRequest.EntityClass, OnuDataClassID)
 	assert.Equal(t, uploadRequest.EntityInstance, uint16(0))
 
 	// Test serialization back to former string
@@ -713,7 +713,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	//
 	//rebootRequest, ok2 := msgLayer.(*RebootRequest)
 	//assert.True(t, ok2)
-	//assert.Equal(t, rebootRequest.EntityClass, OnuDataClassId)
+	//assert.Equal(t, rebootRequest.EntityClass, OnuDataClassID)
 	//assert.Equal(t, rebootRequest.EntityInstance, uint16(0x8000))
 
 	// TODO: Test Decoded flags
@@ -1005,7 +1005,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 
 		uploadResponse, ok2 := msgLayer.(*MibUploadNextResponse)
 		assert.True(t, ok2)
-		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassId)
+		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassID)
 		assert.Equal(t, uploadResponse.EntityInstance, uint16(0))
 
 		// Test serialization back to former string
@@ -1057,7 +1057,7 @@ func TestMibUploadNextSequence(t *testing.T) {
 //
 //		uploadResponse, ok2 := msgLayer.(*MibUploadNextResponse)
 //		assert.True(t, ok2)
-//		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassId)
+//		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassID)
 //		assert.Equal(t, uploadResponse.EntityInstance, uint16(0))
 //
 //		// Test serialization back to former string

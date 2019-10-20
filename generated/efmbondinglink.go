@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EfmBondingLinkClassId is the 16-bit ID for the OMCI
+// EfmBondingLinkClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding link
-const EfmBondingLinkClassId ClassID = ClassID(420)
+const EfmBondingLinkClassID ClassID = ClassID(420)
 
 var efmbondinglinkBME *ManagedEntityDefinition
 

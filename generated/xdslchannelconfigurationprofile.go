@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// XdslChannelConfigurationProfileClassId is the 16-bit ID for the OMCI
+// XdslChannelConfigurationProfileClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL channel configuration profile
-const XdslChannelConfigurationProfileClassId ClassID = ClassID(107)
+const XdslChannelConfigurationProfileClassID ClassID = ClassID(107)
 
 var xdslchannelconfigurationprofileBME *ManagedEntityDefinition
 

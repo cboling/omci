@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TrafficSchedulerClassId is the 16-bit ID for the OMCI
+// TrafficSchedulerClassID is the 16-bit ID for the OMCI
 // Managed entity Traffic scheduler
-const TrafficSchedulerClassId ClassID = ClassID(278)
+const TrafficSchedulerClassID ClassID = ClassID(278)
 
 var trafficschedulerBME *ManagedEntityDefinition
 

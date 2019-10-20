@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EquipmentExtensionPackageClassId is the 16-bit ID for the OMCI
+// EquipmentExtensionPackageClassID is the 16-bit ID for the OMCI
 // Managed entity Equipment extension package
-const EquipmentExtensionPackageClassId ClassID = ClassID(160)
+const EquipmentExtensionPackageClassID ClassID = ClassID(160)
 
 var equipmentextensionpackageBME *ManagedEntityDefinition
 

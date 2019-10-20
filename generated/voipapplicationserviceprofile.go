@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VoipApplicationServiceProfileClassId is the 16-bit ID for the OMCI
+// VoipApplicationServiceProfileClassID is the 16-bit ID for the OMCI
 // Managed entity VoIP application service profile
-const VoipApplicationServiceProfileClassId ClassID = ClassID(146)
+const VoipApplicationServiceProfileClassID ClassID = ClassID(146)
 
 var voipapplicationserviceprofileBME *ManagedEntityDefinition
 

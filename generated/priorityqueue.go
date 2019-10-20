@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PriorityQueueClassId is the 16-bit ID for the OMCI
+// PriorityQueueClassID is the 16-bit ID for the OMCI
 // Managed entity Priority queue
-const PriorityQueueClassId ClassID = ClassID(277)
+const PriorityQueueClassID ClassID = ClassID(277)
 
 var priorityqueueBME *ManagedEntityDefinition
 

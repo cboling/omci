@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VoipVoiceCtpClassId is the 16-bit ID for the OMCI
+// VoipVoiceCtpClassID is the 16-bit ID for the OMCI
 // Managed entity VoIP voice CTP
-const VoipVoiceCtpClassId ClassID = ClassID(139)
+const VoipVoiceCtpClassID ClassID = ClassID(139)
 
 var voipvoicectpBME *ManagedEntityDefinition
 

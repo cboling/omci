@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MacBridgePortDesignationDataClassId is the 16-bit ID for the OMCI
+// MacBridgePortDesignationDataClassID is the 16-bit ID for the OMCI
 // Managed entity MAC bridge port designation data
-const MacBridgePortDesignationDataClassId ClassID = ClassID(48)
+const MacBridgePortDesignationDataClassID ClassID = ClassID(48)
 
 var macbridgeportdesignationdataBME *ManagedEntityDefinition
 

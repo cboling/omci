@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// FastDataPathConfigurationProfileClassId is the 16-bit ID for the OMCI
+// FastDataPathConfigurationProfileClassID is the 16-bit ID for the OMCI
 // Managed entity FAST data path configuration profile
-const FastDataPathConfigurationProfileClassId ClassID = ClassID(433)
+const FastDataPathConfigurationProfileClassID ClassID = ClassID(433)
 
 var fastdatapathconfigurationprofileBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EthernetFlowTerminationPointClassId is the 16-bit ID for the OMCI
+// EthernetFlowTerminationPointClassID is the 16-bit ID for the OMCI
 // Managed entity Ethernet flow termination point
-const EthernetFlowTerminationPointClassId ClassID = ClassID(286)
+const EthernetFlowTerminationPointClassID ClassID = ClassID(286)
 
 var ethernetflowterminationpointBME *ManagedEntityDefinition
 

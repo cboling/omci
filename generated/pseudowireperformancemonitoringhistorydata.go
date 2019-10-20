@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// PseudowirePerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// PseudowirePerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Pseudowire performance monitoring history data
-const PseudowirePerformanceMonitoringHistoryDataClassId ClassID = ClassID(285)
+const PseudowirePerformanceMonitoringHistoryDataClassID ClassID = ClassID(285)
 
 var pseudowireperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

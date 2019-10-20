@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EthernetFrameExtendedPmClassId is the 16-bit ID for the OMCI
+// EthernetFrameExtendedPmClassID is the 16-bit ID for the OMCI
 // Managed entity Ethernet frame extended PM
-const EthernetFrameExtendedPmClassId ClassID = ClassID(334)
+const EthernetFrameExtendedPmClassID ClassID = ClassID(334)
 
 var ethernetframeextendedpmBME *ManagedEntityDefinition
 

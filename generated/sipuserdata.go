@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// SipUserDataClassId is the 16-bit ID for the OMCI
+// SipUserDataClassID is the 16-bit ID for the OMCI
 // Managed entity SIP user data
-const SipUserDataClassId ClassID = ClassID(153)
+const SipUserDataClassID ClassID = ClassID(153)
 
 var sipuserdataBME *ManagedEntityDefinition
 

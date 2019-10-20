@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// IpHostPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// IpHostPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity IP host performance monitoring history data
-const IpHostPerformanceMonitoringHistoryDataClassId ClassID = ClassID(135)
+const IpHostPerformanceMonitoringHistoryDataClassID ClassID = ClassID(135)
 
 var iphostperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

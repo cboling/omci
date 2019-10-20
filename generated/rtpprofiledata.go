@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// RtpProfileDataClassId is the 16-bit ID for the OMCI
+// RtpProfileDataClassID is the 16-bit ID for the OMCI
 // Managed entity RTP profile data
-const RtpProfileDataClassId ClassID = ClassID(143)
+const RtpProfileDataClassID ClassID = ClassID(143)
 
 var rtpprofiledataBME *ManagedEntityDefinition
 

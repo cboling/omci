@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// TwdmChannelManagedEntityClassId is the 16-bit ID for the OMCI
+// TwdmChannelManagedEntityClassID is the 16-bit ID for the OMCI
 // Managed entity TWDM channel managed entity
-const TwdmChannelManagedEntityClassId ClassID = ClassID(443)
+const TwdmChannelManagedEntityClassID ClassID = ClassID(443)
 
 var twdmchannelmanagedentityBME *ManagedEntityDefinition
 

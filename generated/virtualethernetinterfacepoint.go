@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// VirtualEthernetInterfacePointClassId is the 16-bit ID for the OMCI
+// VirtualEthernetInterfacePointClassID is the 16-bit ID for the OMCI
 // Managed entity Virtual Ethernet interface point
-const VirtualEthernetInterfacePointClassId ClassID = ClassID(329)
+const VirtualEthernetInterfacePointClassID ClassID = ClassID(329)
 
 var virtualethernetinterfacepointBME *ManagedEntityDefinition
 

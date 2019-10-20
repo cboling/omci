@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// Dot1XConfigurationProfileClassId is the 16-bit ID for the OMCI
+// Dot1XConfigurationProfileClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1X configuration profile
-const Dot1XConfigurationProfileClassId ClassID = ClassID(291)
+const Dot1XConfigurationProfileClassID ClassID = ClassID(291)
 
 var dot1xconfigurationprofileBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// GalEthernetPerformanceMonitoringHistoryDataClassId is the 16-bit ID for the OMCI
+// GalEthernetPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity GAL Ethernet performance monitoring history data
-const GalEthernetPerformanceMonitoringHistoryDataClassId ClassID = ClassID(276)
+const GalEthernetPerformanceMonitoringHistoryDataClassID ClassID = ClassID(276)
 
 var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 

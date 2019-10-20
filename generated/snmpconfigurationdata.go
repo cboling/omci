@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// SnmpConfigurationDataClassId is the 16-bit ID for the OMCI
+// SnmpConfigurationDataClassID is the 16-bit ID for the OMCI
 // Managed entity SNMP configuration data
-const SnmpConfigurationDataClassId ClassID = ClassID(335)
+const SnmpConfigurationDataClassID ClassID = ClassID(335)
 
 var snmpconfigurationdataBME *ManagedEntityDefinition
 

@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// MacBridgePortFilterPreAssignTableClassId is the 16-bit ID for the OMCI
+// MacBridgePortFilterPreAssignTableClassID is the 16-bit ID for the OMCI
 // Managed entity MAC bridge port filter pre-assign table
-const MacBridgePortFilterPreAssignTableClassId ClassID = ClassID(79)
+const MacBridgePortFilterPreAssignTableClassID ClassID = ClassID(79)
 
 var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 

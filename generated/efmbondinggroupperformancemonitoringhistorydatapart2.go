@@ -22,9 +22,9 @@ package generated
 
 import "github.com/deckarep/golang-set"
 
-// EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId is the 16-bit ID for the OMCI
+// EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding group performance monitoring history data part 2
-const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassId ClassID = ClassID(422)
+const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassID ClassID = ClassID(422)
 
 var efmbondinggroupperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
