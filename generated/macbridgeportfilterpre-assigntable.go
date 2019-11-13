@@ -74,7 +74,7 @@ var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 //		Arp Filtering
 //			ARP filtering:	(R,-W) (mandatory) (1-byte)
 //
-//		Point_To_Point Protocol Over Ethernet Pppoe Broadcast Filtering
+//		Point_To_Point Protocol Over Ethernet Pppoe  Broadcast Filtering
 //			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R,-W) (mandatory) (1-byte)
 //
 type MacBridgePortFilterPreAssignTable struct {

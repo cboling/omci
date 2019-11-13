@@ -35,6 +35,7 @@ type OmciErrors interface {
 	GetError() error
 	GetAttributeExecutionErrors() mapset.Set   // Attribute Names
 	GetAttributeUnsupportedErrors() mapset.Set // Attribute Names
+	GetValidAttributes() mapset.Set            // Attribute Names
 }
 
 type OmciError struct {
@@ -42,6 +43,7 @@ type OmciError struct {
 	statusCode        Results
 	executionErrors   mapset.Set
 	unsupportedErrors mapset.Set
+	validAttributes   mapset.Set
 }
 
 func (e *OmciError) GetError() error {
@@ -57,27 +59,38 @@ func (e *OmciError) StatusCode() Results {
 }
 
 func (e *OmciError) GetAttributeExecutionErrors() mapset.Set {
+	if e.executionErrors == nil {
+		return mapset.NewSet()
+	}
 	return e.executionErrors
 }
 
 func (e *OmciError) GetAttributeUnsupportedErrors() mapset.Set {
+	if e.unsupportedErrors == nil {
+		return mapset.NewSet()
+	}
 	return e.unsupportedErrors
 }
 
-func NewOmciError(text string, status Results) OmciErrors {
-	if status == Success {
-		panic("Do not use OmciError to convey successful results")
+func (e *OmciError) GetValidAttributes() mapset.Set {
+	if e.validAttributes == nil {
+		return mapset.NewSet()
 	}
-	return &OmciError{
-		err:               text,
-		statusCode:        status,
-		executionErrors:   mapset.NewSet(),
-		unsupportedErrors: mapset.NewSet(),
-	}
+	return e.validAttributes
 }
 
-type OmciNonStatusError struct {
-	OmciError
+// NewOmciSuccess is used to convey a successful request. For Set/Get responses,
+// this indicates that all attributes were successfully set/retrieved.
+//
+// For Set/Get requests that have unsupported/failed attributes (code 1001), use the
+// NewAttributeFailureError() function to convey the proper status (AttributeFailure).
+//
+// For Create requests that have parameter errors (code 0011), use the NewParameterError()
+// function to signal which attributes were in error
+func NewOmciSuccess() OmciErrors {
+	return &OmciError{
+		statusCode: Success,
+	}
 }
 
 // NewNonStatusError is for processing errors that do not involve
@@ -107,12 +120,13 @@ func NewProcessingError(args ...interface{}) OmciErrors {
 	}
 }
 
+// NotSupportedError means that the message type indicated in byte 3 is
+// not supported by the ONU.
 type NotSupportedError struct {
 	OmciError
 }
 
-// NewNotSupportedError means that the message type indicated in byte 3 is
-// not supported by the ONU.
+// NewNotSupportedError creates a NotSupportedError
 func NewNotSupportedError(args ...interface{}) OmciErrors {
 	defaultValue := "command not supported"
 	return &NotSupportedError{
@@ -120,57 +134,71 @@ func NewNotSupportedError(args ...interface{}) OmciErrors {
 			err:        genMessage(defaultValue, args...),
 			statusCode: NotSupported,
 		},
-		// TODO: Add attribute name (error) set
 	}
 }
 
-type ParamError struct {
-	OmciError
-	FailureMask uint16
-}
-
-// NewParameterError means that the command message received by the
+// ParamError means that the command message received by the
 // ONU was errored. It would be appropriate if an attribute mask
 // were out of range, for example. In practice, this result code is
 // frequently used interchangeably with code 1001. However, the
 // optional attribute and attribute execution masks in the reply
 // messages are only defined for code 1001.
-func NewParameterError(mask uint16, args ...interface{}) OmciErrors {
-	defaultValue := "parameter error"
-	return &ParamError{
-		OmciError: OmciError{
-			err:        genMessage(defaultValue, args...),
-			statusCode: ParameterError,
-		},
-		FailureMask: mask,
-		// TODO: Add attribute name (error) set
-	}
+type ParamError struct {
+	OmciError
+	FailureMask uint16
 }
 
+// NewParameterError creates a ParamError
+//
+// For Set/Get requests that have unsupported/failed attributes (code 1001), use the
+// NewAttributeFailureError() function to convey the proper status (AttributeFailure).
+func NewParameterError(mask uint16, attrDefs AttributeDefinitionMap, args ...interface{}) OmciErrors {
+	if mask == 0 {
+		panic("invalid attribute mask specified")
+	}
+	defaultValue := "parameter error"
+	err := &ParamError{
+		OmciError: OmciError{
+			err:             genMessage(defaultValue, args...),
+			statusCode:      ParameterError,
+			executionErrors: mapset.NewSet(),
+		},
+		FailureMask: mask,
+	}
+	for bitIndex := uint(1); bitIndex <= 16; bitIndex++ {
+		if mask&(1<<uint16(16-bitIndex)) != 0 {
+			if name, ok := attrDefs[bitIndex]; ok {
+				err.executionErrors.Add(name)
+			}
+		}
+	}
+	return err
+}
+
+// UnknownEntityError means that the managed entity class
+// (bytes 5..6) is not supported by the ONU.
 type UnknownEntityError struct {
 	OmciError
 }
 
-// NewUnknownEntityError This result means that the managed entity class
-// (bytes 5..6) is not supported by the ONU.
+// NewUnknownEntityError creates an UnknownEntityError
 func NewUnknownEntityError(args ...interface{}) OmciErrors {
 	defaultValue := "unknown managed entity"
 	return &UnknownEntityError{
 		OmciError: OmciError{
-			err:               genMessage(defaultValue, args...),
-			statusCode:        UnknownEntity,
-			executionErrors:   mapset.NewSet(),
-			unsupportedErrors: mapset.NewSet(),
+			err:        genMessage(defaultValue, args...),
+			statusCode: UnknownEntity,
 		},
 	}
 }
 
+// UnknownInstanceError means that the managed entity instance (bytes 7..8)
+// does not exist in the ONU.
 type UnknownInstanceError struct {
 	OmciError
 }
 
-// NewUnknownInstanceError means that the managed entity instance (bytes 7..8)
-// does not exist in the ONU.
+// NewUnknownInstanceError creates an UnknownInstanceError
 func NewUnknownInstanceError(args ...interface{}) OmciErrors {
 	defaultValue := "unknown managed entity instance"
 	return &UnknownInstanceError{
@@ -181,15 +209,16 @@ func NewUnknownInstanceError(args ...interface{}) OmciErrors {
 	}
 }
 
-type DeviceBusyError struct {
-	OmciError
-}
-
-// NewDeviceBusyError means that the command could not be processed due
+// DeviceBusyError means that the command could not be processed due
 // to process-related congestion at the ONU. This result code may
 // also be used as a pause indication to the OLT while the ONU
 // conducts a time-consuming operation such as storage of a
 // software image into non-volatile memory.
+type DeviceBusyError struct {
+	OmciError
+}
+
+// NewDeviceBusyError creates a DeviceBusyError
 func NewDeviceBusyError(args ...interface{}) OmciErrors {
 	defaultValue := "device busy"
 	return &DeviceBusyError{
@@ -200,6 +229,8 @@ func NewDeviceBusyError(args ...interface{}) OmciErrors {
 	}
 }
 
+// InstanceExistsError means that the ONU already has a managed entity instance
+// that corresponds to the one the OLT is attempting to create.
 type InstanceExistsError struct {
 	OmciError
 }
@@ -215,27 +246,64 @@ func NewInstanceExistsError(args ...interface{}) OmciErrors {
 	}
 }
 
+// AttributeFailureError is used to encode failed attributes for Get/Set Requests
+//
+// For Get requests, the failed mask is used to report attributes that could not be
+// retrieved (most likely no space available to serialize) and could not be returned
+// to the caller. The unsupported mask reports attributes the ONU does not support.
+//
+// For Set requests, the failed mask is used to report attributes that have errors
+// (possibly constraints) and could not be set/saved. The unsupported mask reports
+// attributes the ONU does not support.
+//
+// For Create requests that have parameter errors (code 0011), use the NewParameterError()
+// function to signal which attributes were in error
 type AttributeFailureError struct {
 	OmciError
+	UnsupportedMask uint16
+	FailureMask     uint16
 }
 
-// NewAttributeFailureError means that the requested attribute does not exist
-func NewAttributeFailureError(args ...interface{}) OmciErrors {
+// NewAttributeFailureError is used to ceeate an AttributeFailure error status for
+// Get/Set requests
+func NewAttributeFailureError(failedMask uint16, unsupportedMask uint16, attrDefs AttributeDefinitionMap,
+	args ...interface{}) OmciErrors {
 	defaultValue := "attribute(s) failed or unknown"
-	return &AttributeFailureError{
+
+	err := &AttributeFailureError{
 		OmciError: OmciError{
-			err:        genMessage(defaultValue, args...),
-			statusCode: AttributeFailure,
+			err:               genMessage(defaultValue, args...),
+			statusCode:        AttributeFailure,
+			executionErrors:   mapset.NewSet(),
+			unsupportedErrors: mapset.NewSet(),
 		},
+		UnsupportedMask: unsupportedMask,
+		FailureMask:     failedMask,
 	}
+	for bitIndex := uint(1); bitIndex <= 16; bitIndex++ {
+		if failedMask&(1<<uint16(16-bitIndex)) != 0 {
+			if name, ok := attrDefs[bitIndex]; ok {
+				err.executionErrors.Add(name)
+			}
+		} else if unsupportedMask&(1<<uint16(16-bitIndex)) != 0 {
+			if name, ok := attrDefs[bitIndex]; ok {
+				err.unsupportedErrors.Add(name)
+			}
+		}
+	}
+	return err
 }
 
+// MessageTruncatedError means that the requested attributes could not
+// be added to the frame due to size limitations. This is typically an OMCI Error
+// returned internally by support functions in the OMCI library and used by the
+// frame encoding routines to eventually return an AttributeFailureError
+// result (code 1001)
 type MessageTruncatedError struct {
 	OmciError
 }
 
-// NewMessageTruncatedError means that the requested attributes could not
-// be added to the frame due to size limitations
+// NewMessageTruncatedError creates a MessageTruncatedError message
 func NewMessageTruncatedError(args ...interface{}) OmciErrors {
 	defaultValue := "out-of-space. Cannot fit attribute into message"
 	return &MessageTruncatedError{

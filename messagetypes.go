@@ -1895,9 +1895,8 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	omci.ImageSize = binary.BigEndian.Uint32(data[5:9])
 	omci.NumberOfCircuitPacks = data[9]
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
-		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
-			omci.NumberOfCircuitPacks)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
+			omci.NumberOfCircuitPacks))
 	}
 	omci.CircuitPacks = make([]uint16, omci.NumberOfCircuitPacks)
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
@@ -1934,9 +1933,8 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 		return me.NewProcessingError("invalid Entity Class for Start Software Download request")
 	}
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
-		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
-			omci.NumberOfCircuitPacks)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
+			omci.NumberOfCircuitPacks))
 	}
 	bytes, err := b.AppendBytes(6 + (2 * int(omci.NumberOfCircuitPacks)))
 	if err != nil {
@@ -2288,9 +2286,8 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	omci.NumberOfInstances = data[13]
 
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
-		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
-			omci.NumberOfInstances)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
+			omci.NumberOfInstances))
 	}
 	omci.ImageInstances = make([]uint16, omci.NumberOfInstances)
 
@@ -2328,9 +2325,8 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 		return me.NewProcessingError("invalid Entity Class for End Software Download response")
 	}
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
-		msg := fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
-			omci.NumberOfInstances)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
+			omci.NumberOfInstances))
 	}
 	bytes, err := b.AppendBytes(9 + (2 * int(omci.NumberOfInstances)))
 	if err != nil {
@@ -2503,9 +2499,8 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	}
 	omci.ActivateFlags = data[4]
 	if omci.ActivateFlags > 2 {
-		msg := fmt.Sprintf("invalid number of Activation flangs: %v, must be 0..2",
-			omci.ActivateFlags)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid number of Activation flangs: %v, must be 0..2",
+			omci.ActivateFlags))
 	}
 	return nil
 }
@@ -3002,8 +2997,8 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		return err
 	}
 	if omci.RebootCondition > 3 {
-		msg := fmt.Sprintf("invalid reboot condition code: %v, must be 0..3", omci.RebootCondition)
-		return me.NewAttributeFailureError(msg)
+		return me.NewProcessingError(fmt.Sprintf("invalid reboot condition code: %v, must be 0..3",
+			omci.RebootCondition))
 	}
 	bytes[0] = omci.RebootCondition
 	return nil

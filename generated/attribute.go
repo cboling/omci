@@ -432,14 +432,14 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 
 // GetAttributeDefinitionByName searches the attribute definition map for the
 // attribute with the specified name (case insensitive)
-func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (*AttributeDefinition, OmciErrors) {
+func GetAttributeDefinitionByName(attrMap AttributeDefinitionMap, name string) (*AttributeDefinition, error) {
 	nameLower := strings.ToLower(name)
 	for _, attrVal := range attrMap {
 		if nameLower == strings.ToLower(attrVal.GetName()) {
 			return &attrVal, nil
 		}
 	}
-	return nil, NewAttributeFailureError(fmt.Sprintf("attribute '%s' not found", name))
+	return nil, errors.New(fmt.Sprintf("attribute '%s' not found", name))
 }
 
 // GetAttributeDefinitionMapKeys is a convenience functions since we may need to

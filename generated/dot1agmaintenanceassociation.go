@@ -66,7 +66,7 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //			and the MA short name must be packed (with additional bytes) into 48-byte CFM message headers.
 //			(R,-W) (mandatory) (25-bytes * 2 attributes)
 //
-//		Continuity Check Message Ccm Interval
+//		Continuity Check Message Ccm  Interval
 //			Short intervals should be used judiciously, as they can interfere with the network's ability to
 //			handle subscriber traffic. The recommended value is 1-s. (R,-W, setbycreate) (mandatory)
 //			(1-byte)

@@ -94,7 +94,7 @@ var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 //		Maximum Sleep Interval Extension
 //			(R,-W) (optional) (8-bytes)
 //
-//		Ethernet Passive Optical Network Epon Capability Extension
+//		Ethernet Passive Optical Network Epon  Capability Extension
 //			-	Configurations: ackEnable configuration = enable, Sleep indication configuration = disable,
 //			Early wake-up configuration = enable
 //

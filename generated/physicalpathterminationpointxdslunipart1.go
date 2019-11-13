@@ -85,7 +85,7 @@ var physicalpathterminationpointxdslunipart1BME *ManagedEntityDefinition
 //			subcarrier masking upstream profile ME. Upon ME instantiation, the ONU sets this attribute to 0,
 //			a null pointer. (R,-W) (mandatory) (2-bytes)
 //
-//		Xdsl Downstream Power Spectral Density Psd Mask Profile
+//		Xdsl Downstream Power Spectral Density Psd  Mask Profile
 //			xDSL downstream power spectral density (PSD) mask profile: This attribute points to an instance
 //			of the xDSL PSD mask profile ME that defines downstream parameters. Upon ME instantiation, the
 //			ONU sets this attribute to 0, a null pointer. (R,-W) (mandatory) (2-bytes)

@@ -77,7 +77,7 @@ var xdslchannelconfigurationprofilepart2BME *ManagedEntityDefinition
 //			1 ms. The valid delay values are given in clause 7.3.2.12 of [ITU-T G.997.1]. (R,-W) (mandatory)
 //			(1-bytes)
 //
-//		Minimum Impulse Noise Protection Against Single High Impulse Noise Event Shine For Retransmission Inpmin_Shine_Rtx
+//		Minimum Impulse Noise Protection Against Single High Impulse Noise Event Shine  For Retransmission Inpmin_Shine_Rtx
 //			Minimum impulse noise protection against single high impulse noise event (SHINE) for
 //			retransmission (INPMIN_SHINE_RTX): If retransmission is used in a given transmit direction, this
 //			parameter specifies the minimum INP against a SHINE for the bearer channel if it is transported

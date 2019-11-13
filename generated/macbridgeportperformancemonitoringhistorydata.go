@@ -61,7 +61,7 @@ var macbridgeportperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Delay exceeded discard counter: This attribute counts frames discarded on this port because
 //			transmission was delayed. (R) (mandatory) (4-bytes)
 //
-//		Maximum Transmission U Nit Mtu Exceeded Discard Counter
+//		Maximum Transmission U Nit Mtu  Exceeded Discard Counter
 //			Maximum transmission unit (MTU) exceeded discard counter: This attribute counts frames discarded
 //			on this port because the MTU was exceeded. (R) (mandatory) (4-bytes)
 //

@@ -24,6 +24,8 @@ package generated
 // This file is used to track the version(s) of code used to parse the ITU
 // document and create the generated code.
 
+// VersionInfo provides information on the parser/generator version used to create
+// the generated data as well as the time of code generation
 type VersionInfo struct {
 	Name       string  // Type (pre-parser, parser, code-generator)
 	Version    string  // Version of parser project
@@ -32,6 +34,7 @@ type VersionInfo struct {
 	SHA256     string  // ITU G.988 document SHA-256 hash
 }
 
+// Version provides version information of this generated cooe
 var Versions []VersionInfo
 
 func init() {
@@ -58,8 +61,8 @@ func init() {
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "code-generator",
-			Version:    "0.10.2",
-			CreateTime: 1571601493.0650082,
+			Version:    "0.11.0",
+			CreateTime: 1573432992.835076,
 			ItuDocName: "T-REC-G.988-2017-11.docx",
 			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
 		})

@@ -64,7 +64,7 @@ var dot1agmaintenancedomainBME *ManagedEntityDefinition
 //			MA name must be packed (with additional bytes) into 48-byte CFM message headers. (R,-W)
 //			(mandatory if MD name format is not 1) (25-bytes * 2 attributes)
 //
-//		Maintenance Domain Intermediate Point Half Function Mhf Creation
+//		Maintenance Domain Intermediate Point Half Function Mhf  Creation
 //			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Sender Id Permission

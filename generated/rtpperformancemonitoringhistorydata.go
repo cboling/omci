@@ -66,7 +66,7 @@ var rtpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			identified during the measured interval, expressed in RTP timestamp units. (R) (mandatory)
 //			(4-bytes)
 //
-//		Maximum Time Between Real_Time Transport Control Protocol Rtcp Packets
+//		Maximum Time Between Real_Time Transport Control Protocol Rtcp  Packets
 //			Maximum time between real-time transport control protocol (RTCP) packets: This attribute is a
 //			high water-mark that represents the maximum time between RTCP packets during the measured
 //			interval, in milliseconds. (R) (mandatory) (4-bytes)

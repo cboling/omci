@@ -169,7 +169,8 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciErrors {
 	attrDef, err := GetAttributeDefinitionByName(entity.definition.GetAttributeDefinitions(), name)
 	if err != nil {
-		return err
+		// Not found, which means not in the attribute definition map
+		return NewProcessingError(err.Error())
 	} else if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	}
@@ -178,7 +179,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err = constraintCheck(value)
 		if err != nil {
-			return NewParameterError(mask, err)
+			return NewParameterError(mask, entity.GetAttributeDefinitions(), err)
 		}
 	}
 	entity.attributes[name] = value
@@ -200,7 +201,7 @@ func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) 
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err := constraintCheck(value)
 		if err != nil {
-			return NewParameterError(mask, err)
+			return NewParameterError(mask, entity.GetAttributeDefinitions(), err)
 		}
 	}
 	entity.attributes[attrDef.Name] = value

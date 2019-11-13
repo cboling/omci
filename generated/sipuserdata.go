@@ -98,7 +98,7 @@ var sipuserdataBME *ManagedEntityDefinition
 //			that the ONU is to use its internal default. The default value of this attribute is 10-s. (R,-W)
 //			(optional) (1-byte)
 //
-//		Receiver Off Hook Roh Timer
+//		Receiver Off Hook Roh  Timer
 //			Receiver off hook (ROH) timer:	This attribute defines the time in seconds for the ROH condition
 //			before ROH tone is applied. The value 0 disables ROH timing. The value 0xFF specifies that the
 //			ONU is to use its internal default, which may or may not be the same as the 15-s OMCI default
