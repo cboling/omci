@@ -454,9 +454,18 @@ func GetAttributeDefinitionMapKeys(attrMap AttributeDefinitionMap) []uint {
 	return keys
 }
 
-// GetAttributeBitmap is a convenience functions to scan a list of attributes
+// GetAttributeBitmap returns the attribute bitmask for a single attribute
+func GetAttributeBitmap(attrMap AttributeDefinitionMap, name string) (uint16, error) {
+	attrDef, err := GetAttributeDefinitionByName(attrMap, name)
+	if err != nil {
+		return 0, err
+	}
+	return uint16(1<<16 - attrDef.GetIndex()), nil
+}
+
+// GetAttributesBitmap is a convenience functions to scan a list of attributes
 // and return the bitmask that represents them
-func GetAttributeBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (uint16, error) {
+func GetAttributesBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (uint16, error) {
 	var mask uint16
 	for k, def := range attrMap {
 		if attributes.Contains(def.Name) {

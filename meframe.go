@@ -372,7 +372,7 @@ func calculateAttributeMask(m *me.ManagedEntity, requestedMask uint16) (uint16, 
 		}
 		attributeNames = append(attributeNames, attrName)
 	}
-	calculatedMask, err := me.GetAttributeBitmap(attrDefs, mapset.NewSetWith(attributeNames...))
+	calculatedMask, err := me.GetAttributesBitmap(attrDefs, mapset.NewSetWith(attributeNames...))
 
 	if err != nil {
 		return 0, err

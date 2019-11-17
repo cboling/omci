@@ -577,7 +577,7 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		return
 	}
 	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
-	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	bitmask, attrErr := me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 	assert.Nil(t, attrErr)
 
 	// Create the managed instance
@@ -653,7 +653,7 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			}
 		}
 	}
-	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	bitmask, attrErr := me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 	assert.Nil(t, attrErr)
 
 	frame, omciErr := GenFrame(meInstance, SetResponseType,
@@ -715,7 +715,7 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 		}
 	}
 	assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
-	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	bitmask, attrErr := me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 	assert.Nil(t, attrErr)
 
 	// Create the managed instance
@@ -797,7 +797,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			}
 		}
 	}
-	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	bitmask, attrErr := me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 	assert.Nil(t, attrErr)
 
 	// Create the managed instance
@@ -1647,7 +1647,7 @@ func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	if len(params.Attributes) == 0 {
 		return
 	}
-	bitmask, attrErr := me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+	bitmask, attrErr := me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 	assert.Nil(t, attrErr)
 
 	// Create the managed instance
@@ -1724,7 +1724,7 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 		}
 		assert.NotEmpty(t, params.Attributes) // Need a parameter that is a table attribute
 		var attrErr error
-		bitmask, attrErr = me.GetAttributeBitmap(attrDefs, getAttributeNameSet(params.Attributes))
+		bitmask, attrErr = me.GetAttributesBitmap(attrDefs, getAttributeNameSet(params.Attributes))
 		assert.Nil(t, attrErr)
 	}
 	// Create the managed instance

@@ -23,7 +23,6 @@ package generated
 import (
 	"errors"
 	"fmt"
-	mapset "github.com/deckarep/golang-set"
 )
 
 // Custom Go Error messages for common OMCI errors
@@ -33,17 +32,15 @@ type OmciErrors interface {
 	Error() string
 	StatusCode() Results
 	GetError() error
-	GetAttributeExecutionErrors() mapset.Set   // Attribute Names
-	GetAttributeUnsupportedErrors() mapset.Set // Attribute Names
-	GetValidAttributes() mapset.Set            // Attribute Names
+	GetFailureMask() uint16
+	GetUnsupporteMask() uint16
 }
 
 type OmciError struct {
-	err               string
-	statusCode        Results
-	executionErrors   mapset.Set
-	unsupportedErrors mapset.Set
-	validAttributes   mapset.Set
+	err             string
+	statusCode      Results
+	failureMask     uint16
+	unsupportedMask uint16
 }
 
 func (e *OmciError) GetError() error {
@@ -58,25 +55,12 @@ func (e *OmciError) StatusCode() Results {
 	return e.statusCode
 }
 
-func (e *OmciError) GetAttributeExecutionErrors() mapset.Set {
-	if e.executionErrors == nil {
-		return mapset.NewSet()
-	}
-	return e.executionErrors
+func (e *OmciError) GetFailureMask() uint16 {
+	return e.failureMask
 }
 
-func (e *OmciError) GetAttributeUnsupportedErrors() mapset.Set {
-	if e.unsupportedErrors == nil {
-		return mapset.NewSet()
-	}
-	return e.unsupportedErrors
-}
-
-func (e *OmciError) GetValidAttributes() mapset.Set {
-	if e.validAttributes == nil {
-		return mapset.NewSet()
-	}
-	return e.validAttributes
+func (e *OmciError) GetUnsupporteMask() uint16 {
+	return e.unsupportedMask
 }
 
 // NewOmciSuccess is used to convey a successful request. For Set/Get responses,
@@ -145,32 +129,23 @@ func NewNotSupportedError(args ...interface{}) OmciErrors {
 // messages are only defined for code 1001.
 type ParamError struct {
 	OmciError
-	FailureMask uint16
 }
 
 // NewParameterError creates a ParamError
 //
 // For Set/Get requests that have unsupported/failed attributes (code 1001), use the
 // NewAttributeFailureError() function to convey the proper status (AttributeFailure).
-func NewParameterError(mask uint16, attrDefs AttributeDefinitionMap, args ...interface{}) OmciErrors {
+func NewParameterError(mask uint16, args ...interface{}) OmciErrors {
 	if mask == 0 {
 		panic("invalid attribute mask specified")
 	}
 	defaultValue := "parameter error"
 	err := &ParamError{
 		OmciError: OmciError{
-			err:             genMessage(defaultValue, args...),
-			statusCode:      ParameterError,
-			executionErrors: mapset.NewSet(),
+			err:         genMessage(defaultValue, args...),
+			statusCode:  ParameterError,
+			failureMask: mask,
 		},
-		FailureMask: mask,
-	}
-	for bitIndex := uint(1); bitIndex <= 16; bitIndex++ {
-		if mask&(1<<uint16(16-bitIndex)) != 0 {
-			if name, ok := attrDefs[bitIndex]; ok {
-				err.executionErrors.Add(name)
-			}
-		}
 	}
 	return err
 }
@@ -260,36 +235,20 @@ func NewInstanceExistsError(args ...interface{}) OmciErrors {
 // function to signal which attributes were in error
 type AttributeFailureError struct {
 	OmciError
-	UnsupportedMask uint16
-	FailureMask     uint16
 }
 
 // NewAttributeFailureError is used to ceeate an AttributeFailure error status for
 // Get/Set requests
-func NewAttributeFailureError(failedMask uint16, unsupportedMask uint16, attrDefs AttributeDefinitionMap,
-	args ...interface{}) OmciErrors {
+func NewAttributeFailureError(failedMask uint16, unsupportedMask uint16, args ...interface{}) OmciErrors {
 	defaultValue := "attribute(s) failed or unknown"
 
 	err := &AttributeFailureError{
 		OmciError: OmciError{
-			err:               genMessage(defaultValue, args...),
-			statusCode:        AttributeFailure,
-			executionErrors:   mapset.NewSet(),
-			unsupportedErrors: mapset.NewSet(),
+			err:             genMessage(defaultValue, args...),
+			statusCode:      AttributeFailure,
+			failureMask:     failedMask,
+			unsupportedMask: unsupportedMask,
 		},
-		UnsupportedMask: unsupportedMask,
-		FailureMask:     failedMask,
-	}
-	for bitIndex := uint(1); bitIndex <= 16; bitIndex++ {
-		if failedMask&(1<<uint16(16-bitIndex)) != 0 {
-			if name, ok := attrDefs[bitIndex]; ok {
-				err.executionErrors.Add(name)
-			}
-		} else if unsupportedMask&(1<<uint16(16-bitIndex)) != 0 {
-			if name, ok := attrDefs[bitIndex]; ok {
-				err.unsupportedErrors.Add(name)
-			}
-		}
 	}
 	return err
 }
