@@ -62,11 +62,13 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0X8000,
+		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("MaximumGemPayloadSize", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

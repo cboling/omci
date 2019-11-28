@@ -72,13 +72,15 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XE000,
+		AllowedAttributeMask: 0xE000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: MultiByteField("VlanFilterList", 24, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 			2: ByteField("ForwardOperation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3: ByteField("NumberOfEntries", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

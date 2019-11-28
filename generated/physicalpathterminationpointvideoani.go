@@ -129,7 +129,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -149,6 +149,8 @@ func init() {
 			15: ByteField("VideoLowerOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 			16: ByteField("VideoUpperOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

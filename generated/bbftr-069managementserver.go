@@ -77,13 +77,15 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XE000,
+		AllowedAttributeMask: 0xE000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
 			2: Uint16Field("AcsNetworkAddress", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 			3: Uint16Field("AssociatedTag", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

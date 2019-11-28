@@ -89,7 +89,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xF800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("UpstreamVlanTaggingOperationMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -98,6 +98,8 @@ func init() {
 			4: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
 			5: Uint16Field("AssociatedMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

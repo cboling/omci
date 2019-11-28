@@ -158,7 +158,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("Type", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 1),
@@ -176,6 +176,8 @@ func init() {
 			13: ByteField("TotalTrafficSchedulerNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
 			14: Uint32Field("PowerShedOverride", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

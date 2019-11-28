@@ -66,7 +66,7 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //			and the MA short name must be packed (with additional bytes) into 48-byte CFM message headers.
 //			(R,-W) (mandatory) (25-bytes * 2 attributes)
 //
-//		Continuity Check Message Ccm  Interval
+//		Continuity Check Message Ccm Interval
 //			Short intervals should be used judiciously, as they can interfere with the network's ability to
 //			handle subscriber traffic. The recommended value is 1-s. (R,-W, setbycreate) (mandatory)
 //			(1-byte)
@@ -101,7 +101,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFE00,
+		AllowedAttributeMask: 0xFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("MdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -112,6 +112,8 @@ func init() {
 			6: ByteField("MhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
 			7: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

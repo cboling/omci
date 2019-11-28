@@ -104,7 +104,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint32Field("Cir", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
@@ -116,6 +116,8 @@ func init() {
 			7: ByteField("EgressColourMarking", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
 			8: ByteField("MeterType", 0, mapset.NewSetWith(Read, SetByCreate), false, false, true, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -109,7 +109,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("TpPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -126,6 +126,8 @@ func init() {
 			12: ByteField("DefaultPBitAssumption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 12),
 			13: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 13),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -479,6 +479,29 @@ func GetAttributesBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) 
 	return mask, nil
 }
 
+// GetAttributesValueMap returns the attribute value map with uninitialized values based
+// on the attribute bitmask
+func GetAttributesValueMap(attrDefs AttributeDefinitionMap, mask uint16, access mapset.Set) (AttributeValueMap, OmciErrors) {
+	attrMap := make(AttributeValueMap, 0)
+	for index, def := range attrDefs {
+		if index == 0 {
+			continue
+		}
+		checkMask := uint16(1<<16 - def.GetIndex())
+		accessOk := access == nil || def.GetAccess().Intersect(access).Cardinality() > 0
+
+		if (mask&checkMask) != 0 && accessOk {
+			attrMap[def.GetName()] = nil
+			mask &= ^checkMask
+		}
+	}
+	if mask != 0 {
+		// Return map, but signaled failed attributes
+		return attrMap, NewParameterError(mask)
+	}
+	return attrMap, nil
+}
+
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 

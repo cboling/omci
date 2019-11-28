@@ -95,7 +95,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -107,6 +107,8 @@ func init() {
 			7: MultiByteField("TransmittedC=0Cells", 5, nil, mapset.NewSetWith(Read), false, false, false, false, 7),
 			8: Uint16Field("ImpairedBlock", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

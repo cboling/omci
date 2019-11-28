@@ -164,7 +164,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("LoopDiagnosticsModeForcedLdsf", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -184,6 +184,8 @@ func init() {
 			15: ByteField("InmClusterContinuationValueDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 			16: ByteField("InmEquivalentInpModeDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

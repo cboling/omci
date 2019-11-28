@@ -74,13 +74,15 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XE000,
+		AllowedAttributeMask: 0xE000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: TableField("MpStatusTable", TableInfo{nil, 18}, mapset.NewSetWith(Read), false, false, false, 2),
 			3: TableField("ConfigurationErrorListTable", TableInfo{nil, 5}, mapset.NewSetWith(Read), true, false, false, 3),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

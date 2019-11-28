@@ -98,7 +98,7 @@ var sipuserdataBME *ManagedEntityDefinition
 //			that the ONU is to use its internal default. The default value of this attribute is 10-s. (R,-W)
 //			(optional) (1-byte)
 //
-//		Receiver Off Hook Roh  Timer
+//		Receiver Off Hook Roh Timer
 //			Receiver off hook (ROH) timer:	This attribute defines the time in seconds for the ROH condition
 //			before ROH tone is applied. The value 0 disables ROH timing. The value 0xFF specifies that the
 //			ONU is to use its internal default, which may or may not be the same as the 15-s OMCI default
@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("SipAgentPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -135,6 +135,8 @@ func init() {
 			11: ByteField("ReleaseTimer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: ByteField("ReceiverOffHookRohTimer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

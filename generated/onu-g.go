@@ -122,7 +122,7 @@ func init() {
 			SynchronizeTime,
 			Test,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint32Field("VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -139,6 +139,8 @@ func init() {
 			12: ByteField("CredentialsStatus", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 			13: Uint16Field("ExtendedTcLayerOptions", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

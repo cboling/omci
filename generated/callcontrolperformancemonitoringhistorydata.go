@@ -90,7 +90,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFE00,
+		AllowedAttributeMask: 0xFE00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -101,6 +101,8 @@ func init() {
 			6: Uint32Field("AnalogPortReleases", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
 			7: Uint32Field("AnalogPortOffHookTimer", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

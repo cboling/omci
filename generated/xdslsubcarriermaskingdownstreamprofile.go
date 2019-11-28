@@ -74,7 +74,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xF800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -83,6 +83,8 @@ func init() {
 			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
 			5: ByteField("MaskValid", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

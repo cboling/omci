@@ -114,7 +114,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("FaxMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -134,6 +134,8 @@ func init() {
 			15: ByteField("OobDtmf", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 15),
 			16: Uint16Field("RtpProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -137,7 +137,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint64Field("XtuCG9941VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -156,6 +156,8 @@ func init() {
 			14: MultiByteField("XtuRTransmissionSystemCapability", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 14),
 			15: ByteField("InitializationSuccessFailureCause", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -83,7 +83,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -93,6 +93,8 @@ func init() {
 			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, mapset.NewSetWith(Read), false, false, false, 5),
 			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, mapset.NewSetWith(Read), false, true, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -85,7 +85,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -95,6 +95,8 @@ func init() {
 			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 5),
 			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

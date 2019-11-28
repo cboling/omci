@@ -85,7 +85,7 @@ var physicalpathterminationpointxdslunipart1BME *ManagedEntityDefinition
 //			subcarrier masking upstream profile ME. Upon ME instantiation, the ONU sets this attribute to 0,
 //			a null pointer. (R,-W) (mandatory) (2-bytes)
 //
-//		Xdsl Downstream Power Spectral Density Psd  Mask Profile
+//		Xdsl Downstream Power Spectral Density Psd Mask Profile
 //			xDSL downstream power spectral density (PSD) mask profile: This attribute points to an instance
 //			of the xDSL PSD mask profile ME that defines downstream parameters. Upon ME instantiation, the
 //			ONU sets this attribute to 0, a null pointer. (R,-W) (mandatory) (2-bytes)
@@ -130,7 +130,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("LoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -147,6 +147,8 @@ func init() {
 			12: Uint16Field("UpstreamPsdMaskProfile", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

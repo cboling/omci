@@ -82,7 +82,7 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xF800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -91,6 +91,8 @@ func init() {
 			4: Uint32Field("OmciExtendedMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
 			5: Uint32Field("OmciMicErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

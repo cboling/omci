@@ -128,7 +128,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("ExpectedType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -147,6 +147,8 @@ func init() {
 			14: ByteField("PppoeFilter", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 			15: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

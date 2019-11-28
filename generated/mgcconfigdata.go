@@ -113,7 +113,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFE0,
+		AllowedAttributeMask: 0xFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("PrimaryMgc", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -128,6 +128,8 @@ func init() {
 			10: Uint32Field("Softswitch", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
 			11: Uint16Field("MessageIdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 11),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

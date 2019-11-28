@@ -47,7 +47,7 @@ var onu2gBME *ManagedEntityDefinition
 //			environments, this attribute may include the common language equipment identification (CLEI)
 //			code. (R) (optional) (20-bytes)
 //
-//		Optical Network Unit Management And Control Channel Omcc  Version
+//		Optical Network Unit Management And Control Channel Omcc Version
 //			(R) (mandatory) (1-byte)
 //
 //		Vendor Product Code
@@ -96,7 +96,7 @@ var onu2gBME *ManagedEntityDefinition
 //		Current Connectivity Mode
 //			(R, W) (optional) (1 byte)
 //
-//		Quality Of Service Qos  Configuration Flexibility
+//		Quality Of Service Qos Configuration Flexibility
 //			The ME ID of both the T-CONT and traffic scheduler contains a slot number. Even when attributes
 //			in the above list are RW, it is never permitted to change the slot number in a reference. That
 //			is, configuration flexibility never extends across slots. It is also not permitted to change the
@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  MultiByteField("EquipmentId", 20, nil, mapset.NewSetWith(Read), false, false, true, false, 1),
@@ -137,6 +137,8 @@ func init() {
 			13: Uint16Field("QualityOfServiceQosConfigurationFlexibility", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
 			14: Uint16Field("PriorityQueueScaleFactor", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

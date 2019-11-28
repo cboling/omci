@@ -103,7 +103,7 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -117,6 +117,8 @@ func init() {
 			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
 			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

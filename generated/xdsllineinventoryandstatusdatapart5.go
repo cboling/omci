@@ -154,7 +154,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint16Field("FextDownstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -174,6 +174,8 @@ func init() {
 			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

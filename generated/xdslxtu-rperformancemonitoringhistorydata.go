@@ -106,7 +106,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -122,6 +122,8 @@ func init() {
 			11: Uint32Field("ErrorFreeBitsCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
 			12: Uint32Field("MinimumErrorFreeThroughputMineftr", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

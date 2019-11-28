@@ -126,7 +126,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("Ripolicyds", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
@@ -142,6 +142,8 @@ func init() {
 			11: ByteField("AttndrMethodAttndrMethod", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

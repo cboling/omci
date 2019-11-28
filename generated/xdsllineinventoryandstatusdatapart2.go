@@ -137,7 +137,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  MultiByteField("XdslTransmissionSystem", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -157,6 +157,8 @@ func init() {
 			15: ByteField("InitializationLastStateTransmittedDownstream", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 			16: ByteField("InitializationLastStateTransmittedUpstream", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

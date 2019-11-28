@@ -148,7 +148,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
@@ -167,6 +167,8 @@ func init() {
 			14: Uint16Field("UpstreamMaximumAggregateReceivePower", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
 			15: ByteField("Vdsl2TransmissionSystemEnabling", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

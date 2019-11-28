@@ -98,7 +98,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -108,6 +108,8 @@ func init() {
 			5: ByteField("BandwidthEnforcement", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 			6: TableField("MulticastServicePackageTable", TableInfo{nil, 22}, mapset.NewSetWith(Read, Write), false, true, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

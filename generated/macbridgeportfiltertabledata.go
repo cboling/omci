@@ -62,11 +62,13 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0X8000,
+		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: TableField("MacFilterTable", TableInfo{0, 8}, mapset.NewSetWith(Read, Write), false, false, false, 1),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

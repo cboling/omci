@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 0),
 			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -133,6 +133,8 @@ func init() {
 			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 			10: ByteField("RtxTcTestmodeRtxTestmode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

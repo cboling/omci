@@ -63,12 +63,14 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xC000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: TableField("MeTypeTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 1),
 			2: TableField("MessageTypeTable", TableInfo{0, 1}, mapset.NewSetWith(Read), false, false, false, 2),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

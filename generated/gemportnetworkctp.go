@@ -116,7 +116,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("PortId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -130,6 +130,8 @@ func init() {
 			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
 			10: ByteField("EncryptionKeyRing", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -66,7 +66,7 @@ var anigBME *ManagedEntityDefinition
 //			threshold to detect the SF alarm. When this value is y, the BER threshold is 10-y. Valid values
 //			are 3..8. Upon ME instantiation, the ONU sets this attribute to 5. (R,-W) (mandatory) (1-byte)
 //
-//		Signal Degrade Sd  Threshold
+//		Signal Degrade Sd Threshold
 //			Signal degrade (SD) threshold: This attribute specifies the downstream BER threshold to detect
 //			the SD alarm. When this value is x, the BER threshold for SD is 10-x. Valid values are 4..10.
 //			The SD threshold must be lower than the SF threshold; i.e., x-> y. Upon ME instantiation, the
@@ -129,7 +129,7 @@ func init() {
 			Set,
 			Test,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("SrIndication", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -149,6 +149,8 @@ func init() {
 			15: ByteField("LowerTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 			16: ByteField("UpperTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

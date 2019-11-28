@@ -69,12 +69,14 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xC000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
 			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

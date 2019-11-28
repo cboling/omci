@@ -114,7 +114,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  MultiByteField("OltCryptoCapabilities", 16, nil, mapset.NewSetWith(Write), false, false, false, false, 1),
@@ -130,6 +130,8 @@ func init() {
 			11: TableField("BroadcastKeyTable", TableInfo{nil, 18}, mapset.NewSetWith(Read, Write), false, true, false, 11),
 			12: Uint16Field("EffectiveKeyLength", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -81,7 +81,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("DialPlanNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -91,6 +91,8 @@ func init() {
 			5: ByteField("DialPlanFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
 			6: TableField("DialPlanTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

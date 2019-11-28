@@ -103,7 +103,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFE0,
+		AllowedAttributeMask: 0xFFE0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint16Field("RestorePowerTimerResetInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -118,6 +118,8 @@ func init() {
 			10: Uint16Field("SdhSonetClassSheddingInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
 			11: Uint16Field("SheddingStatus", 0, mapset.NewSetWith(Read), true, false, true, false, 11),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

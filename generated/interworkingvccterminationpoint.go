@@ -91,7 +91,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("VciValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -104,6 +104,8 @@ func init() {
 			8: ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
 			9: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 9),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

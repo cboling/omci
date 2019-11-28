@@ -94,7 +94,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -107,6 +107,8 @@ func init() {
 			8: Uint32Field("UpstreamDroppedCellsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
 			9: Uint32Field("UpstreamReceivedCellsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

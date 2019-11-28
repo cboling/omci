@@ -63,12 +63,14 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xC000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: ByteField("PortState", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

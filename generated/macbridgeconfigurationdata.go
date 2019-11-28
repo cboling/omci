@@ -89,7 +89,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("BridgeMacAddress", 6, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -101,6 +101,8 @@ func init() {
 			7: Uint16Field("HelloTime", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
 			8: Uint16Field("ForwardDelay", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

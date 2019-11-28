@@ -90,7 +90,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -103,6 +103,8 @@ func init() {
 			8: ByteField("MulticastListenerQueryProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
 			9: ByteField("UnknownIcmpv6Processing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

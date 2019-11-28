@@ -86,11 +86,13 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0X8000,
+		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

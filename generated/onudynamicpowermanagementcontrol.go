@@ -94,7 +94,7 @@ var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 //		Maximum Sleep Interval Extension
 //			(R,-W) (optional) (8-bytes)
 //
-//		Ethernet Passive Optical Network Epon  Capability Extension
+//		Ethernet Passive Optical Network Epon Capability Extension
 //			-	Configurations: ackEnable configuration = enable, Sleep indication configuration = disable,
 //			Early wake-up configuration = enable
 //
@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("PowerReductionManagementCapability", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -135,6 +135,8 @@ func init() {
 			11: ByteField("EponSetupExtension", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

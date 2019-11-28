@@ -85,7 +85,7 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("Name", 25, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -97,6 +97,8 @@ func init() {
 			7: TableField("InstancesTable", TableInfo{0, 1}, mapset.NewSetWith(Read), false, false, false, 7),
 			8: ByteField("Support", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

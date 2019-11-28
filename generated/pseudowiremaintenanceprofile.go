@@ -126,7 +126,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("JitterBufferMaximumDepth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
@@ -146,6 +146,8 @@ func init() {
 			15: ByteField("LBitReceivePolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
 			16: Uint16Field("SesThreshold", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

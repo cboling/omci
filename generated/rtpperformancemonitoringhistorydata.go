@@ -66,7 +66,7 @@ var rtpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			identified during the measured interval, expressed in RTP timestamp units. (R) (mandatory)
 //			(4-bytes)
 //
-//		Maximum Time Between Real_Time Transport Control Protocol Rtcp  Packets
+//		Maximum Time Between Real_Time Transport Control Protocol Rtcp Packets
 //			Maximum time between real-time transport control protocol (RTCP) packets: This attribute is a
 //			high water-mark that represents the maximum time between RTCP packets during the measured
 //			interval, in milliseconds. (R) (mandatory) (4-bytes)
@@ -99,7 +99,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -111,6 +111,8 @@ func init() {
 			7: Uint32Field("BufferUnderflows", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
 			8: Uint32Field("BufferOverflows", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

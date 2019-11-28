@@ -52,7 +52,7 @@ var xgpondownstreammanagementperformancemonitoringhistorydataBME *ManagedEntityD
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
 //			data 2 ME is optional. (R,-W, set-by-create) (mandatory) (2-bytes)
 //
-//		Ploam Message Integrity Check Mic  Error Count
+//		Ploam Message Integrity Check Mic Error Count
 //			PLOAM message integrity check (MIC) error count: This attribute counts MIC errors detected in
 //			downstream PLOAM messages, either directed to this ONU or broadcast to all ONUs. (R) (optional)
 //			(4-bytes)
@@ -127,7 +127,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -147,6 +147,8 @@ func init() {
 			15: Uint32Field("AssignOnuIdMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
 			16: Uint32Field("OmciMicErrorCount", 0, mapset.NewSetWith(Read), false, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

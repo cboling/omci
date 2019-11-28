@@ -63,7 +63,7 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Unknown profile count: This attribute counts the number of grants received whose specified
 //			profile was not known to the ONU. (R) (optional) (4-bytes)
 //
-//		Transmitted Xg_Pon Encapsulation Method Xgem  Frames
+//		Transmitted Xg_Pon Encapsulation Method Xgem Frames
 //			Transmitted XG-PON encapsulation method (XGEM) frames: This attribute counts the number of non-
 //			idle XGEM frames transmitted. If a service data unit (SDU) is fragmented, each fragment is an
 //			XGEM frame and is counted as such. (R) (mandatory) (4 bytes)
@@ -92,7 +92,7 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Received bytes in non-idle XGEM frames: This attribute counts the number of received bytes in
 //			non-idle XGEM frames. (R) (optional) (8 bytes)
 //
-//		Loss Of Downstream Synchronization Lods  Event Count
+//		Loss Of Downstream Synchronization Lods Event Count
 //			Loss of downstream synchronization (LODS) event count: This attribute counts the number of state
 //			transitions from O5.1 to O6. (R) (optional) (4-bytes)
 //
@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -138,6 +138,8 @@ func init() {
 			14: Uint32Field("LodsEventRestoredCount", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
 			15: Uint32Field("OnuReactivationByLodsEvents", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

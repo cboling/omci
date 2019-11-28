@@ -116,7 +116,7 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xFFF8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -133,6 +133,8 @@ func init() {
 			12: Uint32Field("PowerConsumptionReportMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
 			13: Uint32Field("ChangePowerLevelParameterErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -93,7 +93,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("ClockReference", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -103,6 +103,8 @@ func init() {
 			5: Uint16Field("ExpectedPtype", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 			6: Uint64Field("ExpectedSsrc", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

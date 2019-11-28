@@ -90,7 +90,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -102,6 +102,8 @@ func init() {
 			7: Uint16Field("OutOfMemory", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
 			8: Uint16Field("InternalError", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

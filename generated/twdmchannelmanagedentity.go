@@ -78,7 +78,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XF000,
+		AllowedAttributeMask: 0xF000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("ActiveChannelIndication", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -86,6 +86,8 @@ func init() {
 			3: ByteField("DownstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
 			4: ByteField("UpstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

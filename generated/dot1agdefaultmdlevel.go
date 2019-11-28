@@ -90,7 +90,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xF800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -99,6 +99,8 @@ func init() {
 			4: ByteField("CatchallSenderIdPermission", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
 			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

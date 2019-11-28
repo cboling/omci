@@ -36,6 +36,8 @@ type ManagedEntityDefinition struct {
 	// TODO: Support Optional Message types
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
+	Access               ClassAccess
+	Support              ClassSupport
 }
 
 func (bme *ManagedEntityDefinition) String() string {

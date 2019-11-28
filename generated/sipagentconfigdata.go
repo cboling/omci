@@ -145,7 +145,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("ProxyServerAddressPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -164,6 +164,8 @@ func init() {
 			14: ByteField("SipUriFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
 			15: Uint16Field("RedundantSipAgentPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

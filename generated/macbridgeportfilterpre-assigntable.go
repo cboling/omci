@@ -74,7 +74,7 @@ var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 //		Arp Filtering
 //			ARP filtering:	(R,-W) (mandatory) (1-byte)
 //
-//		Point_To_Point Protocol Over Ethernet Pppoe  Broadcast Filtering
+//		Point_To_Point Protocol Over Ethernet Pppoe Broadcast Filtering
 //			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R,-W) (mandatory) (1-byte)
 //
 type MacBridgePortFilterPreAssignTable struct {
@@ -90,7 +90,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xFFC0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("Ipv4MulticastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -104,6 +104,8 @@ func init() {
 			9:  ByteField("ArpFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

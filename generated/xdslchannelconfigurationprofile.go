@@ -147,7 +147,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xFFFE,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint32Field("MinimumDataRate", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -166,6 +166,8 @@ func init() {
 			14: Uint32Field("MinimumSosBitRateDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 			15: Uint32Field("MinimumSosBitRateUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

@@ -91,7 +91,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xFF00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("LocalPortMin", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -103,6 +103,8 @@ func init() {
 			7: ByteField("CasEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 			8: Uint16Field("IpHostConfigPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

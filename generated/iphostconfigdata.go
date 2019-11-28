@@ -122,7 +122,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xFFFF,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("IpOptions", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -142,6 +142,8 @@ func init() {
 			15: MultiByteField("HostName", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 15),
 			16: Uint16Field("RelayAgentOptions", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 16),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

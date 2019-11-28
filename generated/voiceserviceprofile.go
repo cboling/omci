@@ -117,7 +117,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xFFFC,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("AnnouncementType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -135,6 +135,8 @@ func init() {
 			13: MultiByteField("RingingEventTable", 7, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
 			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

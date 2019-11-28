@@ -120,7 +120,7 @@ func init() {
 			Get,
 			StartSoftwareDownload,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xFC00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("Version", 14, nil, mapset.NewSetWith(Read), true, false, false, false, 1),
@@ -130,6 +130,8 @@ func init() {
 			5: MultiByteField("ProductCode", 25, nil, mapset.NewSetWith(Read), true, false, true, false, 5),
 			6: MultiByteField("ImageHash", 16, nil, mapset.NewSetWith(Read), true, false, true, false, 6),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

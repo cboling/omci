@@ -85,7 +85,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: Uint16Field("VoipCodecUsed", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -98,6 +98,8 @@ func init() {
 			8: ByteField("VoipLineState", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
 			9: ByteField("EmergencyCallStatus", 0, mapset.NewSetWith(Read), true, false, true, false, 9),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

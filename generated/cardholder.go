@@ -132,7 +132,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xFF80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("ActualPlugInUnitType", 0, mapset.NewSetWith(Read), true, false, false, false, 1),
@@ -145,6 +145,8 @@ func init() {
 			8: ByteField("AlarmReportingControl", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 8),
 			9: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

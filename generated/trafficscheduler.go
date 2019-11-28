@@ -87,7 +87,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF000,
+		AllowedAttributeMask: 0xF000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: Uint16Field("TContPointer", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -95,6 +95,8 @@ func init() {
 			3: ByteField("Policy", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
 			4: ByteField("PriorityWeight", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 

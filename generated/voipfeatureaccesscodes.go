@@ -95,7 +95,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xFFF0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  MultiByteField("CancelCallWaiting", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
@@ -111,6 +111,8 @@ func init() {
 			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: MultiByteField("AttendedCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 		},
+		Access:  UnknownAccess,
+		Support: UnknownSupport,
 	}
 }
 
