@@ -82,7 +82,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint32Field("ThresholdValue1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -98,9 +98,9 @@ func init() {
 	}
 }
 
-// NewThresholdData1 (class ID 273 creates the basic
+// NewThresholdData1 (class ID 273) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewThresholdData1(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*thresholddata1BME, params...)
 }

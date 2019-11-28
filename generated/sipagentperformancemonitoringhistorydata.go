@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -143,9 +143,9 @@ func init() {
 	}
 }
 
-// NewSipAgentPerformanceMonitoringHistoryData (class ID 151 creates the basic
+// NewSipAgentPerformanceMonitoringHistoryData (class ID 151) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSipAgentPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*sipagentperformancemonitoringhistorydataBME, params...)
 }

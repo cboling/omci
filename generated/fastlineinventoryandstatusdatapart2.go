@@ -83,7 +83,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0xF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamFraOperationStampFrads", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 1),
@@ -97,9 +97,9 @@ func init() {
 	}
 }
 
-// NewFastLineInventoryAndStatusDataPart2 (class ID 436 creates the basic
+// NewFastLineInventoryAndStatusDataPart2 (class ID 436) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewFastLineInventoryAndStatusDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*fastlineinventoryandstatusdatapart2BME, params...)
 }

@@ -90,7 +90,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -106,9 +106,9 @@ func init() {
 	}
 }
 
-// NewCallControlPerformanceMonitoringHistoryData (class ID 140 creates the basic
+// NewCallControlPerformanceMonitoringHistoryData (class ID 140) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*callcontrolperformancemonitoringhistorydataBME, params...)
 }

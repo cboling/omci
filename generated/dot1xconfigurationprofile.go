@@ -95,7 +95,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint16Field("CircuitIdPrefix", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -114,9 +114,9 @@ func init() {
 	}
 }
 
-// NewDot1XConfigurationProfile (class ID 291 creates the basic
+// NewDot1XConfigurationProfile (class ID 291) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1XConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1xconfigurationprofileBME, params...)
 }

@@ -158,7 +158,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("Type", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 1),
@@ -181,9 +181,9 @@ func init() {
 	}
 }
 
-// NewCircuitPack (class ID 6 creates the basic
+// NewCircuitPack (class ID 6) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewCircuitPack(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*circuitpackBME, params...)
 }

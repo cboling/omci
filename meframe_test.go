@@ -277,7 +277,7 @@ func pickAValue(attrDef me.AttributeDefinition) interface{} {
 	defaultVal := attrDef.DefValue
 	size := attrDef.GetSize()
 
-	if attrDef.TableSupport {
+	if attrDef.IsTableAttribute() {
 		// Table attributes treated as a string of octets.  If size is zero, it is
 		// most likely an attribute with variable size. Pick a random size that will
 		// fit into a simple frame (1-33 octets)
@@ -564,7 +564,7 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	for _, attrDef := range attrDefs {
 		if attrDef.Index == 0 {
 			continue // Skip entity ID, already specified
-		} else if attrDef.TableSupport {
+		} else if attrDef.IsTableAttribute() {
 			tableAttrFound = true
 			continue // TODO: Skip table attributes for now
 		} else if attrDef.GetAccess().Contains(me.Write) {
@@ -787,7 +787,7 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 				//       good way to unit test this and see if that can be extended to a more
 				//       general operation that provides the 'get-next' frames to the caller who
 				//		 wishes to serialize a table attribute.
-				if !attrDef.TableSupport {
+				if !attrDef.IsTableAttribute() {
 					params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 				}
 			case 0:

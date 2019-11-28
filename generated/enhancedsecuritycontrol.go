@@ -114,7 +114,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  MultiByteField("OltCryptoCapabilities", 16, nil, mapset.NewSetWith(Write), false, false, false, false, 1),
@@ -135,9 +135,9 @@ func init() {
 	}
 }
 
-// NewEnhancedSecurityControl (class ID 332 creates the basic
+// NewEnhancedSecurityControl (class ID 332) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEnhancedSecurityControl(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*enhancedsecuritycontrolBME, params...)
 }

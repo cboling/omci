@@ -122,7 +122,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("IpOptions", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -147,9 +147,9 @@ func init() {
 	}
 }
 
-// NewIpHostConfigData (class ID 134 creates the basic
+// NewIpHostConfigData (class ID 134) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewIpHostConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*iphostconfigdataBME, params...)
 }

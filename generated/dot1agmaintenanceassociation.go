@@ -101,7 +101,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("MdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -117,9 +117,9 @@ func init() {
 	}
 }
 
-// NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
+// NewDot1AgMaintenanceAssociation (class ID 300) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgMaintenanceAssociation(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agmaintenanceassociationBME, params...)
 }

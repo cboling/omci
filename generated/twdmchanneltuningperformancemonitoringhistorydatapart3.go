@@ -113,7 +113,7 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -132,9 +132,9 @@ func init() {
 	}
 }
 
-// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3 (class ID 451 creates the basic
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3 (class ID 451) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchanneltuningperformancemonitoringhistorydatapart3BME, params...)
 }

@@ -73,9 +73,9 @@ func init() {
 	}
 }
 
-// NewXdslSubcarrierMaskingUpstreamProfile (class ID 109 creates the basic
+// NewXdslSubcarrierMaskingUpstreamProfile (class ID 109) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslSubcarrierMaskingUpstreamProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslsubcarriermaskingupstreamprofileBME, params...)
 }

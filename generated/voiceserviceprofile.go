@@ -117,7 +117,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("AnnouncementType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -140,9 +140,9 @@ func init() {
 	}
 }
 
-// NewVoiceServiceProfile (class ID 58 creates the basic
+// NewVoiceServiceProfile (class ID 58) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoiceServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voiceserviceprofileBME, params...)
 }

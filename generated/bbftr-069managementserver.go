@@ -77,7 +77,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -89,9 +89,9 @@ func init() {
 	}
 }
 
-// NewBbfTr069ManagementServer (class ID 340 creates the basic
+// NewBbfTr069ManagementServer (class ID 340) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewBbfTr069ManagementServer(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*bbftr069managementserverBME, params...)
 }

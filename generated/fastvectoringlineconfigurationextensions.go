@@ -69,7 +69,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xC000,
+		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -80,9 +80,9 @@ func init() {
 	}
 }
 
-// NewFastVectoringLineConfigurationExtensions (class ID 434 creates the basic
+// NewFastVectoringLineConfigurationExtensions (class ID 434) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewFastVectoringLineConfigurationExtensions(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*fastvectoringlineconfigurationextensionsBME, params...)
 }

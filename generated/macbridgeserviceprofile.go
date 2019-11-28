@@ -106,7 +106,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("SpanningTreeInd", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -125,9 +125,9 @@ func init() {
 	}
 }
 
-// NewMacBridgeServiceProfile (class ID 45 creates the basic
+// NewMacBridgeServiceProfile (class ID 45) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgeServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeserviceprofileBME, params...)
 }

@@ -126,7 +126,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("JitterBufferMaximumDepth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
@@ -151,9 +151,9 @@ func init() {
 	}
 }
 
-// NewPseudowireMaintenanceProfile (class ID 284 creates the basic
+// NewPseudowireMaintenanceProfile (class ID 284) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPseudowireMaintenanceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*pseudowiremaintenanceprofileBME, params...)
 }

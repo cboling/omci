@@ -102,7 +102,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0xFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -119,9 +119,9 @@ func init() {
 	}
 }
 
-// NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
+// NewExtendedVlanTaggingOperationConfigurationData (class ID 171) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*extendedvlantaggingoperationconfigurationdataBME, params...)
 }

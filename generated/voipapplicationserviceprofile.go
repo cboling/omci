@@ -94,7 +94,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("CidFeatures", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -112,9 +112,9 @@ func init() {
 	}
 }
 
-// NewVoipApplicationServiceProfile (class ID 146 creates the basic
+// NewVoipApplicationServiceProfile (class ID 146) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipApplicationServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voipapplicationserviceprofileBME, params...)
 }

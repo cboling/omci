@@ -74,7 +74,7 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0xE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -86,9 +86,9 @@ func init() {
 	}
 }
 
-// NewDot1AgCfmStack (class ID 305 creates the basic
+// NewDot1AgCfmStack (class ID 305) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgCfmStack(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agcfmstackBME, params...)
 }

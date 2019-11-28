@@ -80,7 +80,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xF000,
+		AllowedAttributeMask: 0xf000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("PortId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -93,9 +93,9 @@ func init() {
 	}
 }
 
-// NewTcpUdpConfigData (class ID 136 creates the basic
+// NewTcpUdpConfigData (class ID 136) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTcpUdpConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*tcpudpconfigdataBME, params...)
 }

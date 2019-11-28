@@ -79,7 +79,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("ParentMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -93,9 +93,9 @@ func init() {
 	}
 }
 
-// NewDot1RateLimiter (class ID 298 creates the basic
+// NewDot1RateLimiter (class ID 298) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1RateLimiter(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1ratelimiterBME, params...)
 }

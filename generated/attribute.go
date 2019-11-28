@@ -40,8 +40,8 @@ type AttributeDefinition struct {
 	Name         string
 	Index        uint
 	DefValue     interface{} // Note: Not supported yet
-	Size         int
-	Access       mapset.Set // AttributeAccess...
+	Size         int         // Size of attribute in bytes. 0 indicates variable/unknown
+	Access       mapset.Set  // AttributeAccess...
 	Constraint   func(interface{}) *ParamError
 	Avc          bool // If true, an AVC notification can occur for the attribute
 	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
@@ -84,6 +84,25 @@ func (attr AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
 // IsTableAttribute returns true if the attribute is a table
 func (attr AttributeDefinition) IsTableAttribute() bool {
 	return attr.TableSupport
+}
+
+// IsCounter returns true if the attribute is a counter (usually expressed as an
+// unsigned integer)
+func (attr AttributeDefinition) IsCounter() bool {
+	return attr.Counter
+}
+
+// IsBitField returns true if the attribute is a bitfield
+// NOTE: This is for a future version of the OMCI library to help with constraint support
+func (attr AttributeDefinition) IsBitField() bool {
+	return false
+}
+
+// IsString returns true if the attribute is a string. Strings are typically encoded
+// into fixed length files and padded with 0;s
+// NOTE: This is for a future version of the OMCI library to help with constraint support
+func (attr AttributeDefinition) IsString() bool {
+	return false
 }
 
 // Decode takes a slice of bytes and converts them into a value appropriate for

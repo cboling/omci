@@ -72,7 +72,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -84,9 +84,9 @@ func init() {
 	}
 }
 
-// NewEthernetPerformanceMonitoringHistoryData2 (class ID 89 creates the basic
+// NewEthernetPerformanceMonitoringHistoryData2 (class ID 89) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEthernetPerformanceMonitoringHistoryData2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ethernetperformancemonitoringhistorydata2BME, params...)
 }

@@ -90,7 +90,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("SnmpVersion", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -107,9 +107,9 @@ func init() {
 	}
 }
 
-// NewSnmpConfigurationData (class ID 335 creates the basic
+// NewSnmpConfigurationData (class ID 335) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSnmpConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*snmpconfigurationdataBME, params...)
 }

@@ -148,7 +148,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
@@ -172,9 +172,9 @@ func init() {
 	}
 }
 
-// NewXdslLineConfigurationProfilePart2 (class ID 105 creates the basic
+// NewXdslLineConfigurationProfilePart2 (class ID 105) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineconfigurationprofilepart2BME, params...)
 }

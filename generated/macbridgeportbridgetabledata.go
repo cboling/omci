@@ -70,9 +70,9 @@ func init() {
 	}
 }
 
-// NewMacBridgePortBridgeTableData (class ID 50 creates the basic
+// NewMacBridgePortBridgeTableData (class ID 50) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgePortBridgeTableData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeportbridgetabledataBME, params...)
 }

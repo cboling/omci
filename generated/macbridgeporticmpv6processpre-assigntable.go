@@ -90,7 +90,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0xFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -108,9 +108,9 @@ func init() {
 	}
 }
 
-// NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 creates the basic
+// NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeporticmpv6processpreassigntableBME, params...)
 }

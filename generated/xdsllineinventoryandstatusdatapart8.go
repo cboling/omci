@@ -85,7 +85,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0xFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -100,9 +100,9 @@ func init() {
 	}
 }
 
-// NewXdslLineInventoryAndStatusDataPart8 (class ID 414 creates the basic
+// NewXdslLineInventoryAndStatusDataPart8 (class ID 414) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineinventoryandstatusdatapart8BME, params...)
 }

@@ -116,7 +116,7 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -138,9 +138,9 @@ func init() {
 	}
 }
 
-// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448 creates the basic
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3 (class ID 448) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart3(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchannelploamperformancemonitoringhistorydatapart3BME, params...)
 }

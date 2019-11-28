@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 0),
 			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -138,9 +138,9 @@ func init() {
 	}
 }
 
-// NewFastChannelConfigurationProfile (class ID 432 creates the basic
+// NewFastChannelConfigurationProfile (class ID 432) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewFastChannelConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*fastchannelconfigurationprofileBME, params...)
 }

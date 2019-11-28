@@ -119,7 +119,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("SipAgentPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -140,9 +140,9 @@ func init() {
 	}
 }
 
-// NewSipUserData (class ID 153 creates the basic
+// NewSipUserData (class ID 153) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSipUserData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*sipuserdataBME, params...)
 }

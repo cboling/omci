@@ -109,7 +109,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("TpPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -131,9 +131,9 @@ func init() {
 	}
 }
 
-// NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
+// NewIeee8021PMapperServiceProfile (class ID 130) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewIeee8021PMapperServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ieee8021pmapperserviceprofileBME, params...)
 }

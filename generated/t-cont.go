@@ -91,7 +91,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: Uint16Field("AllocId", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
@@ -103,9 +103,9 @@ func init() {
 	}
 }
 
-// NewTCont (class ID 262 creates the basic
+// NewTCont (class ID 262) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTCont(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*tcontBME, params...)
 }

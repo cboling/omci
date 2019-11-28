@@ -122,7 +122,7 @@ func init() {
 			SynchronizeTime,
 			Test,
 		),
-		AllowedAttributeMask: 0xFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  Uint32Field("VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -144,9 +144,9 @@ func init() {
 	}
 }
 
-// NewOnuG (class ID 256 creates the basic
+// NewOnuG (class ID 256) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewOnuG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*onugBME, params...)
 }

@@ -82,7 +82,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
@@ -99,9 +99,9 @@ func init() {
 	}
 }
 
-// NewPhysicalPathTerminationPointXdslUniPart2 (class ID 99 creates the basic
+// NewPhysicalPathTerminationPointXdslUniPart2 (class ID 99) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointxdslunipart2BME, params...)
 }

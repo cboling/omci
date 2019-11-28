@@ -67,7 +67,7 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0xE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("MaxCpcsPduSize", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -79,9 +79,9 @@ func init() {
 	}
 }
 
-// NewAal5Profile (class ID 16 creates the basic
+// NewAal5Profile (class ID 16) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewAal5Profile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*aal5profileBME, params...)
 }

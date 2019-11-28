@@ -126,7 +126,7 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0xFFE0,
+		AllowedAttributeMask: 0xffe0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("ActualInterleavingDelay", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
@@ -146,9 +146,9 @@ func init() {
 	}
 }
 
-// NewXdslChannelUpstreamStatusData (class ID 103 creates the basic
+// NewXdslChannelUpstreamStatusData (class ID 103) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslChannelUpstreamStatusData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslchannelupstreamstatusdataBME, params...)
 }
