@@ -45,9 +45,9 @@ type AttributeDefinition struct {
 	Constraint   func(interface{}) *ParamError
 	Avc          bool // If true, an AVC notification can occur for the attribute
 	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
-	Counter      bool // If true, this attribute is a PM counter
+	counter      bool // If true, this attribute is a PM counter
 	Optional     bool // If true, attribute is option, else mandatory
-	TableSupport bool // If true, attribute is a table
+	tableSupport bool // If true, attribute is a table
 	Deprecated   bool // If true, this attribute is deprecated and only 'read' operations (if-any) performed
 }
 
@@ -83,13 +83,13 @@ func (attr AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
 
 // IsTableAttribute returns true if the attribute is a table
 func (attr AttributeDefinition) IsTableAttribute() bool {
-	return attr.TableSupport
+	return attr.tableSupport
 }
 
 // IsCounter returns true if the attribute is a counter (usually expressed as an
 // unsigned integer)
 func (attr AttributeDefinition) IsCounter() bool {
-	return attr.Counter
+	return attr.counter
 }
 
 // IsBitField returns true if the attribute is a bitfield
@@ -333,6 +333,9 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		value := binary.BigEndian.Uint32(data[0:4])
 		return value, nil
 
+	case byte(Set) | AR: // Set Request
+		fallthrough
+
 	case byte(GetNext) | AK: // Get Next Response
 		// Block of data (octets) that need to be reassembled before conversion
 		// to table/row-data.  If table attribute is not explicitly given a value
@@ -348,10 +351,6 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
 		}
 		return data, nil
-
-	case byte(Set) | AR: // Set Request
-		fmt.Println("TODO")
-		return nil, errors.New("TODO")
 
 	case byte(SetTable) | AR: // Set Table Request
 		// TODO: Only baseline supported at this time
@@ -400,7 +399,10 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 		return 0, errors.New("unexpected type for table serialization")
 
 	case byte(Set) | AR: // Set Request
-		fmt.Println("TODO")
+		// TODO: For complex table types (such as extended vlan tagging config) create an
+		//       interface definition. Provide a switch type to look for that as well as for
+		//       value being a byte slice...  For now, just byte slice provided
+		break
 
 	case byte(SetTable) | AR: // Set Table Request
 		// TODO: Only baseline supported at this time
@@ -535,8 +537,8 @@ func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
 		Size:         1,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -553,8 +555,8 @@ func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
 		Size:         2,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -571,8 +573,8 @@ func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
 		Size:         4,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -589,8 +591,8 @@ func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
 		Size:         8,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -607,8 +609,8 @@ func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, av
 		Size:         int(size),
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -659,8 +661,8 @@ func TableField(name string, tableInfo TableInfo, access mapset.Set,
 		Size:         tableInfo.Size, //Number of elements
 		Access:       access,
 		Avc:          avc,
-		Counter:      false,
-		TableSupport: true,
+		counter:      false,
+		tableSupport: true,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
@@ -677,8 +679,8 @@ func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
 		Size:         99999999,
 		Access:       access,
 		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
+		counter:      counter,
+		tableSupport: false,
 		Optional:     optional,
 		Deprecated:   deprecated,
 	}
