@@ -82,6 +82,9 @@ var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 //		Multicast Service Package Table
 //			(R,-W) (optional) (20N bytes, where N is the number of entries in the table)
 //
+//		Allowed Preview Groups Table
+//			Each list entry begins with a table control field:
+//
 type MulticastSubscriberConfigInfo struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap
@@ -98,7 +101,7 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0xfc00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
@@ -106,7 +109,8 @@ func init() {
 			3: Uint16Field("MaxSimultaneousGroups", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
 			4: Uint32Field("MaxMulticastBandwidth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
 			5: ByteField("BandwidthEnforcement", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6: TableField("MulticastServicePackageTable", TableInfo{nil, 22}, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			6: TableField("MulticastServicePackageTable", TableInfo{0, 20}, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7: TableField("AllowedPreviewGroupsTable", TableInfo{0, 22}, mapset.NewSetWith(Read, Write), false, false, false, 7),
 		},
 		Access:  UnknownAccess,
 		Support: UnknownSupport,

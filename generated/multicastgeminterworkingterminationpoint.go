@@ -101,6 +101,9 @@ var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 //			may also be set to point to a MAC bridge service profile or IEEE 802.1p mapper service profile.
 //			(R,-W, setbycreate) (mandatory) (2-bytes)
 //
+//		Not Used 1
+//			Not used 1:	This attribute is set to 0 and not used. (R,-W, setbycreate) (mandatory) (2-bytes)
+//
 //		Pptp Counter
 //			PPTP counter: This attribute represents the number of instances of PPTP MEs associated with this
 //			instance of the multicast GEM IW TP. This attribute conveys no information that is not available
@@ -113,6 +116,13 @@ var multicastgeminterworkingterminationpointBME *ManagedEntityDefinition
 //		Gal Profile Pointer
 //			GAL profile pointer: This attribute is set to 0 and not used. For backward compatibility, it may
 //			also be set to point to a GAL Ethernet profile. (R,-W, setbycreate) (mandatory) (2-bytes)
+//
+//		Not Used 2
+//			Not used 2:	This attribute is set to 0 and not used. (R,-W, setbycreate) (mandatory) (1-byte)
+//
+//		Ipv4 Multicast Address Table
+//			IPv4 multicast address table: This attribute maps IP multicast addresses to PON layer addresses.
+//			Each entry contains the following.
 //
 //		Ipv6 Multicast Address Table
 //			(R,-W) (optional) (24N bytes, where N is the number of entries in the list.)
@@ -133,16 +143,19 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0xfe00,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("InterworkingOption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint16Field("ServiceProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 5),
-			6: Uint16Field("GalProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
+			1:  Uint16Field("GemPortNetworkCtpConnectivityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			2:  ByteField("InterworkingOption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			3:  Uint16Field("ServiceProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
+			4:  Uint16Field("NotUsed1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
+			5:  ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
+			6:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 6),
+			7:  Uint16Field("GalProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
+			8:  ByteField("NotUsed2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
+			9:  TableField("Ipv4MulticastAddressTable", TableInfo{0, 12}, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: TableField("Ipv6MulticastAddressTable", TableInfo{0, 24}, mapset.NewSetWith(Read, Write), false, true, false, 10),
 		},
 		Access:  UnknownAccess,
 		Support: UnknownSupport,

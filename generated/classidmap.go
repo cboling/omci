@@ -52,7 +52,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 160)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 176)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -94,6 +94,8 @@ func init() {
 	classToManagedEntityMap[107] = NewXdslChannelConfigurationProfile
 	classToManagedEntityMap[108] = NewXdslSubcarrierMaskingDownstreamProfile
 	classToManagedEntityMap[109] = NewXdslSubcarrierMaskingUpstreamProfile
+	classToManagedEntityMap[110] = NewXdslPsdMaskProfile
+	classToManagedEntityMap[111] = NewXdslDownstreamRfiBandsProfile
 	classToManagedEntityMap[112] = NewXdslXtuCPerformanceMonitoringHistoryData
 	classToManagedEntityMap[113] = NewXdslXtuRPerformanceMonitoringHistoryData
 	classToManagedEntityMap[114] = NewXdslXtuCChannelPerformanceMonitoringHistoryData
@@ -126,6 +128,9 @@ func init() {
 	classToManagedEntityMap[160] = NewEquipmentExtensionPackage
 	classToManagedEntityMap[162] = NewPhysicalPathTerminationPointMocaUni
 	classToManagedEntityMap[163] = NewMocaEthernetPerformanceMonitoringHistoryData
+	classToManagedEntityMap[168] = NewVdsl2LineInventoryAndStatusDataPart1
+	classToManagedEntityMap[169] = NewVdsl2LineInventoryAndStatusDataPart2
+	classToManagedEntityMap[170] = NewVdsl2LineInventoryAndStatusDataPart3
 	classToManagedEntityMap[171] = NewExtendedVlanTaggingOperationConfigurationData
 	classToManagedEntityMap[256] = NewOnuG
 	classToManagedEntityMap[257] = NewOnu2G
@@ -162,12 +167,18 @@ func init() {
 	classToManagedEntityMap[301] = NewDot1AgDefaultMdLevel
 	classToManagedEntityMap[302] = NewDot1AgMep
 	classToManagedEntityMap[305] = NewDot1AgCfmStack
+	classToManagedEntityMap[306] = NewDot1AgChassisManagementInfo
+	classToManagedEntityMap[307] = NewOctetString
 	classToManagedEntityMap[310] = NewMulticastSubscriberConfigInfo
 	classToManagedEntityMap[311] = NewMulticastSubscriberMonitor
 	classToManagedEntityMap[313] = NewReAniG
+	classToManagedEntityMap[314] = NewPhysicalPathTerminationPointReUni
+	classToManagedEntityMap[315] = NewReUpstreamAmplifier
 	classToManagedEntityMap[316] = NewReDownstreamAmplifier
 	classToManagedEntityMap[321] = NewEthernetFramePerformanceMonitoringHistoryDataDownstream
 	classToManagedEntityMap[322] = NewEthernetFramePerformanceMonitoringHistoryDataUpstream
+	classToManagedEntityMap[323] = NewVdsl2LineConfigurationExtensions2
+	classToManagedEntityMap[324] = NewXdslImpulseNoiseMonitorPerformanceMonitoringHistoryData
 	classToManagedEntityMap[325] = NewXdslLineInventoryAndStatusDataPart5
 	classToManagedEntityMap[328] = NewReCommonAmplifierParameters
 	classToManagedEntityMap[329] = NewVirtualEthernetInterfacePoint
@@ -176,6 +187,7 @@ func init() {
 	classToManagedEntityMap[334] = NewEthernetFrameExtendedPm
 	classToManagedEntityMap[335] = NewSnmpConfigurationData
 	classToManagedEntityMap[336] = NewOnuDynamicPowerManagementControl
+	classToManagedEntityMap[337] = NewPwAtmConfigurationData
 	classToManagedEntityMap[338] = NewPwAtmPerformanceMonitoringHistoryData
 	classToManagedEntityMap[339] = NewPwEthernetConfigurationData
 	classToManagedEntityMap[340] = NewBbfTr069ManagementServer
@@ -190,7 +202,9 @@ func init() {
 	classToManagedEntityMap[408] = NewXdslXtuCPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[410] = NewVdsl2LineConfigurationExtensions3
 	classToManagedEntityMap[412] = NewXdslChannelConfigurationProfilePart2
+	classToManagedEntityMap[413] = NewXtuDataGatheringConfiguration
 	classToManagedEntityMap[414] = NewXdslLineInventoryAndStatusDataPart8
+	classToManagedEntityMap[419] = NewEfmBondingGroup
 	classToManagedEntityMap[420] = NewEfmBondingLink
 	classToManagedEntityMap[421] = NewEfmBondingGroupPerformanceMonitoringHistoryData
 	classToManagedEntityMap[422] = NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2
@@ -214,6 +228,8 @@ func init() {
 	classToManagedEntityMap[450] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[451] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
+	classToManagedEntityMap[453] = NewEnhancedFecPerformanceMonitoringHistoryData
+	classToManagedEntityMap[454] = NewEnhancedTcPerformanceMonitoringHistoryData
 }
 
 // LoadManagedEntityDefinition returns a function to create a Managed Entity for a specific
