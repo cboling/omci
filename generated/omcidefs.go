@@ -53,7 +53,7 @@ func (cid ClassID) String() string {
 		return fmt.Sprintf("[%s] (%d/%#x)",
 			entity.GetManagedEntityDefinition().GetName(), uint16(cid), uint16(cid))
 	}
-	return fmt.Sprintf("unknown ClassID")
+	return fmt.Sprintf("unknown ClassID: %v", cid)
 }
 
 const (
