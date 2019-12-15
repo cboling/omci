@@ -48,7 +48,7 @@ var enhancedfecperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1-byte)
 //
-//		Threshold Data 64 B It Id
+//		Threshold Data 64 Bit Id
 //			Threshold data 64-bit ID: This attribute points to an instance of the threshold data 64-bit ME
 //			that contains PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
@@ -90,7 +90,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData64BItId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			2: Uint16Field("ThresholdData64BitId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3: Uint64Field("CorrectedBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
 			4: Uint64Field("CorrectedCodeWords", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
 			5: Uint64Field("UncorrectableCodeWords", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
