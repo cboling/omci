@@ -47,7 +47,7 @@ var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 //			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1-byte)
 //
-//		Threshold Data 1_2 Id
+//		Threshold Data 1 _2 Id
 //			Threshold data1/2 ID: This attribute points to an instance of the threshold data1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
@@ -106,14 +106,14 @@ func init() {
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
 			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint16Field("NearEndHecViolationCount", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("NearEndUserTotalCellCountCuP", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint16Field("NearEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint16Field("FarEndHecViolationCount", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("FarEndUserTotalCellCountCuPfe", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint16Field("FarEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
+			3:  Uint16Field("NearEndHecViolationCount", 0, mapset.NewSetWith(Read), false, true, false, false, 3),
+			4:  Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, mapset.NewSetWith(Read), false, true, false, false, 4),
+			5:  Uint32Field("NearEndUserTotalCellCountCuP", 0, mapset.NewSetWith(Read), false, true, false, false, 5),
+			6:  Uint16Field("NearEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, true, false, false, 6),
+			7:  Uint16Field("FarEndHecViolationCount", 0, mapset.NewSetWith(Read), false, true, false, false, 7),
+			8:  Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, mapset.NewSetWith(Read), false, true, false, false, 8),
+			9:  Uint32Field("FarEndUserTotalCellCountCuPfe", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
+			10: Uint16Field("FarEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 		},
 		Access:  UnknownAccess,
 		Support: UnknownSupport,

@@ -77,7 +77,7 @@ func init() {
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("PppoeFilteredFrameCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
+			3: Uint32Field("PppoeFilteredFrameCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 3),
 		},
 		Access:  UnknownAccess,
 		Support: UnknownSupport,
