@@ -704,3 +704,25 @@ func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
 
 // AttributeValueMap maps an attribute (by name) to its value
 type AttributeValueMap map[string]interface{}
+
+// MergeInDefaultValues will examine the Manage Entity defaults (for non-SetByCreate attributes). This
+// function is called on a MIB Create request but is provide for external use in case it is needed
+// before the MIB entry is created
+func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErrors {
+	// Get default values for non-SetByCreate attributes
+	attrDefs, err := GetAttributesDefinitions(classID)
+	if err != nil {
+		return err
+	} else if attributes == nil {
+		return NewProcessingError("Invalid (nil) Attribute Value Map referenced")
+	}
+	for index, attrDef := range attrDefs {
+		if !attrDef.Access.Contains(SetByCreate) && attrDef.DefValue != nil && index != 0 {
+			name := attrDef.GetName()
+			if existing, found := attributes[name]; !found || existing == nil {
+				attributes[name] = attrDef.DefValue
+			}
+		}
+	}
+	return nil
+}
