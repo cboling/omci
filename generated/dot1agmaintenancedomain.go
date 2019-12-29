@@ -94,7 +94,7 @@ func init() {
 			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 			5: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

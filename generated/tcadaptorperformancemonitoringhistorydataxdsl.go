@@ -47,7 +47,7 @@ var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 //			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1-byte)
 //
-//		Threshold Data 1 _2 Id
+//		Threshold Data 1_2 Id
 //			Threshold data1/2 ID: This attribute points to an instance of the threshold data1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
@@ -115,7 +115,7 @@ func init() {
 			9:  Uint32Field("FarEndUserTotalCellCountCuPfe", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
 			10: Uint16Field("FarEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

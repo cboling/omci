@@ -107,7 +107,7 @@ func init() {
 			8: Uint32Field("UpstreamDroppedCellsCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 8),
 			9: Uint32Field("UpstreamReceivedCellsCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

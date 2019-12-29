@@ -85,7 +85,7 @@ func init() {
 			3: Uint32Field("MinimumDownstreamGroupRate", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
 			4: ByteField("GroupAlarmEnable", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

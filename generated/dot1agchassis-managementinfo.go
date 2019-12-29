@@ -112,7 +112,7 @@ func init() {
 			6: ByteField("ManagementAddressLength", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
 			7: MultiByteField("ManagementAddress1ManagementAddress2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

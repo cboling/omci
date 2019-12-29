@@ -98,7 +98,7 @@ func init() {
 			6: Uint16Field("Deprecated3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, true, 6),
 			7: ByteField("Deprecated4", 0, mapset.NewSetWith(Read), false, false, true, true, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

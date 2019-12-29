@@ -126,7 +126,7 @@ func init() {
 			12: ByteField("DefaultPBitAssumption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 12),
 			13: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 13),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

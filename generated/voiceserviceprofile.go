@@ -135,7 +135,7 @@ func init() {
 			13: MultiByteField("RingingEventTable", 7, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
 			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

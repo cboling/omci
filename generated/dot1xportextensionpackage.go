@@ -132,7 +132,7 @@ func init() {
 			11: ByteField("ReAuthenticationEnabled", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
 			12: ByteField("KeyTransmissionEnabled", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

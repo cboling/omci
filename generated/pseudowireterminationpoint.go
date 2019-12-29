@@ -132,7 +132,7 @@ func init() {
 			14: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 14),
 			15: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -214,7 +214,7 @@ func init() {
 			15: ByteField("QueueDropWQ", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 			16: ByteField("DropPrecedenceColourMarking", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

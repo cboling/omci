@@ -88,7 +88,7 @@ func init() {
 			4: MultiByteField("Realm", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
 			5: MultiByteField("Username2", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

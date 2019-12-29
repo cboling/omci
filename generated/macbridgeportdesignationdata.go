@@ -66,10 +66,10 @@ func init() {
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("DesignatedBridgeRootCostPort", 24, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
+			1: MultiByteField("DesignatedBridgeRootCostPort", 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: ByteField("PortState", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

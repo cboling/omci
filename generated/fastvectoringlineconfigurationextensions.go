@@ -75,7 +75,7 @@ func init() {
 			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
 			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

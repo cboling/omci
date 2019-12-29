@@ -102,7 +102,7 @@ func init() {
 			9:  Uint32Field("RxFragments", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
 			10: Uint32Field("TxFragments", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -104,7 +104,7 @@ func init() {
 			9:  ByteField("ArpFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

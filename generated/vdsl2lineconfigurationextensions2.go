@@ -185,10 +185,10 @@ func init() {
 			10: Uint16Field("SnrMaxOffsetUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
 			11: ByteField("RocMinimumImpulseNoiseProtectionDownstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 11),
 			12: ByteField("RocMinimumImpulseNoiseProtectionUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 12),
-			13: TableField("FextDownstreamTransmitterReferredVirtualNoiseTable", TableInfo{0, 3}, mapset.NewSetWith(Read, Write), false, false, false, 13),
-			14: TableField("NextDownstreamTransmitterReferredVirtualNoiseTable", TableInfo{0, 3}, mapset.NewSetWith(Read, Write), false, false, false, 14),
+			13: TableField("FextDownstreamTransmitterReferredVirtualNoiseTable", TableInfo{nil, 3}, mapset.NewSetWith(Read, Write), false, false, false, 13),
+			14: TableField("NextDownstreamTransmitterReferredVirtualNoiseTable", TableInfo{nil, 3}, mapset.NewSetWith(Read, Write), false, false, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

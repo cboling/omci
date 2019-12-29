@@ -79,7 +79,7 @@ func init() {
 			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3: Uint32Field("PppoeFilteredFrameCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 3),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

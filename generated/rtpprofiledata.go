@@ -103,7 +103,7 @@ func init() {
 			7: ByteField("CasEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 			8: Uint16Field("IpHostConfigPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -101,7 +101,7 @@ func init() {
 			7: Uint16Field("GalProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 			8: ByteField("GalLoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

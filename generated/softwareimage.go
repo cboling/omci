@@ -123,14 +123,14 @@ func init() {
 		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("Version", 14, nil, mapset.NewSetWith(Read), true, false, false, false, 1),
+			1: MultiByteField("Version", 14, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, false, false, false, 1),
 			2: ByteField("IsCommitted", 0, mapset.NewSetWith(Read), true, false, false, false, 2),
 			3: ByteField("IsActive", 0, mapset.NewSetWith(Read), true, false, false, false, 3),
 			4: ByteField("IsValid", 0, mapset.NewSetWith(Read), true, false, false, false, 4),
-			5: MultiByteField("ProductCode", 25, nil, mapset.NewSetWith(Read), true, false, true, false, 5),
-			6: MultiByteField("ImageHash", 16, nil, mapset.NewSetWith(Read), true, false, true, false, 6),
+			5: MultiByteField("ProductCode", 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, true, false, 5),
+			6: MultiByteField("ImageHash", 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, true, false, 6),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

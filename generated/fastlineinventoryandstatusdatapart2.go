@@ -92,7 +92,7 @@ func init() {
 			4: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamRpaOperationStampRpaus", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 4),
 			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamTigaOperationStampTiga", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

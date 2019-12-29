@@ -105,10 +105,10 @@ func init() {
 			5: Uint32Field("LowerLimit", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
 			6: Uint32Field("UpperLimit", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
 			7: Uint32Field("BitField", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8: TableField("CodePointsTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 8),
+			8: TableField("CodePointsTable", TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 8),
 			9: ByteField("Support", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

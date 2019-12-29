@@ -122,7 +122,7 @@ func init() {
 			10: Uint32Field("LastDetectedEventTime", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 			11: Uint32Field("LastDetectedResetTime", 0, mapset.NewSetWith(Read), false, true, false, false, 11),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

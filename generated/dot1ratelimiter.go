@@ -88,7 +88,7 @@ func init() {
 			4: Uint16Field("UpstreamBroadcastRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
 			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

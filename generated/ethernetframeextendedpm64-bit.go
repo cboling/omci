@@ -130,7 +130,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  MultiByteField("ControlBlock", 16, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			2:  MultiByteField("ControlBlock", 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3:  Uint64Field("DropEvents", 0, mapset.NewSetWith(Read), false, true, false, false, 3),
 			4:  Uint64Field("Octets", 0, mapset.NewSetWith(Read), false, true, false, false, 4),
 			5:  Uint64Field("Frames", 0, mapset.NewSetWith(Read), false, true, false, false, 5),
@@ -146,7 +146,7 @@ func init() {
 			15: Uint64Field("Frames512To1023Octets", 0, mapset.NewSetWith(Read), false, true, false, false, 15),
 			16: Uint64Field("Frames1024To1518Octets", 0, mapset.NewSetWith(Read), false, true, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

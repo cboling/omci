@@ -107,7 +107,7 @@ func init() {
 			7: MultiByteField("TransmittedC=0Cells", 5, nil, mapset.NewSetWith(Read), false, true, false, false, 7),
 			8: Uint16Field("ImpairedBlock", 0, mapset.NewSetWith(Read), false, true, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

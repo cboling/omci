@@ -133,7 +133,7 @@ func init() {
 			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 			10: ByteField("RtxTcTestmodeRtxTestmode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

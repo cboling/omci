@@ -133,7 +133,7 @@ func init() {
 			5:  ByteField("Hloggus", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
 			6:  ByteField("Qlngus", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
 			7:  ByteField("Snrgus", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  TableField("MrefpsdusTable", TableInfo{0, 3}, mapset.NewSetWith(Read), false, false, false, 8),
+			8:  TableField("MrefpsdusTable", TableInfo{nil, 3}, mapset.NewSetWith(Read), false, false, false, 8),
 			9:  ByteField("Trellisus", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
 			10: ByteField("Actualce", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
 			11: Uint16Field("UpbokleR", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
@@ -141,7 +141,7 @@ func init() {
 			13: ByteField("ActualImpulseNoiseProtectionRocUpstream", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
 			14: Uint16Field("SnrMarginRocUpstream", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

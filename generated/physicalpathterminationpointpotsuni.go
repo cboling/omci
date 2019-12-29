@@ -155,7 +155,7 @@ func init() {
 			12: ByteField("NominalFeedVoltage", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 			13: ByteField("LossOfSoftswitch", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

@@ -150,14 +150,14 @@ func init() {
 			2:  ByteField("InterworkingOption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3:  Uint16Field("ServiceProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 			4:  Uint16Field("NotUsed1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
+			5:  ByteField("PptpCounter", 255, mapset.NewSetWith(Read), false, false, true, false, 5),
 			6:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 6),
 			7:  Uint16Field("GalProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 			8:  ByteField("NotUsed2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  TableField("Ipv4MulticastAddressTable", TableInfo{0, 12}, mapset.NewSetWith(Read, Write), false, false, false, 9),
-			10: TableField("Ipv6MulticastAddressTable", TableInfo{0, 24}, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			9:  TableField("Ipv4MulticastAddressTable", TableInfo{nil, 12}, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: TableField("Ipv6MulticastAddressTable", TableInfo{nil, 24}, mapset.NewSetWith(Read, Write), false, true, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

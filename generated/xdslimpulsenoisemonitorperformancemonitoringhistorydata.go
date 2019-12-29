@@ -106,14 +106,14 @@ func init() {
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: TableField("InmInpeqHistogramTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, true, false, 3),
+			3: TableField("InmInpeqHistogramTable", TableInfo{nil, 2}, mapset.NewSetWith(Read), false, true, false, 3),
 			4: Uint16Field("InmTotalMeasurement", 0, mapset.NewSetWith(Read), false, true, true, false, 4),
 			5: Uint16Field("InmIatHistogram", 0, mapset.NewSetWith(Read), false, true, true, false, 5),
-			6: TableField("InmInpeqHistogramLfeTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, true, false, 6),
+			6: TableField("InmInpeqHistogramLfeTable", TableInfo{nil, 2}, mapset.NewSetWith(Read), false, true, false, 6),
 			7: Uint16Field("InmTotalMeasurementLfe", 0, mapset.NewSetWith(Read), false, true, true, false, 7),
 			8: Uint16Field("InmIatHistogramLfe", 0, mapset.NewSetWith(Read), false, true, true, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

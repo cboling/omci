@@ -74,7 +74,7 @@ func init() {
 			2: ByteField("AalMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 			3: ByteField("SscsType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

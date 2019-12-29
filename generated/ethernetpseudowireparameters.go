@@ -66,7 +66,7 @@ func init() {
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1: Uint16Field("Mtu", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -135,7 +135,7 @@ func init() {
 			11: ByteField("EponSetupExtension", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

@@ -86,7 +86,7 @@ func init() {
 			3: Uint16Field("VOIpMediaProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 			4: ByteField("SignallingCode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -156,7 +156,7 @@ func init() {
 			14: Uint32Field("TuningControlRequestsRejectedUsLnrt", 0, mapset.NewSetWith(Read), false, true, false, false, 14),
 			15: Uint32Field("TuningControlRequestsRejectedUsLncd", 0, mapset.NewSetWith(Read), false, true, false, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

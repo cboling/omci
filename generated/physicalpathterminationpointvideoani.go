@@ -149,7 +149,7 @@ func init() {
 			15: ByteField("VideoLowerOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 			16: ByteField("VideoUpperOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

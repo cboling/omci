@@ -94,7 +94,7 @@ func init() {
 			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
 			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

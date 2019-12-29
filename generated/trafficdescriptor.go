@@ -116,7 +116,7 @@ func init() {
 			7: ByteField("EgressColourMarking", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
 			8: ByteField("MeterType", 0, mapset.NewSetWith(Read, SetByCreate), false, false, true, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

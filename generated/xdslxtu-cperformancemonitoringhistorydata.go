@@ -147,7 +147,7 @@ func init() {
 			15: Uint16Field("SosSuccessCount,NearEnd", 0, mapset.NewSetWith(Read), false, true, true, false, 15),
 			16: Uint16Field("SosSuccessCount,FarEnd", 0, mapset.NewSetWith(Read), false, true, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

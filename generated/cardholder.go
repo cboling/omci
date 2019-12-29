@@ -138,14 +138,14 @@ func init() {
 			1: ByteField("ActualPlugInUnitType", 0, mapset.NewSetWith(Read), true, false, false, false, 1),
 			2: ByteField("ExpectedPlugInUnitType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 			3: ByteField("ExpectedPortCount", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4: MultiByteField("ExpectedEquipmentId", 20, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: MultiByteField("ActualEquipmentId", 20, nil, mapset.NewSetWith(Read), true, false, true, false, 5),
+			4: MultiByteField("ExpectedEquipmentId", 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read, Write), false, false, true, false, 4),
+			5: MultiByteField("ActualEquipmentId", 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, false, true, false, 5),
 			6: ByteField("ProtectionProfilePointer", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
 			7: ByteField("InvokeProtectionSwitch", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
 			8: ByteField("AlarmReportingControl", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 8),
 			9: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

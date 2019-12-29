@@ -174,7 +174,7 @@ func init() {
 			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

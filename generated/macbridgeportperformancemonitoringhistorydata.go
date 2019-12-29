@@ -99,7 +99,7 @@ func init() {
 			6: Uint32Field("ReceivedFrameCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 6),
 			7: Uint32Field("ReceivedAndDiscardedCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

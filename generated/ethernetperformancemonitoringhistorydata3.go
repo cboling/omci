@@ -162,7 +162,7 @@ func init() {
 			15: Uint32Field("Packets512To1023Octets", 0, mapset.NewSetWith(Read), false, true, false, false, 15),
 			16: Uint32Field("Packets1024To1518Octets", 0, mapset.NewSetWith(Read), false, true, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

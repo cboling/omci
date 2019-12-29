@@ -21,6 +21,7 @@
 package generated
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"errors"
 	"fmt"
@@ -39,9 +40,9 @@ type AttributeDefinitionMap map[uint]AttributeDefinition
 type AttributeDefinition struct {
 	Name         string
 	Index        uint
-	DefValue     interface{} // Note: Not supported yet
-	Size         int         // Size of attribute in bytes. 0 indicates variable/unknown
-	Access       mapset.Set  // AttributeAccess...
+	DefValue     interface{}
+	Size         int        // Size of attribute in bytes. 0 indicates variable/unknown
+	Access       mapset.Set // AttributeAccess...
 	Constraint   func(interface{}) *ParamError
 	Avc          bool // If true, an AVC notification can occur for the attribute
 	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
@@ -525,6 +526,16 @@ func GetAttributesValueMap(attrDefs AttributeDefinitionMap, mask uint16, access 
 
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
+func toOctets(str string) []byte {
+	data, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		panic(fmt.Sprintf("Invalid Base-64 string: '%v'", str))
+	}
+	return data
+}
+
+///////////////////////////////////////////////////////////////////////
+// Packet definitions for attributes of various types/sizes
 
 // ByteField returns an AttributeDefinition for an attribute that is encoded as a single
 // octet (8-bits).
@@ -642,9 +653,14 @@ func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, av
 
 // TableInfo is an early prototype of how to better model some tables that are
 // difficult to code.
+//
+// The Value member may be one of the following:
+//   nil    : Empty, no default, ...
+//   value  : A specific value that equates to one row, ie) 6  or toOctets("base64")
+//   array  : One or more rows of values.  [2]uint16{2, 3}
 type TableInfo struct {
-	Value interface{}
-	Size  int
+	Value interface{} // See comment above
+	Size  int         // Table Row Size
 }
 
 func (t *TableInfo) String() string {

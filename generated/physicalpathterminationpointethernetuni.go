@@ -138,7 +138,7 @@ func init() {
 			5:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
 			6:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 6),
 			7:  ByteField("ConfigurationInd", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint16Field("MaxFrameSize", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
+			8:  Uint16Field("MaxFrameSize", 1518, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
 			9:  ByteField("DteOrDceInd", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
 			10: Uint16Field("PauseTime", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
 			11: ByteField("BridgedOrIpInd", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
@@ -147,7 +147,7 @@ func init() {
 			14: ByteField("PppoeFilter", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 			15: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

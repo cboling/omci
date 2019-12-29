@@ -88,7 +88,7 @@ func init() {
 			3: ByteField("TosDiffservField", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 			4: Uint16Field("IpHostPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

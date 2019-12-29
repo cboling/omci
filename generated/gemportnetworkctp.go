@@ -121,7 +121,7 @@ func init() {
 			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
 			1:  Uint16Field("PortId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 			2:  Uint16Field("TContPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("Direction", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
+			3:  ByteField("Direction", 3, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 			6:  ByteField("UniCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
@@ -130,7 +130,7 @@ func init() {
 			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
 			10: ByteField("EncryptionKeyRing", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

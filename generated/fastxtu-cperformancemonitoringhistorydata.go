@@ -89,7 +89,7 @@ func init() {
 			4: Uint32Field("SuccessfulRpaCounter", 0, mapset.NewSetWith(Read), false, true, true, false, 4),
 			5: Uint32Field("SuccessfulTigaCounter", 0, mapset.NewSetWith(Read), false, true, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

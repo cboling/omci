@@ -87,7 +87,7 @@ func init() {
 			4: Uint16Field("Tci", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
 			5: ByteField("Loopback", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

@@ -138,7 +138,7 @@ func init() {
 			14: Uint32Field("LodsEventRestoredCount", 0, mapset.NewSetWith(Read), false, true, true, false, 14),
 			15: Uint32Field("OnuReactivationByLodsEvents", 0, mapset.NewSetWith(Read), false, true, true, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

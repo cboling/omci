@@ -180,7 +180,7 @@ func init() {
 			13: Uint32Field("TargetDownstreamFrequency", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
 			14: ByteField("UpstreamSignalTransmissionMode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

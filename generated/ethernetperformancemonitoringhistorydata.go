@@ -147,7 +147,7 @@ func init() {
 			15: Uint32Field("AlignmentErrorCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 15),
 			16: Uint32Field("InternalMacReceiveErrorCounter", 0, mapset.NewSetWith(Read), false, true, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

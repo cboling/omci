@@ -73,7 +73,7 @@ func init() {
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: ByteField("MibDataSync", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

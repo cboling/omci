@@ -102,9 +102,9 @@ func init() {
 			5: Uint16Field("FarEndMAxCEllCOncatenation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 			6: ByteField("AtmCellLossPriorityClpQosMapping", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
 			7: ByteField("TimeoutMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8: TableField("PwAtmMappingTable", TableInfo{0, 21}, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			8: TableField("PwAtmMappingTable", TableInfo{nil, 21}, mapset.NewSetWith(Read, Write), false, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

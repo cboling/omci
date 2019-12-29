@@ -84,7 +84,7 @@ func init() {
 			2: Uint16Field("AcsNetworkAddress", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 			3: Uint16Field("AssociatedTag", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

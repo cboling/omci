@@ -141,7 +141,7 @@ func init() {
 			10: ByteField("ActualInterleavingBlockLength", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
 			11: ByteField("ActualLatencyPath", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

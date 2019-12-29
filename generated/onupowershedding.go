@@ -118,7 +118,7 @@ func init() {
 			10: Uint16Field("SdhSonetClassSheddingInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
 			11: Uint16Field("SheddingStatus", 0, mapset.NewSetWith(Read), true, false, true, false, 11),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

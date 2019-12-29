@@ -98,7 +98,7 @@ func init() {
 			4: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
 			5: Uint16Field("AssociatedMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

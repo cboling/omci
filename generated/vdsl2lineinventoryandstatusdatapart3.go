@@ -110,7 +110,7 @@ func init() {
 			5: MultiByteField("DownstreamSnrMarginPerBand", 3, nil, mapset.NewSetWith(Read), false, false, false, false, 5),
 			6: Uint32Field("UpstreamSnrMarginPerBand", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

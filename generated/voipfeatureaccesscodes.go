@@ -111,7 +111,7 @@ func init() {
 			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
 			12: MultiByteField("AttendedCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

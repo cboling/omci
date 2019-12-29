@@ -89,9 +89,9 @@ func init() {
 			3: Uint16Field("CriticalDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
 			4: Uint16Field("PartialDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
 			5: ByteField("DialPlanFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: TableField("DialPlanTable", TableInfo{0, 30}, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			6: TableField("DialPlanTable", TableInfo{nil, 30}, mapset.NewSetWith(Read, Write), false, false, false, 6),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

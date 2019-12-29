@@ -127,7 +127,7 @@ func init() {
 			9:  Uint32Field("TuningControlRequestsRollbackUsLnrt", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
 			10: Uint32Field("TuningControlRequestsRollbackUsLncd", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

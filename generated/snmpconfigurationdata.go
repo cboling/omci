@@ -102,7 +102,7 @@ func init() {
 			7: Uint16Field("CommunityForWrite", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 			8: Uint16Field("SysNamePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

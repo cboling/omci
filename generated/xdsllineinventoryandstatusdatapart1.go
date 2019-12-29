@@ -156,7 +156,7 @@ func init() {
 			14: MultiByteField("XtuRTransmissionSystemCapability", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 14),
 			15: ByteField("InitializationSuccessFailureCause", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

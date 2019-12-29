@@ -147,7 +147,7 @@ func init() {
 			15: Uint32Field("AssignOnuIdMessagesReceived", 0, mapset.NewSetWith(Read), false, true, true, false, 15),
 			16: Uint32Field("OmciMicErrorCount", 0, mapset.NewSetWith(Read), false, true, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

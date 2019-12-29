@@ -96,7 +96,7 @@ func init() {
 			5: Uint32Field("WatchfulSleepTime", 0, mapset.NewSetWith(Read), false, true, false, false, 5),
 			6: Uint32Field("EnergyConsumed", 0, mapset.NewSetWith(Read), false, true, true, false, 6),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

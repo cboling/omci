@@ -134,7 +134,7 @@ func init() {
 			15: ByteField("OobDtmf", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 15),
 			16: Uint16Field("RtpProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

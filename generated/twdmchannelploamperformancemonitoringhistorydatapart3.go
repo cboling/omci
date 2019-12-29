@@ -133,7 +133,7 @@ func init() {
 			12: Uint32Field("PowerConsumptionReportMessageCount", 0, mapset.NewSetWith(Read), false, true, false, false, 12),
 			13: Uint32Field("ChangePowerLevelParameterErrorCount", 0, mapset.NewSetWith(Read), false, true, false, false, 13),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

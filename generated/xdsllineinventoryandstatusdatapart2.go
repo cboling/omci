@@ -157,7 +157,7 @@ func init() {
 			15: ByteField("InitializationLastStateTransmittedDownstream", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
 			16: ByteField("InitializationLastStateTransmittedUpstream", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

@@ -165,8 +165,8 @@ func init() {
 			3:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 3),
 			4:  ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
 			5:  Uint16Field("ReAniGPointer", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  TableField("TotalOpticalReceiveSignalLevelTable", TableInfo{0, 4}, mapset.NewSetWith(Read), false, true, false, 6),
-			7:  TableField("PerBurstReceiveSignalLevelTable", TableInfo{0, 4}, mapset.NewSetWith(Read), false, true, false, 7),
+			6:  TableField("TotalOpticalReceiveSignalLevelTable", TableInfo{nil, 4}, mapset.NewSetWith(Read), false, true, false, 6),
+			7:  TableField("PerBurstReceiveSignalLevelTable", TableInfo{nil, 4}, mapset.NewSetWith(Read), false, true, false, 7),
 			8:  ByteField("LowerReceiveOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
 			9:  ByteField("UpperReceiveOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
 			10: Uint16Field("TransmitOpticalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
@@ -175,7 +175,7 @@ func init() {
 			13: ByteField("ADditionalPreamble", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
 			14: ByteField("ADditionalGuardTime", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

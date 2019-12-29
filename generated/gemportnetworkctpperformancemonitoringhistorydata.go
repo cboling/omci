@@ -108,7 +108,7 @@ func init() {
 			6: Uint64Field("TransmittedPayloadBytes", 0, mapset.NewSetWith(Read), false, true, false, false, 6),
 			7: Uint32Field("EncryptionKeyErrors", 0, mapset.NewSetWith(Read), false, true, true, false, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

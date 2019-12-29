@@ -114,7 +114,7 @@ func init() {
 			11: Uint32Field("TxDiscardedFrames", 0, mapset.NewSetWith(Read), false, true, false, false, 11),
 			12: Uint32Field("TxDiscardedBytes", 0, mapset.NewSetWith(Read), false, true, false, false, 12),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

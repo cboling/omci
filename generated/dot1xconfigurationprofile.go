@@ -109,7 +109,7 @@ func init() {
 			9:  Uint32Field("OltProxyAddress", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
 			10: Uint16Field("CallingStationIdFormat", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

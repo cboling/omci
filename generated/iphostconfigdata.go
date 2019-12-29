@@ -142,7 +142,7 @@ func init() {
 			15: MultiByteField("HostName", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 15),
 			16: Uint16Field("RelayAgentOptions", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

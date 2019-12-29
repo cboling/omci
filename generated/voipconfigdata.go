@@ -99,7 +99,7 @@ func init() {
 			7: ByteField("RetrieveProfile", 0, mapset.NewSetWith(Write), false, false, false, false, 7),
 			8: MultiByteField("ProfileVersion", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

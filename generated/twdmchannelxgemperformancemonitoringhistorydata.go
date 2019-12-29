@@ -117,7 +117,7 @@ func init() {
 			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, true, false, false, 9),
 			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, true, false, false, 10),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

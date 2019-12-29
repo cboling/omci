@@ -122,7 +122,7 @@ func init() {
 			11: Uint32Field("ErrorFreeBitsCounter", 0, mapset.NewSetWith(Read), false, true, true, false, 11),
 			12: Uint32Field("MinimumErrorFreeThroughputMineftr", 0, mapset.NewSetWith(Read), false, true, true, false, 12),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

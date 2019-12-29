@@ -112,7 +112,7 @@ func init() {
 			6: ByteField("MhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
 			7: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

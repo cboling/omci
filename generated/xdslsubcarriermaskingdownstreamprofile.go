@@ -83,7 +83,7 @@ func init() {
 			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
 			5: ByteField("MaskValid", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

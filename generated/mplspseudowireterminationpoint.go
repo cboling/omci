@@ -135,7 +135,7 @@ func init() {
 			14: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 			15: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

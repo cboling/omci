@@ -72,7 +72,7 @@ func init() {
 			1: Uint16Field("CesBufferedCdvTolerance", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 			2: ByteField("ChannelAssociatedSignallingCas", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

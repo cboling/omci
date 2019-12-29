@@ -128,7 +128,7 @@ func init() {
 			15: Uint32Field("OutgoingBroadcastPackets", 0, mapset.NewSetWith(Read), false, true, true, false, 15),
 			16: Uint32Field("OutgoingOctets", 0, mapset.NewSetWith(Read), false, true, true, false, 16),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

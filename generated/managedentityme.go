@@ -89,15 +89,15 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
 			1: MultiByteField("Name", 25, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: TableField("AttributesTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 2),
+			2: TableField("AttributesTable", TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 2),
 			3: ByteField("Access", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: TableField("AlarmsTable", TableInfo{0, 1}, mapset.NewSetWith(Read), false, false, false, 4),
-			5: TableField("AvcsTable", TableInfo{0, 1}, mapset.NewSetWith(Read), false, false, false, 5),
+			4: TableField("AlarmsTable", TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, false, 4),
+			5: TableField("AvcsTable", TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, false, 5),
 			6: Uint32Field("Actions", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: TableField("InstancesTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 7),
+			7: TableField("InstancesTable", TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 7),
 			8: ByteField("Support", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

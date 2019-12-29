@@ -127,7 +127,7 @@ func init() {
 			10: ByteField("AmplifierNoiseFigure", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
 			11: ByteField("AmplifierSaturationGain", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

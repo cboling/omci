@@ -97,9 +97,9 @@ func init() {
 			2: ByteField("CatchallLevel", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
 			3: ByteField("CatchallMhfCreation", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
 			4: ByteField("CatchallSenderIdPermission", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: TableField("DefaultMdLevelTable", TableInfo{0, 29}, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			5: TableField("DefaultMdLevelTable", TableInfo{nil, 29}, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

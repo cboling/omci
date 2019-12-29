@@ -97,7 +97,7 @@ func init() {
 			4: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
 			5: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

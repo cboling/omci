@@ -116,7 +116,7 @@ func init() {
 			7: Uint32Field("AdjustTxWavelengthMessageCount", 0, mapset.NewSetWith(Read), false, true, false, false, 7),
 			8: Uint32Field("AdjustTxWavelengthAdjustmentAmplitude", 0, mapset.NewSetWith(Read), false, true, false, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

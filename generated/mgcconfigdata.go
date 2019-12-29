@@ -128,7 +128,7 @@ func init() {
 			10: Uint32Field("Softswitch", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
 			11: Uint16Field("MessageIdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 11),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

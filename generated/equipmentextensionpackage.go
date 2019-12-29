@@ -71,7 +71,7 @@ func init() {
 			1: Uint16Field("EnvironmentalSense", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
 			2: Uint16Field("ContactClosureOutput", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

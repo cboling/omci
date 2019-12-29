@@ -160,7 +160,7 @@ func init() {
 			12: Uint32Field("TargetNetDataRateTargetNdr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
 			13: Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 13),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

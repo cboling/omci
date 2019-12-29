@@ -166,7 +166,7 @@ func init() {
 			14: Uint32Field("MinimumSosBitRateDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
 			15: Uint32Field("MinimumSosBitRateUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

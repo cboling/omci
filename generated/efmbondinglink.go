@@ -72,7 +72,7 @@ func init() {
 			1: Uint16Field("AssociatedGroupMeId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
 			2: ByteField("LinkAlarmEnable", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

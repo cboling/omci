@@ -146,7 +146,7 @@ func init() {
 			13: Uint16Field("RfChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
 			14: Uint16Field("LastOperationalFrequency", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

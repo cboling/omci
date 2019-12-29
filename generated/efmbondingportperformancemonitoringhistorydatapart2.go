@@ -131,7 +131,7 @@ func init() {
 			13: Uint32Field("RxMulticastBytes", 0, mapset.NewSetWith(Read), false, true, false, false, 13),
 			14: Uint32Field("TxMulticastBytes", 0, mapset.NewSetWith(Read), false, true, false, false, 14),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

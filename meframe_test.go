@@ -276,8 +276,9 @@ func pickAValue(attrDef me.AttributeDefinition) interface{} {
 	constraint := attrDef.Constraint
 	defaultVal := attrDef.DefValue
 	size := attrDef.GetSize()
+	_, isOctetString := defaultVal.([]byte)
 
-	if attrDef.IsTableAttribute() {
+	if attrDef.IsTableAttribute() || isOctetString {
 		// Table attributes treated as a string of octets.  If size is zero, it is
 		// most likely an attribute with variable size. Pick a random size that will
 		// fit into a simple frame (1-33 octets)

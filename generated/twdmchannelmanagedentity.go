@@ -86,7 +86,7 @@ func init() {
 			3: ByteField("DownstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
 			4: ByteField("UpstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

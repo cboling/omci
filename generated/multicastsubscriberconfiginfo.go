@@ -109,10 +109,10 @@ func init() {
 			3: Uint16Field("MaxSimultaneousGroups", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
 			4: Uint32Field("MaxMulticastBandwidth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
 			5: ByteField("BandwidthEnforcement", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6: TableField("MulticastServicePackageTable", TableInfo{0, 20}, mapset.NewSetWith(Read, Write), false, true, false, 6),
-			7: TableField("AllowedPreviewGroupsTable", TableInfo{0, 22}, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			6: TableField("MulticastServicePackageTable", TableInfo{nil, 20}, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7: TableField("AllowedPreviewGroupsTable", TableInfo{nil, 22}, mapset.NewSetWith(Read, Write), false, false, false, 7),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOlt,
 		Support: UnknownSupport,
 	}
 }

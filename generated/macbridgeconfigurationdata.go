@@ -92,16 +92,16 @@ func init() {
 		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("BridgeMacAddress", 6, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
+			1: MultiByteField("BridgeMacAddress", 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read), false, false, false, false, 1),
 			2: Uint16Field("BridgePriority", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: Uint64Field("DesignatedRoot", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
+			3: MultiByteField("DesignatedRoot", 8, toOctets("AAAAAAAAAAA="), mapset.NewSetWith(Read), false, false, false, false, 3),
 			4: Uint32Field("RootPathCost", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
 			5: ByteField("BridgePortCount", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
 			6: Uint16Field("RootPortNum", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint16Field("HelloTime", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8: Uint16Field("ForwardDelay", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
+			7: Uint16Field("HelloTime", 256, mapset.NewSetWith(Read), false, false, true, false, 7),
+			8: Uint16Field("ForwardDelay", 1024, mapset.NewSetWith(Read), false, false, true, false, 8),
 		},
-		Access:  UnknownAccess,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }
