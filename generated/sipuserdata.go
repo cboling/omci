@@ -124,7 +124,7 @@ func init() {
 			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
 			1:  Uint16Field("SipAgentPointer", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
 			2:  Uint16Field("UserPartAor", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3:  MultiByteField("SipDisplayName", OctetsAttributeType, 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			3:  MultiByteField("SipDisplayName", OctetsAttributeType, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
 			4:  Uint16Field("UsernameAndPassword", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
 			5:  Uint16Field("VoicemailServerSipUri", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
 			6:  Uint32Field("VoicemailSubscriptionExpirationTime", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),

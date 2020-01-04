@@ -139,7 +139,7 @@ func init() {
 			6:  ByteField("ArcInterval", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
 			7:  ByteField("PppoeFilter", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
 			8:  ByteField("NetworkStatus", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 8),
-			9:  MultiByteField("Password", OctetsAttributeType, 17, nil, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			9:  MultiByteField("Password", OctetsAttributeType, 17, toOctets("AAAAAAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read, Write), false, false, false, 9),
 			10: ByteField("PrivacyEnabled", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 10),
 			11: Uint16Field("MinimumBandwidthAlarmThreshold", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
 			12: Uint32Field("FrequencyMask", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),

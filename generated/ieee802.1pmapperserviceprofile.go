@@ -122,7 +122,7 @@ func init() {
 			8:  Uint16Field("InterworkTpPointerForPBitPriority6", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
 			9:  Uint16Field("InterworkTpPointerForPBitPriority7", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
 			10: ByteField("UnmarkedFrameOption", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
-			11: MultiByteField("DscpToPBitMapping", OctetsAttributeType, 24, nil, mapset.NewSetWith(Read, Write), false, false, false, 11),
+			11: MultiByteField("DscpToPBitMapping", OctetsAttributeType, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, false, false, 11),
 			12: ByteField("DefaultPBitAssumption", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 12),
 			13: ByteField("TpType", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 13),
 		},

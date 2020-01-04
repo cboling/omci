@@ -97,7 +97,7 @@ func init() {
 			5: Uint16Field("VoipConfigurationAddressPointer", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
 			6: ByteField("VoipConfigurationState", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 6),
 			7: ByteField("RetrieveProfile", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Write), false, false, false, 7),
-			8: MultiByteField("ProfileVersion", OctetsAttributeType, 25, nil, mapset.NewSetWith(Read), true, false, false, 8),
+			8: MultiByteField("ProfileVersion", OctetsAttributeType, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, false, 8),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

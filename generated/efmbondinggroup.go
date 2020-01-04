@@ -80,7 +80,7 @@ func init() {
 		AllowedAttributeMask: 0xf000,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: MultiByteField("GroupId", OctetsAttributeType, 6, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			1: MultiByteField("GroupId", OctetsAttributeType, 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
 			2: Uint32Field("MinimumUpstreamGroupRate", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
 			3: Uint32Field("MinimumDownstreamGroupRate", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
 			4: ByteField("GroupAlarmEnable", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),

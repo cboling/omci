@@ -124,7 +124,7 @@ func init() {
 			6:  Uint16Field("MaximumRetryTime", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
 			7:  Uint16Field("MaximumRetryAttempts", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
 			8:  Uint16Field("ServiceChangeDelay", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, false, 8),
-			9:  MultiByteField("TerminationIdBase", OctetsAttributeType, 25, nil, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			9:  MultiByteField("TerminationIdBase", OctetsAttributeType, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 9),
 			10: Uint32Field("Softswitch", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
 			11: Uint16Field("MessageIdPointer", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 11),
 		},

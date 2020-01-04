@@ -117,7 +117,7 @@ func init() {
 		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1:  MultiByteField("OltCryptoCapabilities", OctetsAttributeType, 16, nil, mapset.NewSetWith(Write), false, false, false, 1),
+			1:  MultiByteField("OltCryptoCapabilities", OctetsAttributeType, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Write), false, false, false, 1),
 			2:  TableField("OltRandomChallengeTable", TableAttributeType, TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 2),
 			3:  ByteField("OltChallengeStatus", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
 			4:  ByteField("OnuSelectedCryptoCapabilities", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 4),
@@ -126,7 +126,7 @@ func init() {
 			7:  TableField("OltAuthenticationResultTable", TableAttributeType, TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 7),
 			8:  ByteField("OltResultStatus", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
 			9:  ByteField("OnuAuthenticationStatus", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), true, false, false, 9),
-			10: MultiByteField("MasterSessionKeyName", OctetsAttributeType, 16, nil, mapset.NewSetWith(Read), false, false, false, 10),
+			10: MultiByteField("MasterSessionKeyName", OctetsAttributeType, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 10),
 			11: TableField("BroadcastKeyTable", TableAttributeType, TableInfo{nil, 18}, mapset.NewSetWith(Read, Write), false, true, false, 11),
 			12: Uint16Field("EffectiveKeyLength", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, true, false, 12),
 		},

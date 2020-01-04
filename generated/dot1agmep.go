@@ -140,7 +140,7 @@ func init() {
 			7:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
 			8:  ByteField("CcmAndLtmPriority", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
 			9:  Uint64Field("EgressIdentifier", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
-			10: MultiByteField("PeerMepIds", OctetsAttributeType, 24, nil, mapset.NewSetWith(Read, Write), false, false, false, 10),
+			10: MultiByteField("PeerMepIds", OctetsAttributeType, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, false, false, 10),
 			11: ByteField("EthAisControl", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 11),
 			12: ByteField("FaultAlarmThreshold", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 12),
 			13: Uint16Field("AlarmDeclarationSoakTime", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 13),

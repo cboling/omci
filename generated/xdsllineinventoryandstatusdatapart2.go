@@ -140,7 +140,7 @@ func init() {
 		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1:  MultiByteField("XdslTransmissionSystem", OctetsAttributeType, 7, nil, mapset.NewSetWith(Read), false, false, false, 1),
+			1:  MultiByteField("XdslTransmissionSystem", OctetsAttributeType, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 1),
 			2:  ByteField("LinePowerManagementState", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 2),
 			3:  Uint16Field("DownstreamLineAttenuation", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 3),
 			4:  Uint16Field("UpstreamLineAttenuation", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 4),

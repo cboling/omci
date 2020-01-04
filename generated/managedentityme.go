@@ -88,7 +88,7 @@ func init() {
 		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: MultiByteField("Name", OctetsAttributeType, 25, nil, mapset.NewSetWith(Read), false, false, false, 1),
+			1: MultiByteField("Name", OctetsAttributeType, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 1),
 			2: TableField("AttributesTable", TableAttributeType, TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 2),
 			3: ByteField("Access", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 3),
 			4: TableField("AlarmsTable", TableAttributeType, TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, false, 4),

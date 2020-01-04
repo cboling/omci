@@ -90,7 +90,7 @@ func init() {
 			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
 			1: ByteField("MdLevel", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
 			2: ByteField("MdNameFormat", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
-			3: MultiByteField("MdName1MdName2", OctetsAttributeType, 25, nil, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			3: MultiByteField("MdName1MdName2", OctetsAttributeType, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
 			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
 			5: ByteField("SenderIdPermission", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
 		},
