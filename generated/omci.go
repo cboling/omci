@@ -65,9 +65,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, 0),
-			1: TableField("MeTypeTable", TableAttributeType, TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, 1),
-			2: TableField("MessageTypeTable", TableAttributeType, TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: TableField("MeTypeTable", TableAttributeType, TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 1),
+			2: TableField("MessageTypeTable", TableAttributeType, TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, false, 2),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

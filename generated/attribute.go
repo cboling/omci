@@ -64,6 +64,7 @@ type AttributeDefinition struct {
 	Avc           bool // If true, an AVC notification can occur for the attribute
 	Tca           bool // If true, a threshold crossing alert alarm notification can occur for the attribute
 	Optional      bool // If true, attribute is option, else mandatory
+	Deprecated    bool // If true, attribute is deprecated
 }
 
 func (attr *AttributeDefinition) String() string {
@@ -153,8 +154,14 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 	default:
 		switch attr.GetSize() {
 		default:
-			panic("Not Expected")
-
+			value := make([]byte, size)
+			copy(value, data[:size])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
+			}
+			return value, nil
 		case 1:
 			value := data[0]
 			if attr.GetConstraints() != nil {
@@ -266,7 +273,11 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	default:
 		switch size {
 		default:
-			panic("Not expected")
+			byteStream, err := InterfaceToOctets(value)
+			if err != nil {
+				return 0, err
+			}
+			copy(bytes, byteStream)
 		case 1:
 			switch value.(type) {
 			case int:
@@ -565,7 +576,7 @@ func toOctets(str string) []byte {
 // ByteField returns an AttributeDefinition for an attribute that is encoded as a single
 // octet (8-bits).
 func ByteField(name string, attrType AttributeType, defVal uint8, access mapset.Set, avc bool,
-	optional bool, index uint) AttributeDefinition {
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -575,13 +586,14 @@ func ByteField(name string, attrType AttributeType, defVal uint8, access mapset.
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint16Field returns an AttributeDefinition for an attribute that is encoded as two
 // octet (16-bits).
 func Uint16Field(name string, attrType AttributeType, defVal uint16, access mapset.Set, avc bool,
-	optional bool, index uint) AttributeDefinition {
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -591,13 +603,14 @@ func Uint16Field(name string, attrType AttributeType, defVal uint16, access maps
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint32Field returns an AttributeDefinition for an attribute that is encoded as four
 // octet (32-bits).
 func Uint32Field(name string, attrType AttributeType, defVal uint32, access mapset.Set, avc bool,
-	optional bool, index uint) AttributeDefinition {
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -607,13 +620,14 @@ func Uint32Field(name string, attrType AttributeType, defVal uint32, access maps
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint64Field returns an AttributeDefinition for an attribute that is encoded as eight
 // octet (64-bits).
 func Uint64Field(name string, attrType AttributeType, defVal uint64, access mapset.Set, avc bool,
-	optional bool, index uint) AttributeDefinition {
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -623,13 +637,14 @@ func Uint64Field(name string, attrType AttributeType, defVal uint64, access maps
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // MultiByteField returns an AttributeDefinition for an attribute that is encoded as multiple
 // octets that do not map into fields with a length that is 1, 2, 4, or 8 octets.
 func MultiByteField(name string, attrType AttributeType, size uint, defVal []byte, access mapset.Set, avc bool,
-	optional bool, index uint) AttributeDefinition {
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -639,6 +654,7 @@ func MultiByteField(name string, attrType AttributeType, size uint, defVal []byt
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
@@ -684,7 +700,7 @@ func (t *TableInfo) String() string {
 
 // TableField is used to define an attribute that is a table
 func TableField(name string, attrType AttributeType, tableInfo TableInfo, access mapset.Set,
-	avc bool, optional bool, index uint) AttributeDefinition {
+	avc bool, optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
@@ -694,6 +710,7 @@ func TableField(name string, attrType AttributeType, tableInfo TableInfo, access
 		Access:        access,
 		Avc:           avc,
 		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
@@ -709,6 +726,7 @@ func UnknownField(name string, size int, index uint) AttributeDefinition {
 		Access:        mapset.NewSet(Read, Write),
 		Avc:           false,
 		Optional:      false,
+		Deprecated:    false,
 	}
 }
 

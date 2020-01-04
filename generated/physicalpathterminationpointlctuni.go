@@ -88,8 +88,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, 0),
-			1: ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

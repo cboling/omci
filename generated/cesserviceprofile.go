@@ -68,9 +68,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, 0),
-			1: Uint16Field("CesBufferedCdvTolerance", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, 1),
-			2: ByteField("ChannelAssociatedSignallingCas", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("CesBufferedCdvTolerance", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("ChannelAssociatedSignallingCas", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
