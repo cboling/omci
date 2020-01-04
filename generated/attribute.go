@@ -139,8 +139,8 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 		df.SetTruncated()
 		return nil, NewMessageTruncatedError("packet too small for field")
 	}
-	switch attr.GetSize() {
-	default:
+	switch attr.AttributeType {
+	case StringAttributeType, OctetsAttributeType, UnknownAttributeType:
 		value := make([]byte, size)
 		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
@@ -149,39 +149,46 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 			}
 		}
 		return value, nil
-	case 1:
-		value := data[0]
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+
+	default:
+		switch attr.GetSize() {
+		default:
+			panic("Not Expected")
+
+		case 1:
+			value := data[0]
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 2:
-		value := binary.BigEndian.Uint16(data[0:2])
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 2:
+			value := binary.BigEndian.Uint16(data[0:2])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 4:
-		value := binary.BigEndian.Uint32(data[0:4])
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 4:
+			value := binary.BigEndian.Uint32(data[0:4])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 8:
-		value := binary.BigEndian.Uint64(data[0:8])
-		if attr.GetConstraints() != nil {
-			omciErr := attr.GetConstraints()(value)
-			if omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 8:
+			value := binary.BigEndian.Uint64(data[0:8])
+			if attr.GetConstraints() != nil {
+				omciErr := attr.GetConstraints()(value)
+				if omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
+			return value, nil
 		}
-		return value, nil
 	}
 }
 
@@ -248,40 +255,46 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	if err != nil {
 		return 0, err
 	}
-	switch size {
-	default:
+	switch attr.AttributeType {
+	case StringAttributeType, OctetsAttributeType, UnknownAttributeType:
 		byteStream, err := InterfaceToOctets(value)
 		if err != nil {
 			return 0, err
 		}
 		copy(bytes, byteStream)
-	case 1:
-		switch value.(type) {
-		case int:
-			bytes[0] = byte(value.(int))
+
+	default:
+		switch size {
 		default:
-			bytes[0] = value.(byte)
-		}
-	case 2:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
-		default:
-			binary.BigEndian.PutUint16(bytes, value.(uint16))
-		}
-	case 4:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
-		default:
-			binary.BigEndian.PutUint32(bytes, value.(uint32))
-		}
-	case 8:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
-		default:
-			binary.BigEndian.PutUint64(bytes, value.(uint64))
+			panic("Not expected")
+		case 1:
+			switch value.(type) {
+			case int:
+				bytes[0] = byte(value.(int))
+			default:
+				bytes[0] = value.(byte)
+			}
+		case 2:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
+			default:
+				binary.BigEndian.PutUint16(bytes, value.(uint16))
+			}
+		case 4:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
+			default:
+				binary.BigEndian.PutUint32(bytes, value.(uint32))
+			}
+		case 8:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
+			default:
+				binary.BigEndian.PutUint64(bytes, value.(uint64))
+			}
 		}
 	}
 	return size, nil
