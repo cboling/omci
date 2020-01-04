@@ -23,7 +23,6 @@ import (
 	"fmt"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
-	"log"
 )
 
 // MessageType is the OMCI Message Type or'ed with the AR/AK flags as appropriate.
@@ -239,6 +238,8 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
+	// Create attribute mask of SetByCreate attributes that should be present in the provided
+	// attributes.
 	var sbcMask uint16
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
 		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
@@ -246,9 +247,6 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 				continue // Skip Entity ID
 			}
 			sbcMask |= 1 << (15 - uint(index-1))
-		} else {
-			// TODO: Better (hierarchical) logging would be nice.  This could be a warning...
-			log.Printf("Attribute '%v' of %v is not a SetByCreate attribute", attr.GetName(), omci.EntityClass)
 		}
 	}
 	// Attribute serialization

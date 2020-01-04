@@ -67,9 +67,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint16Field("EnvironmentalSense", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2: Uint16Field("ContactClosureOutput", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, 0),
+			1: Uint16Field("EnvironmentalSense", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, 1),
+			2: Uint16Field("ContactClosureOutput", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, true, 2),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

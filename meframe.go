@@ -92,6 +92,7 @@ type options struct {
 	alarm                     AlarmOptions    // Alarm related frames
 	software                  SoftwareOptions // Software image related frames
 	payload                   interface{}     // ME or list of MEs, alarm bitmap, timestamp, ...
+	addDefaults               bool            // Add missing SetByCreate attributes for Create Requests
 }
 
 var defaultFrameOptions = options{
@@ -107,6 +108,7 @@ var defaultFrameOptions = options{
 	software:                  defaultSoftwareOptions,
 	alarm:                     defaultAlarmOptions,
 	payload:                   nil,
+	addDefaults:               false,
 }
 
 // FrameOption sets options such as frame format, etc.
@@ -252,6 +254,15 @@ func Software(so SoftwareOptions) FrameOption {
 func Payload(p interface{}) FrameOption {
 	return func(o *options) {
 		o.payload = p
+	}
+}
+
+// AddDefaults is used to specify that if a SetByCreate attribute is not
+// specified in the list of attributes for a Create Request, use the attribute
+// defined default
+func AddDefaults(add bool) FrameOption {
+	return func(o *options) {
+		o.addDefaults = add
 	}
 }
 
@@ -411,6 +422,21 @@ func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 			EntityInstance: m.GetEntityID(),
 		},
 		Attributes: m.GetAttributeValueMap(),
+	}
+	// Add any missing SetByCreate options if requested
+	if opt.addDefaults {
+		if attrDefs, err := me.GetAttributesDefinitions(m.GetClassID()); err == nil {
+			for index, attr := range attrDefs {
+				if me.SupportsAttributeAccess(attr, me.SetByCreate) {
+					if index == 0 {
+						continue // Skip Entity ID, if it is SetByCreate, they should always specify it
+					}
+					if _, found := meLayer.Attributes[attr.GetName()]; !found {
+						meLayer.Attributes[attr.GetName()] = attr.DefValue
+					}
+				}
+			}
+		}
 	}
 	return meLayer, nil
 }

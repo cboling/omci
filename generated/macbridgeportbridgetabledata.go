@@ -62,8 +62,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: TableField("BridgeTable", TableInfo{nil, 8}, mapset.NewSetWith(Read), false, false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read), false, false, 0),
+			1: TableField("BridgeTable", TableAttributeType, TableInfo{nil, 8}, mapset.NewSetWith(Read), false, false, 1),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

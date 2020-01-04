@@ -63,8 +63,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("Mtu", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, 0),
+			1: Uint16Field("Mtu", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, 1),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
