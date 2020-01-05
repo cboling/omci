@@ -254,6 +254,9 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	if attr.IsTableAttribute() {
 		return attr.tableAttributeSerializeTo(value, b, msgType, bytesAvailable)
 	}
+	if value == nil {
+		return 0, fmt.Errorf("attribute: %v is nil", attr.Name)
+	}
 	size := attr.GetSize()
 	if bytesAvailable < size {
 		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
