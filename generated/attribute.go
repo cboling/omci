@@ -521,7 +521,11 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, name string) (uint16, er
 	if err != nil {
 		return 0, err
 	}
-	return uint16(1<<16 - attrDef.GetIndex()), nil
+	index := attrDef.GetIndex()
+	if index == 0 {
+		return 0, errors.New("managed entity ID should not be used in an attribute bitmask")
+	}
+	return uint16(1 << (16 - index)), nil
 }
 
 // GetAttributesBitmap is a convenience functions to scan a list of attributes
