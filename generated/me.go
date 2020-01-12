@@ -30,9 +30,10 @@ import (
 
 // ManagedEntity provides a complete instance of a Managed Entity
 type ManagedEntity struct {
-	definition    ManagedEntityDefinition
-	attributeMask uint16
-	attributes    AttributeValueMap
+	definition             ManagedEntityDefinition
+	attributeMask          uint16
+	requestedAttributeMask uint16
+	attributes             AttributeValueMap
 }
 
 // String provides a simple string that describes this struct
@@ -113,6 +114,20 @@ func (entity *ManagedEntity) SetEntityID(eid uint16) error {
 // GetAttributeMask will return the 16-bit attribute mask of a Managed Entity
 func (entity *ManagedEntity) GetAttributeMask() uint16 {
 	return entity.attributeMask
+}
+
+// SetRequestedAttributeMask is used to initialize the requested attribute mask to a specific
+// value. This should only be done on "Get" type operations that need to fetch and attribute
+// and store it in the entity. For other operations (create, set, ...) you should specify
+// the attributes and values in the Params initialization or use the SetAttribute
+func (entity *ManagedEntity) SetRequestedAttributeMask(mask uint16) {
+	entity.requestedAttributeMask = mask
+}
+
+// GetRequestedAttributeMask will return the 16-bit requested attribute mask of a Managed Entity.
+// This is only specified for requests that perform a Get operation
+func (entity *ManagedEntity) GetRequestedAttributeMask() uint16 {
+	return entity.requestedAttributeMask
 }
 
 // GetAttributeValueMap will return the map of attributes of a Managed Entity
