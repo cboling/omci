@@ -71,9 +71,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
-			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("FextCancellationEnablingDisablingUpstreamFextToCancelEnableus", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("FextCancellationEnablingDisablingDownstreamFextToCancelEnableds", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

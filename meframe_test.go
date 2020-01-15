@@ -426,7 +426,7 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 		} else if attrDef.GetAccess().Contains(me.SetByCreate) {
 			// Random 20% chance this parameter was bad
 			if rand.Int31n(5) == 0 {
-				mask |= uint16(1 << (16 - attrDef.Index))
+				mask |= attrDef.Mask
 			}
 		}
 	}
@@ -648,9 +648,9 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 			// 10% it failed
 			switch rand.Int31n(5) {
 			case 0:
-				unsupportedMask |= uint16(1 << (16 - attrDef.Index))
+				unsupportedMask |= attrDef.Mask
 			case 1:
-				failedMask |= uint16(1 << (16 - attrDef.Index))
+				failedMask |= attrDef.Mask
 			}
 		}
 	}
@@ -792,9 +792,9 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 					params.Attributes[attrDef.GetName()] = pickAValue(attrDef)
 				}
 			case 0:
-				unsupportedMask |= uint16(1 << (16 - attrDef.Index))
+				unsupportedMask |= attrDef.Mask
 			case 1:
-				failedMask |= uint16(1 << (16 - attrDef.Index))
+				failedMask |= attrDef.Mask
 			}
 		}
 	}

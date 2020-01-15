@@ -204,7 +204,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 			if index == 0 {
 				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index-1))
+			sbcMask |= attr.Mask
 		}
 	}
 	// Attribute decode
@@ -246,7 +246,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 			if index == 0 {
 				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index-1))
+			sbcMask |= attr.Mask
 		}
 	}
 	// Attribute serialization

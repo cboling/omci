@@ -64,8 +64,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint16Field("MaximumGemPayloadSize", UnsignedIntegerAttributeType, 48, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("MaximumGemPayloadSize", UnsignedIntegerAttributeType, 0x8000, 48, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

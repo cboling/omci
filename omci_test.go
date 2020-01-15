@@ -51,7 +51,7 @@ func getSbcMask(meDefinition IManagedEntityDefinition) uint16 {
 			if index == 0 {
 				continue // Skip Entity ID
 			}
-			sbcMask |= 1 << (15 - uint(index-1))
+			sbcMask |= attr.Mask
 		}
 	}
 	return sbcMask

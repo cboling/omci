@@ -66,9 +66,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: TableField("DownstreamRfiBandsTable", TableAttributeType, TableInfo{nil, 5}, mapset.NewSetWith(Read, Write), false, false, false, 1),
-			2: ByteField("BandsValid", UnsignedIntegerAttributeType, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: TableField("DownstreamRfiBandsTable", TableAttributeType, 0x8000, TableInfo{nil, 5}, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("BandsValid", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

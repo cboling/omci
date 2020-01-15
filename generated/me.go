@@ -189,7 +189,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	} else if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	}
-	mask := uint16(1 << (16 - attrDef.GetIndex()))
+	mask := attrDef.Mask
 	// check any constraints
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err = constraintCheck(value)
@@ -211,7 +211,7 @@ func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) 
 	} else if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	}
-	mask := uint16(1 << (16 - attrDef.GetIndex()))
+	mask := attrDef.Mask
 	// check any constraints
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err := constraintCheck(value)
@@ -232,7 +232,7 @@ func (entity *ManagedEntity) DeleteAttribute(name string) error {
 	}
 	if entity.attributes != nil {
 		delete(entity.attributes, name)
-		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+		entity.attributeMask &= ^attrDef.Mask
 	}
 	return nil
 }
@@ -246,7 +246,7 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	}
 	if entity.attributes != nil {
 		delete(entity.attributes, attrDef.Name)
-		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+		entity.attributeMask &= ^attrDef.Mask
 	}
 	return nil
 }

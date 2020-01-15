@@ -524,8 +524,8 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 				// Is space available?
 				if attrDef.Size <= payloadAvailable {
 					// Mark bit handled
-					mask &= ^(1 << (16 - attrIndex))
-					meLayer.AttributeMask |= 1 << (16 - attrIndex)
+					mask &= ^attrDef.Mask
+					meLayer.AttributeMask |= attrDef.Mask
 					meLayer.Attributes[attrDef.Name] = attrValue
 					payloadAvailable -= attrDef.Size
 				} else {
@@ -642,8 +642,8 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 					// Is space available?
 					if attrDef.Size <= payloadAvailable {
 						// Mark bit handled
-						mask &= ^(1 << (16 - attrIndex))
-						meLayer.AttributeMask |= 1 << (16 - attrIndex)
+						mask &= ^attrDef.Mask
+						meLayer.AttributeMask |= attrDef.Mask
 						meLayer.Attributes[attrDef.Name] = attrValue
 						payloadAvailable -= attrDef.Size
 
@@ -654,7 +654,7 @@ func GetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLa
 						return nil, me.NewMessageTruncatedError(msg)
 					} else {
 						// Add to existing 'failed' mask and update result
-						meLayer.FailedAttributeMask |= 1 << (16 - attrIndex)
+						meLayer.FailedAttributeMask |= attrDef.Mask
 						meLayer.Result = me.AttributeFailure
 					}
 				}
@@ -1256,8 +1256,8 @@ func GetNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializab
 				// Is space available?
 				if attrDef.Size <= payloadAvailable {
 					// Mark bit handled
-					mask &= ^(1 << (16 - attrIndex))
-					meLayer.AttributeMask |= 1 << (16 - attrIndex)
+					mask &= ^attrDef.Mask
+					meLayer.AttributeMask |= attrDef.Mask
 					meLayer.Attributes[attrDef.Name] = attrValue
 					payloadAvailable -= attrDef.Size
 				} else {

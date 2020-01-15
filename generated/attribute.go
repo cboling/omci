@@ -57,6 +57,7 @@ type AttributeDefinition struct {
 	Name          string
 	AttributeType AttributeType
 	Index         uint
+	Mask          uint16
 	DefValue      interface{}
 	Size          int        // Size of attribute in bytes. 0 indicates variable/unknown
 	Access        mapset.Set // AttributeAccess...
@@ -532,9 +533,9 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, name string) (uint16, er
 // and return the bitmask that represents them
 func GetAttributesBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (uint16, error) {
 	var mask uint16
-	for k, def := range attrMap {
+	for _, def := range attrMap {
 		if attributes.Contains(def.Name) {
-			mask |= 1 << uint16(16-k)
+			mask |= def.Mask
 			attributes.Remove(def.Name)
 		}
 	}
@@ -552,7 +553,7 @@ func GetAttributesValueMap(attrDefs AttributeDefinitionMap, mask uint16, access 
 		if index == 0 {
 			continue
 		}
-		checkMask := uint16(1<<16 - def.GetIndex())
+		checkMask := def.Mask
 		accessOk := access == nil || def.GetAccess().Intersect(access).Cardinality() > 0
 
 		if (mask&checkMask) != 0 && accessOk {
@@ -582,11 +583,12 @@ func toOctets(str string) []byte {
 
 // ByteField returns an AttributeDefinition for an attribute that is encoded as a single
 // octet (8-bits).
-func ByteField(name string, attrType AttributeType, defVal uint8, access mapset.Set, avc bool,
+func ByteField(name string, attrType AttributeType, mask uint16, defVal uint8, access mapset.Set, avc bool,
 	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      defVal,
 		Size:          1,
@@ -599,11 +601,12 @@ func ByteField(name string, attrType AttributeType, defVal uint8, access mapset.
 
 // Uint16Field returns an AttributeDefinition for an attribute that is encoded as two
 // octet (16-bits).
-func Uint16Field(name string, attrType AttributeType, defVal uint16, access mapset.Set, avc bool,
+func Uint16Field(name string, attrType AttributeType, mask uint16, defVal uint16, access mapset.Set, avc bool,
 	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      defVal,
 		Size:          2,
@@ -616,11 +619,12 @@ func Uint16Field(name string, attrType AttributeType, defVal uint16, access maps
 
 // Uint32Field returns an AttributeDefinition for an attribute that is encoded as four
 // octet (32-bits).
-func Uint32Field(name string, attrType AttributeType, defVal uint32, access mapset.Set, avc bool,
+func Uint32Field(name string, attrType AttributeType, mask uint16, defVal uint32, access mapset.Set, avc bool,
 	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      defVal,
 		Size:          4,
@@ -633,11 +637,12 @@ func Uint32Field(name string, attrType AttributeType, defVal uint32, access maps
 
 // Uint64Field returns an AttributeDefinition for an attribute that is encoded as eight
 // octet (64-bits).
-func Uint64Field(name string, attrType AttributeType, defVal uint64, access mapset.Set, avc bool,
+func Uint64Field(name string, attrType AttributeType, mask uint16, defVal uint64, access mapset.Set, avc bool,
 	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      defVal,
 		Size:          8,
@@ -650,11 +655,12 @@ func Uint64Field(name string, attrType AttributeType, defVal uint64, access maps
 
 // MultiByteField returns an AttributeDefinition for an attribute that is encoded as multiple
 // octets that do not map into fields with a length that is 1, 2, 4, or 8 octets.
-func MultiByteField(name string, attrType AttributeType, size uint, defVal []byte, access mapset.Set, avc bool,
+func MultiByteField(name string, attrType AttributeType, mask uint16, size uint, defVal []byte, access mapset.Set, avc bool,
 	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      defVal,
 		Size:          int(size),
@@ -706,11 +712,12 @@ func (t *TableInfo) String() string {
 }
 
 // TableField is used to define an attribute that is a table
-func TableField(name string, attrType AttributeType, tableInfo TableInfo, access mapset.Set,
+func TableField(name string, attrType AttributeType, mask uint16, tableInfo TableInfo, access mapset.Set,
 	avc bool, optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: attrType,
+		Mask:          mask,
 		Index:         index,
 		DefValue:      tableInfo.Value,
 		Size:          tableInfo.Size, //Number of elements
@@ -723,10 +730,11 @@ func TableField(name string, attrType AttributeType, tableInfo TableInfo, access
 
 // UnknownField is currently not used and may be deprecated. Its original intent
 // was to be a placeholder during table attribute development
-func UnknownField(name string, size int, index uint) AttributeDefinition {
+func UnknownField(name string, mask uint16, size int, index uint) AttributeDefinition {
 	return AttributeDefinition{
 		Name:          name,
 		AttributeType: UnknownAttributeType, // Stored as octet string
+		Mask:          mask,
 		Index:         index,
 		DefValue:      nil,
 		Size:          size,
