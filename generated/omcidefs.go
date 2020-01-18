@@ -49,7 +49,7 @@ type AttributeAccess byte
 type ClassID uint16
 
 func (cid ClassID) String() string {
-	if entity, err := LoadManagedEntityDefinition(cid); err == nil {
+	if entity, err := LoadManagedEntityDefinition(cid); err.StatusCode() == Success {
 		return fmt.Sprintf("[%s] (%d/%#x)",
 			entity.GetManagedEntityDefinition().GetName(), uint16(cid), uint16(cid))
 	}

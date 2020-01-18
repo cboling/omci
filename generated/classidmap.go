@@ -252,11 +252,11 @@ func GetSupportedClassIDs() []ClassID {
 	return supported
 }
 
-// GetAttributesDefinitions returns the attribute defintion map for a specific class
+// GetAttributesDefinitions returns the attribute definition map for a specific class
 func GetAttributesDefinitions(classID ClassID) (AttributeDefinitionMap, OmciErrors) {
 	medef, err := LoadManagedEntityDefinition(classID)
-	if err != nil {
+	if err.StatusCode() != Success {
 		return nil, err
 	}
-	return medef.GetAttributeDefinitions(), nil
+	return medef.GetAttributeDefinitions(), err
 }

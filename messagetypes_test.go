@@ -285,8 +285,9 @@ func TestCreateRequestDecode(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := me.LoadManagedEntityDefinition(request.EntityClass)
-	assert.Nil(t, err)
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(request.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), me.Success)
 
 	attrDefs := meDefinition.GetAttributeDefinitions()
 
@@ -1339,7 +1340,8 @@ func TestMibUploadNextResponseSerialize(t *testing.T) {
 		},
 	}
 	reportedME, err := me.NewPriorityQueue(paramData)
-	assert.NoError(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	request := &MibUploadNextResponse{
 		MeBasePacket: MeBasePacket{

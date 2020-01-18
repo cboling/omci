@@ -565,7 +565,7 @@ func GetAttributesValueMap(attrDefs AttributeDefinitionMap, mask uint16, access 
 		// Return map, but signaled failed attributes
 		return attrMap, NewParameterError(mask)
 	}
-	return attrMap, nil
+	return attrMap, NewOmciSuccess()
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -754,7 +754,7 @@ type AttributeValueMap map[string]interface{}
 func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErrors {
 	// Get default values for non-SetByCreate attributes
 	attrDefs, err := GetAttributesDefinitions(classID)
-	if err != nil {
+	if err.StatusCode() != Success {
 		return err
 	} else if attributes == nil {
 		return NewProcessingError("Invalid (nil) Attribute Value Map referenced")
@@ -767,5 +767,5 @@ func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErr
 			}
 		}
 	}
-	return nil
+	return err
 }

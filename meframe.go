@@ -425,7 +425,7 @@ func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 	}
 	// Add any missing SetByCreate options if requested
 	if opt.addDefaults {
-		if attrDefs, err := me.GetAttributesDefinitions(m.GetClassID()); err == nil {
+		if attrDefs, err := me.GetAttributesDefinitions(m.GetClassID()); err.StatusCode() == me.Success {
 			for index, attr := range attrDefs {
 				if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 					if index == 0 {

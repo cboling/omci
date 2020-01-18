@@ -240,8 +240,9 @@ func TestCreate8021pMapperService_profile(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
-	assert.Nil(t, err)
+	meDefinition, omciErr := LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), Success)
 
 	attrDefs := meDefinition.GetAttributeDefinitions()
 
@@ -314,8 +315,9 @@ func TestCreate_macBridgeService_profile(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
-	assert.Nil(t, err)
+	meDefinition, omciErr := LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), Success)
 
 	attrDefs := meDefinition.GetAttributeDefinitions()
 
@@ -377,8 +379,9 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 
 	// As this is a create request, gather up all set-by-create attributes
 	// make sure we got them all, and nothing else
-	meDefinition, err := LoadManagedEntityDefinition(createRequest.EntityClass)
-	assert.Nil(t, err)
+	meDefinition, omciErr := LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), Success)
 
 	attrDefs := meDefinition.GetAttributeDefinitions()
 

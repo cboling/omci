@@ -49,12 +49,11 @@ func NewManagedEntity(definition ManagedEntityDefinition, params ...ParamData) (
 		attributes: make(map[string]interface{}),
 	}
 	if params != nil {
-		err := entity.setAttributes(params...)
-		if err != nil {
+		if err := entity.setAttributes(params...); err.StatusCode() != Success {
 			return nil, err
 		}
 	}
-	return entity, nil
+	return entity, NewOmciSuccess()
 }
 
 // GetManagedEntityDefinition provides the ME definition of a Managed Entity
@@ -165,7 +164,7 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 	eidName := entity.definition.AttributeDefinitions[0].Name
 	if len(params) == 0 {
 		entity.attributes[eidName] = uint16(0)
-		return nil
+		return NewOmciSuccess()
 	}
 	entity.attributes[eidName] = params[0].EntityID
 
@@ -173,11 +172,11 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 		if name == eidName {
 			continue
 		}
-		if err := entity.SetAttribute(name, value); err != nil {
+		if err := entity.SetAttribute(name, value); err.StatusCode() != Success {
 			return err
 		}
 	}
-	return nil
+	return NewOmciSuccess()
 }
 
 // SetAttribute can be uses to set the value of a specific attribute by name
@@ -199,7 +198,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	}
 	entity.attributes[name] = value
 	entity.attributeMask |= mask
-	return nil
+	return NewOmciSuccess()
 }
 
 // SetAttributeByIndex can be uses to set the value of a specific attribute by attribute index (0..15)
@@ -262,7 +261,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	parameters := ParamData{EntityID: entityID}
 
 	meDefinition, omciErr := LoadManagedEntityDefinition(classID, parameters)
-	if omciErr != nil {
+	if omciErr.StatusCode() != Success {
 		return omciErr.GetError()
 	}
 	entity.definition = meDefinition.definition

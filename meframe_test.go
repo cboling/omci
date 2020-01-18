@@ -82,7 +82,7 @@ func getMEsThatSupportAMessageType(messageType MessageType) []*me.ManagedEntity 
 
 	entities := make([]*me.ManagedEntity, 0)
 	for _, classID := range me.GetSupportedClassIDs() {
-		if managedEntity, err := me.LoadManagedEntityDefinition(classID); err == nil {
+		if managedEntity, err := me.LoadManagedEntityDefinition(classID); err.StatusCode() == me.Success {
 			supportedTypes := managedEntity.GetManagedEntityDefinition().GetMessageTypes()
 			if supportedTypes.Contains(msgType) {
 				entities = append(entities, managedEntity)
@@ -99,12 +99,13 @@ func TestFrameFormatNotYetSupported(t *testing.T) {
 	params := me.ParamData{
 		Attributes: me.AttributeValueMap{"MibDataSync": 0},
 	}
-	managedEntity, err := me.NewOnuData(params)
-	assert.Nil(t, err)
-
-	buffer, omciErr := GenFrame(managedEntity, GetRequestType, FrameFormat(ExtendedIdent), TransactionID(1))
-	assert.Nil(t, buffer)
+	managedEntity, omciErr := me.NewOnuData(params)
 	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), me.Success)
+
+	buffer, err := GenFrame(managedEntity, GetRequestType, FrameFormat(ExtendedIdent), TransactionID(1))
+	assert.Nil(t, buffer)
+	assert.NotNil(t, err)
 }
 
 // TODO: Add more specific get next response tests as we have had issues
@@ -372,7 +373,8 @@ func testCreateRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	frame, omciErr := GenFrame(meInstance, CreateRequestType, TransactionID(tid))
 	assert.NotNil(t, frame)
@@ -412,7 +414,8 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
@@ -477,7 +480,8 @@ func testDeleteRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -518,7 +522,8 @@ func testDeleteResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
@@ -583,7 +588,8 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
 	frame, omciErr := GenFrame(meInstance, SetRequestType, TransactionID(tid), AttributeMask(bitmask))
@@ -595,7 +601,6 @@ func testSetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	}
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
-	assert.Nil(t, err)
 
 	///////////////////////////////////////////////////////////////////
 	// Now decode and compare
@@ -630,7 +635,8 @@ func testSetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(10))  // [0, 9] Not all types will be tested
@@ -721,7 +727,8 @@ func testGetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -820,7 +827,8 @@ func testGetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity) {
 	}
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	///////////////////////////////////////////////////////////////////
 	// Now decode and compare
@@ -892,7 +900,8 @@ func testGetAllAlarmsRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedE
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	mode := uint8(rand.Int31n(2))          // [0, 1]
@@ -935,7 +944,8 @@ func testGetAllAlarmsResponseTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1)  // [1, 0xFFFF]
 	numOfCommands := uint16(rand.Int31n(5)) // [0, 5)
@@ -979,7 +989,8 @@ func testGetAllAlarmsNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Mana
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1)   // [1, 0xFFFF]
 	sequenceNumber := uint16(rand.Int31n(5)) // [0, 5)
@@ -1023,7 +1034,8 @@ func testGetAllAlarmsNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Man
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -1079,7 +1091,8 @@ func testMibUploadRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -1120,9 +1133,8 @@ func testMibUploadResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnt
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
-
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1)  // [1, 0xFFFF]
 	numOfCommands := uint16(rand.Int31n(5)) // [0, 5)
@@ -1166,7 +1178,8 @@ func testMibUploadNextRequestTypeMeFrame(t *testing.T, managedEntity *me.Managed
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	seqNumber := uint16(rand.Int31n(0xFFFF)) // [0, 0xFFFE]
 	tid := uint16(rand.Int31n(0xFFFE) + 1)   // [1, 0xFFFF]
@@ -1211,9 +1224,8 @@ func testMibUploadNextResponseTypeMeFrame(t *testing.T, managedEntity *me.Manage
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
-
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -1259,7 +1271,8 @@ func testMibResetRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 
@@ -1300,7 +1313,8 @@ func testMibResetResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEnti
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
@@ -1353,7 +1367,8 @@ func testStartSoftwareDownloadRequestTypeMeFrame(t *testing.T, managedEntity *me
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	options := SoftwareOptions{
@@ -1440,7 +1455,8 @@ func testSynchronizeTimeRequestTypeMeFrame(t *testing.T, managedEntity *me.Manag
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	tm := time.Now().UTC()
@@ -1490,7 +1506,8 @@ func testSynchronizeTimeResponseTypeMeFrame(t *testing.T, managedEntity *me.Mana
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
@@ -1541,7 +1558,8 @@ func testRebootRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity)
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	condition := uint8(rand.Int31n(3))     // [0, 3]
@@ -1584,7 +1602,8 @@ func testRebootResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 	result := me.Results(rand.Int31n(7))   // [0, 6] Not all types will be tested
@@ -1653,7 +1672,8 @@ func testGetNextRequestTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	seqNumber := uint16(rand.Int31n(0xFFFF)) // [0, 0xFFFE]
 	tid := uint16(rand.Int31n(0xFFFE) + 1)   // [1, 0xFFFF]
@@ -1730,7 +1750,8 @@ func testGetNextResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntit
 	}
 	// Create the managed instance
 	meInstance, err := me.NewManagedEntity(managedEntity.GetManagedEntityDefinition(), params)
-	assert.Nil(t, err)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.StatusCode(), me.Success)
 
 	tid := uint16(rand.Int31n(0xFFFE) + 1) // [1, 0xFFFF]
 

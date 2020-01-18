@@ -188,11 +188,10 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		return err
 	}
 	// Create attribute mask for all set-by-create entries
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(meDefinition, me.Create) {
@@ -232,11 +231,10 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// Create attribute mask of SetByCreate attributes that should be present in the provided
 	// attributes.
@@ -275,11 +273,10 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(entity, me.Create) {
@@ -306,11 +303,10 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Create
 	if !me.SupportsMsgType(entity, me.Create) {
@@ -347,11 +343,10 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
@@ -373,11 +368,10 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
@@ -405,11 +399,10 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
@@ -432,11 +425,10 @@ func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Delete
 	if !me.SupportsMsgType(entity, me.Delete) {
@@ -470,11 +462,10 @@ func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Set) {
@@ -518,11 +509,10 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Set) {
@@ -578,11 +568,10 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.Set) {
@@ -610,11 +599,10 @@ func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.Set) {
@@ -649,11 +637,10 @@ func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) e
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
@@ -676,11 +663,10 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.Get) {
@@ -718,11 +704,10 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
@@ -781,11 +766,10 @@ func (omci *GetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.S
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.Get) {
@@ -858,11 +842,10 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarms) {
@@ -901,11 +884,10 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
@@ -938,11 +920,10 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarms) {
@@ -976,11 +957,10 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
@@ -1013,11 +993,10 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarmsNext) {
@@ -1051,11 +1030,10 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
@@ -1091,11 +1069,10 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(meDefinition, me.GetAllAlarmsNext) {
@@ -1132,11 +1109,10 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms Next
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
@@ -1169,9 +1145,11 @@ func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
+	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
 		return me.NewProcessingError("managed entity does not support MIB Upload Message-Type")
@@ -1203,11 +1181,10 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
@@ -1235,11 +1212,10 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
@@ -1273,11 +1249,10 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(entity, me.MibUpload) {
@@ -1310,11 +1285,10 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get All Alarms
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
@@ -1348,11 +1322,10 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB upload
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
@@ -1385,11 +1358,10 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MibUploadNext
 	if !me.SupportsMsgType(meDefinition, me.MibUploadNext) {
@@ -1425,11 +1397,10 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB Upload
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
@@ -1458,11 +1429,10 @@ func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB reset
 	if !me.SupportsMsgType(meDefinition, me.MibReset) {
@@ -1513,11 +1483,10 @@ func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuil
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support MIB reset
 	if !me.SupportsMsgType(meDefinition, me.MibReset) {
@@ -1552,11 +1521,10 @@ func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.MibReset) {
@@ -1717,11 +1685,10 @@ func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 	// Attribute decode
@@ -1754,11 +1721,10 @@ func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// TODO: Add support for attributes that can have an AVC associated with them and then add a check here
 	// Validate all attributes support AVC
@@ -1879,11 +1845,10 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
@@ -1920,11 +1885,10 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(entity, me.StartSoftwareDownload) {
@@ -1983,11 +1947,10 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
@@ -2040,11 +2003,10 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(meDefinition, me.StartSoftwareDownload) {
@@ -2107,11 +2069,10 @@ func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
@@ -2139,11 +2100,10 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
@@ -2182,11 +2142,10 @@ func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
@@ -2219,11 +2178,10 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Download section
 	if !me.SupportsMsgType(meDefinition, me.DownloadSection) {
@@ -2269,11 +2227,10 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
@@ -2312,11 +2269,10 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
@@ -2364,11 +2320,10 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
@@ -2420,11 +2375,10 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.EndSoftwareDownload) {
@@ -2485,11 +2439,10 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
@@ -2520,11 +2473,10 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
@@ -2566,11 +2518,10 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
@@ -2602,11 +2553,10 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.ActivateSoftware) {
@@ -2646,11 +2596,10 @@ func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
@@ -2676,11 +2625,10 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
@@ -2710,11 +2658,10 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
@@ -2740,11 +2687,10 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support End Software Download
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
@@ -2781,11 +2727,10 @@ func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
@@ -2820,11 +2765,10 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(entity, me.SynchronizeTime) {
@@ -2863,11 +2807,10 @@ func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.Pac
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Synchronize Time
 	if !me.SupportsMsgType(meDefinition, me.SynchronizeTime) {
@@ -2902,11 +2845,10 @@ func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// Synchronize Time Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuGClassID {
@@ -2953,11 +2895,10 @@ func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(meDefinition, me.Reboot) {
@@ -2984,11 +2925,10 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(entity, me.Reboot) {
@@ -3026,11 +2966,10 @@ func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(meDefinition, me.Reboot) {
@@ -3057,11 +2996,10 @@ func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	var entity me.IManagedEntityDefinition
-	entity, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Reboot
 	if !me.SupportsMsgType(entity, me.Reboot) {
@@ -3099,11 +3037,10 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
@@ -3131,11 +3068,10 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
@@ -3172,11 +3108,10 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
@@ -3225,11 +3160,10 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
@@ -3330,11 +3264,10 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
@@ -3359,11 +3292,10 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support GetNext
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
@@ -3398,11 +3330,10 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
@@ -3431,11 +3362,10 @@ func (omci *GetCurrentDataResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if err != nil {
 		return err
 	}
-	var meDefinition me.IManagedEntityDefinition
-	meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
 		me.ParamData{EntityID: omci.EntityInstance})
-	if err != nil {
-		return err
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.GetCurrentData) {
