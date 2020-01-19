@@ -17,6 +17,8 @@
 package omci_test
 
 import (
+	"encoding/base64"
+	"fmt"
 	. "github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -736,7 +738,7 @@ func TestGetResponseDecode(t *testing.T) {
 	assert.NotNil(t, packet)
 
 	omciLayer := packet.Layer(LayerTypeOMCI)
-	assert.NotNil(t, packet)
+	assert.NotNil(t, omciLayer)
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
@@ -792,6 +794,107 @@ func TestGetResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+///////////////////////////////////////////////////////////////////////
+// Packet definitions for attributes of various types/sizes
+func toOctets(str string) []byte {
+	data, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		panic(fmt.Sprintf("Invalid Base-64 string: '%v'", str))
+	}
+	return data
+}
+
+func TestGetResponseSerializeTruncationFailure(t *testing.T) {
+	// Too much data and 'fix-length' is not specified.  This response has 26
+	// octets in the requested data, but only 25 octets available
+
+	omciLayer := &OMCI{
+		TransactionID: 0x035e,
+		MessageType:   GetResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result:        0,
+		AttributeMask: uint16(0xE000),
+		Attributes: me.AttributeValueMap{
+			"VendorId":     toOctets("ICAgIA=="),
+			"Version":      toOctets("MAAAAAAAAAAAAAAAAAA="),
+			"SerialNumber": toOctets("AAAAAAAAAAA="),
+		},
+	}
+	// Test serialization and verify truncation failure
+	var options gopacket.SerializeOptions
+	options.FixLengths = false
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+	assert.IsType(t, &me.MessageTruncatedError{}, err)
+}
+
+func TestGetResponseSerializeTruncationButOkay(t *testing.T) {
+	// Too much data and 'fix-length' is specified so it packs as much as
+	// possible and adjusts the failure masks
+
+	omciLayer := &OMCI{
+		TransactionID: 0x035e,
+		MessageType:   GetResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	response := &GetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result:        0,
+		AttributeMask: uint16(0xE000),
+		Attributes: me.AttributeValueMap{
+			"VendorId":     toOctets("ICAgIA=="),
+			"Version":      toOctets("MAAAAAAAAAAAAAAAAAA="),
+			"SerialNumber": toOctets("AAAAAAAAAAA="),
+		},
+	}
+	// Test serialization and verify truncation failure
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, response)
+	assert.NoError(t, err)
+
+	// Now deserialize it and see if we have the proper result (Attribute Failure)
+	// and a non-zero failed mask
+	responsePacket := buffer.Bytes()
+	packet := gopacket.NewPacket(responsePacket, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer2 := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer2)
+
+	omciMsg2, ok := omciLayer2.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciLayer.TransactionID, omciMsg2.TransactionID)
+	assert.Equal(t, omciLayer.MessageType, GetResponseType)
+	assert.Equal(t, omciLayer.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciLayer.Length, uint16(40))
+
+	msgLayer2 := packet.Layer(LayerTypeGetResponse)
+	assert.NotNil(t, msgLayer2)
+
+	response2, ok2 := msgLayer2.(*GetResponse)
+	assert.True(t, ok2)
+	assert.Equal(t, me.AttributeFailure, response2.Result)
+	assert.NotZero(t, response2.AttributeMask)
+	assert.NotZero(t, response2.FailedAttributeMask)
+	assert.Zero(t, response2.UnsupportedAttributeMask)
 }
 
 func TestGetResponseTableFailedAttributesDecode(t *testing.T) {

@@ -93,8 +93,8 @@ func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopack
 
 // SerializeAttributes will serialize the attributes of a Managed Entity type
 func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16,
-	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
-	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable)
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, packData bool) (error, uint16) {
+	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable, packData)
 }
 
 // GetEntityID will return the Entity/Instance ID for a Managed Entity
@@ -279,7 +279,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 }
 
 // SerializeTo serializes a Managed Entity into an octet stream
-func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
+func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, opts gopacket.SerializeOptions) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)
 	if err != nil {
@@ -291,6 +291,7 @@ func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byt
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b, msgType, bytesAvailable)
+	err, _ = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b,
+		msgType, bytesAvailable, opts.FixLengths)
 	return err
 }

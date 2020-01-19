@@ -86,7 +86,7 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 		attrDef := bme.AttributeDefinitions[index]
 		name := attrDef.GetName()
 
-		if mask&(1<<(16-uint(index))) != 0 {
+		if mask&attrDef.Mask != 0 {
 			value, err := attrDef.Decode(data, p, msgType)
 			if err != nil {
 				return nil, err
@@ -139,14 +139,16 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 }
 
 func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,
-	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, packData bool) (error, uint16) {
+
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
-		return errors.New("unsupported attribute mask")
+		return errors.New("unsupported attribute mask"), 0
 	}
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
 	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
+	var failedMask uint16
 
 	for _, index := range keyList {
 		if index == 0 {
@@ -154,18 +156,22 @@ func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, m
 		}
 		attrDef := bme.AttributeDefinitions[index]
 
-		if mask&(1<<(16-uint(index))) != 0 {
+		if mask&attrDef.Mask != 0 {
 			value, ok := attr[attrDef.GetName()]
 			if !ok {
 				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
-				return errors.New(msg)
+				return errors.New(msg), failedMask
 			}
 			size, err := attrDef.SerializeTo(value, b, msgType, bytesAvailable)
 			if err != nil {
-				return err
+				failedMask |= attrDef.Mask
+				if packData {
+					continue
+				}
+				return err, failedMask
 			}
 			bytesAvailable -= size
 		}
 	}
-	return nil
+	return nil, failedMask
 }
