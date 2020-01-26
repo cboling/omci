@@ -759,8 +759,10 @@ func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErr
 	} else if attributes == nil {
 		return NewProcessingError("Invalid (nil) Attribute Value Map referenced")
 	}
+	nilAllowed := mapset.NewSet(StringAttributeType, OctetsAttributeType, TableAttributeType)
 	for index, attrDef := range attrDefs {
-		if !attrDef.Access.Contains(SetByCreate) && attrDef.DefValue != nil && index != 0 {
+		if !attrDef.Access.Contains(SetByCreate) && index != 0 &&
+			(attrDef.DefValue != nil || nilAllowed.Contains(attrDef.AttributeType)) {
 			name := attrDef.GetName()
 			if existing, found := attributes[name]; !found || existing == nil {
 				attributes[name] = attrDef.DefValue
