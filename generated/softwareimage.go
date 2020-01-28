@@ -123,7 +123,7 @@ func init() {
 		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: MultiByteField("Version", StringAttributeType, 0x8000, 14, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, false, false, 1),
+			1: MultiByteField("Version", StringAttributeType, 0x8000, 14, toOctets("ICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, false, false, 1),
 			2: ByteField("IsCommitted", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, false, false, 2),
 			3: ByteField("IsActive", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read), true, false, false, 3),
 			4: ByteField("IsValid", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read), true, false, false, 4),
