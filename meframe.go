@@ -317,7 +317,8 @@ func EncodeFrame(m *me.ManagedEntity, messageType MessageType, opt ...FrameOptio
 	// TODO: If AttributesMask option passed in, check for deprecated options. Allow encoding option
 	//       that will ignore deprecated option.   Add additional in the get and set meframe_test,go
 	//       test functions to test this. Also have it test attribute name(s) to see if the attribute
-	//       is deprecated.  The OMCI-Parser will need to decode deprecated for us...
+	//       is deprecated.  The OMCI-Parser now supports detection of deprecated attributes and
+	//       provides that to the code-generator (and currently available in generated golang code).
 	// Note: Transaction ID should be set before frame serialization
 	omci := &OMCI{
 		TransactionID:    opts.transactionID,

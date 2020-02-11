@@ -33,7 +33,7 @@ type ManagedEntityDefinition struct {
 	Name         string
 	ClassID      ClassID
 	MessageTypes mapset.Set // Mandatory
-	// TODO: Support Optional Message types
+	// TODO: Support Optional Message types  (this has just been fixed in the code generator)
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
 	Access               ClassAccess
