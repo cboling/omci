@@ -62,6 +62,7 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{

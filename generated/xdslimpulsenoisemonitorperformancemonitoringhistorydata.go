@@ -100,6 +100,7 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			GetCurrentData,
 		),
 		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{

@@ -141,6 +141,7 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
 		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{

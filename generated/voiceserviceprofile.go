@@ -116,6 +116,7 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			SetTable,
 		),
 		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
