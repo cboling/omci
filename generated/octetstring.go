@@ -52,7 +52,7 @@ var octetstringBME *ManagedEntityDefinition
 //			attribute defaults to 0 to indicate no octet string is defined. The maximum value of this
 //			attribute is 375 (15 parts, 25-bytes each). (R,-W) (mandatory) (2-bytes)
 //
-//		Part 1, Part 2, Part 3, Part 4, Part 5, Part 6, Part 7, Part 8, Part 9, Part 10, Part 11, Part 12, Part 13, Part 14, Part 15
+//		Part 1 to 15
 //			Part 1, Part 2, Part 3, Part 4, Part 5, Part 6, Part 7, Part 8, Part 9,  Part 10, Part 11, Part
 //			12, Part 13, Part 14, Part 15:  (R,-W) (part 1 mandatory, others optional) (25-bytes * 15
 //			attributes)
@@ -76,7 +76,7 @@ func init() {
 		AttributeDefinitions: AttributeDefinitionMap{
 			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
 			1: Uint16Field("Length", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
-			2: MultiByteField("Part1,Part2,Part3,Part4,Part5,Part6,Part7,Part8,Part9,Part10,Part11,Part12,Part13,Part14,Part15", OctetsAttributeType, 0x4000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 2),
+			2: MultiByteField("Part1To15", OctetsAttributeType, 0x4000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 2),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

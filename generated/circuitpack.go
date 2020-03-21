@@ -154,9 +154,10 @@ func init() {
 		Name:    "CircuitPack",
 		ClassID: 6,
 		MessageTypes: mapset.NewSetWith(
-			Create,
 			Get,
 			Set,
+			Create,
+			Delete,
 		),
 		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -176,7 +177,7 @@ func init() {
 			13: ByteField("TotalTrafficSchedulerNumber", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
 			14: Uint32Field("PowerShedOverride", BitFieldAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
 		},
-		Access:  CreatedByOlt,
+		Access:  CreatedByOnu,
 		Support: UnknownSupport,
 	}
 }

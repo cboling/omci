@@ -30,10 +30,9 @@ import (
 
 // ManagedEntityDefinition defines a Manage Entity
 type ManagedEntityDefinition struct {
-	Name         string
-	ClassID      ClassID
-	MessageTypes mapset.Set // Mandatory
-	// TODO: Support Optional Message types  (this has just been fixed in the code generator)
+	Name                 string
+	ClassID              ClassID
+	MessageTypes         mapset.Set // Mandatory
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
 	Access               ClassAccess

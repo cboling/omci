@@ -52,7 +52,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 176)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 178)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -125,6 +125,7 @@ func init() {
 	classToManagedEntityMap[153] = NewSipUserData
 	classToManagedEntityMap[155] = NewMgcConfigData
 	classToManagedEntityMap[156] = NewMgcPerformanceMonitoringHistoryData
+	classToManagedEntityMap[158] = NewOnuRemoteDebug
 	classToManagedEntityMap[160] = NewEquipmentExtensionPackage
 	classToManagedEntityMap[162] = NewPhysicalPathTerminationPointMocaUni
 	classToManagedEntityMap[163] = NewMocaEthernetPerformanceMonitoringHistoryData
@@ -169,6 +170,7 @@ func init() {
 	classToManagedEntityMap[305] = NewDot1AgCfmStack
 	classToManagedEntityMap[306] = NewDot1AgChassisManagementInfo
 	classToManagedEntityMap[307] = NewOctetString
+	classToManagedEntityMap[308] = NewGeneralPurposeBuffer
 	classToManagedEntityMap[310] = NewMulticastSubscriberConfigInfo
 	classToManagedEntityMap[311] = NewMulticastSubscriberMonitor
 	classToManagedEntityMap[313] = NewReAniG
