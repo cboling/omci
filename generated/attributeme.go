@@ -58,14 +58,14 @@ var attributemeBME *ManagedEntityDefinition
 //		Format
 //			(R) (mandatory) (1-byte)
 //
-//		Lower Limit
+//		Lower Value
 //			Lower limit:	This attribute provides the lowest value for the attribute. Valid for numeric types
 //			(pointer, signed integer, unsigned integer) only. For attributes smaller than 4-bytes, the
 //			desired numeric value is expressed in 4-byte representation (for example, the 2s complement
 //			1-byte integer 0xFE is expressed as 0xFFFF-FFFE; the unsigned 1-byte integer 0xFE is expressed
 //			as 0x0000-00FE). (R) (mandatory) (4-bytes)
 //
-//		Upper Limit
+//		Upper Value
 //			Upper limit:	This attribute provides the highest value for the attribute. It has the same
 //			validity and format as the lower limit attribute. (R) (mandatory) (4-bytes)
 //
