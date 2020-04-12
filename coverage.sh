@@ -8,7 +8,7 @@ go build || exit $?
 
 echo "Starting unit test coverage"
 #go test . examples/... generated/... -coverprofile=cp.out
-go test . -coverprofile=cp.out
+go test . generated/ -coverprofile=cp.out
 
 # Output HTML coverage report (to coverage.html)
 echo "Creating HTML coverage report (coverage.html)"
