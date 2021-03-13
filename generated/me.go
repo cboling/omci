@@ -71,6 +71,11 @@ func (entity ManagedEntity) GetClassID() ClassID {
 	return entity.definition.GetClassID()
 }
 
+// SetClassID assigns the 16-bit class ID of a Managed Entity
+func (entity *ManagedEntity) SetClassID(classID ClassID) {
+	entity.definition.SetClassID(classID)
+}
+
 // GetMessageTypes returns the OMCI message types that a Managed Entity supports
 func (entity ManagedEntity) GetMessageTypes() mapset.Set {
 	return entity.definition.GetMessageTypes()
@@ -248,6 +253,17 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 		entity.attributeMask &= ^attrDef.Mask
 	}
 	return nil
+}
+
+// GetClassSupport returns the ONU support for this managed entity
+func (entity *ManagedEntity) GetClassSupport() ClassSupport {
+	return entity.definition.GetClassSupport()
+}
+
+// GetAlarmMap returns the Alarm Bit Number to Alarm Name (string) mapping.  Nil is returned if
+// the managed entity does not support alarms
+func (entity *ManagedEntity) GetAlarmMap() AlarmMap {
+	return entity.definition.GetAlarmMap()
 }
 
 // DecodeFromBytes decodes a Managed Entity give an octet stream pointing to the ME within a frame

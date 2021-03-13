@@ -23,6 +23,7 @@ package generated
 import (
 	"fmt"
 	"reflect"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -112,17 +113,56 @@ func (c *BitmapConstraint) Valid(value interface{}) bool {
 	return u64Value&c.Bitmask == u64Value
 }
 
-// StringConstraint are octet/byte strings that have may have a fixed size and possibly
-// a regular expression it must match. Table rows are also modeled by StringConstraint
+// OctetConstraint are octet/byte strings that have may have a fixed size and possibly
+// a regular expression it must match. Table rows are also modeled by OctetConstraint
 //
 //  len(<values>)[,regex(<allowed-pattern>)][,fill(<value>)]
-type StringConstraint struct {
-	length uint32
+type OctetConstraint struct {
+	Length int            // Fixed length, if zero the length may vary or is not constrained/specified
+	RegEx  *regexp.Regexp // Regular expression (optional)
+	Fill   byte           // Optional fill value. Not used in constraint checks at this time
 }
 
-func (c *StringConstraint) Valid(value interface{}) bool {
+func (c *OctetConstraint) lengthValid(value []byte) bool {
+	if c.Length == 0 {
+		return true
+	} else if value == nil {
+		return false
+	}
+	return len(value) == c.Length
+}
 
-	return false
+func (c *OctetConstraint) regExValid(value []byte) bool {
+	if c.RegEx == nil {
+		return true
+	}
+	return c.RegEx.Match(value)
+}
+
+func (c *OctetConstraint) Valid(value interface{}) bool {
+	var u8String []byte
+	switch value.(type) {
+	default:
+		return false
+
+	case string:
+		u8String = []byte(value.(string))
+
+	case []byte:
+		u8String = value.([]byte)
+	}
+	return c.lengthValid(u8String) && c.regExValid(u8String)
+}
+
+func (c *OctetConstraint) parseLength(input string) int {
+	return 0
+}
+
+func (c *OctetConstraint) parseRegEx(input string) *regexp.Regexp {
+	if len(input) == 0 {
+		return nil
+	}
+	return regexp.MustCompile(input)
 }
 
 // NewOctetsConstraints parses an input string and generates an appropriate IConstraint type
@@ -142,12 +182,41 @@ func (c *StringConstraint) Valid(value interface{}) bool {
 //                the entire string length is set to the maximum allowed. Typically this is
 //                either an ASCII space (0x20) or a null (0x00).
 //
-func NewOctetsConstraint(input string) *StringConstraint {
-	input = strings.TrimSpace(input)
-	if len(input) > 0 {
+func NewOctetsConstraint(input string) IConstraint {
+	var constraint *OctetConstraint
+	values := strings.Split(strings.TrimSpace(input), ",")
 
+	// Maximum of 3 possible fields
+	if len(values) > 3 {
+		panic(fmt.Sprintf("Invalid Octet Constraint. Max fields = 3, '%v'", input))
 	}
-	return nil
+	if len(values) {
+		lenFilter := regexp.MustCompile("len\\([0-9]+\\)")
+		regExFilter := regexp.MustCompile(")")
+		index := 0
+		tmpLen := []byte(strings.Replace(values[index], " ", "", -1))
+		if lenFilter.Match(tmpLen) {
+			// Length matched
+
+			index++
+		}
+		tmpReg := []byte(strings.Replace(values[index], " ", "", -1))
+		if regExFilter.Match(tmpReg) {
+			// Length matched
+
+			index++
+		}
+	}
+	//
+	//if len(input) > 0 {
+	//	for _, value := range values {
+	//		constraint := NewIntegerConstraint(value)
+	//		if constraint != nil {
+	//			constraints = append(constraints, constraint)
+	//		}
+	//	}
+	//}
+	return constraint
 }
 
 // NewIntegerConstraintList parses an input string containing multiple interger constraints
@@ -294,13 +363,21 @@ func ConstraintsValid(value interface{}, constraint interface{}) bool {
 			if constraint.Valid(value) {
 				return true
 			}
+
 		case UintMaxMinConstraint:
 			constraint, _ := constraint.(UintMaxMinConstraint)
 			if constraint.Valid(value) {
 				return true
 			}
+
 		case BitmapConstraint:
 			constraint, _ := constraint.(BitmapConstraint)
+			if constraint.Valid(value) {
+				return true
+			}
+
+		case OctetConstraint:
+			constraint, _ := constraint.(OctetConstraint)
 			if constraint.Valid(value) {
 				return true
 			}

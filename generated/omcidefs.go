@@ -48,6 +48,10 @@ type AttributeAccess byte
 // from the ITU-T G.988 specification.
 type ClassID uint16
 
+// AlarmMap is a mapping of alarm bit numbers to alarm names and can be
+// used during decode of Alarm Notification messages
+type AlarmMap map[uint8]string
+
 func (cid ClassID) String() string {
 	if entity, err := LoadManagedEntityDefinition(cid); err.StatusCode() == Success {
 		return fmt.Sprintf("[%s] (%d/%#x)",
@@ -252,6 +256,7 @@ type IManagedEntityDefinition interface {
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() AttributeDefinitionMap
+	GetAlarmMap() AlarmMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder, byte) (AttributeValueMap, error)
 	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte, int, bool) (error, uint16)

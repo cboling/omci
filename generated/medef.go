@@ -37,6 +37,7 @@ type ManagedEntityDefinition struct {
 	AttributeDefinitions AttributeDefinitionMap
 	Access               ClassAccess
 	Support              ClassSupport
+	Alarms               AlarmMap // AlarmBit -> AlarmName
 }
 
 func (bme *ManagedEntityDefinition) String() string {
@@ -54,6 +55,11 @@ func (bme ManagedEntityDefinition) GetClassID() ClassID {
 	return bme.ClassID
 }
 
+// SetClassID assigns the 16-bit class ID of a managed entity from a ME Definition
+func (bme *ManagedEntityDefinition) SetClassID(classID ClassID) {
+	bme.ClassID = classID
+}
+
 // GetMessageTypes retrieves the OMCI Message Types supporte3d by a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetMessageTypes() mapset.Set {
 	return bme.MessageTypes
@@ -68,6 +74,16 @@ func (bme ManagedEntityDefinition) GetAllowedAttributeMask() uint16 {
 // GetAttributeDefinitions retrieves the attribute definitions of a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinitionMap {
 	return bme.AttributeDefinitions
+}
+
+// GetClassSupport returns ONUs support of this class
+func (bme ManagedEntityDefinition) GetClassSupport() ClassSupport {
+	return bme.Support
+}
+
+// GetAlarmMap returns the Alarm bit number to name map
+func (bme ManagedEntityDefinition) GetAlarmMap() AlarmMap {
+	return bme.Alarms
 }
 
 func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {

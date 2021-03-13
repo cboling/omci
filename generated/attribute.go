@@ -704,7 +704,7 @@ func MultiByteField(name string, attrType AttributeType, mask uint16, size uint,
 //   array  : One or more rows of values.  [2]uint16{2, 3}
 type TableInfo struct {
 	Value interface{} // See comment above
-	Size  int         // Table Row Size (-1 if N*bytes - actual size provided by a separate attribute)
+	Size  int         // Table Row Size
 }
 
 func (t *TableInfo) String() string {
