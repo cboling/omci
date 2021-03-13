@@ -216,6 +216,9 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Block loss",
+		},
 	}
 }
 

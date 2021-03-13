@@ -150,6 +150,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Drop events",
+			1: "CRC errored packets",
+			2: "Undersize packets",
+			3: "Oversize packets",
+		},
 	}
 }
 

@@ -149,6 +149,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Drop events",
+			2: "CRC errored frames",
+			3: "Undersize frames",
+			4: "Oversize frames",
+		},
 	}
 }
 

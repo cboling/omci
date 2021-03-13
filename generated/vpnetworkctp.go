@@ -100,6 +100,14 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "VP AIS LMIR",
+			1: "VP RDI LMIR",
+			2: "VP AIS LMIG",
+			3: "VP RDI LMIG",
+			4: "Segment loss of continuity",
+			5: "End-to-end loss of continuity",
+		},
 	}
 }
 

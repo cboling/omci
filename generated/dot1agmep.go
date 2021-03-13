@@ -148,6 +148,15 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "RDI CCM",
+			1: "MAC status",
+			2: "Remote CCM",
+			3: "Error CCM",
+			4: "Xcon CCM",
+			5: "Unexpected period",
+			6: "AIS",
+		},
 	}
 }
 

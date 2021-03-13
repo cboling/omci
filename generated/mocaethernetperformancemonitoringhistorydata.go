@@ -130,6 +130,22 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "Incoming unicast packets",
+			1:  "Incoming discarded packets",
+			2:  "Incoming errored packets",
+			3:  "Incoming unknown packets",
+			4:  "Incoming multicast packets",
+			5:  "Incoming broadcast packets",
+			6:  "Incoming octets",
+			7:  "Outgoing unicast packets",
+			8:  "Outgoing discarded packets",
+			9:  "Outgoing errored packets",
+			10: "Outgoing unknown packets",
+			11: "Outgoing multicast packets",
+			12: "Outgoing broadcast packets",
+			13: "Outgoing octets",
+		},
 	}
 }
 

@@ -137,6 +137,11 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIP-UA register auth",
+			1: "SIP-UA register timeout",
+			2: "SIP-UA register fail",
+		},
 	}
 }
 

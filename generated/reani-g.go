@@ -182,6 +182,13 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Low received optical power",
+			1: "High received optical power",
+			2: "Low transmit optical power",
+			3: "High transmit optical power",
+			4: "High laser bias current",
+		},
 	}
 }
 

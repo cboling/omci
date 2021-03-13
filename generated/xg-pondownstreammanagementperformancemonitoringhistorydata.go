@@ -150,6 +150,10 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "PLOAM MIC error count",
+			2: "OMCI MIC error count",
+		},
 	}
 }
 

@@ -104,6 +104,13 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIP call PM failed connect",
+			1: "SIP call PM failed to validate",
+			2: "SIP call PM timeout",
+			3: "SIP call PM failure error code received",
+			4: "SIP call PM failed to authenticate",
+		},
 	}
 }
 

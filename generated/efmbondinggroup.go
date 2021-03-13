@@ -87,6 +87,13 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Group down",
+			1: "Group partial",
+			2: "Group US rate low",
+			3: "Group DS rate low",
+			4: "4x rate ratio",
+		},
 	}
 }
 

@@ -165,6 +165,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Drop events",
+			1: "Undersize packets",
+			2: "Fragments",
+			3: "Jabbers",
+		},
 	}
 }
 

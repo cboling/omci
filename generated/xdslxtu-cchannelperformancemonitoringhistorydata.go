@@ -108,6 +108,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Corrected blocks",
+			1: "Uncorrected blocks",
+			2: "Code violations",
+			3: "Forward error corrections",
+		},
 	}
 }
 

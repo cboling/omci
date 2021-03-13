@@ -134,6 +134,10 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "dot1x local authentication - allowed",
+			1: "dot1x local authentication - denied",
+		},
 	}
 }
 

@@ -114,6 +114,14 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "RTP errors",
+			1: "Packet loss(Note 1)",
+			2: "Maximum jitter",
+			3: "Max time between RTCP packets",
+			4: "Buffer underflows",
+			5: "Buffer overflows",
+		},
 	}
 }
 

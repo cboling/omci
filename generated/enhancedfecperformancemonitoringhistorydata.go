@@ -100,6 +100,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Corrected bytes",
+			1: "Corrected code words",
+			2: "Uncorrectable code words",
+			4: "FEC seconds",
+		},
 	}
 }
 

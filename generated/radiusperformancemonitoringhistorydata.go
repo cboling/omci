@@ -108,6 +108,10 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Retransmission count",
+			5: "Invalid radius packets received",
+		},
 	}
 }
 

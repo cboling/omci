@@ -125,6 +125,16 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Loss of frame seconds",
+			1: "Loss of signal seconds",
+			2: "Loss of power seconds",
+			3: "Errored seconds",
+			4: "Severely errored seconds",
+			5: "FEC seconds",
+			6: "Unavailable seconds",
+			7: "leftr defect seconds",
+		},
 	}
 }
 

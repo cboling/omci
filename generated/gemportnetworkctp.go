@@ -132,6 +132,9 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			5: "End-to-end loss of continuity",
+		},
 	}
 }
 

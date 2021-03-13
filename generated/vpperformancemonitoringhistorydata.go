@@ -110,6 +110,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Lost CLP-= 0-+ 1 cells",
+			1: "Lost CLP-= 0 cells",
+			2: "Misinserted cells",
+			3: "Impaired blocks",
+		},
 	}
 }
 

@@ -101,6 +101,13 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Socket failed",
+			2: "Listen failed",
+			3: "Bind failed",
+			4: "Accept failed",
+			5: "Select failed",
+		},
 	}
 }
 

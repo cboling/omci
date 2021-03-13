@@ -82,6 +82,9 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "PPPoE filtered frame counter",
+		},
 	}
 }
 

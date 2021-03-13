@@ -118,6 +118,16 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Near-end HEC violation",
+			1: "Near-end idle cell bit error count",
+			2: "Far-end HEC violation count",
+			3: "Far-end idle cell bit error count",
+			4: "Near-end delineated total cell count (CD-P)",
+			5: "Near-end user total cell count (CU-P)",
+			6: "Far-end delineated total cell count (CD-PFE)",
+			7: "Far-end user total cell count (CU-PFE)",
+		},
 	}
 }
 

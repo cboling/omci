@@ -151,6 +151,11 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Video LOS",
+			1: "Video OOR low",
+			2: "Video OOR high",
+		},
 	}
 }
 

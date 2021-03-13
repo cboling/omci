@@ -110,6 +110,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Downstream missing packets",
+			2: "Downstream reordered packets",
+			3: "Downstream timeout packets",
+			4: "Upstream dropped cells",
+		},
 	}
 }
 

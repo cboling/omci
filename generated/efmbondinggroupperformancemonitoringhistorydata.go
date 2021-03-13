@@ -117,6 +117,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Rx bad fragments",
+			1: "Rx lost fragments",
+			2: "Rx lost starts",
+			3: "Rx lost ends",
+		},
 	}
 }
 

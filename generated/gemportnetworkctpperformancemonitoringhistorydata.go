@@ -111,6 +111,9 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Encryption key errors",
+		},
 	}
 }
 

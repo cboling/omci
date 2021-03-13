@@ -148,6 +148,10 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "MoCA LOL",
+			1: "MoCA limited link (LL)",
+		},
 	}
 }
 

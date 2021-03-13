@@ -190,7 +190,7 @@ func NewOctetsConstraint(input string) IConstraint {
 	if len(values) > 3 {
 		panic(fmt.Sprintf("Invalid Octet Constraint. Max fields = 3, '%v'", input))
 	}
-	if len(values) {
+	if len(values) > 0 {
 		lenFilter := regexp.MustCompile("len\\([0-9]+\\)")
 		regExFilter := regexp.MustCompile(")")
 		index := 0

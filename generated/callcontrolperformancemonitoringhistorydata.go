@@ -104,6 +104,13 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "CCPM call set-up fail",
+			1: "CCPM set-up timeout",
+			2: "CCPM call terminate",
+			3: "CCPM port release with no dialling",
+			4: "CCPM port offhook timeout",
+		},
 	}
 }
 

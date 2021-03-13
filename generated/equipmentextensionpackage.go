@@ -73,6 +73,17 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Reserved",
+			1: "Sense point 1",
+			2: "Sense point 2",
+			3: "Sense point 3",
+			4: "Sense point 4",
+			5: "Sense point 5",
+			6: "Sense point 6",
+			7: "Sense point 7",
+			8: "Sense point 8",
+		},
 	}
 }
 

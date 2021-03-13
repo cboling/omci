@@ -106,6 +106,15 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "End-to-end VC AIS layer management indication receiving (LMIR)",
+			1: "End-to-end VC RDI LMIR",
+			2: "End-to-end VC AIS layer management indication generation (LMIG)",
+			3: "End-to-end VC RDI LMIG",
+			4: "Segment loss of continuity",
+			5: "End-to-end loss of continuity",
+			6: "CSA",
+		},
 	}
 }
 

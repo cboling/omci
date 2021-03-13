@@ -105,6 +105,14 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "IPNPM ICMP error",
+			2: "IPNPM DNS error",
+			3: "DHCP timeout",
+			4: "IP address conflict",
+			5: "Out of memory",
+			6: "Internal error",
+		},
 	}
 }
 

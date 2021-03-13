@@ -139,6 +139,10 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			4: "Invalid EAPOL frames received",
+			9: "EAP length error frames received",
+		},
 	}
 }
 

@@ -129,6 +129,15 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Low gain",
+			1: "High gain",
+			2: "Low temperature",
+			3: "High temperature",
+			4: "High bias current",
+			5: "High temperature shutdown",
+			6: "High current shutdown",
+		},
 	}
 }
 

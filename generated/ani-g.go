@@ -144,7 +144,7 @@ func init() {
 			10: Uint16Field("OpticalSignalLevel", SignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
 			11: ByteField("LowerOpticalThreshold", SignedIntegerAttributeType, 0x0020, 255, mapset.NewSetWith(Read, Write), false, true, false, 11),
 			12: ByteField("UpperOpticalThreshold", SignedIntegerAttributeType, 0x0010, 255, mapset.NewSetWith(Read, Write), false, true, false, 12),
-			13: Uint16Field("OnuResponseTime", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, true, false, 13),
+			13: Uint16Field("OnuResponseTime", UnsignedIntegerAttributeType, 0x0008, 35000, mapset.NewSetWith(Read), false, true, false, 13),
 			14: Uint16Field("TransmitOpticalLevel", SignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, true, false, 14),
 			15: ByteField("LowerTransmitPowerThreshold", SignedIntegerAttributeType, 0x0002, 129, mapset.NewSetWith(Read, Write), false, true, false, 15),
 			16: ByteField("UpperTransmitPowerThreshold", SignedIntegerAttributeType, 0x0001, 129, mapset.NewSetWith(Read, Write), false, true, false, 16),

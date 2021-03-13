@@ -125,6 +125,10 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "MGCP protocol errors",
+			1: "MGCP transport losses",
+		},
 	}
 }
 

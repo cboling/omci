@@ -93,6 +93,9 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "leftr defect seconds",
+		},
 	}
 }
 

@@ -150,6 +150,22 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "FCS errors",
+			1:  "Excessive collision counter",
+			2:  "Late collision counter",
+			3:  "Frames too long",
+			4:  "Buffer overflows on receive",
+			5:  "Buffer overflows on transmit",
+			6:  "Single collision frame counter",
+			7:  "Multiple collisions frame counter",
+			8:  "SQE counter",
+			9:  "Deferred transmission counter",
+			10: "Internal MAC transmit error counter",
+			11: "Carrier sense error counter",
+			12: "Alignment error counter",
+			13: "Internal MAC receive error counter",
+		},
 	}
 }
 

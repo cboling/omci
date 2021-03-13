@@ -129,6 +129,16 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Tuning control requests Rollback/DS_ALBL",
+			1: "Tuning control requests Rollback /DS_LKTP",
+			2: "Tuning control requests Rollback/US_ALBL",
+			3: "Tuning control requests Rollback /US_VOID",
+			4: "Tuning control requests Rollback/US_TUNR",
+			5: "Tuning control requests Rollback /US_LKTP",
+			6: "Tuning control requests Rollback/US_LNRT",
+			7: "Tuning control requests Rollback /US_LNCD",
+		},
 	}
 }
 

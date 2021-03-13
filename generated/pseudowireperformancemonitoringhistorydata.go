@@ -163,6 +163,18 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Missing packets",
+			1: "Misordered packets, usable",
+			2: "Misordered packets dropped",
+			3: "Playout buffer underruns/overruns",
+			4: "Malformed packets",
+			5: "Stray packets",
+			6: "Remote packet loss",
+			7: "ES",
+			8: "SES",
+			9: "UAS",
+		},
 	}
 }
 

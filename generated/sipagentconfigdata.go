@@ -167,6 +167,12 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIP-UA register name",
+			1: "SIP-UA register reach",
+			2: "SIP-UA register connect",
+			3: "SIP-UA register validate",
+		},
 	}
 }
 

@@ -141,6 +141,14 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIPAMD Rx invite req",
+			1: "SIPAMD Rx invite req retransmission",
+			2: "SIPAMD Rx noninvite req",
+			3: "SIPAMD Rx noninvite req retransmission",
+			4: "SIPAMD Rx response",
+			5: "SIPAMD Rx response retransmission",
+		},
 	}
 }
 
