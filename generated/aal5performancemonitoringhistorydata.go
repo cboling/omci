@@ -105,6 +105,13 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Invalid fields",
+			1: "CRC violation",
+			2: "Reassembly timer expirations",
+			3: "Buffer overflows",
+			4: "Encap protocol errors",
+		},
 	}
 }
 

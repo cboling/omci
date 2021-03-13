@@ -112,8 +112,7 @@ type OMCI struct {
 	TransactionID    uint16
 	MessageType      MessageType
 	DeviceIdentifier DeviceIdent
-	Payload          []byte
-	padding          []byte
+	ResponseExpected bool // Significant for Download Section Request only
 	Length           uint16
 	MIC              uint32
 }
@@ -136,7 +135,7 @@ func (omci *OMCI) LayerType() gopacket.LayerType {
 
 // LayerContents returns the OMCI specific layer information
 func (omci *OMCI) LayerContents() []byte {
-	b := make([]byte, 8)
+	b := make([]byte, 4)
 	binary.BigEndian.PutUint16(b, omci.TransactionID)
 	b[2] = byte(omci.MessageType)
 	b[3] = byte(omci.DeviceIdentifier)
@@ -206,6 +205,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
 	omci.MessageType = MessageType(data[2])
 	omci.DeviceIdentifier = DeviceIdent(data[3])
+	omci.ResponseExpected = byte(omci.MessageType)&me.AR == me.AR
 
 	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
 	if omci.TransactionID == 0 && !isNotification {
@@ -250,7 +250,7 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 			//return errors.New(msg)
 		}
 	}
-	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:]}
+	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:omci.Length]}
 	p.AddLayer(omci)
 	nextLayer, err := MsgTypeToNextLayer(omci.MessageType)
 	if err != nil {
@@ -298,7 +298,13 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		return errors.New(msg)
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
-	bytes[2] = byte(omci.MessageType)
+	// Download section request can optionally have the AR bit set or cleared.  If user passes in this
+	// message type and sets download requested, fix up the message type for them.
+	if omci.MessageType == DownloadSectionRequestType && omci.ResponseExpected {
+		bytes[2] = byte(DownloadSectionRequestWithResponseType)
+	} else {
+		bytes[2] = byte(omci.MessageType)
+	}
 	bytes[3] = byte(omci.DeviceIdentifier)
 	b.PushLayer(LayerTypeOMCI)
 

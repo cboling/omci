@@ -29,46 +29,47 @@ import (
 type MessageType byte
 
 const (
-	CreateRequestType                 = MessageType(byte(me.Create) | me.AR)
-	CreateResponseType                = MessageType(byte(me.Create) | me.AK)
-	DeleteRequestType                 = MessageType(byte(me.Delete) | me.AR)
-	DeleteResponseType                = MessageType(byte(me.Delete) | me.AK)
-	SetRequestType                    = MessageType(byte(me.Set) | me.AR)
-	SetResponseType                   = MessageType(byte(me.Set) | me.AK)
-	GetRequestType                    = MessageType(byte(me.Get) | me.AR)
-	GetResponseType                   = MessageType(byte(me.Get) | me.AK)
-	GetAllAlarmsRequestType           = MessageType(byte(me.GetAllAlarms) | me.AR)
-	GetAllAlarmsResponseType          = MessageType(byte(me.GetAllAlarms) | me.AK)
-	GetAllAlarmsNextRequestType       = MessageType(byte(me.GetAllAlarmsNext) | me.AR)
-	GetAllAlarmsNextResponseType      = MessageType(byte(me.GetAllAlarmsNext) | me.AK)
-	MibUploadRequestType              = MessageType(byte(me.MibUpload) | me.AR)
-	MibUploadResponseType             = MessageType(byte(me.MibUpload) | me.AK)
-	MibUploadNextRequestType          = MessageType(byte(me.MibUploadNext) | me.AR)
-	MibUploadNextResponseType         = MessageType(byte(me.MibUploadNext) | me.AK)
-	MibResetRequestType               = MessageType(byte(me.MibReset) | me.AR)
-	MibResetResponseType              = MessageType(byte(me.MibReset) | me.AK)
-	TestRequestType                   = MessageType(byte(me.Test) | me.AR)
-	TestResponseType                  = MessageType(byte(me.Test) | me.AK)
-	StartSoftwareDownloadRequestType  = MessageType(byte(me.StartSoftwareDownload) | me.AR)
-	StartSoftwareDownloadResponseType = MessageType(byte(me.StartSoftwareDownload) | me.AK)
-	DownloadSectionRequestType        = MessageType(byte(me.DownloadSection) | me.AR)
-	DownloadSectionResponseType       = MessageType(byte(me.DownloadSection) | me.AK)
-	EndSoftwareDownloadRequestType    = MessageType(byte(me.EndSoftwareDownload) | me.AR)
-	EndSoftwareDownloadResponseType   = MessageType(byte(me.EndSoftwareDownload) | me.AK)
-	ActivateSoftwareRequestType       = MessageType(byte(me.ActivateSoftware) | me.AR)
-	ActivateSoftwareResponseType      = MessageType(byte(me.ActivateSoftware) | me.AK)
-	CommitSoftwareRequestType         = MessageType(byte(me.CommitSoftware) | me.AR)
-	CommitSoftwareResponseType        = MessageType(byte(me.CommitSoftware) | me.AK)
-	SynchronizeTimeRequestType        = MessageType(byte(me.SynchronizeTime) | me.AR)
-	SynchronizeTimeResponseType       = MessageType(byte(me.SynchronizeTime) | me.AK)
-	RebootRequestType                 = MessageType(byte(me.Reboot) | me.AR)
-	RebootResponseType                = MessageType(byte(me.Reboot) | me.AK)
-	GetNextRequestType                = MessageType(byte(me.GetNext) | me.AR)
-	GetNextResponseType               = MessageType(byte(me.GetNext) | me.AK)
-	GetCurrentDataRequestType         = MessageType(byte(me.GetCurrentData) | me.AR)
-	GetCurrentDataResponseType        = MessageType(byte(me.GetCurrentData) | me.AK)
-	SetTableRequestType               = MessageType(byte(me.SetTable) | me.AR)
-	SetTableResponseType              = MessageType(byte(me.SetTable) | me.AK)
+	CreateRequestType                      = MessageType(byte(me.Create) | me.AR)
+	CreateResponseType                     = MessageType(byte(me.Create) | me.AK)
+	DeleteRequestType                      = MessageType(byte(me.Delete) | me.AR)
+	DeleteResponseType                     = MessageType(byte(me.Delete) | me.AK)
+	SetRequestType                         = MessageType(byte(me.Set) | me.AR)
+	SetResponseType                        = MessageType(byte(me.Set) | me.AK)
+	GetRequestType                         = MessageType(byte(me.Get) | me.AR)
+	GetResponseType                        = MessageType(byte(me.Get) | me.AK)
+	GetAllAlarmsRequestType                = MessageType(byte(me.GetAllAlarms) | me.AR)
+	GetAllAlarmsResponseType               = MessageType(byte(me.GetAllAlarms) | me.AK)
+	GetAllAlarmsNextRequestType            = MessageType(byte(me.GetAllAlarmsNext) | me.AR)
+	GetAllAlarmsNextResponseType           = MessageType(byte(me.GetAllAlarmsNext) | me.AK)
+	MibUploadRequestType                   = MessageType(byte(me.MibUpload) | me.AR)
+	MibUploadResponseType                  = MessageType(byte(me.MibUpload) | me.AK)
+	MibUploadNextRequestType               = MessageType(byte(me.MibUploadNext) | me.AR)
+	MibUploadNextResponseType              = MessageType(byte(me.MibUploadNext) | me.AK)
+	MibResetRequestType                    = MessageType(byte(me.MibReset) | me.AR)
+	MibResetResponseType                   = MessageType(byte(me.MibReset) | me.AK)
+	TestRequestType                        = MessageType(byte(me.Test) | me.AR)
+	TestResponseType                       = MessageType(byte(me.Test) | me.AK)
+	StartSoftwareDownloadRequestType       = MessageType(byte(me.StartSoftwareDownload) | me.AR)
+	StartSoftwareDownloadResponseType      = MessageType(byte(me.StartSoftwareDownload) | me.AK)
+	DownloadSectionRequestType             = MessageType(me.DownloadSection) // me.AR is optional
+	DownloadSectionRequestWithResponseType = MessageType(byte(me.DownloadSection) | me.AR)
+	DownloadSectionResponseType            = MessageType(byte(me.DownloadSection) | me.AK)
+	EndSoftwareDownloadRequestType         = MessageType(byte(me.EndSoftwareDownload) | me.AR)
+	EndSoftwareDownloadResponseType        = MessageType(byte(me.EndSoftwareDownload) | me.AK)
+	ActivateSoftwareRequestType            = MessageType(byte(me.ActivateSoftware) | me.AR)
+	ActivateSoftwareResponseType           = MessageType(byte(me.ActivateSoftware) | me.AK)
+	CommitSoftwareRequestType              = MessageType(byte(me.CommitSoftware) | me.AR)
+	CommitSoftwareResponseType             = MessageType(byte(me.CommitSoftware) | me.AK)
+	SynchronizeTimeRequestType             = MessageType(byte(me.SynchronizeTime) | me.AR)
+	SynchronizeTimeResponseType            = MessageType(byte(me.SynchronizeTime) | me.AK)
+	RebootRequestType                      = MessageType(byte(me.Reboot) | me.AR)
+	RebootResponseType                     = MessageType(byte(me.Reboot) | me.AK)
+	GetNextRequestType                     = MessageType(byte(me.GetNext) | me.AR)
+	GetNextResponseType                    = MessageType(byte(me.GetNext) | me.AK)
+	GetCurrentDataRequestType              = MessageType(byte(me.GetCurrentData) | me.AR)
+	GetCurrentDataResponseType             = MessageType(byte(me.GetCurrentData) | me.AK)
+	SetTableRequestType                    = MessageType(byte(me.SetTable) | me.AR)
+	SetTableResponseType                   = MessageType(byte(me.SetTable) | me.AK)
 	// Autonomous ONU messages
 	AlarmNotificationType    = MessageType(byte(me.AlarmNotification))
 	AttributeValueChangeType = MessageType(byte(me.AttributeValueChange))
@@ -183,7 +184,7 @@ func (omci *CreateRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Create Request into this layer
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -270,7 +271,7 @@ func (omci *CreateResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Create Response into this layer
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
 	if err != nil {
 		return err
 	}
@@ -340,7 +341,7 @@ func (omci *DeleteRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Delete Request into this layer
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -396,7 +397,7 @@ func (omci *DeleteResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Delete Response into this layer
 func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -459,7 +460,7 @@ func (omci *SetRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Set Request into this layer
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -566,7 +567,7 @@ func (omci *SetResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Set Response into this layer
 func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+5)
 	if err != nil {
 		return err
 	}
@@ -635,7 +636,7 @@ func (omci *GetRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Request into this layer
 func (omci *GetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -702,7 +703,7 @@ func (omci *GetResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Response into this layer
 func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
 	if err != nil {
 		return err
 	}
@@ -725,7 +726,12 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	//                   octets for data if the status code == 0.  So accommodate
 	//                   this behaviour in favor of greater interoperability.
 	lastOctet := 36
-	if omci.Result == me.AttributeFailure {
+
+	switch omci.Result {
+	case me.ProcessingError, me.NotSupported, me.UnknownEntity, me.UnknownInstance, me.DeviceBusy:
+		return nil // Done (do not try and decode attributes)
+
+	case me.AttributeFailure:
 		lastOctet = 32
 	}
 	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:lastOctet], p, byte(GetResponseType))
@@ -864,7 +870,7 @@ func (omci *GetAllAlarmsRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Request into this layer
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -942,7 +948,7 @@ func (omci *GetAllAlarmsResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Response into this layer
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -1015,7 +1021,7 @@ func (omci *GetAllAlarmsNextRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Request into this layer
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -1091,7 +1097,7 @@ func (omci *GetAllAlarmsNextResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Response into this layer
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4+28)
 	if err != nil {
 		return err
 	}
@@ -1167,7 +1173,7 @@ func (omci *MibUploadRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Request into this layer
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -1234,7 +1240,7 @@ func (omci *MibUploadResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Response into this layer
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -1307,7 +1313,7 @@ func (omci *MibUploadNextRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Request into this layer
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -1380,7 +1386,7 @@ func (omci *MibUploadNextResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Response into this layer
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+6)
 	if err != nil {
 		return err
 	}
@@ -1451,7 +1457,7 @@ func (omci *MibResetRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Reset Request into this layer
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -1505,7 +1511,7 @@ func (omci *MibResetResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a MIB Reset Response into this layer
 func (omci *MibResetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -1585,6 +1591,20 @@ func (omci *AlarmNotificationMsg) IsAlarmActive(alarmNumber uint8) (bool, error)
 		msg := fmt.Sprintf("invalid alarm number: %v, must be 0..224", alarmNumber)
 		return false, errors.New(msg)
 	}
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return false, omciErr.GetError()
+	}
+	alarmMap := entity.GetAlarmMap()
+	if alarmMap == nil {
+		msg := "Managed Entity does not support Alarm notifications"
+		return false, errors.New(msg)
+	}
+	if _, ok := alarmMap[alarmNumber]; !ok {
+		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
+		return false, errors.New(msg)
+	}
 	octet := alarmNumber / 8
 	bit := 7 - (alarmNumber % 8)
 	return omci.AlarmBitmap[octet]>>bit == 1, nil
@@ -1595,6 +1615,19 @@ func (omci *AlarmNotificationMsg) IsAlarmClear(alarmNumber uint8) (bool, error) 
 		msg := fmt.Sprintf("invalid alarm number: %v, must be 0..224", alarmNumber)
 		return false, errors.New(msg)
 	}
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return false, omciErr.GetError()
+	}
+	alarmMap := entity.GetAlarmMap()
+	if alarmMap == nil {
+		return false, errors.New("Managed Entity does not support Alarm notifications")
+	}
+	if _, ok := alarmMap[alarmNumber]; !ok {
+		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
+		return false, errors.New(msg)
+	}
 	octet := alarmNumber / 8
 	bit := 7 - (alarmNumber % 8)
 	return omci.AlarmBitmap[octet]>>bit == 0, nil
@@ -1603,6 +1636,19 @@ func (omci *AlarmNotificationMsg) IsAlarmClear(alarmNumber uint8) (bool, error) 
 func (omci *AlarmNotificationMsg) ActivateAlarm(alarmNumber uint8) error {
 	if alarmNumber >= AlarmBitmapSize {
 		msg := fmt.Sprintf("invalid alarm number: %v, must be 0..224", alarmNumber)
+		return errors.New(msg)
+	}
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
+	}
+	alarmMap := entity.GetAlarmMap()
+	if alarmMap == nil {
+		return errors.New("Managed Entity does not support Alarm notifications")
+	}
+	if _, ok := alarmMap[alarmNumber]; !ok {
+		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
 		return errors.New(msg)
 	}
 	octet := alarmNumber / 8
@@ -1616,6 +1662,19 @@ func (omci *AlarmNotificationMsg) ClearAlarm(alarmNumber uint8) error {
 		msg := fmt.Sprintf("invalid alarm number: %v, must be 0..224", alarmNumber)
 		return errors.New(msg)
 	}
+	entity, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
+	}
+	alarmMap := entity.GetAlarmMap()
+	if alarmMap == nil {
+		return errors.New("Managed Entity does not support Alarm notifications")
+	}
+	if _, ok := alarmMap[alarmNumber]; !ok {
+		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
+		return errors.New(msg)
+	}
 	octet := alarmNumber / 8
 	bit := 7 - (alarmNumber % 8)
 	omci.AlarmBitmap[octet] &= ^(1 << bit)
@@ -1625,31 +1684,35 @@ func (omci *AlarmNotificationMsg) ClearAlarm(alarmNumber uint8) error {
 // DecodeFromBytes decodes the given bytes of an Alarm Notification into this layer
 func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+28)
 	if err != nil {
 		return err
 	}
-	//var meDefinition me.IManagedEntityDefinition
-	//meDefinition, err = me.LoadManagedEntityDefinition(omci.EntityClass,
-	//	me.ParamData{EntityID: omci.EntityInstance})
-	//if err != nil {
-	//	return err
-	//}
-	// ME needs to support Alarms
-	// TODO: Add attribute to ME to specify that alarm is allowed
-	//if !me.SupportsMsgType(meDefinition, me.MibReset) {
-	//	return me.NewProcesssingError("managed entity does not support MIB Reset Message-Type")
-	//}
-	for index, octet := range data[4 : (AlarmBitmapSize/8)-4] {
-		omci.AlarmBitmap[index] = octet
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(omci.EntityClass,
+		me.ParamData{EntityID: omci.EntityInstance})
+	if omciErr.StatusCode() != me.Success {
+		return omciErr.GetError()
 	}
-	padOffset := 4 + (AlarmBitmapSize / 8)
-	omci.zeroPadding[0] = data[padOffset]
-	omci.zeroPadding[1] = data[padOffset+1]
-	omci.zeroPadding[2] = data[padOffset+2]
+	// Is this an unsupported or vendor specific ME.  If so, it is not an error to decode
+	// the alarms.  We just cannot provide any alarm names.  Handle decode here.
+	classSupport := meDefinition.GetClassSupport()
+	isUnsupported := classSupport == me.UnsupportedManagedEntity ||
+		classSupport == me.UnsupportedVendorSpecificManagedEntity
 
-	omci.AlarmSequenceNumber = data[padOffset+3]
-	return nil
+	// Look for a non-nil/not empty Alarm Map to determine if this ME supports alarms
+	if alarmMap := meDefinition.GetAlarmMap(); isUnsupported || (alarmMap != nil && len(alarmMap) > 0) {
+		for index, octet := range data[4 : (AlarmBitmapSize/8)-4] {
+			omci.AlarmBitmap[index] = octet
+		}
+		padOffset := 4 + (AlarmBitmapSize / 8)
+		omci.zeroPadding[0] = data[padOffset]
+		omci.zeroPadding[1] = data[padOffset+1]
+		omci.zeroPadding[2] = data[padOffset+2]
+
+		omci.AlarmSequenceNumber = data[padOffset+3]
+		return nil
+	}
+	return me.NewProcessingError("managed entity does not support alarm notifications")
 }
 
 func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {
@@ -1707,7 +1770,7 @@ func (omci *AttributeValueChangeMsg) String() string {
 // DecodeFromBytes decodes the given bytes of an Attribute Value Change notification into this layer
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -1792,7 +1855,7 @@ func (omci *TestRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Test Request into this layer
 func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+5)
 	if err != nil {
 		return err
 	}
@@ -1828,7 +1891,7 @@ func (omci *TestResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Test Response into this layer
 func (omci *TestResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -1868,7 +1931,7 @@ func (omci *StartSoftwareDownloadRequest) String() string {
 
 // DecodeFromBytes decodes the given bytes of a Start Software Download Request into this layer
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4)
 	if err != nil {
 		return err
 	}
@@ -1944,12 +2007,12 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 
 /////////////////////////////////////////////////////////////////////////////
 //
-type downloadResults struct {
+type DownloadResults struct {
 	ManagedEntityID uint16 // ME ID of software image entity instance (slot number plus instance 0..1 or 2..254 vendor-specific)
 	Result          me.Results
 }
 
-func (dr *downloadResults) String() string {
+func (dr *DownloadResults) String() string {
 	return fmt.Sprintf("ME: %v (%#x), Results: %d (%v)", dr.ManagedEntityID, dr.ManagedEntityID,
 		dr.Result, dr.Result)
 }
@@ -1959,7 +2022,7 @@ type StartSoftwareDownloadResponse struct {
 	Result            me.Results
 	WindowSize        byte // Window Size -1
 	NumberOfInstances byte
-	MeResults         []downloadResults
+	MeResults         []DownloadResults
 }
 
 func (omci *StartSoftwareDownloadResponse) String() string {
@@ -1970,7 +2033,7 @@ func (omci *StartSoftwareDownloadResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Start Software Download Response into this layer
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
 	if err != nil {
 		return err
 	}
@@ -2002,7 +2065,7 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 		return errors.New(msg)
 	}
 	if omci.NumberOfInstances > 0 {
-		omci.MeResults = make([]downloadResults, omci.NumberOfInstances)
+		omci.MeResults = make([]DownloadResults, omci.NumberOfInstances)
 
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
 			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[7+(index*3):])
@@ -2081,7 +2144,7 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 type DownloadSectionRequest struct {
 	MeBasePacket  // Note: EntityInstance for software download is two specific values
 	SectionNumber byte
-	SectionData   [29]byte // 0 padding if final transfer requires only a partial block
+	SectionData   [31]byte // 0 padding if final transfer requires only a partial block
 }
 
 func (omci *DownloadSectionRequest) String() string {
@@ -2092,7 +2155,7 @@ func (omci *DownloadSectionRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Download Section Request into this layer
 func (omci *DownloadSectionRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -2140,7 +2203,7 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Download Section response")
 	}
-	bytes, err := b.AppendBytes(1 + 29)
+	bytes, err := b.AppendBytes(1 + len(omci.SectionData))
 	if err != nil {
 		return err
 	}
@@ -2165,7 +2228,7 @@ func (omci *DownloadSectionResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Download Section Response into this layer
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -2222,13 +2285,13 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	if err != nil {
 		return err
 	}
-	bytes[0] = omci.SectionNumber
 	if omci.Result > me.DeviceBusy {
 		msg := fmt.Sprintf("invalid results for Download Section response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
 	}
-	bytes[1] = byte(omci.Result)
+	bytes[0] = byte(omci.Result)
+	bytes[1] = omci.SectionNumber
 	return nil
 }
 
@@ -2250,7 +2313,7 @@ func (omci *EndSoftwareDownloadRequest) String() string {
 // DecodeFromBytes decodes the given bytes of an End Software Download Request into this layer
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+7)
 	if err != nil {
 		return err
 	}
@@ -2269,7 +2332,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	}
 	omci.CRC32 = binary.BigEndian.Uint32(data[4:8])
 	omci.ImageSize = binary.BigEndian.Uint32(data[8:12])
-	omci.NumberOfInstances = data[13]
+	omci.NumberOfInstances = data[12]
 
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
@@ -2278,7 +2341,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	omci.ImageInstances = make([]uint16, omci.NumberOfInstances)
 
 	for index := 0; index < int(omci.NumberOfInstances); index++ {
-		omci.ImageInstances[index] = binary.BigEndian.Uint16(data[14+(index*2):])
+		omci.ImageInstances[index] = binary.BigEndian.Uint16(data[13+(index*2):])
 	}
 	return nil
 }
@@ -2317,11 +2380,11 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint32(bytes[4:8], omci.CRC32)
-	binary.BigEndian.PutUint32(bytes[8:12], omci.ImageSize)
-	bytes[13] = omci.NumberOfInstances
+	binary.BigEndian.PutUint32(bytes[0:4], omci.CRC32)
+	binary.BigEndian.PutUint32(bytes[4:8], omci.ImageSize)
+	bytes[8] = omci.NumberOfInstances
 	for index := 0; index < int(omci.NumberOfInstances); index++ {
-		binary.BigEndian.PutUint16(bytes[14+(index*2):], omci.ImageInstances[index])
+		binary.BigEndian.PutUint16(bytes[9+(index*2):], omci.ImageInstances[index])
 	}
 	return nil
 }
@@ -2332,7 +2395,7 @@ type EndSoftwareDownloadResponse struct {
 	MeBasePacket      // Note: EntityInstance for software download is two specific values
 	Result            me.Results
 	NumberOfInstances byte
-	MeResults         []downloadResults
+	MeResults         []DownloadResults
 }
 
 func (omci *EndSoftwareDownloadResponse) String() string {
@@ -2343,7 +2406,7 @@ func (omci *EndSoftwareDownloadResponse) String() string {
 // DecodeFromBytes decodes the given bytes of an End Software Download Response into this layer
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -2374,7 +2437,7 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 		return errors.New(msg)
 	}
 	if omci.NumberOfInstances > 0 {
-		omci.MeResults = make([]downloadResults, omci.NumberOfInstances)
+		omci.MeResults = make([]DownloadResults, omci.NumberOfInstances)
 
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
 			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[6+(index*3):])
@@ -2415,7 +2478,7 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for End Download response")
 	}
-	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
+	bytes, err := b.AppendBytes(2 + (3 * int(omci.NumberOfInstances)))
 	if err != nil {
 		return err
 	}
@@ -2462,7 +2525,7 @@ func (omci *ActivateSoftwareRequest) String() string {
 // DecodeFromBytes decodes the given bytes of an Activate Software Request into this layer
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -2541,7 +2604,7 @@ func (omci *ActivateSoftwareResponse) String() string {
 // DecodeFromBytes decodes the given bytes of an Activate Softwre Response into this layer
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -2619,7 +2682,7 @@ func (omci *CommitSoftwareRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Commit Software Request into this layer
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -2672,6 +2735,7 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 //
 type CommitSoftwareResponse struct {
 	MeBasePacket
+	Result me.Results
 }
 
 func (omci *CommitSoftwareResponse) String() string {
@@ -2681,7 +2745,7 @@ func (omci *CommitSoftwareResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Commit Softwar Response into this layer
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -2690,13 +2754,19 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if omciErr.StatusCode() != me.Success {
 		return omciErr.GetError()
 	}
-	// ME needs to support End Software Download
+	// ME needs to support Commit Software
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
 		return me.NewProcessingError("managed entity does not support Commit Software Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Commit Software response")
+	}
+	omci.Result = me.Results(data[4])
+	if omci.Result > me.Results(6) {
+		msg := fmt.Sprintf("invalid results for Commit Software response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
 	}
 	return nil
 }
@@ -2719,13 +2789,23 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts
 	if omciErr.StatusCode() != me.Success {
 		return omciErr.GetError()
 	}
-	// ME needs to support End Software Download
+	// ME needs to support Commit Software
 	if !me.SupportsMsgType(meDefinition, me.CommitSoftware) {
 		return me.NewProcessingError("managed entity does not support Commit Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Commit Software response")
+	}
+	bytes, err := b.AppendBytes(1)
+	if err != nil {
+		return err
+	}
+	bytes[0] = byte(omci.Result)
+	if omci.Result > me.Results(6) {
+		msg := fmt.Sprintf("invalid results for Commit Software response: %v, must be 0..6",
+			omci.Result)
+		return errors.New(msg)
 	}
 	return nil
 }
@@ -2750,7 +2830,7 @@ func (omci *SynchronizeTimeRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Synchronize Time Request into this layer
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+7)
 	if err != nil {
 		return err
 	}
@@ -2830,7 +2910,7 @@ func (omci *SynchronizeTimeResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Synchronize Time Response into this layer
 func (omci *SynchronizeTimeResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -2918,7 +2998,7 @@ func (omci *RebootRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Reboot Request into this layer
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -2989,7 +3069,7 @@ func (omci *RebootResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Reboot Response into this layer
 func (omci *RebootResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
 	if err != nil {
 		return err
 	}
@@ -3060,7 +3140,7 @@ func (omci *GetNextRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Next Request into this layer
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4)
 	if err != nil {
 		return err
 	}
@@ -3131,7 +3211,7 @@ func (omci *GetNextResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Next Response into this layer
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
 	if err != nil {
 		return err
 	}
@@ -3249,7 +3329,7 @@ func (omci *TestResultMsg) String() string {
 // DecodeFromBytes decodes the given bytes of a Test Result Notification into this layer
 func (omci *TestResultMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
 	if err != nil {
 		return err
 	}
@@ -3287,7 +3367,7 @@ func (omci *GetCurrentDataRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Current Data Request into this layer
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
 	if err != nil {
 		return err
 	}
@@ -3353,7 +3433,7 @@ func (omci *GetCurrentDataResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Get Current Data Respnse into this layer
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
 	if err != nil {
 		return err
 	}
@@ -3368,6 +3448,10 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	}
 	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
 
+	switch omci.Result {
+	case me.ProcessingError, me.NotSupported, me.UnknownEntity, me.UnknownInstance, me.DeviceBusy:
+		return nil // Done (do not try and decode attributes)
+	}
 	// Attribute decode
 	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[6:], p, byte(GetCurrentDataResponseType))
 	if err != nil {
@@ -3436,7 +3520,7 @@ func (omci *SetTableRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Set Table Request into this layer
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 6+2)
 	if err != nil {
 		return err
 	}
@@ -3473,7 +3557,7 @@ func (omci *SetTableResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Set Table Response into this layer
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 6+1)
 	if err != nil {
 		return err
 	}

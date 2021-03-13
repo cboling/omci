@@ -179,6 +179,14 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Equipment alarm",
+			1: "Powering alarm",
+			2: "Self-test failure",
+			3: "Laser end of life",
+			4: "Temperature yellow",
+			5: "Temperature red",
+		},
 	}
 }
 

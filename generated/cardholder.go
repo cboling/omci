@@ -147,6 +147,13 @@ func init() {
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Plug-in circuit pack missing",
+			1: "Plug-in type mismatch alarm",
+			2: "Improper card removal",
+			3: "Plug-in equipment ID mismatch alarm",
+			4: "Protection switch",
+		},
 	}
 }
 

@@ -102,6 +102,11 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Delay exceeded discard",
+			2: "MTU exceeded discard",
+			4: "Received and discarded",
+		},
 	}
 }
 

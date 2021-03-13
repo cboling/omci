@@ -1,12 +1,3 @@
-# Attention: OMCI LIBRARY MOVED
-This library has been moved under the ONF opencord github in order for the ONF community to work on it. 
-Please find the most up to date code here:
-[https://github.com/opencord/omci-lib-go](https://github.com/opencord/omci-lib-go)
-
-**Any contribution to this codebase should be done at this new location. 
-
-------------
-
 # OMCI
 
 OMCI gopacket library supports the encoding and decoding of ITU G.988 OMCI

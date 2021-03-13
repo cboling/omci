@@ -140,6 +140,14 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "PSBd HEC error count",
+			2: "XGTC HEC error count",
+			3: "Unknown profile count",
+			4: "XGEM HEC loss count",
+			5: "XGEM key errors",
+			6: "XGEM HEC error count",
+		},
 	}
 }
 
