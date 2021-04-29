@@ -25,11 +25,12 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/deckarep/golang-set"
-	"github.com/google/gopacket"
 	"reflect"
 	"sort"
 	"strings"
+
+	mapset "github.com/deckarep/golang-set"
+	"github.com/google/gopacket"
 )
 
 // Attribute types
@@ -397,7 +398,6 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		// TODO: Only baseline supported at this time
 		return nil, errors.New("attribute encode for set-table-request not yet supported")
 	}
-	return nil, errors.New("TODO")
 }
 
 func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte,

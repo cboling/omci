@@ -36,5 +36,6 @@ const (
 )
 
 func (cs ClassSupport) String() string {
-	return [...]string{"Unknown", "Supported", "Unsupported", "Partially Supported", "Ignored"}[cs]
+	return [...]string{"Unknown", "Supported", "Unsupported", "Partially Supported", "Ignored",
+		"Unsupported", "Vendor Specific"}[cs]
 }

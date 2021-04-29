@@ -8,5 +8,5 @@ require (
 	github.com/deckarep/golang-set v1.7.1
 	github.com/google/gopacket v1.1.17
 	github.com/stretchr/testify v1.5.0
-	gopkg.in/yaml.v2 v2.2.8 //indirect
+	gopkg.in/yaml.v2 v2.2.8 // indirect; indirect
 )
