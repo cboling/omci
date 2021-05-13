@@ -74,6 +74,7 @@ the following Message Types have this support and are covered by unit tests:
 
  - GetRequest
  - GetResponse
+ - DownloadSectionRequest/Response
 
 ### Upcoming message types that will be supported
 
@@ -81,7 +82,6 @@ The following provides a list of message types that will eventually support the 
 in the expected order of implementation.  The priority was chosen based on speed improvement requests
 of operations and ease of implementation.
 
- - DownloadSectionRequest/Response
  - AlarmNotification
  - AttributeValueChange
  - TestResult
