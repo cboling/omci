@@ -114,7 +114,7 @@ const MaxAttributeGetNextExtendedLength = MaxExtendedLength - 13 - 4
 
 // MaxDownloadSectionExtendedLength is the maximum payload size for section data of
 // a Download Section request message for the extended message set.
-const MaxDownloadSectionExtendedLength = MaxExtendedLength - 12 - 4
+const MaxDownloadSectionExtendedLength = MaxExtendedLength - 11 - 4
 
 // NullEntityID is often used as the Null/void Managed Entity ID for attributes
 // that are used to refer to other Managed Entities but are currently not provisioned.
