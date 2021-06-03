@@ -49,10 +49,17 @@ var (
 	LayerTypeGetCurrentDataRequest        gopacket.LayerType
 	LayerTypeSetTableRequest              gopacket.LayerType
 
-	// Extended Message Types
+	// Extended Request Message Types
+	LayerTypeCreateRequestExtended              gopacket.LayerType
+	LayerTypeDeleteRequestExtended              gopacket.LayerType
+	LayerTypeSetRequestExtended                 gopacket.LayerType
+	LayerTypeMibResetRequestExtended            gopacket.LayerType
 	LayerTypeGetRequestExtended                 gopacket.LayerType
 	LayerTypeDownloadSectionRequestExtended     gopacket.LayerType
 	LayerTypeDownloadSectionLastRequestExtended gopacket.LayerType
+	LayerTypeSynchronizeTimeRequestExtended     gopacket.LayerType
+	LayerTypeRebootRequestExtended              gopacket.LayerType
+	LayerTypeGetCurrentDataRequestExtended      gopacket.LayerType
 )
 var (
 	// Baseline Message Types
@@ -80,9 +87,19 @@ var (
 	LayerTypeGetCurrentDataResponse        gopacket.LayerType
 	LayerTypeSetTableResponse              gopacket.LayerType
 
-	// Extended Message Types
+	// Extended Response/Notification Message Types
+	LayerTypeCreateResponseExtended          gopacket.LayerType
+	LayerTypeDeleteResponseExtended          gopacket.LayerType
+	LayerTypeSetResponseExtended             gopacket.LayerType
+	LayerTypeMibResetResponseExtended        gopacket.LayerType
 	LayerTypeGetResponseExtended             gopacket.LayerType
 	LayerTypeDownloadSectionResponseExtended gopacket.LayerType
+	LayerTypeAlarmNotificationExtended       gopacket.LayerType
+	LayerTypeAttributeValueChangeExtended    gopacket.LayerType
+	LayerTypeTestResultExtended              gopacket.LayerType
+	LayerTypeSynchronizeTimeResponseExtended gopacket.LayerType
+	LayerTypeRebootResponseExtended          gopacket.LayerType
+	LayerTypeGetCurrentDataResponseExtended  gopacket.LayerType
 )
 
 func mkReqLayer(mt me.MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
@@ -152,13 +169,30 @@ func init() {
 
 	// Extended message set support
 
+	LayerTypeCreateRequestExtended = mkReqLayer(me.Create|me.ExtendedOffset, "CreateRequest-Ext", gopacket.DecodeFunc(decodeCreateRequestExtended))
+	LayerTypeDeleteRequestExtended = mkReqLayer(me.Delete|me.ExtendedOffset, "DeleteRequest-Ext", gopacket.DecodeFunc(decodeDeleteRequestExtended))
+	LayerTypeSetRequestExtended = mkReqLayer(me.Set|me.ExtendedOffset, "SetRequest-Ext", gopacket.DecodeFunc(decodeSetRequestExtended))
 	LayerTypeGetRequestExtended = mkReqLayer(me.Get|me.ExtendedOffset, "GetRequest-Ext", gopacket.DecodeFunc(decodeGetRequestExtended))
-	LayerTypeGetResponseExtended = mkRespLayer(me.Get|me.ExtendedOffset, "GetResponse-Ext", gopacket.DecodeFunc(decodeGetResponseExtended))
-
-	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
+	LayerTypeMibResetRequestExtended = mkReqLayer(me.MibReset|me.ExtendedOffset, "MibResetRequest-Ext", gopacket.DecodeFunc(decodeMibResetRequestExtended))
 	LayerTypeDownloadSectionRequestExtended = mkLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionRequest-Ext", gopacket.DecodeFunc(decodeDownloadSectionRequestExtended))
 	LayerTypeDownloadSectionLastRequestExtended = mkReqLayer(me.DownloadSection|me.ExtendedOffset, "DownloadLastSectionRequest-Ext", gopacket.DecodeFunc(decodeDownloadSectionRequestExtended))
+	LayerTypeSynchronizeTimeRequestExtended = mkReqLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeRequest-Ext", gopacket.DecodeFunc(decodeSynchronizeTimeRequestExtended))
+	LayerTypeRebootRequestExtended = mkReqLayer(me.Reboot|me.ExtendedOffset, "RebootRequest-Ext", gopacket.DecodeFunc(decodeRebootRequestExtended))
+	LayerTypeGetCurrentDataRequestExtended = mkReqLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataRequest-Ext", gopacket.DecodeFunc(decodeGetCurrentDataRequestExtended))
+
+	LayerTypeCreateResponseExtended = mkRespLayer(me.Create|me.ExtendedOffset, "CreateResponse-Ext", gopacket.DecodeFunc(decodeCreateResponseExtended))
+	LayerTypeDeleteResponseExtended = mkRespLayer(me.Delete|me.ExtendedOffset, "DeleteResponse-Ext", gopacket.DecodeFunc(decodeDeleteResponseExtended))
+	LayerTypeSetResponseExtended = mkRespLayer(me.Set|me.ExtendedOffset, "SetResponse-Ext", gopacket.DecodeFunc(decodeSetResponseExtended))
+	LayerTypeGetResponseExtended = mkRespLayer(me.Get|me.ExtendedOffset, "GetResponse-Ext", gopacket.DecodeFunc(decodeGetResponseExtended))
+	LayerTypeMibResetResponseExtended = mkRespLayer(me.MibReset|me.ExtendedOffset, "MibResetResponse-Ext", gopacket.DecodeFunc(decodeMibResetResponseExtended))
 	LayerTypeDownloadSectionResponseExtended = mkRespLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionResponse-Ext", gopacket.DecodeFunc(decodeDownloadSectionResponseExtended))
+	LayerTypeSynchronizeTimeResponseExtended = mkRespLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeResponse-Ext", gopacket.DecodeFunc(decodeSynchronizeTimeResponseExtended))
+	LayerTypeRebootResponseExtended = mkRespLayer(me.Reboot|me.ExtendedOffset, "RebootResponse-Ext", gopacket.DecodeFunc(decodeRebootResponseExtended))
+	LayerTypeGetCurrentDataResponseExtended = mkRespLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataResponse-Ext", gopacket.DecodeFunc(decodeGetCurrentDataResponseExtended))
+
+	LayerTypeAlarmNotificationExtended = mkLayer(me.AlarmNotification|me.ExtendedOffset, "AlarmNotification-Ext", gopacket.DecodeFunc(decodeAlarmNotificationExtended))
+	LayerTypeAttributeValueChangeExtended = mkLayer(me.AttributeValueChange|me.ExtendedOffset, "AttributeValueChange-Ext", gopacket.DecodeFunc(decodeAttributeValueChangeExtended))
+	LayerTypeTestResultExtended = mkLayer(me.TestResult|me.ExtendedOffset, "TestResult-Ext", gopacket.DecodeFunc(decodeTestResultExtended))
 
 	// Map message_type and action to layer
 	nextLayerMapping = make(map[MessageType]gopacket.LayerType)
@@ -211,11 +245,31 @@ func init() {
 	nextLayerMapping[TestResultType] = LayerTypeTestResult
 
 	// Extended message support
+	nextLayerMapping[CreateRequestType+ExtendedTypeDecodeOffset] = LayerTypeCreateRequestExtended
+	nextLayerMapping[CreateResponseType+ExtendedTypeDecodeOffset] = LayerTypeCreateResponseExtended
+	nextLayerMapping[DeleteResponseType+ExtendedTypeDecodeOffset] = LayerTypeDeleteResponseExtended
+	nextLayerMapping[DeleteRequestType+ExtendedTypeDecodeOffset] = LayerTypeDeleteRequestExtended
+	nextLayerMapping[SetRequestType+ExtendedTypeDecodeOffset] = LayerTypeSetRequestExtended
+	nextLayerMapping[SetResponseType+ExtendedTypeDecodeOffset] = LayerTypeSetResponseExtended
 	nextLayerMapping[GetRequestType+ExtendedTypeDecodeOffset] = LayerTypeGetRequestExtended
 	nextLayerMapping[GetResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetResponseExtended
+	nextLayerMapping[MibResetRequestType+ExtendedTypeDecodeOffset] = LayerTypeMibResetRequestExtended
+	nextLayerMapping[MibResetResponseType+ExtendedTypeDecodeOffset] = LayerTypeMibResetResponseExtended
+	nextLayerMapping[SynchronizeTimeRequestType+ExtendedTypeDecodeOffset] = LayerTypeSynchronizeTimeRequestExtended
+	nextLayerMapping[SynchronizeTimeResponseType+ExtendedTypeDecodeOffset] = LayerTypeSynchronizeTimeResponseExtended
+	nextLayerMapping[RebootRequestType+ExtendedTypeDecodeOffset] = LayerTypeRebootRequestExtended
+	nextLayerMapping[RebootResponseType+ExtendedTypeDecodeOffset] = LayerTypeRebootResponseExtended
+	nextLayerMapping[GetCurrentDataRequestType+ExtendedTypeDecodeOffset] = LayerTypeGetCurrentDataRequestExtended
+	nextLayerMapping[GetCurrentDataResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetCurrentDataResponseExtended
+
+	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
 	nextLayerMapping[DownloadSectionRequestType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionRequestExtended
-	nextLayerMapping[DownloadSectionRequestWithResponseType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionRequestExtended
+	nextLayerMapping[DownloadSectionRequestWithResponseType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionLastRequestExtended
 	nextLayerMapping[DownloadSectionResponseType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionResponseExtended
+
+	nextLayerMapping[AlarmNotificationType+ExtendedTypeDecodeOffset] = LayerTypeAlarmNotificationExtended
+	nextLayerMapping[AttributeValueChangeType+ExtendedTypeDecodeOffset] = LayerTypeAttributeValueChangeExtended
+	nextLayerMapping[TestResultType+ExtendedTypeDecodeOffset] = LayerTypeTestResultExtended
 }
 
 func MsgTypeToNextLayer(mt MessageType, isExtended bool) (gopacket.LayerType, error) {

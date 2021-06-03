@@ -188,7 +188,19 @@ func (omci *CreateRequest) String() string {
 // DecodeFromBytes decodes the given bytes of a Create Request into this layer
 func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6
+	} else {
+		hdrSize = 4
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -212,7 +224,7 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		}
 	}
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[4:], p, byte(CreateRequestType))
+	omci.Attributes, err = meDefinition.DecodeAttributes(sbcMask, data[hdrSize:], p, byte(CreateRequestType))
 	if err != nil {
 		return err
 	}
@@ -220,12 +232,19 @@ func (omci *CreateRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
-	panic("All Managed Entities have an EntityID attribute")
+	return me.NewProcessingError("All Managed Entities have an EntityID attribute")
 }
 
 func decodeCreateRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateRequest{}
 	omci.MsgLayerType = LayerTypeCreateRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeCreateRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CreateRequest{}
+	omci.MsgLayerType = LayerTypeCreateRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -253,10 +272,31 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 		}
 	}
 	// Attribute serialization
-	// TODO: Only Baseline supported at this time
-	bytesAvailable := MaxBaselineLength - 8 - 8
-	err, _ = meDefinition.SerializeAttributes(omci.Attributes, sbcMask, b, byte(CreateRequestType), bytesAvailable, false)
-	return err
+	var bytesAvailable int
+	var bytes []byte
+	if omci.Extended {
+		bytesAvailable = MaxExtendedLength - 10 - 4
+		bytes, err = b.AppendBytes(2)
+		if err != nil {
+			return err
+		}
+	} else {
+		bytesAvailable = MaxBaselineLength - 8 - 8
+	}
+	attributeBuffer := gopacket.NewSerializeBuffer()
+	if err, _ = meDefinition.SerializeAttributes(omci.Attributes, sbcMask,
+		attributeBuffer, byte(CreateRequestType), bytesAvailable, false); err != nil {
+		return err
+	}
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(len(attributeBuffer.Bytes())))
+	}
+	bytes, err = b.AppendBytes(len(attributeBuffer.Bytes()))
+	if err != nil {
+		return err
+	}
+	copy(bytes, attributeBuffer.Bytes())
+	return nil
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -275,7 +315,21 @@ func (omci *CreateResponse) String() string {
 // DecodeFromBytes decodes the given bytes of a Create Response into this layer
 func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
+	var hdrSize, offset int
+	if omci.Extended {
+		offset = 6
+		hdrSize = offset + 1 // Plus 2 more if result = 3
+	} else {
+		offset = 4
+		hdrSize = offset + 3
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -288,10 +342,14 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	if !me.SupportsMsgType(entity, me.Create) {
 		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
-	omci.Result = me.Results(data[4])
+	omci.Result = me.Results(data[offset])
 	if omci.Result == me.ParameterError {
-		omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[5:])
-		// TODO: validation that attributes set in mask are SetByCreate would be good here
+		// Optional attribute execution mask (2 octets) is required
+		if len(data) < hdrSize+2 {
+			p.SetTruncated()
+			return errors.New("frame too small")
+		}
+		omci.AttributeExecutionMask = binary.BigEndian.Uint16(data[offset+1:])
 	}
 	return nil
 }
@@ -299,6 +357,13 @@ func (omci *CreateResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 func decodeCreateResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CreateResponse{}
 	omci.MsgLayerType = LayerTypeCreateResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeCreateResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CreateResponse{}
+	omci.MsgLayerType = LayerTypeCreateResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -318,24 +383,23 @@ func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	if !me.SupportsMsgType(entity, me.Create) {
 		return me.NewProcessingError("managed entity does not support the Create Message-Type")
 	}
-	var offset int
+	var offset, extra int
 	if omci.Extended {
 		offset = 2
-	} else {
-		offset = 0
 	}
-	bytes, err := b.AppendBytes(offset + 3)
+	if omci.Result == me.ParameterError {
+		extra = 2
+	}
+	bytes, err := b.AppendBytes(offset + 1 + extra)
 	if err != nil {
 		return err
 	}
 	if omci.Extended {
-		binary.BigEndian.PutUint16(bytes, 3)
+		binary.BigEndian.PutUint16(bytes, uint16(1+extra))
 	}
 	bytes[offset] = byte(omci.Result)
 	if omci.Result == me.ParameterError {
 		binary.BigEndian.PutUint16(bytes[offset+1:], omci.AttributeExecutionMask)
-	} else {
-		binary.BigEndian.PutUint16(bytes[offset+1:], 0)
 	}
 	return nil
 }
@@ -667,7 +731,7 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	// Common ClassID/EntityID decode in msgBase
 	var hdrSize int
 	if omci.Extended {
-		hdrSize = 6 + 5
+		hdrSize = 6 + 1 // Plus 4 more if result = 9
 	} else {
 		hdrSize = 4 + 5
 	}
@@ -694,6 +758,11 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	omci.Result = me.Results(data[offset])
 
 	if omci.Result == me.AttributeFailure {
+		// Optional attribute masks (4 octets) is required
+		if len(data) < hdrSize+4 {
+			p.SetTruncated()
+			return errors.New("frame too small")
+		}
 		omci.UnsupportedAttributeMask = binary.BigEndian.Uint16(data[offset+1:])
 		omci.FailedAttributeMask = binary.BigEndian.Uint16(data[offset+3:])
 	}

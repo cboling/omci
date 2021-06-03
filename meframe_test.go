@@ -81,6 +81,15 @@ func init() {
 	// Supported Extended message set types here
 	messageTypeTestFuncs[GetRequestType+ExtendedTypeDecodeOffset] = testGetRequestTypeMeFrame
 	messageTypeTestFuncs[GetResponseType+ExtendedTypeDecodeOffset] = testGetResponseTypeMeFrame
+
+	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
+	messageTypeTestFuncs[DownloadSectionRequestType+ExtendedTypeDecodeOffset] = testDownloadSectionRequestTypeMeFrame
+	// TODO: messageTypeTestFuncs[DownloadSectionRequestWithResponseType+ExtendedTypeDecodeOffset] = testDownloadSectionLastRequestTypeMeFrame
+	messageTypeTestFuncs[DownloadSectionResponseType+ExtendedTypeDecodeOffset] = testDownloadSectionResponseTypeMeFrame
+
+	messageTypeTestFuncs[AlarmNotificationType+ExtendedTypeDecodeOffset] = testAlarmNotificationTypeMeFrame
+	messageTypeTestFuncs[AttributeValueChangeType+ExtendedTypeDecodeOffset] = testAttributeValueChangeTypeMeFrame
+	messageTypeTestFuncs[TestResultType+ExtendedTypeDecodeOffset] = testTestResultTypeMeFrame
 }
 
 func getMEsThatSupportAMessageType(messageType MessageType) []*me.ManagedEntity {
@@ -450,7 +459,7 @@ func testCreateResponseTypeMeFrame(t *testing.T, managedEntity *me.ManagedEntity
 
 		} else if attrDef.GetAccess().Contains(me.SetByCreate) {
 			// Random 20% chance this parameter was bad
-			if rand.Int31n(5) == 0 {
+			if result == me.ParameterError && rand.Int31n(5) == 0 {
 				mask |= attrDef.Mask
 			}
 		}
