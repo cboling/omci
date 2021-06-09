@@ -22,6 +22,7 @@ import (
 	"fmt"
 	. "github.com/cboling/omci"
 	. "github.com/cboling/omci/generated"
+	"github.com/cboling/omci/meframe"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -1304,7 +1305,7 @@ func TestCreateMulticastOperationsProfileMe(t *testing.T) {
 	assert.Equal(t, newErr.StatusCode(), Success)
 
 	tid := uint16(123)
-	frame, omciErr := GenFrame(meInstance, CreateRequestType, TransactionID(tid))
+	frame, omciErr := meframe.GenFrame(meInstance, CreateRequestType, meframe.TransactionID(tid))
 	assert.NotNil(t, frame)
 	assert.NotZero(t, len(frame))
 	assert.Nil(t, omciErr)

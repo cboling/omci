@@ -4,6 +4,13 @@ OMCI gopacket library supports the encoding and decoding of ITU G.988 OMCI
 messages.  Support for the Baseline Message Set has been completed and work
 is underway to support the Extended Message Set format.
 
+# Recent Changes
+
+In v2.0.0, the directory/package structure was reorganized (no API changes otherwise)
+in order to separate message type functionality on a filename basis. This will allow
+for future features and bug fixes to be better localized and to allow for better
+unit test coverage reporting.
+
 ## Message Types supported and under unit test
 The following OMCI message types currently have been coded and are covered
 satisfactory by unit tests.

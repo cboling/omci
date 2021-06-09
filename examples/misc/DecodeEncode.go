@@ -1830,7 +1830,7 @@ func decodeAnyPacket() {
 
 			omciMsg, ok := omciLayer.(*omci.OMCI)
 			if ok {
-				layerType, err := omci.MsgTypeToNextLayer(omciMsg.MessageType)
+				layerType, err := omci.MsgTypeToNextLayer(omciMsg.MessageType, false)
 
 				if err != nil {
 					fmt.Println(err)
@@ -2299,7 +2299,7 @@ func decodeMorePackets() {
 			omciLayer := packet.Layer(omci.LayerTypeOMCI)
 			omciMsg, ok := omciLayer.(*omci.OMCI)
 			if ok {
-				layerType, err := omci.MsgTypeToNextLayer(omciMsg.MessageType)
+				layerType, err := omci.MsgTypeToNextLayer(omciMsg.MessageType, false)
 
 				if err != nil {
 					fmt.Println(err)

@@ -120,7 +120,7 @@ func (c *BitmapConstraint) Valid(value interface{}) bool {
 type OctetConstraint struct {
 	Length int            // Fixed length, if zero the length may vary or is not constrained/specified
 	RegEx  *regexp.Regexp // Regular expression (optional)
-	Fill   byte           // Optional fill value. Not used in constraint checks at this time
+	Fill   *byte          // Optional fill value. Not used in constraint checks at this time
 }
 
 func (c *OctetConstraint) lengthValid(value []byte) bool {
@@ -338,7 +338,6 @@ func NewConstraint(input string, attrType AttributeType) IConstraint {
 		// Counters are read-only, no constraints are required
 		return nil
 	}
-	return nil
 }
 
 // ConstraintsValid validates a value against one or more constraints. If the

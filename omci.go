@@ -271,7 +271,10 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 			//return errors.New(msg)
 		}
 	}
-	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:eomOffset]}
+	omci.BaseLayer = layers.BaseLayer{
+		Contents: data[:4],
+		Payload:  data[4:eomOffset],
+	}
 	p.AddLayer(omci)
 	nextLayer, err := MsgTypeToNextLayer(omci.MessageType, omci.DeviceIdentifier == ExtendedIdent)
 	if err != nil {
