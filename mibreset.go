@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// MibResetRequest
 type MibResetRequest struct {
 	MeBasePacket
 }
@@ -91,7 +89,7 @@ func decodeMibResetRequestExtended(data []byte, p gopacket.PacketBuilder) error 
 }
 
 // SerializeTo provides serialization of an MIB Reset Request message
-func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// MibReset Entity Class are always ONU DATA (2) and Entity Instance of 0
 	if omci.EntityClass != me.OnuDataClassID {
 		return me.NewProcessingError("invalid Entity Class for MIB Reset request")
@@ -114,8 +112,6 @@ func (omci *MibResetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MibResetResponse
 type MibResetResponse struct {
 	MeBasePacket
 	Result me.Results
@@ -185,7 +181,7 @@ func decodeMibResetResponseExtended(data []byte, p gopacket.PacketBuilder) error
 }
 
 // SerializeTo provides serialization of an MIB Reset Response message
-func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *MibResetResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
