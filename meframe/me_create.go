@@ -29,7 +29,7 @@ import (
 
 func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// NOTE: The OMCI parser does not extract the default values of set-by-create attributes
 	//       and are the zero 'default' (or nil) at this time.  For this reason, make sure
@@ -62,7 +62,7 @@ func CreateRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 
 func CreateResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	meLayer := &CreateResponse{
 		MeBasePacket: MeBasePacket{

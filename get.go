@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// GetRequest
 type GetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
@@ -91,7 +89,7 @@ func decodeGetRequestExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Get Request message
-func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -121,12 +119,6 @@ func (omci *GetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	return nil
 }
 
-func (omci *GetRequest) SerializeToExtended(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	return nil
-}
-
-/////////////////////////////////////////////////////////////////////////////
-// GetResponse
 type GetResponse struct {
 	MeBasePacket
 	Result                   me.Results
@@ -223,7 +215,7 @@ func (omci *GetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
-	return errors.New("All Managed Entities have an EntityID attribute")
+	return errors.New("all Managed Entities have an EntityID attribute")
 }
 
 func decodeGetResponse(data []byte, p gopacket.PacketBuilder) error {

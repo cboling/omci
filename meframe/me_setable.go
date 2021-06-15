@@ -30,10 +30,10 @@ import (
 
 func SetTableRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat != ExtendedIdent {
-		return nil, errors.New("SetTable message type only supported with Extended OMCI Messaging")
+		return nil, errors.New("set table message type only supported with Extended OMCI Messaging")
 	}
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -58,10 +58,10 @@ func SetTableRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializab
 
 func SetTableResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat != ExtendedIdent {
-		return nil, errors.New("SetTable message type only supported with Extended OMCI Message Set")
+		return nil, errors.New("set table message type only supported with Extended OMCI Message Set")
 	}
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {

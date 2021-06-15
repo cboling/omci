@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type GetCurrentDataRequest struct {
 	MeBasePacket
 	AttributeMask uint16
@@ -86,7 +84,7 @@ func decodeGetCurrentDataRequestExtended(data []byte, p gopacket.PacketBuilder) 
 }
 
 // SerializeTo provides serialization of an Get Current Data Request message
-func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -109,8 +107,6 @@ func (omci *GetCurrentDataRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type GetCurrentDataResponse struct {
 	MeBasePacket
 	Result                   me.Results
@@ -125,7 +121,7 @@ func (omci *GetCurrentDataResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask, omci.Attributes)
 }
 
-// DecodeFromBytes decodes the given bytes of a Get Current Data Respnse into this layer
+// DecodeFromBytes decodes the given bytes of a Get Current Data Response into this layer
 func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	var offset, length int
@@ -196,7 +192,7 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 		omci.Attributes[eidDef.GetName()] = omci.EntityInstance
 		return nil
 	}
-	return errors.New("All Managed Entities have an EntityID attribute")
+	return errors.New("all Managed Entities have an EntityID attribute")
 }
 
 func decodeGetCurrentDataResponse(data []byte, p gopacket.PacketBuilder) error {

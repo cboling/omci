@@ -45,7 +45,7 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 	maxPayload := maxPacketAvailable(m, opt)
 	payloadAvailable := int(maxPayload) - 2 // Less attribute mask
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 		// payloadAvailable -= 2				// Less length
 	}
 	meLayer := &SetRequest{
@@ -93,7 +93,7 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 			}
 		}
 	}
-	if err == nil && meLayer.AttributeMask == 0 {
+	if meLayer.AttributeMask == 0 {
 		// TODO: Is a set request with no attributes valid?
 		return nil, errors.New("no attributes encoded for SetRequest")
 	}
@@ -102,7 +102,7 @@ func SetRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLay
 
 func SetResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	meLayer := &SetResponse{
 		MeBasePacket: MeBasePacket{

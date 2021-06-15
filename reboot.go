@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type RebootRequest struct {
 	MeBasePacket
 	RebootCondition byte
@@ -88,7 +86,7 @@ func decodeRebootRequestExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Reboot Request message
-func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -124,8 +122,6 @@ func (omci *RebootRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type RebootResponse struct {
 	MeBasePacket
 	Result me.Results
@@ -188,7 +184,7 @@ func decodeRebootResponseExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Reboot Response message
-func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *RebootResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

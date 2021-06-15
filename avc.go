@@ -24,8 +24,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// AttributeValueChangeMsg
 type AttributeValueChangeMsg struct {
 	MeBasePacket
 	AttributeMask uint16
@@ -90,7 +88,7 @@ func decodeAttributeValueChangeExtended(data []byte, p gopacket.PacketBuilder) e
 }
 
 // SerializeTo provides serialization of an Attribute Value Change Notification message
-func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *AttributeValueChangeMsg) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

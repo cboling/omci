@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAllAlarms
 type GetAllAlarmsRequest struct {
 	MeBasePacket
 	AlarmRetrievalMode byte
@@ -80,7 +78,7 @@ func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Get All Alarms Request message
-func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -103,8 +101,6 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, opts go
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAllAlarms
 type GetAllAlarmsResponse struct {
 	MeBasePacket
 	NumberOfCommands uint16
@@ -153,7 +149,7 @@ func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Get All Alarms Response message
-func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -176,8 +172,6 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, opts g
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAllAlarms
 type GetAllAlarmsNextRequest struct {
 	MeBasePacket
 	CommandSequenceNumber uint16
@@ -226,7 +220,7 @@ func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error 
 }
 
 // SerializeTo provides serialization of an Get All Alarms Next Request message
-func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -249,8 +243,6 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// GetAllAlarms
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
 	AlarmEntityClass    me.ClassID
@@ -305,7 +297,7 @@ func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error
 }
 
 // SerializeTo provides serialization of an Get All Alarms Next Response message
-func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -330,8 +322,6 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// AlarmNotificationMsg
 const AlarmBitmapSize = 224
 
 type AlarmNotificationMsg struct {
@@ -358,7 +348,7 @@ func (omci *AlarmNotificationMsg) IsAlarmActive(alarmNumber uint8) (bool, error)
 	}
 	alarmMap := entity.GetAlarmMap()
 	if alarmMap == nil {
-		msg := "Managed Entity does not support Alarm notifications"
+		msg := "managed entity does not support Alarm notifications"
 		return false, errors.New(msg)
 	}
 	if _, ok := alarmMap[alarmNumber]; !ok {
@@ -382,7 +372,7 @@ func (omci *AlarmNotificationMsg) IsAlarmClear(alarmNumber uint8) (bool, error) 
 	}
 	alarmMap := entity.GetAlarmMap()
 	if alarmMap == nil {
-		return false, errors.New("Managed Entity does not support Alarm notifications")
+		return false, errors.New("managed entity does not support Alarm notifications")
 	}
 	if _, ok := alarmMap[alarmNumber]; !ok {
 		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
@@ -405,7 +395,7 @@ func (omci *AlarmNotificationMsg) ActivateAlarm(alarmNumber uint8) error {
 	}
 	alarmMap := entity.GetAlarmMap()
 	if alarmMap == nil {
-		return errors.New("Managed Entity does not support Alarm notifications")
+		return errors.New("managed entity does not support Alarm notifications")
 	}
 	if _, ok := alarmMap[alarmNumber]; !ok {
 		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
@@ -429,7 +419,7 @@ func (omci *AlarmNotificationMsg) ClearAlarm(alarmNumber uint8) error {
 	}
 	alarmMap := entity.GetAlarmMap()
 	if alarmMap == nil {
-		return errors.New("Managed Entity does not support Alarm notifications")
+		return errors.New("managed entity does not support Alarm notifications")
 	}
 	if _, ok := alarmMap[alarmNumber]; !ok {
 		msg := fmt.Sprintf("unsupported invalid alarm number: %v", alarmNumber)
@@ -500,7 +490,7 @@ func decodeAlarmNotificationExtended(data []byte, p gopacket.PacketBuilder) erro
 }
 
 // SerializeTo provides serialization of an Alarm Notification message
-func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *AlarmNotificationMsg) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

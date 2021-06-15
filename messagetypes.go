@@ -21,7 +21,7 @@ import (
 	me "github.com/cboling/omci/generated"
 )
 
-// MessageType is the OMCI Message Type or'ed with the AR/AK flags as appropriate.
+// MessageType is the OMCI Message Type combined with the AR/AK flags as appropriate.
 type MessageType byte
 
 const (
@@ -68,11 +68,13 @@ const (
 	SetTableResponseType                   = MessageType(byte(me.SetTable) | me.AK)
 
 	// Autonomous ONU messages
-	AlarmNotificationType    = MessageType(byte(me.AlarmNotification))
-	AttributeValueChangeType = MessageType(byte(me.AttributeValueChange))
-	TestResultType           = MessageType(byte(me.TestResult))
+
+	AlarmNotificationType    = MessageType(me.AlarmNotification)
+	AttributeValueChangeType = MessageType(me.AttributeValueChange)
+	TestResultType           = MessageType(me.TestResult)
 
 	// Support mapping of extended format types (use MSB reserved bit)
+
 	ExtendedTypeDecodeOffset = MessageType(byte(0x80))
 )
 

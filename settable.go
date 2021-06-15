@@ -23,8 +23,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type SetTableRequest struct {
 	MeBasePacket
 	// TODO: Fix me when extended messages supported)
@@ -51,7 +49,7 @@ func decodeSetTableRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Set Table Message Type Request
-func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -60,8 +58,6 @@ func (omci *SetTableRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopack
 	return errors.New("need to implement") /// TODO: Fix me when extended messages supported)
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type SetTableResponse struct {
 	MeBasePacket
 	// TODO: Fix me when extended messages supported)
@@ -88,7 +84,7 @@ func decodeSetTableResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Set Table Message Type Response
-func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SetTableResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

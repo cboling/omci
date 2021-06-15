@@ -30,7 +30,7 @@ import (
 
 func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &SynchronizeTimeRequest{
@@ -55,7 +55,7 @@ func SynchronizeTimeRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Ser
 
 func SynchronizeTimeResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &SynchronizeTimeResponse{

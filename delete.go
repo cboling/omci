@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// DeleteRequest
 type DeleteRequest struct {
 	MeBasePacket
 }
@@ -80,7 +78,7 @@ func decodeDeleteRequestExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Delete Request message
-func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -105,8 +103,6 @@ func (omci *DeleteRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// DeleteResponse
 type DeleteResponse struct {
 	MeBasePacket
 	Result me.Results
@@ -164,7 +160,7 @@ func decodeDeleteResponseExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Delete Response message
-func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *DeleteResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

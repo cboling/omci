@@ -25,8 +25,8 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateRequest
+// CreateRequest message apply only to attributes that are defined to be set by create.
+// Writeable attributes that are not set by create are not permitted in a create message
 type CreateRequest struct {
 	MeBasePacket
 	Attributes me.AttributeValueMap
@@ -100,7 +100,7 @@ func decodeCreateRequestExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Create Request Message
-func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -150,8 +150,7 @@ func (omci *CreateRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CreateResponse
+// CreateResponse returns the result of a CreateRequest
 type CreateResponse struct {
 	MeBasePacket
 	Result                 me.Results
@@ -219,7 +218,7 @@ func decodeCreateResponseExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Create Response message
-func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *CreateResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

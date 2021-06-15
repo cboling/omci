@@ -30,7 +30,7 @@ import (
 
 func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadRequest{
@@ -58,7 +58,7 @@ func StartSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopack
 
 func StartSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &StartSoftwareDownloadResponse{
@@ -116,7 +116,7 @@ func DownloadSectionResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 
 func EndSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -141,7 +141,7 @@ func EndSoftwareDownloadRequestFrame(m *me.ManagedEntity, opt options) (gopacket
 
 func EndSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -166,7 +166,7 @@ func EndSoftwareDownloadResponseFrame(m *me.ManagedEntity, opt options) (gopacke
 
 func ActivateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -191,7 +191,7 @@ func ActivateSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 
 func ActivateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -216,7 +216,7 @@ func ActivateSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 
 func CommitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {
@@ -241,7 +241,7 @@ func CommitSoftwareRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Seri
 
 func CommitSoftwareResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {

@@ -411,39 +411,6 @@ func TestCreateGemPortNetworkCtp(t *testing.T) {
 	assert.Equal(t, strings.ToLower(createGemPortNetworkCtp), reconstituted)
 }
 
-// TODO: Uncomment as encode/decode supported
-//func TestMulticastGemInterworkingTp(t *testing.T) {
-//
-//	multicastGemInterworkingTp := "0011440A011900060104000001000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(multicastGemInterworkingTp)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreateGemInteworkingTp(t *testing.T) {
-//
-//	createGemInteworkingTp := "0012440A010A80010100058000000000" +
-//		"01000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createGemInteworkingTp)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-
 func TestSet8021pMapperServiceProfile(t *testing.T) {
 	set8021pMapperServiceProfile := "0016480A008280004000800100000000" +
 		"00000000000000000000000000000000" +
@@ -489,116 +456,6 @@ func TestSet8021pMapperServiceProfile(t *testing.T) {
 	assert.Equal(t, strings.ToLower(set8021pMapperServiceProfile), reconstituted)
 }
 
-// TODO: Uncomment as encode/decode supported
-//func TestCreateMacBridgePortConfigurationData(t *testing.T) {
-//
-//	createMacBridgePortConfigurationData := "001A440A002F21010201020380000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createMacBridgePortConfigurationData)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreateVlanTaggingFilterData(t *testing.T) {
-//
-//	createVlanTaggingFilterData := "001F440A005421010400000000000000" +
-//		"00000000000000000000000000000000" +
-//		"100100000000000000000028"
-//
-//	data, err := stringToPacket(createVlanTaggingFilterData)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreateExtendedVlanTaggingOperationConfigurationData(t *testing.T) {
-//
-//	createExtendedVlanTaggingOperationConfigurationData := "0023440A00AB02020A04010000000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createExtendedVlanTaggingOperationConfigurationData)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//}
-//
-//func TestSetExtendedVlanTagging_operationConfigurationData(t *testing.T) {
-//
-//	setExtendedVlanTaggingOperationConfigurationData := "0024480A00AB02023800810081000000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(setExtendedVlanTaggingOperationConfigurationData)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestSetExtendedVlanTagging1(t *testing.T) {
-//
-//	setExtendedVlanTagging1 := "0025480A00AB02020400f00000008200" +
-//		"5000402f000000082004000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(setExtendedVlanTagging1)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestSetExtendedVlanTagging2(t *testing.T) {
-//
-//	setExtendedVlanTagging2 := "0026480A00AB02020400F00000008200" +
-//		"d000402f00000008200c000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(setExtendedVlanTagging2)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-//
-//func TestCreateMacBridgePortConfigurationData2(t *testing.T) {
-//
-//	createMacBridgePortConfigurationData2 := "0029440A002F02010201010b04010000" +
-//		"00000000000000000000000000000000" +
-//		"000000000000000000000028"
-//
-//	data, err := stringToPacket(createMacBridgePortConfigurationData2)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-
 func TestMibUpload(t *testing.T) {
 	mibUpload := "00304D0A000200000000000000000000" +
 		"00000000000000000000000000000000" +
@@ -640,56 +497,6 @@ func TestMibUpload(t *testing.T) {
 	assert.Equal(t, strings.ToLower(mibUpload), reconstituted)
 }
 
-// TODO: Uncomment as encode/decode supported
-//func TestEnhSecurityAvc(t *testing.T) {
-//
-//	enhSecurityAvc := "0000110a014c0000008000202020202020202020202020202020202020202020" +
-//		"2020202020202020000000280be43cf4"
-//
-//	data, err := stringToPacket(enhSecurityAvc)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	fmt.Println(packet)
-//
-//	customLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, customLayer)
-//}
-
-//func TestAlarmMessage(t *testing.T) {
-//	alarmMessage := "0000100a00050101000000000000000000000000000000000000000000000000" +
-//		"0000000220000000000000280be43cf4"
-//
-//	data, err := stringToPacket(alarmMessage)
-//	assert.NoError(t, err)
-//
-//	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//	assert.NotNil(t, packet)
-//
-//	omciLayer := packet.Layer(LayerTypeOMCI)
-//	assert.NotNil(t, packet)
-//
-//	omciMsg, ok := omciLayer.(*OMCI)
-//	assert.True(t, ok)
-//	assert.Equal(t, omciMsg.TransactionID, uint16(0))
-//	assert.Equal(t, omciMsg.MessageType, byte(AlarmNotification))
-//	assert.Equal(t, omciMsg.Length, uint16(40))
-//
-//	msgLayer := packet.Layer(LayerTypeAlarmNotification)
-//	assert.Nil(t, msgLayer)		// TODO: Fix decode
-//
-//	//assert.NotNil(t, msgLayer)
-//	//
-//	//alarmNotification, ok2 := msgLayer.(*AlarmNotificationMsg)
-//	//assert.True(t, ok2)
-//	//// TODO: Repace with actual entity class
-//	//assert.Equal(t, alarmNotification.EntityClass, uint16(0x0005))
-//	//assert.Equal(t, alarmNotification.EntityInstance, uint16(0x101))
-//	// TODO: Decode alarm bits
-//
-//	// TODO: Serialize frame and test with original
-//}
-
 func TestOnuRebootRequest(t *testing.T) {
 	onuRebootRequest := "0016590a01000000000000000000000000000" +
 		"0000000000000000000000000000000000000" +
@@ -711,18 +518,7 @@ func TestOnuRebootRequest(t *testing.T) {
 	assert.Equal(t, omciMsg.Length, uint16(40))
 
 	msgLayer := packet.Layer(LayerTypeRebootRequest)
-	assert.NotNil(t, msgLayer) // TODO: Fix decode
-
-	//assert.NotNil(t, msgLayer)
-	//
-	//rebootRequest, ok2 := msgLayer.(*RebootRequest)
-	//assert.True(t, ok2)
-	//assert.Equal(t, rebootRequest.EntityClass, OnuDataClassID)
-	//assert.Equal(t, rebootRequest.EntityInstance, uint16(0x8000))
-
-	// TODO: Test Decoded flags
-
-	// TODO: Serialize frame and test with original
+	assert.NotNil(t, msgLayer)
 }
 
 func TestMibUploadNextSequence(t *testing.T) {
@@ -1028,58 +824,6 @@ func TestMibUploadNextSequence(t *testing.T) {
 		firstTid += 1
 	}
 }
-
-//func TestMibUploadNextWithMIC(t *testing.T) {
-//	// Similar to previous, but with the MIC available for testing
-//	mibUploadNextSequence := [...]string{
-//		"00032e0a0002000000020000800000000000000000000000000000000000000000000000000000000000002828ce00e2",
-//		"00042e0a0002000000050101f0002f2f05202020202020202020202020202020202020202000000000000028d4eb4bdf",
-//		"00052e0a00020000000501010f802020202020202020202020202020202020202020000000000000000000282dbe4b44",
-//		"00062e0a0002000000050104f000303001202020202020202020202020202020202020202000000000000028ef1b035b",
-//	}
-//	firstTid := uint16(3)
-//
-//	for pktNumber, packetString := range mibUploadNextSequence {
-//		data, err := stringToPacket(packetString)
-//		assert.NoError(t, err)
-//
-//		packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-//		fmt.Printf("Packet: %v: %v", pktNumber, packet)
-//		assert.NotNil(t, packet)
-//
-//		omciLayer := packet.Layer(LayerTypeOMCI)
-//		assert.NotNil(t, omciLayer)
-//
-//		omciMsg, ok := omciLayer.(*OMCI)
-//		assert.True(t, ok)
-//		assert.Equal(t, omciMsg.TransactionID, firstTid)
-//		assert.Equal(t, omciMsg.MessageType, byte(MibUploadNext))
-//		assert.Equal(t, omciMsg.Length, uint16(40))
-//
-//		msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
-//		assert.NotNil(t, msgLayer)
-//
-//		uploadResponse, ok2 := msgLayer.(*MibUploadNextResponse)
-//		assert.True(t, ok2)
-//		assert.Equal(t, uploadResponse.EntityClass, OnuDataClassID)
-//		assert.Equal(t, uploadResponse.EntityInstance, uint16(0))
-//
-//		// Test serialization back to former string
-//		var options gopacket.SerializeOptions
-//		options.FixLengths = true
-//
-//		buffer := gopacket.NewSerializeBuffer()
-//		err = gopacket.SerializeLayers(buffer, options, omciMsg, uploadResponse)
-//		assert.NoError(t, err)
-//
-//		outgoingPacket := buffer.Bytes()
-//		reconstituted := packetToString(outgoingPacket)
-//		assert.Equal(t,  strings.ToLower(packetString), reconstituted)
-//
-//		// Advance TID
-//		firstTid += 1
-//	}
-//}
 
 // TestUnsupportedG988ClassIDMibUploadNextResponse tests decoding of an Unknown class ID that is
 // in the range of IDs assigned for G.988 use

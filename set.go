@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// SetRequest
 type SetRequest struct {
 	MeBasePacket
 	AttributeMask uint16
@@ -106,7 +104,7 @@ func decodeSetRequestExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Set Request message
-func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -161,8 +159,6 @@ func (omci *SetRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Se
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// SetResponse
 type SetResponse struct {
 	MeBasePacket
 	Result                   me.Results
@@ -233,7 +229,7 @@ func decodeSetResponseExtended(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Set Response message
-func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SetResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 
 	err := omci.MeBasePacket.SerializeTo(b)

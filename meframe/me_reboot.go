@@ -29,7 +29,7 @@ import (
 
 func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &RebootRequest{
@@ -45,7 +45,7 @@ func RebootRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 
 func RebootResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &RebootResponse{

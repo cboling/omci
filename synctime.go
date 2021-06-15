@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type SynchronizeTimeRequest struct {
 	MeBasePacket
 	Year   uint16
@@ -116,7 +114,7 @@ func decodeSynchronizeTimeRequestExtended(data []byte, p gopacket.PacketBuilder)
 }
 
 // SerializeTo provides serialization of an Synchronize Time Request message
-func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -160,8 +158,6 @@ func (omci *SynchronizeTimeRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type SynchronizeTimeResponse struct {
 	MeBasePacket
 	Result         me.Results
@@ -241,7 +237,7 @@ func decodeSynchronizeTimeResponseExtended(data []byte, p gopacket.PacketBuilder
 }
 
 // SerializeTo provides serialization of an Synchronize Time Response message
-func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *SynchronizeTimeResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

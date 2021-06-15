@@ -30,7 +30,7 @@ import (
 
 func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsRequest{
@@ -46,7 +46,7 @@ func GetAllAlarmsRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serial
 
 func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsResponse{
@@ -62,7 +62,7 @@ func GetAllAlarmsResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 
 func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextRequest{
@@ -78,7 +78,7 @@ func GetAllAlarmsNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Se
 
 func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &GetAllAlarmsNextResponse{
@@ -104,7 +104,7 @@ func GetAllAlarmsNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.S
 
 func AlarmNotificationFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {

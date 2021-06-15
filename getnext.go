@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type GetNextRequest struct {
 	MeBasePacket
 	AttributeMask  uint16
@@ -70,7 +68,7 @@ func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Get Next Message Type Request
-func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -94,8 +92,6 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacke
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type GetNextResponse struct {
 	MeBasePacket
 	Result        me.Results
@@ -162,7 +158,7 @@ func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Get Next Message Type Response
-func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

@@ -32,7 +32,7 @@ import (
 // DeviceIdent identifies the OMCI message format. Currently either baseline or extended.
 type DeviceIdent byte
 
-// LayerTypeOmci provide a gopacket LayerType for OMCI messages
+// LayerTypeOMCI provides a gopacket LayerType for OMCI messages
 var (
 	LayerTypeOMCI gopacket.LayerType
 )
@@ -52,7 +52,7 @@ const (
 	// G-PON OLTs and ONUs support the baseline message set
 	BaselineIdent DeviceIdent = 0x0A
 
-	// ExtendedIdent messager are up to 1920 octets but may not be supported by all ONUs or OLTs.
+	// ExtendedIdent messages are up to 1920 octets but may not be supported by all ONUs or OLTs.
 	ExtendedIdent DeviceIdent = 0x0B
 )
 
@@ -135,12 +135,6 @@ type OMCI struct {
 }
 
 func (omci *OMCI) String() string {
-	//msgType := me.MsgType(byte(omci.MessageType) & me.MsgTypeMask)
-	//if me.IsAutonomousNotification(msgType) {
-	//	return fmt.Sprintf("OMCI: Type: %v:", msgType)
-	//} else if byte(omci.MessageType)&me.AK == me.AK {
-	//	return fmt.Sprintf("OMCI: Type: %v Response", msgType)
-	//}
 	return fmt.Sprintf("Type: %v, TID: %d (%#x), Ident: %v",
 		omci.MessageType, omci.TransactionID, omci.TransactionID, omci.DeviceIdentifier)
 }

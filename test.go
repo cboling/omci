@@ -76,14 +76,14 @@ func (omci *TestRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 }
 
 // SerializeTo provides serialization of an Test Request message
-func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *TestRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
 	}
 	if omci.Payload == nil {
-		return errors.New("Test Results payload is missing")
+		return errors.New("test results payload is missing")
 	}
 
 	if len(omci.Payload) > MaxTestRequestLength {
@@ -131,7 +131,7 @@ func (omci *OpticalLineSupervisionTestRequest) DecodeFromBytes(data []byte, p go
 }
 
 // SerializeTo provides serialization of an Test Result notification message
-func (omci *OpticalLineSupervisionTestRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *OpticalLineSupervisionTestRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -187,7 +187,7 @@ func decodeTestResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Test Response message
-func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *TestResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -318,7 +318,7 @@ func (omci *TestResultNotification) DecodeFromBytes(data []byte, p gopacket.Pack
 }
 
 // SerializeTo provides serialization of an Test Result notification message
-func (omci *TestResultNotification) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *TestResultNotification) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -336,7 +336,7 @@ func (omci *TestResultNotification) SerializeTo(b gopacket.SerializeBuffer, opts
 		return me.NewProcessingError("managed entity does not support Test Message-Type")
 	}
 	if omci.Payload == nil {
-		return errors.New("Test Results payload is missing")
+		return errors.New("test results payload is missing")
 	}
 
 	payloadOffset := 0
@@ -437,7 +437,7 @@ func (omci *OpticalLineSupervisionTestResult) DecodeFromBytes(data []byte, p gop
 }
 
 // SerializeTo provides serialization of an Test Result notification message
-func (omci *OpticalLineSupervisionTestResult) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *OpticalLineSupervisionTestResult) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

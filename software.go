@@ -25,8 +25,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type StartSoftwareDownloadRequest struct {
 	MeBasePacket                // Note: EntityInstance for software download is two specific values
 	WindowSize           byte   // Window Size -1
@@ -80,7 +78,7 @@ func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) e
 }
 
 // SerializeTo provides serialization of an Start Software Download Request message
-func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -116,8 +114,6 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type DownloadResults struct {
 	ManagedEntityID uint16 // ME ID of software image entity instance (slot number plus instance 0..1 or 2..254 vendor-specific)
 	Result          me.Results
@@ -198,7 +194,7 @@ func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) 
 }
 
 // SerializeTo provides serialization of an Start Software Download Response message
-func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -323,7 +319,7 @@ func decodeDownloadSectionRequestExtended(data []byte, p gopacket.PacketBuilder)
 }
 
 // SerializeTo provides serialization of an Download Section Request message
-func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -379,8 +375,6 @@ func (omci *DownloadSectionRequest) SerializeTo(b gopacket.SerializeBuffer, opts
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type DownloadSectionResponse struct {
 	MeBasePacket  // Note: EntityInstance for software download is two specific values
 	Result        me.Results
@@ -445,7 +439,7 @@ func decodeDownloadSectionResponseExtended(data []byte, p gopacket.PacketBuilder
 }
 
 // SerializeTo provides serialization of an Download Section Response message
-func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -488,8 +482,6 @@ func (omci *DownloadSectionResponse) SerializeTo(b gopacket.SerializeBuffer, opt
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type EndSoftwareDownloadRequest struct {
 	MeBasePacket      // Note: EntityInstance for software download is two specific values
 	CRC32             uint32
@@ -546,7 +538,7 @@ func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) err
 }
 
 // SerializeTo provides serialization of an End Software Download Request message
-func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -582,8 +574,6 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type EndSoftwareDownloadResponse struct {
 	MeBasePacket      // Note: EntityInstance for software download is two specific values
 	Result            me.Results
@@ -652,7 +642,7 @@ func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) er
 }
 
 // SerializeTo provides serialization of an End Software Download Response message
-func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -703,8 +693,6 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type ActivateSoftwareRequest struct {
 	MeBasePacket  // Note: EntityInstance for software download is two specific values
 	ActivateFlags byte
@@ -750,7 +738,7 @@ func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error 
 }
 
 // SerializeTo provides serialization of an Activate Software message
-func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -782,8 +770,6 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opt
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type ActivateSoftwareResponse struct {
 	MeBasePacket
 	Result me.Results
@@ -794,7 +780,7 @@ func (omci *ActivateSoftwareResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
 }
 
-// DecodeFromBytes decodes the given bytes of an Activate Softwre Response into this layer
+// DecodeFromBytes decodes the given bytes of an Activate Software Response into this layer
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
@@ -830,7 +816,7 @@ func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error
 }
 
 // SerializeTo provides serialization of an Activate Software Response message
-func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -862,8 +848,6 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, op
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type CommitSoftwareRequest struct {
 	MeBasePacket
 }
@@ -902,7 +886,7 @@ func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Commit Software Request message
-func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -924,8 +908,6 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, opts 
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type CommitSoftwareResponse struct {
 	MeBasePacket
 	Result me.Results
@@ -935,7 +917,7 @@ func (omci *CommitSoftwareResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
-// DecodeFromBytes decodes the given bytes of a Commit Softwar Response into this layer
+// DecodeFromBytes decodes the given bytes of a Commit Software Response into this layer
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
@@ -971,7 +953,7 @@ func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an Commit Software Response message
-func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {

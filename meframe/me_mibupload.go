@@ -23,7 +23,7 @@ import (
 
 func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &MibUploadRequest{
@@ -38,7 +38,7 @@ func MibUploadRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializa
 
 func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &MibUploadResponse{
@@ -54,7 +54,7 @@ func MibUploadResponseFrame(m *me.ManagedEntity, opt options) (gopacket.Serializ
 
 func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &MibUploadNextRequest{
@@ -70,7 +70,7 @@ func MibUploadNextRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Seria
 
 func MibUploadNextResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	// Common for all MEs
 	meLayer := &MibUploadNextResponse{

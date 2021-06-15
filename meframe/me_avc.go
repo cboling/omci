@@ -30,7 +30,7 @@ import (
 
 func AttributeValueChangeFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	mask, err := checkAttributeMask(m, opt.attributeMask)
 	if err != nil {

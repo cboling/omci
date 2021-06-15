@@ -24,8 +24,6 @@ import (
 	"github.com/google/gopacket"
 )
 
-/////////////////////////////////////////////////////////////////////////////
-// MibUploadRequest
 type MibUploadRequest struct {
 	MeBasePacket
 }
@@ -71,7 +69,7 @@ func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an MIB Upload Request message
-func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -89,8 +87,6 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopac
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MibUploadResponse
 type MibUploadResponse struct {
 	MeBasePacket
 	NumberOfCommands uint16
@@ -139,7 +135,7 @@ func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an MIB Upload Response message
-func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -162,8 +158,6 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopa
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type MibUploadNextRequest struct {
 	MeBasePacket
 	CommandSequenceNumber uint16
@@ -212,7 +206,7 @@ func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 }
 
 // SerializeTo provides serialization of an MIB Upload Next Request message
-func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
+func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
@@ -235,8 +229,6 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, opts g
 	return nil
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
 type MibUploadNextResponse struct {
 	MeBasePacket
 	ReportedME me.ManagedEntity

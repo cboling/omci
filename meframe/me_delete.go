@@ -29,7 +29,7 @@ import (
 
 func DeleteRequestFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	meLayer := &DeleteRequest{
 		MeBasePacket: MeBasePacket{
@@ -43,7 +43,7 @@ func DeleteRequestFrame(m *me.ManagedEntity, opt options) (gopacket.Serializable
 
 func DeleteResponseFrame(m *me.ManagedEntity, opt options) (gopacket.SerializableLayer, error) {
 	if opt.frameFormat == ExtendedIdent {
-		return nil, errors.New("Extended message set for this message type is not supported")
+		return nil, errors.New("extended message set for this message type is not supported")
 	}
 	meLayer := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
