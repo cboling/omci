@@ -39,10 +39,14 @@ func TestMibUploadRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0360))
-	assert.Equal(t, omciMsg.MessageType, MibUploadRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibUploadRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0360), omciMsg.TransactionID)
+	assert.Equal(t, MibUploadRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 	msgLayer := packet.Layer(LayerTypeMibUploadRequest)
 
 	assert.NotNil(t, msgLayer)
@@ -50,6 +54,9 @@ func TestMibUploadRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibUploadRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeMibUploadRequest, request.LayerType())
+	assert.Equal(t, LayerTypeMibUploadRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -100,10 +107,14 @@ func TestMibUploadResponse(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0360))
-	assert.Equal(t, omciMsg.MessageType, MibUploadResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibUploadResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0360), omciMsg.TransactionID)
+	assert.Equal(t, MibUploadResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeMibUploadResponse)
 	assert.NotNil(t, msgLayer)
@@ -111,6 +122,9 @@ func TestMibUploadResponse(t *testing.T) {
 	response, ok2 := msgLayer.(*MibUploadResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeMibUploadResponse, response.LayerType())
+	assert.Equal(t, LayerTypeMibUploadResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 	assert.Equal(t, response.NumberOfCommands, uint16(0x112))
 }
 
@@ -159,10 +173,13 @@ func TestMibUploadNextRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0286))
-	assert.Equal(t, omciMsg.MessageType, MibUploadNextRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibUploadNextRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0286), omciMsg.TransactionID)
+	assert.Equal(t, MibUploadNextRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextRequest)
 	assert.NotNil(t, msgLayer)
@@ -170,7 +187,10 @@ func TestMibUploadNextRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibUploadNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.CommandSequenceNumber, uint16(0x3a))
+	assert.Equal(t, LayerTypeMibUploadNextRequest, request.LayerType())
+	assert.Equal(t, LayerTypeMibUploadNextRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, uint16(0x3a), request.CommandSequenceNumber)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -219,10 +239,14 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0286))
-	assert.Equal(t, omciMsg.MessageType, MibUploadNextResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibUploadNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0286), omciMsg.TransactionID)
+	assert.Equal(t, MibUploadNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeMibUploadNextResponse)
 	assert.NotNil(t, msgLayer)
@@ -230,8 +254,11 @@ func TestMibUploadNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*MibUploadNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.ReportedME.GetClassID(), me.PriorityQueueClassID)
-	assert.Equal(t, response.ReportedME.GetEntityID(), uint16(0))
+	assert.Equal(t, LayerTypeMibUploadNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeMibUploadNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+	assert.Equal(t, me.PriorityQueueClassID, response.ReportedME.GetClassID())
+	assert.Equal(t, uint16(0), response.ReportedME.GetEntityID())
 
 	attributes := me.AttributeValueMap{
 		"QueueConfigurationOption":                            byte(0),

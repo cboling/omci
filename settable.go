@@ -32,6 +32,21 @@ func (omci *SetTableRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// LayerType returns LayerTypeSetTableRequest
+func (omci *SetTableRequest) LayerType() gopacket.LayerType {
+	return LayerTypeSetTableRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SetTableRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeSetTableRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SetTableRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Set Table Request into this layer
 func (omci *SetTableRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -65,6 +80,21 @@ type SetTableResponse struct {
 
 func (omci *SetTableResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
+}
+
+// LayerType returns LayerTypeSetTableResponse
+func (omci *SetTableResponse) LayerType() gopacket.LayerType {
+	return LayerTypeSetTableResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SetTableResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeSetTableResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SetTableResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Set Table Response into this layer

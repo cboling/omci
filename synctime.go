@@ -40,6 +40,21 @@ func (omci *SynchronizeTimeRequest) String() string {
 		omci.MeBasePacket.String(), omci.Year, omci.Month, omci.Day, omci.Hour, omci.Minute, omci.Second)
 }
 
+// LayerType returns LayerTypeSynchronizeTimeRequest
+func (omci *SynchronizeTimeRequest) LayerType() gopacket.LayerType {
+	return LayerTypeSynchronizeTimeRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SynchronizeTimeRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeSynchronizeTimeRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SynchronizeTimeRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Synchronize Time Request into this layer
 func (omci *SynchronizeTimeRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -167,6 +182,21 @@ type SynchronizeTimeResponse struct {
 func (omci *SynchronizeTimeResponse) String() string {
 	return fmt.Sprintf("%v, Results: %d (%v), Success: %d",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SuccessResults)
+}
+
+// LayerType returns LayerTypeSynchronizeTimeResponse
+func (omci *SynchronizeTimeResponse) LayerType() gopacket.LayerType {
+	return LayerTypeSynchronizeTimeResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SynchronizeTimeResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeSynchronizeTimeResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SynchronizeTimeResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Synchronize Time Response into this layer

@@ -35,6 +35,21 @@ func (omci *GetAllAlarmsRequest) String() string {
 		omci.MeBasePacket.String(), omci.AlarmRetrievalMode)
 }
 
+// LayerType returns LayerTypeGetAllAlarmsRequest
+func (omci *GetAllAlarmsRequest) LayerType() gopacket.LayerType {
+	return LayerTypeGetAllAlarmsRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetAllAlarmsRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetAllAlarmsRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetAllAlarmsRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Request into this layer
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -111,6 +126,21 @@ func (omci *GetAllAlarmsResponse) String() string {
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
 }
 
+// LayerType returns LayerTypeGetAllAlarmsResponse
+func (omci *GetAllAlarmsResponse) LayerType() gopacket.LayerType {
+	return LayerTypeGetAllAlarmsResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetAllAlarmsResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetAllAlarmsResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetAllAlarmsResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Response into this layer
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -180,6 +210,21 @@ type GetAllAlarmsNextRequest struct {
 func (omci *GetAllAlarmsNextRequest) String() string {
 	return fmt.Sprintf("%v, Sequence Number: %d",
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
+}
+
+// LayerType returns LayerTypeGetAllAlarmsNextRequest
+func (omci *GetAllAlarmsNextRequest) LayerType() gopacket.LayerType {
+	return LayerTypeGetAllAlarmsNextRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetAllAlarmsNextRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetAllAlarmsNextRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetAllAlarmsNextRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Request into this layer
@@ -254,6 +299,21 @@ func (omci *GetAllAlarmsNextResponse) String() string {
 	return fmt.Sprintf("%v, CID: %v, EID: (%d/%#x), Bitmap: %v",
 		omci.MeBasePacket.String(), omci.AlarmEntityClass, omci.AlarmEntityInstance,
 		omci.AlarmEntityInstance, omci.AlarmBitMap)
+}
+
+// LayerType returns LayerTypeGetAllAlarmsNextResponse
+func (omci *GetAllAlarmsNextResponse) LayerType() gopacket.LayerType {
+	return LayerTypeGetAllAlarmsNextResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetAllAlarmsNextResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetAllAlarmsNextResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetAllAlarmsNextResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Response into this layer
@@ -334,6 +394,21 @@ type AlarmNotificationMsg struct {
 func (omci *AlarmNotificationMsg) String() string {
 	return fmt.Sprintf("%v, Sequence Number: %d, Alarm Bitmap: %v",
 		omci.MeBasePacket.String(), omci.AlarmSequenceNumber, omci.AlarmBitmap)
+}
+
+// LayerType returns LayerTypeAlarmNotification
+func (omci *AlarmNotificationMsg) LayerType() gopacket.LayerType {
+	return LayerTypeAlarmNotification
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *AlarmNotificationMsg) CanDecode() gopacket.LayerClass {
+	return LayerTypeAlarmNotification
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *AlarmNotificationMsg) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 func (omci *AlarmNotificationMsg) IsAlarmActive(alarmNumber uint8) (bool, error) {

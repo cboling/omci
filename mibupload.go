@@ -32,6 +32,21 @@ func (omci *MibUploadRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// LayerType returns LayerTypeMibUploadRequest
+func (omci *MibUploadRequest) LayerType() gopacket.LayerType {
+	return LayerTypeMibUploadRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibUploadRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibUploadRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibUploadRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a MIB Upload Request into this layer
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -95,6 +110,21 @@ type MibUploadResponse struct {
 func (omci *MibUploadResponse) String() string {
 	return fmt.Sprintf("%v, NumberOfCommands: %#v",
 		omci.MeBasePacket.String(), omci.NumberOfCommands)
+}
+
+// LayerType returns LayerTypeMibUploadResponse
+func (omci *MibUploadResponse) LayerType() gopacket.LayerType {
+	return LayerTypeMibUploadResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibUploadResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibUploadResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibUploadResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a MIB Upload Response into this layer
@@ -168,6 +198,21 @@ func (omci *MibUploadNextRequest) String() string {
 		omci.MeBasePacket.String(), omci.CommandSequenceNumber)
 }
 
+// LayerType returns LayerTypeMibUploadNextRequest
+func (omci *MibUploadNextRequest) LayerType() gopacket.LayerType {
+	return LayerTypeMibUploadNextRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibUploadNextRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibUploadNextRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibUploadNextRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Request into this layer
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -237,6 +282,21 @@ type MibUploadNextResponse struct {
 func (omci *MibUploadNextResponse) String() string {
 	return fmt.Sprintf("%v, ReportedME: [%v]",
 		omci.MeBasePacket.String(), omci.ReportedME.String())
+}
+
+// LayerType returns LayerTypeMibUploadNextResponse
+func (omci *MibUploadNextResponse) LayerType() gopacket.LayerType {
+	return LayerTypeMibUploadNextResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibUploadNextResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibUploadNextResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibUploadNextResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Response into this layer

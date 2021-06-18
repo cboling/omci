@@ -35,6 +35,21 @@ func (omci *RebootRequest) String() string {
 		omci.MeBasePacket.String(), omci.RebootCondition)
 }
 
+// LayerType returns LayerTypeRebootRequest
+func (omci *RebootRequest) LayerType() gopacket.LayerType {
+	return LayerTypeRebootRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *RebootRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeRebootRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *RebootRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Reboot Request into this layer
 func (omci *RebootRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -131,6 +146,21 @@ type RebootResponse struct {
 func (omci *RebootResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
+}
+
+// LayerType returns LayerTypeRebootResponse
+func (omci *RebootResponse) LayerType() gopacket.LayerType {
+	return LayerTypeRebootResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *RebootResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeRebootResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *RebootResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Reboot Response into this layer

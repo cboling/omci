@@ -39,10 +39,14 @@ func TestGetAllAlarmsRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0445))
-	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0445), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
 	assert.NotNil(t, msgLayer)
@@ -50,7 +54,10 @@ func TestGetAllAlarmsRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetAllAlarmsRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.AlarmRetrievalMode, byte(0))
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, byte(0), request.AlarmRetrievalMode)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -99,10 +106,14 @@ func TestGetAllAlarmsResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0445))
-	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0445), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
 	assert.NotNil(t, msgLayer)
@@ -110,7 +121,10 @@ func TestGetAllAlarmsResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetAllAlarmsResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
-	assert.Equal(t, response.NumberOfCommands, uint16(3))
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+	assert.Equal(t, uint16(3), response.NumberOfCommands)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -160,10 +174,14 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0234))
-	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0234), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
 	assert.NotNil(t, msgLayer)
@@ -171,6 +189,9 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -219,10 +240,14 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0234))
-	assert.Equal(t, omciMsg.MessageType, GetAllAlarmsNextResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0234), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
 	assert.NotNil(t, msgLayer)
@@ -230,12 +255,15 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetAllAlarmsNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 
 	var alarms [224 / 8]byte
 	alarms[0] = 0x80
-	assert.Equal(t, response.AlarmEntityClass, me.PhysicalPathTerminationPointEthernetUniClassID)
-	assert.Equal(t, response.AlarmEntityInstance, uint16(0x102))
-	assert.Equal(t, response.AlarmBitMap, alarms)
+	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, response.AlarmEntityClass)
+	assert.Equal(t, uint16(0x102), response.AlarmEntityInstance)
+	assert.Equal(t, alarms, response.AlarmBitMap)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -307,10 +335,10 @@ func TestAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
 	assert.NotNil(t, msgLayer)
@@ -318,15 +346,18 @@ func TestAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, me.PhysicalPathTerminationPointEthernetUniClassID)
-	assert.Equal(t, request.EntityInstance, uint16(0x104))
-	assert.Equal(t, request.AlarmBitmap, [28]byte{
+	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, request.EntityClass)
+	assert.Equal(t, uint16(0x104), request.EntityInstance)
+	assert.Equal(t, [28]byte{
 		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
-	assert.Equal(t, request.AlarmSequenceNumber, byte(5))
+	}, request.AlarmBitmap)
+	assert.Equal(t, byte(5), request.AlarmSequenceNumber)
 
 	// Active/Clear tests
 	active, err2 := request.IsAlarmActive(0)
@@ -362,10 +393,13 @@ func TestInvalidClassAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAlarmNotification, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
 	assert.Nil(t, msgLayer)
@@ -373,6 +407,9 @@ func TestInvalidClassAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.False(t, ok2)
 	assert.Nil(t, request)
+	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 }
 
 func TestUnknownsMeAlarmNotificationDecode(t *testing.T) {
@@ -389,10 +426,14 @@ func TestUnknownsMeAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAlarmNotification, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
 	assert.NotNil(t, msgLayer)
@@ -400,15 +441,18 @@ func TestUnknownsMeAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, me.ClassID(22))
-	assert.Equal(t, request.EntityInstance, uint16(0x104))
-	assert.Equal(t, request.AlarmBitmap, [28]byte{
+	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, me.ClassID(22), request.EntityClass)
+	assert.Equal(t, uint16(0x104), request.EntityInstance)
+	assert.Equal(t, [28]byte{
 		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
-	assert.Equal(t, request.AlarmSequenceNumber, byte(5))
+	}, request.AlarmBitmap)
+	assert.Equal(t, byte(5), request.AlarmSequenceNumber)
 }
 
 func TestVendorSpecificAlarmNotificationDecode(t *testing.T) {
@@ -425,10 +469,14 @@ func TestVendorSpecificAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	assert.Equal(t, omciMsg.MessageType, AlarmNotificationType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAlarmNotification, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
 	assert.NotNil(t, msgLayer)
@@ -436,15 +484,18 @@ func TestVendorSpecificAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, me.ClassID(255))
-	assert.Equal(t, request.EntityInstance, uint16(0x104))
-	assert.Equal(t, request.AlarmBitmap, [28]byte{
+	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, me.ClassID(255), request.EntityClass)
+	assert.Equal(t, uint16(0x104), request.EntityInstance)
+	assert.Equal(t, [28]byte{
 		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
 		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-	})
-	assert.Equal(t, request.AlarmSequenceNumber, byte(5))
+	}, request.AlarmBitmap)
+	assert.Equal(t, byte(5), request.AlarmSequenceNumber)
 }
 
 func TestAlarmNotificationSerialize(t *testing.T) {
@@ -496,6 +547,10 @@ func TestExtendedAlarmNotificationDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAlarmNotification, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
 	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -507,6 +562,9 @@ func TestExtendedAlarmNotificationDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AlarmNotificationMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, request.EntityClass)
 	assert.Equal(t, uint16(0x104), request.EntityInstance)
 	assert.Equal(t, [28]byte{

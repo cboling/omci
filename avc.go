@@ -35,6 +35,21 @@ func (omci *AttributeValueChangeMsg) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
+// LayerType returns LayerTypeAttributeValueChange
+func (omci *AttributeValueChangeMsg) LayerType() gopacket.LayerType {
+	return LayerTypeAttributeValueChange
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *AttributeValueChangeMsg) CanDecode() gopacket.LayerClass {
+	return LayerTypeAttributeValueChange
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *AttributeValueChangeMsg) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of an Attribute Value Change notification into this layer
 func (omci *AttributeValueChangeMsg) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase

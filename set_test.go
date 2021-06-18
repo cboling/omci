@@ -39,10 +39,14 @@ func TestSetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0107))
-	assert.Equal(t, omciMsg.MessageType, SetRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeSetRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0107), omciMsg.TransactionID)
+	assert.Equal(t, SetRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeSetRequest)
 	assert.NotNil(t, msgLayer)
@@ -50,6 +54,9 @@ func TestSetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeSetRequest, request.LayerType())
+	assert.Equal(t, LayerTypeSetRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -99,10 +106,14 @@ func TestSetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0107))
-	assert.Equal(t, omciMsg.MessageType, SetResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeSetResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0107), omciMsg.TransactionID)
+	assert.Equal(t, SetResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeSetResponse)
 	assert.NotNil(t, msgLayer)
@@ -110,6 +121,9 @@ func TestSetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*SetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeSetResponse, response.LayerType())
+	assert.Equal(t, LayerTypeSetResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -159,6 +173,10 @@ func TestExtendedSetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeSetRequest, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0107), omciMsg.TransactionID)
 	assert.Equal(t, SetRequestType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -170,6 +188,9 @@ func TestExtendedSetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*SetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeSetRequest, request.LayerType())
+	assert.Equal(t, LayerTypeSetRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, uint16(0x0200), request.AttributeMask)
 
 	// Verify string output for message
@@ -221,6 +242,10 @@ func TestExtendedSetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeSetResponse, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0107), omciMsg.TransactionID)
 	assert.Equal(t, SetResponseType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -232,6 +257,9 @@ func TestExtendedSetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*SetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeSetResponse, response.LayerType())
+	assert.Equal(t, LayerTypeSetResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 	assert.Equal(t, me.Success, response.Result)
 
 	// Verify string output for message

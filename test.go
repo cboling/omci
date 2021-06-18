@@ -58,6 +58,21 @@ func (omci *TestRequest) String() string {
 	return fmt.Sprintf("%v, Request: %v octets", omci.MeBasePacket.String(), len(omci.Payload))
 }
 
+// LayerType returns LayerTypeTestRequest
+func (omci *TestRequest) LayerType() gopacket.LayerType {
+	return LayerTypeTestRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *TestRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeTestRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *TestRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 func (omci *TestRequest) TestRequest() []byte {
 	return omci.Payload
 }
@@ -112,6 +127,21 @@ func (omci *OpticalLineSupervisionTestRequest) String() string {
 		omci.SelectTest, omci.GeneralPurposeBuffer, omci.VendorSpecificParameters)
 }
 
+// LayerType returns LayerTypeTestRequest
+func (omci *OpticalLineSupervisionTestRequest) LayerType() gopacket.LayerType {
+	return LayerTypeTestRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *OpticalLineSupervisionTestRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeTestRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *OpticalLineSupervisionTestRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 func (omci *OpticalLineSupervisionTestRequest) TestRequest() []byte {
 	return omci.Payload
 }
@@ -157,6 +187,21 @@ type TestResponse struct {
 
 func (omci *TestResponse) String() string {
 	return fmt.Sprintf("%v, Results: %d (%v)", omci.MeBasePacket.String(), omci.Result, omci.Result)
+}
+
+// LayerType returns LayerTypeTestResponse
+func (omci *TestResponse) LayerType() gopacket.LayerType {
+	return LayerTypeTestResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *TestResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeTestResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *TestResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Test Response into this layer
@@ -276,6 +321,21 @@ func (omci *TestResultNotification) String() string {
 	return fmt.Sprintf("%v, Payload: %v octets", omci.MeBasePacket.String(), len(omci.Payload))
 }
 
+// LayerType returns LayerTypeTestResult
+func (omci *TestResultNotification) LayerType() gopacket.LayerType {
+	return LayerTypeTestResult
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *TestResultNotification) CanDecode() gopacket.LayerClass {
+	return LayerTypeTestResult
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *TestResultNotification) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Test Result Notification into this layer
 func (omci *TestResultNotification) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -382,6 +442,21 @@ type OpticalLineSupervisionTestResult struct {
 
 func (omci *OpticalLineSupervisionTestResult) String() string {
 	return fmt.Sprintf("Optical Line Supervision Test Result")
+}
+
+// LayerType returns LayerTypeTestResult
+func (omci *OpticalLineSupervisionTestResult) LayerType() gopacket.LayerType {
+	return LayerTypeTestResult
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *OpticalLineSupervisionTestResult) CanDecode() gopacket.LayerClass {
+	return LayerTypeTestResult
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *OpticalLineSupervisionTestResult) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 func (omci *OpticalLineSupervisionTestResult) TestResults() []byte {

@@ -39,6 +39,10 @@ func TestMibResetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibResetRequest, omciMsg.NextLayerType())
 	assert.Equal(t, MibResetRequestType, omciMsg.MessageType)
 	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
 	assert.Equal(t, uint16(40), omciMsg.Length)
@@ -49,6 +53,9 @@ func TestMibResetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibResetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeMibResetRequest, request.LayerType())
+	assert.Equal(t, LayerTypeMibResetRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, me.OnuDataClassID, request.EntityClass)
 	assert.Equal(t, uint16(0), request.EntityInstance)
 
@@ -98,8 +105,13 @@ func TestMibResetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.MessageType, MibResetResponseType)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibResetResponse, omciMsg.NextLayerType())
+	assert.Equal(t, MibResetResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeMibResetResponse)
 
@@ -108,6 +120,9 @@ func TestMibResetResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*MibResetResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeMibResetResponse, response.LayerType())
+	assert.Equal(t, LayerTypeMibResetResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -155,6 +170,10 @@ func TestExtendedMibResetRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibResetRequest, omciMsg.NextLayerType())
 	assert.Equal(t, MibResetRequestType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
 	assert.Equal(t, uint16(0), omciMsg.Length)
@@ -165,6 +184,9 @@ func TestExtendedMibResetRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*MibResetRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeMibResetRequest, request.LayerType())
+	assert.Equal(t, LayerTypeMibResetRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, me.OnuDataClassID, request.EntityClass)
 	assert.Equal(t, uint16(0), request.EntityInstance)
 
@@ -213,6 +235,10 @@ func TestExtendedMibResetResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeMibResetResponse, omciMsg.NextLayerType())
 	assert.Equal(t, MibResetResponseType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
 	assert.Equal(t, uint16(1), omciMsg.Length)

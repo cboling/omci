@@ -33,6 +33,21 @@ func (omci *MibResetRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// LayerType returns LayerTypeMibResetRequest
+func (omci *MibResetRequest) LayerType() gopacket.LayerType {
+	return LayerTypeMibResetRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibResetRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibResetRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibResetRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a MIB Reset Request into this layer
 func (omci *MibResetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -120,6 +135,21 @@ type MibResetResponse struct {
 func (omci *MibResetResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
+}
+
+// LayerType returns LayerTypeMibResetResponse
+func (omci *MibResetResponse) LayerType() gopacket.LayerType {
+	return LayerTypeMibResetResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *MibResetResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeMibResetResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *MibResetResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a MIB Reset Response into this layer

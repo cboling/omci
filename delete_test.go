@@ -39,10 +39,14 @@ func TestDeleteRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0211))
-	assert.Equal(t, omciMsg.MessageType, DeleteRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeDeleteRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0211), omciMsg.TransactionID)
+	assert.Equal(t, DeleteRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeDeleteRequest)
 
@@ -51,6 +55,9 @@ func TestDeleteRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*DeleteRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeDeleteRequest, request.LayerType())
+	assert.Equal(t, LayerTypeDeleteRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -98,10 +105,14 @@ func TestDeleteResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0211))
-	assert.Equal(t, omciMsg.MessageType, DeleteResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeDeleteResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0211), omciMsg.TransactionID)
+	assert.Equal(t, DeleteResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeDeleteResponse)
 
@@ -110,6 +121,9 @@ func TestDeleteResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*DeleteResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeDeleteResponse, response.LayerType())
+	assert.Equal(t, LayerTypeDeleteResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -158,6 +172,10 @@ func TestExtendedDeleteRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeDeleteRequest, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0211), omciMsg.TransactionID)
 	assert.Equal(t, DeleteRequestType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -170,6 +188,9 @@ func TestExtendedDeleteRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*DeleteRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeDeleteRequest, request.LayerType())
+	assert.Equal(t, LayerTypeDeleteRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -217,6 +238,10 @@ func TestExtendedDeleteResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeDeleteResponse, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0211), omciMsg.TransactionID)
 	assert.Equal(t, DeleteResponseType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -229,6 +254,9 @@ func TestExtendedDeleteResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*DeleteResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeDeleteResponse, response.LayerType())
+	assert.Equal(t, LayerTypeDeleteResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 	assert.Equal(t, me.ParameterError, response.Result)
 
 	// Verify string output for message

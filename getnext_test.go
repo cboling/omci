@@ -39,10 +39,14 @@ func TestGetNextRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x285e))
-	assert.Equal(t, omciMsg.MessageType, GetNextRequestType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetNextRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x285e), omciMsg.TransactionID)
+	assert.Equal(t, GetNextRequestType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetNextRequest)
 	assert.NotNil(t, msgLayer)
@@ -50,10 +54,13 @@ func TestGetNextRequestDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*GetNextRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.EntityClass, me.ExtendedVlanTaggingOperationConfigurationDataClassID)
-	assert.Equal(t, request.EntityInstance, uint16(0x0202))
-	assert.Equal(t, request.AttributeMask, uint16(0x0400))
-	assert.Equal(t, request.SequenceNumber, uint16(1))
+	assert.Equal(t, LayerTypeGetNextRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetNextRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, me.ExtendedVlanTaggingOperationConfigurationDataClassID, request.EntityClass)
+	assert.Equal(t, uint16(0x0202), request.EntityInstance)
+	assert.Equal(t, uint16(0x0400), request.AttributeMask)
+	assert.Equal(t, uint16(1), request.SequenceNumber)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -104,10 +111,14 @@ func TestGetNextResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x285e))
-	assert.Equal(t, omciMsg.MessageType, GetNextResponseType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x285e), omciMsg.TransactionID)
+	assert.Equal(t, GetNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeGetNextResponse)
 	assert.NotNil(t, msgLayer)
@@ -118,6 +129,9 @@ func TestGetNextResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*GetNextResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 	assert.Equal(t, me.ExtendedVlanTaggingOperationConfigurationDataClassID, response.EntityClass)
 	assert.Equal(t, uint16(0x0202), response.EntityInstance)
 	assert.Equal(t, me.Success, response.Result)
@@ -127,7 +141,7 @@ func TestGetNextResponseDecode(t *testing.T) {
 	// size
 	expectedOctets := 16
 	value := response.Attributes["ReceivedFrameVlanTaggingOperationTable"]
-	assert.Equal(t, vlanOpTable, value.([]byte)[:expectedOctets])
+	assert.Equal(t, value.([]byte)[:expectedOctets], vlanOpTable)
 
 	// Verify string output for message
 	packetString := packet.String()

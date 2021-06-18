@@ -38,6 +38,21 @@ func (omci *StartSoftwareDownloadRequest) String() string {
 		omci.MeBasePacket.String(), omci.WindowSize, omci.ImageSize, omci.NumberOfCircuitPacks)
 }
 
+// LayerType returns LayerTypeStartSoftwareDownloadRequest
+func (omci *StartSoftwareDownloadRequest) LayerType() gopacket.LayerType {
+	return LayerTypeStartSoftwareDownloadRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *StartSoftwareDownloadRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeStartSoftwareDownloadRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *StartSoftwareDownloadRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Start Software Download Request into this layer
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4)
@@ -135,6 +150,21 @@ type StartSoftwareDownloadResponse struct {
 func (omci *StartSoftwareDownloadResponse) String() string {
 	return fmt.Sprintf("%v, Results: %v, Window Size: %v, # of Instances: %v, ME Results: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.WindowSize, omci.NumberOfInstances, omci.MeResults)
+}
+
+// LayerType returns LayerTypeStartSoftwareDownloadResponse
+func (omci *StartSoftwareDownloadResponse) LayerType() gopacket.LayerType {
+	return LayerTypeStartSoftwareDownloadResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *StartSoftwareDownloadResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeStartSoftwareDownloadResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *StartSoftwareDownloadResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Start Software Download Response into this layer
@@ -258,6 +288,21 @@ type DownloadSectionRequest struct {
 func (omci *DownloadSectionRequest) String() string {
 	return fmt.Sprintf("%v, Section #: %v, Data Length: %v",
 		omci.MeBasePacket.String(), omci.SectionNumber, len(omci.SectionData))
+}
+
+// LayerType returns LayerTypeDownloadSectionRequest
+func (omci *DownloadSectionRequest) LayerType() gopacket.LayerType {
+	return LayerTypeDownloadSectionRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *DownloadSectionRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeDownloadSectionRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *DownloadSectionRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Download Section Request into this layer
@@ -386,6 +431,21 @@ func (omci *DownloadSectionResponse) String() string {
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.SectionNumber)
 }
 
+// LayerType returns LayerTypeDownloadSectionResponse
+func (omci *DownloadSectionResponse) LayerType() gopacket.LayerType {
+	return LayerTypeDownloadSectionResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *DownloadSectionResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeDownloadSectionResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *DownloadSectionResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Download Section Response into this layer
 func (omci *DownloadSectionResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -495,6 +555,21 @@ func (omci *EndSoftwareDownloadRequest) String() string {
 		omci.MeBasePacket.String(), omci.CRC32, omci.ImageSize, omci.NumberOfInstances, omci.ImageInstances)
 }
 
+// LayerType returns LayerTypeEndSoftwareDownloadRequest
+func (omci *EndSoftwareDownloadRequest) LayerType() gopacket.LayerType {
+	return LayerTypeEndSoftwareDownloadRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *EndSoftwareDownloadRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeEndSoftwareDownloadRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *EndSoftwareDownloadRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of an End Software Download Request into this layer
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -584,6 +659,21 @@ type EndSoftwareDownloadResponse struct {
 func (omci *EndSoftwareDownloadResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v), Number of Instances: %v, ME Results: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.NumberOfInstances, omci.MeResults)
+}
+
+// LayerType returns LayerTypeCreateResponse
+func (omci *EndSoftwareDownloadResponse) LayerType() gopacket.LayerType {
+	return LayerTypeEndSoftwareDownloadResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *EndSoftwareDownloadResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeEndSoftwareDownloadResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *EndSoftwareDownloadResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of an End Software Download Response into this layer
@@ -703,6 +793,21 @@ func (omci *ActivateSoftwareRequest) String() string {
 		omci.MeBasePacket.String(), omci.ActivateFlags)
 }
 
+// LayerType returns LayerTypeActivateSoftwareRequest
+func (omci *ActivateSoftwareRequest) LayerType() gopacket.LayerType {
+	return LayerTypeActivateSoftwareRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *ActivateSoftwareRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeActivateSoftwareRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *ActivateSoftwareRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of an Activate Software Request into this layer
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -778,6 +883,21 @@ type ActivateSoftwareResponse struct {
 func (omci *ActivateSoftwareResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
+}
+
+// LayerType returns LayerTypeActivateSoftwareResponse
+func (omci *ActivateSoftwareResponse) LayerType() gopacket.LayerType {
+	return LayerTypeActivateSoftwareResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *ActivateSoftwareResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeActivateSoftwareResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *ActivateSoftwareResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of an Activate Software Response into this layer
@@ -856,6 +976,21 @@ func (omci *CommitSoftwareRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// LayerType returns LayerTypeCommitSoftwareRequest
+func (omci *CommitSoftwareRequest) LayerType() gopacket.LayerType {
+	return LayerTypeCommitSoftwareRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *CommitSoftwareRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeCommitSoftwareRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *CommitSoftwareRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Commit Software Request into this layer
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -915,6 +1050,21 @@ type CommitSoftwareResponse struct {
 
 func (omci *CommitSoftwareResponse) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
+}
+
+// LayerType returns LayerTypeCommitSoftwareResponse
+func (omci *CommitSoftwareResponse) LayerType() gopacket.LayerType {
+	return LayerTypeCommitSoftwareResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *CommitSoftwareResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeCommitSoftwareResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *CommitSoftwareResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Commit Software Response into this layer

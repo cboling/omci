@@ -39,10 +39,14 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	assert.Equal(t, omciMsg.MessageType, AttributeValueChangeType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	assert.Equal(t, omciMsg.Length, uint16(40))
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAttributeValueChange, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AttributeValueChangeType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeAttributeValueChange)
 	assert.NotNil(t, msgLayer)
@@ -50,12 +54,16 @@ func TestAttributeValueChangeDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AttributeValueChangeMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
-	assert.Equal(t, request.AttributeMask, uint16(0x8000))
-	assert.Equal(t, request.EntityClass, me.SoftwareImageClassID)
-	assert.Equal(t, request.EntityInstance, uint16(0))
-	assert.Equal(t, request.Attributes["Version"], []byte{
+	assert.Equal(t, LayerTypeAttributeValueChange, request.LayerType())
+	assert.Equal(t, LayerTypeAttributeValueChange, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, uint16(0x8000), request.AttributeMask)
+	assert.Equal(t, me.SoftwareImageClassID, request.EntityClass)
+	assert.Equal(t, uint16(0), request.EntityInstance)
+	assert.Equal(t, []byte{
 		0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
-		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00})
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
+		request.Attributes["Version"])
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -111,6 +119,10 @@ func TestExtendedAttributeValueChangeDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeAttributeValueChange, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
 	assert.Equal(t, AttributeValueChangeType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -122,6 +134,9 @@ func TestExtendedAttributeValueChangeDecode(t *testing.T) {
 	request, ok2 := msgLayer.(*AttributeValueChangeMsg)
 	assert.True(t, ok2)
 	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeAttributeValueChange, request.LayerType())
+	assert.Equal(t, LayerTypeAttributeValueChange, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, uint16(0x8000), request.AttributeMask)
 	assert.Equal(t, me.SoftwareImageClassID, request.EntityClass)
 	assert.Equal(t, uint16(0), request.EntityInstance)

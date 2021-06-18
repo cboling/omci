@@ -144,15 +144,6 @@ func (omci *OMCI) LayerType() gopacket.LayerType {
 	return LayerTypeOMCI
 }
 
-// LayerContents returns the OMCI specific layer information
-func (omci *OMCI) LayerContents() []byte {
-	b := make([]byte, 4)
-	binary.BigEndian.PutUint16(b, omci.TransactionID)
-	b[2] = byte(omci.MessageType)
-	b[3] = byte(omci.DeviceIdentifier)
-	return b
-}
-
 // CanDecode returns the layers that this class can decode
 func (omci *OMCI) CanDecode() gopacket.LayerClass {
 	return LayerTypeOMCI
@@ -160,7 +151,20 @@ func (omci *OMCI) CanDecode() gopacket.LayerClass {
 
 // NextLayerType returns the layer type contained by this DecodingLayer.
 func (omci *OMCI) NextLayerType() gopacket.LayerType {
-	return gopacket.LayerTypeZero
+
+	if next, ok := nextLayerMapping[omci.MessageType]; ok {
+		return next
+	}
+	return gopacket.LayerTypePayload
+}
+
+// LayerContents returns the OMCI specific layer information
+func (omci *OMCI) LayerContents() []byte {
+	b := make([]byte, 4)
+	binary.BigEndian.PutUint16(b, omci.TransactionID)
+	b[2] = byte(omci.MessageType)
+	b[3] = byte(omci.DeviceIdentifier)
+	return b
 }
 
 func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {

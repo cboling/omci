@@ -35,6 +35,21 @@ func (omci *GetCurrentDataRequest) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask)
 }
 
+// LayerType returns LayerTypeGetCurrentDataRequest
+func (omci *GetCurrentDataRequest) LayerType() gopacket.LayerType {
+	return LayerTypeGetCurrentDataRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetCurrentDataRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetCurrentDataRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetCurrentDataRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Get Current Data Request into this layer
 func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -119,6 +134,21 @@ type GetCurrentDataResponse struct {
 func (omci *GetCurrentDataResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v), Attribute Mask: %#x, Attributes: %v",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.AttributeMask, omci.Attributes)
+}
+
+// LayerType returns LayerTypeGetCurrentDataResponse
+func (omci *GetCurrentDataResponse) LayerType() gopacket.LayerType {
+	return LayerTypeGetCurrentDataResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *GetCurrentDataResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeGetCurrentDataResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *GetCurrentDataResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Get Current Data Response into this layer

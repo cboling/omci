@@ -42,9 +42,13 @@ func TestGenericTestResultDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0000))
-	assert.Equal(t, omciMsg.MessageType, TestResultType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestResult, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0000), omciMsg.TransactionID)
+	assert.Equal(t, TestResultType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
 	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeTestResult)
@@ -54,6 +58,9 @@ func TestGenericTestResultDecode(t *testing.T) {
 	generic, ok2 := msgLayer.(*TestResultNotification)
 	assert.True(t, ok2)
 	assert.NotNil(t, generic)
+	assert.Equal(t, LayerTypeTestResult, generic.LayerType())
+	assert.Equal(t, LayerTypeTestResult, generic.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, generic.NextLayerType())
 	assert.NotNil(t, generic.MeBasePacket.Payload) // Next three all same data
 	assert.NotNil(t, generic.Payload)
 	assert.NotNil(t, generic.TestResults())
@@ -90,9 +97,13 @@ func TestOpticalLineSupervisionTestResultDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
-	assert.Equal(t, omciMsg.TransactionID, uint16(0x0000))
-	assert.Equal(t, omciMsg.MessageType, TestResultType)
-	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestResult, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0000), omciMsg.TransactionID)
+	assert.Equal(t, TestResultType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
 	assert.Equal(t, uint16(40), omciMsg.Length)
 
 	msgLayer := packet.Layer(LayerTypeTestResult)
@@ -102,6 +113,9 @@ func TestOpticalLineSupervisionTestResultDecode(t *testing.T) {
 	optical, ok2 := msgLayer.(*OpticalLineSupervisionTestResult)
 	assert.True(t, ok2)
 	assert.NotNil(t, optical)
+	assert.Equal(t, LayerTypeTestResult, optical.LayerType())
+	assert.Equal(t, LayerTypeTestResult, optical.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, optical.NextLayerType())
 
 	// Get the Managed Entity class ID and instance ID from the base packet
 	base := optical.MeBasePacket
@@ -219,6 +233,10 @@ func TestGenericTestRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestRequest, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0123), omciMsg.TransactionID)
 	assert.Equal(t, TestRequestType, omciMsg.MessageType)
 	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
@@ -231,6 +249,9 @@ func TestGenericTestRequestDecode(t *testing.T) {
 	generic, ok2 := msgLayer.(*TestRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, generic)
+	assert.Equal(t, LayerTypeTestRequest, generic.LayerType())
+	assert.Equal(t, LayerTypeTestRequest, generic.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, generic.NextLayerType())
 	assert.NotNil(t, generic.MeBasePacket.Payload) // Next three all same data
 	assert.NotNil(t, generic.Payload)
 	assert.NotNil(t, generic.TestRequest())
@@ -267,6 +288,10 @@ func TestOpticalLineSupervisionTestRequestDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestRequest, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0ddd), omciMsg.TransactionID)
 	assert.Equal(t, TestRequestType, omciMsg.MessageType)
 	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
@@ -279,6 +304,9 @@ func TestOpticalLineSupervisionTestRequestDecode(t *testing.T) {
 	optical, ok2 := msgLayer.(*OpticalLineSupervisionTestRequest)
 	assert.True(t, ok2)
 	assert.NotNil(t, optical)
+	assert.Equal(t, LayerTypeTestRequest, optical.LayerType())
+	assert.Equal(t, LayerTypeTestRequest, optical.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, optical.NextLayerType())
 
 	// Get the Managed Entity class ID and instance ID from the base packet
 	base := optical.MeBasePacket
@@ -373,6 +401,10 @@ func TestTestResponseDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestResponse, omciMsg.NextLayerType())
 	assert.Equal(t, TestResponseType, omciMsg.MessageType)
 	assert.Equal(t, uint16(40), omciMsg.Length)
 
@@ -383,6 +415,9 @@ func TestTestResponseDecode(t *testing.T) {
 	response, ok2 := msgLayer.(*TestResponse)
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeTestResponse, response.LayerType())
+	assert.Equal(t, LayerTypeTestResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
 	assert.Equal(t, me.OnuGClassID, response.EntityClass)
 	assert.Equal(t, uint16(0), response.EntityInstance)
 	assert.Equal(t, me.Success, response.Result)
@@ -437,6 +472,10 @@ func TestExtendedGenericTestResultDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestResult, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0000), omciMsg.TransactionID)
 	assert.Equal(t, TestResultType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -449,6 +488,9 @@ func TestExtendedGenericTestResultDecode(t *testing.T) {
 	generic, ok2 := msgLayer.(*TestResultNotification)
 	assert.True(t, ok2)
 	assert.NotNil(t, generic)
+	assert.Equal(t, LayerTypeTestResult, generic.LayerType())
+	assert.Equal(t, LayerTypeTestResult, generic.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, generic.NextLayerType())
 	assert.NotNil(t, generic.MeBasePacket.Payload) // Next three all same data
 	assert.NotNil(t, generic.Payload)
 	assert.NotNil(t, generic.TestResults())
@@ -486,6 +528,10 @@ func TestExtendedOpticalLineSupervisionTestResultDecode(t *testing.T) {
 
 	omciMsg, ok := omciLayer.(*OMCI)
 	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeTestResult, omciMsg.NextLayerType())
 	assert.Equal(t, uint16(0x0000), omciMsg.TransactionID)
 	assert.Equal(t, TestResultType, omciMsg.MessageType)
 	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
@@ -498,6 +544,9 @@ func TestExtendedOpticalLineSupervisionTestResultDecode(t *testing.T) {
 	optical, ok2 := msgLayer.(*OpticalLineSupervisionTestResult)
 	assert.True(t, ok2)
 	assert.NotNil(t, optical)
+	assert.Equal(t, LayerTypeTestResult, optical.LayerType())
+	assert.Equal(t, LayerTypeTestResult, optical.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, optical.NextLayerType())
 
 	// Get the Managed Entity class ID and instance ID from the base packet
 	base := optical.MeBasePacket

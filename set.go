@@ -36,6 +36,21 @@ func (omci *SetRequest) String() string {
 		omci.MeBasePacket.String(), omci.AttributeMask, omci.Attributes)
 }
 
+// LayerType returns LayerTypeSetRequest
+func (omci *SetRequest) LayerType() gopacket.LayerType {
+	return LayerTypeSetRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SetRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeSetRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SetRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Set Request into this layer
 func (omci *SetRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -170,6 +185,21 @@ func (omci *SetResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v), Unsupported Mask: %#x, Failed Mask: %#x",
 		omci.MeBasePacket.String(), omci.Result, omci.Result, omci.UnsupportedAttributeMask,
 		omci.FailedAttributeMask)
+}
+
+// LayerType returns LayerTypeSetResponse
+func (omci *SetResponse) LayerType() gopacket.LayerType {
+	return LayerTypeSetResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *SetResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeSetResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *SetResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Set Response into this layer

@@ -33,6 +33,21 @@ func (omci *DeleteRequest) String() string {
 	return fmt.Sprintf("%v", omci.MeBasePacket.String())
 }
 
+// LayerType returns LayerTypeDeleteRequest
+func (omci *DeleteRequest) LayerType() gopacket.LayerType {
+	return LayerTypeDeleteRequest
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *DeleteRequest) CanDecode() gopacket.LayerClass {
+	return LayerTypeDeleteRequest
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *DeleteRequest) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
+}
+
 // DecodeFromBytes decodes the given bytes of a Delete Request into this layer
 func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
@@ -111,6 +126,21 @@ type DeleteResponse struct {
 func (omci *DeleteResponse) String() string {
 	return fmt.Sprintf("%v, Result: %d (%v)",
 		omci.MeBasePacket.String(), omci.Result, omci.Result)
+}
+
+// LayerType returns LayerTypeDeleteResponse
+func (omci *DeleteResponse) LayerType() gopacket.LayerType {
+	return LayerTypeDeleteResponse
+}
+
+// CanDecode returns the set of layer types that this DecodingLayer can decode
+func (omci *DeleteResponse) CanDecode() gopacket.LayerClass {
+	return LayerTypeDeleteResponse
+}
+
+// NextLayerType returns the layer type contained by this DecodingLayer.
+func (omci *DeleteResponse) NextLayerType() gopacket.LayerType {
+	return gopacket.LayerTypePayload
 }
 
 // DecodeFromBytes decodes the given bytes of a Delete Response into this layer
