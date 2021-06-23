@@ -58,6 +58,7 @@ var (
 	LayerTypeSynchronizeTimeRequestExtended     gopacket.LayerType
 	LayerTypeRebootRequestExtended              gopacket.LayerType
 	LayerTypeGetCurrentDataRequestExtended      gopacket.LayerType
+	LayerTypeSetTableRequestExtended            gopacket.LayerType
 )
 var (
 	LayerTypeCreateResponse                gopacket.LayerType
@@ -96,6 +97,7 @@ var (
 	LayerTypeSynchronizeTimeResponseExtended gopacket.LayerType
 	LayerTypeRebootResponseExtended          gopacket.LayerType
 	LayerTypeGetCurrentDataResponseExtended  gopacket.LayerType
+	LayerTypeSetTableResponseExtended        gopacket.LayerType
 )
 
 func mkReqLayer(mt me.MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
@@ -175,6 +177,7 @@ func init() {
 	LayerTypeSynchronizeTimeRequestExtended = mkReqLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeRequest-Ext", decodeSynchronizeTimeRequestExtended)
 	LayerTypeRebootRequestExtended = mkReqLayer(me.Reboot|me.ExtendedOffset, "RebootRequest-Ext", decodeRebootRequestExtended)
 	LayerTypeGetCurrentDataRequestExtended = mkReqLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataRequest-Ext", decodeGetCurrentDataRequestExtended)
+	LayerTypeSetTableRequestExtended = mkReqLayer(me.SetTable|me.ExtendedOffset, "SetTableRequest-Ext", decodeSetTableRequestExtended)
 
 	LayerTypeCreateResponseExtended = mkRespLayer(me.Create|me.ExtendedOffset, "CreateResponse-Ext", decodeCreateResponseExtended)
 	LayerTypeDeleteResponseExtended = mkRespLayer(me.Delete|me.ExtendedOffset, "DeleteResponse-Ext", decodeDeleteResponseExtended)
@@ -185,6 +188,7 @@ func init() {
 	LayerTypeSynchronizeTimeResponseExtended = mkRespLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeResponse-Ext", decodeSynchronizeTimeResponseExtended)
 	LayerTypeRebootResponseExtended = mkRespLayer(me.Reboot|me.ExtendedOffset, "RebootResponse-Ext", decodeRebootResponseExtended)
 	LayerTypeGetCurrentDataResponseExtended = mkRespLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataResponse-Ext", decodeGetCurrentDataResponseExtended)
+	LayerTypeSetTableResponseExtended = mkRespLayer(me.SetTable|me.ExtendedOffset, "SetTableResponse-Ext", decodeSetTableResponseExtended)
 
 	LayerTypeAlarmNotificationExtended = mkLayer(me.AlarmNotification|me.ExtendedOffset, "AlarmNotification-Ext", decodeAlarmNotificationExtended)
 	LayerTypeAttributeValueChangeExtended = mkLayer(me.AttributeValueChange|me.ExtendedOffset, "AttributeValueChange-Ext", decodeAttributeValueChangeExtended)
@@ -213,7 +217,6 @@ func init() {
 	nextLayerMapping[RebootRequestType] = LayerTypeRebootRequest
 	nextLayerMapping[GetNextRequestType] = LayerTypeGetNextRequest
 	nextLayerMapping[GetCurrentDataRequestType] = LayerTypeGetCurrentDataRequest
-	nextLayerMapping[SetTableRequestType] = LayerTypeSetTableRequest
 
 	nextLayerMapping[CreateResponseType] = LayerTypeCreateResponse
 	nextLayerMapping[DeleteResponseType] = LayerTypeDeleteResponse
@@ -234,11 +237,13 @@ func init() {
 	nextLayerMapping[RebootResponseType] = LayerTypeRebootResponse
 	nextLayerMapping[GetNextResponseType] = LayerTypeGetNextResponse
 	nextLayerMapping[GetCurrentDataResponseType] = LayerTypeGetCurrentDataResponse
-	nextLayerMapping[SetTableResponseType] = LayerTypeSetTableResponse
 
 	nextLayerMapping[AttributeValueChangeType] = LayerTypeAttributeValueChange
 	nextLayerMapping[AlarmNotificationType] = LayerTypeAlarmNotification
 	nextLayerMapping[TestResultType] = LayerTypeTestResult
+
+	nextLayerMapping[SetTableRequestType] = LayerTypeSetTableRequest
+	nextLayerMapping[SetTableResponseType] = LayerTypeSetTableResponse
 
 	// Extended message support
 	nextLayerMapping[CreateRequestType+ExtendedTypeDecodeOffset] = LayerTypeCreateRequestExtended
@@ -257,6 +262,9 @@ func init() {
 	nextLayerMapping[RebootResponseType+ExtendedTypeDecodeOffset] = LayerTypeRebootResponseExtended
 	nextLayerMapping[GetCurrentDataRequestType+ExtendedTypeDecodeOffset] = LayerTypeGetCurrentDataRequestExtended
 	nextLayerMapping[GetCurrentDataResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetCurrentDataResponseExtended
+
+	nextLayerMapping[SetTableRequestType+ExtendedTypeDecodeOffset] = LayerTypeSetTableRequestExtended
+	nextLayerMapping[SetTableResponseType+ExtendedTypeDecodeOffset] = LayerTypeSetTableResponseExtended
 
 	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
 	nextLayerMapping[DownloadSectionRequestType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionRequestExtended

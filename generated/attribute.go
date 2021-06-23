@@ -69,6 +69,12 @@ type AttributeDefinition struct {
 	Deprecated    bool // If true, attribute is deprecated
 }
 
+// TableRows is used by the SetTable request/response
+type TableRows struct {
+	NumRows int    // Number of rows of 'AttributeDefinition.Size' length
+	Rows    []byte // 0..NumRows rows of attribute data of size 'AttributeDefinition.Size'
+}
+
 func (attr *AttributeDefinition) String() string {
 	return fmt.Sprintf("AttributeDefinition: %v (%v/%v): Size: %v, Default: %v, Access: %v",
 		attr.GetName(), attr.AttributeType, attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
@@ -389,14 +395,32 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		if size != 0 && len(data) < attr.GetSize() {
 			df.SetTruncated()
 			return nil, NewMessageTruncatedError("packet too small for field")
-		} else if size == 0 {
+		}
+		if size == 0 {
 			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
 		}
 		return data, nil
 
 	case byte(SetTable) | AR: // Set Table Request
-		// TODO: Only baseline supported at this time
-		return nil, errors.New("attribute encode for set-table-request not yet supported")
+		// SetTableRequestType will be composed of zero or more row of a fixed size (based on ME)
+		// and will be saved to a TableRow struct for the consumer's use
+		size := attr.GetSize()
+		if size == 0 {
+			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
+		}
+		if len(data)%size != 0 {
+			df.SetTruncated()
+			return nil, NewMessageTruncatedError("packet does not contain an integral number of rows")
+		}
+		if len(data) == 0 {
+			return TableRows{}, nil
+		}
+		rows := TableRows{
+			NumRows: len(data) / size,
+			Rows:    make([]byte, len(data)),
+		}
+		copy(rows.Rows, data)
+		return rows, nil
 	}
 }
 
@@ -446,9 +470,24 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 		break
 
 	case byte(SetTable) | AR: // Set Table Request
-		// TODO: Only baseline supported at this time
-		return 0, errors.New("attribute encode for set-table-request not yet supported")
+		if rows, ok := value.(TableRows); ok {
+			size := attr.GetSize()
+			if size != 0 && len(rows.Rows)%size != 0 {
+				return 0, NewMessageTruncatedError("packet does not contain an integral number of rows")
+			}
+			if bytesAvailable < len(rows.Rows) {
+				return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+			}
+			bytes, err := b.AppendBytes(len(rows.Rows))
+			if err != nil {
+				return 0, err
+			}
+			copy(bytes, rows.Rows)
+			return len(rows.Rows), nil
+		}
+		return 0, errors.New("unexpected type for table serialization")
 	}
+	panic("HELP")
 	size := attr.GetSize()
 	if bytesAvailable < size {
 		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))

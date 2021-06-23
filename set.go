@@ -228,7 +228,7 @@ func (omci *SetResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) 
 	}
 	// ME needs to support Set
 	if !me.SupportsMsgType(entity, me.Set) {
-		return me.NewProcessingError("managed entity does not support the Delete Message-Type")
+		return me.NewProcessingError("managed entity does not support the Set Message-Type")
 	}
 	offset := hdrSize - 5
 	omci.Result = me.Results(data[offset])

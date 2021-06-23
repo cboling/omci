@@ -71,8 +71,6 @@ have any unit test coverage.
 
 The following OMCI message types currently have not been coded.
 
- - SetTableRequest
- - SetTableResponse
 
 ## Extended Message Set Support
 
@@ -91,6 +89,8 @@ the following Message Types have this support and are covered by unit tests:
  - RebootRequest/Response
  - GetCurrentDataRequest/Response
  - TestResult
+ - SetTableRequest
+ - SetTableResponse
 
 ### Upcoming message types that will be supported
 

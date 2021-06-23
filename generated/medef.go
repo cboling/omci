@@ -141,8 +141,8 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 					// TODO: No support at this time
 
 				case byte(SetTable) | AR: // Set Table Request
-					// TODO: Only baseline supported at this time
-					return nil, errors.New("attribute encode for set-table-request not yet supported")
+					attrMap[name] = value
+					data = data[len(data):]
 				}
 			} else {
 				attrMap[name] = value
