@@ -92,6 +92,7 @@ the following Message Types have this support and are covered by unit tests:
  - SetTableRequest/Response
  - MibUploadRequest/Response
  - MibUploadNextRequest/Response
+ - TestRequest/Response/Result
 
 ### Upcoming message types that will be supported
 
@@ -99,31 +100,40 @@ The following provides a list of message types that will eventually support the 
 in the expected order of implementation.  The priority was chosen based on speed improvement requests
 of operations and ease of implementation.
 
-
  - GetNextRequest/Response
-   
  - GetAllAlarmsRequest/Response
  - GetAllAlarmsNextRequest/Response
-
  - StartSoftwareDownloadRequest/Response
  - EndSoftwareDownloadRequest/Response
  - CommitSoftwareRequest/Response
  - ActivateSoftwareRequest/Response
-  
- - TestRequest/Response
 
 ## Current user-test coverage
 
 The _**make** test_ command can be used to create code coverage support for the
-library.  The current coverage for version 1.0.0 (as of 4/21/2021) is:
+library.  The current coverage for version 2.2.0 (as of 7/2/2021) is:
 
-| File            | Statement Coverage |
+| File            | Coverage |
 | --------------: | :---: |
+| alarms.go       | 65.6% |
+| avc.go          | 86%   |
+| create.go       | 80.2% |
+| delete.go       | 82%   |
+| get.go          | 77.6% |
+| getcurrent.go   | 68.1% |
+| getnext.go      | 72.9% |
 | layers.go       | 100%  |
-| mebase.go       | 91.7% |
-| meframe.go      | 50.8% |
-| messagetypes.go | 59.1% |
-| omci.go         | 79.0% |
+| mebase.go       | 87.5% |
+| messagetypes.go | 100%  |
+| mibreset.go     | 74%   |
+| mibupload.go    | 75%   |
+| omci.go         | 84%   |
+| reboot.go       | 78.5% |
+| set.go          | 75.4% |
+| settable.go     | 80.5% |
+| software.go     | 53.9% |
+| synctime.go     | 78.3% |
+| test.go         | 79.9% |
 
 ## Other outstanding items
 
