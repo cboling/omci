@@ -306,3 +306,98 @@ func TestSetResponseTableFailedAttributesSerialize(t *testing.T) {
 	// This is a SET Response with failed and unsupported attributes
 	// TODO:Implement (also implement for Extended message set)
 }
+
+func TestSetTCont(t *testing.T) {
+	setTCont := "0003480A010680008000040000000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(setTCont)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(3), omciMsg.TransactionID)
+	assert.Equal(t, SetRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeSetRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*SetRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.TContClassID, omciMsg2.EntityClass)
+	assert.Equal(t, uint16(0x8000), omciMsg2.EntityInstance)
+
+	attributes := omciMsg2.Attributes
+	assert.Equal(t, 2, len(attributes))
+
+	// Here 1 is the index in the attribute definition map of a TCONT that points
+	// to the AllocID attribute.
+	value, ok3 := attributes["AllocId"]
+	assert.True(t, ok3)
+	assert.Equal(t, value, uint16(1024))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(setTCont), reconstituted)
+}
+
+func TestSet8021pMapperServiceProfile(t *testing.T) {
+	set8021pMapperServiceProfile := "0016480A008280004000800100000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(set8021pMapperServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(0x16), omciMsg.TransactionID)
+	assert.Equal(t, SetRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeSetRequest)
+	assert.NotNil(t, msgLayer)
+
+	setRequest, ok2 := msgLayer.(*SetRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.Ieee8021PMapperServiceProfileClassID, setRequest.EntityClass)
+	assert.Equal(t, uint16(0x8000), setRequest.EntityInstance)
+
+	attributes := setRequest.Attributes
+	assert.NotNil(t, attributes)
+	assert.Equal(t, 2, len(attributes))
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, setRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(set8021pMapperServiceProfile), reconstituted)
+}

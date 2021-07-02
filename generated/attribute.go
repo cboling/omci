@@ -49,7 +49,7 @@ const (
 	CounterAttributeType                              // Incrementing counter
 )
 
-// AttributeDefinitionMap is a map of attribute definitions with the attribute index (0..15)
+// AttributeDefinitionMap is a map of attribute definitions with the attribute index (0..16)
 // as the key
 type AttributeDefinitionMap map[uint]AttributeDefinition
 
@@ -83,7 +83,7 @@ func (attr *AttributeDefinition) String() string {
 // GetName returns the attribute's name
 func (attr AttributeDefinition) GetName() string { return attr.Name }
 
-// GetIndex returns the attribute index )0..15)
+// GetIndex returns the attribute index )0..16)
 func (attr AttributeDefinition) GetIndex() uint { return attr.Index }
 
 // GetDefault provides the default value for an attribute if not specified
@@ -809,4 +809,26 @@ func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErr
 		}
 	}
 	return err
+}
+
+// AttributeValueMapBufferSize will determine how much space is needed to encode all
+// of the attributes
+func AttributeValueMapBufferSize(classID ClassID, attributes AttributeValueMap, msgType uint8) (int, error) {
+	attrDefs, err := GetAttributesDefinitions(classID)
+	if err.StatusCode() != Success {
+		return 0, err
+	} else if attributes == nil {
+		return 0, NewProcessingError("Invalid (nil) Attribute Value Map referenced")
+	}
+	bufferSize := 0
+	isGetResponse := msgType == 0x29
+
+	for _, attrDef := range attrDefs {
+		if isGetResponse && attrDef.IsTableAttribute() {
+			bufferSize += 4
+		} else {
+			bufferSize += attrDef.GetSize()
+		}
+	}
+	return bufferSize, nil
 }

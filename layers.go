@@ -51,6 +51,8 @@ var (
 	LayerTypeCreateRequestExtended              gopacket.LayerType
 	LayerTypeDeleteRequestExtended              gopacket.LayerType
 	LayerTypeSetRequestExtended                 gopacket.LayerType
+	LayerTypeMibUploadRequestExtended           gopacket.LayerType
+	LayerTypeMibUploadNextRequestExtended       gopacket.LayerType
 	LayerTypeMibResetRequestExtended            gopacket.LayerType
 	LayerTypeGetRequestExtended                 gopacket.LayerType
 	LayerTypeDownloadSectionRequestExtended     gopacket.LayerType
@@ -88,6 +90,8 @@ var (
 	LayerTypeCreateResponseExtended          gopacket.LayerType
 	LayerTypeDeleteResponseExtended          gopacket.LayerType
 	LayerTypeSetResponseExtended             gopacket.LayerType
+	LayerTypeMibUploadResponseExtended       gopacket.LayerType
+	LayerTypeMibUploadNextResponseExtended   gopacket.LayerType
 	LayerTypeMibResetResponseExtended        gopacket.LayerType
 	LayerTypeGetResponseExtended             gopacket.LayerType
 	LayerTypeDownloadSectionResponseExtended gopacket.LayerType
@@ -171,6 +175,8 @@ func init() {
 	LayerTypeDeleteRequestExtended = mkReqLayer(me.Delete|me.ExtendedOffset, "DeleteRequest-Ext", decodeDeleteRequestExtended)
 	LayerTypeSetRequestExtended = mkReqLayer(me.Set|me.ExtendedOffset, "SetRequest-Ext", decodeSetRequestExtended)
 	LayerTypeGetRequestExtended = mkReqLayer(me.Get|me.ExtendedOffset, "GetRequest-Ext", decodeGetRequestExtended)
+	LayerTypeMibUploadRequestExtended = mkReqLayer(me.MibUpload|me.ExtendedOffset, "MibUploadRequest-Ext", decodeMibUploadRequestExtended)
+	LayerTypeMibUploadNextRequestExtended = mkReqLayer(me.MibUploadNext|me.ExtendedOffset, "MibUploadNextRequest-Ext", decodeMibUploadNextRequestExtended)
 	LayerTypeMibResetRequestExtended = mkReqLayer(me.MibReset|me.ExtendedOffset, "MibResetRequest-Ext", decodeMibResetRequestExtended)
 	LayerTypeDownloadSectionRequestExtended = mkLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionRequest-Ext", decodeDownloadSectionRequestExtended)
 	LayerTypeDownloadSectionLastRequestExtended = mkReqLayer(me.DownloadSection|me.ExtendedOffset, "DownloadLastSectionRequest-Ext", decodeDownloadSectionRequestExtended)
@@ -183,6 +189,8 @@ func init() {
 	LayerTypeDeleteResponseExtended = mkRespLayer(me.Delete|me.ExtendedOffset, "DeleteResponse-Ext", decodeDeleteResponseExtended)
 	LayerTypeSetResponseExtended = mkRespLayer(me.Set|me.ExtendedOffset, "SetResponse-Ext", decodeSetResponseExtended)
 	LayerTypeGetResponseExtended = mkRespLayer(me.Get|me.ExtendedOffset, "GetResponse-Ext", decodeGetResponseExtended)
+	LayerTypeMibUploadResponseExtended = mkRespLayer(me.MibUpload|me.ExtendedOffset, "MibUploadResponse-Ext", decodeMibUploadResponseExtended)
+	LayerTypeMibUploadNextResponseExtended = mkRespLayer(me.MibUploadNext|me.ExtendedOffset, "MibUploadNextResponse-Ext", decodeMibUploadNextResponseExtended)
 	LayerTypeMibResetResponseExtended = mkRespLayer(me.MibReset|me.ExtendedOffset, "MibResetResponse-Ext", decodeMibResetResponseExtended)
 	LayerTypeDownloadSectionResponseExtended = mkRespLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionResponse-Ext", decodeDownloadSectionResponseExtended)
 	LayerTypeSynchronizeTimeResponseExtended = mkRespLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeResponse-Ext", decodeSynchronizeTimeResponseExtended)
@@ -254,6 +262,12 @@ func init() {
 	nextLayerMapping[SetResponseType+ExtendedTypeDecodeOffset] = LayerTypeSetResponseExtended
 	nextLayerMapping[GetRequestType+ExtendedTypeDecodeOffset] = LayerTypeGetRequestExtended
 	nextLayerMapping[GetResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetResponseExtended
+
+	nextLayerMapping[MibUploadRequestType+ExtendedTypeDecodeOffset] = LayerTypeMibUploadRequestExtended
+	nextLayerMapping[MibUploadResponseType+ExtendedTypeDecodeOffset] = LayerTypeMibUploadResponseExtended
+	nextLayerMapping[MibUploadNextRequestType+ExtendedTypeDecodeOffset] = LayerTypeMibUploadNextRequestExtended
+	nextLayerMapping[MibUploadNextResponseType+ExtendedTypeDecodeOffset] = LayerTypeMibUploadNextResponseExtended
+
 	nextLayerMapping[MibResetRequestType+ExtendedTypeDecodeOffset] = LayerTypeMibResetRequestExtended
 	nextLayerMapping[MibResetResponseType+ExtendedTypeDecodeOffset] = LayerTypeMibResetResponseExtended
 	nextLayerMapping[SynchronizeTimeRequestType+ExtendedTypeDecodeOffset] = LayerTypeSynchronizeTimeRequestExtended

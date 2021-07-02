@@ -20,6 +20,7 @@ package omci_test
 import (
 	. "github.com/cboling/omci"
 	me "github.com/cboling/omci/generated"
+	"github.com/cboling/omci/meframe"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -388,4 +389,306 @@ func TestExtendedCreateResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestCreate8021pMapperService_profile(t *testing.T) {
+	create8021pMapperServiceProfile := "0007440A00828000ffffffffffffffff" +
+		"ffffffffffffffffffff000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(create8021pMapperServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(7), omciMsg.TransactionID)
+	assert.Equal(t, CreateRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	createRequest, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.Ieee8021PMapperServiceProfileClassID, createRequest.EntityClass)
+	assert.Equal(t, uint16(0x8000), createRequest.EntityInstance)
+
+	attributes := createRequest.Attributes
+	assert.NotNil(t, attributes)
+	assert.Equal(t, 13, len(attributes))
+
+	// As this is a create request, gather up all set-by-create attributes
+	// make sure we got them all, and nothing else
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, me.Success, omciErr.StatusCode())
+
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
+	for index := uint(1); index <= uint(9); index++ {
+		attrName := attrDefs[index].GetName()
+		value, ok := attributes[attrName]
+		assert.True(t, ok)
+
+		value16, ok3 := value.(uint16)
+		assert.True(t, ok3)
+		assert.Equal(t, uint16(0xffff), value16)
+	}
+
+	sbcMask := getSbcMask(meDefinition)
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
+			_, ok3 := attributes[attrName]
+			assert.True(t, ok3)
+		} else {
+			_, ok3 := attributes[attrName]
+			assert.False(t, ok3)
+		}
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(create8021pMapperServiceProfile), reconstituted)
+}
+
+func TestCreateGalEthernetProfile(t *testing.T) {
+	createGalEthernetProfile := "0002440A011000010030000000000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createGalEthernetProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(2), omciMsg.TransactionID)
+	assert.Equal(t, CreateRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.GalEthernetProfileClassID, omciMsg2.EntityClass)
+	assert.Equal(t, uint16(1), omciMsg2.EntityInstance)
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(createGalEthernetProfile), reconstituted)
+}
+
+func TestCreate_macBridgeService_profile(t *testing.T) {
+	var createMacBridgeServiceProfile = "000B440A002D02010001008000140002" +
+		"000f0001000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createMacBridgeServiceProfile)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(0xb), omciMsg.TransactionID)
+	assert.Equal(t, CreateRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	createRequest, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.MacBridgeServiceProfileClassID, createRequest.EntityClass)
+	assert.Equal(t, uint16(0x201), createRequest.EntityInstance)
+
+	attributes := createRequest.Attributes
+	assert.NotNil(t, attributes)
+
+	// As this is a create request, gather up all set-by-create attributes
+	// make sure we got them all, and nothing else
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, me.Success, omciErr.StatusCode())
+
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
+	sbcMask := getSbcMask(meDefinition)
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
+			_, ok3 := attributes[attrName]
+			assert.True(t, ok3)
+		} else {
+			_, ok3 := attributes[attrName]
+			assert.False(t, ok3)
+		}
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(createMacBridgeServiceProfile), reconstituted)
+}
+
+func TestCreateGemPortNetworkCtp(t *testing.T) {
+	createGemPortNetworkCtp := "000C440A010C01000400800003010000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(createGemPortNetworkCtp)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(0xc), omciMsg.TransactionID)
+	assert.Equal(t, CreateRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	createRequest, ok2 := msgLayer.(*CreateRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.GemPortNetworkCtpClassID, createRequest.EntityClass)
+	assert.Equal(t, uint16(0x100), createRequest.EntityInstance)
+
+	attributes := createRequest.Attributes
+	assert.NotNil(t, attributes)
+
+	// As this is a create request, gather up all set-by-create attributes
+	// make sure we got them all, and nothing else
+	meDefinition, omciErr := me.LoadManagedEntityDefinition(createRequest.EntityClass)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, me.Success, omciErr.StatusCode())
+
+	attrDefs := meDefinition.GetAttributeDefinitions()
+
+	sbcMask := getSbcMask(meDefinition)
+	for index := uint(1); index < uint(len(attrDefs)); index++ {
+		attrName := attrDefs[index].GetName()
+
+		if sbcMask&uint16(1<<(uint)(16-index)) != 0 {
+			_, ok3 := attributes[attrName]
+			assert.True(t, ok3)
+		} else {
+			_, ok3 := attributes[attrName]
+			assert.False(t, ok3)
+		}
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, createRequest)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(createGemPortNetworkCtp), reconstituted)
+}
+
+// TestCreateMulticastOperationsProfileMe tests a hand-coded managed entity in the generated
+// subdirectory
+func TestCreateMulticastOperationsProfileMe(t *testing.T) {
+	// Test various create request for this ME
+	meParams := me.ParamData{
+		EntityID: uint16(0x501),
+		Attributes: me.AttributeValueMap{
+			"IgmpVersion":               2,
+			"IgmpFunction":              0,
+			"ImmediateLeave":            0,
+			"USIgmpTci":                 0,
+			"Robustness":                2,
+			"QuerierIp":                 0,
+			"QueryInterval":             125,
+			"QuerierMaxResponseTime":    100,
+			"LastMemberResponseTime":    10,
+			"UnauthorizedJoinBehaviour": 0,
+			"USIgmpRate":                0,
+			"USIgmpTagCtrl":             0,
+			"DSIgmpMcastTci":            []byte{0, 0, 0},
+		},
+	}
+	meInstance, newErr := me.NewMulticastOperationsProfile(meParams)
+	assert.NotNil(t, meInstance)
+	assert.Equal(t, newErr.StatusCode(), me.Success)
+
+	tid := uint16(123)
+	frame, omciErr := meframe.GenFrame(meInstance, CreateRequestType, meframe.TransactionID(tid))
+	assert.NotNil(t, frame)
+	assert.NotZero(t, len(frame))
+	assert.Nil(t, omciErr)
+
+	///////////////////////////////////////////////////////////////////
+	// Now decode
+	packet := gopacket.NewPacket(frame, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciObj, omciOk := omciLayer.(*OMCI)
+	assert.NotNil(t, omciObj)
+	assert.True(t, omciOk)
+	assert.Equal(t, tid, omciObj.TransactionID)
+	assert.Equal(t, omciObj.MessageType, CreateRequestType)
+	assert.Equal(t, omciObj.DeviceIdentifier, BaselineIdent)
+
+	msgLayer := packet.Layer(LayerTypeCreateRequest)
+	assert.NotNil(t, msgLayer)
+
+	msgObj, msgOk := msgLayer.(*CreateRequest)
+	assert.NotNil(t, msgObj)
+	assert.True(t, msgOk)
+
+	assert.Equal(t, msgObj.EntityClass, meInstance.GetClassID())
+	assert.Equal(t, msgObj.EntityInstance, meInstance.GetEntityID())
 }

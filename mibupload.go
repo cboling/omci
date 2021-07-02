@@ -19,6 +19,7 @@ package omci
 
 import (
 	"encoding/binary"
+	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -50,7 +51,19 @@ func (omci *MibUploadRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Request into this layer
 func (omci *MibUploadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6
+	} else {
+		hdrSize = 4
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -83,6 +96,13 @@ func decodeMibUploadRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func decodeMibUploadRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadRequest{}
+	omci.MsgLayerType = LayerTypeMibUploadRequest
+	omci.Extended = true
+	return decodingLayerDecoder(omci, data, p)
+}
+
 // SerializeTo provides serialization of an MIB Upload Request message
 func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
@@ -98,6 +118,14 @@ func (omci *MibUploadRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket
 	// ME needs to support Get
 	if !me.SupportsMsgType(meDefinition, me.MibUpload) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Message-Type")
+	}
+	// Add length if extended ident
+	if omci.Extended {
+		bytes, err := b.AppendBytes(2)
+		if err != nil {
+			return err
+		}
+		binary.BigEndian.PutUint16(bytes, 0)
 	}
 	return nil
 }
@@ -130,7 +158,19 @@ func (omci *MibUploadResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Response into this layer
 func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 2
+	} else {
+		hdrSize = 4 + 2
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -154,7 +194,8 @@ func (omci *MibUploadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBui
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
+	offset := hdrSize - 2
+	omci.NumberOfCommands = binary.BigEndian.Uint16(data[offset:])
 	return nil
 }
 
@@ -164,9 +205,16 @@ func decodeMibUploadResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func decodeMibUploadResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadResponse{}
+	omci.MsgLayerType = LayerTypeMibUploadResponse
+	omci.Extended = true
+	return decodingLayerDecoder(omci, data, p)
+}
+
 // SerializeTo provides serialization of an MIB Upload Response message
 func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
-	// Basic (common) OMCI Header is 8 octets, 10
+	// Basic (common) OMCI Header
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
@@ -180,11 +228,19 @@ func (omci *MibUploadResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacke
 	if !me.SupportsMsgType(entity, me.MibUpload) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 2)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:2], omci.NumberOfCommands)
+	// Add length if extended ident
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, 2)
+	}
+	binary.BigEndian.PutUint16(bytes[offset:], omci.NumberOfCommands)
 	return nil
 }
 
@@ -216,7 +272,19 @@ func (omci *MibUploadNextRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Request into this layer
 func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 2
+	} else {
+		hdrSize = 4 + 2
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -240,13 +308,24 @@ func (omci *MibUploadNextRequest) DecodeFromBytes(data []byte, p gopacket.Packet
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4+offset:])
 	return nil
 }
 
 func decodeMibUploadNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &MibUploadNextRequest{}
 	omci.MsgLayerType = LayerTypeMibUploadNextRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeMibUploadNextRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadNextRequest{}
+	omci.MsgLayerType = LayerTypeMibUploadNextRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -266,16 +345,36 @@ func (omci *MibUploadNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopa
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(2 + offset)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:2], omci.CommandSequenceNumber)
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, 2)
+	}
+	binary.BigEndian.PutUint16(bytes[offset:], omci.CommandSequenceNumber)
 	return nil
+}
+
+type IMibUploadNextResponse interface {
+	GetMeBasePacket() *MeBasePacket
+	GetMeCount() int
+	GetManagedEntity(int) *me.ManagedEntity
+	AddManagedEntity(*me.ManagedEntity) error
 }
 
 type MibUploadNextResponse struct {
 	MeBasePacket
+	ReportedME    me.ManagedEntity
+	AdditionalMEs []me.ManagedEntity // Valid only for extended message set version
+}
+
+type MibUploadNextManageEntity struct {
+	AttrSize   uint16 // Size of ME instance attribute values included
 	ReportedME me.ManagedEntity
 }
 
@@ -302,7 +401,19 @@ func (omci *MibUploadNextResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a MIB Upload Next Response into this layer
 func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+6)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6
+	} else {
+		hdrSize = 4
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small: MIB Upload Response message-type header truncated")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -329,7 +440,49 @@ func (omci *MibUploadNextResponse) DecodeFromBytes(data []byte, p gopacket.Packe
 	// Decode reported ME.  If an out-of-range sequence number was sent, this will
 	// contain an ME with class ID and entity ID of zero and you should get an
 	// error of "managed entity definition not found" returned.
-	return omci.ReportedME.DecodeFromBytes(data[4:], p, byte(MibUploadNextResponseType))
+	var offset int
+	var attrLen int
+	if omci.Extended {
+		offset = 2 + 2 // Message Contents length (2) + first ME attribute values len (2)
+		attrLen = int(binary.BigEndian.Uint16(data[6:]))
+
+		if len(data[4+offset:]) < 6+attrLen {
+			p.SetTruncated()
+			return errors.New("frame too small: MIB Upload Response Managed Entity attribute truncated")
+		}
+	}
+	err = omci.ReportedME.DecodeFromBytes(data[4+offset:], p, byte(MibUploadNextResponseType))
+	if err != nil || !omci.Extended {
+		return err
+	}
+	// Handle extended message set decode here for additional attributes
+	remaining := len(data) - (6 + 8 + attrLen)
+	if remaining > 0 {
+		offset = 6 + 8 + attrLen
+		omci.AdditionalMEs = make([]me.ManagedEntity, 0)
+		for remaining > 0 {
+			if len(data[offset:]) < 8 {
+				p.SetTruncated()
+				// TODO: Review all "frame to small" and add an extra hint for developers
+				return errors.New("frame too small: MIB Upload Response Managed Entity header truncated")
+			}
+			additional := me.ManagedEntity{}
+			attrLen = int(binary.BigEndian.Uint16(data[offset:]))
+
+			if len(data[offset:]) < 8+attrLen {
+				p.SetTruncated()
+				return errors.New("frame too small: MIB Upload Response Managed Entity attribute truncated")
+			}
+			err = additional.DecodeFromBytes(data[offset+2:], p, byte(MibUploadNextResponseType))
+			if err != nil {
+				return err
+			}
+			omci.AdditionalMEs = append(omci.AdditionalMEs, additional)
+			remaining -= 8 + attrLen
+			offset += 8 + attrLen
+		}
+	}
+	return nil
 }
 
 func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
@@ -338,9 +491,16 @@ func decodeMibUploadNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func decodeMibUploadNextResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &MibUploadNextResponse{}
+	omci.MsgLayerType = LayerTypeMibUploadNextResponse
+	omci.Extended = true
+	return decodingLayerDecoder(omci, data, p)
+}
+
 // SerializeTo provides serialization of an MIB Upload Next Response message
 func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	// Basic (common) OMCI Header is 8 octets, 10
+	// Basic (common) OMCI Header
 	err := omci.MeBasePacket.SerializeTo(b)
 	if err != nil {
 		return err
@@ -354,8 +514,61 @@ func (omci *MibUploadNextResponse) SerializeTo(b gopacket.SerializeBuffer, opts 
 	if !me.SupportsMsgType(entity, me.MibUploadNext) {
 		return me.NewProcessingError("managed entity does not support the MIB Upload Next Message-Type")
 	}
-	// TODO: Only Baseline supported at this time
 	bytesAvailable := MaxBaselineLength - 8 - 8
 
-	return omci.ReportedME.SerializeTo(b, byte(MibUploadNextResponseType), bytesAvailable, opts)
+	if omci.Extended {
+		bytesAvailable = MaxExtendedLength - 10 - 4
+	}
+	attributeBuffer := gopacket.NewSerializeBuffer()
+	attrErr := omci.ReportedME.SerializeTo(attributeBuffer, byte(MibUploadNextResponseType), bytesAvailable, opts)
+	if attrErr != nil {
+		return attrErr
+	}
+	var offset int
+	if omci.Extended {
+		offset = 2 + 2 // Message Contents length (2) + first ME attribute values len (2)
+	}
+	meLength := len(attributeBuffer.Bytes())
+	buf, attrErr := b.AppendBytes(meLength + offset)
+	if attrErr != nil {
+		return attrErr
+	}
+	if omci.Extended {
+		binary.BigEndian.PutUint16(buf, uint16(meLength+2))
+		binary.BigEndian.PutUint16(buf[2:], uint16(meLength-6))
+	}
+	copy(buf[offset:], attributeBuffer.Bytes())
+
+	if omci.Extended && omci.AdditionalMEs != nil {
+		// Handle additional Managed Entities here for the Extended Message set
+		bytesAvailable -= 4 + meLength
+		length := meLength + 2
+
+		for index, entry := range omci.AdditionalMEs {
+			if bytesAvailable <= 8 {
+				msg := fmt.Sprintf("not enough space to fit all requested Managed Entities, entry: %v", index)
+				attrErr = me.NewMessageTruncatedError(msg)
+				if attrErr != nil {
+					return attrErr
+				}
+			}
+			attributeBuffer = gopacket.NewSerializeBuffer()
+			attrErr = entry.SerializeTo(attributeBuffer, byte(MibUploadNextResponseType), bytesAvailable, opts)
+			if attrErr != nil {
+				return attrErr
+			}
+			meLength = len(attributeBuffer.Bytes())
+			buf, attrErr = b.AppendBytes(2 + meLength)
+			if attrErr != nil {
+				return attrErr
+			}
+			binary.BigEndian.PutUint16(buf, uint16(meLength-6))
+			copy(buf[2:], attributeBuffer.Bytes())
+			length += 2 + meLength
+			bytesAvailable -= 2 + meLength
+		}
+		msgBuffer := b.Bytes()
+		binary.BigEndian.PutUint16(msgBuffer[4:], uint16(length))
+	}
+	return nil
 }

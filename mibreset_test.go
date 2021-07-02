@@ -284,3 +284,44 @@ func TestExtendedMibResetResponseSerialize(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
+// MibResetRequestTest tests decode/encode of a MIB Reset Request
+func TestMibResetRequestMessage(t *testing.T) {
+	mibResetRequest := "00014F0A000200000000000000000000" +
+		"00000000000000000000000000000000" +
+		"000000000000000000000028"
+
+	data, err := stringToPacket(mibResetRequest)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(1), omciMsg.TransactionID)
+	assert.Equal(t, MibResetRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeMibResetRequest)
+	assert.NotNil(t, msgLayer)
+
+	omciMsg2, ok2 := msgLayer.(*MibResetRequest)
+	assert.True(t, ok2)
+	assert.Equal(t, me.OnuDataClassID, omciMsg2.EntityClass)
+	assert.Equal(t, uint16(0), omciMsg2.EntityInstance)
+
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err = gopacket.SerializeLayers(buffer, options, omciMsg, omciMsg2)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(mibResetRequest), reconstituted)
+}

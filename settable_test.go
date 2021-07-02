@@ -692,7 +692,7 @@ func TestSetTableResponseSerialize(t *testing.T) {
 		MessageType:      SetTableResponseType,
 		DeviceIdentifier: ExtendedIdent,
 	}
-	request := &SetResponse{
+	request := &SetTableResponse{
 		MeBasePacket: MeBasePacket{
 			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
 			EntityInstance: uint16(0x1234),

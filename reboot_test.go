@@ -300,3 +300,27 @@ func TestExtendedRebootResponseSerialize(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
+func TestOnuRebootRequest(t *testing.T) {
+	onuRebootRequest := "0016590a01000000000000000000000000000" +
+		"0000000000000000000000000000000000000" +
+		"00000000000028"
+
+	data, err := stringToPacket(onuRebootRequest)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, packet)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(0x16), omciMsg.TransactionID)
+	assert.Equal(t, RebootRequestType, omciMsg.MessageType)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeRebootRequest)
+	assert.NotNil(t, msgLayer)
+}

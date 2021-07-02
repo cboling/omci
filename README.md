@@ -88,9 +88,10 @@ the following Message Types have this support and are covered by unit tests:
  - SynchronizeTimeRequest/Response
  - RebootRequest/Response
  - GetCurrentDataRequest/Response
- - TestResult
- - SetTableRequest
- - SetTableResponse
+ - TestRequest/Response/Result
+ - SetTableRequest/Response
+ - MibUploadRequest/Response
+ - MibUploadNextRequest/Response
 
 ### Upcoming message types that will be supported
 
@@ -98,12 +99,9 @@ The following provides a list of message types that will eventually support the 
 in the expected order of implementation.  The priority was chosen based on speed improvement requests
 of operations and ease of implementation.
 
+
  - GetNextRequest/Response
- - SetTableRequest/Response
-
- - MibUploadRequest/Response
- - MibUploadNextRequest/Response
-
+   
  - GetAllAlarmsRequest/Response
  - GetAllAlarmsNextRequest/Response
 

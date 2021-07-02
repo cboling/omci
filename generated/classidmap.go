@@ -272,3 +272,12 @@ func IsVendorSpecificClassID(classID ClassID) bool {
 		(ClassID(350) <= classID && classID <= ClassID(399)) ||
 		(ClassID(65280) <= classID && classID <= ClassID(65535))
 }
+
+// IsUnknownClassID returns true if the provided class ID is reserved in ITU-T G.988
+// for vendor specific functionality or is not decoded/supported by this library
+func IsUnknownClassID(classID ClassID) bool {
+	if _, err := LoadManagedEntityDefinition(classID); err != nil {
+		return false
+	}
+	return true
+}
