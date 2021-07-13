@@ -54,7 +54,20 @@ func (omci *GetNextRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get Next Request into this layer
 func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4)
+	var hdrSize int
+	if omci.Extended {
+		//start here
+		hdrSize = 6 + 4
+	} else {
+		hdrSize = 4 + 4
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -71,14 +84,21 @@ func (omci *GetNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 	//       than one attribute is requested
 	// TODO: Return error.  Have flag to optionally allow it to be encoded
 	// TODO: Check that the attribute is a table attribute.  Issue warning or return error
-	omci.AttributeMask = binary.BigEndian.Uint16(data[4:6])
-	omci.SequenceNumber = binary.BigEndian.Uint16(data[6:8])
+	omci.AttributeMask = binary.BigEndian.Uint16(data[hdrSize-4:])
+	omci.SequenceNumber = binary.BigEndian.Uint16(data[hdrSize-2:])
 	return nil
 }
 
 func decodeGetNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetNextRequest{}
 	omci.MsgLayerType = LayerTypeGetNextRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeGetNextRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetNextRequest{}
+	omci.MsgLayerType = LayerTypeGetNextRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -98,12 +118,19 @@ func (omci *GetNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.S
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
 		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(4)
+	maskOffset := 0
+	if omci.Extended {
+		maskOffset = 2
+	}
+	bytes, err := b.AppendBytes(4 + maskOffset)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, omci.AttributeMask)
-	binary.BigEndian.PutUint16(bytes[2:], omci.SequenceNumber)
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(4))
+	}
+	binary.BigEndian.PutUint16(bytes[maskOffset:], omci.AttributeMask)
+	binary.BigEndian.PutUint16(bytes[maskOffset+2:], omci.SequenceNumber)
 	return nil
 }
 
@@ -138,7 +165,14 @@ func (omci *GetNextResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get Next Response into this layer
 func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
+	var hdrSize int
+	if omci.Extended {
+		//start here
+		hdrSize = 6 + 3
+	} else {
+		hdrSize = 4 + 3
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -151,15 +185,19 @@ func (omci *GetNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
 		return me.NewProcessingError("managed entity does not support Get Next Message-Type")
 	}
-	omci.Result = me.Results(data[4])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.Result = me.Results(data[4+offset])
 	if omci.Result > 6 {
 		msg := fmt.Sprintf("invalid get next results code: %v, must be 0..6", omci.Result)
 		return errors.New(msg)
 	}
-	omci.AttributeMask = binary.BigEndian.Uint16(data[5:7])
+	omci.AttributeMask = binary.BigEndian.Uint16(data[4+offset+1:])
 
 	// Attribute decode
-	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[7:], p, byte(GetNextResponseType))
+	omci.Attributes, err = meDefinition.DecodeAttributes(omci.AttributeMask, data[4+offset+3:], p, byte(GetNextResponseType))
 	if err != nil {
 		return err
 	}
@@ -187,6 +225,13 @@ func decodeGetNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func decodeGetNextResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetNextResponse{}
+	omci.MsgLayerType = LayerTypeGetNextResponse
+	omci.Extended = true
+	return decodingLayerDecoder(omci, data, p)
+}
+
 // SerializeTo provides serialization of an Get Next Message Type Response
 func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
@@ -203,16 +248,20 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.
 	if !me.SupportsMsgType(meDefinition, me.GetNext) {
 		return me.NewProcessingError("managed entity does not support the Get Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(3)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 3)
 	if err != nil {
 		return err
 	}
-	bytes[0] = byte(omci.Result)
+	bytes[offset] = byte(omci.Result)
 	if omci.Result > 6 {
 		msg := fmt.Sprintf("invalid get next results code: %v, must be 0..6", omci.Result)
 		return errors.New(msg)
 	}
-	binary.BigEndian.PutUint16(bytes[1:3], omci.AttributeMask)
+	binary.BigEndian.PutUint16(bytes[offset+1:], omci.AttributeMask)
 
 	// Validate all attributes support read
 	for attrName := range omci.Attributes {
@@ -232,12 +281,30 @@ func (omci *GetNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.
 
 	case me.Success:
 		// TODO: Only Baseline supported at this time
-		bytesAvailable := MaxBaselineLength - 11 - 8
+		if omci.Extended {
+			bytesAvailable := MaxExtendedLength - 13 - 4
+			attributeBuffer := gopacket.NewSerializeBuffer()
+			err, _ = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask,
+				attributeBuffer, byte(GetNextResponseType), bytesAvailable, false)
+			if err != nil {
+				return err
+			}
+			binary.BigEndian.PutUint16(bytes, uint16(len(attributeBuffer.Bytes())+3))
+			var newSpace []byte
 
-		err, _ = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
-			byte(GetNextResponseType), bytesAvailable, false)
-		if err != nil {
-			return err
+			newSpace, err = b.AppendBytes(len(attributeBuffer.Bytes()))
+			if err != nil {
+				return err
+			}
+			copy(newSpace, attributeBuffer.Bytes())
+		} else {
+			bytesAvailable := MaxBaselineLength - 11 - 8
+
+			err, _ = meDefinition.SerializeAttributes(omci.Attributes, omci.AttributeMask, b,
+				byte(GetNextResponseType), bytesAvailable, false)
+			if err != nil {
+				return err
+			}
 		}
 	}
 	return nil

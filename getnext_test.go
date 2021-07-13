@@ -67,6 +67,47 @@ func TestGetNextRequestDecode(t *testing.T) {
 	assert.NotZero(t, len(packetString))
 }
 
+func TestGetNextRequestDecodeExtended(t *testing.T) {
+	goodMessage := "285e5a0b00ab0202000404000001"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetNextRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x285e), omciMsg.TransactionID)
+	assert.Equal(t, GetNextRequestType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(4), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetNextRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetNextRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeGetNextRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetNextRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, me.ExtendedVlanTaggingOperationConfigurationDataClassID, request.EntityClass)
+	assert.Equal(t, uint16(0x0202), request.EntityInstance)
+	assert.Equal(t, uint16(0x0400), request.AttributeMask)
+	assert.Equal(t, uint16(1), request.SequenceNumber)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
 func TestGetNextRequestSerialize(t *testing.T) {
 	goodMessage := "285e5a0a00ab0202040000010000000000000000000000000000000000000000000000000000000000000028"
 
@@ -80,6 +121,36 @@ func TestGetNextRequestSerialize(t *testing.T) {
 		MeBasePacket: MeBasePacket{
 			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
 			EntityInstance: uint16(0x0202),
+		},
+		AttributeMask:  uint16(0x0400),
+		SequenceNumber: uint16(1),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetNextRequestSerializeExtended(t *testing.T) {
+	goodMessage := "285e5a0b00ab0202000404000001"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x285e,
+		MessageType:      GetNextRequestType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	request := &GetNextRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x0202),
+			Extended:       true,
 		},
 		AttributeMask:  uint16(0x0400),
 		SequenceNumber: uint16(1),
@@ -148,6 +219,56 @@ func TestGetNextResponseDecode(t *testing.T) {
 	assert.NotZero(t, len(packetString))
 }
 
+func TestGetNextResponseDecodeExtended(t *testing.T) {
+	goodMessage := "285e3a0b00ab0202001300040008033400000000000000000000000000"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x285e), omciMsg.TransactionID)
+	assert.Equal(t, GetNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(19), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+
+	response, ok2 := msgLayer.(*GetNextResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+	assert.Equal(t, me.ExtendedVlanTaggingOperationConfigurationDataClassID, response.EntityClass)
+	assert.Equal(t, uint16(0x0202), response.EntityInstance)
+	assert.Equal(t, me.Success, response.Result)
+	assert.Equal(t, uint16(0x0400), response.AttributeMask)
+
+	// For GetNextResponse frames, caller is responsible for trimming last packet to remaining
+	// size
+	expectedOctets := 16
+	value := response.Attributes["ReceivedFrameVlanTaggingOperationTable"]
+	assert.Equal(t, value.([]byte)[:expectedOctets], vlanOpTable)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
 func TestGetNextResponseSerialize(t *testing.T) {
 	goodMessage := "285e3a0a00ab0202000400080334000000000000000000000000000000000000000000000000000000000028"
 
@@ -164,6 +285,40 @@ func TestGetNextResponseSerialize(t *testing.T) {
 		MeBasePacket: MeBasePacket{
 			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
 			EntityInstance: uint16(0x0202),
+		},
+		Result:        me.Success,
+		AttributeMask: uint16(0x0400),
+		Attributes:    me.AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": vlanOpTable},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetNextResponseSerializeExtended(t *testing.T) {
+	goodMessage := "285e3a0b00ab0202001300040008033400000000000000000000000000"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x285e,
+		MessageType:      GetNextResponseType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+
+	request := &GetNextResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x0202),
+			Extended:       true,
 		},
 		Result:        me.Success,
 		AttributeMask: uint16(0x0400),

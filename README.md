@@ -81,6 +81,7 @@ the following Message Types have this support and are covered by unit tests:
  - DeleteRequest/Response
  - SetRequest/Response
  - GetRequest/Response
+ - GetNextRequest/Response
  - MibResetRequest/Response
  - AlarmNotification
  - AttributeValueChange
@@ -96,11 +97,10 @@ the following Message Types have this support and are covered by unit tests:
 
 ### Upcoming message types that will be supported
 
-The following provides a list of message types that will eventually support the _Extended Message Set_
+The following provides a list of the remaining message types that will eventually support the _Extended Message Set_
 in the expected order of implementation.  The priority was chosen based on speed improvement requests
 of operations and ease of implementation.
 
- - GetNextRequest/Response
  - GetAllAlarmsRequest/Response
  - GetAllAlarmsNextRequest/Response
  - StartSoftwareDownloadRequest/Response
@@ -111,7 +111,7 @@ of operations and ease of implementation.
 ## Current user-test coverage
 
 The _**make** test_ command can be used to create code coverage support for the
-library.  The current coverage for version 2.2.0 (as of 7/2/2021) is:
+library.  The current coverage for version 2.3.0 (as of 7/13/2021) is:
 
 | File            | Coverage |
 | --------------: | :---: |
@@ -121,7 +121,7 @@ library.  The current coverage for version 2.2.0 (as of 7/2/2021) is:
 | delete.go       | 82%   |
 | get.go          | 77.6% |
 | getcurrent.go   | 68.1% |
-| getnext.go      | 72.9% |
+| getnext.go      | 78.3% |
 | layers.go       | 100%  |
 | mebase.go       | 87.5% |
 | messagetypes.go | 100%  |
