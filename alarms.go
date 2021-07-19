@@ -462,6 +462,19 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	offset = 6 + 4 + 28
 	omci.AdditionalAlarms = make([]AdditionalAlarmsData, 0)
 	for remaining > 0 {
+		if remaining < 4+28 {
+			p.SetTruncated()
+			return errors.New("frame too small: Get All Alarms Next Response Managed Entity attribute truncated")
+		}
+		alarm := AdditionalAlarmsData{
+			AlarmEntityClass:    me.ClassID(binary.BigEndian.Uint16(data[offset:])),
+			AlarmEntityInstance: binary.BigEndian.Uint16(data[offset+2:]),
+		}
+		copy(alarm.AlarmBitMap[:], data[offset+4:])
+		omci.AdditionalAlarms = append(omci.AdditionalAlarms, alarm)
+
+		offset += 4 + 28
+		remaining -= 4 + 28
 	}
 	return nil
 }
