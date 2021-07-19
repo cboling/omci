@@ -24,11 +24,11 @@ import "github.com/deckarep/golang-set"
 
 // EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding group performance monitoring history data part 2
-const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassID ClassID = ClassID(422)
+const EfmBondingGroupPerformanceMonitoringHistoryDataPart2ClassID ClassID = ClassID(421)
 
 var efmbondinggroupperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #422)
+// EfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID #421)
 //	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
 //	the OLT.
 //
@@ -105,7 +105,7 @@ type EfmBondingGroupPerformanceMonitoringHistoryDataPart2 struct {
 func init() {
 	efmbondinggroupperformancemonitoringhistorydatapart2BME = &ManagedEntityDefinition{
 		Name:    "EfmBondingGroupPerformanceMonitoringHistoryDataPart2",
-		ClassID: 422,
+		ClassID: 421,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -136,7 +136,7 @@ func init() {
 	}
 }
 
-// NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID 422) creates the basic
+// NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2 (class ID 421) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
 // is received from or transmitted to the OMCC.
 func NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {

@@ -219,3 +219,17 @@ func TestOmciHeaderExtendedShort(t *testing.T) {
 	//	"000000000000000000000028"
 
 }
+
+func TestBad2017_G_988(t *testing.T) {
+	// ITU-G.988 11/2017 has a bad set of class IDs that map the Ethernet 64-bit PM counter
+	// to class ID 426 when it should be 425.   Make sure that code-generation of the OMCI
+	// ME's does not let that bad value find it's way back into our library.
+
+	assert.Equal(t, ClassID(425), EthernetFrameExtendedPm64BitClassID)
+
+	instance, omciErr := NewEthernetFrameExtendedPm64Bit()
+	assert.NotNil(t, instance)
+	assert.NotNil(t, omciErr)
+	assert.Equal(t, omciErr.StatusCode(), Success)
+	assert.Equal(t, EthernetFrameExtendedPm64BitClassID, instance.GetClassID())
+}
