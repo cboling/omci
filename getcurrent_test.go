@@ -27,7 +27,7 @@ import (
 )
 
 func TestGetCurrentDataRequestDecode(t *testing.T) {
-	goodMessage := "035e5c0a01aa0000004400000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "035e5c0a01a90000004400000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
 
@@ -67,7 +67,7 @@ func TestGetCurrentDataRequestDecode(t *testing.T) {
 }
 
 func TestGetCurrentDataRequestSerialize(t *testing.T) {
-	goodMessage := "035e5c0a01aa0000004400000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "035e5c0a01a90000004400000000000000000000000000000000000000000000000000000000000000000028"
 
 	omciLayer := &OMCI{
 		TransactionID: 0x035e,
@@ -96,7 +96,7 @@ func TestGetCurrentDataRequestSerialize(t *testing.T) {
 }
 
 func TestGetCurrentDataResponseDecode(t *testing.T) {
-	goodMessage := "035e3c0a01aa0000000044123456781234dbcb432187654321dac1000000000000000000000000000028"
+	goodMessage := "035e3c0a01a90000000044123456781234dbcb432187654321dac1000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
 
@@ -139,7 +139,7 @@ func TestGetCurrentDataResponseDecode(t *testing.T) {
 }
 
 func TestGetCurrentDataResponseSerialize(t *testing.T) {
-	goodMessage := "035e3c0a01aa0000000044123456781234dbcb432187654321dac10000000000000000000000000000000028"
+	goodMessage := "035e3c0a01a90000000044123456781234dbcb432187654321dac10000000000000000000000000000000028"
 
 	omciLayer := &OMCI{
 		TransactionID: 0x035e,
