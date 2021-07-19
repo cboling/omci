@@ -53,7 +53,14 @@ func (omci *GetAllAlarmsRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Request into this layer
 func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
+	var hdrSize int
+	if omci.Extended {
+		//start here
+		hdrSize = 6 + 1
+	} else {
+		hdrSize = 4 + 1
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -77,7 +84,11 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.AlarmRetrievalMode = data[4]
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.AlarmRetrievalMode = data[4+offset]
 	if omci.AlarmRetrievalMode > 1 {
 		msg := fmt.Sprintf("invalid Alarm Retrieval Mode for Get All Alarms request: %v, must be 0..1",
 			omci.AlarmRetrievalMode)
@@ -89,6 +100,13 @@ func (omci *GetAllAlarmsRequest) DecodeFromBytes(data []byte, p gopacket.PacketB
 func decodeGetAllAlarmsRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsRequest{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeGetAllAlarmsRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsRequest{}
+	omci.MsgLayerType = LayerTypeGetAllAlarmsRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -108,11 +126,18 @@ func (omci *GetAllAlarmsRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopac
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
 		return me.NewProcessingError("managed entity does not support the Get All Alarms Message-Type")
 	}
-	bytes, err := b.AppendBytes(1)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 1)
 	if err != nil {
 		return err
 	}
-	bytes[0] = omci.AlarmRetrievalMode
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(1))
+	}
+	bytes[offset] = omci.AlarmRetrievalMode
 	return nil
 }
 
@@ -144,7 +169,14 @@ func (omci *GetAllAlarmsResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Response into this layer
 func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
+	var hdrSize int
+	if omci.Extended {
+		//start here
+		hdrSize = 6 + 2
+	} else {
+		hdrSize = 4 + 2
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -168,13 +200,24 @@ func (omci *GetAllAlarmsResponse) DecodeFromBytes(data []byte, p gopacket.Packet
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4:6])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.NumberOfCommands = binary.BigEndian.Uint16(data[4+offset:])
 	return nil
 }
 
 func decodeGetAllAlarmsResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsResponse{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeGetAllAlarmsResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsResponse{}
+	omci.MsgLayerType = LayerTypeGetAllAlarmsResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -194,11 +237,18 @@ func (omci *GetAllAlarmsResponse) SerializeTo(b gopacket.SerializeBuffer, _ gopa
 	if !me.SupportsMsgType(entity, me.GetAllAlarms) {
 		return me.NewProcessingError("managed entity does not support the Get All Alarms Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 2)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:2], omci.NumberOfCommands)
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(2))
+	}
+	binary.BigEndian.PutUint16(bytes[offset:], omci.NumberOfCommands)
 	return nil
 }
 
@@ -230,7 +280,14 @@ func (omci *GetAllAlarmsNextRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Request into this layer
 func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
+	var hdrSize int
+	if omci.Extended {
+		//start here
+		hdrSize = 6 + 2
+	} else {
+		hdrSize = 4 + 2
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -254,13 +311,24 @@ func (omci *GetAllAlarmsNextRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4:6])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.CommandSequenceNumber = binary.BigEndian.Uint16(data[4+offset:])
 	return nil
 }
 
 func decodeGetAllAlarmsNextRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextRequest{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsNextRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeGetAllAlarmsNextRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsNextRequest{}
+	omci.MsgLayerType = LayerTypeGetAllAlarmsNextRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -280,19 +348,33 @@ func (omci *GetAllAlarmsNextRequest) SerializeTo(b gopacket.SerializeBuffer, _ g
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
 		return me.NewProcessingError("managed entity does not support the Get All Alarms Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(2)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 2)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes, omci.CommandSequenceNumber)
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(2))
+	}
+	binary.BigEndian.PutUint16(bytes[offset:], omci.CommandSequenceNumber)
 	return nil
+}
+
+type AdditionalAlarmsData struct {
+	AlarmEntityClass    me.ClassID
+	AlarmEntityInstance uint16
+	AlarmBitMap         [28]byte // 224 bits
 }
 
 type GetAllAlarmsNextResponse struct {
 	MeBasePacket
 	AlarmEntityClass    me.ClassID
 	AlarmEntityInstance uint16
-	AlarmBitMap         [28]byte // 224 bits
+	AlarmBitMap         [28]byte               // 224 bits
+	AdditionalAlarms    []AdditionalAlarmsData // Valid only for extended message set version
 }
 
 func (omci *GetAllAlarmsNextResponse) String() string {
@@ -319,7 +401,19 @@ func (omci *GetAllAlarmsNextResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Get All Alarms Next Response into this layer
 func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4+28)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6
+	} else {
+		hdrSize = 4
+	}
+	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
+	//       ALL message type settings
+	if len(data) < hdrSize {
+		p.SetTruncated()
+		return errors.New("frame too small: Get All Alarms Next Response message-type header truncated")
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -343,16 +437,45 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 			omci.EntityInstance)
 		return me.NewUnknownInstanceError(msg)
 	}
-	omci.AlarmEntityClass = me.ClassID(binary.BigEndian.Uint16(data[4:6]))
-	omci.AlarmEntityInstance = binary.BigEndian.Uint16(data[6:8])
+	//err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4+28)	// Decode reported ME.  If an out-of-range sequence number was sent, this will
+	//	// contain an ME with class ID and entity ID of zero and you should get an
+	//	// error of "managed entity definition not found" returned.
+	var offset int
+	msgContentsLen := 28
+	if omci.Extended {
+		offset = 2 // Message Contents length (2)
+		msgContentsLen = int(binary.BigEndian.Uint16(data[6:]))
+	}
+	if len(data[4+offset:]) < 4+msgContentsLen {
+		p.SetTruncated()
+		return errors.New("frame too small: Get All Alarms Next Response Managed Entity attribute truncated")
+	}
+	omci.AlarmEntityClass = me.ClassID(binary.BigEndian.Uint16(data[4+offset:]))
+	omci.AlarmEntityInstance = binary.BigEndian.Uint16(data[6+offset:])
 
-	copy(omci.AlarmBitMap[:], data[8:36])
+	copy(omci.AlarmBitMap[:], data[8+offset:36])
+	remaining := len(data) - (6 + 4 + 28)
+
+	if !omci.Extended || remaining <= 0 {
+		return nil
+	}
+	offset = 6 + 4 + 28
+	omci.AdditionalAlarms = make([]AdditionalAlarmsData, 0)
+	for remaining > 0 {
+	}
 	return nil
 }
 
 func decodeGetAllAlarmsNextResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &GetAllAlarmsNextResponse{}
 	omci.MsgLayerType = LayerTypeGetAllAlarmsNextResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeGetAllAlarmsNextResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &GetAllAlarmsNextResponse{}
+	omci.MsgLayerType = LayerTypeGetAllAlarmsNextResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -372,13 +495,47 @@ func (omci *GetAllAlarmsNextResponse) SerializeTo(b gopacket.SerializeBuffer, _ 
 	if !me.SupportsMsgType(entity, me.GetAllAlarmsNext) {
 		return me.NewProcessingError("managed entity does not support the Get All Alarms Next Message-Type")
 	}
-	bytes, err := b.AppendBytes(2 + 2 + 28)
+	contentLength := 2 + 2 + 28
+	maxLength := MaxBaselineLength - 8 - 8
+	var extraMEs int
+	var offset int
+
+	if omci.Extended {
+		maxLength = MaxExtendedLength - 10 - 4
+		offset = 2
+		contentLength += 2 // Length field
+		if omci.AdditionalAlarms != nil {
+			extraMEs = len(omci.AdditionalAlarms)
+			contentLength += extraMEs*4 + 28
+		}
+	}
+	if contentLength > maxLength {
+		msg := fmt.Sprintf("not enough space to fit all requested Managed Entities, have %v, requested: %v",
+			maxLength, contentLength)
+		return me.NewMessageTruncatedError(msg)
+	}
+	// Allocate space for all
+	bytes, err := b.AppendBytes(contentLength)
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint16(bytes[0:], uint16(omci.AlarmEntityClass))
-	binary.BigEndian.PutUint16(bytes[2:], omci.AlarmEntityInstance)
-	copy(bytes[4:], omci.AlarmBitMap[:])
+	// Always encode the first ME alarm data
+	binary.BigEndian.PutUint16(bytes[offset:], uint16(omci.AlarmEntityClass))
+	binary.BigEndian.PutUint16(bytes[offset+2:], omci.AlarmEntityInstance)
+	copy(bytes[offset+4:], omci.AlarmBitMap[:])
+
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(contentLength-2))
+
+		if omci.AdditionalAlarms != nil {
+			for index, value := range omci.AdditionalAlarms {
+				offset = (32 * (index + 1)) + 2
+				binary.BigEndian.PutUint16(bytes[offset:], uint16(value.AlarmEntityClass))
+				binary.BigEndian.PutUint16(bytes[offset+2:], value.AlarmEntityInstance)
+				copy(bytes[offset+4:], value.AlarmBitMap[:])
+			}
+		}
+	}
 	return nil
 }
 

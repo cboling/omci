@@ -94,6 +94,8 @@ the following Message Types have this support and are covered by unit tests:
  - MibUploadRequest/Response
  - MibUploadNextRequest/Response
  - TestRequest/Response/Result
+ - GetAllAlarmsRequest/Response
+ - GetAllAlarmsNextRequest/Response
 
 ### Upcoming message types that will be supported
 
@@ -101,8 +103,6 @@ The following provides a list of the remaining message types that will eventuall
 in the expected order of implementation.  The priority was chosen based on speed improvement requests
 of operations and ease of implementation.
 
- - GetAllAlarmsRequest/Response
- - GetAllAlarmsNextRequest/Response
  - StartSoftwareDownloadRequest/Response
  - EndSoftwareDownloadRequest/Response
  - CommitSoftwareRequest/Response

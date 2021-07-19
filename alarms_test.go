@@ -64,6 +64,44 @@ func TestGetAllAlarmsRequestDecode(t *testing.T) {
 	assert.NotZero(t, len(packetString))
 }
 
+func TestGetAllAlarmsRequestDecodeExtended(t *testing.T) {
+	goodMessage := "04454b0b00020000000101"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0445), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsRequestType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(1), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetAllAlarmsRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, byte(1), request.AlarmRetrievalMode)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
 func TestGetAllAlarmsRequestSerialize(t *testing.T) {
 	goodMessage := "04454b0a00020000010000000000000000000000000000000000000000000000000000000000000000000028"
 
@@ -77,6 +115,35 @@ func TestGetAllAlarmsRequestSerialize(t *testing.T) {
 		MeBasePacket: MeBasePacket{
 			EntityClass:    me.OnuDataClassID,
 			EntityInstance: uint16(0),
+		},
+		AlarmRetrievalMode: byte(1),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetAllAlarmsRequestSerializeExtended(t *testing.T) {
+	goodMessage := "04454b0b00020000000101"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0445,
+		MessageType:      GetAllAlarmsRequestType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	request := &GetAllAlarmsRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuDataClassID,
+			EntityInstance: uint16(0),
+			Extended:       true,
 		},
 		AlarmRetrievalMode: byte(1),
 	}
@@ -131,6 +198,44 @@ func TestGetAllAlarmsResponseDecode(t *testing.T) {
 	assert.NotZero(t, len(packetString))
 }
 
+func TestGetAllAlarmsResponseDecodeExtended(t *testing.T) {
+	goodMessage := "04452b0b0002000000020003"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0445), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsResponseType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(2), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetAllAlarmsResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+	assert.Equal(t, uint16(3), response.NumberOfCommands)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
 func TestGetAllAlarmsResponseSerialize(t *testing.T) {
 	goodMessage := "04452b0a00020000000300000000000000000000000000000000000000000000000000000000000000000028"
 
@@ -160,8 +265,37 @@ func TestGetAllAlarmsResponseSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestGetAllAlarmsResponseSerializeExtended(t *testing.T) {
+	goodMessage := "04452b0b0002000000020003"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0445,
+		MessageType:      GetAllAlarmsResponseType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	request := &GetAllAlarmsResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuDataClassID,
+			EntityInstance: uint16(0),
+			Extended:       true,
+		},
+		NumberOfCommands: uint16(3),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
 func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
-	goodMessage := "02344c0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "02344c0a00020000000300000000000000000000000000000000000000000000000000000000000000000028"
 
 	data, err := stringToPacket(goodMessage)
 	assert.NoError(t, err)
@@ -192,6 +326,46 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.LayerType())
 	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.CanDecode())
 	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, uint16(3), request.CommandSequenceNumber)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestGetAllAlarmsNextRequestDecodeExtended(t *testing.T) {
+	goodMessage := "02344c0b0002000000020003"
+
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0234), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextRequestType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(2), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*GetAllAlarmsNextRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextRequest, request.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	assert.Equal(t, uint16(3), request.CommandSequenceNumber)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -199,7 +373,7 @@ func TestGetAllAlarmsNextRequestDecode(t *testing.T) {
 }
 
 func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
-	goodMessage := "02344c0a00020000000000000000000000000000000000000000000000000000000000000000000000000028"
+	goodMessage := "02344c0a00020000000300000000000000000000000000000000000000000000000000000000000000000028"
 
 	omciLayer := &OMCI{
 		TransactionID: 0x0234,
@@ -212,7 +386,36 @@ func TestGetAllAlarmsNextRequestSerialize(t *testing.T) {
 			EntityClass:    me.OnuDataClassID,
 			EntityInstance: uint16(0),
 		},
-		CommandSequenceNumber: uint16(0),
+		CommandSequenceNumber: uint16(3),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetAllAlarmsNextRequestSerializeExtended(t *testing.T) {
+	goodMessage := "02344c0b0002000000020004"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0234,
+		MessageType:      GetAllAlarmsNextRequestType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	request := &GetAllAlarmsNextRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuDataClassID,
+			EntityInstance: uint16(0),
+			Extended:       true,
+		},
+		CommandSequenceNumber: uint16(4),
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -264,6 +467,102 @@ func TestGetAllAlarmsNextResponseDecode(t *testing.T) {
 	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, response.AlarmEntityClass)
 	assert.Equal(t, uint16(0x102), response.AlarmEntityInstance)
 	assert.Equal(t, alarms, response.AlarmBitMap)
+	assert.Nil(t, response.AdditionalAlarms)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestGetAllAlarmsNextResponseDecodeExtended(t *testing.T) {
+	goodMessage := "02342c0b000200000020000b010280000000000000000000000000000000000000000000000000000000"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0234), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(32), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetAllAlarmsNextResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+
+	var alarms [224 / 8]byte
+	alarms[0] = 0x80
+	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, response.AlarmEntityClass)
+	assert.Equal(t, uint16(0x102), response.AlarmEntityInstance)
+	assert.Equal(t, alarms, response.AlarmBitMap)
+	assert.Nil(t, response.AdditionalAlarms)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
+}
+
+func TestGetAllAlarmsNextResponseDecodeExtendedTwoBitmaps(t *testing.T) {
+	alarm1 := "000b010280000000000000000000000000000000000000000000000000000000"
+	alarm2 := "000b010380000000000000000000000000000000000000000000000000000000"
+	goodMessage := "02342c0b000200000040" + alarm1 + alarm2
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+	assert.Equal(t, LayerTypeOMCI, omciMsg.LayerType())
+	assert.Equal(t, LayerTypeOMCI, omciMsg.CanDecode())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, omciMsg.NextLayerType())
+	assert.Equal(t, uint16(0x0234), omciMsg.TransactionID)
+	assert.Equal(t, GetAllAlarmsNextResponseType, omciMsg.MessageType)
+	assert.Equal(t, ExtendedIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(64), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeGetAllAlarmsNextResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetAllAlarmsNextResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.LayerType())
+	assert.Equal(t, LayerTypeGetAllAlarmsNextResponse, response.CanDecode())
+	assert.Equal(t, gopacket.LayerTypePayload, response.NextLayerType())
+
+	var alarms [224 / 8]byte
+	alarms[0] = 0x80
+	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, response.AlarmEntityClass)
+	assert.Equal(t, uint16(0x102), response.AlarmEntityInstance)
+	assert.Equal(t, alarms, response.AlarmBitMap)
+
+	assert.NotNil(t, response.AdditionalAlarms)
+	assert.Equal(t, 1, len(response.AdditionalAlarms))
+	assert.Equal(t, me.PhysicalPathTerminationPointEthernetUniClassID, response.AdditionalAlarms[0].AlarmEntityClass)
+	assert.Equal(t, uint16(0x103), response.AdditionalAlarms[0].AlarmEntityInstance)
+	assert.Equal(t, alarms, response.AdditionalAlarms[0].AlarmBitMap)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -304,6 +603,80 @@ func TestGetAllAlarmsNextResponseSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestGetAllAlarmsNextResponseSerializeExtended(t *testing.T) {
+	goodMessage := "02342c0b000200000020000b010280000000000000000000000000000000000000000000000000000000"
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0234,
+		MessageType:      GetAllAlarmsNextResponseType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	var alarms [224 / 8]byte
+	alarms[0] = 0x80
+
+	request := &GetAllAlarmsNextResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuDataClassID,
+			EntityInstance: uint16(0),
+			Extended:       true,
+		},
+		AlarmEntityClass:    me.PhysicalPathTerminationPointEthernetUniClassID,
+		AlarmEntityInstance: uint16(0x102),
+		AlarmBitMap:         alarms,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+func TestGetAllAlarmsNextResponseSerializeExtendedTwoBitmaps(t *testing.T) {
+	alarm1 := "000b010280000000000000000000000000000000000000000000000000000000"
+	alarm2 := "000b010380000000000000000000000000000000000000000000000000000000"
+	goodMessage := "02342c0b000200000040" + alarm1 + alarm2
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0234,
+		MessageType:      GetAllAlarmsNextResponseType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	var alarms [224 / 8]byte
+	alarms[0] = 0x80
+
+	secondAlarm := AdditionalAlarmsData{
+		AlarmEntityClass:    me.PhysicalPathTerminationPointEthernetUniClassID,
+		AlarmEntityInstance: uint16(0x103),
+		AlarmBitMap:         alarms,
+	}
+	request := &GetAllAlarmsNextResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuDataClassID,
+			EntityInstance: uint16(0),
+			Extended:       true,
+		},
+		AlarmEntityClass:    me.PhysicalPathTerminationPointEthernetUniClassID,
+		AlarmEntityInstance: uint16(0x102),
+		AlarmBitMap:         alarms,
+		AdditionalAlarms:    []AdditionalAlarmsData{secondAlarm},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
 func TestGetAllAlarmsNextResponseBadCommandNumberDecode(t *testing.T) {
 	// Test of a GetNext Response that results when an invalid command number
 	// is requested. In the case where the ONU receives a get all alarms next
