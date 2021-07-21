@@ -27,17 +27,6 @@ import (
 	"testing"
 )
 
-// TODO: Create request/response tests for all of the following types
-//Test,
-//                    1                   2                   3                   4
-//  1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4
-// 0004530a00070001ff000f424001000100000000000000000000000000000000000000000000000000000028
-// 0004530a
-//         00070001             - ONU-G instance 0001
-//                 ff           - window size - 1
-//                   000f4240   - image size
-//                           01
-//                             000100000000000000000000000000000000000000000000000000000028
 func TestStartSoftwareDownloadRequestDecode(t *testing.T) {
 	goodMessage := "0004530a00070001ff000f424001000100000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -72,6 +61,7 @@ func TestStartSoftwareDownloadRequestDecode(t *testing.T) {
 	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
 	assert.Equal(t, uint8(0xff), request.WindowSize)
 	assert.Equal(t, uint32(0x000f4240), request.ImageSize)
+	assert.Equal(t, uint8(1), request.NumberOfCircuitPacks)
 
 	// Verify string output for message
 	packetString := packet.String()
@@ -79,93 +69,102 @@ func TestStartSoftwareDownloadRequestDecode(t *testing.T) {
 }
 
 func TestStartSoftwareDownloadRequestSerialize(t *testing.T) {
-	//// TODO: Need to complete implementation & debug this
-	//goodMessage := "0000530a0007000113000f424001000100000000000000000000000000000000000000000000000000000028"
-	//
-	//omciLayer := &OMCI{
-	//	TransactionID: 0x01,
-	//	MessageType:   StartSoftwareDownloadRequestType,
-	//	// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
-	//	// Length:           0x28,						// Optional, defaults to 40 octets
-	//}
-	//request := &StartSoftwareDownloadRequest{
-	//	MeBasePacket: MeBasePacket{
-	//		EntityClass: OnuDataClassID,
-	//		// Default Instance ID is 0
-	//	},
-	//}
-	//// Test serialization back to former string
-	//var options gopacket.SerializeOptions
-	//options.FixLengths = true
-	//
-	//buffer := gopacket.NewSerializeBuffer()
-	//err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
-	//assert.NoError(t, err)
-	//
-	//outgoingPacket := buffer.Bytes()
-	//reconstituted := packetToString(outgoingPacket)
-	//assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+	goodMessage := "0004530a00070001ff000f424001000100000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x04,
+		MessageType:   StartSoftwareDownloadRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &StartSoftwareDownloadRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.SoftwareImageClassID,
+			EntityInstance: 1,
+		},
+		WindowSize:           255,
+		ImageSize:            0x000f4240,
+		NumberOfCircuitPacks: 1,
+		CircuitPacks:         []uint16{0x0001},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestStartSoftwareDownloadResponseDecode(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := ""
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, omciLayer)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	//assert.Equal(t, omciMsg.MessageType, StartSoftwareDownloadResponseType)
-	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeStartSoftwareDownloadResponse)
-	//
-	//assert.NotNil(t, msgLayer)
-	//
-	//response, ok2 := msgLayer.(*StartSoftwareDownloadResponse)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, response)
-	//
-	//// Verify string output for message
-	//packetString := packet.String()
-	//assert.NotZero(t, len(packetString))
+	goodMessage := "0004330a0007000100ff00000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(0x0004))
+	assert.Equal(t, omciMsg.MessageType, StartSoftwareDownloadResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeStartSoftwareDownloadResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*StartSoftwareDownloadResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, me.Success, response.Result)
+	assert.Equal(t, uint8(0xff), response.WindowSize)
+	assert.Equal(t, uint8(0), response.NumberOfInstances)
+	assert.Nil(t, response.MeResults)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestStartSoftwareDownloadResponseSerialize(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := ""
-	//
-	//omciLayer := &OMCI{
-	//	TransactionID: 0x01,
-	//	MessageType:   StartSoftwareDownloadResponseType,
-	//	// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
-	//	// Length:           0x28,						// Optional, defaults to 40 octets
-	//}
-	//request := &StartSoftwareDownloadResponse{
-	//	MeBasePacket: MeBasePacket{
-	//		EntityClass: OnuDataClassID,
-	//		// Default Instance ID is 0
-	//	},
-	//}
-	//// Test serialization back to former string
-	//var options gopacket.SerializeOptions
-	//options.FixLengths = true
-	//
-	//buffer := gopacket.NewSerializeBuffer()
-	//err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
-	//assert.NoError(t, err)
-	//
-	//outgoingPacket := buffer.Bytes()
-	//reconstituted := packetToString(outgoingPacket)
-	//assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+	goodMessage := "0001330a0007000100ff00000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x01,
+		MessageType:   StartSoftwareDownloadResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &StartSoftwareDownloadResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.SoftwareImageClassID,
+			EntityInstance: 1,
+		},
+		Result:            me.Success,
+		WindowSize:        0xff,
+		NumberOfInstances: 0,   // Note: Optional since default is zero
+		MeResults:         nil, // Note: Optional since default is nil
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 //                    1                   2                   3                   4
@@ -630,124 +629,124 @@ func TestEndSoftwareDownloadResponseSerialize(t *testing.T) {
 }
 
 func TestActivateSoftwareRequestDecode(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := "0000560a00070001000000000000000000000000000000000000000000000000000000000000000000000028"
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, omciLayer)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	//assert.Equal(t, omciMsg.MessageType, ActivateSoftwareRequestType)
-	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeActivateSoftwareRequest)
-	//assert.NotNil(t, msgLayer)
-	//
-	//request, ok2 := msgLayer.(*ActivateSoftwareRequest)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, request)
-	//
-	//// Verify string output for message
-	//packetString := packet.String()
-	//assert.NotZero(t, len(packetString))
+	goodMessage := "0009560a00070001020000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(9))
+	assert.Equal(t, omciMsg.MessageType, ActivateSoftwareRequestType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeActivateSoftwareRequest)
+	assert.NotNil(t, msgLayer)
+
+	request, ok2 := msgLayer.(*ActivateSoftwareRequest)
+	assert.True(t, ok2)
+	assert.NotNil(t, request)
+	assert.Equal(t, uint8(2), request.ActivateFlags)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestActivateSoftwareRequestSerialize(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := "0000560a00070001000000000000000000000000000000000000000000000000000000000000000000000028"
-	//
-	//omciLayer := &OMCI{
-	//	TransactionID: 0x01,
-	//	MessageType:   ActivateSoftwareRequestType,
-	//	// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
-	//	// Length:           0x28,						// Optional, defaults to 40 octets
-	//}
-	//request := &ActivateSoftwareRequest{
-	//	MeBasePacket: MeBasePacket{
-	//		EntityClass: OnuDataClassID,
-	//		// Default Instance ID is 0
-	//	},
-	//}
-	//// Test serialization back to former string
-	//var options gopacket.SerializeOptions
-	//options.FixLengths = true
-	//
-	//buffer := gopacket.NewSerializeBuffer()
-	//err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
-	//assert.NoError(t, err)
-	//
-	//outgoingPacket := buffer.Bytes()
-	//reconstituted := packetToString(outgoingPacket)
-	//assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+	goodMessage := "0009560a00070001020000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x09,
+		MessageType:   ActivateSoftwareRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &ActivateSoftwareRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.SoftwareImageClassID,
+			EntityInstance: 1,
+		},
+		ActivateFlags: 2,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestActivateSoftwareResponseDecode(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := ""
-	//data, err := stringToPacket(goodMessage)
-	//assert.NoError(t, err)
-	//
-	//packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
-	//assert.NotNil(t, packet)
-	//
-	//omciLayer := packet.Layer(LayerTypeOMCI)
-	//assert.NotNil(t, omciLayer)
-	//
-	//omciMsg, ok := omciLayer.(*OMCI)
-	//assert.True(t, ok)
-	//assert.Equal(t, omciMsg.TransactionID, uint16(0x0))
-	//assert.Equal(t, omciMsg.MessageType, ActivateSoftwareResponseType)
-	//assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
-	//assert.Equal(t, omciMsg.Length, uint16(40))
-	//
-	//msgLayer := packet.Layer(LayerTypeActivateSoftwareResponse)
-	//
-	//assert.NotNil(t, msgLayer)
-	//
-	//response, ok2 := msgLayer.(*ActivateSoftwareResponse)
-	//assert.True(t, ok2)
-	//assert.NotNil(t, response)
-	//
-	//// Verify string output for message
-	//packetString := packet.String()
-	//assert.NotZero(t, len(packetString))
+	goodMessage := "0009360a00070001060000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, omciMsg.TransactionID, uint16(9))
+	assert.Equal(t, omciMsg.MessageType, ActivateSoftwareResponseType)
+	assert.Equal(t, omciMsg.DeviceIdentifier, BaselineIdent)
+	assert.Equal(t, omciMsg.Length, uint16(40))
+
+	msgLayer := packet.Layer(LayerTypeActivateSoftwareResponse)
+
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*ActivateSoftwareResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+	assert.Equal(t, me.DeviceBusy, response.Result)
+
+	// Verify string output for message
+	packetString := packet.String()
+	assert.NotZero(t, len(packetString))
 }
 
 func TestActivateSoftwareResponseSerialize(t *testing.T) {
-	// TODO: Need to complete implementation & debug this
-	//goodMessage := ""
-	//
-	//omciLayer := &OMCI{
-	//	TransactionID: 0x01,
-	//	MessageType:   ActivateSoftwareResponseType,
-	//	// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
-	//	// Length:           0x28,						// Optional, defaults to 40 octets
-	//}
-	//request := &ActivateSoftwareResponse{
-	//	MeBasePacket: MeBasePacket{
-	//		EntityClass: OnuDataClassID,
-	//		// Default Instance ID is 0
-	//	},
-	//}
-	//// Test serialization back to former string
-	//var options gopacket.SerializeOptions
-	//options.FixLengths = true
-	//
-	//buffer := gopacket.NewSerializeBuffer()
-	//err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
-	//assert.NoError(t, err)
-	//
-	//outgoingPacket := buffer.Bytes()
-	//reconstituted := packetToString(outgoingPacket)
-	//assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+	goodMessage := "0009360a00070001060000000000000000000000000000000000000000000000000000000000000000000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x09,
+		MessageType:   ActivateSoftwareResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &ActivateSoftwareResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.SoftwareImageClassID,
+			EntityInstance: 1,
+		},
+		Result: me.DeviceBusy,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
 func TestCommitSoftwareRequestDecode(t *testing.T) {

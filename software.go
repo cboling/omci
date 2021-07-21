@@ -106,7 +106,7 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 	}
 	// ME needs to support Start Software Download
 	if !me.SupportsMsgType(entity, me.StartSoftwareDownload) {
-		return me.NewProcessingError("managed entity does not support the SStart Software Download Message-Type")
+		return me.NewProcessingError("managed entity does not support the Start Software Download Message-Type")
 	}
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassID {
