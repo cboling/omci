@@ -19,7 +19,6 @@ package omci
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -56,12 +55,6 @@ func (omci *DeleteRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder
 		hdrSize = 6
 	} else {
 		hdrSize = 4
-	}
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small")
 	}
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
@@ -151,12 +144,6 @@ func (omci *DeleteResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilde
 		hdrSize = 6 + 1
 	} else {
 		hdrSize = 4 + 1
-	}
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small")
 	}
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {

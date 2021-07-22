@@ -55,7 +55,14 @@ func (omci *StartSoftwareDownloadRequest) NextLayerType() gopacket.LayerType {
 
 // DecodeFromBytes decodes the given bytes of a Start Software Download Request into this layer
 func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+4)
+	// Common ClassID/EntityID decode in msgBase
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 4
+	} else {
+		hdrSize = 4 + 4
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -72,16 +79,20 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Start Software Download request")
 	}
-	omci.WindowSize = data[4]
-	omci.ImageSize = binary.BigEndian.Uint32(data[5:9])
-	omci.NumberOfCircuitPacks = data[9]
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.WindowSize = data[offset+4]
+	omci.ImageSize = binary.BigEndian.Uint32(data[offset+5:])
+	omci.NumberOfCircuitPacks = data[offset+9]
 	if omci.NumberOfCircuitPacks < 1 || omci.NumberOfCircuitPacks > 9 {
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
 			omci.NumberOfCircuitPacks))
 	}
 	omci.CircuitPacks = make([]uint16, omci.NumberOfCircuitPacks)
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
-		omci.CircuitPacks[index] = binary.BigEndian.Uint16(data[10+(index*2):])
+		omci.CircuitPacks[index] = binary.BigEndian.Uint16(data[offset+10+(index*2):])
 	}
 	return nil
 }
@@ -89,6 +100,13 @@ func (omci *StartSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacke
 func decodeStartSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadRequest{}
 	omci.MsgLayerType = LayerTypeStartSoftwareDownloadRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeStartSoftwareDownloadRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &StartSoftwareDownloadRequest{}
+	omci.MsgLayerType = LayerTypeStartSoftwareDownloadRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -116,15 +134,22 @@ func (omci *StartSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Circuit Packs: %v, must be 1..9",
 			omci.NumberOfCircuitPacks))
 	}
-	bytes, err := b.AppendBytes(6 + (2 * int(omci.NumberOfCircuitPacks)))
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 6 + (2 * int(omci.NumberOfCircuitPacks)))
 	if err != nil {
 		return err
 	}
-	bytes[0] = omci.WindowSize
-	binary.BigEndian.PutUint32(bytes[1:], omci.ImageSize)
-	bytes[5] = omci.NumberOfCircuitPacks
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(6+(2*int(omci.NumberOfCircuitPacks))))
+	}
+	bytes[offset] = omci.WindowSize
+	binary.BigEndian.PutUint32(bytes[offset+1:], omci.ImageSize)
+	bytes[offset+5] = omci.NumberOfCircuitPacks
 	for index := 0; index < int(omci.NumberOfCircuitPacks); index++ {
-		binary.BigEndian.PutUint16(bytes[6+(index*2):], omci.CircuitPacks[index])
+		binary.BigEndian.PutUint16(bytes[offset+6+(index*2):], omci.CircuitPacks[index])
 	}
 	return nil
 }
@@ -170,7 +195,13 @@ func (omci *StartSoftwareDownloadResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Start Software Download Response into this layer
 func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+3)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 3
+	} else {
+		hdrSize = 4 + 3
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -187,14 +218,18 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Start Software Download response")
 	}
-	omci.Result = me.Results(data[4])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.Result = me.Results(data[offset+4])
 	if omci.Result > me.DeviceBusy {
 		msg := fmt.Sprintf("invalid results for Start Software Download response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
 	}
-	omci.WindowSize = data[5]
-	omci.NumberOfInstances = data[6]
+	omci.WindowSize = data[offset+5]
+	omci.NumberOfInstances = data[offset+6]
 
 	if omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 0..9",
@@ -202,11 +237,12 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 		return errors.New(msg)
 	}
 	if omci.NumberOfInstances > 0 {
+		// TODO: Calculate additional space needed and see if it is truncated
 		omci.MeResults = make([]DownloadResults, omci.NumberOfInstances)
 
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
-			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[7+(index*3):])
-			omci.MeResults[index].Result = me.Results(data[9+(index*3)])
+			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[offset+7+(index*3):])
+			omci.MeResults[index].Result = me.Results(data[offset+9+(index*3)])
 			if omci.MeResults[index].Result > me.DeviceBusy {
 				msg := fmt.Sprintf("invalid results for Start Software Download instance %v response: %v, must be 0..6",
 					index, omci.MeResults[index])
@@ -220,6 +256,13 @@ func (omci *StartSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopack
 func decodeStartSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &StartSoftwareDownloadResponse{}
 	omci.MsgLayerType = LayerTypeStartSoftwareDownloadResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeStartSoftwareDownloadResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &StartSoftwareDownloadResponse{}
+	omci.MsgLayerType = LayerTypeStartSoftwareDownloadResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -243,34 +286,41 @@ func (omci *StartSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffe
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Start Software Download response")
 	}
-	bytes, err := b.AppendBytes(3 + (3 * int(omci.NumberOfInstances)))
-	if err != nil {
-		return err
-	}
 	if omci.Result > me.DeviceBusy {
 		msg := fmt.Sprintf("invalid results for Start Software Download response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
 	}
-	bytes[0] = byte(omci.Result)
-	bytes[1] = omci.WindowSize
-	bytes[2] = omci.NumberOfInstances
-
 	if omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Circuit Packs: %v, must be 0..9",
 			omci.NumberOfInstances)
 		return errors.New(msg)
 	}
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 3 + (3 * int(omci.NumberOfInstances)))
+	if err != nil {
+		return err
+	}
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(3+(3*int(omci.NumberOfInstances))))
+	}
+	bytes[offset] = byte(omci.Result)
+	bytes[offset+1] = omci.WindowSize
+	bytes[offset+2] = omci.NumberOfInstances
+
 	if omci.NumberOfInstances > 0 {
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
-			binary.BigEndian.PutUint16(bytes[3+(3*index):], omci.MeResults[index].ManagedEntityID)
+			binary.BigEndian.PutUint16(bytes[offset+3+(3*index):], omci.MeResults[index].ManagedEntityID)
 
 			if omci.MeResults[index].Result > me.DeviceBusy {
 				msg := fmt.Sprintf("invalid results for Start Software Download instance %v response: %v, must be 0..6",
 					index, omci.MeResults[index])
 				return errors.New(msg)
 			}
-			bytes[5+(3*index)] = byte(omci.MeResults[index].Result)
+			bytes[offset+5+(3*index)] = byte(omci.MeResults[index].Result)
 		}
 	}
 	return nil
@@ -573,7 +623,13 @@ func (omci *EndSoftwareDownloadRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of an End Software Download Request into this layer
 func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+7)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 7
+	} else {
+		hdrSize = 4 + 7
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -590,9 +646,13 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for End Software Download request")
 	}
-	omci.CRC32 = binary.BigEndian.Uint32(data[4:8])
-	omci.ImageSize = binary.BigEndian.Uint32(data[8:12])
-	omci.NumberOfInstances = data[12]
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.CRC32 = binary.BigEndian.Uint32(data[offset+4:])
+	omci.ImageSize = binary.BigEndian.Uint32(data[offset+8:])
+	omci.NumberOfInstances = data[offset+12]
 
 	if omci.NumberOfInstances < 1 || omci.NumberOfInstances > 9 {
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
@@ -601,7 +661,7 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 	omci.ImageInstances = make([]uint16, omci.NumberOfInstances)
 
 	for index := 0; index < int(omci.NumberOfInstances); index++ {
-		omci.ImageInstances[index] = binary.BigEndian.Uint16(data[13+(index*2):])
+		omci.ImageInstances[index] = binary.BigEndian.Uint16(data[offset+13+(index*2):])
 	}
 	return nil
 }
@@ -609,6 +669,13 @@ func (omci *EndSoftwareDownloadRequest) DecodeFromBytes(data []byte, p gopacket.
 func decodeEndSoftwareDownloadRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadRequest{}
 	omci.MsgLayerType = LayerTypeEndSoftwareDownloadRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeEndSoftwareDownloadRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &EndSoftwareDownloadRequest{}
+	omci.MsgLayerType = LayerTypeEndSoftwareDownloadRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -636,15 +703,22 @@ func (omci *EndSoftwareDownloadRequest) SerializeTo(b gopacket.SerializeBuffer, 
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Instances: %v, must be 1..9",
 			omci.NumberOfInstances))
 	}
-	bytes, err := b.AppendBytes(9 + (2 * int(omci.NumberOfInstances)))
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 9 + (2 * int(omci.NumberOfInstances)))
 	if err != nil {
 		return err
 	}
-	binary.BigEndian.PutUint32(bytes[0:4], omci.CRC32)
-	binary.BigEndian.PutUint32(bytes[4:8], omci.ImageSize)
-	bytes[8] = omci.NumberOfInstances
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(9+(2*int(omci.NumberOfInstances))))
+	}
+	binary.BigEndian.PutUint32(bytes[offset+0:], omci.CRC32)
+	binary.BigEndian.PutUint32(bytes[offset+4:], omci.ImageSize)
+	bytes[offset+8] = omci.NumberOfInstances
 	for index := 0; index < int(omci.NumberOfInstances); index++ {
-		binary.BigEndian.PutUint16(bytes[9+(index*2):], omci.ImageInstances[index])
+		binary.BigEndian.PutUint16(bytes[offset+9+(index*2):], omci.ImageInstances[index])
 	}
 	return nil
 }
@@ -679,7 +753,13 @@ func (omci *EndSoftwareDownloadResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of an End Software Download Response into this layer
 func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+2)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 2
+	} else {
+		hdrSize = 4 + 2
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -696,13 +776,17 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for End Software Download response")
 	}
-	omci.Result = me.Results(data[4])
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	omci.Result = me.Results(data[offset+4])
 	if omci.Result > me.DeviceBusy {
 		msg := fmt.Sprintf("invalid results for End Software Download response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
 	}
-	omci.NumberOfInstances = data[5]
+	omci.NumberOfInstances = data[offset+5]
 
 	if omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Instances: %v, must be 0..9",
@@ -713,8 +797,8 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 		omci.MeResults = make([]DownloadResults, omci.NumberOfInstances)
 
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
-			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[6+(index*3):])
-			omci.MeResults[index].Result = me.Results(data[8+(index*3)])
+			omci.MeResults[index].ManagedEntityID = binary.BigEndian.Uint16(data[offset+6+(index*3):])
+			omci.MeResults[index].Result = me.Results(data[offset+8+(index*3)])
 			if omci.MeResults[index].Result > me.DeviceBusy {
 				msg := fmt.Sprintf("invalid results for End Software Download instance %v response: %v, must be 0..6",
 					index, omci.MeResults[index])
@@ -728,6 +812,13 @@ func (omci *EndSoftwareDownloadResponse) DecodeFromBytes(data []byte, p gopacket
 func decodeEndSoftwareDownloadResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &EndSoftwareDownloadResponse{}
 	omci.MsgLayerType = LayerTypeEndSoftwareDownloadResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeEndSoftwareDownloadResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &EndSoftwareDownloadResponse{}
+	omci.MsgLayerType = LayerTypeEndSoftwareDownloadResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -751,7 +842,11 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for End Download response")
 	}
-	bytes, err := b.AppendBytes(2 + (3 * int(omci.NumberOfInstances)))
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 2 + (3 * int(omci.NumberOfInstances)))
 	if err != nil {
 		return err
 	}
@@ -760,8 +855,11 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 			omci.Result)
 		return errors.New(msg)
 	}
-	bytes[0] = byte(omci.Result)
-	bytes[1] = omci.NumberOfInstances
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(2+(3*int(omci.NumberOfInstances))))
+	}
+	bytes[offset] = byte(omci.Result)
+	bytes[offset+1] = omci.NumberOfInstances
 
 	if omci.NumberOfInstances > 9 {
 		msg := fmt.Sprintf("invalid number of Instances: %v, must be 0..9",
@@ -770,14 +868,14 @@ func (omci *EndSoftwareDownloadResponse) SerializeTo(b gopacket.SerializeBuffer,
 	}
 	if omci.NumberOfInstances > 0 {
 		for index := 0; index < int(omci.NumberOfInstances); index++ {
-			binary.BigEndian.PutUint16(bytes[2+(3*index):], omci.MeResults[index].ManagedEntityID)
+			binary.BigEndian.PutUint16(bytes[offset+2+(3*index):], omci.MeResults[index].ManagedEntityID)
 
 			if omci.MeResults[index].Result > me.DeviceBusy {
 				msg := fmt.Sprintf("invalid results for End Software Download instance %v response: %v, must be 0..6",
 					index, omci.MeResults[index])
 				return errors.New(msg)
 			}
-			bytes[4+(3*index)] = byte(omci.MeResults[index].Result)
+			bytes[offset+4+(3*index)] = byte(omci.MeResults[index].Result)
 		}
 	}
 	return nil
@@ -811,7 +909,13 @@ func (omci *ActivateSoftwareRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of an Activate Software Request into this layer
 func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 1
+	} else {
+		hdrSize = 4 + 1
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -828,7 +932,11 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Activate Software request")
 	}
-	omci.ActivateFlags = data[4]
+	if omci.Extended {
+		omci.ActivateFlags = data[6]
+	} else {
+		omci.ActivateFlags = data[4]
+	}
 	if omci.ActivateFlags > 2 {
 		return me.NewProcessingError(fmt.Sprintf("invalid number of Activation flangs: %v, must be 0..2",
 			omci.ActivateFlags))
@@ -839,6 +947,13 @@ func (omci *ActivateSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.Pac
 func decodeActivateSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareRequest{}
 	omci.MsgLayerType = LayerTypeActivateSoftwareRequest
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeActivateSoftwareRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &ActivateSoftwareRequest{}
+	omci.MsgLayerType = LayerTypeActivateSoftwareRequest
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -862,11 +977,18 @@ func (omci *ActivateSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, _ g
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Activate Software request")
 	}
-	bytes, err := b.AppendBytes(1)
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 1)
 	if err != nil {
 		return err
 	}
-	bytes[0] = omci.ActivateFlags
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, uint16(1))
+	}
+	bytes[offset] = omci.ActivateFlags
 	if omci.ActivateFlags > 2 {
 		msg := fmt.Sprintf("invalid results for Activate Software request: %v, must be 0..2",
 			omci.ActivateFlags)
@@ -903,7 +1025,13 @@ func (omci *ActivateSoftwareResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of an Activate Software Response into this layer
 func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 1
+	} else {
+		hdrSize = 4 + 1
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -920,7 +1048,11 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Activate Software response")
 	}
-	omci.Result = me.Results(data[4])
+	if omci.Extended {
+		omci.Result = me.Results(data[6])
+	} else {
+		omci.Result = me.Results(data[4])
+	}
 	if omci.Result > me.Results(6) {
 		msg := fmt.Sprintf("invalid results for Activate Software response: %v, must be 0..6",
 			omci.Result)
@@ -932,6 +1064,13 @@ func (omci *ActivateSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 func decodeActivateSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &ActivateSoftwareResponse{}
 	omci.MsgLayerType = LayerTypeActivateSoftwareResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeActivateSoftwareResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &ActivateSoftwareResponse{}
+	omci.MsgLayerType = LayerTypeActivateSoftwareResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -955,16 +1094,23 @@ func (omci *ActivateSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, _ 
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Activate Software response")
 	}
-	bytes, err := b.AppendBytes(1)
-	if err != nil {
-		return err
-	}
-	bytes[0] = byte(omci.Result)
 	if omci.Result > me.Results(6) {
 		msg := fmt.Sprintf("invalid results for Activate Software response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
 	}
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 1)
+	if err != nil {
+		return err
+	}
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, 1)
+	}
+	bytes[offset] = byte(omci.Result)
 	return nil
 }
 
@@ -994,7 +1140,13 @@ func (omci *CommitSoftwareRequest) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Commit Software Request into this layer
 func (omci *CommitSoftwareRequest) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6
+	} else {
+		hdrSize = 4
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -1020,6 +1172,13 @@ func decodeCommitSoftwareRequest(data []byte, p gopacket.PacketBuilder) error {
 	return decodingLayerDecoder(omci, data, p)
 }
 
+func decodeCommitSoftwareRequestExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CommitSoftwareRequest{}
+	omci.MsgLayerType = LayerTypeCommitSoftwareRequest
+	omci.Extended = true
+	return decodingLayerDecoder(omci, data, p)
+}
+
 // SerializeTo provides serialization of an Commit Software Request message
 func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, _ gopacket.SerializeOptions) error {
 	// Basic (common) OMCI Header is 8 octets, 10
@@ -1039,6 +1198,13 @@ func (omci *CommitSoftwareRequest) SerializeTo(b gopacket.SerializeBuffer, _ gop
 	// Software Image Entity Class are always use the Software Image
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Commit Software request")
+	}
+	if omci.Extended {
+		bytes, err := b.AppendBytes(2)
+		if err != nil {
+			return err
+		}
+		binary.BigEndian.PutUint16(bytes, 0)
 	}
 	return nil
 }
@@ -1070,7 +1236,13 @@ func (omci *CommitSoftwareResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Commit Software Response into this layer
 func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, 4+1)
+	var hdrSize int
+	if omci.Extended {
+		hdrSize = 6 + 1
+	} else {
+		hdrSize = 4 + 1
+	}
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
 	}
@@ -1087,7 +1259,11 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Commit Software response")
 	}
-	omci.Result = me.Results(data[4])
+	if omci.Extended {
+		omci.Result = me.Results(data[6])
+	} else {
+		omci.Result = me.Results(data[4])
+	}
 	if omci.Result > me.Results(6) {
 		msg := fmt.Sprintf("invalid results for Commit Software response: %v, must be 0..6",
 			omci.Result)
@@ -1099,6 +1275,13 @@ func (omci *CommitSoftwareResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 func decodeCommitSoftwareResponse(data []byte, p gopacket.PacketBuilder) error {
 	omci := &CommitSoftwareResponse{}
 	omci.MsgLayerType = LayerTypeCommitSoftwareResponse
+	return decodingLayerDecoder(omci, data, p)
+}
+
+func decodeCommitSoftwareResponseExtended(data []byte, p gopacket.PacketBuilder) error {
+	omci := &CommitSoftwareResponse{}
+	omci.MsgLayerType = LayerTypeCommitSoftwareResponse
+	omci.Extended = true
 	return decodingLayerDecoder(omci, data, p)
 }
 
@@ -1122,15 +1305,24 @@ func (omci *CommitSoftwareResponse) SerializeTo(b gopacket.SerializeBuffer, _ go
 	if omci.EntityClass != me.SoftwareImageClassID {
 		return me.NewProcessingError("invalid Entity Class for Commit Software response")
 	}
-	bytes, err := b.AppendBytes(1)
-	if err != nil {
-		return err
-	}
-	bytes[0] = byte(omci.Result)
 	if omci.Result > me.Results(6) {
 		msg := fmt.Sprintf("invalid results for Commit Software response: %v, must be 0..6",
 			omci.Result)
 		return errors.New(msg)
+	}
+	var offset int
+	if omci.Extended {
+		offset = 2
+	}
+	bytes, err := b.AppendBytes(offset + 1)
+	if err != nil {
+		return err
+	}
+	if omci.Extended {
+		binary.BigEndian.PutUint16(bytes, 1)
+		bytes[2] = byte(omci.Result)
+	} else {
+		bytes[0] = byte(omci.Result)
 	}
 	return nil
 }

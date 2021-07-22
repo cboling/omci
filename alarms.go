@@ -407,12 +407,6 @@ func (omci *GetAllAlarmsNextResponse) DecodeFromBytes(data []byte, p gopacket.Pa
 	} else {
 		hdrSize = 4
 	}
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small: Get All Alarms Next Response message-type header truncated")
-	}
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err

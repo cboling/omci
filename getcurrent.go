@@ -60,12 +60,6 @@ func (omci *GetCurrentDataRequest) DecodeFromBytes(data []byte, p gopacket.Packe
 		offset = 4
 	}
 	hdrSize := offset + 2
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small")
-	}
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err
@@ -163,12 +157,6 @@ func (omci *GetCurrentDataResponse) DecodeFromBytes(data []byte, p gopacket.Pack
 		length = 3
 	}
 	hdrSize := offset + length
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small")
-	}
 	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
 	if err != nil {
 		return err

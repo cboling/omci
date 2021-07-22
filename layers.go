@@ -48,22 +48,26 @@ var (
 	LayerTypeGetCurrentDataRequest        gopacket.LayerType
 	LayerTypeSetTableRequest              gopacket.LayerType
 
-	LayerTypeCreateRequestExtended              gopacket.LayerType
-	LayerTypeDeleteRequestExtended              gopacket.LayerType
-	LayerTypeSetRequestExtended                 gopacket.LayerType
-	LayerTypeMibUploadRequestExtended           gopacket.LayerType
-	LayerTypeMibUploadNextRequestExtended       gopacket.LayerType
-	LayerTypeMibResetRequestExtended            gopacket.LayerType
-	LayerTypeGetRequestExtended                 gopacket.LayerType
-	LayerTypeGetNextRequestExtended             gopacket.LayerType
-	LayerTypeDownloadSectionRequestExtended     gopacket.LayerType
-	LayerTypeDownloadSectionLastRequestExtended gopacket.LayerType
-	LayerTypeSynchronizeTimeRequestExtended     gopacket.LayerType
-	LayerTypeRebootRequestExtended              gopacket.LayerType
-	LayerTypeGetCurrentDataRequestExtended      gopacket.LayerType
-	LayerTypeSetTableRequestExtended            gopacket.LayerType
-	LayerTypeGetAllAlarmsRequestExtended        gopacket.LayerType
-	LayerTypeGetAllAlarmsNextRequestExtended    gopacket.LayerType
+	LayerTypeCreateRequestExtended                gopacket.LayerType
+	LayerTypeDeleteRequestExtended                gopacket.LayerType
+	LayerTypeSetRequestExtended                   gopacket.LayerType
+	LayerTypeMibUploadRequestExtended             gopacket.LayerType
+	LayerTypeMibUploadNextRequestExtended         gopacket.LayerType
+	LayerTypeMibResetRequestExtended              gopacket.LayerType
+	LayerTypeGetRequestExtended                   gopacket.LayerType
+	LayerTypeGetNextRequestExtended               gopacket.LayerType
+	LayerTypeStartSoftwareDownloadRequestExtended gopacket.LayerType
+	LayerTypeDownloadSectionRequestExtended       gopacket.LayerType
+	LayerTypeDownloadSectionLastRequestExtended   gopacket.LayerType
+	LayerTypeEndSoftwareDownloadRequestExtended   gopacket.LayerType
+	LayerTypeActivateSoftwareRequestExtended      gopacket.LayerType
+	LayerTypeCommitSoftwareRequestExtended        gopacket.LayerType
+	LayerTypeSynchronizeTimeRequestExtended       gopacket.LayerType
+	LayerTypeRebootRequestExtended                gopacket.LayerType
+	LayerTypeGetCurrentDataRequestExtended        gopacket.LayerType
+	LayerTypeSetTableRequestExtended              gopacket.LayerType
+	LayerTypeGetAllAlarmsRequestExtended          gopacket.LayerType
+	LayerTypeGetAllAlarmsNextRequestExtended      gopacket.LayerType
 )
 var (
 	LayerTypeCreateResponse                gopacket.LayerType
@@ -90,24 +94,28 @@ var (
 	LayerTypeGetCurrentDataResponse        gopacket.LayerType
 	LayerTypeSetTableResponse              gopacket.LayerType
 
-	LayerTypeCreateResponseExtended           gopacket.LayerType
-	LayerTypeDeleteResponseExtended           gopacket.LayerType
-	LayerTypeSetResponseExtended              gopacket.LayerType
-	LayerTypeMibUploadResponseExtended        gopacket.LayerType
-	LayerTypeMibUploadNextResponseExtended    gopacket.LayerType
-	LayerTypeMibResetResponseExtended         gopacket.LayerType
-	LayerTypeGetResponseExtended              gopacket.LayerType
-	LayerTypeGetNextResponseExtended          gopacket.LayerType
-	LayerTypeDownloadSectionResponseExtended  gopacket.LayerType
-	LayerTypeAlarmNotificationExtended        gopacket.LayerType
-	LayerTypeAttributeValueChangeExtended     gopacket.LayerType
-	LayerTypeTestResultExtended               gopacket.LayerType
-	LayerTypeSynchronizeTimeResponseExtended  gopacket.LayerType
-	LayerTypeRebootResponseExtended           gopacket.LayerType
-	LayerTypeGetCurrentDataResponseExtended   gopacket.LayerType
-	LayerTypeSetTableResponseExtended         gopacket.LayerType
-	LayerTypeGetAllAlarmsResponseExtended     gopacket.LayerType
-	LayerTypeGetAllAlarmsNextResponseExtended gopacket.LayerType
+	LayerTypeCreateResponseExtended                gopacket.LayerType
+	LayerTypeDeleteResponseExtended                gopacket.LayerType
+	LayerTypeSetResponseExtended                   gopacket.LayerType
+	LayerTypeMibUploadResponseExtended             gopacket.LayerType
+	LayerTypeMibUploadNextResponseExtended         gopacket.LayerType
+	LayerTypeMibResetResponseExtended              gopacket.LayerType
+	LayerTypeGetResponseExtended                   gopacket.LayerType
+	LayerTypeGetNextResponseExtended               gopacket.LayerType
+	LayerTypeStartSoftwareDownloadResponseExtended gopacket.LayerType
+	LayerTypeDownloadSectionResponseExtended       gopacket.LayerType
+	LayerTypeEndSoftwareDownloadResponseExtended   gopacket.LayerType
+	LayerTypeActivateSoftwareResponseExtended      gopacket.LayerType
+	LayerTypeCommitSoftwareResponseExtended        gopacket.LayerType
+	LayerTypeAlarmNotificationExtended             gopacket.LayerType
+	LayerTypeAttributeValueChangeExtended          gopacket.LayerType
+	LayerTypeTestResultExtended                    gopacket.LayerType
+	LayerTypeSynchronizeTimeResponseExtended       gopacket.LayerType
+	LayerTypeRebootResponseExtended                gopacket.LayerType
+	LayerTypeGetCurrentDataResponseExtended        gopacket.LayerType
+	LayerTypeSetTableResponseExtended              gopacket.LayerType
+	LayerTypeGetAllAlarmsResponseExtended          gopacket.LayerType
+	LayerTypeGetAllAlarmsNextResponseExtended      gopacket.LayerType
 )
 
 func mkReqLayer(mt me.MsgType, mts string, decode gopacket.DecodeFunc) gopacket.LayerType {
@@ -185,8 +193,12 @@ func init() {
 	LayerTypeMibUploadRequestExtended = mkReqLayer(me.MibUpload|me.ExtendedOffset, "MibUploadRequest-Ext", decodeMibUploadRequestExtended)
 	LayerTypeMibUploadNextRequestExtended = mkReqLayer(me.MibUploadNext|me.ExtendedOffset, "MibUploadNextRequest-Ext", decodeMibUploadNextRequestExtended)
 	LayerTypeMibResetRequestExtended = mkReqLayer(me.MibReset|me.ExtendedOffset, "MibResetRequest-Ext", decodeMibResetRequestExtended)
+	LayerTypeStartSoftwareDownloadRequestExtended = mkReqLayer(me.StartSoftwareDownload|me.ExtendedOffset, "StartSoftwareDownloadRequest-Ext", decodeStartSoftwareDownloadRequestExtended)
 	LayerTypeDownloadSectionRequestExtended = mkLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionRequest-Ext", decodeDownloadSectionRequestExtended)
 	LayerTypeDownloadSectionLastRequestExtended = mkReqLayer(me.DownloadSection|me.ExtendedOffset, "DownloadLastSectionRequest-Ext", decodeDownloadSectionRequestExtended)
+	LayerTypeEndSoftwareDownloadRequestExtended = mkReqLayer(me.EndSoftwareDownload|me.ExtendedOffset, "EndSoftwareDownloadRequest-Ext", decodeEndSoftwareDownloadRequestExtended)
+	LayerTypeActivateSoftwareRequestExtended = mkReqLayer(me.ActivateSoftware|me.ExtendedOffset, "ActivateSoftwareRequest-Ext", decodeActivateSoftwareRequestExtended)
+	LayerTypeCommitSoftwareRequestExtended = mkReqLayer(me.CommitSoftware|me.ExtendedOffset, "CommitSoftwareRequest-Ext", decodeCommitSoftwareRequestExtended)
 	LayerTypeSynchronizeTimeRequestExtended = mkReqLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeRequest-Ext", decodeSynchronizeTimeRequestExtended)
 	LayerTypeRebootRequestExtended = mkReqLayer(me.Reboot|me.ExtendedOffset, "RebootRequest-Ext", decodeRebootRequestExtended)
 	LayerTypeGetCurrentDataRequestExtended = mkReqLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataRequest-Ext", decodeGetCurrentDataRequestExtended)
@@ -202,7 +214,11 @@ func init() {
 	LayerTypeMibUploadResponseExtended = mkRespLayer(me.MibUpload|me.ExtendedOffset, "MibUploadResponse-Ext", decodeMibUploadResponseExtended)
 	LayerTypeMibUploadNextResponseExtended = mkRespLayer(me.MibUploadNext|me.ExtendedOffset, "MibUploadNextResponse-Ext", decodeMibUploadNextResponseExtended)
 	LayerTypeMibResetResponseExtended = mkRespLayer(me.MibReset|me.ExtendedOffset, "MibResetResponse-Ext", decodeMibResetResponseExtended)
+	LayerTypeStartSoftwareDownloadResponseExtended = mkRespLayer(me.StartSoftwareDownload|me.ExtendedOffset, "StartSoftwareDownloadResponse-Ext", decodeStartSoftwareDownloadResponseExtended)
 	LayerTypeDownloadSectionResponseExtended = mkRespLayer(me.DownloadSection|me.ExtendedOffset, "DownloadSectionResponse-Ext", decodeDownloadSectionResponseExtended)
+	LayerTypeEndSoftwareDownloadResponseExtended = mkRespLayer(me.EndSoftwareDownload|me.ExtendedOffset, "EndSoftwareDownloadResponse-Ext", decodeEndSoftwareDownloadResponseExtended)
+	LayerTypeActivateSoftwareResponseExtended = mkRespLayer(me.ActivateSoftware|me.ExtendedOffset, "ActivateSoftwareResponse-Ext", decodeActivateSoftwareResponseExtended)
+	LayerTypeCommitSoftwareResponseExtended = mkRespLayer(me.CommitSoftware|me.ExtendedOffset, "CommitSoftwareResponse-Ext", decodeCommitSoftwareResponseExtended)
 	LayerTypeSynchronizeTimeResponseExtended = mkRespLayer(me.SynchronizeTime|me.ExtendedOffset, "SynchronizeTimeResponse-Ext", decodeSynchronizeTimeResponseExtended)
 	LayerTypeRebootResponseExtended = mkRespLayer(me.Reboot|me.ExtendedOffset, "RebootResponse-Ext", decodeRebootResponseExtended)
 	LayerTypeGetCurrentDataResponseExtended = mkRespLayer(me.GetCurrentData|me.ExtendedOffset, "GetCurrentDataResponse-Ext", decodeGetCurrentDataResponseExtended)
@@ -299,10 +315,21 @@ func init() {
 	nextLayerMapping[GetAllAlarmsResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetAllAlarmsResponseExtended
 	nextLayerMapping[GetAllAlarmsNextResponseType+ExtendedTypeDecodeOffset] = LayerTypeGetAllAlarmsNextResponseExtended
 
+	nextLayerMapping[StartSoftwareDownloadRequestType+ExtendedTypeDecodeOffset] = LayerTypeStartSoftwareDownloadRequestExtended
+	nextLayerMapping[StartSoftwareDownloadResponseType+ExtendedTypeDecodeOffset] = LayerTypeStartSoftwareDownloadResponseExtended
 	// For Download section, AR=0 if not response expected, AR=1 if response expected (last section of a window)
 	nextLayerMapping[DownloadSectionRequestType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionRequestExtended
 	nextLayerMapping[DownloadSectionRequestWithResponseType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionLastRequestExtended
 	nextLayerMapping[DownloadSectionResponseType+ExtendedTypeDecodeOffset] = LayerTypeDownloadSectionResponseExtended
+
+	nextLayerMapping[EndSoftwareDownloadRequestType+ExtendedTypeDecodeOffset] = LayerTypeEndSoftwareDownloadRequestExtended
+	nextLayerMapping[EndSoftwareDownloadResponseType+ExtendedTypeDecodeOffset] = LayerTypeEndSoftwareDownloadResponseExtended
+
+	nextLayerMapping[ActivateSoftwareRequestType+ExtendedTypeDecodeOffset] = LayerTypeActivateSoftwareRequestExtended
+	nextLayerMapping[ActivateSoftwareResponseType+ExtendedTypeDecodeOffset] = LayerTypeActivateSoftwareResponseExtended
+
+	nextLayerMapping[CommitSoftwareRequestType+ExtendedTypeDecodeOffset] = LayerTypeCommitSoftwareRequestExtended
+	nextLayerMapping[CommitSoftwareResponseType+ExtendedTypeDecodeOffset] = LayerTypeCommitSoftwareResponseExtended
 
 	nextLayerMapping[AlarmNotificationType+ExtendedTypeDecodeOffset] = LayerTypeAlarmNotificationExtended
 	nextLayerMapping[AttributeValueChangeType+ExtendedTypeDecodeOffset] = LayerTypeAttributeValueChangeExtended

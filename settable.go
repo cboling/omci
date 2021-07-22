@@ -217,15 +217,7 @@ func (omci *SetTableResponse) NextLayerType() gopacket.LayerType {
 // DecodeFromBytes decodes the given bytes of a Set Table Response into this layer
 func (omci *SetTableResponse) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Common ClassID/EntityID decode in msgBase
-	hdrSize := 6 + 1
-
-	// TODO: Move following check into DecodeFromBytes once we have a chance to verify
-	//       ALL message type settings
-	if len(data) < hdrSize {
-		p.SetTruncated()
-		return errors.New("frame too small")
-	}
-	err := omci.MeBasePacket.DecodeFromBytes(data, p, hdrSize)
+	err := omci.MeBasePacket.DecodeFromBytes(data, p, 6+1)
 	if err != nil {
 		return err
 	}
