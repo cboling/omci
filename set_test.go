@@ -93,6 +93,30 @@ func TestSetRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestSetRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   SetRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &SetRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		AttributeMask: uint16(0x200),
+		Attributes:    me.AttributeValueMap{"AdministrativeState": byte(1)},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestSetResponseDecode(t *testing.T) {
 	goodMessage := "0107280a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -157,6 +181,30 @@ func TestSetResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+
+}
+
+func TestSetResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   SetResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &SetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result: me.Success,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 
 }
 

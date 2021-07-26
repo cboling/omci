@@ -138,6 +138,30 @@ func TestGetNextRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestGetNextRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   GetNextRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetNextRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x0202),
+		},
+		AttributeMask:  uint16(0x0400),
+		SequenceNumber: uint16(1),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestGetNextRequestSerializeExtended(t *testing.T) {
 	goodMessage := "285e5a0b00ab0202000404000001"
 
@@ -301,6 +325,34 @@ func TestGetNextResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetNextResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   GetNextResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	vlanOpTable := []byte{0x08, 0x03, 0x34, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}
+
+	request := &GetNextResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x0202),
+		},
+		Result:        me.Success,
+		AttributeMask: uint16(0x0400),
+		Attributes:    me.AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": vlanOpTable},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestGetNextResponseSerializeExtended(t *testing.T) {

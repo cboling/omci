@@ -95,6 +95,29 @@ func TestRebootRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestRebootRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   RebootRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &RebootRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuGClassID,
+			// Default Instance ID is 0
+		},
+		RebootCondition: uint8(2),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestRebootResponseDecode(t *testing.T) {
 	goodMessage := "023c390a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -162,6 +185,29 @@ func TestRebootResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestRebootResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   RebootResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &RebootResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result: me.DeviceBusy,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedRebootRequestDecode(t *testing.T) {

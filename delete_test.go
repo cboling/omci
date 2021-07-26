@@ -92,6 +92,28 @@ func TestDeleteRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestDeleteRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0000,
+		MessageType:   DeleteRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &DeleteRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x202),
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestDeleteResponseDecode(t *testing.T) {
 	goodMessage := "0211260a00ab0202000000000000000000000000000000000000000000000000000000000000000000000028013437fb"
 	data, err := stringToPacket(goodMessage)
@@ -157,6 +179,29 @@ func TestDeleteResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestDeleteResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   DeleteResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &DeleteResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x202),
+		},
+		Result: me.Success,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedDeleteRequestDecode(t *testing.T) {

@@ -142,6 +142,38 @@ func TestCreateRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestCreateRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0000,
+		MessageType:   CreateRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &CreateRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.GemPortNetworkCtpClassID,
+			EntityInstance: uint16(0x100),
+		},
+		Attributes: me.AttributeValueMap{
+			"PortId":                              0x400,
+			"TContPointer":                        0x8000,
+			"Direction":                           3,
+			"TrafficManagementPointerForUpstream": 0x100,
+			"TrafficDescriptorProfilePointerForUpstream":   0,
+			"PriorityQueuePointerForDownStream":            0,
+			"TrafficDescriptorProfilePointerForDownstream": 0,
+			"EncryptionKeyRing":                            0,
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestCreateResponseDecode(t *testing.T) {
 	goodMessage := "0157240a01100001000000000000000000000000000000000000000000000000000000000000000000000028a9ccbeb9"
 	data, err := stringToPacket(goodMessage)
@@ -207,6 +239,30 @@ func TestCreateResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestCreateResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   CreateResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &CreateResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.GalEthernetProfileClassID,
+			EntityInstance: uint16(1),
+		},
+		Result:                 me.Success,
+		AttributeExecutionMask: uint16(0),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedCreateRequestDecode(t *testing.T) {

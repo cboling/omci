@@ -151,7 +151,6 @@ func (omci *OMCI) CanDecode() gopacket.LayerClass {
 
 // NextLayerType returns the layer type contained by this DecodingLayer.
 func (omci *OMCI) NextLayerType() gopacket.LayerType {
-
 	if next, ok := nextLayerMapping[omci.MessageType]; ok {
 		return next
 	}
@@ -169,7 +168,7 @@ func (omci *OMCI) LayerContents() []byte {
 
 func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	// Allow baseline messages without Length & MIC, but no less
-	if len(data) < 10 {
+	if len(data) < 4 {
 		p.SetTruncated()
 		return errors.New("frame header too small")
 	}
@@ -182,11 +181,17 @@ func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	case BaselineIdent:
 		if len(data) < MaxBaselineLength-8 {
 			p.SetTruncated()
-			return errors.New("frame too small")
+			return fmt.Errorf("frame too small. OMCI baseline frame length %v, %v required",
+				len(data), MaxBaselineLength-8)
 		}
 		return omci.DecodeFromBytes(data, p)
 
 	case ExtendedIdent:
+		if len(data) < 10 {
+			p.SetTruncated()
+			return fmt.Errorf("frame too small. OMCI minimal extended frame length %v, 10 required",
+				len(data))
+		}
 		return omci.DecodeFromBytes(data, p)
 	}
 }
@@ -216,10 +221,7 @@ func calculateMicAes128(data []byte) (uint32, error) {
 
 // DecodeFromBytes will decode the OMCI layer of a packet/message
 func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	if len(data) < 10 {
-		p.SetTruncated()
-		return errors.New("frame too small")
-	}
+	// Minimal Baseline and Extended message set length has already been checked
 	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
 	omci.MessageType = MessageType(data[2])
 	omci.DeviceIdentifier = DeviceIdent(data[3])
@@ -290,9 +292,15 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		return err
 	}
 	// OMCI layer error checks
-	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
-	if omci.TransactionID == 0 && !isNotification {
+	// Self-initiated Test Results have a TID of 0, OLT-requested do not.
+	isNotification := omci.MessageType == AlarmNotificationType ||
+		omci.MessageType == AttributeValueChangeType
+
+	if omci.TransactionID == 0 && !isNotification && omci.MessageType != TestResultType {
 		return errors.New("omci Transaction ID is zero for non-Notification type message")
+	}
+	if omci.TransactionID != 0 && isNotification {
+		return errors.New("omci Transaction ID is not zero for Notification type message")
 	}
 	if omci.DeviceIdentifier == 0 {
 		omci.DeviceIdentifier = BaselineIdent // Allow uninitialized device identifier

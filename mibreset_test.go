@@ -92,6 +92,28 @@ func TestMibResetRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestMibResetRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   MibResetRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &MibResetRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuDataClassID,
+			// Default Instance ID is 0
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestMibResetResponseDecode(t *testing.T) {
 	goodMessage := "00012F0A00020000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -155,6 +177,28 @@ func TestMibResetResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestMibResetResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   MibResetResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &MibResetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuDataClassID,
+			// Default Instance ID is 0
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedMibResetRequestDecode(t *testing.T) {

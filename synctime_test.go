@@ -102,6 +102,34 @@ func TestSynchronizeTimeRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestSynchronizeTimeRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   SynchronizeTimeRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &SynchronizeTimeRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass: me.OnuGClassID,
+			// Default Instance ID is 0
+		},
+		Year:   uint16(2018),
+		Month:  uint8(12),
+		Day:    uint8(1),
+		Hour:   uint8(01),
+		Minute: uint8(48),
+		Second: uint8(27),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestSynchronizeTimeResponseDecode(t *testing.T) {
 	goodMessage := "0109380a01000000000000000000000000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -166,6 +194,30 @@ func TestSynchronizeTimeResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestSynchronizeTimeResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   SynchronizeTimeResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &SynchronizeTimeResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result:         me.Success,
+		SuccessResults: uint8(0),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedSynchronizeTimeRequestDecode(t *testing.T) {

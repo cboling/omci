@@ -28,6 +28,51 @@ import (
 	"testing"
 )
 
+var allBaselineTypes = []MessageType{
+	CreateRequestType,
+	CreateResponseType,
+	DeleteRequestType,
+	DeleteResponseType,
+	SetRequestType,
+	SetResponseType,
+	GetRequestType,
+	GetResponseType,
+	GetAllAlarmsRequestType,
+	GetAllAlarmsResponseType,
+	GetAllAlarmsNextRequestType,
+	GetAllAlarmsNextResponseType,
+	MibUploadRequestType,
+	MibUploadResponseType,
+	MibUploadNextRequestType,
+	MibUploadNextResponseType,
+	MibResetRequestType,
+	MibResetResponseType,
+	TestRequestType,
+	TestResponseType,
+	StartSoftwareDownloadRequestType,
+	StartSoftwareDownloadResponseType,
+	DownloadSectionRequestType,
+	DownloadSectionRequestWithResponseType,
+	DownloadSectionResponseType,
+	EndSoftwareDownloadRequestType,
+	EndSoftwareDownloadResponseType,
+	ActivateSoftwareRequestType,
+	ActivateSoftwareResponseType,
+	CommitSoftwareRequestType,
+	CommitSoftwareResponseType,
+	SynchronizeTimeRequestType,
+	SynchronizeTimeResponseType,
+	RebootRequestType,
+	RebootResponseType,
+	GetNextRequestType,
+	GetNextResponseType,
+	GetCurrentDataRequestType,
+	GetCurrentDataResponseType,
+	AlarmNotificationType,
+	AttributeValueChangeType,
+	TestResultType,
+}
+
 func stringToPacket(input string) ([]byte, error) {
 	var p []byte
 
@@ -125,51 +170,7 @@ func TestOmciHeaderVeryShort(t *testing.T) {
 }
 
 func TestOmciHeaderBaselineShort(t *testing.T) {
-	msgTypes := []MessageType{
-		CreateRequestType,
-		CreateResponseType,
-		DeleteRequestType,
-		DeleteResponseType,
-		SetRequestType,
-		SetResponseType,
-		GetRequestType,
-		GetResponseType,
-		GetAllAlarmsRequestType,
-		GetAllAlarmsResponseType,
-		GetAllAlarmsNextRequestType,
-		GetAllAlarmsNextResponseType,
-		MibUploadRequestType,
-		MibUploadResponseType,
-		MibUploadNextRequestType,
-		MibUploadNextResponseType,
-		MibResetRequestType,
-		MibResetResponseType,
-		TestRequestType,
-		TestResponseType,
-		StartSoftwareDownloadRequestType,
-		StartSoftwareDownloadResponseType,
-		DownloadSectionRequestType,
-		DownloadSectionRequestWithResponseType,
-		DownloadSectionResponseType,
-		EndSoftwareDownloadRequestType,
-		EndSoftwareDownloadResponseType,
-		ActivateSoftwareRequestType,
-		ActivateSoftwareResponseType,
-		CommitSoftwareRequestType,
-		CommitSoftwareResponseType,
-		SynchronizeTimeRequestType,
-		SynchronizeTimeResponseType,
-		RebootRequestType,
-		RebootResponseType,
-		GetNextRequestType,
-		GetNextResponseType,
-		GetCurrentDataRequestType,
-		GetCurrentDataResponseType,
-		AlarmNotificationType,
-		AttributeValueChangeType,
-		TestResultType,
-	}
-	for _, msgType := range msgTypes {
+	for _, msgType := range allBaselineTypes {
 		// Smallest message baseline is 40 bytes (length and MIC optional)
 		tid := 1
 		if msgType == AlarmNotificationType || msgType == AttributeValueChangeType {
@@ -232,4 +233,49 @@ func TestBad2017_G_988(t *testing.T) {
 	assert.NotNil(t, omciErr)
 	assert.Equal(t, omciErr.StatusCode(), Success)
 	assert.Equal(t, EthernetFrameExtendedPm64BitClassID, instance.GetClassID())
+}
+
+func TestBaselineBadLenSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID:    0x0211,
+		MessageType:      DeleteResponseType,
+		DeviceIdentifier: BaselineIdent,
+		Length:           39, // Must be 0 or 40
+	}
+	request := &DeleteResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x202),
+		},
+		Result: Success,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
+func TestBadIdentSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID:    0x0211,
+		MessageType:      DeleteResponseType,
+		DeviceIdentifier: DeviceIdent(1), // Default is Baseline (0xa), other is Extended (0xb)
+	}
+	request := &DeleteResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x202),
+		},
+		Result: Success,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }

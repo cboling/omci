@@ -149,8 +149,41 @@ func TestGenericTestResultSerialize(t *testing.T) {
 	goodMessage := "00001b0a01000000" + payload + "00000028"
 
 	omciLayer := &OMCI{
-		// TransactionID: 0x0c,						// Optional for notifications since TID always 0x0000
-		MessageType: TestResultType,
+		TransactionID: 0x0000, // Optional for notifications since TID always 0x0000
+		MessageType:   TestResultType,
+		// DeviceIdentifier: omci.BaselineIdent,    // Optional, defaults to Baseline
+		// Length:           0x28,					// Optional, defaults to 40 octets
+	}
+	data, derr := stringToPacket(payload)
+	assert.NoError(t, derr)
+
+	request := &TestResultNotification{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.OnuGClassID,
+			EntityInstance: uint16(0),
+		},
+		Payload: data,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.NoError(t, err)
+
+	outgoingPacket := buffer.Bytes()
+	reconstituted := packetToString(outgoingPacket)
+	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGenericTestResultNonZeroTICSerialize(t *testing.T) {
+	payload := "1234567891234567890123456789012345678901234567890123456789012345"
+	goodMessage := "12341b0a01000000" + payload + "00000028"
+
+	omciLayer := &OMCI{
+		TransactionID: 0x1234,
+		MessageType:   TestResultType,
 		// DeviceIdentifier: omci.BaselineIdent,    // Optional, defaults to Baseline
 		// Length:           0x28,					// Optional, defaults to 40 octets
 	}

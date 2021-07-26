@@ -94,6 +94,29 @@ func TestGetRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestGetRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0000,
+		MessageType:   GetRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.AniGClassID,
+			EntityInstance: uint16(0),
+		},
+		AttributeMask: uint16(0x0044),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestGetResponseDecode(t *testing.T) {
 	goodMessage := "035e290a01070000000044dbcb05f10000000000000000000000000000000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -162,6 +185,33 @@ func TestGetResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   GetResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.AniGClassID,
+			EntityInstance: uint16(0),
+		},
+		Result:        0,
+		AttributeMask: uint16(0x0044),
+		Attributes: me.AttributeValueMap{
+			"TransmitOpticalLevel": uint16(0x05f1),
+			"OpticalSignalLevel":   uint16(0xdbcb)},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 ///////////////////////////////////////////////////////////////////////

@@ -105,6 +105,33 @@ func TestAttributeValueChangeSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestAttributeValueChangeNonZeroTicSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 1,
+		MessageType:   AttributeValueChangeType,
+	}
+	request := &AttributeValueChangeMsg{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.SoftwareImageClassID,
+			EntityInstance: uint16(0),
+		},
+		AttributeMask: uint16(0x8000),
+		Attributes: me.AttributeValueMap{
+			"Version": []byte{
+				0x4d, 0x4c, 0x2d, 0x33, 0x36, 0x32, 0x36,
+				0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			},
+		},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestExtendedAttributeValueChangeDecode(t *testing.T) {
 	// Software Image Version (14 bytes) AVC
 	goodMessage := "0000110b00070000001080004d4c2d3336323600000000000000"

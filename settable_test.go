@@ -400,6 +400,39 @@ func TestSetTableRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestSetTableRequestZeroTICSerialize(t *testing.T) {
+	// Single row
+	row := "F0000001" + "F0000002" + "00000003" + "00000004"
+	rowData, rErr := stringToPacket(row)
+	assert.NoError(t, rErr)
+
+	omciLayer := &OMCI{
+		TransactionID:    0x0,
+		MessageType:      SetTableRequestType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	tableRow := me.TableRows{
+		NumRows: 1,
+		Rows:    rowData,
+	}
+	request := &SetTableRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x1234),
+			Extended:       true,
+		},
+		AttributeMask: uint16(0x0400),
+		Attributes:    me.AttributeValueMap{"ReceivedFrameVlanTaggingOperationTable": tableRow},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestSetTableRequestSerializeZeroRows(t *testing.T) {
 	// No rows is sort of dumb on a set but technically it is allowed
 	goodMessage := "01075d0b00AB123400020400"
@@ -711,4 +744,27 @@ func TestSetTableResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestSetTableResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID:    0x0,
+		MessageType:      SetTableResponseType,
+		DeviceIdentifier: ExtendedIdent,
+	}
+	request := &SetTableResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityInstance: uint16(0x1234),
+			Extended:       true,
+		},
+		Result: me.ParameterError,
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }

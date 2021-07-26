@@ -636,6 +636,7 @@ func TestGetAllAlarmsNextResponseSerializeExtended(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
 func TestGetAllAlarmsNextResponseSerializeExtendedTwoBitmaps(t *testing.T) {
 	alarm1 := "000b010280000000000000000000000000000000000000000000000000000000"
 	alarm2 := "000b010380000000000000000000000000000000000000000000000000000000"
@@ -677,6 +678,7 @@ func TestGetAllAlarmsNextResponseSerializeExtendedTwoBitmaps(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
 func TestGetAllAlarmsNextResponseBadCommandNumberDecode(t *testing.T) {
 	// Test of a GetNext Response that results when an invalid command number
 	// is requested. In the case where the ONU receives a get all alarms next
@@ -692,8 +694,6 @@ func TestGetAllAlarmsNextResponseBadCommandNumberSerialize(t *testing.T) {
 	// is requested.
 	//TODO: Implement
 }
-
-// TODO: Create request/response tests for all of the following types -> SetTable
 
 func TestAlarmNotificationDecode(t *testing.T) {
 	goodMessage := "0000100a000b0104800000000000000000000000000000000000000000000000000000000000000500000028"
@@ -906,6 +906,33 @@ func TestAlarmNotificationSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestAlarmNotificationSerializeNonZeroTIC(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 1,
+		MessageType:   AlarmNotificationType,
+	}
+	request := &AlarmNotificationMsg{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.PhysicalPathTerminationPointEthernetUniClassID,
+			EntityInstance: uint16(0x104),
+		},
+		AlarmBitmap: [28]byte{
+			0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+			0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		},
+		AlarmSequenceNumber: byte(5),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestExtendedAlarmNotificationDecode(t *testing.T) {
 	//                                   1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8
 	goodMessage := "0000100b000b0104001d8000000000000000000000000000000000000000000000000000000005"
@@ -1004,4 +1031,42 @@ func TestExtendedAlarmNotificationSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestAlarmDecodesOmciLayerHeaderTooSmall(t *testing.T) {
+	// Baseline is always checked for < 40 octets and that test is in mebase_test.go. And
+	// that test also handles Extended message set where the length field is short. This
+	// test for a valid length field but no message content past that.
+	getAllAlarmsRequestExt := "04454b0b000200000000"
+	getAllAlarmsResponseExt := "04452b0b000200000000"
+	getAllAlarmsNextRequestExt := "02344c0b000200000000"
+	alarmNotificationExt := "0000100b000b01040000"
+
+	frames := []string{
+		getAllAlarmsRequestExt,
+		getAllAlarmsResponseExt,
+		getAllAlarmsNextRequestExt,
+		alarmNotificationExt,
+	}
+	for _, frame := range frames {
+		data, err := stringToPacket(frame)
+		assert.NoError(t, err)
+
+		// Should get packet but with error layer
+		packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+		assert.NotNil(t, packet)
+
+		// OMCI layer should be present (but not message type specific layer)
+		omciLayer := packet.Layer(LayerTypeOMCI)
+		assert.NotNil(t, omciLayer)
+
+		// And there is an error layer. Since OMCI, we only have two OMCI and
+		// the message type layer (which should be the failed one)
+		assert.Equal(t, 2, len(packet.Layers()))
+		errLayer := packet.ErrorLayer()
+		assert.NotNil(t, errLayer)
+		metaData := packet.Metadata()
+		assert.NotNil(t, metaData)
+		assert.True(t, metaData.Truncated)
+	}
 }

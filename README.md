@@ -21,9 +21,9 @@ and additional feature support will typically result in incrementing the second 
 ## Current user-test coverage
 
 The _**make** test_ command can be used to create code coverage support for the
-library. The current coverage for version 2.5.0 (as of 7/22/2021) is:
+library. The current coverage for version 2.5.1 (as of 7/26/2021) is:
 
-Entire Project:         96% of files and 65.7% of statements
+Entire Project:         96% of files and 66.1% of statements
 Generated Subdirectory: 96.9% of files and 36.4% of statements
 meframe Subdirectory:   80% of files and 55.4% of statements
 
@@ -31,7 +31,7 @@ Main Message Directory (below):
 
 | File            | Coverage |
 | --------------: | :---: |
-| alarms.go       | 73.2% |
+| alarms.go       | 74.3% |
 | avc.go          | 86%   |
 | create.go       | 82.5% |
 | delete.go       | 85.5% |
@@ -39,11 +39,11 @@ Main Message Directory (below):
 | getcurrent.go   | 69.4% |
 | getnext.go      | 79.3% |
 | layers.go       | 100%  |
-| mebase.go       | 81.5% |
+| mebase.go       | 93.3% |
 | messagetypes.go | 100%  |
 | mibreset.go     | 76.6% |
 | mibupload.go    | 77%   |
-| omci.go         | 84%   |
+| omci.go         | 90.6% |
 | reboot.go       | 81.2% |
 | set.go          | 77.3% |
 | settable.go     | 81.5% |

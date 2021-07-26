@@ -19,7 +19,6 @@ package omci
 
 import (
 	"encoding/binary"
-	"errors"
 	"fmt"
 	me "github.com/cboling/omci/generated"
 	"github.com/google/gopacket"
@@ -70,7 +69,12 @@ func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
 func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder, contentSize int) error {
 	if len(data) < contentSize {
 		p.SetTruncated()
-		return errors.New("frame too small")
+		layerType := msg.LayerType().String()
+		if msg.Extended {
+			layerType += " (extended)"
+		}
+		return fmt.Errorf("frame header too small. %v header length %v, %v required",
+			layerType, len(data), contentSize)
 	}
 	msg.EntityClass = me.ClassID(binary.BigEndian.Uint16(data[0:]))
 	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])

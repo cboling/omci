@@ -95,6 +95,29 @@ func TestGetCurrentDataRequestSerialize(t *testing.T) {
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
 
+func TestGetCurrentDataRequestZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   GetCurrentDataRequestType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetCurrentDataRequest{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.EthernetFrameExtendedPm64BitClassID,
+			EntityInstance: uint16(0),
+		},
+		AttributeMask: uint16(0x0044),
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
+}
+
 func TestGetCurrentDataResponseDecode(t *testing.T) {
 	goodMessage := "035e3c0a01a90000000044123456781234dbcb432187654321dac1000000000000000000000000000028"
 	data, err := stringToPacket(goodMessage)
@@ -171,6 +194,35 @@ func TestGetCurrentDataResponseSerialize(t *testing.T) {
 	outgoingPacket := buffer.Bytes()
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
+}
+
+func TestGetCurrentDataResponseZeroTICSerialize(t *testing.T) {
+	omciLayer := &OMCI{
+		TransactionID: 0x0,
+		MessageType:   GetCurrentDataResponseType,
+		// DeviceIdentifier: omci.BaselineIdent,		// Optional, defaults to Baseline
+		// Length:           0x28,						// Optional, defaults to 40 octets
+	}
+	request := &GetCurrentDataResponse{
+		MeBasePacket: MeBasePacket{
+			EntityClass:    me.EthernetFrameExtendedPm64BitClassID,
+			EntityInstance: uint16(0),
+		},
+		Result:        0,
+		AttributeMask: uint16(0x0044),
+		Attributes: me.AttributeValueMap{
+			"OversizeFrames":       uint64(0x123456781234dbcb),
+			"Frames256To511Octets": uint64(0x432187654321dac1),
+			// BroadcastFrames can be supplied but will not be encoded since not in attribute mask.
+			"BroadcastFrames": uint64(0x0123456789abcdef)},
+	}
+	// Test serialization back to former string
+	var options gopacket.SerializeOptions
+	options.FixLengths = true
+
+	buffer := gopacket.NewSerializeBuffer()
+	err := gopacket.SerializeLayers(buffer, options, omciLayer, request)
+	assert.Error(t, err)
 }
 
 func TestExtendedGetCurrentDataRequestDecode(t *testing.T) {
