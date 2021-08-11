@@ -126,28 +126,30 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("Ripolicyds", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2:  ByteField("Ripolicyus", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
-			3:  ByteField("ReinitTimeThresholdds", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4:  ByteField("ReinitTimeThresholdus", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5:  ByteField("Rxrefvnsfus", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
-			6:  ByteField("Txrefvnsfds", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  ByteField("RtxModeds", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("RtxModeus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("LeftrThresh", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: ByteField("MaxdelayoctetSplitParameterMdosplit", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: ByteField("AttndrMethodAttndrMethod", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("Ripolicyds", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, true, false, 1),
+			2:  ByteField("Ripolicyus", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, true, false, 2),
+			3:  ByteField("ReinitTimeThresholdds", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4:  ByteField("ReinitTimeThresholdus", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5:  ByteField("Rxrefvnsfus", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
+			6:  ByteField("Txrefvnsfds", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  ByteField("RtxModeds", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("RtxModeus", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("LeftrThresh", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: ByteField("MaxdelayoctetSplitParameterMdosplit", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: ByteField("AttndrMethodAttndrMethod", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("AttndrMaxdelayoctetSplitParameterAttndrMdosplit", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVdsl2LineConfigurationExtensions3 (class ID 410 creates the basic
+// NewVdsl2LineConfigurationExtensions3 (class ID 410) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVdsl2LineConfigurationExtensions3(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*vdsl2lineconfigurationextensions3BME, params...)
 }

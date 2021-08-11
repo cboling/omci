@@ -89,24 +89,26 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("BridgeMacAddress", 6, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("BridgePriority", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: Uint64Field("DesignatedRoot", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("RootPathCost", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: ByteField("BridgePortCount", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint16Field("RootPortNum", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint16Field("HelloTime", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8: Uint16Field("ForwardDelay", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: MultiByteField("BridgeMacAddress", OctetsAttributeType, 0x8000, 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("BridgePriority", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: MultiByteField("DesignatedRoot", OctetsAttributeType, 0x2000, 8, toOctets("AAAAAAAAAAA="), mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("RootPathCost", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: ByteField("BridgePortCount", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint16Field("RootPortNum", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: Uint16Field("HelloTime", UnsignedIntegerAttributeType, 0x0200, 256, mapset.NewSetWith(Read), false, true, false, 7),
+			8: Uint16Field("ForwardDelay", UnsignedIntegerAttributeType, 0x0100, 1024, mapset.NewSetWith(Read), false, true, false, 8),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMacBridgeConfigurationData (class ID 46 creates the basic
+// NewMacBridgeConfigurationData (class ID 46) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgeConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeconfigurationdataBME, params...)
 }

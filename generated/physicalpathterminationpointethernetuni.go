@@ -128,31 +128,36 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("ExpectedType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("SensedType", 0, mapset.NewSetWith(Read), true, false, false, false, 2),
-			3:  ByteField("AutoDetectionConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  ByteField("EthernetLoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 6),
-			7:  ByteField("ConfigurationInd", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint16Field("MaxFrameSize", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("DteOrDceInd", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: Uint16Field("PauseTime", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: ByteField("BridgedOrIpInd", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 12),
-			13: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: ByteField("PppoeFilter", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
-			15: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("ExpectedType", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("SensedType", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, false, false, 2),
+			3:  ByteField("AutoDetectionConfiguration", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  ByteField("EthernetLoopbackConfiguration", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  ByteField("AdministrativeState", EnumerationAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  ByteField("OperationalState", EnumerationAttributeType, 0x0400, 0, mapset.NewSetWith(Read), true, true, false, 6),
+			7:  ByteField("ConfigurationInd", EnumerationAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint16Field("MaxFrameSize", UnsignedIntegerAttributeType, 0x0100, 1518, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("DteOrDceInd", EnumerationAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: Uint16Field("PauseTime", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: ByteField("BridgedOrIpInd", EnumerationAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("Arc", EnumerationAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), true, true, false, 12),
+			13: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: ByteField("PppoeFilter", EnumerationAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+			15: ByteField("PowerControl", EnumerationAttributeType, 0x0002, 0, mapset.NewSetWith(Read, Write), false, true, false, 15),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "LAN-LOS",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointEthernetUni (class ID 11 creates the basic
+// NewPhysicalPathTerminationPointEthernetUni (class ID 11) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointEthernetUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointethernetuniBME, params...)
 }

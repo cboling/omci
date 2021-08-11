@@ -137,31 +137,33 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  Uint64Field("XtuCG9941VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint64Field("XtuRG9941VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint64Field("XtuCSystemVendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint64Field("XtuRSystemVendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  MultiByteField("XtuCVersionNumber", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  MultiByteField("XtuRVersionNumber", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  MultiByteField("XtuCSerialNumberPart1", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  MultiByteField("XtuCSerialNumberPart2", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  MultiByteField("XtuRSerialNumberPart1", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: MultiByteField("XtuRSerialNumberPart2", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("XtuCSelfTestResults", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("XtuRSelfTestResults", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: MultiByteField("XtuCTransmissionSystemCapability", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: MultiByteField("XtuRTransmissionSystemCapability", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: ByteField("InitializationSuccessFailureCause", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  Uint64Field("XtuCG9941VendorId", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint64Field("XtuRG9941VendorId", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3:  Uint64Field("XtuCSystemVendorId", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint64Field("XtuRSystemVendorId", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  MultiByteField("XtuCVersionNumber", OctetsAttributeType, 0x0800, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 5),
+			6:  MultiByteField("XtuRVersionNumber", OctetsAttributeType, 0x0400, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 6),
+			7:  MultiByteField("XtuCSerialNumberPart1", OctetsAttributeType, 0x0200, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 7),
+			8:  MultiByteField("XtuCSerialNumberPart2", OctetsAttributeType, 0x0100, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 8),
+			9:  MultiByteField("XtuRSerialNumberPart1", OctetsAttributeType, 0x0080, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 9),
+			10: MultiByteField("XtuRSerialNumberPart2", OctetsAttributeType, 0x0040, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("XtuCSelfTestResults", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("XtuRSelfTestResults", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: MultiByteField("XtuCTransmissionSystemCapability", OctetsAttributeType, 0x0008, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 13),
+			14: MultiByteField("XtuRTransmissionSystemCapability", OctetsAttributeType, 0x0004, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 14),
+			15: ByteField("InitializationSuccessFailureCause", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineInventoryAndStatusDataPart1 (class ID 100 creates the basic
+// NewXdslLineInventoryAndStatusDataPart1 (class ID 100) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineInventoryAndStatusDataPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineinventoryandstatusdatapart1BME, params...)
 }

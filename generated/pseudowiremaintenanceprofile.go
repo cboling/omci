@@ -126,32 +126,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("JitterBufferMaximumDepth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
-			2:  Uint16Field("JitterBufferDesiredDepth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
-			3:  ByteField("FillPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4:  ByteField("MisconnectedPacketsDeclarationPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5:  ByteField("MisconnectedPacketsClearPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6:  ByteField("LossOfPacketsDeclarationPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
-			7:  ByteField("LossOfPacketsClearPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 8),
-			9:  ByteField("BufferOverrunUnderrunClearPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
-			10: ByteField("MalformedPacketsDeclarationPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
-			11: ByteField("MalformedPacketsClearPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 11),
-			12: ByteField("RBitTransmitSetPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 12),
-			13: ByteField("RBitTransmitClearPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 13),
-			14: ByteField("RBitReceivePolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
-			15: ByteField("LBitReceivePolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
-			16: Uint16Field("SesThreshold", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("JitterBufferMaximumDepth", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 1),
+			2:  Uint16Field("JitterBufferDesiredDepth", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
+			3:  ByteField("FillPolicy", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4:  ByteField("MisconnectedPacketsDeclarationPolicy", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5:  ByteField("MisconnectedPacketsClearPolicy", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6:  ByteField("LossOfPacketsDeclarationPolicy", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 6),
+			7:  ByteField("LossOfPacketsClearPolicy", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
+			8:  ByteField("BufferOverrunUnderrunDeclarationPolicy", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 8),
+			9:  ByteField("BufferOverrunUnderrunClearPolicy", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 9),
+			10: ByteField("MalformedPacketsDeclarationPolicy", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 10),
+			11: ByteField("MalformedPacketsClearPolicy", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 11),
+			12: ByteField("RBitTransmitSetPolicy", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 12),
+			13: ByteField("RBitTransmitClearPolicy", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 13),
+			14: ByteField("RBitReceivePolicy", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 14),
+			15: ByteField("LBitReceivePolicy", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 15),
+			16: Uint16Field("SesThreshold", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 16),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewPseudowireMaintenanceProfile (class ID 284 creates the basic
+// NewPseudowireMaintenanceProfile (class ID 284) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPseudowireMaintenanceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*pseudowiremaintenanceprofileBME, params...)
 }

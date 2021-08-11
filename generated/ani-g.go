@@ -66,7 +66,7 @@ var anigBME *ManagedEntityDefinition
 //			threshold to detect the SF alarm. When this value is y, the BER threshold is 10-y. Valid values
 //			are 3..8. Upon ME instantiation, the ONU sets this attribute to 5. (R,-W) (mandatory) (1-byte)
 //
-//		Signal Degrade Sd  Threshold
+//		Signal Degrade Threshold
 //			Signal degrade (SD) threshold: This attribute specifies the downstream BER threshold to detect
 //			the SD alarm. When this value is x, the BER threshold for SD is 10-x. Valid values are 4..10.
 //			The SD threshold must be lower than the SF threshold; i.e., x-> y. Upon ME instantiation, the
@@ -129,32 +129,43 @@ func init() {
 			Set,
 			Test,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("SrIndication", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("TotalTcontNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint16Field("GemBlockLength", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  ByteField("PiggybackDbaReporting", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  ByteField("Deprecated", 0, mapset.NewSetWith(Read), false, false, false, true, 5),
-			6:  ByteField("SignalFailThreshold", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("SignalDegradeSdThreshold", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 8),
-			9:  ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: Uint16Field("OpticalSignalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: ByteField("LowerOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("UpperOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint16Field("OnuResponseTime", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
-			14: Uint16Field("TransmitOpticalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
-			15: ByteField("LowerTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
-			16: ByteField("UpperTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("SrIndication", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("TotalTcontNumber", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3:  Uint16Field("GemBlockLength", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  ByteField("PiggybackDbaReporting", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  ByteField("Deprecated", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, true, 5),
+			6:  ByteField("SignalFailThreshold", UnsignedIntegerAttributeType, 0x0400, 5, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("SignalDegradeThreshold", UnsignedIntegerAttributeType, 0x0200, 9, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("Arc", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), true, true, false, 8),
+			9:  ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: Uint16Field("OpticalSignalLevel", SignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: ByteField("LowerOpticalThreshold", SignedIntegerAttributeType, 0x0020, 255, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("UpperOpticalThreshold", SignedIntegerAttributeType, 0x0010, 255, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint16Field("OnuResponseTime", UnsignedIntegerAttributeType, 0x0008, 35000, mapset.NewSetWith(Read), false, true, false, 13),
+			14: Uint16Field("TransmitOpticalLevel", SignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, true, false, 14),
+			15: ByteField("LowerTransmitPowerThreshold", SignedIntegerAttributeType, 0x0002, 129, mapset.NewSetWith(Read, Write), false, true, false, 15),
+			16: ByteField("UpperTransmitPowerThreshold", SignedIntegerAttributeType, 0x0001, 129, mapset.NewSetWith(Read, Write), false, true, false, 16),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Low received optical power",
+			1: "High received optical power",
+			2: "SF",
+			3: "SD",
+			4: "Low transmit optical power",
+			5: "High transmit optical power",
+			6: "Laser bias current",
 		},
 	}
 }
 
-// NewAniG (class ID 263 creates the basic
+// NewAniG (class ID 263) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewAniG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*anigBME, params...)
 }

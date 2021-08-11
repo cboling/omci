@@ -82,24 +82,26 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
-			3: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
-			6: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Downstream", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, true, false, 1),
+			2: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Downstream", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, true, false, 2),
+			3: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Downstream", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Downstream", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: Uint16Field("XdslChannelConfigurationProfileForBearerChannel0Upstream", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
+			6: Uint16Field("XdslChannelConfigurationProfileForBearerChannel1Upstream", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7: Uint16Field("XdslChannelConfigurationProfileForBearerChannel2Upstream", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8: Uint16Field("XdslChannelConfigurationProfileForBearerChannel3Upstream", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, true, false, 8),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewPhysicalPathTerminationPointXdslUniPart2 (class ID 99 creates the basic
+// NewPhysicalPathTerminationPointXdslUniPart2 (class ID 99) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointXdslUniPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointxdslunipart2BME, params...)
 }

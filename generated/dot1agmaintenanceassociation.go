@@ -66,7 +66,7 @@ var dot1agmaintenanceassociationBME *ManagedEntityDefinition
 //			and the MA short name must be packed (with additional bytes) into 48-byte CFM message headers.
 //			(R,-W) (mandatory) (25-bytes * 2 attributes)
 //
-//		Continuity Check Message Ccm  Interval
+//		Continuity Check Message Ccm Interval
 //			Short intervals should be used judiciously, as they can interfere with the network's ability to
 //			handle subscriber traffic. The recommended value is 1-s. (R,-W, setbycreate) (mandatory)
 //			(1-byte)
@@ -101,23 +101,25 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("MdPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("ShortMaNameFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: MultiByteField("ShortMaName1,ShortMaName2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: ByteField("ContinuityCheckMessageCcmInterval", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: MultiByteField("AssociatedVlans", 24, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6: ByteField("MhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("MdPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("ShortMaNameFormat", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: MultiByteField("ShortMaName1,ShortMaName2", OctetsAttributeType, 0x2000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField("ContinuityCheckMessageCcmInterval", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: MultiByteField("AssociatedVlans", OctetsAttributeType, 0x0800, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6: ByteField("MhfCreation", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7: ByteField("SenderIdPermission", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1AgMaintenanceAssociation (class ID 300 creates the basic
+// NewDot1AgMaintenanceAssociation (class ID 300) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgMaintenanceAssociation(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agmaintenanceassociationBME, params...)
 }

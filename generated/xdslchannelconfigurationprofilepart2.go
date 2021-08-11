@@ -77,7 +77,7 @@ var xdslchannelconfigurationprofilepart2BME *ManagedEntityDefinition
 //			1 ms. The valid delay values are given in clause 7.3.2.12 of [ITU-T G.997.1]. (R,-W) (mandatory)
 //			(1-bytes)
 //
-//		Minimum Impulse Noise Protection Against Single High Impulse Noise Event Shine  For Retransmission Inpmin_Shine_Rtx
+//		Minimum Impulse Noise Protection Against Single High Impulse Noise Event Shine For Retransmission Inpmin_Shine_Rtx
 //			Minimum impulse noise protection against single high impulse noise event (SHINE) for
 //			retransmission (INPMIN_SHINE_RTX): If retransmission is used in a given transmit direction, this
 //			parameter specifies the minimum INP against a SHINE for the bearer channel if it is transported
@@ -143,29 +143,31 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  Uint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  Uint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  ByteField("MaximumDelayForRetransmissionDelaymaxRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  ByteField("MinimumDelayForRetransmissionDelayminRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  ByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("ShineratioRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
-			11: ByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 11),
-			12: Uint32Field("TargetNetDataRateTargetNdr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
-			13: Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 13),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint32Field("MinimumExpectedThroughputForRetransmissionMinetrRtx", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  Uint32Field("MaximumExpectedThroughputForRetransmissionMaxetrRtx", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  Uint32Field("MaximumNetDataRateForRetransmissionMaxndrRtx", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  ByteField("MaximumDelayForRetransmissionDelaymaxRtx", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  ByteField("MinimumDelayForRetransmissionDelayminRtx", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  ByteField("MinimumImpulseNoiseProtectionAgainstSingleHighImpulseNoiseEventShineForRetransmissionInpminShineRtx", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("MinimumImpulseNoiseProtectionAgainstShineForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ShineRtx", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("ShineratioRtx", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionInpminReinRtx", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: ByteField("MinimumImpulseNoiseProtectionAgainstReinForRetransmissionForSystemsUsing8625KhzSubcarrierSpacingInpmin8ReinRtx", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, false, false, 10),
+			11: ByteField("ReinInterArrivalTimeForRetransmissionIatReinRtx", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, false, false, 11),
+			12: Uint32Field("TargetNetDataRateTargetNdr", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, false, false, 12),
+			13: Uint32Field("TargetExpectedThroughputForRetransmissionTargetEtr", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, false, false, 13),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslChannelConfigurationProfilePart2 (class ID 412 creates the basic
+// NewXdslChannelConfigurationProfilePart2 (class ID 412) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslChannelConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslchannelconfigurationprofilepart2BME, params...)
 }

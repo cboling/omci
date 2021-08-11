@@ -63,18 +63,20 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: TableField("MeTypeTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 1),
-			2: TableField("MessageTypeTable", TableInfo{0, 1}, mapset.NewSetWith(Read), false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: TableField("MeTypeTable", TableAttributeType, 0x8000, TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 1),
+			2: TableField("MessageTypeTable", TableAttributeType, 0x4000, TableInfo{nil, 1}, mapset.NewSetWith(Read), false, false, false, 2),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewOmci (class ID 287 creates the basic
+// NewOmci (class ID 287) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewOmci(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*omciBME, params...)
 }

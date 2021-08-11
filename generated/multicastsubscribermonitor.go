@@ -83,22 +83,24 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint32Field("CurrentMulticastBandwidth", 0, mapset.NewSetWith(Read), false, false, true, false, 2),
-			3: Uint32Field("JoinMessagesCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4: Uint32Field("BandwidthExceededCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5: TableField("Ipv4ActiveGroupListTable", TableInfo{nil, 24}, mapset.NewSetWith(Read), false, false, false, 5),
-			6: TableField("Ipv6ActiveGroupListTable", TableInfo{nil, 58}, mapset.NewSetWith(Read), false, true, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("MeType", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint32Field("CurrentMulticastBandwidth", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, true, false, 2),
+			3: Uint32Field("JoinMessagesCounter", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4: Uint32Field("BandwidthExceededCounter", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5: TableField("Ipv4ActiveGroupListTable", TableAttributeType, 0x0800, TableInfo{nil, 24}, mapset.NewSetWith(Read), false, false, false, 5),
+			6: TableField("Ipv6ActiveGroupListTable", TableAttributeType, 0x0400, TableInfo{nil, 58}, mapset.NewSetWith(Read), false, true, false, 6),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMulticastSubscriberMonitor (class ID 311 creates the basic
+// NewMulticastSubscriberMonitor (class ID 311) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMulticastSubscriberMonitor(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*multicastsubscribermonitorBME, params...)
 }

@@ -93,26 +93,35 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("DownstreamMissingPacketsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("DownstreamReorderedPacketsCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5: Uint32Field("DownstreamMisorderedPacketsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint32Field("UpstreamTimeoutPacketsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint32Field("UpstreamTransmittedCellsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8: Uint32Field("UpstreamDroppedCellsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9: Uint32Field("UpstreamReceivedCellsCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("DownstreamMissingPacketsCounter", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("DownstreamReorderedPacketsCounter", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5: Uint32Field("DownstreamMisorderedPacketsCounter", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint32Field("UpstreamTimeoutPacketsCounter", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: Uint32Field("UpstreamTransmittedCellsCounter", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8: Uint32Field("UpstreamDroppedCellsCounter", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9: Uint32Field("UpstreamReceivedCellsCounter", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "Downstream missing packets",
+			2: "Downstream reordered packets",
+			3: "Downstream timeout packets",
+			4: "Upstream dropped cells",
 		},
 	}
 }
 
-// NewPwAtmPerformanceMonitoringHistoryData (class ID 338 creates the basic
+// NewPwAtmPerformanceMonitoringHistoryData (class ID 338) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPwAtmPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*pwatmperformancemonitoringhistorydataBME, params...)
 }

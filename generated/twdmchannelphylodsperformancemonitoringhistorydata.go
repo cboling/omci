@@ -133,31 +133,47 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("Bip32BitErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("CorrectedPsbdHecErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("UncorrectablePsbdHecErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("TotalNumberOfLodsEvents", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("LodsEventsResultingInReactivation", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint64Field("TotalReceivedWordsProtectedByBitInterleavedParity32Bip32", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("Bip32BitErrorCount", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("CorrectedPsbdHecErrorCount", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("UncorrectablePsbdHecErrorCount", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("CorrectedDownstreamFsHeaderHecErrorCount", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("UncorrectableDownstreamFsHeaderHecErrorCount", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("TotalNumberOfLodsEvents", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("LodsEventsRestoredInOperatingTwdmChannel", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("LodsEventsRestoredInProtectionTwdmChannel", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("LodsEventsRestoredInDiscretionaryTwdmChannel", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("LodsEventsResultingInReactivation", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToProtectionTwdmChannel", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint32Field("LodsEventsResultingInReactivationAfterRetuningToDiscretionaryTwdmChannel", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1:  "BIP-32 bit error count",
+			2:  "PSBd HEC errors - corrected",
+			3:  "PSBd HEC errors - uncorrectable",
+			4:  "FS header errors - corrected",
+			5:  "FS header errors - uncorrectable",
+			6:  "Total LODS event count",
+			7:  "LODS - restored in operating TWDM channel",
+			8:  "LODS - restored in protection TWDM channel",
+			9:  "LODS - restored in discretionary TWDM channel",
+			10: "LODS - reactivations",
+			11: "LODS - handshake failure in protection channel",
+			12: "LODS - handshake failure in discretionary channel",
 		},
 	}
 }
 
-// NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData (class ID 444 creates the basic
+// NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData (class ID 444) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelPhyLodsPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchannelphylodsperformancemonitoringhistorydataBME, params...)
 }

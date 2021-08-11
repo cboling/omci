@@ -72,19 +72,21 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: MultiByteField("VlanFilterList", 24, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("ForwardOperation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: ByteField("NumberOfEntries", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: MultiByteField("VlanFilterList", OctetsAttributeType, 0x8000, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("ForwardOperation", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: ByteField("NumberOfEntries", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVlanTaggingFilterData (class ID 84 creates the basic
+// NewVlanTaggingFilterData (class ID 84) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVlanTaggingFilterData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*vlantaggingfilterdataBME, params...)
 }

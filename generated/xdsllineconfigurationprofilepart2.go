@@ -148,31 +148,33 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
-			2:  Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
-			3:  Uint16Field("DownstreamDownshiftNoiseMargin", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4:  Uint16Field("UpstreamDownshiftNoiseMargin", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5:  Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6:  Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
-			7:  ByteField("XtuImpedanceStateForced", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8:  ByteField("L0Time", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("L2Time", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 11),
-			12: ByteField("DownstreamMaximumNominalAggregateTransmitPower", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 12),
-			13: ByteField("UpstreamMaximumNominalAggregateTransmitPower", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 13),
-			14: Uint16Field("UpstreamMaximumAggregateReceivePower", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: ByteField("Vdsl2TransmissionSystemEnabling", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("DownstreamMinimumTimeIntervalForUpshiftRateAdaptation", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 1),
+			2:  Uint16Field("UpstreamMinimumTimeIntervalForUpshiftRateAdaptation", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
+			3:  Uint16Field("DownstreamDownshiftNoiseMargin", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4:  Uint16Field("UpstreamDownshiftNoiseMargin", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5:  Uint16Field("DownstreamMinimumTimeIntervalForDownshiftRateAdaptation", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6:  Uint16Field("UpstreamMinimumTimeIntervalForDownshiftRateAdaptation", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 6),
+			7:  ByteField("XtuImpedanceStateForced", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
+			8:  ByteField("L0Time", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("L2Time", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: Uint16Field("DownstreamMaximumNominalPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: Uint16Field("UpstreamMaximumNominalPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 11),
+			12: ByteField("DownstreamMaximumNominalAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 12),
+			13: ByteField("UpstreamMaximumNominalAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 13),
+			14: Uint16Field("UpstreamMaximumAggregateReceivePower", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: ByteField("Vdsl2TransmissionSystemEnabling", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 15),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineConfigurationProfilePart2 (class ID 105 creates the basic
+// NewXdslLineConfigurationProfilePart2 (class ID 105) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineConfigurationProfilePart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineconfigurationprofilepart2BME, params...)
 }

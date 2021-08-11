@@ -91,25 +91,36 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("VciValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("VpNetworkCtpConnectivityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: ByteField("Deprecated1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 3),
-			4: Uint16Field("Deprecated2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 4),
-			5: Uint16Field("Aal5ProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: Uint16Field("Deprecated3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 6),
-			7: ByteField("AalLoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8: ByteField("PptpCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("VciValue", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("VpNetworkCtpConnectivityPointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: ByteField("Deprecated1", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 3),
+			4: Uint16Field("Deprecated2", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 4),
+			5: Uint16Field("Aal5ProfilePointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6: Uint16Field("Deprecated3", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 6),
+			7: ByteField("AalLoopbackConfiguration", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8: ByteField("PptpCounter", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9: ByteField("OperationalState", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), true, true, false, 9),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "End-to-end VC AIS layer management indication receiving (LMIR)",
+			1: "End-to-end VC RDI LMIR",
+			2: "End-to-end VC AIS layer management indication generation (LMIG)",
+			3: "End-to-end VC RDI LMIG",
+			4: "Segment loss of continuity",
+			5: "End-to-end loss of continuity",
+			6: "CSA",
 		},
 	}
 }
 
-// NewInterworkingVccTerminationPoint (class ID 14 creates the basic
+// NewInterworkingVccTerminationPoint (class ID 14) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewInterworkingVccTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*interworkingvccterminationpointBME, params...)
 }

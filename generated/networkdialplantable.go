@@ -80,23 +80,26 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("DialPlanNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("DialPlanTableMaxSize", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 2),
-			3: Uint16Field("CriticalDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: Uint16Field("PartialDialTimeout", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: ByteField("DialPlanFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: TableField("DialPlanTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("DialPlanNumber", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("DialPlanTableMaxSize", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 2),
+			3: Uint16Field("CriticalDialTimeout", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("PartialDialTimeout", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: ByteField("DialPlanFormat", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6: TableField("DialPlanTable", TableAttributeType, 0x0400, TableInfo{nil, 30}, mapset.NewSetWith(Read, Write), false, false, false, 6),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewNetworkDialPlanTable (class ID 145 creates the basic
+// NewNetworkDialPlanTable (class ID 145) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewNetworkDialPlanTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*networkdialplantableBME, params...)
 }

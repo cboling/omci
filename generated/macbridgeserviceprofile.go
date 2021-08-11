@@ -106,26 +106,28 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("SpanningTreeInd", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  ByteField("LearningInd", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("PortBridgingInd", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint16Field("Priority", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("MaxAge", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint16Field("HelloTime", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  Uint16Field("ForwardDelay", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  ByteField("UnknownMacAddressDiscard", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("MacLearningDepth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
-			10: Uint32Field("DynamicFilteringAgeingTime", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("SpanningTreeInd", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  ByteField("LearningInd", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("PortBridgingInd", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint16Field("Priority", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("MaxAge", UnsignedIntegerAttributeType, 0x0800, 1536, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint16Field("HelloTime", UnsignedIntegerAttributeType, 0x0400, 256, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  Uint16Field("ForwardDelay", UnsignedIntegerAttributeType, 0x0200, 1024, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  ByteField("UnknownMacAddressDiscard", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("MacLearningDepth", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 9),
+			10: Uint32Field("DynamicFilteringAgeingTime", UnsignedIntegerAttributeType, 0x0040, 300, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 10),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMacBridgeServiceProfile (class ID 45 creates the basic
+// NewMacBridgeServiceProfile (class ID 45) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgeServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeserviceprofileBME, params...)
 }

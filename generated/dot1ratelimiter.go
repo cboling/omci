@@ -79,21 +79,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("ParentMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint16Field("UpstreamUnicastFloodRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4: Uint16Field("UpstreamBroadcastRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5: Uint16Field("UpstreamMulticastPayloadRatePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("ParentMePointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("TpType", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("UpstreamUnicastFloodRatePointer", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4: Uint16Field("UpstreamBroadcastRatePointer", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5: Uint16Field("UpstreamMulticastPayloadRatePointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1RateLimiter (class ID 298 creates the basic
+// NewDot1RateLimiter (class ID 298) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1RateLimiter(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1ratelimiterBME, params...)
 }

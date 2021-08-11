@@ -90,25 +90,27 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("Icmpv6ErrorMessagesProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2: ByteField("Icmpv6InformationalMessagesProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: ByteField("RouterSolicitationProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: ByteField("RouterAdvertisementProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: ByteField("NeighbourSolicitationProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6: ByteField("NeighbourAdvertisementProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7: ByteField("RedirectProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8: ByteField("MulticastListenerQueryProcessing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9: ByteField("UnknownIcmpv6Processing", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("Icmpv6ErrorMessagesProcessing", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("Icmpv6InformationalMessagesProcessing", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField("RouterSolicitationProcessing", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField("RouterAdvertisementProcessing", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: ByteField("NeighbourSolicitationProcessing", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6: ByteField("NeighbourAdvertisementProcessing", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7: ByteField("RedirectProcessing", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8: ByteField("MulticastListenerQueryProcessing", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9: ByteField("UnknownIcmpv6Processing", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348 creates the basic
+// NewMacBridgePortIcmpv6ProcessPreAssignTable (class ID 348) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgePortIcmpv6ProcessPreAssignTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeporticmpv6processpreassigntableBME, params...)
 }

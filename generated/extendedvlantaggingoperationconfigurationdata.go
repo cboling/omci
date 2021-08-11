@@ -101,25 +101,28 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: Uint16Field("InputTpid", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: Uint16Field("OutputTpid", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: ByteField("DownstreamMode", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6: TableField("ReceivedFrameVlanTaggingOperationTable", TableInfo{nil, 16}, mapset.NewSetWith(Read, Write), false, false, false, 6),
-			7: Uint16Field("AssociatedMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8: MultiByteField("DscpToPBitMapping", 24, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("AssociationType", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("ReceivedFrameVlanTaggingOperationTableMaxSize", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: Uint16Field("InputTpid", UnsignedIntegerAttributeType, 0x2000, 34984, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: Uint16Field("OutputTpid", UnsignedIntegerAttributeType, 0x1000, 34984, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: ByteField("DownstreamMode", EnumerationAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6: TableField("ReceivedFrameVlanTaggingOperationTable", TableAttributeType, 0x0400, TableInfo{nil, 16}, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7: Uint16Field("AssociatedMePointer", PointerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8: MultiByteField("DscpToPBitMapping", OctetsAttributeType, 0x0100, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, true, false, 8),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewExtendedVlanTaggingOperationConfigurationData (class ID 171 creates the basic
+// NewExtendedVlanTaggingOperationConfigurationData (class ID 171) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewExtendedVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*extendedvlantaggingoperationconfigurationdataBME, params...)
 }

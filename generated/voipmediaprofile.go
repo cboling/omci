@@ -114,32 +114,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("FaxMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("VoiceServiceProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("CodecSelection1StOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  ByteField("PacketPeriodSelection1StOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  ByteField("SilenceSuppression1StOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  ByteField("CodecSelection2NdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  ByteField("PacketPeriodSelection2NdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  ByteField("SilenceSuppression2NdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("CodecSelection3RdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: ByteField("PacketPeriodSelection3RdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: ByteField("SilenceSuppression3RdOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 11),
-			12: ByteField("CodecSelection4ThOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 12),
-			13: ByteField("PacketPeriodSelection4ThOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 13),
-			14: ByteField("SilenceSuppression4ThOrder", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 14),
-			15: ByteField("OobDtmf", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 15),
-			16: Uint16Field("RtpProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("FaxMode", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("VoiceServiceProfilePointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("CodecSelection1StOrder", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  ByteField("PacketPeriodSelection1StOrder", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  ByteField("SilenceSuppression1StOrder", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  ByteField("CodecSelection2NdOrder", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  ByteField("PacketPeriodSelection2NdOrder", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  ByteField("SilenceSuppression2NdOrder", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("CodecSelection3RdOrder", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: ByteField("PacketPeriodSelection3RdOrder", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: ByteField("SilenceSuppression3RdOrder", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 11),
+			12: ByteField("CodecSelection4ThOrder", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 12),
+			13: ByteField("PacketPeriodSelection4ThOrder", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 13),
+			14: ByteField("SilenceSuppression4ThOrder", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 14),
+			15: ByteField("OobDtmf", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 15),
+			16: Uint16Field("RtpProfilePointer", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 16),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVoipMediaProfile (class ID 142 creates the basic
+// NewVoipMediaProfile (class ID 142) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipMediaProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voipmediaprofileBME, params...)
 }

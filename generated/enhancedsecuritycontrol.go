@@ -114,28 +114,30 @@ func init() {
 			GetNext,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  MultiByteField("OltCryptoCapabilities", 16, nil, mapset.NewSetWith(Write), false, false, false, false, 1),
-			2:  TableField("OltRandomChallengeTable", TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 2),
-			3:  ByteField("OltChallengeStatus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  ByteField("OnuSelectedCryptoCapabilities", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  TableField("OnuRandomChallengeTable", TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, false, 5),
-			6:  TableField("OnuAuthenticationResultTable", TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, false, 6),
-			7:  TableField("OltAuthenticationResultTable", TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 7),
-			8:  ByteField("OltResultStatus", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("OnuAuthenticationStatus", 0, mapset.NewSetWith(Read), true, false, false, false, 9),
-			10: MultiByteField("MasterSessionKeyName", 16, nil, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: TableField("BroadcastKeyTable", TableInfo{nil, 18}, mapset.NewSetWith(Read, Write), false, true, false, 11),
-			12: Uint16Field("EffectiveKeyLength", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  MultiByteField("OltCryptoCapabilities", OctetsAttributeType, 0x8000, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Write), false, false, false, 1),
+			2:  TableField("OltRandomChallengeTable", TableAttributeType, 0x4000, TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  ByteField("OltChallengeStatus", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  ByteField("OnuSelectedCryptoCapabilities", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  TableField("OnuRandomChallengeTable", TableAttributeType, 0x0800, TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, false, 5),
+			6:  TableField("OnuAuthenticationResultTable", TableAttributeType, 0x0400, TableInfo{nil, 16}, mapset.NewSetWith(Read), true, false, false, 6),
+			7:  TableField("OltAuthenticationResultTable", TableAttributeType, 0x0200, TableInfo{nil, 17}, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("OltResultStatus", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("OnuAuthenticationStatus", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), true, false, false, 9),
+			10: MultiByteField("MasterSessionKeyName", OctetsAttributeType, 0x0040, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 10),
+			11: TableField("BroadcastKeyTable", TableAttributeType, 0x0020, TableInfo{nil, 18}, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: Uint16Field("EffectiveKeyLength", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, true, false, 12),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEnhancedSecurityControl (class ID 332 creates the basic
+// NewEnhancedSecurityControl (class ID 332) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEnhancedSecurityControl(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*enhancedsecuritycontrolBME, params...)
 }

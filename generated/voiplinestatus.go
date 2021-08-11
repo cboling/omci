@@ -85,25 +85,27 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint16Field("VoipCodecUsed", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: ByteField("VoipVoiceServerStatus", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: ByteField("VoipPortSessionType", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint16Field("VoipCall1PacketPeriod", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint16Field("VoipCall2PacketPeriod", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: MultiByteField("VoipCall1DestAddr", 25, nil, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: MultiByteField("VoipCall2DestAddr", 25, nil, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8: ByteField("VoipLineState", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9: ByteField("EmergencyCallStatus", 0, mapset.NewSetWith(Read), true, false, true, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: Uint16Field("VoipCodecUsed", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField("VoipVoiceServerStatus", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: ByteField("VoipPortSessionType", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint16Field("VoipCall1PacketPeriod", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint16Field("VoipCall2PacketPeriod", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: MultiByteField("VoipCall1DestAddr", OctetsAttributeType, 0x0400, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 6),
+			7: MultiByteField("VoipCall2DestAddr", OctetsAttributeType, 0x0200, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 7),
+			8: ByteField("VoipLineState", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9: ByteField("EmergencyCallStatus", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), true, true, false, 9),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVoipLineStatus (class ID 141 creates the basic
+// NewVoipLineStatus (class ID 141) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipLineStatus(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voiplinestatusBME, params...)
 }

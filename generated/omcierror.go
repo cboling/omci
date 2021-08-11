@@ -44,6 +44,9 @@ type OmciError struct {
 }
 
 func (e *OmciError) GetError() error {
+	if e.statusCode == Success {
+		return nil
+	}
 	return errors.New(e.err)
 }
 

@@ -132,25 +132,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("ActualPlugInUnitType", 0, mapset.NewSetWith(Read), true, false, false, false, 1),
-			2: ByteField("ExpectedPlugInUnitType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: ByteField("ExpectedPortCount", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4: MultiByteField("ExpectedEquipmentId", 20, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: MultiByteField("ActualEquipmentId", 20, nil, mapset.NewSetWith(Read), true, false, true, false, 5),
-			6: ByteField("ProtectionProfilePointer", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
-			7: ByteField("InvokeProtectionSwitch", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8: ByteField("AlarmReportingControl", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 8),
-			9: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("ActualPlugInUnitType", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read), true, false, false, 1),
+			2: ByteField("ExpectedPlugInUnitType", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField("ExpectedPortCount", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4: MultiByteField("ExpectedEquipmentId", StringAttributeType, 0x1000, 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: MultiByteField("ActualEquipmentId", StringAttributeType, 0x0800, 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, true, false, 5),
+			6: ByteField("ProtectionProfilePointer", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
+			7: ByteField("InvokeProtectionSwitch", EnumerationAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8: ByteField("AlarmReportingControl", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), true, true, false, 8),
+			9: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Plug-in circuit pack missing",
+			1: "Plug-in type mismatch alarm",
+			2: "Improper card removal",
+			3: "Plug-in equipment ID mismatch alarm",
+			4: "Protection switch",
 		},
 	}
 }
 
-// NewCardholder (class ID 5 creates the basic
+// NewCardholder (class ID 5) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewCardholder(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*cardholderBME, params...)
 }

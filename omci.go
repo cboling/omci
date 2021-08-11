@@ -32,7 +32,7 @@ import (
 // DeviceIdent identifies the OMCI message format. Currently either baseline or extended.
 type DeviceIdent byte
 
-// LayerTypeOmci provide a gopacket LayerType for OMCI messages
+// LayerTypeOMCI provides a gopacket LayerType for OMCI messages
 var (
 	LayerTypeOMCI gopacket.LayerType
 )
@@ -52,7 +52,7 @@ const (
 	// G-PON OLTs and ONUs support the baseline message set
 	BaselineIdent DeviceIdent = 0x0A
 
-	// ExtendedIdent messager are up to 1920 octets but may not be supported by all ONUs or OLTs.
+	// ExtendedIdent messages are up to 1920 octets but may not be supported by all ONUs or OLTs.
 	ExtendedIdent DeviceIdent = 0x0B
 )
 
@@ -85,9 +85,21 @@ const MaxExtendedLength = 1980
 const MaxAttributeMibUploadNextBaselineLength = MaxBaselineLength - 14 - 8
 
 // MaxAttributeGetNextBaselineLength is the maximum payload size for attributes for
-// a Baseline MIB Get Next message. This is just the attribute portion of the
-// message contents and does not include the Result Code & Attribute Mask.
+// a Baseline MIB Get Next message for the baseline message set. This is just the
+// attribute portion of the message contents and does not include the Result Code & Attribute Mask.
 const MaxAttributeGetNextBaselineLength = MaxBaselineLength - 11 - 8
+
+// MaxDownloadSectionLength is the maximum payload size for section data of
+// a Download Section request message for the baseline message set.
+const MaxDownloadSectionLength = 31
+
+// MaxTestRequestLength is the maximum payload size for test request message
+// for the baseline message set.
+const MaxTestRequestLength = MaxBaselineLength - 8 - 8
+
+// MaxTestResultsLength is the maximum payload size for test results message
+// for the baseline message set.
+const MaxTestResultsLength = MaxBaselineLength - 8 - 8
 
 // MaxManagedEntityMibUploadNextExtendedLength is the maximum payload size for ME
 // entries for an Extended MIB Upload Next message. Extended messages differ from
@@ -99,6 +111,10 @@ const MaxManagedEntityMibUploadNextExtendedLength = MaxExtendedLength - 10 - 4
 // a Extended MIB Get Next message. This is just the attribute portion of the
 // message contents and does not include the Result Code & Attribute Mask.
 const MaxAttributeGetNextExtendedLength = MaxExtendedLength - 13 - 4
+
+// MaxDownloadSectionExtendedLength is the maximum payload size for section data of
+// a Download Section request message for the extended message set.
+const MaxDownloadSectionExtendedLength = MaxExtendedLength - 11 - 4
 
 // NullEntityID is often used as the Null/void Managed Entity ID for attributes
 // that are used to refer to other Managed Entities but are currently not provisioned.
@@ -112,19 +128,13 @@ type OMCI struct {
 	TransactionID    uint16
 	MessageType      MessageType
 	DeviceIdentifier DeviceIdent
-	Payload          []byte
-	padding          []byte
+	ResponseExpected bool   // Significant for Download Section Request only
+	Payload          []byte // TODO: Deprecated.  Use layers.BaseLayer.Payload
 	Length           uint16
 	MIC              uint32
 }
 
 func (omci *OMCI) String() string {
-	//msgType := me.MsgType(byte(omci.MessageType) & me.MsgTypeMask)
-	//if me.IsAutonomousNotification(msgType) {
-	//	return fmt.Sprintf("OMCI: Type: %v:", msgType)
-	//} else if byte(omci.MessageType)&me.AK == me.AK {
-	//	return fmt.Sprintf("OMCI: Type: %v Response", msgType)
-	//}
 	return fmt.Sprintf("Type: %v, TID: %d (%#x), Ident: %v",
 		omci.MessageType, omci.TransactionID, omci.TransactionID, omci.DeviceIdentifier)
 }
@@ -134,15 +144,6 @@ func (omci *OMCI) LayerType() gopacket.LayerType {
 	return LayerTypeOMCI
 }
 
-// LayerContents returns the OMCI specific layer information
-func (omci *OMCI) LayerContents() []byte {
-	b := make([]byte, 8)
-	binary.BigEndian.PutUint16(b, omci.TransactionID)
-	b[2] = byte(omci.MessageType)
-	b[3] = byte(omci.DeviceIdentifier)
-	return b
-}
-
 // CanDecode returns the layers that this class can decode
 func (omci *OMCI) CanDecode() gopacket.LayerClass {
 	return LayerTypeOMCI
@@ -150,26 +151,47 @@ func (omci *OMCI) CanDecode() gopacket.LayerClass {
 
 // NextLayerType returns the layer type contained by this DecodingLayer.
 func (omci *OMCI) NextLayerType() gopacket.LayerType {
-	return gopacket.LayerTypeZero
+	if next, ok := nextLayerMapping[omci.MessageType]; ok {
+		return next
+	}
+	return gopacket.LayerTypePayload
+}
+
+// LayerContents returns the OMCI specific layer information
+func (omci *OMCI) LayerContents() []byte {
+	b := make([]byte, 4)
+	binary.BigEndian.PutUint16(b, omci.TransactionID)
+	b[2] = byte(omci.MessageType)
+	b[3] = byte(omci.DeviceIdentifier)
+	return b
 }
 
 func decodeOMCI(data []byte, p gopacket.PacketBuilder) error {
 	// Allow baseline messages without Length & MIC, but no less
-	if len(data) < MaxBaselineLength-8 {
+	if len(data) < 4 {
+		p.SetTruncated()
 		return errors.New("frame header too small")
 	}
+	omci := &OMCI{}
+
 	switch DeviceIdent(data[3]) {
 	default:
-		return errors.New("unsupported message type")
+		return errors.New("unsupported message set/device identifier")
 
 	case BaselineIdent:
-		//omci := &BaselineMessage{}
-		omci := &OMCI{}
+		if len(data) < MaxBaselineLength-8 {
+			p.SetTruncated()
+			return fmt.Errorf("frame too small. OMCI baseline frame length %v, %v required",
+				len(data), MaxBaselineLength-8)
+		}
 		return omci.DecodeFromBytes(data, p)
 
 	case ExtendedIdent:
-		//omci := &ExtendedMessage{}
-		omci := &OMCI{}
+		if len(data) < 10 {
+			p.SetTruncated()
+			return fmt.Errorf("frame too small. OMCI minimal extended frame length %v, 10 required",
+				len(data))
+		}
 		return omci.DecodeFromBytes(data, p)
 	}
 }
@@ -199,13 +221,11 @@ func calculateMicAes128(data []byte) (uint32, error) {
 
 // DecodeFromBytes will decode the OMCI layer of a packet/message
 func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	if len(data) < 10 {
-		p.SetTruncated()
-		return errors.New("frame too small")
-	}
+	// Minimal Baseline and Extended message set length has already been checked
 	omci.TransactionID = binary.BigEndian.Uint16(data[0:])
 	omci.MessageType = MessageType(data[2])
 	omci.DeviceIdentifier = DeviceIdent(data[3])
+	omci.ResponseExpected = byte(omci.MessageType)&me.AR == me.AR
 
 	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
 	if omci.TransactionID == 0 && !isNotification {
@@ -214,10 +234,12 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 	// Decode length
 	var payloadOffset int
 	var micOffset int
+	var eomOffset int
 	if omci.DeviceIdentifier == BaselineIdent {
 		omci.Length = MaxBaselineLength - 8
 		payloadOffset = 8
 		micOffset = MaxBaselineLength - 4
+		eomOffset = MaxBaselineLength - 8
 
 		if len(data) >= micOffset {
 			length := binary.BigEndian.Uint32(data[micOffset-4:])
@@ -229,14 +251,13 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 		payloadOffset = 10
 		omci.Length = binary.BigEndian.Uint16(data[8:10])
 		micOffset = int(omci.Length) + payloadOffset
+		eomOffset = micOffset
 
-		if omci.Length > MaxExtendedLength {
+		if omci.Length > uint16(MaxExtendedLength-payloadOffset) {
 			return me.NewProcessingError("extended frame exceeds maximum allowed")
 		}
-		if int(omci.Length) != micOffset {
-			if int(omci.Length) < micOffset {
-				p.SetTruncated()
-			}
+		if len(data) < micOffset {
+			p.SetTruncated()
 			return me.NewProcessingError("extended frame too small")
 		}
 	}
@@ -250,9 +271,12 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 			//return errors.New(msg)
 		}
 	}
-	omci.BaseLayer = layers.BaseLayer{data[:4], data[4:]}
+	omci.BaseLayer = layers.BaseLayer{
+		Contents: data[:4],
+		Payload:  data[4:eomOffset],
+	}
 	p.AddLayer(omci)
-	nextLayer, err := MsgTypeToNextLayer(omci.MessageType)
+	nextLayer, err := MsgTypeToNextLayer(omci.MessageType, omci.DeviceIdentifier == ExtendedIdent)
 	if err != nil {
 		return err
 	}
@@ -263,16 +287,20 @@ func (omci *OMCI) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
 // SerializationBuffer, implementing gopacket.SerializableLayer.
 // See the docs for gopacket.SerializableLayer for more info.
 func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.SerializeOptions) error {
-	// TODO: Hardcoded for baseline message format for now. Will eventually need to support
-	//       the extended message format.
 	bytes, err := b.PrependBytes(4)
 	if err != nil {
 		return err
 	}
 	// OMCI layer error checks
-	isNotification := (int(omci.MessageType) & ^me.MsgTypeMask) == 0
-	if omci.TransactionID == 0 && !isNotification {
+	// Self-initiated Test Results have a TID of 0, OLT-requested do not.
+	isNotification := omci.MessageType == AlarmNotificationType ||
+		omci.MessageType == AttributeValueChangeType
+
+	if omci.TransactionID == 0 && !isNotification && omci.MessageType != TestResultType {
 		return errors.New("omci Transaction ID is zero for non-Notification type message")
+	}
+	if omci.TransactionID != 0 && isNotification {
+		return errors.New("omci Transaction ID is not zero for Notification type message")
 	}
 	if omci.DeviceIdentifier == 0 {
 		omci.DeviceIdentifier = BaselineIdent // Allow uninitialized device identifier
@@ -285,11 +313,11 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 			return errors.New(msg)
 		}
 	} else if omci.DeviceIdentifier == ExtendedIdent {
-		if omci.Length == 0 {
-			omci.Length = uint16(len(bytes) - 10) // Allow uninitialized length
-		}
-		if omci.Length > MaxExtendedLength {
-			msg := fmt.Sprintf("invalid Baseline message length: %v", omci.Length)
+		omci.Length = uint16(len(b.Bytes()) - 10)
+
+		// Is length larger than maximum packet (less header and trailing MIC)
+		if omci.Length > MaxExtendedLength-10-4 {
+			msg := fmt.Sprintf("invalid Extended message length: %v", omci.Length)
 			return errors.New(msg)
 		}
 	} else {
@@ -298,21 +326,30 @@ func (omci *OMCI) SerializeTo(b gopacket.SerializeBuffer, opts gopacket.Serializ
 		return errors.New(msg)
 	}
 	binary.BigEndian.PutUint16(bytes, omci.TransactionID)
-	bytes[2] = byte(omci.MessageType)
+	// Download section request can optionally have the AR bit set or cleared.  If user passes in this
+	// message type and sets download requested, fix up the message type for them.
+	if omci.MessageType == DownloadSectionRequestType && omci.ResponseExpected {
+		bytes[2] = byte(DownloadSectionRequestWithResponseType)
+	} else {
+		bytes[2] = byte(omci.MessageType)
+	}
 	bytes[3] = byte(omci.DeviceIdentifier)
 	b.PushLayer(LayerTypeOMCI)
 
-	bufLen := len(b.Bytes())
-	padSize := int(omci.Length) - bufLen + 4
-	if padSize < 0 {
-		msg := fmt.Sprintf("invalid OMCI Message Type length, exceeded allowed frame size by %d bytes",
-			-padSize)
-		return errors.New(msg)
-	}
-	padding, err := b.AppendBytes(padSize)
-	copy(padding, lotsOfZeros[:])
-
 	if omci.DeviceIdentifier == BaselineIdent {
+		bufLen := len(b.Bytes())
+		padSize := int(omci.Length) - bufLen + 4
+		if padSize < 0 {
+			msg := fmt.Sprintf("invalid OMCI Message Type length, exceeded allowed frame size by %d bytes",
+				-padSize)
+			return errors.New(msg)
+		}
+		padding, err := b.AppendBytes(padSize)
+		if err != nil {
+			return err
+		}
+		copy(padding, lotsOfZeros[:])
+
 		// For baseline, always provide the length
 		binary.BigEndian.PutUint32(b.Bytes()[MaxBaselineLength-8:], 40)
 	}

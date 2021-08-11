@@ -94,25 +94,27 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("CidFeatures", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("CallWaitingFeatures", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint16Field("CallProgressOrTransferFeatures", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: Uint16Field("CallPresentationFeatures", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: ByteField("DirectConnectFeature", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: Uint16Field("DirectConnectUriPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7: Uint16Field("BridgedLineAgentUriPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8: Uint16Field("ConferenceFactoryUriPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("CidFeatures", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("CallWaitingFeatures", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("CallProgressOrTransferFeatures", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("CallPresentationFeatures", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: ByteField("DirectConnectFeature", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6: Uint16Field("DirectConnectUriPointer", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7: Uint16Field("BridgedLineAgentUriPointer", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8: Uint16Field("ConferenceFactoryUriPointer", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9: Uint16Field("DialToneFeatureDelayWArmlineTimerNew", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVoipApplicationServiceProfile (class ID 146 creates the basic
+// NewVoipApplicationServiceProfile (class ID 146) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipApplicationServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voipapplicationserviceprofileBME, params...)
 }

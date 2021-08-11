@@ -162,30 +162,39 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 2),
-			3:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 3),
-			4:  ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5:  Uint16Field("OpticalSignalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  ByteField("LowerOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  ByteField("UpperOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8:  Uint16Field("TransmitOpticalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  ByteField("LowerTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: ByteField("UpperTransmitPowerThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: ByteField("UsageMode", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 11),
-			12: Uint32Field("TargetUpstreamFrequency", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint32Field("TargetDownstreamFrequency", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: ByteField("UpstreamSignalTransmissionMode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("OperationalState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, true, false, 2),
+			3:  ByteField("Arc", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), true, true, false, 3),
+			4:  ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5:  Uint16Field("OpticalSignalLevel", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6:  ByteField("LowerOpticalThreshold", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  ByteField("UpperOpticalThreshold", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8:  Uint16Field("TransmitOpticalLevel", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  ByteField("LowerTransmitPowerThreshold", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: ByteField("UpperTransmitPowerThreshold", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: ByteField("UsageMode", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, false, false, 11),
+			12: Uint32Field("TargetUpstreamFrequency", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint32Field("TargetDownstreamFrequency", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: ByteField("UpstreamSignalTransmissionMode", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Low received optical power",
+			1: "High received optical power",
+			2: "Low transmit optical power",
+			3: "High transmit optical power",
+			4: "High laser bias current",
 		},
 	}
 }
 
-// NewReAniG (class ID 313 creates the basic
+// NewReAniG (class ID 313) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewReAniG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*reanigBME, params...)
 }

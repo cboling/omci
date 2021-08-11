@@ -52,7 +52,7 @@ var xgpondownstreammanagementperformancemonitoringhistorydataBME *ManagedEntityD
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
 //			data 2 ME is optional. (R,-W, set-by-create) (mandatory) (2-bytes)
 //
-//		Ploam Message Integrity Check Mic  Error Count
+//		Ploam Message Integrity Check Mic Error Count
 //			PLOAM message integrity check (MIC) error count: This attribute counts MIC errors detected in
 //			downstream PLOAM messages, either directed to this ONU or broadcast to all ONUs. (R) (optional)
 //			(4-bytes)
@@ -126,33 +126,40 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("PloamMessageIntegrityCheckMicErrorCount", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4:  Uint32Field("DownstreamPloamMessagesCount", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5:  Uint32Field("ProfileMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  Uint32Field("RangingTimeMessagesReceived", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("DeactivateOnuIdMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8:  Uint32Field("DisableSerialNumberMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  Uint32Field("RequestRegistrationMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: Uint32Field("AssignAllocIdMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: Uint32Field("KeyControlMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
-			12: Uint32Field("SleepAllowMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
-			13: Uint32Field("BaselineOmciMessagesReceivedCount", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
-			14: Uint32Field("ExtendedOmciMessagesReceivedCount", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
-			15: Uint32Field("AssignOnuIdMessagesReceived", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
-			16: Uint32Field("OmciMicErrorCount", 0, mapset.NewSetWith(Read), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("PloamMessageIntegrityCheckMicErrorCount", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4:  Uint32Field("DownstreamPloamMessagesCount", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5:  Uint32Field("ProfileMessagesReceived", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6:  Uint32Field("RangingTimeMessagesReceived", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("DeactivateOnuIdMessagesReceived", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, false, 7),
+			8:  Uint32Field("DisableSerialNumberMessagesReceived", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  Uint32Field("RequestRegistrationMessagesReceived", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, true, false, 9),
+			10: Uint32Field("AssignAllocIdMessagesReceived", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: Uint32Field("KeyControlMessagesReceived", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
+			12: Uint32Field("SleepAllowMessagesReceived", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, true, false, 12),
+			13: Uint32Field("BaselineOmciMessagesReceivedCount", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, true, false, 13),
+			14: Uint32Field("ExtendedOmciMessagesReceivedCount", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, true, false, 14),
+			15: Uint32Field("AssignOnuIdMessagesReceived", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, true, false, 15),
+			16: Uint32Field("OmciMicErrorCount", CounterAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, true, false, 16),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "PLOAM MIC error count",
+			2: "OMCI MIC error count",
 		},
 	}
 }
 
-// NewXgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID 345 creates the basic
+// NewXgPonDownstreamManagementPerformanceMonitoringHistoryData (class ID 345) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXgPonDownstreamManagementPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xgpondownstreammanagementperformancemonitoringhistorydataBME, params...)
 }

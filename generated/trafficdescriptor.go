@@ -104,24 +104,26 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint32Field("Cir", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 1),
-			2: Uint32Field("Pir", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
-			3: Uint32Field("Cbs", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4: Uint32Field("Pbs", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5: ByteField("ColourMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6: ByteField("IngressColourMarking", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
-			7: ByteField("EgressColourMarking", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8: ByteField("MeterType", 0, mapset.NewSetWith(Read, SetByCreate), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint32Field("Cir", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 1),
+			2: Uint32Field("Pir", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
+			3: Uint32Field("Cbs", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4: Uint32Field("Pbs", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5: ByteField("ColourMode", EnumerationAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6: ByteField("IngressColourMarking", EnumerationAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 6),
+			7: ByteField("EgressColourMarking", EnumerationAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
+			8: ByteField("MeterType", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate), false, true, false, 8),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewTrafficDescriptor (class ID 280 creates the basic
+// NewTrafficDescriptor (class ID 280) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTrafficDescriptor(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*trafficdescriptorBME, params...)
 }

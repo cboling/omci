@@ -30,12 +30,14 @@ import (
 
 // ManagedEntityDefinition defines a Manage Entity
 type ManagedEntityDefinition struct {
-	Name         string
-	ClassID      ClassID
-	MessageTypes mapset.Set // Mandatory
-	// TODO: Support Optional Message types
+	Name                 string
+	ClassID              ClassID
+	MessageTypes         mapset.Set // Mandatory
 	AllowedAttributeMask uint16
 	AttributeDefinitions AttributeDefinitionMap
+	Access               ClassAccess
+	Support              ClassSupport
+	Alarms               AlarmMap // AlarmBit -> AlarmName
 }
 
 func (bme *ManagedEntityDefinition) String() string {
@@ -51,6 +53,11 @@ func (bme ManagedEntityDefinition) GetName() string {
 // GetClassID retrieves the 16-bit class ID of a managed entity from a ME Definition
 func (bme ManagedEntityDefinition) GetClassID() ClassID {
 	return bme.ClassID
+}
+
+// SetClassID assigns the 16-bit class ID of a managed entity from a ME Definition
+func (bme *ManagedEntityDefinition) SetClassID(classID ClassID) {
+	bme.ClassID = classID
 }
 
 // GetMessageTypes retrieves the OMCI Message Types supporte3d by a managed entity from a ME Definition
@@ -69,6 +76,16 @@ func (bme ManagedEntityDefinition) GetAttributeDefinitions() AttributeDefinition
 	return bme.AttributeDefinitions
 }
 
+// GetClassSupport returns ONUs support of this class
+func (bme ManagedEntityDefinition) GetClassSupport() ClassSupport {
+	return bme.Support
+}
+
+// GetAlarmMap returns the Alarm bit number to name map
+func (bme ManagedEntityDefinition) GetAlarmMap() AlarmMap {
+	return bme.Alarms
+}
+
 func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
@@ -84,7 +101,7 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 		attrDef := bme.AttributeDefinitions[index]
 		name := attrDef.GetName()
 
-		if mask&(1<<(16-uint(index))) != 0 {
+		if mask&attrDef.Mask != 0 {
 			value, err := attrDef.Decode(data, p, msgType)
 			if err != nil {
 				return nil, err
@@ -121,11 +138,11 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 					data = data[len(valueBuffer):]
 
 				case byte(Set) | AR: // Set Request
-					fmt.Println("TODO")
+					// TODO: No support at this time
 
 				case byte(SetTable) | AR: // Set Table Request
-					// TODO: Only baseline supported at this time
-					return nil, errors.New("attribute encode for set-table-request not yet supported")
+					attrMap[name] = value
+					data = data[len(data):]
 				}
 			} else {
 				attrMap[name] = value
@@ -137,14 +154,16 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 }
 
 func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,
-	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, packData bool) (error, uint16) {
+
 	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
 		// TODO: Provide custom error code so a response 'result' can properly be coded
-		return errors.New("unsupported attribute mask")
+		return errors.New("unsupported attribute mask"), 0
 	}
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
 	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
+	var failedMask uint16
 
 	for _, index := range keyList {
 		if index == 0 {
@@ -152,18 +171,22 @@ func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, m
 		}
 		attrDef := bme.AttributeDefinitions[index]
 
-		if mask&(1<<(16-uint(index))) != 0 {
+		if mask&attrDef.Mask != 0 {
 			value, ok := attr[attrDef.GetName()]
 			if !ok {
 				msg := fmt.Sprintf("attribute not found: '%v'", attrDef.GetName())
-				return errors.New(msg)
+				return errors.New(msg), failedMask
 			}
 			size, err := attrDef.SerializeTo(value, b, msgType, bytesAvailable)
 			if err != nil {
-				return err
+				failedMask |= attrDef.Mask
+				if packData {
+					continue
+				}
+				return err, failedMask
 			}
 			bytesAvailable -= size
 		}
 	}
-	return nil
+	return nil, failedMask
 }

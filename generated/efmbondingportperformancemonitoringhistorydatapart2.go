@@ -24,11 +24,11 @@ import "github.com/deckarep/golang-set"
 
 // EfmBondingPortPerformanceMonitoringHistoryDataPart2ClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding port performance monitoring history data part 2
-const EfmBondingPortPerformanceMonitoringHistoryDataPart2ClassID ClassID = ClassID(425)
+const EfmBondingPortPerformanceMonitoringHistoryDataPart2ClassID ClassID = ClassID(424)
 
 var efmbondingportperformancemonitoringhistorydatapart2BME *ManagedEntityDefinition
 
-// EfmBondingPortPerformanceMonitoringHistoryDataPart2 (class ID #425)
+// EfmBondingPortPerformanceMonitoringHistoryDataPart2 (class ID #424)
 //	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
 //	the OLT.
 //
@@ -106,37 +106,40 @@ type EfmBondingPortPerformanceMonitoringHistoryDataPart2 struct {
 func init() {
 	efmbondingportperformancemonitoringhistorydatapart2BME = &ManagedEntityDefinition{
 		Name:    "EfmBondingPortPerformanceMonitoringHistoryDataPart2",
-		ClassID: 425,
+		ClassID: 424,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("RxUnicastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("TxUnicastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("RxUnicastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("TxUnicastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("RxBroadcastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("TxBroadcastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("RxBroadcastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("TxBroadcastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("RxMulticastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("TxMulticastFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("RxMulticastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("TxMulticastBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("RxUnicastFrames", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("TxUnicastFrames", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("RxUnicastBytes", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("TxUnicastBytes", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("RxBroadcastFrames", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("TxBroadcastFrames", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("RxBroadcastBytes", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("TxBroadcastBytes", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("RxMulticastFrames", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("TxMulticastFrames", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("RxMulticastBytes", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("TxMulticastBytes", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEfmBondingPortPerformanceMonitoringHistoryDataPart2 (class ID 425 creates the basic
+// NewEfmBondingPortPerformanceMonitoringHistoryDataPart2 (class ID 424) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEfmBondingPortPerformanceMonitoringHistoryDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*efmbondingportperformancemonitoringhistorydatapart2BME, params...)
 }

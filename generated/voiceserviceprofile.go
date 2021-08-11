@@ -116,31 +116,34 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("AnnouncementType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("JitterTarget", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
-			3:  Uint16Field("JitterBufferMax", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4:  ByteField("EchoCancelInd", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("PstnProtocolVariant", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6:  Uint16Field("DtmfDigitLevels", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 6),
-			7:  Uint16Field("DtmfDigitDuration", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8:  Uint16Field("HookFlashMinimumTime", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 8),
-			9:  Uint16Field("HookFlashMaximumTime", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
-			10: MultiByteField("TonePatternTable", 20, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: MultiByteField("ToneEventTable", 7, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: MultiByteField("RingingPatternTable", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: MultiByteField("RingingEventTable", 7, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: Uint16Field("NetworkSpecificExtensionsPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("AnnouncementType", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("JitterTarget", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
+			3:  Uint16Field("JitterBufferMax", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4:  ByteField("EchoCancelInd", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("PstnProtocolVariant", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6:  Uint16Field("DtmfDigitLevels", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 6),
+			7:  Uint16Field("DtmfDigitDuration", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
+			8:  Uint16Field("HookFlashMinimumTime", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 8),
+			9:  Uint16Field("HookFlashMaximumTime", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 9),
+			10: MultiByteField("TonePatternTable", OctetsAttributeType, 0x0040, 20, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: MultiByteField("ToneEventTable", OctetsAttributeType, 0x0020, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: MultiByteField("RingingPatternTable", OctetsAttributeType, 0x0010, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: MultiByteField("RingingEventTable", OctetsAttributeType, 0x0008, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: Uint16Field("NetworkSpecificExtensionsPointer", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 14),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVoiceServiceProfile (class ID 58 creates the basic
+// NewVoiceServiceProfile (class ID 58) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoiceServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voiceserviceprofileBME, params...)
 }

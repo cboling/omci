@@ -61,17 +61,19 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0X8000,
+		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("Mtu", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("Mtu", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEthernetPseudowireParameters (class ID 400 creates the basic
+// NewEthernetPseudowireParameters (class ID 400) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEthernetPseudowireParameters(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ethernetpseudowireparametersBME, params...)
 }

@@ -95,26 +95,28 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  Uint16Field("CircuitIdPrefix", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("FallbackPolicy", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  Uint16Field("AuthServer1", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  MultiByteField("SharedSecretAuth1", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  Uint16Field("AuthServer2", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
-			6:  MultiByteField("SharedSecretAuth2", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  Uint16Field("AuthServer3", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8:  MultiByteField("SharedSecretAuth3", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
-			9:  Uint32Field("OltProxyAddress", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: Uint16Field("CallingStationIdFormat", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  Uint16Field("CircuitIdPrefix", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("FallbackPolicy", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  Uint16Field("AuthServer1", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  MultiByteField("SharedSecretAuth1", OctetsAttributeType, 0x1000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  Uint16Field("AuthServer2", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
+			6:  MultiByteField("SharedSecretAuth2", OctetsAttributeType, 0x0400, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  Uint16Field("AuthServer3", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8:  MultiByteField("SharedSecretAuth3", OctetsAttributeType, 0x0100, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 8),
+			9:  Uint32Field("OltProxyAddress", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: Uint16Field("CallingStationIdFormat", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1XConfigurationProfile (class ID 291 creates the basic
+// NewDot1XConfigurationProfile (class ID 291) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1XConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1xconfigurationprofileBME, params...)
 }

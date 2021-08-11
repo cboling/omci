@@ -154,32 +154,34 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  Uint16Field("FextDownstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("NextDownstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint16Field("FextUpstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint16Field("NextUpstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
-			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  Uint16Field("FextDownstreamSnrMargin", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("NextDownstreamSnrMargin", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3:  Uint16Field("FextUpstreamSnrMargin", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint16Field("NextUpstreamSnrMargin", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("FextDownstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("NextDownstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("FextUpstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("NextUpstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint16Field("FextDownstreamActualPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint16Field("NextDownstreamActualPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint16Field("FextUpstreamActualPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint16Field("NextUpstreamActualPowerSpectralDensity", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint16Field("FextDownstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint16Field("NextDownstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint16Field("FextUpstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+			16: Uint16Field("NextUpstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, false, false, 16),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineInventoryAndStatusDataPart5 (class ID 325 creates the basic
+// NewXdslLineInventoryAndStatusDataPart5 (class ID 325) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineInventoryAndStatusDataPart5(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineinventoryandstatusdatapart5BME, params...)
 }

@@ -24,11 +24,11 @@ import "github.com/deckarep/golang-set"
 
 // EfmBondingLinkPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding link performance monitoring history data
-const EfmBondingLinkPerformanceMonitoringHistoryDataClassID ClassID = ClassID(423)
+const EfmBondingLinkPerformanceMonitoringHistoryDataClassID ClassID = ClassID(422)
 
 var efmbondinglinkperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// EfmBondingLinkPerformanceMonitoringHistoryData (class ID #423)
+// EfmBondingLinkPerformanceMonitoringHistoryData (class ID #422)
 //	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
 //	the OLT.
 //
@@ -81,33 +81,36 @@ type EfmBondingLinkPerformanceMonitoringHistoryData struct {
 func init() {
 	efmbondinglinkperformancemonitoringhistorydataBME = &ManagedEntityDefinition{
 		Name:    "EfmBondingLinkPerformanceMonitoringHistoryData",
-		ClassID: 423,
+		ClassID: 422,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("RxErroredFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("RxSmallFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("RxLargeFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("RxDiscardedFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("RxFcsErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("RxCodingErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("RxFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("TxFragments", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("RxErroredFragments", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("RxSmallFragments", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("RxLargeFragments", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("RxDiscardedFragments", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("RxFcsErrors", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("RxCodingErrors", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("RxFragments", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("TxFragments", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEfmBondingLinkPerformanceMonitoringHistoryData (class ID 423 creates the basic
+// NewEfmBondingLinkPerformanceMonitoringHistoryData (class ID 422) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEfmBondingLinkPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*efmbondinglinkperformancemonitoringhistorydataBME, params...)
 }

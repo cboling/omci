@@ -112,27 +112,38 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFE0,
+		AllowedAttributeMask: 0xffe0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("Gain", 0, mapset.NewSetWith(Read), false, false, true, false, 1),
-			2:  ByteField("LowerGainThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
-			3:  ByteField("UpperGainThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4:  ByteField("TargetGain", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5:  Uint16Field("DeviceTemperature", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  ByteField("LowerDeviceTemperatureThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  ByteField("UpperDeviceTemperatureThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8:  ByteField("DeviceBiasCurrent", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  Uint16Field("AmplifierSaturationOutputPower", 0, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: ByteField("AmplifierNoiseFigure", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: ByteField("AmplifierSaturationGain", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("Gain", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, true, false, 1),
+			2:  ByteField("LowerGainThreshold", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, true, false, 2),
+			3:  ByteField("UpperGainThreshold", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4:  ByteField("TargetGain", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5:  Uint16Field("DeviceTemperature", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6:  ByteField("LowerDeviceTemperatureThreshold", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  ByteField("UpperDeviceTemperatureThreshold", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8:  ByteField("DeviceBiasCurrent", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  Uint16Field("AmplifierSaturationOutputPower", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, true, false, 9),
+			10: ByteField("AmplifierNoiseFigure", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: ByteField("AmplifierSaturationGain", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Low gain",
+			1: "High gain",
+			2: "Low temperature",
+			3: "High temperature",
+			4: "High bias current",
+			5: "High temperature shutdown",
+			6: "High current shutdown",
 		},
 	}
 }
 
-// NewReCommonAmplifierParameters (class ID 328 creates the basic
+// NewReCommonAmplifierParameters (class ID 328) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewReCommonAmplifierParameters(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*recommonamplifierparametersBME, params...)
 }

@@ -75,18 +75,20 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("SecurityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("AddressPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("SecurityPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("AddressPointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewNetworkAddress (class ID 137 creates the basic
+// NewNetworkAddress (class ID 137) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewNetworkAddress(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*networkaddressBME, params...)
 }

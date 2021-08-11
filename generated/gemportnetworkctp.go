@@ -116,26 +116,31 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("PortId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("TContPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("Direction", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint16Field("TrafficManagementPointerForUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6:  ByteField("UniCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
-			7:  Uint16Field("PriorityQueuePointerForDownStream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  ByteField("EncryptionState", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 9),
-			10: ByteField("EncryptionKeyRing", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("PortId", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("TContPointer", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("Direction", EnumerationAttributeType, 0x2000, 3, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint16Field("TrafficManagementPointerForUpstream", PointerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("TrafficDescriptorProfilePointerForUpstream", PointerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6:  ByteField("UniCounter", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
+			7:  Uint16Field("PriorityQueuePointerForDownStream", PointerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  ByteField("EncryptionState", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  Uint16Field("TrafficDescriptorProfilePointerForDownstream", PointerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 9),
+			10: ByteField("EncryptionKeyRing", EnumerationAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 10),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			5: "End-to-end loss of continuity",
 		},
 	}
 }
 
-// NewGemPortNetworkCtp (class ID 268 creates the basic
+// NewGemPortNetworkCtp (class ID 268) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewGemPortNetworkCtp(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*gemportnetworkctpBME, params...)
 }

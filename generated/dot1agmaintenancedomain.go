@@ -64,7 +64,7 @@ var dot1agmaintenancedomainBME *ManagedEntityDefinition
 //			MA name must be packed (with additional bytes) into 48-byte CFM message headers. (R,-W)
 //			(mandatory if MD name format is not 1) (25-bytes * 2 attributes)
 //
-//		Maintenance Domain Intermediate Point Half Function Mhf  Creation
+//		Maintenance Domain Intermediate Point Half Function Mhf Creation
 //			(R,-W, setbycreate) (mandatory) (1-byte)
 //
 //		Sender Id Permission
@@ -85,21 +85,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("MdLevel", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("MdNameFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: MultiByteField("MdName1MdName2", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: ByteField("SenderIdPermission", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("MdLevel", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("MdNameFormat", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: MultiByteField("MdName1MdName2", OctetsAttributeType, 0x2000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField("MaintenanceDomainIntermediatePointHalfFunctionMhfCreation", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: ByteField("SenderIdPermission", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1AgMaintenanceDomain (class ID 299 creates the basic
+// NewDot1AgMaintenanceDomain (class ID 299) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgMaintenanceDomain(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agmaintenancedomainBME, params...)
 }

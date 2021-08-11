@@ -137,32 +137,34 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  MultiByteField("XdslTransmissionSystem", 7, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  ByteField("LinePowerManagementState", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint16Field("DownstreamLineAttenuation", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint16Field("UpstreamLineAttenuation", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint16Field("DownstreamSignalAttenuation", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint16Field("UpstreamSignalAttenuation", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint16Field("DownstreamSnrRatioMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint16Field("UpstreamSnrMargin", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("DownstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("UpstreamMaximumAttainableDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint16Field("DownstreamActualPowerSpectrumDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint16Field("UpstreamActualPowerSpectrumDensity", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint16Field("DownstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint16Field("UpstreamActualAggregateTransmitPower", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: ByteField("InitializationLastStateTransmittedDownstream", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
-			16: ByteField("InitializationLastStateTransmittedUpstream", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  MultiByteField("XdslTransmissionSystem", OctetsAttributeType, 0x8000, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 1),
+			2:  ByteField("LinePowerManagementState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3:  Uint16Field("DownstreamLineAttenuation", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint16Field("UpstreamLineAttenuation", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint16Field("DownstreamSignalAttenuation", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint16Field("UpstreamSignalAttenuation", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint16Field("DownstreamSnrRatioMargin", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint16Field("UpstreamSnrMargin", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("DownstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("UpstreamMaximumAttainableDataRate", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint16Field("DownstreamActualPowerSpectrumDensity", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint16Field("UpstreamActualPowerSpectrumDensity", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint16Field("DownstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint16Field("UpstreamActualAggregateTransmitPower", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: ByteField("InitializationLastStateTransmittedDownstream", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+			16: ByteField("InitializationLastStateTransmittedUpstream", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, false, false, 16),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineInventoryAndStatusDataPart2 (class ID 101 creates the basic
+// NewXdslLineInventoryAndStatusDataPart2 (class ID 101) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineInventoryAndStatusDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineinventoryandstatusdatapart2BME, params...)
 }

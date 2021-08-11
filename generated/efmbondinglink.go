@@ -24,11 +24,11 @@ import "github.com/deckarep/golang-set"
 
 // EfmBondingLinkClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding link
-const EfmBondingLinkClassID ClassID = ClassID(420)
+const EfmBondingLinkClassID ClassID = ClassID(419)
 
 var efmbondinglinkBME *ManagedEntityDefinition
 
-// EfmBondingLink (class ID #420)
+// EfmBondingLink (class ID #419)
 //	The EFM bonding link represents a link that can be bonded with other links to form a group. In
 //	[IEEE 802.3], a bonding group is known as a PAF and a link is known as a PME. Instances of this
 //	ME are created and deleted by the OLT.
@@ -59,25 +59,30 @@ type EfmBondingLink struct {
 func init() {
 	efmbondinglinkBME = &ManagedEntityDefinition{
 		Name:    "EfmBondingLink",
-		ClassID: 420,
+		ClassID: 419,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("AssociatedGroupMeId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: ByteField("LinkAlarmEnable", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("AssociatedGroupMeId", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: ByteField("LinkAlarmEnable", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Link down",
 		},
 	}
 }
 
-// NewEfmBondingLink (class ID 420 creates the basic
+// NewEfmBondingLink (class ID 419) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEfmBondingLink(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*efmbondinglinkBME, params...)
 }

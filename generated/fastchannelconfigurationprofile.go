@@ -119,26 +119,28 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint32Field("MaximumNetDataRateMaxndr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 0),
-			1:  Uint32Field("MinimumExpectedThroughputMinetr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  Uint32Field("MaximumGammaDataRateMaxgdr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  Uint32Field("MinimumGammaDataRateMingdr", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  Uint32Field("MaximumDelayDelaymax", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  ByteField("ShineRatioShineratio", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("ReinInterArrivalTimeIatRein", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: ByteField("RtxTcTestmodeRtxTestmode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
+			0:  Uint32Field("MaximumNetDataRateMaxndr", UnknownAttributeType, 0x0000, 0, mapset.NewSetWith(Read, Write), false, false, false, 0),
+			1:  Uint32Field("MinimumExpectedThroughputMinetr", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  Uint32Field("MaximumGammaDataRateMaxgdr", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  Uint32Field("MinimumGammaDataRateMingdr", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  Uint32Field("MaximumDelayDelaymax", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  Uint16Field("MinimumImpulseNoiseProtectionAgainstShineInpminShine", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  ByteField("ShineRatioShineratio", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("MinimumImpulseNoiseProtectionAgainstReinInpminRein", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("ReinInterArrivalTimeIatRein", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("MinimumReedSolomonRfecNfecRatioRnratio", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: ByteField("RtxTcTestmodeRtxTestmode", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewFastChannelConfigurationProfile (class ID 432 creates the basic
+// NewFastChannelConfigurationProfile (class ID 432) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewFastChannelConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*fastchannelconfigurationprofileBME, params...)
 }

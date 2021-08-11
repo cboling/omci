@@ -154,34 +154,45 @@ func init() {
 		Name:    "CircuitPack",
 		ClassID: 6,
 		MessageTypes: mapset.NewSetWith(
-			Create,
 			Get,
 			Set,
+			Create,
+			Delete,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("Type", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 1),
-			2:  ByteField("NumberOfPorts", 0, mapset.NewSetWith(Read), false, false, true, false, 2),
-			3:  Uint64Field("SerialNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  MultiByteField("Version", 14, nil, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("VendorId", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 7),
-			8:  ByteField("BridgedOrIpInd", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  MultiByteField("EquipmentId", 20, nil, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: ByteField("CardConfiguration", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: ByteField("TotalTContBufferNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: ByteField("TotalPriorityQueueNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: ByteField("TotalTrafficSchedulerNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("PowerShedOverride", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("Type", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 1),
+			2:  ByteField("NumberOfPorts", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, true, false, 2),
+			3:  MultiByteField("SerialNumber", OctetsAttributeType, 0x2000, 8, toOctets("ICAgICAgICA="), mapset.NewSetWith(Read), false, false, false, 3),
+			4:  MultiByteField("Version", OctetsAttributeType, 0x1000, 14, toOctets("ICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), false, false, false, 4),
+			5:  MultiByteField("VendorId", StringAttributeType, 0x0800, 4, toOctets("ICAgIA=="), mapset.NewSetWith(Read), false, true, false, 5),
+			6:  ByteField("AdministrativeState", EnumerationAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("OperationalState", EnumerationAttributeType, 0x0200, 2, mapset.NewSetWith(Read), true, true, false, 7),
+			8:  ByteField("BridgedOrIpInd", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  MultiByteField("EquipmentId", StringAttributeType, 0x0080, 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), false, true, false, 9),
+			10: ByteField("CardConfiguration", EnumerationAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: ByteField("TotalTContBufferNumber", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: ByteField("TotalPriorityQueueNumber", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: ByteField("TotalTrafficSchedulerNumber", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("PowerShedOverride", BitFieldAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Equipment alarm",
+			1: "Powering alarm",
+			2: "Self-test failure",
+			3: "Laser end of life",
+			4: "Temperature yellow",
+			5: "Temperature red",
 		},
 	}
 }
 
-// NewCircuitPack (class ID 6 creates the basic
+// NewCircuitPack (class ID 6) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewCircuitPack(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*circuitpackBME, params...)
 }

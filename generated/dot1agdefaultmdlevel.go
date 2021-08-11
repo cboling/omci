@@ -89,22 +89,25 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: ByteField("CatchallLevel", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: ByteField("CatchallMhfCreation", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: ByteField("CatchallSenderIdPermission", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: TableField("DefaultMdLevelTable", TableInfo{0, 1}, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("Layer2Type", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField("CatchallLevel", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField("CatchallMhfCreation", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField("CatchallSenderIdPermission", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: TableField("DefaultMdLevelTable", TableAttributeType, 0x0800, TableInfo{nil, 29}, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1AgDefaultMdLevel (class ID 301 creates the basic
+// NewDot1AgDefaultMdLevel (class ID 301) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgDefaultMdLevel(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agdefaultmdlevelBME, params...)
 }

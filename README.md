@@ -1,98 +1,94 @@
 # OMCI
 
 OMCI gopacket library supports the encoding and decoding of ITU G.988 OMCI
-messages. It is currently a work in progress.
+messages. Support for the Baseline and Extended Message Set has been completed for
+basic serialization and decode and some support for the MEFrame library.
 
-## Message Types supported and under unit test
-The following OMCI message types currently have been coded and are covered
-satisfactory by unit tests.
+Current work is to focus on getting unit test coverage >= 75% for the basic serialization
+and decode objects before work for additional extended message set support in the
+MEFrame library.
 
- - CreateRequest
- - CreateResponse
- - DeleteRequest
- - DeleteResponse
- - SetRequest
- - GetRequest
- - GetAllAlarmsRequest
- - GetAllAlarmsResponse
- - GetAllAlarmsNextRequest
- - MibUploadRequest
- - MibUploadResponse
- - MibUploadNextRequest
- - MibResetRequest
- - MibResetResponse
- - SynchronizeTimeRequest
+# Recent Changes
 
-## Message Types supported but lacking full unit test
-The following OMCI message types currently have been coded and are partially covered
-by unit tests, but work still remains for sufficient/better unit test coverage.
+In v2.0.0, the directory/package structure was reorganized (no API changes otherwise)
+in order to separate message type functionality on a filename basis. This will allow
+for future features and bug fixes to be better localized and to allow for better
+unit test coverage reporting.
 
- - SetResponse
- - GetResponse
- - GetAllAlarmsNextResponse
- - MibUploadNextResponse
- - SynchronizeTimeResponse
- - AttributeValueChange
- - RebootRequest
- - RebootResponse
- - StartSoftwareDownloadRequest
- - GetNextRequest
- - GetNextResponse
-
-## Message Types supported but lacking any unit test
-The following OMCI message types currently have been coded but do not
-have any unit test coverage.
-
- - StartSoftwareDownloadResponse
- - DownloadSectionRequest
- - DownloadSectionResponse
- - EndSoftwareDownloadRequest
- - EndSoftwareDownloadResponse
- - ActivateSoftwareRequest
- - ActivateSoftwareResponse
- - CommitSoftwareRequest
- - CommitSoftwareResponse
- - GetCurrentDataRequest
- - GetCurrentDataResponse
- - AlarmNotification
+Bug fixes will typically result in an increment of the third number in the version string
+and additional feature support will typically result in incrementing the second number. 
  
-## Message Types not yet supported
-
-The following OMCI message types currently have not been coded.
-
- - TestResult
- - TestRequest
- - TestResponse
- - SetTableRequest
- - SetTableResponse
-
 ## Current user-test coverage
 
+The _**make** test_ command can be used to create code coverage support for the
+library. The current coverage for version 2.5.1 (as of 7/26/2021) is:
+
+Entire Project:         96% of files and 66.1% of statements
+Generated Subdirectory: 96.9% of files and 36.4% of statements
+meframe Subdirectory:   80% of files and 55.4% of statements
+
+Main Message Directory (below):
+
+| File            | Coverage |
+| --------------: | :---: |
+| alarms.go       | 74.3% |
+| avc.go          | 86%   |
+| create.go       | 82.5% |
+| delete.go       | 85.5% |
+| get.go          | 78.4% |
+| getcurrent.go   | 69.4% |
+| getnext.go      | 79.3% |
+| layers.go       | 100%  |
+| mebase.go       | 93.3% |
+| messagetypes.go | 100%  |
+| mibreset.go     | 76.6% |
+| mibupload.go    | 77%   |
+| omci.go         | 90.6% |
+| reboot.go       | 81.2% |
+| set.go          | 77.3% |
+| settable.go     | 81.5% |
+| software.go     | 75.2% |
+| synctime.go     | 79.3% |
+| test.go         | 79.9% |
 
 ## Other outstanding items
 
-Besides OMCI Message decode/serialization, and associated unit tests, the following items
-would be needed or useful in a first official release of this library. Some changes are
-to be done in the generated OMCI ME code as well.
+A few additional features have been requested and are listed below for future inclusion
+in the package:
 
- - Specific examples of how to use this library (expand upon DecodeEncode.go examples)
-   Include unknown ME examples and how to catch various common or expected errors
- - Add Alarm Table Support (generated MEs also)
+ - Constraint checking (these are not yet fully parsed/provided by the OMCI code generated
+   structs). This feature will hopefully be available in the near future.
  - Add AVC flag for appropriate attributes
- - For serialization, check early for message size exceeded
- - Check proper gopacket use of Payload/Contents properties and make sure we
-   follow guidelines (if there are any)
- - For 'mebase.go' string output, look up ME name and output as needed
- - Look through 'error' messages and see if there are a few very common ones that
-   could be moved to a custom class to allow for better user interception/decode of
-   these errors.
+ - Review other gopacket libraries for logging support and add some type of logging support
+   if it is standard. If not, recommend design patterns users of this library can use to detect
+   issues in decode or serialization.
+ - For several of the software image message types, multiple instances can be supported. Unit
+   test and source implementation to verify correct implementation is needed.
  
-The following would be 'nice' to have but are not necessary for initial code release
- - Extended message support
- - MIC Encode/Decode support
+Also searching through the code for _TODO_ statements will also yield additional areas of
+work to be performed.
 
-## Create requests
-Currently the OMCI parser does not decode the default Set-By-Create attribute values
-from the ITU document. So for attributes that do not have a default of zero, you must
-specify the defaults if you use the 'meframe.go' routine to create a CreateRequest
-for a specific Managed Entity Instance.
+## What is not provided by this library
+
+This library is not a full OMCI stack for either an OLT or an ONU. It is focused primarily on
+packet decode/serialization and a variety of structs and functions that are useful for handling
+the creation of OMCI frames and handling decoded frames from the PON.
+
+For an OLT-side OMCI stack, you would still need to write:
+ - OMCI CC sender & receiver (stop & wait protocol) with appropriate timeout support
+ - OLT State machines to support 
+   - MIB Uploads/Audits/Resynchronization (and a MIB database implemention),
+   - More sophisticated get & get-next support to make handle of MEs with
+     lots of attributes or table attributes easy to handle and code,
+   - Alarm Table support,
+   - OMCI ME/Msg-Type capabilities inquiry,
+   - Performance Monitoring collection (and initial time synchronization), 
+   - Service implementation
+
+For an ONU-side OMCI stack, you would still need to write:
+   - OMCC implementation,
+   - MIB Database,
+   - Get-Next cache for table attributes,
+   - MIB upload next cache for MIB uploads,
+   - Generation of any alarms/AVC notifications,
+   - Actually acting on the create/delete/get/set/... requests from an OLT

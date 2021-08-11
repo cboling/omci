@@ -128,30 +128,36 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("LoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 3),
-			4:  Uint16Field("MaxFrameSize", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 5),
-			6:  ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  ByteField("PppoeFilter", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8:  ByteField("NetworkStatus", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  MultiByteField("Password", 17, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: ByteField("PrivacyEnabled", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
-			11: Uint16Field("MinimumBandwidthAlarmThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: Uint32Field("FrequencyMask", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint16Field("RfChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint16Field("LastOperationalFrequency", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("LoopbackConfiguration", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, true, false, 1),
+			2:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  ByteField("OperationalState", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), true, true, false, 3),
+			4:  Uint16Field("MaxFrameSize", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  ByteField("Arc", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), true, true, false, 5),
+			6:  ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  ByteField("PppoeFilter", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8:  ByteField("NetworkStatus", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  MultiByteField("Password", OctetsAttributeType, 0x0080, 17, toOctets("AAAAAAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: ByteField("PrivacyEnabled", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, false, false, 10),
+			11: Uint16Field("MinimumBandwidthAlarmThreshold", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: Uint32Field("FrequencyMask", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint16Field("RfChannel", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint16Field("LastOperationalFrequency", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "MoCA LOL",
+			1: "MoCA limited link (LL)",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointMocaUni (class ID 162 creates the basic
+// NewPhysicalPathTerminationPointMocaUni (class ID 162) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointMocaUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointmocauniBME, params...)
 }

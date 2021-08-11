@@ -95,25 +95,27 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XFF80,
+		AllowedAttributeMask: 0xff80,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("Name", 25, nil, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("Size", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: ByteField("Access", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: ByteField("Format", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint32Field("LowerLimit", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint32Field("UpperLimit", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint32Field("BitField", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8: TableField("CodePointsTable", TableInfo{0, 2}, mapset.NewSetWith(Read), false, false, false, 8),
-			9: ByteField("Support", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: MultiByteField("Name", OctetsAttributeType, 0x8000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("Size", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: ByteField("Access", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: ByteField("Format", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint32Field("LowerLimit", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint32Field("UpperLimit", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: Uint32Field("BitField", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8: TableField("CodePointsTable", TableAttributeType, 0x0100, TableInfo{nil, 2}, mapset.NewSetWith(Read), false, false, false, 8),
+			9: ByteField("Support", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewAttributeMe (class ID 289 creates the basic
+// NewAttributeMe (class ID 289) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewAttributeMe(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*attributemeBME, params...)
 }

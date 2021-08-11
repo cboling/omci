@@ -32,6 +32,7 @@ type MeBasePacket struct {
 	gopacket.Layer
 	layers.BaseLayer
 	MsgLayerType gopacket.LayerType
+	Extended     bool
 }
 
 func (msg *MeBasePacket) String() string {
@@ -65,11 +66,19 @@ func (msg *MeBasePacket) NextLayerType() gopacket.LayerType {
 }
 
 // DecodeFromBytes decodes the given bytes into this layer
-func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder) error {
-	// Note: Base OMCI frame already checked for frame with at least 10 octets
+func (msg *MeBasePacket) DecodeFromBytes(data []byte, p gopacket.PacketBuilder, contentSize int) error {
+	if len(data) < contentSize {
+		p.SetTruncated()
+		layerType := msg.LayerType().String()
+		if msg.Extended {
+			layerType += " (extended)"
+		}
+		return fmt.Errorf("frame header too small. %v header length %v, %v required",
+			layerType, len(data), contentSize)
+	}
 	msg.EntityClass = me.ClassID(binary.BigEndian.Uint16(data[0:]))
 	msg.EntityInstance = binary.BigEndian.Uint16(data[2:])
-	msg.BaseLayer = layers.BaseLayer{Contents: data[:4], Payload: data[4:]}
+	msg.BaseLayer = layers.BaseLayer{Contents: data[:contentSize], Payload: data[contentSize:]}
 	return nil
 }
 

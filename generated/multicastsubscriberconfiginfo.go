@@ -82,6 +82,9 @@ var multicastsubscriberconfiginfoBME *ManagedEntityDefinition
 //		Multicast Service Package Table
 //			(R,-W) (optional) (20N bytes, where N is the number of entries in the table)
 //
+//		Allowed Preview Groups Table
+//			Each list entry begins with a table control field:
+//
 type MulticastSubscriberConfigInfo struct {
 	ManagedEntityDefinition
 	Attributes AttributeValueMap
@@ -97,23 +100,27 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("MeType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("MulticastOperationsProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint16Field("MaxSimultaneousGroups", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4: Uint32Field("MaxMulticastBandwidth", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5: ByteField("BandwidthEnforcement", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
-			6: TableField("MulticastServicePackageTable", TableInfo{nil, 22}, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("MeType", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("MulticastOperationsProfilePointer", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint16Field("MaxSimultaneousGroups", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4: Uint32Field("MaxMulticastBandwidth", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5: ByteField("BandwidthEnforcement", EnumerationAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
+			6: TableField("MulticastServicePackageTable", TableAttributeType, 0x0400, TableInfo{nil, 20}, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7: TableField("AllowedPreviewGroupsTable", TableAttributeType, 0x0200, TableInfo{nil, 22}, mapset.NewSetWith(Read, Write), false, false, false, 7),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMulticastSubscriberConfigInfo (class ID 310 creates the basic
+// NewMulticastSubscriberConfigInfo (class ID 310) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMulticastSubscriberConfigInfo(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*multicastsubscriberconfiginfoBME, params...)
 }

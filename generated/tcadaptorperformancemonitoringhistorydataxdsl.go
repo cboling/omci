@@ -47,7 +47,7 @@ var tcadaptorperformancemonitoringhistorydataxdslBME *ManagedEntityDefinition
 //			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1-byte)
 //
-//		Threshold Data 1 _2 Id
+//		Threshold Data 1_2 Id
 //			Threshold data1/2 ID: This attribute points to an instance of the threshold data1 ME that
 //			contains PM threshold values. Since no threshold value attribute number exceeds 7, a threshold
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
@@ -100,27 +100,40 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint16Field("NearEndHecViolationCount", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("NearEndDelineatedTotalCellCountCdP", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("NearEndUserTotalCellCountCuP", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint16Field("NearEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint16Field("FarEndHecViolationCount", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("FarEndDelineatedTotalCellCountCdPfe", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("FarEndUserTotalCellCountCuPfe", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint16Field("FarEndIdleCellBitErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint16Field("NearEndHecViolationCount", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("NearEndDelineatedTotalCellCountCdP", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("NearEndUserTotalCellCountCuP", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint16Field("NearEndIdleCellBitErrorCount", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint16Field("FarEndHecViolationCount", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("FarEndDelineatedTotalCellCountCdPfe", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("FarEndUserTotalCellCountCuPfe", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint16Field("FarEndIdleCellBitErrorCount", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Near-end HEC violation",
+			1: "Near-end idle cell bit error count",
+			2: "Far-end HEC violation count",
+			3: "Far-end idle cell bit error count",
+			4: "Near-end delineated total cell count (CD-P)",
+			5: "Near-end user total cell count (CU-P)",
+			6: "Far-end delineated total cell count (CD-PFE)",
+			7: "Far-end user total cell count (CU-PFE)",
 		},
 	}
 }
 
-// NewTcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID 116 creates the basic
+// NewTcAdaptorPerformanceMonitoringHistoryDataXdsl (class ID 116) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTcAdaptorPerformanceMonitoringHistoryDataXdsl(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*tcadaptorperformancemonitoringhistorydataxdslBME, params...)
 }

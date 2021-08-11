@@ -94,7 +94,7 @@ var onudynamicpowermanagementcontrolBME *ManagedEntityDefinition
 //		Maximum Sleep Interval Extension
 //			(R,-W) (optional) (8-bytes)
 //
-//		Ethernet Passive Optical Network Epon  Capability Extension
+//		Ethernet Passive Optical Network Epon Capability Extension
 //			-	Configurations: ackEnable configuration = enable, Sleep indication configuration = disable,
 //			Early wake-up configuration = enable
 //
@@ -119,28 +119,30 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("PowerReductionManagementCapability", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  ByteField("PowerReductionManagementMode", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  Uint16Field("Itransinit", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint16Field("Itxinit", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("MaximumSleepInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  Uint32Field("MaximumReceiverOffInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  Uint32Field("MinimumAwareInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  Uint16Field("MinimumActiveHeldInterval", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  Uint64Field("MaximumSleepIntervalExtension", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: ByteField("EponSetupExtension", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: Uint32Field("MissingConsecutiveBurstsThreshold", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("PowerReductionManagementCapability", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  ByteField("PowerReductionManagementMode", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  Uint16Field("Itransinit", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint16Field("Itxinit", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("MaximumSleepInterval", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  Uint32Field("MaximumReceiverOffInterval", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  Uint32Field("MinimumAwareInterval", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  Uint16Field("MinimumActiveHeldInterval", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  Uint64Field("MaximumSleepIntervalExtension", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: ByteField("EthernetPassiveOpticalNetworkEponCapabilityExtension", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: ByteField("EponSetupExtension", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: Uint32Field("MissingConsecutiveBurstsThreshold", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, false, false, 12),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewOnuDynamicPowerManagementControl (class ID 336 creates the basic
+// NewOnuDynamicPowerManagementControl (class ID 336) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewOnuDynamicPowerManagementControl(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*onudynamicpowermanagementcontrolBME, params...)
 }

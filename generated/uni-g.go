@@ -77,21 +77,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint16Field("Deprecated", 0, mapset.NewSetWith(Read, Write), false, false, false, true, 1),
-			2: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: ByteField("ManagementCapability", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4: Uint16Field("NonOmciManagementIdentifier", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: Uint16Field("RelayAgentOptions", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: Uint16Field("Deprecated", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, true, 1),
+			2: ByteField("AdministrativeState", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField("ManagementCapability", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4: Uint16Field("NonOmciManagementIdentifier", PointerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: Uint16Field("RelayAgentOptions", PointerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewUniG (class ID 264 creates the basic
+// NewUniG (class ID 264) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewUniG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*unigBME, params...)
 }

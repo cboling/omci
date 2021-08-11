@@ -113,31 +113,33 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("UnderlyingTransport", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  ByteField("ServiceType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("Signalling", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint16Field("TdmUniPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("NorthSidePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint16Field("FarEndIpInfo", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  Uint16Field("PayloadSize", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  ByteField("PayloadEncapsulationDelay", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("TimingMode", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: Uint64Field("TransmitCircuitId", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
-			11: Uint64Field("ExpectedCircuitId", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 11),
-			12: Uint64Field("ReceivedCircuitId", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint16Field("ExceptionPolicy", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 14),
-			15: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("UnderlyingTransport", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  ByteField("ServiceType", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("Signalling", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint16Field("TdmUniPointer", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("NorthSidePointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint16Field("FarEndIpInfo", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  Uint16Field("PayloadSize", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  ByteField("PayloadEncapsulationDelay", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("TimingMode", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: Uint64Field("TransmitCircuitId", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, false, false, 10),
+			11: Uint64Field("ExpectedCircuitId", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, false, false, 11),
+			12: Uint64Field("ReceivedCircuitId", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint16Field("ExceptionPolicy", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: ByteField("Arc", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), true, true, false, 14),
+			15: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, Write), false, true, false, 15),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewPseudowireTerminationPoint (class ID 282 creates the basic
+// NewPseudowireTerminationPoint (class ID 282) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPseudowireTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*pseudowireterminationpointBME, params...)
 }

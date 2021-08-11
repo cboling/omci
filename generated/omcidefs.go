@@ -48,12 +48,16 @@ type AttributeAccess byte
 // from the ITU-T G.988 specification.
 type ClassID uint16
 
+// AlarmMap is a mapping of alarm bit numbers to alarm names and can be
+// used during decode of Alarm Notification messages
+type AlarmMap map[uint8]string
+
 func (cid ClassID) String() string {
-	if entity, err := LoadManagedEntityDefinition(cid); err == nil {
+	if entity, err := LoadManagedEntityDefinition(cid); err.StatusCode() == Success {
 		return fmt.Sprintf("[%s] (%d/%#x)",
 			entity.GetManagedEntityDefinition().GetName(), uint16(cid), uint16(cid))
 	}
-	return fmt.Sprintf("unknown ClassID")
+	return fmt.Sprintf("unknown ClassID: %d (%#x)", uint16(cid), uint16(cid))
 }
 
 const (
@@ -98,6 +102,7 @@ const (
 	TestResult            MsgType = 27
 	GetCurrentData        MsgType = 28
 	SetTable              MsgType = 29 // Defined in Extended Message Set Only
+	ExtendedOffset        MsgType = 0x80
 )
 
 func (mt MsgType) String() string {
@@ -252,9 +257,10 @@ type IManagedEntityDefinition interface {
 	GetMessageTypes() mapset.Set
 	GetAllowedAttributeMask() uint16
 	GetAttributeDefinitions() AttributeDefinitionMap
+	GetAlarmMap() AlarmMap
 
 	DecodeAttributes(uint16, []byte, gopacket.PacketBuilder, byte) (AttributeValueMap, error)
-	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte, int) error
+	SerializeAttributes(AttributeValueMap, uint16, gopacket.SerializeBuffer, byte, int, bool) (error, uint16)
 }
 
 type IManagedEntity interface {

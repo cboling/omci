@@ -85,23 +85,26 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("DozeTime", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("CyclicSleepTime", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint32Field("WatchfulSleepTime", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint32Field("EnergyConsumed", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("DozeTime", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("CyclicSleepTime", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint32Field("WatchfulSleepTime", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint32Field("EnergyConsumed", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEnergyConsumptionPerformanceMonitoringHistoryData (class ID 343 creates the basic
+// NewEnergyConsumptionPerformanceMonitoringHistoryData (class ID 343) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEnergyConsumptionPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*energyconsumptionperformancemonitoringhistorydataBME, params...)
 }

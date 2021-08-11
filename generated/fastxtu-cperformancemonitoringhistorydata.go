@@ -80,21 +80,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("SuccessfulFraCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("SuccessfulRpaCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5: Uint32Field("SuccessfulTigaCounter", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("SuccessfulFraCounter", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("SuccessfulRpaCounter", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5: Uint32Field("SuccessfulTigaCounter", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewFastXtuCPerformanceMonitoringHistoryData (class ID 437 creates the basic
+// NewFastXtuCPerformanceMonitoringHistoryData (class ID 437) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewFastXtuCPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*fastxtucperformancemonitoringhistorydataBME, params...)
 }

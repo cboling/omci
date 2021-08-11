@@ -48,7 +48,7 @@ var twdmchannelxgemperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
 //			(mandatory) (1-byte)
 //
-//		Threshold Data 64 B It Id
+//		Threshold Data 64 Bit Id
 //			Threshold data 64-bit ID: This attribute points to an instance of the threshold data 64-bit ME
 //			that contains PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
@@ -103,26 +103,28 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData64BItId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint64Field("TotalTransmittedXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint64Field("TransmittedXgemFramesWithLfBitNotSet", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint64Field("TotalReceivedXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint64Field("FsWordsLostToXgemHeaderHecErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint64Field("XgemEncryptionKeyErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData64BitId", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint64Field("TotalTransmittedXgemFrames", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint64Field("TransmittedXgemFramesWithLfBitNotSet", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint64Field("TotalReceivedXgemFrames", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint64Field("ReceivedXgemFramesWithXgemHeaderHecErrors", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint64Field("FsWordsLostToXgemHeaderHecErrors", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint64Field("XgemEncryptionKeyErrors", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint64Field("TotalTransmittedBytesInNonIdleXgemFrames", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint64Field("TotalReceivedBytesInNonIdleXgemFrames", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewTwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445 creates the basic
+// NewTwdmChannelXgemPerformanceMonitoringHistoryData (class ID 445) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelXgemPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchannelxgemperformancemonitoringhistorydataBME, params...)
 }

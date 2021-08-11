@@ -74,21 +74,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: MultiByteField("DownstreamSubcarrierMask1", 16, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: MultiByteField("DownstreamSubcarrierMask2", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: MultiByteField("DownstreamSubcarrierMask3", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: MultiByteField("DownstreamSubcarrierMask4", 16, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: ByteField("MaskValid", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: MultiByteField("DownstreamSubcarrierMask1", OctetsAttributeType, 0x8000, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: MultiByteField("DownstreamSubcarrierMask2", OctetsAttributeType, 0x4000, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: MultiByteField("DownstreamSubcarrierMask3", OctetsAttributeType, 0x2000, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: MultiByteField("DownstreamSubcarrierMask4", OctetsAttributeType, 0x1000, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: ByteField("MaskValid", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslSubcarrierMaskingDownstreamProfile (class ID 108 creates the basic
+// NewXdslSubcarrierMaskingDownstreamProfile (class ID 108) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslSubcarrierMaskingDownstreamProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslsubcarriermaskingdownstreamprofileBME, params...)
 }

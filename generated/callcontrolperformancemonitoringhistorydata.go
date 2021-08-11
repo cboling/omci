@@ -89,24 +89,34 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("CallSetupFailures", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("CallSetupTimer", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint32Field("CallTerminateFailures", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint32Field("AnalogPortReleases", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint32Field("AnalogPortOffHookTimer", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("CallSetupFailures", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("CallSetupTimer", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint32Field("CallTerminateFailures", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint32Field("AnalogPortReleases", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: Uint32Field("AnalogPortOffHookTimer", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "CCPM call set-up fail",
+			1: "CCPM set-up timeout",
+			2: "CCPM call terminate",
+			3: "CCPM port release with no dialling",
+			4: "CCPM port offhook timeout",
 		},
 	}
 }
 
-// NewCallControlPerformanceMonitoringHistoryData (class ID 140 creates the basic
+// NewCallControlPerformanceMonitoringHistoryData (class ID 140) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewCallControlPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*callcontrolperformancemonitoringhistorydataBME, params...)
 }

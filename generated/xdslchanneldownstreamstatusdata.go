@@ -131,27 +131,29 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFFE0,
+		AllowedAttributeMask: 0xffe0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("ActualInterleavingDelay", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint32Field("ActualDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint32Field("PreviousDataRate", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  ByteField("ActualImpulseNoiseProtection", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  ByteField("ActualSizeOfReedSolomonCodeword", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint16Field("ActualNumberOfBitsPerSymbol", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint16Field("ActualInterleavingDepth", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  ByteField("ActualInterleavingBlockLength", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: ByteField("ActualLatencyPath", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: ByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("ActualInterleavingDelay", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint32Field("ActualDataRate", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3:  Uint32Field("PreviousDataRate", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  ByteField("ActualImpulseNoiseProtection", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  ByteField("ActualSizeOfReedSolomonCodeword", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  ByteField("ActualNumberOfReedSolomonRedundancyBytes", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint16Field("ActualNumberOfBitsPerSymbol", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint16Field("ActualInterleavingDepth", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  ByteField("ActualInterleavingBlockLength", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: ByteField("ActualLatencyPath", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: ByteField("ActualImpulseNoiseProtectionAgainstREpetitiveELectricalIMpulseNOiseActinpRein", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslChannelDownstreamStatusData (class ID 102 creates the basic
+// NewXdslChannelDownstreamStatusData (class ID 102) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslChannelDownstreamStatusData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslchanneldownstreamstatusdataBME, params...)
 }

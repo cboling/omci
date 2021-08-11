@@ -95,28 +95,30 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  MultiByteField("CancelCallWaiting", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2:  MultiByteField("CallHold", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
-			3:  MultiByteField("CallPark", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4:  MultiByteField("CallerIdActivate", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5:  MultiByteField("CallerIdDeactivate", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
-			6:  MultiByteField("DoNotDisturbActivation", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  MultiByteField("DoNotDisturbDeactivation", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 7),
-			8:  MultiByteField("DoNotDisturbPinChange", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
-			9:  MultiByteField("EmergencyServiceNumber", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: MultiByteField("IntercomService", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: MultiByteField("UnattendedBlindCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: MultiByteField("AttendedCallTransfer", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  MultiByteField("CancelCallWaiting", OctetsAttributeType, 0x8000, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 1),
+			2:  MultiByteField("CallHold", OctetsAttributeType, 0x4000, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 2),
+			3:  MultiByteField("CallPark", OctetsAttributeType, 0x2000, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4:  MultiByteField("CallerIdActivate", OctetsAttributeType, 0x1000, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5:  MultiByteField("CallerIdDeactivate", OctetsAttributeType, 0x0800, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 5),
+			6:  MultiByteField("DoNotDisturbActivation", OctetsAttributeType, 0x0400, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  MultiByteField("DoNotDisturbDeactivation", OctetsAttributeType, 0x0200, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 7),
+			8:  MultiByteField("DoNotDisturbPinChange", OctetsAttributeType, 0x0100, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 8),
+			9:  MultiByteField("EmergencyServiceNumber", OctetsAttributeType, 0x0080, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: MultiByteField("IntercomService", OctetsAttributeType, 0x0040, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: MultiByteField("UnattendedBlindCallTransfer", OctetsAttributeType, 0x0020, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: MultiByteField("AttendedCallTransfer", OctetsAttributeType, 0x0010, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 12),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVoipFeatureAccessCodes (class ID 147 creates the basic
+// NewVoipFeatureAccessCodes (class ID 147) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipFeatureAccessCodes(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voipfeatureaccesscodesBME, params...)
 }

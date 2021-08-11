@@ -87,24 +87,44 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("AvailableSignallingProtocols", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: ByteField("SignallingProtocolUsed", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: Uint32Field("AvailableVoipConfigurationMethods", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: ByteField("VoipConfigurationMethodUsed", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5: Uint16Field("VoipConfigurationAddressPointer", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6: ByteField("VoipConfigurationState", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: ByteField("RetrieveProfile", 0, mapset.NewSetWith(Write), false, false, false, false, 7),
-			8: MultiByteField("ProfileVersion", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("AvailableSignallingProtocols", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField("SignallingProtocolUsed", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: Uint32Field("AvailableVoipConfigurationMethods", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: ByteField("VoipConfigurationMethodUsed", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: Uint16Field("VoipConfigurationAddressPointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6: ByteField("VoipConfigurationState", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: ByteField("RetrieveProfile", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Write), false, false, false, 7),
+			8: MultiByteField("ProfileVersion", OctetsAttributeType, 0x0100, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, false, 8),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "VCD config server name",
+			1:  "VCD config server reach",
+			2:  "VCD config server connect",
+			3:  "VCD config server validate",
+			4:  "VCD config server auth",
+			5:  "VCD config server timeout",
+			6:  "VCD config server fail",
+			7:  "VCD config file error",
+			8:  "VCD subscription name",
+			9:  "VCD subscription reach",
+			10: "VCD subscription connect",
+			11: "VCD subscription validate",
+			12: "VCD subscription auth",
+			13: "VCD subscription timeout",
+			14: "VCD subscription fail",
+			15: "VCD reboot request",
 		},
 	}
 }
 
-// NewVoipConfigData (class ID 138 creates the basic
+// NewVoipConfigData (class ID 138) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVoipConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*voipconfigdataBME, params...)
 }

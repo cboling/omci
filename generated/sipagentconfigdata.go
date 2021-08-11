@@ -144,32 +144,41 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("ProxyServerAddressPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("OutboundProxyAddressPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("PrimarySipDns", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint32Field("SecondarySipDns", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("TcpUdpPointer", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  Uint32Field("SipRegExpTime", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  Uint32Field("SipReregHeadStartTime", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  Uint16Field("HostPartUri", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("SipStatus", 0, mapset.NewSetWith(Read), true, false, false, false, 9),
-			10: Uint16Field("SipRegistrar", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: Uint32Field("Softswitch", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 11),
-			12: MultiByteField("SipResponseTable", 5, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: ByteField("SipOptionTransmitControl", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 13),
-			14: ByteField("SipUriFormat", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 14),
-			15: Uint16Field("RedundantSipAgentPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("ProxyServerAddressPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("OutboundProxyAddressPointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("PrimarySipDns", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint32Field("SecondarySipDns", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("TcpUdpPointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  Uint32Field("SipRegExpTime", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  Uint32Field("SipReregHeadStartTime", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  Uint16Field("HostPartUri", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("SipStatus", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), true, false, false, 9),
+			10: Uint16Field("SipRegistrar", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: Uint32Field("Softswitch", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 11),
+			12: MultiByteField("SipResponseTable", OctetsAttributeType, 0x0010, 5, toOctets("AAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: ByteField("SipOptionTransmitControl", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 13),
+			14: ByteField("SipUriFormat", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 14),
+			15: Uint16Field("RedundantSipAgentPointer", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 15),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIP-UA register name",
+			1: "SIP-UA register reach",
+			2: "SIP-UA register connect",
+			3: "SIP-UA register validate",
 		},
 	}
 }
 
-// NewSipAgentConfigData (class ID 150 creates the basic
+// NewSipAgentConfigData (class ID 150) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSipAgentConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*sipagentconfigdataBME, params...)
 }

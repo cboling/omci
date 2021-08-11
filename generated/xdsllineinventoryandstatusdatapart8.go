@@ -85,22 +85,24 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", 7, nil, mapset.NewSetWith(Read), false, false, true, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("RetransmissionUsedDownstreamRtxUsedds", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField("RetransmissionUsedUpstreamRtxUsedus", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: MultiByteField("DateTimeStampingOfNearEndTestParametersStampTestNe", OctetsAttributeType, 0x2000, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, true, false, 3),
+			4: MultiByteField("DateTimeStampingOfFarEndTestParametersStampTestFe", OctetsAttributeType, 0x1000, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, true, false, 4),
+			5: MultiByteField("DateTimeStampingOfLastSuccessfulDownstreamOlrOperationStampOlrDs", OctetsAttributeType, 0x0800, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, true, false, 5),
+			6: MultiByteField("DateTimeStampingOfLastSuccessfulUpstreamOlrOperationStampOlrUs", OctetsAttributeType, 0x0400, 7, toOctets("AAAAAAAAAA=="), mapset.NewSetWith(Read), false, true, false, 6),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineInventoryAndStatusDataPart8 (class ID 414 creates the basic
+// NewXdslLineInventoryAndStatusDataPart8 (class ID 414) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineInventoryAndStatusDataPart8(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineinventoryandstatusdatapart8BME, params...)
 }

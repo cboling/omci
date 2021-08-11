@@ -74,7 +74,7 @@ var macbridgeportfilterpreassigntableBME *ManagedEntityDefinition
 //		Arp Filtering
 //			ARP filtering:	(R,-W) (mandatory) (1-byte)
 //
-//		Point_To_Point Protocol Over Ethernet Pppoe  Broadcast Filtering
+//		Point_To_Point Protocol Over Ethernet Pppoe Broadcast Filtering
 //			Point-to-point protocol over Ethernet (PPPoE) broadcast filtering:	(R,-W) (mandatory) (1-byte)
 //
 type MacBridgePortFilterPreAssignTable struct {
@@ -90,26 +90,28 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFC0,
+		AllowedAttributeMask: 0xffc0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("Ipv4MulticastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("Ipv6MulticastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  ByteField("Ipv4BroadcastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  ByteField("RarpFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  ByteField("IpxFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  ByteField("NetbeuiFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("AppletalkFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("BridgeManagementInformationFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("ArpFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 9),
-			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("Ipv4MulticastFiltering", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("Ipv6MulticastFiltering", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  ByteField("Ipv4BroadcastFiltering", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  ByteField("RarpFiltering", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  ByteField("IpxFiltering", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  ByteField("NetbeuiFiltering", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("AppletalkFiltering", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("BridgeManagementInformationFiltering", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("ArpFiltering", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, false, false, 9),
+			10: ByteField("PointToPointProtocolOverEthernetPppoeBroadcastFiltering", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, false, false, 10),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMacBridgePortFilterPreAssignTable (class ID 79 creates the basic
+// NewMacBridgePortFilterPreAssignTable (class ID 79) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgePortFilterPreAssignTable(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeportfilterpreassigntableBME, params...)
 }

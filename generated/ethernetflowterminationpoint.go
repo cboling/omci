@@ -78,21 +78,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: MultiByteField("DestinationMac", 6, nil, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: MultiByteField("SourceMac", 6, nil, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: ByteField("TagPolicy", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: Uint16Field("Tci", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: ByteField("Loopback", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: MultiByteField("DestinationMac", OctetsAttributeType, 0x8000, 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: MultiByteField("SourceMac", OctetsAttributeType, 0x4000, 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read), false, false, false, 2),
+			3: ByteField("TagPolicy", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("Tci", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: ByteField("Loopback", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewEthernetFlowTerminationPoint (class ID 286 creates the basic
+// NewEthernetFlowTerminationPoint (class ID 286) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEthernetFlowTerminationPoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ethernetflowterminationpointBME, params...)
 }

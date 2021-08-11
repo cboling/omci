@@ -94,21 +94,26 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 2),
-			3: MultiByteField("InterdomainName", 25, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 3),
-			4: Uint16Field("TcpUdpPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: Uint16Field("IanaAssignedPort", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("AdministrativeState", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("OperationalState", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, true, false, 2),
+			3: MultiByteField("InterdomainName", StringAttributeType, 0x2000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, true, false, 3),
+			4: Uint16Field("TcpUdpPointer", PointerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: Uint16Field("IanaAssignedPort", UnsignedIntegerAttributeType, 0x0800, 65535, mapset.NewSetWith(Read), false, false, false, 5),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Connecting function fail",
 		},
 	}
 }
 
-// NewVirtualEthernetInterfacePoint (class ID 329 creates the basic
+// NewVirtualEthernetInterfacePoint (class ID 329) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVirtualEthernetInterfacePoint(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*virtualethernetinterfacepointBME, params...)
 }

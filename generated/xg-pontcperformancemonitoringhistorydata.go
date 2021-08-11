@@ -63,7 +63,7 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Unknown profile count: This attribute counts the number of grants received whose specified
 //			profile was not known to the ONU. (R) (optional) (4-bytes)
 //
-//		Transmitted Xg_Pon Encapsulation Method Xgem  Frames
+//		Transmitted Xg_Pon Encapsulation Method Xgem Frames
 //			Transmitted XG-PON encapsulation method (XGEM) frames: This attribute counts the number of non-
 //			idle XGEM frames transmitted. If a service data unit (SDU) is fragmented, each fragment is an
 //			XGEM frame and is counted as such. (R) (mandatory) (4 bytes)
@@ -92,7 +92,7 @@ var xgpontcperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			Received bytes in non-idle XGEM frames: This attribute counts the number of received bytes in
 //			non-idle XGEM frames. (R) (optional) (8 bytes)
 //
-//		Loss Of Downstream Synchronization Lods  Event Count
+//		Loss Of Downstream Synchronization Lods Event Count
 //			Loss of downstream synchronization (LODS) event count: This attribute counts the number of state
 //			transitions from O5.1 to O6. (R) (optional) (4-bytes)
 //
@@ -118,32 +118,43 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("PsbdHecErrorCount", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4:  Uint32Field("XgtcHecErrorCount", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5:  Uint32Field("UnknownProfileCount", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("FragmentXgemFrames", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8:  Uint32Field("XgemHecLostWordsCount", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  Uint32Field("XgemKeyErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("XgemHecErrorCount", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint64Field("TransmittedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint64Field("ReceivedBytesInNonIdleXgemFrames", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
-			13: Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
-			14: Uint32Field("LodsEventRestoredCount", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
-			15: Uint32Field("OnuReactivationByLodsEvents", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("PsbdHecErrorCount", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4:  Uint32Field("XgtcHecErrorCount", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5:  Uint32Field("UnknownProfileCount", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6:  Uint32Field("TransmittedXgPonEncapsulationMethodXgemFrames", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("FragmentXgemFrames", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, false, 7),
+			8:  Uint32Field("XgemHecLostWordsCount", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  Uint32Field("XgemKeyErrors", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("XgemHecErrorCount", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint64Field("TransmittedBytesInNonIdleXgemFrames", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint64Field("ReceivedBytesInNonIdleXgemFrames", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, true, false, 12),
+			13: Uint32Field("LossOfDownstreamSynchronizationLodsEventCount", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, true, false, 13),
+			14: Uint32Field("LodsEventRestoredCount", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, true, false, 14),
+			15: Uint32Field("OnuReactivationByLodsEvents", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, true, false, 15),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "PSBd HEC error count",
+			2: "XGTC HEC error count",
+			3: "Unknown profile count",
+			4: "XGEM HEC loss count",
+			5: "XGEM key errors",
+			6: "XGEM HEC error count",
 		},
 	}
 }
 
-// NewXgPonTcPerformanceMonitoringHistoryData (class ID 344 creates the basic
+// NewXgPonTcPerformanceMonitoringHistoryData (class ID 344) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXgPonTcPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xgpontcperformancemonitoringhistorydataBME, params...)
 }

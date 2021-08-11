@@ -136,32 +136,37 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("SystemProfileMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("ChannelProfileMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("BurstProfileMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("AssignOnuIdMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("DeactivateOnuIdMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("DisableSerialNumberMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("RequestRegistrationMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("AssignAllocIdMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("KeyControlMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("SleepAllowMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("TuningControlRequestMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint32Field("TuningControlCompleteDMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
-			16: Uint32Field("CalibrationRequestMessageCount", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("SystemProfileMessageCount", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("ChannelProfileMessageCount", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("BurstProfileMessageCount", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("AssignOnuIdMessageCount", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("UnsatisfiedAdjustTxWavelengthRequests", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("DeactivateOnuIdMessageCount", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("DisableSerialNumberMessageCount", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("RequestRegistrationMessageCount", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("AssignAllocIdMessageCount", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("KeyControlMessageCount", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("SleepAllowMessageCount", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("TuningControlRequestMessageCount", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint32Field("TuningControlCompleteDMessageCount", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+			16: Uint32Field("CalibrationRequestMessageCount", CounterAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, false, false, 16),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Unsatisfied Adjust_Tx_Wavelength requests",
 		},
 	}
 }
 
-// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID 447 creates the basic
+// NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2 (class ID 447) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelPloamPerformanceMonitoringHistoryDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchannelploamperformancemonitoringhistorydatapart2BME, params...)
 }

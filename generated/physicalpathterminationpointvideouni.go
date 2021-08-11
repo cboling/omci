@@ -88,21 +88,28 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2: ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 2),
-			3: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 3),
-			4: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5: ByteField("PowerControl", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: ByteField("OperationalState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, true, false, 2),
+			3: ByteField("Arc", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), true, true, false, 3),
+			4: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5: ByteField("PowerControl", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Video-LOS",
+			1: "Video-OOR-low",
+			2: "Video-OOR-high",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointVideoUni (class ID 82 creates the basic
+// NewPhysicalPathTerminationPointVideoUni (class ID 82) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointVideoUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointvideouniBME, params...)
 }

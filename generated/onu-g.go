@@ -122,29 +122,31 @@ func init() {
 			SynchronizeTime,
 			Test,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  Uint32Field("VendorId", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  MultiByteField("Version", 14, nil, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  Uint64Field("SerialNumber", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  ByteField("TrafficManagementOption", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  ByteField("Deprecated", 0, mapset.NewSetWith(Read), false, false, true, true, 5),
-			6:  ByteField("BatteryBackup", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  ByteField("OnuSurvivalTime", 0, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: MultiByteField("LogicalOnuId", 24, nil, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: MultiByteField("LogicalPassword", 12, nil, mapset.NewSetWith(Read), false, false, true, false, 11),
-			12: ByteField("CredentialsStatus", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint16Field("ExtendedTcLayerOptions", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  MultiByteField("VendorId", StringAttributeType, 0x8000, 4, toOctets("ICAgIA=="), mapset.NewSetWith(Read), false, false, false, 1),
+			2:  MultiByteField("Version", StringAttributeType, 0x4000, 14, toOctets("MAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read), false, false, false, 2),
+			3:  MultiByteField("SerialNumber", OctetsAttributeType, 0x2000, 8, toOctets("AAAAAAAAAAA="), mapset.NewSetWith(Read), false, false, false, 3),
+			4:  ByteField("TrafficManagementOption", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  ByteField("Deprecated", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, true, 5),
+			6:  ByteField("BatteryBackup", EnumerationAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("AdministrativeState", EnumerationAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("OperationalState", EnumerationAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  ByteField("OnuSurvivalTime", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, true, false, 9),
+			10: MultiByteField("LogicalOnuId", OctetsAttributeType, 0x0040, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read), false, true, false, 10),
+			11: MultiByteField("LogicalPassword", OctetsAttributeType, 0x0020, 12, toOctets("AAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read), false, true, false, 11),
+			12: ByteField("CredentialsStatus", EnumerationAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint16Field("ExtendedTcLayerOptions", BitFieldAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, true, false, 13),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewOnuG (class ID 256 creates the basic
+// NewOnuG (class ID 256) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewOnuG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*onugBME, params...)
 }

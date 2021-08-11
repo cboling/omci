@@ -61,18 +61,21 @@ func init() {
 			Get,
 			GetNext,
 			Set,
+			SetTable,
 		),
-		AllowedAttributeMask: 0X8000,
+		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: TableField("MacFilterTable", TableInfo{0, 8}, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: TableField("MacFilterTable", TableAttributeType, 0x8000, TableInfo{nil, 8}, mapset.NewSetWith(Read, Write), false, false, false, 1),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewMacBridgePortFilterTableData (class ID 49 creates the basic
+// NewMacBridgePortFilterTableData (class ID 49) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMacBridgePortFilterTableData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*macbridgeportfiltertabledataBME, params...)
 }

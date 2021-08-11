@@ -128,30 +128,41 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFC,
+		AllowedAttributeMask: 0xfffc,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("Layer2EntityPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  ByteField("Layer2Type", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint16Field("MaPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint16Field("MepId", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  ByteField("MepControl", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint16Field("PrimaryVlan", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  ByteField("CcmAndLtmPriority", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  Uint64Field("EgressIdentifier", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: MultiByteField("PeerMepIds", 24, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 10),
-			11: ByteField("EthAisControl", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 11),
-			12: ByteField("FaultAlarmThreshold", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 12),
-			13: Uint16Field("AlarmDeclarationSoakTime", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 13),
-			14: Uint16Field("AlarmClearSoakTime", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 14),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("Layer2EntityPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  ByteField("Layer2Type", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint16Field("MaPointer", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint16Field("MepId", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  ByteField("MepControl", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint16Field("PrimaryVlan", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  ByteField("CcmAndLtmPriority", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  Uint64Field("EgressIdentifier", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: MultiByteField("PeerMepIds", OctetsAttributeType, 0x0040, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, false, false, 10),
+			11: ByteField("EthAisControl", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 11),
+			12: ByteField("FaultAlarmThreshold", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 12),
+			13: Uint16Field("AlarmDeclarationSoakTime", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, false, false, 13),
+			14: Uint16Field("AlarmClearSoakTime", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, false, false, 14),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "RDI CCM",
+			1: "MAC status",
+			2: "Remote CCM",
+			3: "Error CCM",
+			4: "Xcon CCM",
+			5: "Unexpected period",
+			6: "AIS",
 		},
 	}
 }
 
-// NewDot1AgMep (class ID 302 creates the basic
+// NewDot1AgMep (class ID 302) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgMep(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agmepBME, params...)
 }

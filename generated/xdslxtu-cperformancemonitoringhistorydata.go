@@ -126,33 +126,50 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint16Field("LossOfFrameSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint16Field("LossOfSignalSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint16Field("LossOfLinkSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint16Field("LossOfPowerSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint16Field("ErroredSecondsEs", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint16Field("SeverelyErroredSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint16Field("LineInitializations", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint16Field("FailedLineInitializations", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint16Field("ShortInitializations", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
-			12: Uint16Field("FailedShortInitializations", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
-			13: Uint16Field("FecSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint16Field("UnavailableSeconds", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint16Field("SosSuccessCount,NearEnd", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
-			16: Uint16Field("SosSuccessCount,FarEnd", 0, mapset.NewSetWith(Read), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint16Field("LossOfFrameSeconds", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint16Field("LossOfSignalSeconds", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint16Field("LossOfLinkSeconds", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint16Field("LossOfPowerSeconds", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint16Field("ErroredSecondsEs", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint16Field("SeverelyErroredSeconds", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint16Field("LineInitializations", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint16Field("FailedLineInitializations", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint16Field("ShortInitializations", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
+			12: Uint16Field("FailedShortInitializations", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, true, false, 12),
+			13: Uint16Field("FecSeconds", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint16Field("UnavailableSeconds", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint16Field("SosSuccessCount,NearEnd", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, true, false, 15),
+			16: Uint16Field("SosSuccessCount,FarEnd", CounterAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, true, false, 16),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "Loss of frame seconds",
+			1:  "Loss of signal seconds",
+			2:  "Loss of link seconds",
+			3:  "Loss of power seconds",
+			4:  "Errored seconds",
+			5:  "Severely errored seconds",
+			6:  "Line initializations",
+			7:  "Failed line initializations",
+			8:  "Short initializations",
+			9:  "Failed short initializations",
+			10: "FEC seconds",
+			11: "Unavailable seconds",
 		},
 	}
 }
 
-// NewXdslXtuCPerformanceMonitoringHistoryData (class ID 112 creates the basic
+// NewXdslXtuCPerformanceMonitoringHistoryData (class ID 112) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslXtuCPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslxtucperformancemonitoringhistorydataBME, params...)
 }

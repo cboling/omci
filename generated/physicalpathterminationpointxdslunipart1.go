@@ -85,7 +85,7 @@ var physicalpathterminationpointxdslunipart1BME *ManagedEntityDefinition
 //			subcarrier masking upstream profile ME. Upon ME instantiation, the ONU sets this attribute to 0,
 //			a null pointer. (R,-W) (mandatory) (2-bytes)
 //
-//		Xdsl Downstream Power Spectral Density Psd  Mask Profile
+//		Xdsl Downstream Power Spectral Density Psd Mask Profile
 //			xDSL downstream power spectral density (PSD) mask profile: This attribute points to an instance
 //			of the xDSL PSD mask profile ME that defines downstream parameters. Upon ME instantiation, the
 //			ONU sets this attribute to 0, a null pointer. (R,-W) (mandatory) (2-bytes)
@@ -130,29 +130,56 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("LoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 3),
-			4:  Uint16Field("XdslLineConfigurationProfile", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  Uint16Field("XdslDownstreamRfiBandsProfile", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 9),
-			10: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: ByteField("ModemType", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: Uint16Field("UpstreamPsdMaskProfile", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint16Field("NetworkSpecificExtensionsPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("LoopbackConfiguration", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3:  ByteField("OperationalState", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), true, true, false, 3),
+			4:  Uint16Field("XdslLineConfigurationProfile", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  Uint16Field("XdslSubcarrierMaskingDownstreamProfile", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  Uint16Field("XdslSubcarrierMaskingUpstreamProfile", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  Uint16Field("XdslDownstreamPowerSpectralDensityPsdMaskProfile", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  Uint16Field("XdslDownstreamRfiBandsProfile", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  ByteField("Arc", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), true, true, false, 9),
+			10: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: ByteField("ModemType", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: Uint16Field("UpstreamPsdMaskProfile", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint16Field("NetworkSpecificExtensionsPointer", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "NE LOF",
+			1:  "NE LOS",
+			2:  "NE LOL",
+			3:  "NE LPR",
+			4:  "Card alm",
+			5:  "FE LOF",
+			6:  "FE LOS",
+			7:  "FE LOL",
+			8:  "FE LPR",
+			9:  "DRT up",
+			10: "DRT down",
+			11: "LINIT",
+			12: "LCD",
+			13: "NCD",
+			14: "LCD-FE",
+			15: "NCD-FE",
+			16: "File not found",
+			17: "OOS",
+			18: "OOS-FE",
+			19: "LOR",
+			20: "LOM",
+			21: "LOR-FE",
+			22: "LOM-FE",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointXdslUniPart1 (class ID 98 creates the basic
+// NewPhysicalPathTerminationPointXdslUniPart1 (class ID 98) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointXdslUniPart1(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointxdslunipart1BME, params...)
 }

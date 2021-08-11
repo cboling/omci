@@ -74,19 +74,21 @@ func init() {
 			Get,
 			GetNext,
 		),
-		AllowedAttributeMask: 0XE000,
+		AllowedAttributeMask: 0xe000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("Layer2Type", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: TableField("MpStatusTable", TableInfo{nil, 18}, mapset.NewSetWith(Read), false, false, false, 2),
-			3: TableField("ConfigurationErrorListTable", TableInfo{nil, 5}, mapset.NewSetWith(Read), true, false, false, 3),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("Layer2Type", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: TableField("MpStatusTable", TableAttributeType, 0x4000, TableInfo{nil, 18}, mapset.NewSetWith(Read), false, false, false, 2),
+			3: TableField("ConfigurationErrorListTable", TableAttributeType, 0x2000, TableInfo{nil, 5}, mapset.NewSetWith(Read), true, false, false, 3),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewDot1AgCfmStack (class ID 305 creates the basic
+// NewDot1AgCfmStack (class ID 305) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1AgCfmStack(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1agcfmstackBME, params...)
 }

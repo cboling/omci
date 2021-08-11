@@ -147,31 +147,33 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint32Field("MinimumDataRate", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint32Field("MaximumDataRate", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("RateAdaptationRatio", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 3),
-			4:  ByteField("MaximumInterleavingDelay", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint32Field("DataRateThresholdUpshift", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint32Field("DataRateThresholdDownshift", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  Uint32Field("MinimumReservedDataRate", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 7),
-			8:  Uint32Field("MinimumDataRateInLowPowerState", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  ByteField("MinimumImpulseNoiseProtection", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: ByteField("MaximumBitErrorRatio", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: ByteField("MinimumImpulseNoiseProtection8Khz", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 11),
-			12: ByteField("MaximumDelayVariation", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
-			13: ByteField("ChannelInitializationPolicySelection", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: Uint32Field("MinimumSosBitRateDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
-			15: Uint32Field("MinimumSosBitRateUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint32Field("MinimumDataRate", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint32Field("MaximumDataRate", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("RateAdaptationRatio", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 3),
+			4:  ByteField("MaximumInterleavingDelay", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint32Field("DataRateThresholdUpshift", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint32Field("DataRateThresholdDownshift", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  Uint32Field("MinimumReservedDataRate", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 7),
+			8:  Uint32Field("MinimumDataRateInLowPowerState", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  ByteField("MinimumImpulseNoiseProtection", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: ByteField("MaximumBitErrorRatio", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: ByteField("MinimumImpulseNoiseProtection8Khz", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, false, false, 11),
+			12: ByteField("MaximumDelayVariation", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, false, false, 12),
+			13: ByteField("ChannelInitializationPolicySelection", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: Uint32Field("MinimumSosBitRateDownstream", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+			15: Uint32Field("MinimumSosBitRateUpstream", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, Write), false, true, false, 15),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslChannelConfigurationProfile (class ID 107 creates the basic
+// NewXdslChannelConfigurationProfile (class ID 107) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslChannelConfigurationProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslchannelconfigurationprofileBME, params...)
 }

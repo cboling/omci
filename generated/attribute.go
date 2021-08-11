@@ -21,45 +21,69 @@
 package generated
 
 import (
+	"encoding/base64"
 	"encoding/binary"
 	"errors"
 	"fmt"
-	"github.com/deckarep/golang-set"
-	"github.com/google/gopacket"
 	"reflect"
 	"sort"
 	"strings"
+
+	mapset "github.com/deckarep/golang-set"
+	"github.com/google/gopacket"
 )
 
-// AttributeDefinitionMap is a map of attribute definitions with the attribute index (0..15)
+// Attribute types
+type AttributeType uint8
+
+const (
+	UnknownAttributeType         AttributeType = iota // Not known
+	OctetsAttributeType                               // Series of zero or more octets
+	StringAttributeType                               // Readable String
+	UnsignedIntegerAttributeType                      // Integer (0..max)
+	TableAttributeType                                // Table (of Octets)
+	SignedIntegerAttributeType                        // Signed integer, often expressed as 2's complement
+	PointerAttributeType                              // Managed Entity ID or pointer to a Managed instance
+	BitFieldAttributeType                             // Bitfield
+	EnumerationAttributeType                          // Fixed number of values (Unsigned Integers)
+	CounterAttributeType                              // Incrementing counter
+)
+
+// AttributeDefinitionMap is a map of attribute definitions with the attribute index (0..16)
 // as the key
 type AttributeDefinitionMap map[uint]AttributeDefinition
 
 // AttributeDefinition defines a single specific Managed Entity's attributes
 type AttributeDefinition struct {
-	Name         string
-	Index        uint
-	DefValue     interface{} // Note: Not supported yet
-	Size         int
-	Access       mapset.Set // AttributeAccess...
-	Constraint   func(interface{}) *ParamError
-	Avc          bool // If true, an AVC notification can occur for the attribute
-	Tca          bool // If true, a threshold crossing alert alarm notification can occur for the attribute
-	Counter      bool // If true, this attribute is a PM counter
-	Optional     bool // If true, attribute is option, else mandatory
-	TableSupport bool // If true, attribute is a table
-	Deprecated   bool // If true, this attribute is deprecated and only 'read' operations (if-any) performed
+	Name          string
+	AttributeType AttributeType
+	Index         uint
+	Mask          uint16
+	DefValue      interface{}
+	Size          int        // Size of attribute in bytes. 0 indicates variable/unknown
+	Access        mapset.Set // AttributeAccess...
+	Constraint    func(interface{}) *ParamError
+	Avc           bool // If true, an AVC notification can occur for the attribute
+	Tca           bool // If true, a threshold crossing alert alarm notification can occur for the attribute
+	Optional      bool // If true, attribute is option, else mandatory
+	Deprecated    bool // If true, attribute is deprecated
+}
+
+// TableRows is used by the SetTable request/response
+type TableRows struct {
+	NumRows int    // Number of rows of 'AttributeDefinition.Size' length
+	Rows    []byte // 0..NumRows rows of attribute data of size 'AttributeDefinition.Size'
 }
 
 func (attr *AttributeDefinition) String() string {
-	return fmt.Sprintf("AttributeDefinition: %v (%v): Size: %v, Default: %v, Access: %v",
-		attr.GetName(), attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
+	return fmt.Sprintf("AttributeDefinition: %v (%v/%v): Size: %v, Default: %v, Access: %v",
+		attr.GetName(), attr.AttributeType, attr.GetIndex(), attr.GetSize(), attr.GetDefault(), attr.GetAccess())
 }
 
 // GetName returns the attribute's name
 func (attr AttributeDefinition) GetName() string { return attr.Name }
 
-// GetIndex returns the attribute index )0..15)
+// GetIndex returns the attribute index )0..16)
 func (attr AttributeDefinition) GetIndex() uint { return attr.Index }
 
 // GetDefault provides the default value for an attribute if not specified
@@ -83,7 +107,24 @@ func (attr AttributeDefinition) GetConstraints() func(interface{}) *ParamError {
 
 // IsTableAttribute returns true if the attribute is a table
 func (attr AttributeDefinition) IsTableAttribute() bool {
-	return attr.TableSupport
+	return attr.AttributeType == TableAttributeType
+}
+
+// IsCounter returns true if the attribute is a counter (usually expressed as an
+// unsigned integer)
+func (attr AttributeDefinition) IsCounter() bool {
+	return attr.AttributeType == CounterAttributeType
+}
+
+// IsBitField returns true if the attribute is a bitfield
+func (attr AttributeDefinition) IsBitField() bool {
+	return attr.AttributeType == BitFieldAttributeType
+}
+
+// IsString returns true if the attribute is a string. Strings are typically encoded
+// into fixed length files and padded with 0's
+func (attr AttributeDefinition) IsString() bool {
+	return attr.AttributeType == StringAttributeType
 }
 
 // Decode takes a slice of bytes and converts them into a value appropriate for
@@ -107,8 +148,8 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 		df.SetTruncated()
 		return nil, NewMessageTruncatedError("packet too small for field")
 	}
-	switch attr.GetSize() {
-	default:
+	switch attr.AttributeType {
+	case StringAttributeType, OctetsAttributeType, UnknownAttributeType:
 		value := make([]byte, size)
 		copy(value, data[:size])
 		if attr.GetConstraints() != nil {
@@ -117,39 +158,52 @@ func (attr *AttributeDefinition) Decode(data []byte, df gopacket.DecodeFeedback,
 			}
 		}
 		return value, nil
-	case 1:
-		value := data[0]
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+
+	default:
+		switch attr.GetSize() {
+		default:
+			value := make([]byte, size)
+			copy(value, data[:size])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 2:
-		value := binary.BigEndian.Uint16(data[0:2])
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 1:
+			value := data[0]
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 4:
-		value := binary.BigEndian.Uint32(data[0:4])
-		if attr.GetConstraints() != nil {
-			if omciErr := attr.GetConstraints()(value); omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 2:
+			value := binary.BigEndian.Uint16(data[0:2])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
-		}
-		return value, nil
-	case 8:
-		value := binary.BigEndian.Uint64(data[0:8])
-		if attr.GetConstraints() != nil {
-			omciErr := attr.GetConstraints()(value)
-			if omciErr != nil {
-				return nil, omciErr.GetError()
+			return value, nil
+		case 4:
+			value := binary.BigEndian.Uint32(data[0:4])
+			if attr.GetConstraints() != nil {
+				if omciErr := attr.GetConstraints()(value); omciErr != nil {
+					return nil, omciErr.GetError()
+				}
 			}
+			return value, nil
+		case 8:
+			value := binary.BigEndian.Uint64(data[0:8])
+			if attr.GetConstraints() != nil {
+				omciErr := attr.GetConstraints()(value)
+				if omciErr != nil {
+					return nil, omciErr.GetError()
+				}
+			}
+			return value, nil
 		}
-		return value, nil
 	}
 }
 
@@ -208,6 +262,9 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	if attr.IsTableAttribute() {
 		return attr.tableAttributeSerializeTo(value, b, msgType, bytesAvailable)
 	}
+	if value == nil {
+		return 0, fmt.Errorf("attribute: %v is nil", attr.Name)
+	}
 	size := attr.GetSize()
 	if bytesAvailable < size {
 		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
@@ -216,40 +273,50 @@ func (attr *AttributeDefinition) SerializeTo(value interface{}, b gopacket.Seria
 	if err != nil {
 		return 0, err
 	}
-	switch size {
-	default:
+	switch attr.AttributeType {
+	case StringAttributeType, OctetsAttributeType, UnknownAttributeType:
 		byteStream, err := InterfaceToOctets(value)
 		if err != nil {
 			return 0, err
 		}
 		copy(bytes, byteStream)
-	case 1:
-		switch value.(type) {
-		case int:
-			bytes[0] = byte(value.(int))
+
+	default:
+		switch size {
 		default:
-			bytes[0] = value.(byte)
-		}
-	case 2:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
-		default:
-			binary.BigEndian.PutUint16(bytes, value.(uint16))
-		}
-	case 4:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
-		default:
-			binary.BigEndian.PutUint32(bytes, value.(uint32))
-		}
-	case 8:
-		switch value.(type) {
-		case int:
-			binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
-		default:
-			binary.BigEndian.PutUint64(bytes, value.(uint64))
+			byteStream, err := InterfaceToOctets(value)
+			if err != nil {
+				return 0, err
+			}
+			copy(bytes, byteStream)
+		case 1:
+			switch value.(type) {
+			case int:
+				bytes[0] = byte(value.(int))
+			default:
+				bytes[0] = value.(byte)
+			}
+		case 2:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint16(bytes, uint16(value.(int)))
+			default:
+				binary.BigEndian.PutUint16(bytes, value.(uint16))
+			}
+		case 4:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint32(bytes, uint32(value.(int)))
+			default:
+				binary.BigEndian.PutUint32(bytes, value.(uint32))
+			}
+		case 8:
+			switch value.(type) {
+			case int:
+				binary.BigEndian.PutUint64(bytes, uint64(value.(int)))
+			default:
+				binary.BigEndian.PutUint64(bytes, value.(uint64))
+			}
 		}
 	}
 	return size, nil
@@ -314,6 +381,9 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		value := binary.BigEndian.Uint32(data[0:4])
 		return value, nil
 
+	case byte(Set) | AR: // Set Request
+		fallthrough
+
 	case byte(GetNext) | AK: // Get Next Response
 		// Block of data (octets) that need to be reassembled before conversion
 		// to table/row-data.  If table attribute is not explicitly given a value
@@ -325,20 +395,33 @@ func (attr *AttributeDefinition) tableAttributeDecode(data []byte, df gopacket.D
 		if size != 0 && len(data) < attr.GetSize() {
 			df.SetTruncated()
 			return nil, NewMessageTruncatedError("packet too small for field")
-		} else if size == 0 {
+		}
+		if size == 0 {
 			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
 		}
 		return data, nil
 
-	case byte(Set) | AR: // Set Request
-		fmt.Println("TODO")
-		return nil, errors.New("TODO")
-
 	case byte(SetTable) | AR: // Set Table Request
-		// TODO: Only baseline supported at this time
-		return nil, errors.New("attribute encode for set-table-request not yet supported")
+		// SetTableRequestType will be composed of zero or more row of a fixed size (based on ME)
+		// and will be saved to a TableRow struct for the consumer's use
+		size := attr.GetSize()
+		if size == 0 {
+			return nil, NewProcessingError("table attributes with no size are not supported: %v", attr.Name)
+		}
+		if len(data)%size != 0 {
+			df.SetTruncated()
+			return nil, NewMessageTruncatedError("packet does not contain an integral number of rows")
+		}
+		if len(data) == 0 {
+			return TableRows{}, nil
+		}
+		rows := TableRows{
+			NumRows: len(data) / size,
+			Rows:    make([]byte, len(data)),
+		}
+		copy(rows.Rows, data)
+		return rows, nil
 	}
-	return nil, errors.New("TODO")
 }
 
 func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b gopacket.SerializeBuffer, msgType byte,
@@ -381,12 +464,30 @@ func (attr *AttributeDefinition) tableAttributeSerializeTo(value interface{}, b 
 		return 0, errors.New("unexpected type for table serialization")
 
 	case byte(Set) | AR: // Set Request
-		fmt.Println("TODO")
+		// TODO: For complex table types (such as extended vlan tagging config) create an
+		//       interface definition. Provide a switch type to look for that as well as for
+		//       value being a byte slice...  For now, just byte slice provided
+		break
 
 	case byte(SetTable) | AR: // Set Table Request
-		// TODO: Only baseline supported at this time
-		return 0, errors.New("attribute encode for set-table-request not yet supported")
+		if rows, ok := value.(TableRows); ok {
+			size := attr.GetSize()
+			if size != 0 && len(rows.Rows)%size != 0 {
+				return 0, NewMessageTruncatedError("packet does not contain an integral number of rows")
+			}
+			if bytesAvailable < len(rows.Rows) {
+				return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
+			}
+			bytes, err := b.AppendBytes(len(rows.Rows))
+			if err != nil {
+				return 0, err
+			}
+			copy(bytes, rows.Rows)
+			return len(rows.Rows), nil
+		}
+		return 0, errors.New("unexpected type for table serialization")
 	}
+	panic("HELP")
 	size := attr.GetSize()
 	if bytesAvailable < size {
 		return 0, NewMessageTruncatedError(fmt.Sprintf("not enough space for attribute: %v", attr.Name))
@@ -460,16 +561,20 @@ func GetAttributeBitmap(attrMap AttributeDefinitionMap, name string) (uint16, er
 	if err != nil {
 		return 0, err
 	}
-	return uint16(1<<16 - attrDef.GetIndex()), nil
+	index := attrDef.GetIndex()
+	if index == 0 {
+		return 0, errors.New("managed entity ID should not be used in an attribute bitmask")
+	}
+	return uint16(1 << (16 - index)), nil
 }
 
 // GetAttributesBitmap is a convenience functions to scan a list of attributes
 // and return the bitmask that represents them
 func GetAttributesBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) (uint16, error) {
 	var mask uint16
-	for k, def := range attrMap {
+	for _, def := range attrMap {
 		if attributes.Contains(def.Name) {
-			mask |= 1 << uint16(16-k)
+			mask |= def.Mask
 			attributes.Remove(def.Name)
 		}
 	}
@@ -479,96 +584,129 @@ func GetAttributesBitmap(attrMap AttributeDefinitionMap, attributes mapset.Set) 
 	return mask, nil
 }
 
+// GetAttributesValueMap returns the attribute value map with uninitialized values based
+// on the attribute bitmask
+func GetAttributesValueMap(attrDefs AttributeDefinitionMap, mask uint16, access mapset.Set) (AttributeValueMap, OmciErrors) {
+	attrMap := make(AttributeValueMap, 0)
+	for index, def := range attrDefs {
+		if index == 0 {
+			continue
+		}
+		checkMask := def.Mask
+		accessOk := access == nil || def.GetAccess().Intersect(access).Cardinality() > 0
+
+		if (mask&checkMask) != 0 && accessOk {
+			attrMap[def.GetName()] = nil
+			mask &= ^checkMask
+		}
+	}
+	if mask != 0 {
+		// Return map, but signaled failed attributes
+		return attrMap, NewParameterError(mask)
+	}
+	return attrMap, NewOmciSuccess()
+}
+
+///////////////////////////////////////////////////////////////////////
+// Packet definitions for attributes of various types/sizes
+func toOctets(str string) []byte {
+	data, err := base64.StdEncoding.DecodeString(str)
+	if err != nil {
+		panic(fmt.Sprintf("Invalid Base-64 string: '%v'", str))
+	}
+	return data
+}
+
 ///////////////////////////////////////////////////////////////////////
 // Packet definitions for attributes of various types/sizes
 
 // ByteField returns an AttributeDefinition for an attribute that is encoded as a single
 // octet (8-bits).
-func ByteField(name string, defVal uint8, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func ByteField(name string, attrType AttributeType, mask uint16, defVal uint8, access mapset.Set, avc bool,
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         1,
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      defVal,
+		Size:          1,
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint16Field returns an AttributeDefinition for an attribute that is encoded as two
 // octet (16-bits).
-func Uint16Field(name string, defVal uint16, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func Uint16Field(name string, attrType AttributeType, mask uint16, defVal uint16, access mapset.Set, avc bool,
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         2,
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      defVal,
+		Size:          2,
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint32Field returns an AttributeDefinition for an attribute that is encoded as four
 // octet (32-bits).
-func Uint32Field(name string, defVal uint32, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func Uint32Field(name string, attrType AttributeType, mask uint16, defVal uint32, access mapset.Set, avc bool,
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         4,
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      defVal,
+		Size:          4,
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // Uint64Field returns an AttributeDefinition for an attribute that is encoded as eight
 // octet (64-bits).
-func Uint64Field(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func Uint64Field(name string, attrType AttributeType, mask uint16, defVal uint64, access mapset.Set, avc bool,
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         8,
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      defVal,
+		Size:          8,
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // MultiByteField returns an AttributeDefinition for an attribute that is encoded as multiple
 // octets that do not map into fields with a length that is 1, 2, 4, or 8 octets.
-func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func MultiByteField(name string, attrType AttributeType, mask uint16, size uint, defVal []byte, access mapset.Set, avc bool,
+	optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         int(size),
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      defVal,
+		Size:          int(size),
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
@@ -598,9 +736,14 @@ func MultiByteField(name string, size uint, defVal []byte, access mapset.Set, av
 
 // TableInfo is an early prototype of how to better model some tables that are
 // difficult to code.
+//
+// The Value member may be one of the following:
+//   nil    : Empty, no default, ...
+//   value  : A specific value that equates to one row, ie) 6  or toOctets("base64")
+//   array  : One or more rows of values.  [2]uint16{2, 3}
 type TableInfo struct {
-	Value interface{}
-	Size  int
+	Value interface{} // See comment above
+	Size  int         // Table Row Size
 }
 
 func (t *TableInfo) String() string {
@@ -608,39 +751,84 @@ func (t *TableInfo) String() string {
 }
 
 // TableField is used to define an attribute that is a table
-func TableField(name string, tableInfo TableInfo, access mapset.Set,
+func TableField(name string, attrType AttributeType, mask uint16, tableInfo TableInfo, access mapset.Set,
 	avc bool, optional bool, deprecated bool, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     tableInfo.Value,
-		Size:         tableInfo.Size, //Number of elements
-		Access:       access,
-		Avc:          avc,
-		Counter:      false,
-		TableSupport: true,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: attrType,
+		Mask:          mask,
+		Index:         index,
+		DefValue:      tableInfo.Value,
+		Size:          tableInfo.Size, //Number of elements
+		Access:        access,
+		Avc:           avc,
+		Optional:      optional,
+		Deprecated:    deprecated,
 	}
 }
 
 // UnknownField is currently not used and may be deprecated. Its original intent
 // was to be a placeholder during table attribute development
-func UnknownField(name string, defVal uint64, access mapset.Set, avc bool,
-	counter bool, optional bool, deprecated bool, index uint) AttributeDefinition {
+func UnknownField(name string, mask uint16, size int, index uint) AttributeDefinition {
 	return AttributeDefinition{
-		Name:         name,
-		Index:        index,
-		DefValue:     defVal,
-		Size:         99999999,
-		Access:       access,
-		Avc:          avc,
-		Counter:      counter,
-		TableSupport: false,
-		Optional:     optional,
-		Deprecated:   deprecated,
+		Name:          name,
+		AttributeType: UnknownAttributeType, // Stored as octet string
+		Mask:          mask,
+		Index:         index,
+		DefValue:      nil,
+		Size:          size,
+		Access:        mapset.NewSet(Read, Write),
+		Avc:           false,
+		Optional:      false,
+		Deprecated:    false,
 	}
 }
 
 // AttributeValueMap maps an attribute (by name) to its value
 type AttributeValueMap map[string]interface{}
+
+// MergeInDefaultValues will examine the Manage Entity defaults (for non-SetByCreate attributes). This
+// function is called on a MIB Create request but is provide for external use in case it is needed
+// before the MIB entry is created
+func MergeInDefaultValues(classID ClassID, attributes AttributeValueMap) OmciErrors {
+	// Get default values for non-SetByCreate attributes
+	attrDefs, err := GetAttributesDefinitions(classID)
+	if err.StatusCode() != Success {
+		return err
+	} else if attributes == nil {
+		return NewProcessingError("Invalid (nil) Attribute Value Map referenced")
+	}
+	nilAllowed := mapset.NewSet(StringAttributeType, OctetsAttributeType, TableAttributeType)
+	for index, attrDef := range attrDefs {
+		if !attrDef.Access.Contains(SetByCreate) && index != 0 &&
+			(attrDef.DefValue != nil || nilAllowed.Contains(attrDef.AttributeType)) {
+			name := attrDef.GetName()
+			if existing, found := attributes[name]; !found || existing == nil {
+				attributes[name] = attrDef.DefValue
+			}
+		}
+	}
+	return err
+}
+
+// AttributeValueMapBufferSize will determine how much space is needed to encode all
+// of the attributes
+func AttributeValueMapBufferSize(classID ClassID, attributes AttributeValueMap, msgType uint8) (int, error) {
+	attrDefs, err := GetAttributesDefinitions(classID)
+	if err.StatusCode() != Success {
+		return 0, err
+	} else if attributes == nil {
+		return 0, NewProcessingError("Invalid (nil) Attribute Value Map referenced")
+	}
+	bufferSize := 0
+	isGetResponse := msgType == 0x29
+
+	for _, attrDef := range attrDefs {
+		if isGetResponse && attrDef.IsTableAttribute() {
+			bufferSize += 4
+		} else {
+			bufferSize += attrDef.GetSize()
+		}
+	}
+	return bufferSize, nil
+}

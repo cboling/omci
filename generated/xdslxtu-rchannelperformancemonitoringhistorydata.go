@@ -95,25 +95,34 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("CorrectedBlocks", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("UncorrectedBlocks", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint32Field("TransmittedBlocks", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6: Uint32Field("ReceivedBlocks", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7: Uint16Field("CodeViolations", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8: Uint16Field("ForwardErrorCorrections", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("CorrectedBlocks", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("UncorrectedBlocks", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint32Field("TransmittedBlocks", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6: Uint32Field("ReceivedBlocks", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7: Uint16Field("CodeViolations", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8: Uint16Field("ForwardErrorCorrections", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Corrected blocks",
+			1: "Uncorrected blocks",
+			2: "Code violations",
+			3: "Forward error corrections",
 		},
 	}
 }
 
-// NewXdslXtuRChannelPerformanceMonitoringHistoryData (class ID 115 creates the basic
+// NewXdslXtuRChannelPerformanceMonitoringHistoryData (class ID 115) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslXtuRChannelPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdslxturchannelperformancemonitoringhistorydataBME, params...)
 }

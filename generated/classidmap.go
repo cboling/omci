@@ -20,8 +20,6 @@
 
 package generated
 
-import "fmt"
-
 // ManagedEntityInfo provides ManagedEntity information
 type ManagedEntityInfo struct {
 	New func(params ...ParamData) (*ManagedEntity, error)
@@ -52,7 +50,7 @@ var classToManagedEntityMap map[ClassID]CreateME
 
 func init() {
 	// Create mapping of 16-bit managed entity class IDs to ME-type
-	classToManagedEntityMap = make(map[ClassID]CreateME, 160)
+	classToManagedEntityMap = make(map[ClassID]CreateME, 180)
 
 	classToManagedEntityMap[2] = NewOnuData
 	classToManagedEntityMap[5] = NewCardholder
@@ -94,6 +92,8 @@ func init() {
 	classToManagedEntityMap[107] = NewXdslChannelConfigurationProfile
 	classToManagedEntityMap[108] = NewXdslSubcarrierMaskingDownstreamProfile
 	classToManagedEntityMap[109] = NewXdslSubcarrierMaskingUpstreamProfile
+	classToManagedEntityMap[110] = NewXdslPsdMaskProfile
+	classToManagedEntityMap[111] = NewXdslDownstreamRfiBandsProfile
 	classToManagedEntityMap[112] = NewXdslXtuCPerformanceMonitoringHistoryData
 	classToManagedEntityMap[113] = NewXdslXtuRPerformanceMonitoringHistoryData
 	classToManagedEntityMap[114] = NewXdslXtuCChannelPerformanceMonitoringHistoryData
@@ -123,9 +123,13 @@ func init() {
 	classToManagedEntityMap[153] = NewSipUserData
 	classToManagedEntityMap[155] = NewMgcConfigData
 	classToManagedEntityMap[156] = NewMgcPerformanceMonitoringHistoryData
+	classToManagedEntityMap[158] = NewOnuRemoteDebug
 	classToManagedEntityMap[160] = NewEquipmentExtensionPackage
 	classToManagedEntityMap[162] = NewPhysicalPathTerminationPointMocaUni
 	classToManagedEntityMap[163] = NewMocaEthernetPerformanceMonitoringHistoryData
+	classToManagedEntityMap[168] = NewVdsl2LineInventoryAndStatusDataPart1
+	classToManagedEntityMap[169] = NewVdsl2LineInventoryAndStatusDataPart2
+	classToManagedEntityMap[170] = NewVdsl2LineInventoryAndStatusDataPart3
 	classToManagedEntityMap[171] = NewExtendedVlanTaggingOperationConfigurationData
 	classToManagedEntityMap[256] = NewOnuG
 	classToManagedEntityMap[257] = NewOnu2G
@@ -162,12 +166,21 @@ func init() {
 	classToManagedEntityMap[301] = NewDot1AgDefaultMdLevel
 	classToManagedEntityMap[302] = NewDot1AgMep
 	classToManagedEntityMap[305] = NewDot1AgCfmStack
+	classToManagedEntityMap[306] = NewDot1AgChassisManagementInfo
+	classToManagedEntityMap[307] = NewOctetString
+	classToManagedEntityMap[308] = NewGeneralPurposeBuffer
+	classToManagedEntityMap[309] = NewMulticastOperationsProfile
 	classToManagedEntityMap[310] = NewMulticastSubscriberConfigInfo
 	classToManagedEntityMap[311] = NewMulticastSubscriberMonitor
+	classToManagedEntityMap[312] = NewFecPerformanceMonitoringHistoryData
 	classToManagedEntityMap[313] = NewReAniG
+	classToManagedEntityMap[314] = NewPhysicalPathTerminationPointReUni
+	classToManagedEntityMap[315] = NewReUpstreamAmplifier
 	classToManagedEntityMap[316] = NewReDownstreamAmplifier
 	classToManagedEntityMap[321] = NewEthernetFramePerformanceMonitoringHistoryDataDownstream
 	classToManagedEntityMap[322] = NewEthernetFramePerformanceMonitoringHistoryDataUpstream
+	classToManagedEntityMap[323] = NewVdsl2LineConfigurationExtensions2
+	classToManagedEntityMap[324] = NewXdslImpulseNoiseMonitorPerformanceMonitoringHistoryData
 	classToManagedEntityMap[325] = NewXdslLineInventoryAndStatusDataPart5
 	classToManagedEntityMap[328] = NewReCommonAmplifierParameters
 	classToManagedEntityMap[329] = NewVirtualEthernetInterfacePoint
@@ -176,6 +189,7 @@ func init() {
 	classToManagedEntityMap[334] = NewEthernetFrameExtendedPm
 	classToManagedEntityMap[335] = NewSnmpConfigurationData
 	classToManagedEntityMap[336] = NewOnuDynamicPowerManagementControl
+	classToManagedEntityMap[337] = NewPwAtmConfigurationData
 	classToManagedEntityMap[338] = NewPwAtmPerformanceMonitoringHistoryData
 	classToManagedEntityMap[339] = NewPwEthernetConfigurationData
 	classToManagedEntityMap[340] = NewBbfTr069ManagementServer
@@ -190,14 +204,16 @@ func init() {
 	classToManagedEntityMap[408] = NewXdslXtuCPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[410] = NewVdsl2LineConfigurationExtensions3
 	classToManagedEntityMap[412] = NewXdslChannelConfigurationProfilePart2
+	classToManagedEntityMap[413] = NewXtuDataGatheringConfiguration
 	classToManagedEntityMap[414] = NewXdslLineInventoryAndStatusDataPart8
-	classToManagedEntityMap[420] = NewEfmBondingLink
-	classToManagedEntityMap[421] = NewEfmBondingGroupPerformanceMonitoringHistoryData
-	classToManagedEntityMap[422] = NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2
-	classToManagedEntityMap[423] = NewEfmBondingLinkPerformanceMonitoringHistoryData
-	classToManagedEntityMap[424] = NewEfmBondingPortPerformanceMonitoringHistoryData
-	classToManagedEntityMap[425] = NewEfmBondingPortPerformanceMonitoringHistoryDataPart2
-	classToManagedEntityMap[426] = NewEthernetFrameExtendedPm64Bit
+	classToManagedEntityMap[418] = NewEfmBondingGroup
+	classToManagedEntityMap[419] = NewEfmBondingLink
+	classToManagedEntityMap[420] = NewEfmBondingGroupPerformanceMonitoringHistoryData
+	classToManagedEntityMap[421] = NewEfmBondingGroupPerformanceMonitoringHistoryDataPart2
+	classToManagedEntityMap[422] = NewEfmBondingLinkPerformanceMonitoringHistoryData
+	classToManagedEntityMap[423] = NewEfmBondingPortPerformanceMonitoringHistoryData
+	classToManagedEntityMap[424] = NewEfmBondingPortPerformanceMonitoringHistoryDataPart2
+	classToManagedEntityMap[425] = NewEthernetFrameExtendedPm64Bit
 	classToManagedEntityMap[432] = NewFastChannelConfigurationProfile
 	classToManagedEntityMap[433] = NewFastDataPathConfigurationProfile
 	classToManagedEntityMap[434] = NewFastVectoringLineConfigurationExtensions
@@ -214,17 +230,20 @@ func init() {
 	classToManagedEntityMap[450] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2
 	classToManagedEntityMap[451] = NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart3
 	classToManagedEntityMap[452] = NewTwdmChannelOmciPerformanceMonitoringHistoryData
+	classToManagedEntityMap[453] = NewEnhancedFecPerformanceMonitoringHistoryData
+	classToManagedEntityMap[454] = NewEnhancedTcPerformanceMonitoringHistoryData
 }
 
 // LoadManagedEntityDefinition returns a function to create a Managed Entity for a specific
 // Managed Entity class ID
 func LoadManagedEntityDefinition(classID ClassID, params ...ParamData) (*ManagedEntity, OmciErrors) {
-	newFunc, ok := classToManagedEntityMap[classID]
-	if ok {
+	if newFunc, ok := classToManagedEntityMap[classID]; ok {
 		return newFunc(params...)
 	}
-	return nil, NewUnknownEntityError(fmt.Sprintf("managed entity %d (%#x) definition not found",
-		uint16(classID), uint16(classID)))
+	if IsVendorSpecificClassID(classID) {
+		return NewUnknownVendorSpecificME(classID, params...)
+	}
+	return NewUnknownG988ME(classID, params...)
 }
 
 // GetSupportedClassIDs returns an array of Managed Entity Class IDs supported
@@ -234,4 +253,31 @@ func GetSupportedClassIDs() []ClassID {
 		supported = append(supported, k)
 	}
 	return supported
+}
+
+// GetAttributesDefinitions returns the attribute definition map for a specific class
+func GetAttributesDefinitions(classID ClassID) (AttributeDefinitionMap, OmciErrors) {
+	medef, err := LoadManagedEntityDefinition(classID)
+	if err.StatusCode() != Success {
+		return nil, err
+	}
+	return medef.GetAttributeDefinitions(), err
+}
+
+// IsVendorSpecificClassID returns true if the provided class ID is reserved in ITU-T G.988
+// for vendor specific functionality
+func IsVendorSpecificClassID(classID ClassID) bool {
+	// Values below are from Table 11.2.4-1 of ITU-T G.988 (11/2017)
+	return (ClassID(240) <= classID && classID <= ClassID(255)) ||
+		(ClassID(350) <= classID && classID <= ClassID(399)) ||
+		(ClassID(65280) <= classID && classID <= ClassID(65535))
+}
+
+// IsUnknownClassID returns true if the provided class ID is reserved in ITU-T G.988
+// for vendor specific functionality or is not decoded/supported by this library
+func IsUnknownClassID(classID ClassID) bool {
+	if _, err := LoadManagedEntityDefinition(classID); err != nil {
+		return false
+	}
+	return true
 }

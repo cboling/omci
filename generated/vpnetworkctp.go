@@ -87,23 +87,33 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFE00,
+		AllowedAttributeMask: 0xfe00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("VpiValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("UniPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: ByteField("Direction", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: Uint16Field("Deprecated1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 4),
-			5: Uint16Field("Deprecated2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, true, 5),
-			6: Uint16Field("Deprecated3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, true, 6),
-			7: ByteField("Deprecated4", 0, mapset.NewSetWith(Read), false, false, true, true, 7),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("VpiValue", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("UniPointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: ByteField("Direction", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("Deprecated1", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 4),
+			5: Uint16Field("Deprecated2", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, 5),
+			6: Uint16Field("Deprecated3", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, true, 6),
+			7: ByteField("Deprecated4", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, true, 7),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "VP AIS LMIR",
+			1: "VP RDI LMIR",
+			2: "VP AIS LMIG",
+			3: "VP RDI LMIG",
+			4: "Segment loss of continuity",
+			5: "End-to-end loss of continuity",
 		},
 	}
 }
 
-// NewVpNetworkCtp (class ID 269 creates the basic
+// NewVpNetworkCtp (class ID 269) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVpNetworkCtp(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*vpnetworkctpBME, params...)
 }

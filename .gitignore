@@ -90,3 +90,5 @@ fabric.properties
 
 /coverage.html
 /vendor/
+/sca-report/
+/tests/

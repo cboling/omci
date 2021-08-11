@@ -129,32 +129,39 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 2),
-			3:  ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 3),
-			4:  ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
-			5:  ByteField("FrequencyRangeLow", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  ByteField("FrequencyRangeHigh", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  ByteField("SignalCapability", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  ByteField("OpticalSignalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  ByteField("PilotSignalLevel", 0, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: ByteField("SignalLevelMin", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: ByteField("SignalLevelMax", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("PilotFrequency", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: ByteField("AgcMode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: ByteField("AgcSetting", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
-			15: ByteField("VideoLowerOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
-			16: ByteField("VideoUpperOpticalThreshold", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("OperationalState", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, true, false, 2),
+			3:  ByteField("Arc", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), true, true, false, 3),
+			4:  ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, true, false, 4),
+			5:  ByteField("FrequencyRangeLow", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  ByteField("FrequencyRangeHigh", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  ByteField("SignalCapability", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  ByteField("OpticalSignalLevel", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  ByteField("PilotSignalLevel", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, true, false, 9),
+			10: ByteField("SignalLevelMin", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: ByteField("SignalLevelMax", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("PilotFrequency", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: ByteField("AgcMode", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: ByteField("AgcSetting", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+			15: ByteField("VideoLowerOpticalThreshold", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, Write), false, true, false, 15),
+			16: ByteField("VideoUpperOpticalThreshold", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read, Write), false, true, false, 16),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Video LOS",
+			1: "Video OOR low",
+			2: "Video OOR high",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointVideoAni (class ID 90 creates the basic
+// NewPhysicalPathTerminationPointVideoAni (class ID 90) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointVideoAni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointvideoaniBME, params...)
 }

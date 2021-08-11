@@ -120,22 +120,24 @@ func init() {
 			Get,
 			StartSoftwareDownload,
 		),
-		AllowedAttributeMask: 0XFC00,
+		AllowedAttributeMask: 0xfc00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: MultiByteField("Version", 14, nil, mapset.NewSetWith(Read), true, false, false, false, 1),
-			2: ByteField("IsCommitted", 0, mapset.NewSetWith(Read), true, false, false, false, 2),
-			3: ByteField("IsActive", 0, mapset.NewSetWith(Read), true, false, false, false, 3),
-			4: ByteField("IsValid", 0, mapset.NewSetWith(Read), true, false, false, false, 4),
-			5: MultiByteField("ProductCode", 25, nil, mapset.NewSetWith(Read), true, false, true, false, 5),
-			6: MultiByteField("ImageHash", 16, nil, mapset.NewSetWith(Read), true, false, true, false, 6),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: MultiByteField("Version", StringAttributeType, 0x8000, 14, toOctets("ICAgICAgICAgICAgICA="), mapset.NewSetWith(Read), true, false, false, 1),
+			2: ByteField("IsCommitted", EnumerationAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, false, false, 2),
+			3: ByteField("IsActive", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read), true, false, false, 3),
+			4: ByteField("IsValid", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read), true, false, false, 4),
+			5: MultiByteField("ProductCode", OctetsAttributeType, 0x0800, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, true, false, 5),
+			6: MultiByteField("ImageHash", StringAttributeType, 0x0400, 16, toOctets("AAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, true, false, 6),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewSoftwareImage (class ID 7 creates the basic
+// NewSoftwareImage (class ID 7) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSoftwareImage(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*softwareimageBME, params...)
 }

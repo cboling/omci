@@ -91,24 +91,26 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("LocalPortMin", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("LocalPortMax", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 2),
-			3: ByteField("DscpMark", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: ByteField("PiggybackEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: ByteField("ToneEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: ByteField("DtmfEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7: ByteField("CasEvents", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8: Uint16Field("IpHostConfigPointer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("LocalPortMin", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("LocalPortMax", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 2),
+			3: ByteField("DscpMark", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: ByteField("PiggybackEvents", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: ByteField("ToneEvents", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6: ByteField("DtmfEvents", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7: ByteField("CasEvents", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8: Uint16Field("IpHostConfigPointer", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, true, false, 8),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewRtpProfileData (class ID 143 creates the basic
+// NewRtpProfileData (class ID 143) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewRtpProfileData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*rtpprofiledataBME, params...)
 }

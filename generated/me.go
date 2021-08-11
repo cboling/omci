@@ -30,9 +30,10 @@ import (
 
 // ManagedEntity provides a complete instance of a Managed Entity
 type ManagedEntity struct {
-	definition    ManagedEntityDefinition
-	attributeMask uint16
-	attributes    AttributeValueMap
+	definition             ManagedEntityDefinition
+	attributeMask          uint16
+	requestedAttributeMask uint16
+	attributes             AttributeValueMap
 }
 
 // String provides a simple string that describes this struct
@@ -48,12 +49,11 @@ func NewManagedEntity(definition ManagedEntityDefinition, params ...ParamData) (
 		attributes: make(map[string]interface{}),
 	}
 	if params != nil {
-		err := entity.setAttributes(params...)
-		if err != nil {
+		if err := entity.setAttributes(params...); err.StatusCode() != Success {
 			return nil, err
 		}
 	}
-	return entity, nil
+	return entity, NewOmciSuccess()
 }
 
 // GetManagedEntityDefinition provides the ME definition of a Managed Entity
@@ -69,6 +69,11 @@ func (entity ManagedEntity) GetName() string {
 // GetClassID returns the 16-bit class ID of a Managed Entity
 func (entity ManagedEntity) GetClassID() ClassID {
 	return entity.definition.GetClassID()
+}
+
+// SetClassID assigns the 16-bit class ID of a Managed Entity
+func (entity *ManagedEntity) SetClassID(classID ClassID) {
+	entity.definition.SetClassID(classID)
 }
 
 // GetMessageTypes returns the OMCI message types that a Managed Entity supports
@@ -93,8 +98,8 @@ func (entity *ManagedEntity) DecodeAttributes(mask uint16, data []byte, p gopack
 
 // SerializeAttributes will serialize the attributes of a Managed Entity type
 func (entity *ManagedEntity) SerializeAttributes(attr AttributeValueMap, mask uint16,
-	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
-	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable)
+	b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, packData bool) (error, uint16) {
+	return entity.definition.SerializeAttributes(attr, mask, b, msgType, bytesAvailable, packData)
 }
 
 // GetEntityID will return the Entity/Instance ID for a Managed Entity
@@ -113,6 +118,20 @@ func (entity *ManagedEntity) SetEntityID(eid uint16) error {
 // GetAttributeMask will return the 16-bit attribute mask of a Managed Entity
 func (entity *ManagedEntity) GetAttributeMask() uint16 {
 	return entity.attributeMask
+}
+
+// SetRequestedAttributeMask is used to initialize the requested attribute mask to a specific
+// value. This should only be done on "Get" type operations that need to fetch and attribute
+// and store it in the entity. For other operations (create, set, ...) you should specify
+// the attributes and values in the Params initialization or use the SetAttribute
+func (entity *ManagedEntity) SetRequestedAttributeMask(mask uint16) {
+	entity.requestedAttributeMask = mask
+}
+
+// GetRequestedAttributeMask will return the 16-bit requested attribute mask of a Managed Entity.
+// This is only specified for requests that perform a Get operation
+func (entity *ManagedEntity) GetRequestedAttributeMask() uint16 {
+	return entity.requestedAttributeMask
 }
 
 // GetAttributeValueMap will return the map of attributes of a Managed Entity
@@ -150,7 +169,7 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 	eidName := entity.definition.AttributeDefinitions[0].Name
 	if len(params) == 0 {
 		entity.attributes[eidName] = uint16(0)
-		return nil
+		return NewOmciSuccess()
 	}
 	entity.attributes[eidName] = params[0].EntityID
 
@@ -158,11 +177,11 @@ func (entity *ManagedEntity) setAttributes(params ...ParamData) OmciErrors {
 		if name == eidName {
 			continue
 		}
-		if err := entity.SetAttribute(name, value); err != nil {
+		if err := entity.SetAttribute(name, value); err.StatusCode() != Success {
 			return err
 		}
 	}
-	return nil
+	return NewOmciSuccess()
 }
 
 // SetAttribute can be uses to set the value of a specific attribute by name
@@ -174,7 +193,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	} else if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	}
-	mask := uint16(1 << (16 - attrDef.GetIndex()))
+	mask := attrDef.Mask
 	// check any constraints
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err = constraintCheck(value)
@@ -184,7 +203,7 @@ func (entity *ManagedEntity) SetAttribute(name string, value interface{}) OmciEr
 	}
 	entity.attributes[name] = value
 	entity.attributeMask |= mask
-	return nil
+	return NewOmciSuccess()
 }
 
 // SetAttributeByIndex can be uses to set the value of a specific attribute by attribute index (0..15)
@@ -196,7 +215,7 @@ func (entity *ManagedEntity) SetAttributeByIndex(index uint, value interface{}) 
 	} else if entity.attributes == nil {
 		entity.attributes = make(map[string]interface{})
 	}
-	mask := uint16(1 << (16 - attrDef.GetIndex()))
+	mask := attrDef.Mask
 	// check any constraints
 	if constraintCheck := attrDef.GetConstraints(); constraintCheck != nil {
 		err := constraintCheck(value)
@@ -217,7 +236,7 @@ func (entity *ManagedEntity) DeleteAttribute(name string) error {
 	}
 	if entity.attributes != nil {
 		delete(entity.attributes, name)
-		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+		entity.attributeMask &= ^attrDef.Mask
 	}
 	return nil
 }
@@ -231,9 +250,20 @@ func (entity *ManagedEntity) DeleteAttributeByIndex(index uint) error {
 	}
 	if entity.attributes != nil {
 		delete(entity.attributes, attrDef.Name)
-		entity.attributeMask &= ^uint16(1 << (16 - attrDef.GetIndex()))
+		entity.attributeMask &= ^attrDef.Mask
 	}
 	return nil
+}
+
+// GetClassSupport returns the ONU support for this managed entity
+func (entity *ManagedEntity) GetClassSupport() ClassSupport {
+	return entity.definition.GetClassSupport()
+}
+
+// GetAlarmMap returns the Alarm Bit Number to Alarm Name (string) mapping.  Nil is returned if
+// the managed entity does not support alarms
+func (entity *ManagedEntity) GetAlarmMap() AlarmMap {
+	return entity.definition.GetAlarmMap()
 }
 
 // DecodeFromBytes decodes a Managed Entity give an octet stream pointing to the ME within a frame
@@ -247,7 +277,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	parameters := ParamData{EntityID: entityID}
 
 	meDefinition, omciErr := LoadManagedEntityDefinition(classID, parameters)
-	if omciErr != nil {
+	if omciErr.StatusCode() != Success {
 		return omciErr.GetError()
 	}
 	entity.definition = meDefinition.definition
@@ -265,7 +295,7 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 }
 
 // SerializeTo serializes a Managed Entity into an octet stream
-func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int) error {
+func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byte, bytesAvailable int, opts gopacket.SerializeOptions) error {
 	// Add class ID and entity ID
 	bytes, err := b.AppendBytes(6)
 	if err != nil {
@@ -277,6 +307,7 @@ func (entity *ManagedEntity) SerializeTo(b gopacket.SerializeBuffer, msgType byt
 
 	// TODO: Need to limit number of bytes appended to not exceed packet size
 	// Is there space/metadata info in 'b' parameter to allow this?
-	err = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b, msgType, bytesAvailable)
+	err, _ = entity.SerializeAttributes(entity.attributes, entity.GetAttributeMask(), b,
+		msgType, bytesAvailable, opts.FixLengths)
 	return err
 }

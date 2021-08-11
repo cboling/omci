@@ -78,20 +78,22 @@ func init() {
 		MessageTypes: mapset.NewSetWith(
 			Get,
 		),
-		AllowedAttributeMask: 0XF000,
+		AllowedAttributeMask: 0xf000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: ByteField("ActiveChannelIndication", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: ByteField("OperationalChannelIndication", 0, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3: ByteField("DownstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: ByteField("UpstreamWavelengthChannel", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField("ActiveChannelIndication", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField("OperationalChannelIndication", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), false, false, false, 2),
+			3: ByteField("DownstreamWavelengthChannel", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: ByteField("UpstreamWavelengthChannel", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewTwdmChannelManagedEntity (class ID 443 creates the basic
+// NewTwdmChannelManagedEntity (class ID 443) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelManagedEntity(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchannelmanagedentityBME, params...)
 }

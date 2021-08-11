@@ -126,33 +126,52 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("FcsErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("ExcessiveCollisionCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("LateCollisionCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("FramesTooLong", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("BufferOverflowsOnReceive", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("BufferOverflowsOnTransmit", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("SingleCollisionFrameCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("MultipleCollisionsFrameCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("SqeCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("DeferredTransmissionCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("InternalMacTransmitErrorCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("CarrierSenseErrorCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint32Field("AlignmentErrorCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
-			16: Uint32Field("InternalMacReceiveErrorCounter", 0, mapset.NewSetWith(Read), false, false, false, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", PointerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("FcsErrors", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("ExcessiveCollisionCounter", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("LateCollisionCounter", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("FramesTooLong", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("BufferOverflowsOnReceive", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("BufferOverflowsOnTransmit", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("SingleCollisionFrameCounter", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("MultipleCollisionsFrameCounter", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("SqeCounter", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("DeferredTransmissionCounter", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("InternalMacTransmitErrorCounter", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("CarrierSenseErrorCounter", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint32Field("AlignmentErrorCounter", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+			16: Uint32Field("InternalMacReceiveErrorCounter", CounterAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, false, false, 16),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "FCS errors",
+			1:  "Excessive collision counter",
+			2:  "Late collision counter",
+			3:  "Frames too long",
+			4:  "Buffer overflows on receive",
+			5:  "Buffer overflows on transmit",
+			6:  "Single collision frame counter",
+			7:  "Multiple collisions frame counter",
+			8:  "SQE counter",
+			9:  "Deferred transmission counter",
+			10: "Internal MAC transmit error counter",
+			11: "Carrier sense error counter",
+			12: "Alignment error counter",
+			13: "Internal MAC receive error counter",
 		},
 	}
 }
 
-// NewEthernetPerformanceMonitoringHistoryData (class ID 24 creates the basic
+// NewEthernetPerformanceMonitoringHistoryData (class ID 24) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEthernetPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ethernetperformancemonitoringhistorydataBME, params...)
 }

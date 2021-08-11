@@ -65,18 +65,31 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XC000,
+		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint16Field("EnvironmentalSense", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 1),
-			2: Uint16Field("ContactClosureOutput", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 2),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: Uint16Field("EnvironmentalSense", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, true, false, 1),
+			2: Uint16Field("ContactClosureOutput", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, true, false, 2),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Reserved",
+			1: "Sense point 1",
+			2: "Sense point 2",
+			3: "Sense point 3",
+			4: "Sense point 4",
+			5: "Sense point 5",
+			6: "Sense point 6",
+			7: "Sense point 7",
+			8: "Sense point 8",
 		},
 	}
 }
 
-// NewEquipmentExtensionPackage (class ID 160 creates the basic
+// NewEquipmentExtensionPackage (class ID 160) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewEquipmentExtensionPackage(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*equipmentextensionpackageBME, params...)
 }

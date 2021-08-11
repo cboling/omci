@@ -164,32 +164,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("LoopDiagnosticsModeForcedLdsf", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  ByteField("AutomodeColdStartForced", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  ByteField("L2Atpr", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  ByteField("L2Atprt", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  ByteField("ForceInpDownstream", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  ByteField("ForceInpUpstream", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  ByteField("UpdateRequestFlagForNearEndTestParameters", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 7),
-			8:  ByteField("UpdateRequestFlagForFarEndTestParameters", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 8),
-			9:  Uint16Field("InmInterArrivalTimeOffsetUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: ByteField("InmInterArrivalTimeStepUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 10),
-			11: ByteField("InmClusterContinuationValueUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("InmEquivalentInpModeUpstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
-			13: Uint16Field("InmInterArrivalTimeOffsetDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 13),
-			14: ByteField("InmInterArrivalTimeStepDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 14),
-			15: ByteField("InmClusterContinuationValueDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 15),
-			16: ByteField("InmEquivalentInpModeDownstream", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("LoopDiagnosticsModeForcedLdsf", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  ByteField("AutomodeColdStartForced", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  ByteField("L2Atpr", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  ByteField("L2Atprt", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  ByteField("ForceInpDownstream", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  ByteField("ForceInpUpstream", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  ByteField("UpdateRequestFlagForNearEndTestParameters", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), true, true, false, 7),
+			8:  ByteField("UpdateRequestFlagForFarEndTestParameters", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), true, true, false, 8),
+			9:  Uint16Field("InmInterArrivalTimeOffsetUpstream", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: ByteField("InmInterArrivalTimeStepUpstream", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), false, true, false, 10),
+			11: ByteField("InmClusterContinuationValueUpstream", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("InmEquivalentInpModeUpstream", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+			13: Uint16Field("InmInterArrivalTimeOffsetDownstream", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, Write), false, true, false, 13),
+			14: ByteField("InmInterArrivalTimeStepDownstream", UnsignedIntegerAttributeType, 0x0004, 0, mapset.NewSetWith(Read, Write), false, true, false, 14),
+			15: ByteField("InmClusterContinuationValueDownstream", UnsignedIntegerAttributeType, 0x0002, 0, mapset.NewSetWith(Read, Write), false, true, false, 15),
+			16: ByteField("InmEquivalentInpModeDownstream", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read, Write), false, true, false, 16),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewXdslLineConfigurationProfilePart3 (class ID 106 creates the basic
+// NewXdslLineConfigurationProfilePart3 (class ID 106) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewXdslLineConfigurationProfilePart3(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*xdsllineconfigurationprofilepart3BME, params...)
 }

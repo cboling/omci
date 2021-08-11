@@ -137,31 +137,48 @@ func init() {
 			GetCurrentData,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("TuningControlRequestsRejectedDsAlbl", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("TuningControlRequestsRejectedDsVoid", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("TuningControlRequestsRejectedDsPart", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("TuningControlRequestsRejectedDsTunr", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("TuningControlRequestsRejectedDsLnrt", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("TuningControlRequestsRejectedDsLncd", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("TuningControlRequestsRejectedUsAlbl", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("TuningControlRequestsRejectedUsVoid", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("TuningControlRequestsRejectedUsTunr", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("TuningControlRequestsRejectedUsClbr", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("TuningControlRequestsRejectedUsLktp", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("TuningControlRequestsRejectedUsLnrt", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint32Field("TuningControlRequestsRejectedUsLncd", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("TuningControlRequestsRejectedDsAlbl", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("TuningControlRequestsRejectedDsVoid", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("TuningControlRequestsRejectedDsPart", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("TuningControlRequestsRejectedDsTunr", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("TuningControlRequestsRejectedDsLnrt", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("TuningControlRequestsRejectedDsLncd", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("TuningControlRequestsRejectedUsAlbl", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("TuningControlRequestsRejectedUsVoid", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("TuningControlRequestsRejectedUsTunr", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("TuningControlRequestsRejectedUsClbr", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("TuningControlRequestsRejectedUsLktp", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("TuningControlRequestsRejectedUsLnrt", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint32Field("TuningControlRequestsRejectedUsLncd", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "Tuning control requests rejected/DS_ALBL",
+			1:  "Tuning control requests rejected/DS_VOID",
+			2:  "Tuning control requests rejected/DS_PART",
+			3:  "Tuning control requests rejected/DS_TUNR",
+			4:  "Tuning control requests rejected/DS_LNRT",
+			5:  "Tuning control requests rejected/DS_LNCD",
+			6:  "Tuning control requests rejected/US_ALBL",
+			7:  "Tuning control requests rejected/US_VOID",
+			8:  "Tuning control requests rejected/US_TUNR",
+			9:  "Tuning control requests rejected/US_CLBR",
+			10: "Tuning control requests rejected/US_LKTP",
+			11: "Tuning control requests rejected/US_LNRT",
+			12: "Tuning control requests rejected/US_LNCD",
 		},
 	}
 }
 
-// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450 creates the basic
+// NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2 (class ID 450) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewTwdmChannelTuningPerformanceMonitoringHistoryDataPart2(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*twdmchanneltuningperformancemonitoringhistorydatapart2BME, params...)
 }

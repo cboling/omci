@@ -122,28 +122,55 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("ExpectedType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("SensedType", 0, mapset.NewSetWith(Read), true, false, false, false, 2),
-			3:  ByteField("CesLoopbackConfiguration", 0, mapset.NewSetWith(Read, Write), true, false, false, false, 3),
-			4:  ByteField("AdministrativeState", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  ByteField("OperationalState", 0, mapset.NewSetWith(Read), true, false, true, false, 5),
-			6:  ByteField("Framing", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 6),
-			7:  ByteField("Encoding", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  ByteField("LineLength", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
-			9:  ByteField("Ds1Mode", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: ByteField("Arc", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 10),
-			11: ByteField("ArcInterval", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("LineType", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("ExpectedType", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("SensedType", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read), true, false, false, 2),
+			3:  ByteField("CesLoopbackConfiguration", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), true, false, false, 3),
+			4:  ByteField("AdministrativeState", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  ByteField("OperationalState", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read), true, true, false, 5),
+			6:  ByteField("Framing", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, true, false, 6),
+			7:  ByteField("Encoding", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  ByteField("LineLength", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, true, false, 8),
+			9:  ByteField("Ds1Mode", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: ByteField("Arc", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, Write), true, true, false, 10),
+			11: ByteField("ArcInterval", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("LineType", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, false, false, 12),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "TF",
+			1:  "LOS",
+			2:  "LOF",
+			3:  "OOF",
+			4:  "RAI",
+			5:  "1.5 M BAIS",
+			6:  "R-INH",
+			7:  "6M REC",
+			8:  "6M SEND",
+			9:  "6M ERR",
+			10: "6M BERR",
+			11: "34M REC",
+			12: "34M AIS",
+			13: "2M REC",
+			14: "2M AIS",
+			15: "1.5M REC",
+			16: "1.5 AIS",
+			17: "INFO0",
+			18: "45M RDI",
+			19: "45M AIS",
+			20: "AIS-CI",
+			21: "DS1 idle",
+			22: "RAI-CI",
 		},
 	}
 }
 
-// NewPhysicalPathTerminationPointCesUni (class ID 12 creates the basic
+// NewPhysicalPathTerminationPointCesUni (class ID 12) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPhysicalPathTerminationPointCesUni(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*physicalpathterminationpointcesuniBME, params...)
 }

@@ -98,7 +98,7 @@ var sipuserdataBME *ManagedEntityDefinition
 //			that the ONU is to use its internal default. The default value of this attribute is 10-s. (R,-W)
 //			(optional) (1-byte)
 //
-//		Receiver Off Hook Roh  Timer
+//		Receiver Off Hook Roh Timer
 //			Receiver off hook (ROH) timer:	This attribute defines the time in seconds for the ROH condition
 //			before ROH tone is applied. The value 0 disables ROH timing. The value 0xFF specifies that the
 //			ONU is to use its internal default, which may or may not be the same as the 15-s OMCI default
@@ -119,28 +119,35 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("SipAgentPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("UserPartAor", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  MultiByteField("SipDisplayName", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  Uint16Field("UsernameAndPassword", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("VoicemailServerSipUri", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint32Field("VoicemailSubscriptionExpirationTime", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  Uint16Field("NetworkDialPlanPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  Uint16Field("ApplicationServicesProfilePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  Uint16Field("FeatureCodePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: Uint16Field("PptpPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: ByteField("ReleaseTimer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 11),
-			12: ByteField("ReceiverOffHookRohTimer", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("SipAgentPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("UserPartAor", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  MultiByteField("SipDisplayName", OctetsAttributeType, 0x2000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  Uint16Field("UsernameAndPassword", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("VoicemailServerSipUri", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint32Field("VoicemailSubscriptionExpirationTime", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  Uint16Field("NetworkDialPlanPointer", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  Uint16Field("ApplicationServicesProfilePointer", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  Uint16Field("FeatureCodePointer", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: Uint16Field("PptpPointer", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: ByteField("ReleaseTimer", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read, Write), false, true, false, 11),
+			12: ByteField("ReceiverOffHookRohTimer", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "SIP-UA register auth",
+			1: "SIP-UA register timeout",
+			2: "SIP-UA register fail",
 		},
 	}
 }
 
-// NewSipUserData (class ID 153 creates the basic
+// NewSipUserData (class ID 153) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSipUserData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*sipuserdataBME, params...)
 }

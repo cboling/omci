@@ -89,21 +89,23 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF800,
+		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("UpstreamVlanTaggingOperationMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("UpstreamVlanTagTciValue", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: ByteField("DownstreamVlanTaggingOperationMode", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: ByteField("AssociationType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 4),
-			5: Uint16Field("AssociatedMePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 5),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("UpstreamVlanTaggingOperationMode", EnumerationAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("UpstreamVlanTagTciValue", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: ByteField("DownstreamVlanTaggingOperationMode", EnumerationAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: ByteField("AssociationType", EnumerationAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 4),
+			5: Uint16Field("AssociatedMePointer", PointerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 5),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewVlanTaggingOperationConfigurationData (class ID 78 creates the basic
+// NewVlanTaggingOperationConfigurationData (class ID 78) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewVlanTaggingOperationConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*vlantaggingoperationconfigurationdataBME, params...)
 }

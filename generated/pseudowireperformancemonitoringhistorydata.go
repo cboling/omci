@@ -140,32 +140,47 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFFFE,
+		AllowedAttributeMask: 0xfffe,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("ReceivedPackets", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4:  Uint32Field("TransmittedPackets", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5:  Uint32Field("MissingPackets", 0, mapset.NewSetWith(Read), false, false, false, false, 5),
-			6:  Uint32Field("MisorderedPackets,Usable", 0, mapset.NewSetWith(Read), false, false, false, false, 6),
-			7:  Uint32Field("MisorderedPacketsDropped", 0, mapset.NewSetWith(Read), false, false, false, false, 7),
-			8:  Uint32Field("PlayoutBufferUnderrunsOverruns", 0, mapset.NewSetWith(Read), false, false, false, false, 8),
-			9:  Uint32Field("MalformedPackets", 0, mapset.NewSetWith(Read), false, false, false, false, 9),
-			10: Uint32Field("StrayPackets", 0, mapset.NewSetWith(Read), false, false, false, false, 10),
-			11: Uint32Field("RemotePacketLoss", 0, mapset.NewSetWith(Read), false, false, false, false, 11),
-			12: Uint32Field("TdmLBitPacketsTransmitted", 0, mapset.NewSetWith(Read), false, false, false, false, 12),
-			13: Uint32Field("Es", 0, mapset.NewSetWith(Read), false, false, false, false, 13),
-			14: Uint32Field("Ses", 0, mapset.NewSetWith(Read), false, false, false, false, 14),
-			15: Uint32Field("Uas", 0, mapset.NewSetWith(Read), false, false, false, false, 15),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("ReceivedPackets", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4:  Uint32Field("TransmittedPackets", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5:  Uint32Field("MissingPackets", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, false, false, 5),
+			6:  Uint32Field("MisorderedPackets,Usable", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, false, false, 6),
+			7:  Uint32Field("MisorderedPacketsDropped", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, false, false, 7),
+			8:  Uint32Field("PlayoutBufferUnderrunsOverruns", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, false, false, 8),
+			9:  Uint32Field("MalformedPackets", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, false, false, 9),
+			10: Uint32Field("StrayPackets", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, false, false, 10),
+			11: Uint32Field("RemotePacketLoss", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, false, false, 11),
+			12: Uint32Field("TdmLBitPacketsTransmitted", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, false, false, 12),
+			13: Uint32Field("Es", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, false, false, 13),
+			14: Uint32Field("Ses", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, false, false, 14),
+			15: Uint32Field("Uas", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, false, false, 15),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "Missing packets",
+			1: "Misordered packets, usable",
+			2: "Misordered packets dropped",
+			3: "Playout buffer underruns/overruns",
+			4: "Malformed packets",
+			5: "Stray packets",
+			6: "Remote packet loss",
+			7: "ES",
+			8: "SES",
+			9: "UAS",
 		},
 	}
 }
 
-// NewPseudowirePerformanceMonitoringHistoryData (class ID 285 creates the basic
+// NewPseudowirePerformanceMonitoringHistoryData (class ID 285) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewPseudowirePerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*pseudowireperformancemonitoringhistorydataBME, params...)
 }

@@ -116,28 +116,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF0,
+		AllowedAttributeMask: 0xfff0,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("Dot1XEnable", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  ByteField("ActionRegister", 0, mapset.NewSetWith(Write), false, false, false, false, 2),
-			3:  ByteField("AuthenticatorPaeState", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4:  ByteField("BackendAuthenticationState", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5:  ByteField("AdminControlledDirections", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 5),
-			6:  ByteField("OperationalControlledDirections", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
-			7:  ByteField("AuthenticatorControlledPortStatus", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8:  Uint16Field("QuietPeriod", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 8),
-			9:  Uint16Field("ServerTimeoutPeriod", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 9),
-			10: Uint16Field("ReAuthenticationPeriod", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: ByteField("ReAuthenticationEnabled", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
-			12: ByteField("KeyTransmissionEnabled", 0, mapset.NewSetWith(Read, Write), false, false, true, false, 12),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("Dot1XEnable", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  ByteField("ActionRegister", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Write), false, false, false, 2),
+			3:  ByteField("AuthenticatorPaeState", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4:  ByteField("BackendAuthenticationState", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5:  ByteField("AdminControlledDirections", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, true, false, 5),
+			6:  ByteField("OperationalControlledDirections", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
+			7:  ByteField("AuthenticatorControlledPortStatus", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, false, 7),
+			8:  Uint16Field("QuietPeriod", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, true, false, 8),
+			9:  Uint16Field("ServerTimeoutPeriod", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, Write), false, true, false, 9),
+			10: Uint16Field("ReAuthenticationPeriod", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: ByteField("ReAuthenticationEnabled", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
+			12: ByteField("KeyTransmissionEnabled", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, Write), false, true, false, 12),
+		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "dot1x local authentication - allowed",
+			1: "dot1x local authentication - denied",
 		},
 	}
 }
 
-// NewDot1XPortExtensionPackage (class ID 290 creates the basic
+// NewDot1XPortExtensionPackage (class ID 290) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewDot1XPortExtensionPackage(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*dot1xportextensionpackageBME, params...)
 }

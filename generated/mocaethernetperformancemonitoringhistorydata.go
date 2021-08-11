@@ -108,32 +108,50 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2:  Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint32Field("IncomingUnicastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 3),
-			4:  Uint32Field("IncomingDiscardedPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 4),
-			5:  Uint32Field("IncomingErroredPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6:  Uint32Field("IncomingUnknownPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
-			7:  Uint32Field("IncomingMulticastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8:  Uint32Field("IncomingBroadcastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
-			9:  Uint32Field("IncomingOctets", 0, mapset.NewSetWith(Read), false, false, true, false, 9),
-			10: Uint32Field("OutgoingUnicastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 10),
-			11: Uint32Field("OutgoingDiscardedPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 11),
-			12: Uint32Field("OutgoingErroredPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 12),
-			13: Uint32Field("OutgoingUnknownPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 13),
-			14: Uint32Field("OutgoingMulticastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 14),
-			15: Uint32Field("OutgoingBroadcastPackets", 0, mapset.NewSetWith(Read), false, false, true, false, 15),
-			16: Uint32Field("OutgoingOctets", 0, mapset.NewSetWith(Read), false, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2:  Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint32Field("IncomingUnicastPackets", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, true, false, 3),
+			4:  Uint32Field("IncomingDiscardedPackets", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, true, false, 4),
+			5:  Uint32Field("IncomingErroredPackets", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6:  Uint32Field("IncomingUnknownPackets", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
+			7:  Uint32Field("IncomingMulticastPackets", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, false, 7),
+			8:  Uint32Field("IncomingBroadcastPackets", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+			9:  Uint32Field("IncomingOctets", CounterAttributeType, 0x0080, 0, mapset.NewSetWith(Read), false, true, false, 9),
+			10: Uint32Field("OutgoingUnicastPackets", CounterAttributeType, 0x0040, 0, mapset.NewSetWith(Read), false, true, false, 10),
+			11: Uint32Field("OutgoingDiscardedPackets", CounterAttributeType, 0x0020, 0, mapset.NewSetWith(Read), false, true, false, 11),
+			12: Uint32Field("OutgoingErroredPackets", CounterAttributeType, 0x0010, 0, mapset.NewSetWith(Read), false, true, false, 12),
+			13: Uint32Field("OutgoingUnknownPackets", CounterAttributeType, 0x0008, 0, mapset.NewSetWith(Read), false, true, false, 13),
+			14: Uint32Field("OutgoingMulticastPackets", CounterAttributeType, 0x0004, 0, mapset.NewSetWith(Read), false, true, false, 14),
+			15: Uint32Field("OutgoingBroadcastPackets", CounterAttributeType, 0x0002, 0, mapset.NewSetWith(Read), false, true, false, 15),
+			16: Uint32Field("OutgoingOctets", CounterAttributeType, 0x0001, 0, mapset.NewSetWith(Read), false, true, false, 16),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0:  "Incoming unicast packets",
+			1:  "Incoming discarded packets",
+			2:  "Incoming errored packets",
+			3:  "Incoming unknown packets",
+			4:  "Incoming multicast packets",
+			5:  "Incoming broadcast packets",
+			6:  "Incoming octets",
+			7:  "Outgoing unicast packets",
+			8:  "Outgoing discarded packets",
+			9:  "Outgoing errored packets",
+			10: "Outgoing unknown packets",
+			11: "Outgoing multicast packets",
+			12: "Outgoing broadcast packets",
+			13: "Outgoing octets",
 		},
 	}
 }
 
-// NewMocaEthernetPerformanceMonitoringHistoryData (class ID 163 creates the basic
+// NewMocaEthernetPerformanceMonitoringHistoryData (class ID 163) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewMocaEthernetPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*mocaethernetperformancemonitoringhistorydataBME, params...)
 }

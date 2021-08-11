@@ -122,32 +122,34 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFFF,
+		AllowedAttributeMask: 0xffff,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1:  ByteField("IpOptions", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2:  MultiByteField("MacAddress", 6, nil, mapset.NewSetWith(Read), false, false, false, false, 2),
-			3:  MultiByteField("OnuIdentifier", 25, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4:  Uint32Field("IpAddress", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 4),
-			5:  Uint32Field("Mask", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 5),
-			6:  Uint32Field("Gateway", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 6),
-			7:  Uint32Field("PrimaryDns", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 7),
-			8:  Uint32Field("SecondaryDns", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 8),
-			9:  Uint32Field("CurrentAddress", 0, mapset.NewSetWith(Read), true, false, true, false, 9),
-			10: Uint32Field("CurrentMask", 0, mapset.NewSetWith(Read), true, false, true, false, 10),
-			11: Uint32Field("CurrentGateway", 0, mapset.NewSetWith(Read), true, false, true, false, 11),
-			12: Uint32Field("CurrentPrimaryDns", 0, mapset.NewSetWith(Read), true, false, true, false, 12),
-			13: Uint32Field("CurrentSecondaryDns", 0, mapset.NewSetWith(Read), true, false, true, false, 13),
-			14: MultiByteField("DomainName", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 14),
-			15: MultiByteField("HostName", 25, nil, mapset.NewSetWith(Read), true, false, false, false, 15),
-			16: Uint16Field("RelayAgentOptions", 0, mapset.NewSetWith(Read, Write), true, false, true, false, 16),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1:  ByteField("IpOptions", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2:  MultiByteField("MacAddress", OctetsAttributeType, 0x4000, 6, toOctets("AAAAAAAA"), mapset.NewSetWith(Read), false, false, false, 2),
+			3:  MultiByteField("OnuIdentifier", OctetsAttributeType, 0x2000, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4:  Uint32Field("IpAddress", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5:  Uint32Field("Mask", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			6:  Uint32Field("Gateway", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, Write), false, false, false, 6),
+			7:  Uint32Field("PrimaryDns", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, Write), false, false, false, 7),
+			8:  Uint32Field("SecondaryDns", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, Write), false, false, false, 8),
+			9:  Uint32Field("CurrentAddress", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read), true, true, false, 9),
+			10: Uint32Field("CurrentMask", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read), true, true, false, 10),
+			11: Uint32Field("CurrentGateway", UnsignedIntegerAttributeType, 0x0020, 0, mapset.NewSetWith(Read), true, true, false, 11),
+			12: Uint32Field("CurrentPrimaryDns", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read), true, true, false, 12),
+			13: Uint32Field("CurrentSecondaryDns", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read), true, true, false, 13),
+			14: MultiByteField("DomainName", OctetsAttributeType, 0x0004, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, false, 14),
+			15: MultiByteField("HostName", OctetsAttributeType, 0x0002, 25, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=="), mapset.NewSetWith(Read), true, false, false, 15),
+			16: Uint16Field("RelayAgentOptions", UnsignedIntegerAttributeType, 0x0001, 0, mapset.NewSetWith(Read, Write), true, true, false, 16),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewIpHostConfigData (class ID 134 creates the basic
+// NewIpHostConfigData (class ID 134) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewIpHostConfigData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*iphostconfigdataBME, params...)
 }

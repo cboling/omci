@@ -78,20 +78,22 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XF000,
+		AllowedAttributeMask: 0xf000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read), false, false, false, false, 0),
-			1: Uint32Field("OltVendorId", 0, mapset.NewSetWith(Read, Write), false, false, false, false, 1),
-			2: MultiByteField("EquipmentId", 20, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 2),
-			3: MultiByteField("Version", 14, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 3),
-			4: MultiByteField("TimeOfDayInformation", 14, nil, mapset.NewSetWith(Read, Write), false, false, true, false, 4),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: MultiByteField("OltVendorId", StringAttributeType, 0x8000, 4, toOctets("ICAgIA=="), mapset.NewSetWith(Read, Write), false, false, false, 1),
+			2: MultiByteField("EquipmentId", StringAttributeType, 0x4000, 20, toOctets("ICAgICAgICAgICAgICAgICAgICA="), mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: MultiByteField("Version", StringAttributeType, 0x2000, 14, toOctets("MAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: MultiByteField("TimeOfDayInformation", OctetsAttributeType, 0x1000, 14, toOctets("AAAAAAAAAAAAAAAAAAA="), mapset.NewSetWith(Read, Write), false, true, false, 4),
 		},
+		Access:  CreatedByOnu,
+		Support: UnknownSupport,
 	}
 }
 
-// NewOltG (class ID 131 creates the basic
+// NewOltG (class ID 131) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewOltG(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*oltgBME, params...)
 }

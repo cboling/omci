@@ -109,29 +109,31 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFFF8,
+		AllowedAttributeMask: 0xfff8,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0:  Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1:  Uint16Field("TpPointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2:  Uint16Field("InterworkTpPointerForPBitPriority0", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3:  Uint16Field("InterworkTpPointerForPBitPriority1", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4:  Uint16Field("InterworkTpPointerForPBitPriority2", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5:  Uint16Field("InterworkTpPointerForPBitPriority3", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6:  Uint16Field("InterworkTpPointerForPBitPriority4", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7:  Uint16Field("InterworkTpPointerForPBitPriority5", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8:  Uint16Field("InterworkTpPointerForPBitPriority6", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
-			9:  Uint16Field("InterworkTpPointerForPBitPriority7", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 9),
-			10: ByteField("UnmarkedFrameOption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 10),
-			11: MultiByteField("DscpToPBitMapping", 24, nil, mapset.NewSetWith(Read, Write), false, false, false, false, 11),
-			12: ByteField("DefaultPBitAssumption", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 12),
-			13: ByteField("TpType", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, true, false, 13),
+			0:  Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1:  Uint16Field("TpPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2:  Uint16Field("InterworkTpPointerForPBitPriority0", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3:  Uint16Field("InterworkTpPointerForPBitPriority1", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4:  Uint16Field("InterworkTpPointerForPBitPriority2", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5:  Uint16Field("InterworkTpPointerForPBitPriority3", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6:  Uint16Field("InterworkTpPointerForPBitPriority4", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7:  Uint16Field("InterworkTpPointerForPBitPriority5", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8:  Uint16Field("InterworkTpPointerForPBitPriority6", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
+			9:  Uint16Field("InterworkTpPointerForPBitPriority7", UnsignedIntegerAttributeType, 0x0080, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 9),
+			10: ByteField("UnmarkedFrameOption", UnsignedIntegerAttributeType, 0x0040, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 10),
+			11: MultiByteField("DscpToPBitMapping", OctetsAttributeType, 0x0020, 24, toOctets("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), mapset.NewSetWith(Read, Write), false, false, false, 11),
+			12: ByteField("DefaultPBitAssumption", UnsignedIntegerAttributeType, 0x0010, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 12),
+			13: ByteField("TpType", UnsignedIntegerAttributeType, 0x0008, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, true, false, 13),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewIeee8021PMapperServiceProfile (class ID 130 creates the basic
+// NewIeee8021PMapperServiceProfile (class ID 130) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewIeee8021PMapperServiceProfile(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*ieee8021pmapperserviceprofileBME, params...)
 }

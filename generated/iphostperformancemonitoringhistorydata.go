@@ -89,25 +89,36 @@ func init() {
 			Delete,
 			Get,
 			Set,
+			GetCurrentData,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: ByteField("IntervalEndTime", 0, mapset.NewSetWith(Read), false, false, false, false, 1),
-			2: Uint16Field("ThresholdData12Id", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("IcmpErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 3),
-			4: Uint32Field("DnsErrors", 0, mapset.NewSetWith(Read), false, false, false, false, 4),
-			5: Uint16Field("DhcpTimeouts", 0, mapset.NewSetWith(Read), false, false, true, false, 5),
-			6: Uint16Field("IpAddressConflict", 0, mapset.NewSetWith(Read), false, false, true, false, 6),
-			7: Uint16Field("OutOfMemory", 0, mapset.NewSetWith(Read), false, false, true, false, 7),
-			8: Uint16Field("InternalError", 0, mapset.NewSetWith(Read), false, false, true, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField("IntervalEndTime", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: Uint16Field("ThresholdData12Id", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("IcmpErrors", CounterAttributeType, 0x2000, 0, mapset.NewSetWith(Read), false, false, false, 3),
+			4: Uint32Field("DnsErrors", CounterAttributeType, 0x1000, 0, mapset.NewSetWith(Read), false, false, false, 4),
+			5: Uint16Field("DhcpTimeouts", CounterAttributeType, 0x0800, 0, mapset.NewSetWith(Read), false, true, false, 5),
+			6: Uint16Field("IpAddressConflict", CounterAttributeType, 0x0400, 0, mapset.NewSetWith(Read), false, true, false, 6),
+			7: Uint16Field("OutOfMemory", CounterAttributeType, 0x0200, 0, mapset.NewSetWith(Read), false, true, false, 7),
+			8: Uint16Field("InternalError", CounterAttributeType, 0x0100, 0, mapset.NewSetWith(Read), false, true, false, 8),
+		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			1: "IPNPM ICMP error",
+			2: "IPNPM DNS error",
+			3: "DHCP timeout",
+			4: "IP address conflict",
+			5: "Out of memory",
+			6: "Internal error",
 		},
 	}
 }
 
-// NewIpHostPerformanceMonitoringHistoryData (class ID 135 creates the basic
+// NewIpHostPerformanceMonitoringHistoryData (class ID 135) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewIpHostPerformanceMonitoringHistoryData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*iphostperformancemonitoringhistorydataBME, params...)
 }

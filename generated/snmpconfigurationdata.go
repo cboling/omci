@@ -90,24 +90,26 @@ func init() {
 			Get,
 			Set,
 		),
-		AllowedAttributeMask: 0XFF00,
+		AllowedAttributeMask: 0xff00,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, false, 0),
-			1: Uint16Field("SnmpVersion", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 1),
-			2: Uint16Field("SnmpAgentAddress", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 2),
-			3: Uint32Field("SnmpServerAddress", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 3),
-			4: Uint16Field("SnmpServerPort", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 4),
-			5: Uint16Field("SecurityNamePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 5),
-			6: Uint16Field("CommunityForRead", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 6),
-			7: Uint16Field("CommunityForWrite", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 7),
-			8: Uint16Field("SysNamePointer", 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, false, 8),
+			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field("SnmpVersion", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field("SnmpAgentAddress", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			3: Uint32Field("SnmpServerAddress", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 3),
+			4: Uint16Field("SnmpServerPort", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 4),
+			5: Uint16Field("SecurityNamePointer", UnsignedIntegerAttributeType, 0x0800, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 5),
+			6: Uint16Field("CommunityForRead", UnsignedIntegerAttributeType, 0x0400, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 6),
+			7: Uint16Field("CommunityForWrite", UnsignedIntegerAttributeType, 0x0200, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 7),
+			8: Uint16Field("SysNamePointer", UnsignedIntegerAttributeType, 0x0100, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 8),
 		},
+		Access:  CreatedByOlt,
+		Support: UnknownSupport,
 	}
 }
 
-// NewSnmpConfigurationData (class ID 335 creates the basic
+// NewSnmpConfigurationData (class ID 335) creates the basic
 // Managed Entity definition that is used to validate an ME of this type that
-// is received from the wire, about to be sent on the wire.
+// is received from or transmitted to the OMCC.
 func NewSnmpConfigurationData(params ...ParamData) (*ManagedEntity, OmciErrors) {
 	return NewManagedEntity(*snmpconfigurationdataBME, params...)
 }
