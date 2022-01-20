@@ -20,7 +20,7 @@ package omci
 import (
 	"encoding/binary"
 	"fmt"
-	me "github.com/cboling/omci/generated"
+	me "github.com/cboling/omci/v2/generated"
 	"github.com/google/gopacket"
 	"github.com/google/gopacket/layers"
 )

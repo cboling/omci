@@ -20,7 +20,7 @@ package omci_test
 import (
 	"encoding/hex"
 	"fmt"
-	. "github.com/cboling/omci"
+	. "github.com/cboling/omci/v2"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"

@@ -21,7 +21,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
-	me "github.com/cboling/omci/generated"
+	me "github.com/cboling/omci/v2/generated"
 	"github.com/google/gopacket"
 )
 

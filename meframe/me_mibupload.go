@@ -16,8 +16,8 @@ package meframe
 
 import (
 	"errors"
-	. "github.com/cboling/omci"
-	me "github.com/cboling/omci/generated"
+	. "github.com/cboling/omci/v2"
+	me "github.com/cboling/omci/v2/generated"
 	"github.com/google/gopacket"
 )
 

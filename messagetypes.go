@@ -18,7 +18,7 @@
 package omci
 
 import (
-	me "github.com/cboling/omci/generated"
+	me "github.com/cboling/omci/v2/generated"
 )
 
 // MessageType is the OMCI Message Type combined with the AR/AK flags as appropriate.

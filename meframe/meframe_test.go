@@ -17,9 +17,9 @@
 package meframe_test
 
 import (
-	. "github.com/cboling/omci"
-	me "github.com/cboling/omci/generated"
-	"github.com/cboling/omci/meframe"
+	. "github.com/cboling/omci/v2"
+	me "github.com/cboling/omci/v2/generated"
+	"github.com/cboling/omci/v2/meframe"
 	mapset "github.com/deckarep/golang-set"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
