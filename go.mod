@@ -1,4 +1,4 @@
-module github.com/cboling/omci
+module github.com/cboling/omci/v2
 
 go 1.16
 
