@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // Aal5PerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity AAL5 performance monitoring history data
-const Aal5PerformanceMonitoringHistoryDataClassID ClassID = ClassID(18)
+const Aal5PerformanceMonitoringHistoryDataClassID = ClassID(18) // 0x0012
 
 var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// Aal5PerformanceMonitoringHistoryData (class ID #18)
+// Aal5PerformanceMonitoringHistoryData (Class ID: #18 / 0x0012)
 //	This ME collects PM data as a result of performing segmentation and reassembly (SAR) and
 //	convergence sublayer (CS) level protocol monitoring. Instances of this ME are created and
 //	deleted by the OLT.
@@ -41,13 +43,11 @@ var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the IW VCC TP. (R, setbycreate)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the IW VCC TP. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
@@ -55,26 +55,25 @@ var aal5performancemonitoringhistorydataBME *ManagedEntityDefinition
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Sum Of Invalid Cs Field Errors
-//			Sum of invalid CS field errors: This attribute counts the sum of invalid CS field errors. For
-//			AAL type 5, this attribute is a single count of the number of CS PDUs discarded due to one of
-//			the following error conditions: invalid common part indicator (CPI), oversized received SDU, or
-//			length violation. (R) (mandatory) (4-bytes)
-//
-//		Crc Violations
-//			CRC violations: This attribute counts CRC violations detected on incoming SAR PDUs. (R)
+//			This attribute counts the sum of invalid CS field errors. For AAL type 5, this attribute is a
+//			single count of the number of CS PDUs discarded due to one of the following error conditions:
+//			invalid common part indicator (CPI), oversized received SDU, or length violation. (R)
 //			(mandatory) (4-bytes)
 //
+//		Crc Violations
+//			This attribute counts CRC violations detected on incoming SAR PDUs. (R) (mandatory) (4-bytes)
+//
 //		Reassembly Timer Expirations
-//			Reassembly timer expirations: This attribute counts reassembly timer expirations. (R) (mandatory
-//			if reassembly timer is implemented) (4-bytes)
+//			This attribute counts reassembly timer expirations. (R) (mandatory if reassembly timer is
+//			implemented) (4-bytes)
 //
 //		Buffer Overflows
-//			Buffer overflows: This attribute counts the number of times where there was not enough buffer
-//			space for a reassembled packet. (R) (mandatory) (4-bytes)
+//			This attribute counts the number of times where there was not enough buffer space for a
+//			reassembled packet. (R) (mandatory) (4-bytes)
 //
 //		Encap Protocol Errors
-//			Encap protocol errors: This attribute counts the number of times that [IETF RFC 2684]
-//			encapsulation protocol detected a bad header. (R) (mandatory) (4-bytes)
+//			This attribute counts the number of times that [IETF RFC 2684] encapsulation protocol detected a
+//			bad header. (R) (mandatory) (4-bytes)
 //
 type Aal5PerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

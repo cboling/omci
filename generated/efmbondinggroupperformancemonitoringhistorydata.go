@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // EfmBondingGroupPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity EFM bonding group performance monitoring history data
-const EfmBondingGroupPerformanceMonitoringHistoryDataClassID ClassID = ClassID(420)
+const EfmBondingGroupPerformanceMonitoringHistoryDataClassID = ClassID(420) // 0x01a4
 
 var efmbondinggroupperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// EfmBondingGroupPerformanceMonitoringHistoryData (class ID #420)
+// EfmBondingGroupPerformanceMonitoringHistoryData (Class ID: #420 / 0x01a4)
 //	This ME collects PM data as seen at the xTU-C. Instances of this ME are created and deleted by
 //	the OLT.
 //
@@ -37,51 +39,49 @@ var efmbondinggroupperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the EFM bonding group. (R,
-//			setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the EFM bonding group. (R, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
 //			that contain PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Rx Bad Fragments
-//			Rx bad fragments: Clause 45.2.3.33 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
+//			Clause 45.2.3.33 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Fragments
-//			Rx lost fragments: Clause 45.2.3.34 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
+//			Clause 45.2.3.34 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Starts
-//			Rx lost starts: Clause 45.2.3.35 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
+//			Clause 45.2.3.35 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Lost Ends
-//			Rx lost ends: Clause 45.2.3.36 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
+//			Clause 45.2.3.36 of [IEEE 802.3]. (R) (mandatory) (4-bytes)
 //
 //		Rx Frames
-//			Rx frames: Number of Ethernet frames received over this group. (R) (mandatory) (4-bytes)
+//			Number of Ethernet frames received over this group. (R) (mandatory) (4-bytes)
 //
 //		Tx Frames
-//			Tx frames: Number of Ethernet frames transmitted over this group. (R) (mandatory) (4-bytes)
+//			Number of Ethernet frames transmitted over this group. (R) (mandatory) (4-bytes)
 //
 //		Rx Bytes
-//			Rx bytes: Number of bytes contained in the Ethernet frames received over this group. (R)
-//			(mandatory) (8-bytes)
+//			Number of bytes contained in the Ethernet frames received over this group. (R) (mandatory)
+//			(8-bytes)
 //
 //		Tx Bytes
-//			Tx bytes: Number of bytes contained in the Ethernet frames transmitted over this group. (R)
-//			(mandatory) (8-bytes)
+//			Number of bytes contained in the Ethernet frames transmitted over this group. (R) (mandatory)
+//			(8-bytes)
 //
 //		Tx Discarded Frames
-//			Tx discarded frames: Number of Ethernet frames discarded by the group transmit function. (R)
-//			(mandatory) (4-bytes)
+//			Number of Ethernet frames discarded by the group transmit function. (R) (mandatory) (4-bytes)
 //
 //		Tx Discarded Bytes
-//			Tx discarded bytes: Number of bytes contained in the Ethernet frames discarded by the group
-//			transmit function. (R) (mandatory) (4-bytes)
+//			Number of bytes contained in the Ethernet frames discarded by the group transmit function. (R)
+//			(mandatory) (4-bytes)
 //
 type EfmBondingGroupPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // TcpUdpPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity TCP/UDP performance monitoring history data
-const TcpUdpPerformanceMonitoringHistoryDataClassID ClassID = ClassID(342)
+const TcpUdpPerformanceMonitoringHistoryDataClassID = ClassID(342) // 0x0156
 
 var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// TcpUdpPerformanceMonitoringHistoryData (class ID #342)
+// TcpUdpPerformanceMonitoringHistoryData (Class ID: #342 / 0x0156)
 //	This ME collects PM data related to a TCP or UDP port. Instances of this ME are created and
 //	deleted by the OLT.
 //
@@ -39,13 +41,12 @@ var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the TCP/UDP config data ME. (R,
-//			setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the TCP/UDP config data ME. (R, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
@@ -53,24 +54,24 @@ var tcpudpperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Socket Failed
-//			Socket failed:	This attribute is incremented when an attempt to create a socket associated with
-//			a port fails. (R) (mandatory) (2-bytes)
-//
-//		Listen Failed
-//			Listen failed:	This attribute is incremented when an attempt by a service to listen for a
-//			request on a port fails. (R) (mandatory) (2-bytes)
-//
-//		Bind Failed
-//			Bind failed:	This attribute is incremented when an attempt by a service to bind to a port fails.
+//			This attribute is incremented when an attempt to create a socket associated with a port fails.
 //			(R) (mandatory) (2-bytes)
 //
-//		Accept Failed
-//			Accept failed: This attribute is incremented when an attempt to accept a connection on a port
+//		Listen Failed
+//			This attribute is incremented when an attempt by a service to listen for a request on a port
 //			fails. (R) (mandatory) (2-bytes)
 //
+//		Bind Failed
+//			This attribute is incremented when an attempt by a service to bind to a port fails. (R)
+//			(mandatory) (2-bytes)
+//
+//		Accept Failed
+//			This attribute is incremented when an attempt to accept a connection on a port fails. (R)
+//			(mandatory) (2-bytes)
+//
 //		Select Failed
-//			Select failed:	This attribute is incremented when an attempt to perform a select on a group of
-//			ports fails. (R) (mandatory) (2-bytes)
+//			This attribute is incremented when an attempt to perform a select on a group of ports fails. (R)
+//			(mandatory) (2-bytes)
 //
 type TcpUdpPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

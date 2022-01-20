@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // FastChannelConfigurationProfileClassID is the 16-bit ID for the OMCI
 // Managed entity FAST channel configuration profile
-const FastChannelConfigurationProfileClassID ClassID = ClassID(432)
+const FastChannelConfigurationProfileClassID = ClassID(432) // 0x01b0
 
 var fastchannelconfigurationprofileBME *ManagedEntityDefinition
 
-// FastChannelConfigurationProfile (class ID #432)
+// FastChannelConfigurationProfile (Class ID: #432 / 0x01b0)
 //	This ME contains the FAST channel configuration profile for an xDSL UNI. An instance of this ME
 //	is created and deleted by the OLT.
 //
@@ -90,6 +92,20 @@ var fastchannelconfigurationprofileBME *ManagedEntityDefinition
 //			[ITU-T G.997.2]. (R, W) (mandatory) (1 byte)
 //
 //		Rein Inter_Arrival Time Iat_Rein
+//			REIN Inter-arrival time (IAT_REIN): This attribute specifies the REIN IAT. See clause 9.8 of
+//			[ITU-T G.9701]. The ITU-T G.9701 control parameter iat_rein_flag is set to the same value as the
+//			REIN IAT. See clause 11.4.2.7 of [ITU-T G.9701].
+//
+//			The REIN IAT is specified via the following values:
+//
+//			1	100 Hz;
+//
+//			2	120 Hz;
+//
+//			3	360 Hz.
+//
+//			See clause 7.2.2.5 of [ITU-T G.997.2].
+//
 //			(R, W) (mandatory) (1 byte)
 //
 //		Minimum Reed_Solomon Rfec_Nfec Ratio Rnratio

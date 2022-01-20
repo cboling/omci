@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // GalEthernetProfileClassID is the 16-bit ID for the OMCI
 // Managed entity GAL Ethernet profile
-const GalEthernetProfileClassID ClassID = ClassID(272)
+const GalEthernetProfileClassID = ClassID(272) // 0x0110
 
 var galethernetprofileBME *ManagedEntityDefinition
 
-// GalEthernetProfile (class ID #272)
+// GalEthernetProfile (Class ID: #272 / 0x0110)
 //	This ME organizes data that describe the gigabit-capable passive optical network transmission
 //	convergence layer (GTC) adaptation layer processing functions of the ONU for Ethernet services.
 //	It is used with the GEM IW TP ME.
@@ -40,12 +42,12 @@ var galethernetprofileBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. (R, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Maximum Gem Payload Size
-//			Maximum GEM payload size: This attribute defines the maximum payload size generated in the
-//			associated GEM IW TP ME. (R,-W, setbycreate) (mandatory) (2-bytes)
+//			This attribute defines the maximum payload size generated in the associated GEM IW TP ME. (R,-W,
+//			setbycreate) (mandatory) (2-bytes)
 //
 type GalEthernetProfile struct {
 	ManagedEntityDefinition

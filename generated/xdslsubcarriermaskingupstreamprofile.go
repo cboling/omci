@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // XdslSubcarrierMaskingUpstreamProfileClassID is the 16-bit ID for the OMCI
 // Managed entity xDSL subcarrier masking upstream profile
-const XdslSubcarrierMaskingUpstreamProfileClassID ClassID = ClassID(109)
+const XdslSubcarrierMaskingUpstreamProfileClassID = ClassID(109) // 0x006d
 
 var xdslsubcarriermaskingupstreamprofileBME *ManagedEntityDefinition
 
-// XdslSubcarrierMaskingUpstreamProfile (class ID #109)
+// XdslSubcarrierMaskingUpstreamProfile (Class ID: #109 / 0x006d)
 //	This ME contains the subcarrier masking upstream profile for an xDSL UNI. An instance of this ME
 //	is created and deleted by the OLT.
 //
@@ -38,10 +40,15 @@ var xdslsubcarriermaskingupstreamprofileBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. The value 0 is
-//			reserved. (R, setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. The value 0 is reserved. (R,
+//			setbycreate) (mandatory) (2-bytes)
 //
 //		Upstream Subcarrier Mask
+//			This attribute is a bit map representing upstream mask values for subcarriers 1 to 64. The MSB
+//			of byte 1 corresponds to subcarrier 1, and the LSB of byte 8 corresponds to subcarrier 64. Each
+//			bit position defines whether the corresponding downstream subcarrier is masked (1) or not masked
+//			(0).
+//
 //			Subcarrier number 1 is the lowest, and the number of xDSL subcarriers, upstream (NSCus) is the
 //			highest subcarrier that can be transmitted in the upstream direction. For [ITUT-G.992.3],
 //			[ITUT-G.992.4] and [ITUT-G.992.5], it is defined in the corresponding Recommendation. For Annex

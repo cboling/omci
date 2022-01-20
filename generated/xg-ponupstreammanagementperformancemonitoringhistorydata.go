@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity XG-PON upstream management performance monitoring history data
-const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassID ClassID = ClassID(346)
+const XgPonUpstreamManagementPerformanceMonitoringHistoryDataClassID = ClassID(346) // 0x015a
 
 var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// XgPonUpstreamManagementPerformanceMonitoringHistoryData (class ID #346)
+// XgPonUpstreamManagementPerformanceMonitoringHistoryData (Class ID: #346 / 0x015a)
 //	This ME collects PM data associated with the XG-PON TC layer. It counts upstream PLOAM messages
 //	transmitted by the ONU.
 //
@@ -39,13 +41,11 @@ var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDef
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the ANI-G. (R, set-by-create)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the ANI-G. (R, set-by-create) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: No thresholds are defined for this ME. For uniformity with other PM, the
@@ -53,29 +53,25 @@ var xgponupstreammanagementperformancemonitoringhistorydataBME *ManagedEntityDef
 //			set-by-create) (mandatory) (2-bytes)
 //
 //		Upstream Ploam Message Count
-//			Upstream PLOAM message count: This attribute counts PLOAM messages transmitted upstream,
-//			excluding acknowledge messages. (R) (optional) (4-bytes)
+//			This attribute counts PLOAM messages transmitted upstream, excluding acknowledge messages. (R)
+//			(optional) (4-bytes)
 //
 //		Serial_Number_Onu Message Count
-//			Serial_number_ONU message count: This attribute counts Serial_number_ONU PLOAM messages
-//			transmitted. (R) (optional) (4-bytes)
+//			This attribute counts Serial_number_ONU PLOAM messages transmitted. (R) (optional) (4-bytes)
 //
 //		Registration Message Count
-//			Registration message count: This attribute counts Registration PLOAM messages transmitted. (R)
-//			(optional) (4-bytes)
+//			This attribute counts Registration PLOAM messages transmitted. (R) (optional) (4-bytes)
 //
 //		Key_Report Message Count
-//			Key_report message count: This attribute counts key_report PLOAM messages transmitted. (R)
-//			(optional) (4-bytes)
+//			This attribute counts key_report PLOAM messages transmitted. (R) (optional) (4-bytes)
 //
 //		Acknowledge Message Count
-//			Acknowledge message count: This attribute counts acknowledge PLOAM messages transmitted. It
-//			includes all forms of acknowledgement (AK), including those transmitted in response to a PLOAM
-//			grant when the ONU has nothing to send. (R) (optional) (4-bytes)
+//			This attribute counts acknowledge PLOAM messages transmitted. It includes all forms of
+//			acknowledgement (AK), including those transmitted in response to a PLOAM grant when the ONU has
+//			nothing to send. (R) (optional) (4-bytes)
 //
 //		Sleep_Request Message Count
-//			Sleep_request message count: This attribute counts sleep_request PLOAM messages transmitted. (R)
-//			(optional) (4-bytes)
+//			This attribute counts sleep_request PLOAM messages transmitted. (R) (optional) (4-bytes)
 //
 type XgPonUpstreamManagementPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

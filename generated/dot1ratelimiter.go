@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // Dot1RateLimiterClassID is the 16-bit ID for the OMCI
 // Managed entity Dot1 rate limiter
-const Dot1RateLimiterClassID ClassID = ClassID(298)
+const Dot1RateLimiterClassID = ClassID(298) // 0x012a
 
 var dot1ratelimiterBME *ManagedEntityDefinition
 
-// Dot1RateLimiter (class ID #298)
+// Dot1RateLimiter (Class ID: #298 / 0x012a)
 //	This ME allows rate limits to be defined for various types of upstream traffic that are
 //	processed by IEEE 802.1 bridges or related structures.
 //
@@ -38,31 +40,37 @@ var dot1ratelimiterBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. (R, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Parent Me Pointer
-//			Parent ME pointer: This attribute points to an instance of a ME. The type of ME is determined by
-//			the TP type attribute. (R,-W, setbycreate) (mandatory) (2-bytes)
+//			This attribute points to an instance of a ME. The type of ME is determined by the TP type
+//			attribute. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Tp Type
 //			(R,-W, setbycreate) (mandatory) (1-byte)
 //
-//		Upstream Unicast Flood Rate Pointer
-//			Upstream unicast flood rate pointer: This attribute points to an instance of the traffic
-//			descriptor that governs the rate of upstream unicast packets whose DA is unknown to the bridge.
-//			A null pointer specifies that no administrative limit is to be imposed. (R,-W, setbycreate)
-//			(optional) (2-bytes)
+//			This attribute identifies the type of TP associated with this dot1 rate limiter. Valid values
+//			are:
 //
-//		Upstream Broadcast Rate Pointer
-//			Upstream broadcast rate pointer: This attribute points to an instance of the traffic descriptor
-//			that governs the rate of upstream broadcast packets. A null pointer specifies that no
+//			1	MAC bridge service profile
+//
+//			2	IEEE 802.1p mapper service profile
+//
+//		Upstream Unicast Flood Rate Pointer
+//			This attribute points to an instance of the traffic descriptor that governs the rate of upstream
+//			unicast packets whose DA is unknown to the bridge. A null pointer specifies that no
 //			administrative limit is to be imposed. (R,-W, setbycreate) (optional) (2-bytes)
 //
+//		Upstream Broadcast Rate Pointer
+//			This attribute points to an instance of the traffic descriptor that governs the rate of upstream
+//			broadcast packets. A null pointer specifies that no administrative limit is to be imposed.
+//			(R,-W, setbycreate) (optional) (2-bytes)
+//
 //		Upstream Multicast Payload Rate Pointer
-//			Upstream multicast payload rate pointer: This attribute points to an instance of the traffic
-//			descriptor that governs the rate of upstream multicast payload packets. A null pointer specifies
-//			that no administrative limit is to be imposed. (R,-W, setbycreate) (optional) (2-bytes)
+//			This attribute points to an instance of the traffic descriptor that governs the rate of upstream
+//			multicast payload packets. A null pointer specifies that no administrative limit is to be
+//			imposed. (R,-W, setbycreate) (optional) (2-bytes)
 //
 type Dot1RateLimiter struct {
 	ManagedEntityDefinition

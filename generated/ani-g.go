@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // AniGClassID is the 16-bit ID for the OMCI
 // Managed entity ANI-G
-const AniGClassID ClassID = ClassID(263)
+const AniGClassID = ClassID(263) // 0x0107
 
 var anigBME *ManagedEntityDefinition
 
-// AniG (class ID #263)
+// AniG (Class ID: #263 / 0x0107)
 //	This ME organizes data associated with each access network interface supported by a GPON ONU.
 //	The ONU automatically creates one instance of this ME for each PON physical port.
 //
@@ -37,29 +39,52 @@ var anigBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Its value
-//			indicates the physical position of the PON interface. The first byte is the slot ID, defined in
-//			clause 9.1.5. The second byte is the port ID. (R) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Its value indicates the physical
+//			position of the PON interface. The first byte is the slot ID, defined in clause 9.1.5. The
+//			second byte is the port ID. (R) (mandatory) (2-bytes)
 //
 //		Sr Indication
-//			SR indication: This Boolean attribute indicates the ONU's capability to report queue status for
-//			DBA. The value true means that status reporting is available for all TCONTs that are associated
-//			with the ANI. (R) (mandatory) (1-byte)
+//			This Boolean attribute indicates the ONU's capability to report queue status for DBA. The value
+//			true means that status reporting is available for all TCONTs that are associated with the ANI.
+//			(R) (mandatory) (1-byte)
 //
 //		Total TCont Number
-//			Total TCONT number: This attribute indicates the total number of T-CONTs that can be supported
-//			on this ANI. (R) (mandatory) (2-bytes)
+//			This attribute indicates the total number of T-CONTs that can be supported on this ANI. (R)
+//			(mandatory) (2-bytes)
 //
 //		Gem Block Length
+//			This attribute specifies the queue occupancy reporting granularity for DBA, expressed in bytes.
+//			This attribute is meaningful only in ITUT G.984.x systems. (R, W) (mandatory) (2 bytes)
+//
+//			In ITU-T G.984 systems, the value set by the OLT is used by all TCONTs on this ANI. Upon ME
+//			instantiation, the ONU sets this attribute to 48. See [ITUT G.984.3] for further details.
+//
 //			In all other ITU-T PON systems, the unit for queue occupancy reporting is fixed in at 4-bytes by
 //			the respective TC layer specification.
 //
 //		Piggyback Dba Reporting
+//			This attribute indicates the ONU's piggyback DBA reporting format capabilities. [ITUT G.984.3]
+//			defines two possible piggyback reporting modes. For reporting mode 0, the single field is the
+//			entire report. For reporting mode 1, the DBA report is two fields long. Mode 0 is mandatory for
+//			ITU-T G.984 ONUs that support piggyback DBA reporting; mode 1 is optional. Subsequent PON
+//			specifications allows only one mode, which should be reported in this attribute as code point 0.
+//
+//			The following coding indicates the ONU's piggyback DBA reporting mode capabilities:
+//
+//			0	Mode 0 only
+//
+//			1	Modes 0 and 1
+//
+//			2	Deprecated
+//
+//			3	Deprecated
+//
+//			4	Piggyback DBA reporting not supported
+//
 //			(R) (mandatory) (1-byte)
 //
 //		Deprecated
-//			Deprecated:	This attribute should be set to 0 by the ONU and ignored by the OLT. (R) (mandatory)
-//			(1-byte)
+//			This attribute should be set to 0 by the ONU and ignored by the OLT. (R) (mandatory) (1-byte)
 //
 //		Signal Fail Threshold
 //			Signal fail (SF) threshold: This attribute specifies the downstream bit error rate (BER)
@@ -73,47 +98,56 @@ var anigBME *ManagedEntityDefinition
 //			ONU sets this attribute to 9. (R,-W) (mandatory) (1-byte)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
+//			See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
+//			See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Optical Signal Level
-//			Optical signal level: This attribute reports the current measurement of the total downstream
-//			optical signal level. Its value is a 2s complement integer referred to 1- mW (i.e., 1-dBm), with
-//			0.002 dB granularity. (R) (optional) (2-bytes)
+//			This attribute reports the current measurement of the total downstream optical signal level. Its
+//			value is a 2s complement integer referred to 1- mW (i.e., 1-dBm), with 0.002 dB granularity. (R)
+//			(optional) (2-bytes)
 //
 //		Lower Optical Threshold
-//			Lower optical threshold: This attribute specifies the optical level the ONU uses to declare the
-//			downstream low received optical power alarm. Valid values are  -127 dBm (coded as 254) to 0 dBm
-//			(coded as 0) in 0.5 dB increments. The default value 0xFF selects the ONU's internal policy.
-//			(R,-W) (optional) (1-byte)
+//			This attribute specifies the optical level the ONU uses to declare the downstream low received
+//			optical power alarm. Valid values are  -127 dBm (coded as 254) to 0 dBm (coded as 0) in 0.5 dB
+//			increments. The default value 0xFF selects the ONU's internal policy. (R,-W) (optional) (1-byte)
 //
 //		Upper Optical Threshold
-//			Upper optical threshold: This attribute specifies the optical level the ONU uses to declare the
-//			downstream high received optical power alarm. Valid values are  -127 dBm (coded as 254) to 0 dBm
-//			(coded as 0) in 0.5 dB increments. The default value 0xFF selects the ONU's internal policy.
-//			(R,-W) (optional) (1-byte)
+//			This attribute specifies the optical level the ONU uses to declare the downstream high received
+//			optical power alarm. Valid values are  -127 dBm (coded as 254) to 0 dBm (coded as 0) in 0.5 dB
+//			increments. The default value 0xFF selects the ONU's internal policy. (R,-W) (optional) (1-byte)
 //
 //		Onu Response Time
+//			This attribute indicates the ONU's actual response time. This attribute is in the range
+//			34..36-us. Although this attribute is expressed in nanoseconds, its accuracy is likely to be
+//			more coarse. Furthermore, the value may change from one activation cycle to the next. Valid
+//			values are:
+//
+//			0 (Null, function not supported)
+//
+//			34000 to 36000 (response time in nanoseconds)
+//
+//			All other values reserved
+//
 //			(R) (optional) (2-bytes)
 //
 //		Transmit Optical Level
-//			Transmit optical level: This attribute reports the current measurement of mean optical launch
-//			power. Its value is a 2s complement integer referred to 1-mW (i.e., 1-dBm), with 0.002 dB
-//			granularity. (R) (optional) (2-bytes)
+//			This attribute reports the current measurement of mean optical launch power. Its value is a 2s
+//			complement integer referred to 1-mW (i.e., 1-dBm), with 0.002 dB granularity. (R) (optional)
+//			(2-bytes)
 //
 //		Lower Transmit Power Threshold
-//			Lower transmit power threshold: This attribute specifies the minimum mean optical launch power
-//			that the ONU uses to declare the low transmit optical power alarm. Its value is a 2s complement
-//			integer referred to 1-mW (i.e., dBm), with 0.5-dB granularity. The default value -63.5 (0x81)
-//			selects the ONU's internal policy. (R,-W) (optional) (1-byte)
+//			This attribute specifies the minimum mean optical launch power that the ONU uses to declare the
+//			low transmit optical power alarm. Its value is a 2s complement integer referred to 1-mW (i.e.,
+//			dBm), with 0.5-dB granularity. The default value -63.5 (0x81) selects the ONU's internal policy.
+//			(R,-W) (optional) (1-byte)
 //
 //		Upper Transmit Power Threshold
-//			Upper transmit power threshold: This attribute specifies the maximum mean optical launch power
-//			that the ONU uses to declare the high transmit optical power alarm. Its value is a 2s complement
-//			integer referred to 1-mW (i.e., dBm), with 0.5-dB granularity. The default value -63.5 (0x81)
-//			selects the ONU's internal policy. (R,-W) (optional) (1-byte)
+//			This attribute specifies the maximum mean optical launch power that the ONU uses to declare the
+//			high transmit optical power alarm. Its value is a 2s complement integer referred to 1-mW (i.e.,
+//			dBm), with 0.5-dB granularity. The default value -63.5 (0x81) selects the ONU's internal policy.
+//			(R,-W) (optional) (1-byte)
 //
 type AniG struct {
 	ManagedEntityDefinition

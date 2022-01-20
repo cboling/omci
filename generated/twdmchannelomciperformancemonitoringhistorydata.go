@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,15 +26,15 @@ import "github.com/deckarep/golang-set"
 
 // TwdmChannelOmciPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity TWDM channel OMCI performance monitoring history data
-const TwdmChannelOmciPerformanceMonitoringHistoryDataClassID ClassID = ClassID(452)
+const TwdmChannelOmciPerformanceMonitoringHistoryDataClassID = ClassID(452) // 0x01c4
 
 var twdmchannelomciperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// TwdmChannelOmciPerformanceMonitoringHistoryData (class ID #452)
+// TwdmChannelOmciPerformanceMonitoringHistoryData (Class ID: #452 / 0x01c4)
 //	This ME collects OMCI-related PM data associated with the slot/circuit pack, hosting one or more
 //	ANI-G MEs, for a specific TWDM channel. Instances of this ME are created and deleted by the OLT.
 //
-//	The counters maintained by this ME are characterized as optional in Clause 14 of [ITU-
+//	The counters maintained by this ME are characterized as optional in clause 14 of [ITU-
 //	T-G.989.3].
 //
 //	For a complete discussion of generic PM architecture, refer to clause I.4.
@@ -42,29 +44,24 @@ var twdmchannelomciperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the TWDM channel ME. (R,
-//			setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the TWDM channel ME. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 and 2 MEs
 //			that contains PM threshold values. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Omci Baseline Message Count
-//			OMCI baseline message count: The counter of baseline format OMCI messages directed to the given
-//			ONU. (R) (mandatory) (4-byte)
+//			The counter of baseline format OMCI messages directed to the given ONU. (R) (mandatory) (4-byte)
 //
 //		Omci Extended Message Count
-//			OMCI extended message count: The counter of extended format OMCI messages directed to the given
-//			ONU. (R) (mandatory) (4-byte)
+//			The counter of extended format OMCI messages directed to the given ONU. (R) (mandatory) (4-byte)
 //
 //		Omci Mic Error Count
-//			OMCI MIC error count: The counter of OMCI messages received with MIC errors. (R) (mandatory)
-//			(4-byte)
+//			The counter of OMCI messages received with MIC errors. (R) (mandatory) (4-byte)
 //
 type TwdmChannelOmciPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition
@@ -79,8 +76,8 @@ func init() {
 			Create,
 			Delete,
 			Get,
-			GetCurrentData,
 			Set,
+			GetCurrentData,
 		),
 		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
@@ -93,6 +90,9 @@ func init() {
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,
+		Alarms: AlarmMap{
+			0: "OMCI MIC error count",
+		},
 	}
 }
 

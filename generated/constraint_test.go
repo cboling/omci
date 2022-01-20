@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -237,44 +239,43 @@ var octetRegEx8 = OctetConstraint{
 	Fill:   nil,
 }
 
-// TODO: Get following tests working
-//func TestOctetsConstraints(t *testing.T) {
-//	// NewOctetsConstraints parses an input string and generates an appropriate IConstraint type
-//	// to handle processing.  The input takes on the form of:
-//	//
-//	//   [len(<values>)][,regex(<allowed-pattern>)][,fill(<value>)]
-//	//     where:
-//	//       len()    is a function that checks a string/octets for a specific length and the
-//	//                result should match one of the <values>.  For tables, this is the length
-//	//                of a row entry.  If not specified, the octet/string/table row can be any
-//	//                length.
-//	//
-//	//       regex()  is an optional regular expression that will check the values of
-//	//                the collection of octets. Any pattern is provided
-//	//
-//	//       fill())  is an optional fill value to add to the end of a supplied string so that
-//	//                the entire string length is set to the maximum allowed. Typically this is
-//	//                either an ASCII space (0x20) or a null (0x00).
-//	//
-//	constraint12 := NewOctetsConstraint("len(12)")
-//	assert.IsType(t, &OctetConstraint{}, constraint12)
-//	//assert.Equal(t, octetLen12, *constraint12.(*OctetConstraint))
-//
-//	vendorIDConstraint := NewOctetsConstraint("len(4), regex([a-zA-Z]{4})")
-//	assert.IsType(t, &UintConstraint{}, vendorIDConstraint)
-//	//assert.Equal(t, uintZero, *vendorIDRegEx.(*vendorIDConstraint))
-//
-//	serialNumberConstraint := NewOctetsConstraint("len(8), regex([a-zA-Z]{4}.{4})")
-//	assert.IsType(t, &UintConstraint{}, serialNumberConstraint)
-//	//assert.Equal(t, uintZero, *vendorIDRegEx.(*serialNumberConstraint))
-//
-//	// TODO: Implement me
-//	//assert.True(t, false)
-//
-//	// CLEI  (20 Characters  Equipement ID
-//	//
-//	// SERIAL NUMBER   [a-zA-Z]{4}....
-//}
+func TestOctetsConstraints(t *testing.T) {
+	// NewOctetsConstraints parses an input string and generates an appropriate IConstraint type
+	// to handle processing.  The input takes on the form of:
+	//
+	//   [len(<values>)][,regex(<allowed-pattern>)][,fill(<value>)]
+	//     where:
+	//       len()    is a function that checks a string/octets for a specific length and the
+	//                result should match one of the <values>.  For tables, this is the length
+	//                of a row entry.  If not specified, the octet/string/table row can be any
+	//                length.
+	//
+	//       regex()  is an optional regular expression that will check the values of
+	//                the collection of octets. Any pattern is provided
+	//
+	//       fill())  is an optional fill value to add to the end of a supplied string so that
+	//                the entire string length is set to the maximum allowed. Typically this is
+	//                either an ASCII space (0x20) or a null (0x00).
+	//
+	constraint12 := NewOctetsConstraint("len(12)")
+	assert.IsType(t, &OctetConstraint{}, constraint12)
+	//assert.Equal(t, octetLen12, *constraint12.(*OctetConstraint))
+
+	vendorIDConstraint := NewOctetsConstraint("len(4), regex([a-zA-Z]{4})")
+	assert.IsType(t, &UintConstraint{}, vendorIDConstraint)
+	//assert.Equal(t, uintZero, *vendorIDRegEx.(*vendorIDConstraint))
+
+	serialNumberConstraint := NewOctetsConstraint("len(8), regex([a-zA-Z]{4}.{4})")
+	assert.IsType(t, &UintConstraint{}, serialNumberConstraint)
+	//assert.Equal(t, uintZero, *vendorIDRegEx.(*serialNumberConstraint))
+
+	// TODO: Implement me
+	//assert.True(t, false)
+
+	// CLEI  (20 Characters  Equipement ID
+	//
+	// SERIAL NUMBER   [a-zA-Z]{4}....
+}
 
 func TestOctetsConstraintArray(t *testing.T) {
 	// Allow multiple constraint checks
@@ -284,11 +285,10 @@ func TestOctetsConstraintArray(t *testing.T) {
 	//assert.True(t, false)
 }
 
-//
-//func TestOctetsConstraintNils(t *testing.T) {
-//	assert.Nil(t, NewOctetsConstraint(""))
-//	assert.Nil(t, NewOctetsConstraint("     "))
-//}
+func TestOctetsConstraintNils(t *testing.T) {
+	assert.Nil(t, NewOctetsConstraint(""))
+	assert.Nil(t, NewOctetsConstraint("     "))
+}
 
 func TestOctetsConstraintPanics(t *testing.T) {
 	defer tShouldPanic(t)

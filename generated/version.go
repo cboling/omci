@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -43,27 +45,27 @@ func init() {
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "parser",
-			Version:    "0.15.9",
-			CreateTime: 1618598854.0325966,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
-			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
+			Version:    "0.15.13",
+			CreateTime: 1632853136.8901486,
+			ItuDocName: "T-REC-G.988-202003-I!Amd3!MSW-E.docx",
+			SHA256:     "084f5265bc090ca882fe45f6844d1ce368c218e52c77795060b7643240885469",
 		})
 
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "pre-parser",
-			Version:    "0.15.9",
-			CreateTime: 1618598701.6081934,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
-			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
+			Version:    "0.15.12",
+			CreateTime: 1628800053.665055,
+			ItuDocName: "T-REC-G.988-202003-I!Amd3!MSW-E.docx",
+			SHA256:     "084f5265bc090ca882fe45f6844d1ce368c218e52c77795060b7643240885469",
 		})
 
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "code-generator",
-			Version:    "0.15.9",
-			CreateTime: 1619706725.2579129,
-			ItuDocName: "T-REC-G.988-201711-I!!MSW-E.docx",
-			SHA256:     "96ffc8bca6f70175c8e281e87e1cf21662d07a7502ebf595c5c3180a9972b9ac",
+			Version:    "0.15.13",
+			CreateTime: 1642696472.736577,
+			ItuDocName: "T-REC-G.988-202003-I!Amd3!MSW-E.docx",
+			SHA256:     "084f5265bc090ca882fe45f6844d1ce368c218e52c77795060b7643240885469",
 		})
 }

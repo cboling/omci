@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // GalEthernetPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity GAL Ethernet performance monitoring history data
-const GalEthernetPerformanceMonitoringHistoryDataClassID ClassID = ClassID(276)
+const GalEthernetPerformanceMonitoringHistoryDataClassID = ClassID(276) // 0x0114
 
 var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// GalEthernetPerformanceMonitoringHistoryData (class ID #276)
+// GalEthernetPerformanceMonitoringHistoryData (Class ID: #276 / 0x0114)
 //	This ME collects PM data associated with a GEM IW TP when the GEM layer supports an Ethernet
 //	service. Instances of this ME are created and deleted by the OLT.
 //
@@ -39,13 +41,11 @@ var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the GEM IW TP. (R, setbycreate)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the GEM IW TP. (R, setbycreate) (mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
@@ -53,9 +53,8 @@ var galethernetperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			data 2 ME is optional. (R,-W, setbycreate) (mandatory) (2-bytes)
 //
 //		Discarded Frames
-//			Discarded frames: This attribute counts the number of downstream GEM frames discarded for any
-//			reason [erroneous frame check sequence (FCS), too long length, buffer overflow, etc.]. (R)
-//			(mandatory) (4-bytes)
+//			This attribute counts the number of downstream GEM frames discarded for any reason [erroneous
+//			frame check sequence (FCS), too long length, buffer overflow, etc.]. (R) (mandatory) (4-bytes)
 //
 type GalEthernetPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

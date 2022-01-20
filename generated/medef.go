@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -87,10 +89,15 @@ func (bme ManagedEntityDefinition) GetAlarmMap() AlarmMap {
 }
 
 func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p gopacket.PacketBuilder, msgType byte) (AttributeValueMap, error) {
-	if (mask | bme.GetAllowedAttributeMask()) != bme.GetAllowedAttributeMask() {
-		// TODO: Provide custom error code so a response 'result' can properly be coded
-		return nil, errors.New("unsupported attribute mask")
+	badMask := (mask | bme.GetAllowedAttributeMask()) ^ bme.GetAllowedAttributeMask()
+
+	var maskErr error
+	if badMask != 0 {
+		maskErr = fmt.Errorf("unsupported attribute mask %#x, valid: %#x for ME %v (Class ID: %d)",
+			mask, bme.GetAllowedAttributeMask(), bme.GetName(), bme.ClassID)
+		mask &= bme.GetAllowedAttributeMask()
 	}
+	// Process known attributes
 	keyList := GetAttributeDefinitionMapKeys(bme.AttributeDefinitions)
 
 	attrMap := make(AttributeValueMap, bits.OnesCount16(mask))
@@ -103,19 +110,38 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 
 		if mask&attrDef.Mask != 0 {
 			value, err := attrDef.Decode(data, p, msgType)
-			if err != nil {
-				return nil, err
-			}
+
+			// Handle table attributes errors in special code section so we can test
+			// to see if the message type supports table attributes.
 			if attrDef.IsTableAttribute() {
 				switch msgType {
 				default:
-					return nil, fmt.Errorf("unsupported Message Type '%v' for table serialization", msgType)
+					// Drop this attribute from the mask and any attributes following it. This
+					// error also overrides any previous 'Unknown' attributes errors
+					errMsg := fmt.Sprintf("unsupported Message Type '%v/0x%02x' for table attribute '%v' decode. ME %v (Class ID: %d)",
+						MsgType(msgType&MsgTypeMask), msgType, attrDef.Name, bme.GetName(), bme.ClassID)
+
+					for index < uint(len(keyList)) {
+						bitmask := uint16(1 << (16 - index))
+						if bitmask&mask != 0 {
+							badMask |= bitmask
+						}
+						index++
+					}
+					maskErr = NewUnknownAttributeDecodeError(InvalidTableAttribute, errMsg, badMask, data)
+					return attrMap, maskErr
 
 				case byte(Get) | AK: // Get Response
+					if err != nil {
+						return nil, err
+					}
 					attrMap[name] = value
 					data = data[4:]
 
 				case byte(GetNext) | AK: // Get Next Response
+					if err != nil {
+						return nil, err
+					}
 					// Value is a partial octet buffer we need to collect and at
 					// the end (last segment) pull it up into more appropriate table
 					// rows
@@ -141,16 +167,27 @@ func (bme ManagedEntityDefinition) DecodeAttributes(mask uint16, data []byte, p 
 					// TODO: No support at this time
 
 				case byte(SetTable) | AR: // Set Table Request
+					if err != nil {
+						return nil, err
+					}
 					attrMap[name] = value
 					data = data[len(data):]
 				}
+			} else if err != nil {
+				return nil, err
 			} else {
 				attrMap[name] = value
 				data = data[attrDef.GetSize():]
 			}
 		}
 	}
-	return attrMap, nil
+	// If badMask is non-zero.  Handle it by re-encoding the error as a custom relaxed
+	// decode error that the caller of this decode can process if they wish to relax
+	// the decoding
+	if badMask != 0 {
+		maskErr = NewUnknownAttributeDecodeError(UnknownAttribute, maskErr.Error(), badMask, data)
+	}
+	return attrMap, maskErr
 }
 
 func (bme ManagedEntityDefinition) SerializeAttributes(attr AttributeValueMap, mask uint16,

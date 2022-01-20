@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -283,15 +285,26 @@ func (entity *ManagedEntity) DecodeFromBytes(data []byte, p gopacket.PacketBuild
 	entity.definition = meDefinition.definition
 	entity.attributeMask = binary.BigEndian.Uint16(data[4:6])
 	entity.attributes = make(map[string]interface{})
-	entity.SetEntityID(entityID)
+	setErr := entity.SetEntityID(entityID)
+	if setErr != nil {
+		return setErr
+	}
 	packetAttributes, err := entity.DecodeAttributes(entity.GetAttributeMask(), data[6:], p, msgType)
+
+	// Decode packet attributes even if present in case relaxed attribute decoding is enabled.
+	if packetAttributes != nil {
+		for name, value := range packetAttributes {
+			entity.attributes[name] = value
+		}
+	}
 	if err != nil {
-		return err
+		if attrError, ok := err.(*UnknownAttributeDecodeError); ok && GetRelaxedDecodeByOctetType(msgType) {
+			// Subtract off bad mask from what we computed
+			badMask := attrError.AttributeMask
+			entity.attributeMask &= ^badMask
+		}
 	}
-	for name, value := range packetAttributes {
-		entity.attributes[name] = value
-	}
-	return nil
+	return err
 }
 
 // SerializeTo serializes a Managed Entity into an octet stream

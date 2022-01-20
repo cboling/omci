@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // ThresholdData2ClassID is the 16-bit ID for the OMCI
 // Managed entity Threshold data 2
-const ThresholdData2ClassID ClassID = ClassID(274)
+const ThresholdData2ClassID = ClassID(274) // 0x0112
 
 var thresholddata2BME *ManagedEntityDefinition
 
-// ThresholdData2 (class ID #274)
+// ThresholdData2 (Class ID: #274 / 0x0112)
 //	Together with an instance of the threshold data 1 ME, an instance of this ME contains threshold
 //	values for counters maintained in one or more instances of PM history data MEs.
 //
@@ -41,8 +43,12 @@ var thresholddata2BME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Its value is the
-//			same as that of the paired threshold data-1-instance. (R, setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Its value is the same as that of
+//			the paired threshold data-1-instance. (R, setbycreate) (mandatory) (2-bytes)
+//
+//			The following seven attributes specify threshold values for seven thresholded counters in
+//			associated PM history data MEs. The definition of each PM history ME includes a table that links
+//			each thresholded counter to one of these threshold value attributes.
 //
 //		Threshold Value_8
 //			Threshold value-8: (R,-W, setbycreate) (mandatory) (4-bytes)

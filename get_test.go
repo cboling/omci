@@ -609,3 +609,30 @@ func TestExtendedGetResponseSerialize(t *testing.T) {
 	reconstituted := packetToString(outgoingPacket)
 	assert.Equal(t, strings.ToLower(goodMessage), reconstituted)
 }
+
+func TestItDecode(t *testing.T) {
+	message := "D32B290A00050103050000000000000000000000000000000000000000000000000000000000000000000028"
+	data, err := stringToPacket(message)
+	assert.NoError(t, err)
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.NotNil(t, omciMsg)
+
+	msgLayer := packet.Layer(LayerTypeGetResponse)
+	assert.NotNil(t, msgLayer)
+
+	response, ok2 := msgLayer.(*GetResponse)
+	assert.True(t, ok2)
+	assert.NotNil(t, response)
+
+	fmt.Println(packet.Dump())
+	fmt.Println(omciMsg.String())
+	fmt.Println(response.String())
+}

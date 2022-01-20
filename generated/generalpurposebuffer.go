@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // GeneralPurposeBufferClassID is the 16-bit ID for the OMCI
 // Managed entity General purpose buffer
-const GeneralPurposeBufferClassID ClassID = ClassID(308)
+const GeneralPurposeBufferClassID = ClassID(308) // 0x0134
 
 var generalpurposebufferBME *ManagedEntityDefinition
 
-// GeneralPurposeBuffer (class ID #308)
+// GeneralPurposeBuffer (Class ID: #308 / 0x0134)
 //	This ME is created by the OLT when needed to store the results of an operation, such as a test
 //	command, that needs to return a block of data of indeterminate size. The buffer is retrieved
 //	with get next operations, since its size is not known a priori. An instance of this ME is
@@ -48,22 +50,22 @@ var generalpurposebufferBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. (R, setbycreate)
-//			(mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. (R, setbycreate) (mandatory)
+//			(2-bytes)
 //
 //		Maximum Size
-//			Maximum size: The ONU determines the actual size of the buffer table in the process of capturing
-//			the data directed to it. The maximum size attribute permits the OLT to restrict the maximum size
-//			of the buffer table. The value 0 indicates that the OLT imposes no limit on the size; it is
-//			recognized that ONU implementations will impose their own limits. The ONU will not create a
-//			buffer table larger than the value of this attribute. If the ONU cannot allocate enough memory
-//			to accommodate this size, it should deny the ME create action or a write operation that attempts
-//			to expand an existing ME. (R,-W, setbycreate) (optional) (4-bytes)
+//			The ONU determines the actual size of the buffer table in the process of capturing the data
+//			directed to it. The maximum size attribute permits the OLT to restrict the maximum size of the
+//			buffer table. The value 0 indicates that the OLT imposes no limit on the size; it is recognized
+//			that ONU implementations will impose their own limits. The ONU will not create a buffer table
+//			larger than the value of this attribute. If the ONU cannot allocate enough memory to accommodate
+//			this size, it should deny the ME create action or a write operation that attempts to expand an
+//			existing ME. (R,-W, setbycreate) (optional) (4-bytes)
 //
 //		Buffer Table
-//			Buffer table:	This attribute is an octet string that contains the result of some operation
-//			performed on the ONU. The exact content depends on the operation, and is documented with the
-//			definition of each operation. (R) (mandatory) (N bytes)
+//			This attribute is an octet string that contains the result of some operation performed on the
+//			ONU. The exact content depends on the operation, and is documented with the definition of each
+//			operation. (R) (mandatory) (N bytes)
 //
 type GeneralPurposeBuffer struct {
 	ManagedEntityDefinition

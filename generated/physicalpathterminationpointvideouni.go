@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // PhysicalPathTerminationPointVideoUniClassID is the 16-bit ID for the OMCI
 // Managed entity Physical path termination point video UNI
-const PhysicalPathTerminationPointVideoUniClassID ClassID = ClassID(82)
+const PhysicalPathTerminationPointVideoUniClassID = ClassID(82) // 0x0052
 
 var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 
-// PhysicalPathTerminationPointVideoUni (class ID #82)
+// PhysicalPathTerminationPointVideoUni (Class ID: #82 / 0x0052)
 //	This ME represents an RF video UNI in the ONU, where physical paths terminate and physical path
 //	level functions are performed.
 //
@@ -52,28 +54,28 @@ var physicalpathterminationpointvideouniBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. This 2-byte
-//			number indicates the physical position of the UNI. The first byte is the slot ID (defined in
-//			clause 9.1.5). The second byte is the port ID, with the range 1..255. (R) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. This 2-byte number indicates the
+//			physical position of the UNI. The first byte is the slot ID (defined in clause 9.1.5). The
+//			second byte is the port ID, with the range 1..255. (R) (mandatory) (2-bytes)
 //
 //		Administrative State
-//			Administrative state: This attribute locks (1) and unlocks (0) the functions performed by this
-//			ME. Administrative state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
+//			This attribute locks (1) and unlocks (0) the functions performed by this ME. Administrative
+//			state is further described in clause A.1.6. (R,-W) (mandatory) (1-byte)
 //
 //		Operational State
-//			Operational state: This attribute indicates whether the ME is capable of performing its
-//			function. Valid values are enabled (0) and disabled (1). (R) (optional) (1-byte)
+//			This attribute indicates whether the ME is capable of performing its function. Valid values are
+//			enabled (0) and disabled (1). (R) (optional) (1-byte)
 //
 //		Arc
-//			ARC:	See clause A.1.4.3. (R,-W) (optional) (1-byte)
+//			See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Arc Interval
-//			ARC interval: See clause A.1.4.3. (R,-W) (optional) (1-byte)
+//			See clause A.1.4.3. (R,-W) (optional) (1-byte)
 //
 //		Power Control
-//			Power control: This attribute controls whether power is provided from the ONU to an external
-//			equipment over the video PPTP. Value 1 enables power over coaxial cable. The default value 0
-//			disables power feed. (R,-W) (optional) (1-byte)
+//			This attribute controls whether power is provided from the ONU to an external equipment over the
+//			video PPTP. Value 1 enables power over coaxial cable. The default value 0 disables power feed.
+//			(R,-W) (optional) (1-byte)
 //
 type PhysicalPathTerminationPointVideoUni struct {
 	ManagedEntityDefinition

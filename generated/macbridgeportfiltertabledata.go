@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // MacBridgePortFilterTableDataClassID is the 16-bit ID for the OMCI
 // Managed entity MAC bridge port filter table data
-const MacBridgePortFilterTableDataClassID ClassID = ClassID(49)
+const MacBridgePortFilterTableDataClassID = ClassID(49) // 0x0031
 
 var macbridgeportfiltertabledataBME *ManagedEntityDefinition
 
-// MacBridgePortFilterTableData (class ID #49)
+// MacBridgePortFilterTableData (Class ID: #49 / 0x0031)
 //	This ME organizes data associated with a bridge port. The ONU automatically creates or deletes
 //	an instance of this ME upon the creation or deletion of a MAC bridge port configuration data ME.
 //
@@ -41,11 +43,49 @@ var macbridgeportfiltertabledataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID, this ME is implicitly linked to an instance of the MAC bridge port configuration
-//			data ME. (R) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID, this ME is
+//			implicitly linked to an instance of the MAC bridge port configuration data ME. (R) (mandatory)
+//			(2-bytes)
 //
 //		Mac Filter Table
+//			This attribute lists MAC addresses associated with the bridge port, each with an allow/disallow
+//			forwarding indicator for traffic flowing out of the bridge port. Additionally, the forwarding
+//			action may be based on a MAC source or DA. In this way, upstream traffic is filtered on ANI-side
+//			bridge ports, and downstream traffic is filtered on UNI-side bridge ports. The setting of an
+//			entry with a forward action implies that all other addresses are filtered. Conversely, the
+//			setting of an entry with a filter action implies that all other addresses are forwarded. The
+//			behaviour is unspecified if forward and filter actions are mixed.
+//
+//			Each entry contains:
+//
+//			-	the entry number, an index into this attribute list (1-byte);
+//
+//			-	filter byte (1-byte);
+//
+//			-	MAC address (6-bytes).
+//
+//			The bits of the filter byte are assigned as follows.
+//
+//			Bit	Name	Setting
+//
+//			1 (LSB)	Filter/forward	0: forward
+//
+//			1: filter
+//
+//			2		0: MAC DAs
+//
+//			1: MAC source addresses
+//
+//			3..6	Reserved	0
+//
+//			7..8	Add/remove	10: Clear entire table (set operation)
+//
+//			00: Remove this entry (set operation)
+//
+//			01: Add this entry
+//
+//			Upon ME instantiation, the ONU sets this attribute to an empty table.
+//
 //			(R,-W) (Mandatory) (8N bytes, where N is the number of entries in the list)
 //
 type MacBridgePortFilterTableData struct {

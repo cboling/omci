@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // RadiusPerformanceMonitoringHistoryDataClassID is the 16-bit ID for the OMCI
 // Managed entity Radius performance monitoring history data
-const RadiusPerformanceMonitoringHistoryDataClassID ClassID = ClassID(293)
+const RadiusPerformanceMonitoringHistoryDataClassID = ClassID(293) // 0x0125
 
 var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 
-// RadiusPerformanceMonitoringHistoryData (class ID #293)
+// RadiusPerformanceMonitoringHistoryData (Class ID: #293 / 0x0125)
 //	This ME collects performance statistics on an ONU's radius client, particularly as related to
 //	its IEEE-802.1X operation.
 //
@@ -41,13 +43,12 @@ var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. Through an
-//			identical ID (namely 0), this ME is implicitly linked to an instance of a dot1X configuration
-//			profile. (R, setbycreate) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. Through an identical ID (namely 0),
+//			this ME is implicitly linked to an instance of a dot1X configuration profile. (R, setbycreate)
+//			(mandatory) (2-bytes)
 //
 //		Interval End Time
-//			Interval end time: This attribute identifies the most recently finished 15-min interval. (R)
-//			(mandatory) (1-byte)
+//			This attribute identifies the most recently finished 15-min interval. (R) (mandatory) (1-byte)
 //
 //		Threshold Data 1_2 Id
 //			Threshold data 1/2 ID: This attribute points to an instance of the threshold data 1 ME that
@@ -75,8 +76,7 @@ var radiusperformancemonitoringhistorydataBME *ManagedEntityDefinition
 //			(R) (mandatory) (4-bytes)
 //
 //		Invalid Radius Packets Received
-//			Invalid radius packets received: This attribute counts received invalid radius messages. (R)
-//			(mandatory) (4-bytes)
+//			This attribute counts received invalid radius messages. (R) (mandatory) (4-bytes)
 //
 type RadiusPerformanceMonitoringHistoryData struct {
 	ManagedEntityDefinition

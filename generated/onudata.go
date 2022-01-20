@@ -4,7 +4,9 @@
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -24,11 +26,11 @@ import "github.com/deckarep/golang-set"
 
 // OnuDataClassID is the 16-bit ID for the OMCI
 // Managed entity ONU data
-const OnuDataClassID ClassID = ClassID(2)
+const OnuDataClassID = ClassID(2) // 0x0002
 
 var onudataBME *ManagedEntityDefinition
 
-// OnuData (class ID #2)
+// OnuData (Class ID: #2 / 0x0002)
 //	This ME models the MIB itself. Clause I.1.3 explains the use of this ME with respect to MIB
 //	synchronization.
 //
@@ -40,15 +42,15 @@ var onudataBME *ManagedEntityDefinition
 //
 //	Attributes
 //		Managed Entity Id
-//			Managed entity ID: This attribute uniquely identifies each instance of this ME. There is only
-//			one instance, number 0. (R) (mandatory) (2-bytes)
+//			This attribute uniquely identifies each instance of this ME. There is only one instance, number
+//			0. (R) (mandatory) (2-bytes)
 //
 //		Mib Data Sync
-//			MIB data sync: This attribute is used to check the alignment of the MIB of the ONU with the
-//			corresponding MIB in the OLT. MIB data sync relies on this attribute, which is a sequence number
-//			that can be checked by the OLT to see if the MIB snapshots for the OLT and ONU match. Refer to
-//			clause I.1.2.1 for a detailed description of this attribute. Upon ME instantiation, the ONU sets
-//			this attribute to 0. (R,-W) (mandatory) (1-byte)
+//			This attribute is used to check the alignment of the MIB of the ONU with the corresponding MIB
+//			in the OLT. MIB data sync relies on this attribute, which is a sequence number that can be
+//			checked by the OLT to see if the MIB snapshots for the OLT and ONU match. Refer to clause
+//			I.1.2.1 for a detailed description of this attribute. Upon ME instantiation, the ONU sets this
+//			attribute to 0. (R,-W) (mandatory) (1-byte)
 //
 type OnuData struct {
 	ManagedEntityDefinition
