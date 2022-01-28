@@ -553,6 +553,8 @@ type AlarmNotificationMsg struct {
 	AlarmBitmap         [AlarmBitmapSize / 8]byte
 	zeroPadding         [3]byte // Note: This zero padding is not present in the Extended Message Set
 	AlarmSequenceNumber byte
+
+	RelaxedError me.IRelaxedDecodeError
 }
 
 func (omci *AlarmNotificationMsg) String() string {
@@ -572,7 +574,17 @@ func (omci *AlarmNotificationMsg) CanDecode() gopacket.LayerClass {
 
 // NextLayerType returns the layer type contained by this DecodingLayer.
 func (omci *AlarmNotificationMsg) NextLayerType() gopacket.LayerType {
+	if omci.RelaxedError != nil {
+		return LayerTypeUnknownAlarm
+	}
 	return gopacket.LayerTypePayload
+}
+
+// addRelaxedError appends relaxed decode errors to this message
+func (omci *AlarmNotificationMsg) addRelaxedError(err me.IRelaxedDecodeError) {
+	if omci.RelaxedError == nil {
+		omci.RelaxedError = err
+	}
 }
 
 func (omci *AlarmNotificationMsg) IsAlarmActive(alarmNumber uint8) (bool, error) {
@@ -682,12 +694,6 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 	if omciErr.StatusCode() != me.Success {
 		return omciErr.GetError()
 	}
-	// Is this an unsupported or vendor specific ME.  If so, it is not an error to decode
-	// the alarms.  We just cannot provide any alarm names.  Handle decode here.
-	classSupport := meDefinition.GetClassSupport()
-	isUnsupported := classSupport == me.UnsupportedManagedEntity ||
-		classSupport == me.UnsupportedVendorSpecificManagedEntity
-
 	mapOffset := 4
 	if omci.Extended {
 		mapOffset = 6
@@ -696,23 +702,65 @@ func (omci *AlarmNotificationMsg) DecodeFromBytes(data []byte, p gopacket.Packet
 			return errors.New("frame too small")
 		}
 	}
-	// Look for a non-nil/not empty Alarm Map to determine if this ME supports alarms
-	if alarmMap := meDefinition.GetAlarmMap(); isUnsupported || (alarmMap != nil && len(alarmMap) > 0) {
-		for index, octet := range data[mapOffset : (AlarmBitmapSize/8)-mapOffset] {
-			omci.AlarmBitmap[index] = octet
-		}
-		if omci.Extended {
-			omci.AlarmSequenceNumber = data[mapOffset+(AlarmBitmapSize/8)]
-		} else {
-			padOffset := mapOffset + (AlarmBitmapSize / 8)
-			omci.zeroPadding[0] = data[padOffset]
-			omci.zeroPadding[1] = data[padOffset+1]
-			omci.zeroPadding[2] = data[padOffset+2]
-			omci.AlarmSequenceNumber = data[padOffset+3]
-		}
-		return nil
+	if omci.Extended {
+		omci.AlarmSequenceNumber = data[mapOffset+(AlarmBitmapSize/8)]
+	} else {
+		padOffset := mapOffset + (AlarmBitmapSize / 8)
+		omci.zeroPadding[0] = data[padOffset]
+		omci.zeroPadding[1] = data[padOffset+1]
+		omci.zeroPadding[2] = data[padOffset+2]
+		omci.AlarmSequenceNumber = data[padOffset+3]
 	}
-	return me.NewProcessingError("managed entity does not support alarm notifications")
+	// Is this an unsupported or vendor specific ME.  If so, it is not an error to decode
+	// the alarms.  We just cannot provide any alarm names.  Handle decode here.
+	classSupport := meDefinition.GetClassSupport()
+	isUnsupported := classSupport == me.UnsupportedManagedEntity ||
+		classSupport == me.UnsupportedVendorSpecificManagedEntity
+
+	copy(omci.AlarmBitmap[:], data[mapOffset:(AlarmBitmapSize/8)-mapOffset])
+
+	if !isUnsupported {
+		// Look for a non-nil/not empty Alarm Map to determine if this ME supports alarms
+		alarmMap := meDefinition.GetAlarmMap()
+		relaxedDecode := me.GetRelaxedDecode(me.AlarmNotification, false)
+		invalidAlarmBits := make([]byte, AlarmBitmapSize/8)
+		invalidAlarmBitsFound := false
+
+		if alarmMap != nil {
+			// Look for invalid bits
+			for octet := 0; octet < AlarmBitmapSize/8; octet++ {
+				if omci.AlarmBitmap[octet] != 0 {
+					for bit := 0; bit < 8; bit++ {
+						val := byte(1 << (7 - bit))
+						if omci.AlarmBitmap[octet]&val == val {
+							if _, validBit := alarmMap[uint8(bit)]; !validBit {
+								// If valid ALARM bit found
+								if !relaxedDecode {
+									return errors.New(fmt.Sprintf("alarm notification decode: invalid alarm bit %v set", bit))
+								}
+								invalidAlarmBitsFound = true
+								invalidAlarmBits[octet] |= val
+								omci.AlarmBitmap[octet] &= ^val
+							}
+						}
+					}
+				}
+			}
+		} else if relaxedDecode {
+			invalidAlarmBitsFound = true
+			copy(invalidAlarmBits, data[mapOffset:(AlarmBitmapSize/8)-mapOffset])
+			copy(omci.AlarmBitmap[:], make([]byte, AlarmBitmapSize/8))
+		} else {
+			return errors.New("alarm notification decode: managed entity does not support alarms")
+		}
+		if invalidAlarmBitsFound {
+			decodeErr := me.NewUnknownAlarmDecodeError("alarm map not supported", invalidAlarmBits)
+			omci.addRelaxedError(decodeErr)
+			// Create our error layer now
+			err = newUnknownAlarmsLayer(omci, decodeErr, p)
+		}
+	}
+	return err
 }
 
 func decodeAlarmNotification(data []byte, p gopacket.PacketBuilder) error {

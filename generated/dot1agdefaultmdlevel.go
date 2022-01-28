@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -151,10 +151,18 @@ type Dot1AgDefaultMdLevel struct {
 	Attributes AttributeValueMap
 }
 
+// Attribute name constants
+
+const Dot1AgDefaultMdLevel_Layer2Type = "Layer2Type"
+const Dot1AgDefaultMdLevel_CatchallLevel = "CatchallLevel"
+const Dot1AgDefaultMdLevel_CatchallMhfCreation = "CatchallMhfCreation"
+const Dot1AgDefaultMdLevel_CatchallSenderIdPermission = "CatchallSenderIdPermission"
+const Dot1AgDefaultMdLevel_DefaultMdLevelTable = "DefaultMdLevelTable"
+
 func init() {
 	dot1agdefaultmdlevelBME = &ManagedEntityDefinition{
 		Name:    "Dot1AgDefaultMdLevel",
-		ClassID: 301,
+		ClassID: Dot1AgDefaultMdLevelClassID,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetNext,
@@ -163,12 +171,12 @@ func init() {
 		),
 		AllowedAttributeMask: 0xf800,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: ByteField("Layer2Type", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
-			2: ByteField("CatchallLevel", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
-			3: ByteField("CatchallMhfCreation", UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
-			4: ByteField("CatchallSenderIdPermission", UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
-			5: TableField("DefaultMdLevelTable", TableAttributeType, 0x0800, TableInfo{nil, 29}, mapset.NewSetWith(Read, Write), false, false, false, 5),
+			0: Uint16Field(ManagedEntityID, PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField(Dot1AgDefaultMdLevel_Layer2Type, UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read), false, false, false, 1),
+			2: ByteField(Dot1AgDefaultMdLevel_CatchallLevel, UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, Write), false, false, false, 2),
+			3: ByteField(Dot1AgDefaultMdLevel_CatchallMhfCreation, UnsignedIntegerAttributeType, 0x2000, 0, mapset.NewSetWith(Read, Write), false, false, false, 3),
+			4: ByteField(Dot1AgDefaultMdLevel_CatchallSenderIdPermission, UnsignedIntegerAttributeType, 0x1000, 0, mapset.NewSetWith(Read, Write), false, false, false, 4),
+			5: TableField(Dot1AgDefaultMdLevel_DefaultMdLevelTable, TableAttributeType, 0x0800, TableInfo{nil, 29}, mapset.NewSetWith(Read, Write), false, false, false, 5),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

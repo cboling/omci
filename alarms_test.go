@@ -758,6 +758,10 @@ func TestInvalidClassAlarmNotificationDecode(t *testing.T) {
 	data, err := stringToPacket(badMessage)
 	assert.NoError(t, err)
 
+	// Relaxed Decode Default is True
+	assert.True(t, me.GetRelaxedDecode(me.AlarmNotification, false))
+	assert.NoError(t, me.SetRelaxedDecode(me.AlarmNotification, false, false))
+
 	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
 	assert.NotNil(t, packet)
 
@@ -776,13 +780,106 @@ func TestInvalidClassAlarmNotificationDecode(t *testing.T) {
 
 	msgLayer := packet.Layer(LayerTypeAlarmNotification)
 	assert.Nil(t, msgLayer)
+	assert.NotNil(t, packet.Layer(gopacket.LayerTypeDecodeFailure))
 
-	request, ok2 := msgLayer.(*AlarmNotificationMsg)
-	assert.False(t, ok2)
-	assert.Nil(t, request)
-	assert.Equal(t, LayerTypeAlarmNotification, request.LayerType())
-	assert.Equal(t, LayerTypeAlarmNotification, request.CanDecode())
-	assert.Equal(t, gopacket.LayerTypePayload, request.NextLayerType())
+	// Now re-enable relaxed decode and try again
+	assert.NoError(t, me.SetRelaxedDecode(me.AlarmNotification, false, true))
+
+	packet = gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer = packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	msgLayer = packet.Layer(LayerTypeAlarmNotification)
+	assert.NotNil(t, msgLayer)
+
+	notification, ok2 := msgLayer.(*AlarmNotificationMsg)
+	assert.True(t, ok2)
+	assert.NotNil(t, notification)
+	assert.Equal(t, LayerTypeAlarmNotification, notification.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, notification.CanDecode())
+	assert.Equal(t, uint8(5), notification.AlarmSequenceNumber)
+	assert.Equal(t, uint8(0), notification.AlarmBitmap[0])
+
+	assert.Equal(t, LayerTypeUnknownAlarm, notification.NextLayerType())
+	errorLayer := packet.Layer(LayerTypeUnknownAlarm)
+	assert.NotNil(t, errorLayer)
+
+	unknownAlarm, ok3 := errorLayer.(*UnknownAlarms)
+	assert.NotNil(t, unknownAlarm)
+	assert.True(t, ok3)
+	assert.Equal(t, AlarmBitmapSize/8, len(unknownAlarm.InvalidAlarmData))
+	assert.Equal(t, []byte{
+		0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}, unknownAlarm.InvalidAlarmData)
+}
+
+func TestAlarmNotificationMeHasAlarmsButUknownBitSetDecode(t *testing.T) {
+	goodMessage := "0000100a000b0104800001000000000000000000000000000000000000000000000000000000000500000028"
+	data, err := stringToPacket(goodMessage)
+	assert.NoError(t, err)
+
+	// Relaxed Decode Default is True
+	assert.True(t, me.GetRelaxedDecode(me.AlarmNotification, false))
+	assert.NoError(t, me.SetRelaxedDecode(me.AlarmNotification, false, false))
+
+	packet := gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer := packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	omciMsg, ok := omciLayer.(*OMCI)
+	assert.True(t, ok)
+	assert.Equal(t, uint16(0x0), omciMsg.TransactionID)
+	assert.Equal(t, AlarmNotificationType, omciMsg.MessageType)
+	assert.Equal(t, BaselineIdent, omciMsg.DeviceIdentifier)
+	assert.Equal(t, uint16(40), omciMsg.Length)
+
+	msgLayer := packet.Layer(LayerTypeAlarmNotification)
+	assert.Nil(t, msgLayer)
+
+	// Now re-enable relaxed decode and try again
+	assert.NoError(t, me.SetRelaxedDecode(me.AlarmNotification, false, true))
+
+	packet = gopacket.NewPacket(data, LayerTypeOMCI, gopacket.NoCopy)
+	assert.NotNil(t, packet)
+
+	omciLayer = packet.Layer(LayerTypeOMCI)
+	assert.NotNil(t, omciLayer)
+
+	msgLayer = packet.Layer(LayerTypeAlarmNotification)
+	assert.NotNil(t, msgLayer)
+
+	notification, ok2 := msgLayer.(*AlarmNotificationMsg)
+	assert.True(t, ok2)
+	assert.NotNil(t, notification)
+	assert.Equal(t, LayerTypeAlarmNotification, notification.LayerType())
+	assert.Equal(t, LayerTypeAlarmNotification, notification.CanDecode())
+	assert.Equal(t, uint8(5), notification.AlarmSequenceNumber)
+	// Note that the good (valid) alarm bit made it to the notification array
+	assert.Equal(t, uint8(0x80), notification.AlarmBitmap[0])
+
+	assert.Equal(t, LayerTypeUnknownAlarm, notification.NextLayerType())
+	errorLayer := packet.Layer(LayerTypeUnknownAlarm)
+	assert.NotNil(t, errorLayer)
+
+	unknownAlarm, ok3 := errorLayer.(*UnknownAlarms)
+	assert.NotNil(t, unknownAlarm)
+	assert.True(t, ok3)
+	assert.Equal(t, AlarmBitmapSize/8, len(unknownAlarm.InvalidAlarmData))
+
+	// Note that the good (valid) alarm bit is not in the error'ed list
+	assert.Equal(t, []byte{
+		0x00, 0x00, 0x01, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+		0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+	}, unknownAlarm.InvalidAlarmData)
 }
 
 func TestUnknownsMeAlarmNotificationDecode(t *testing.T) {

@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -57,10 +57,14 @@ type OnuData struct {
 	Attributes AttributeValueMap
 }
 
+// Attribute name constants
+
+const OnuData_MibDataSync = "MibDataSync"
+
 func init() {
 	onudataBME = &ManagedEntityDefinition{
 		Name:    "OnuData",
-		ClassID: 2,
+		ClassID: OnuDataClassID,
 		MessageTypes: mapset.NewSetWith(
 			Get,
 			GetAllAlarms,
@@ -72,8 +76,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
-			1: ByteField("MibDataSync", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			0: Uint16Field(ManagedEntityID, PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read), false, false, false, 0),
+			1: ByteField(OnuData_MibDataSync, UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
 		},
 		Access:  CreatedByOnu,
 		Support: UnknownSupport,

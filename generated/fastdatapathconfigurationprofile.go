@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -53,10 +53,14 @@ type FastDataPathConfigurationProfile struct {
 	Attributes AttributeValueMap
 }
 
+// Attribute name constants
+
+const FastDataPathConfigurationProfile_TpsTcTestmodeTpsTestmode = "TpsTcTestmodeTpsTestmode"
+
 func init() {
 	fastdatapathconfigurationprofileBME = &ManagedEntityDefinition{
 		Name:    "FastDataPathConfigurationProfile",
-		ClassID: 433,
+		ClassID: FastDataPathConfigurationProfileClassID,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -65,8 +69,8 @@ func init() {
 		),
 		AllowedAttributeMask: 0x8000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: ByteField("TpsTcTestmodeTpsTestmode", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
+			0: Uint16Field(ManagedEntityID, PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: ByteField(FastDataPathConfigurationProfile_TpsTcTestmodeTpsTestmode, UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, Write), false, false, false, 1),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

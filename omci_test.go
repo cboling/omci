@@ -21,6 +21,7 @@ import (
 	"encoding/hex"
 	"fmt"
 	. "github.com/cboling/omci/v2"
+	me "github.com/cboling/omci/v2/generated"
 	"github.com/google/gopacket"
 	"github.com/stretchr/testify/assert"
 	"strings"
@@ -87,11 +88,11 @@ func packetToString(input []byte) string {
 	return strings.ToLower(hex.EncodeToString(input))
 }
 
-func getSbcMask(meDefinition IManagedEntityDefinition) uint16 {
+func getSbcMask(meDefinition me.IManagedEntityDefinition) uint16 {
 	var sbcMask uint16
 
 	for index, attr := range meDefinition.GetAttributeDefinitions() {
-		if SupportsAttributeAccess(attr, SetByCreate) {
+		if me.SupportsAttributeAccess(attr, me.SetByCreate) {
 			if index == 0 {
 				continue // Skip Entity ID
 			}
@@ -225,13 +226,13 @@ func TestBad2017_G_988(t *testing.T) {
 	// to class ID 426 when it should be 425.   Make sure that code-generation of the OMCI
 	// ME's does not let that bad value find it's way back into our library.
 
-	assert.Equal(t, ClassID(425), EthernetFrameExtendedPm64BitClassID)
+	assert.Equal(t, me.ClassID(425), me.EthernetFrameExtendedPm64BitClassID)
 
-	instance, omciErr := NewEthernetFrameExtendedPm64Bit()
+	instance, omciErr := me.NewEthernetFrameExtendedPm64Bit()
 	assert.NotNil(t, instance)
 	assert.NotNil(t, omciErr)
-	assert.Equal(t, omciErr.StatusCode(), Success)
-	assert.Equal(t, EthernetFrameExtendedPm64BitClassID, instance.GetClassID())
+	assert.Equal(t, omciErr.StatusCode(), me.Success)
+	assert.Equal(t, me.EthernetFrameExtendedPm64BitClassID, instance.GetClassID())
 }
 
 func TestBaselineBadLenSerialize(t *testing.T) {
@@ -243,10 +244,10 @@ func TestBaselineBadLenSerialize(t *testing.T) {
 	}
 	request := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
 			EntityInstance: uint16(0x202),
 		},
-		Result: Success,
+		Result: me.Success,
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions
@@ -265,10 +266,10 @@ func TestBadIdentSerialize(t *testing.T) {
 	}
 	request := &DeleteResponse{
 		MeBasePacket: MeBasePacket{
-			EntityClass:    ExtendedVlanTaggingOperationConfigurationDataClassID,
+			EntityClass:    me.ExtendedVlanTaggingOperationConfigurationDataClassID,
 			EntityInstance: uint16(0x202),
 		},
-		Result: Success,
+		Result: me.Success,
 	}
 	// Test serialization back to former string
 	var options gopacket.SerializeOptions

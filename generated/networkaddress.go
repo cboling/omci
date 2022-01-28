@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -67,10 +67,15 @@ type NetworkAddress struct {
 	Attributes AttributeValueMap
 }
 
+// Attribute name constants
+
+const NetworkAddress_SecurityPointer = "SecurityPointer"
+const NetworkAddress_AddressPointer = "AddressPointer"
+
 func init() {
 	networkaddressBME = &ManagedEntityDefinition{
 		Name:    "NetworkAddress",
-		ClassID: 137,
+		ClassID: NetworkAddressClassID,
 		MessageTypes: mapset.NewSetWith(
 			Create,
 			Delete,
@@ -79,9 +84,9 @@ func init() {
 		),
 		AllowedAttributeMask: 0xc000,
 		AttributeDefinitions: AttributeDefinitionMap{
-			0: Uint16Field("ManagedEntityId", PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
-			1: Uint16Field("SecurityPointer", UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
-			2: Uint16Field("AddressPointer", UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
+			0: Uint16Field(ManagedEntityID, PointerAttributeType, 0x0000, 0, mapset.NewSetWith(Read, SetByCreate), false, false, false, 0),
+			1: Uint16Field(NetworkAddress_SecurityPointer, UnsignedIntegerAttributeType, 0x8000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 1),
+			2: Uint16Field(NetworkAddress_AddressPointer, UnsignedIntegerAttributeType, 0x4000, 0, mapset.NewSetWith(Read, SetByCreate, Write), false, false, false, 2),
 		},
 		Access:  CreatedByOlt,
 		Support: UnknownSupport,

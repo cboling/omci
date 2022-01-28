@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -45,8 +45,8 @@ func init() {
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "parser",
-			Version:    "0.15.13",
-			CreateTime: 1632853136.8901486,
+			Version:    "0.16.0",
+			CreateTime: 1643293483.072271,
 			ItuDocName: "T-REC-G.988-202003-I!Amd3!MSW-E.docx",
 			SHA256:     "084f5265bc090ca882fe45f6844d1ce368c218e52c77795060b7643240885469",
 		})
@@ -63,8 +63,8 @@ func init() {
 	Versions = append(Versions,
 		VersionInfo{
 			Name:       "code-generator",
-			Version:    "0.15.13",
-			CreateTime: 1642696472.736577,
+			Version:    "0.16.0",
+			CreateTime: 1643379188.8367958,
 			ItuDocName: "T-REC-G.988-202003-I!Amd3!MSW-E.docx",
 			SHA256:     "084f5265bc090ca882fe45f6844d1ce368c218e52c77795060b7643240885469",
 		})

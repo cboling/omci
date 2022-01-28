@@ -632,7 +632,7 @@ func TestItDecode(t *testing.T) {
 	assert.True(t, ok2)
 	assert.NotNil(t, response)
 
-	fmt.Println(packet.Dump())
-	fmt.Println(omciMsg.String())
-	fmt.Println(response.String())
+	//fmt.Println(packet.Dump())
+	//fmt.Println(omciMsg.String())
+	//fmt.Println(response.String())
 }
