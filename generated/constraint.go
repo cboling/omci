@@ -339,7 +339,6 @@ func NewConstraint(input string, attrType AttributeType) IConstraint {
 		// Counters are read-only, no constraints are required
 		return nil
 	}
-	return nil
 }
 
 // ConstraintsValid validates a value against one or more constraints. If the
