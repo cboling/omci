@@ -41,15 +41,20 @@ help:
 	@echo "distclean            : Remove build and testing artifacts and reports"
 	@echo "lint                 : Shorthand for format + lint-code + lint-mod"
 	@echo "format               : Verify code is properly gofmt-ed"
-	@echo "lint-code           : Verify that 'go vet' doesn't report any issues"
+	@echo "lint-code            : Verify that 'go vet' doesn't report any issues"
 	@echo "lint-mod             : Verify the integrity of the 'mod' files"
 	@echo "mod-update           : Update go.mod and the vendor directory"
 	@echo "test                 : Generate reports for all go tests"
+	@echo "cg-omci-decode       : Build a omci-text file decoder"
 	@echo
 
 ## build the library
 build:
 	${GO} build ./...
+
+cg-omci-decode: examples/cg-decode/cg-omci-decode.go
+	$(GO) build -o cg-omci-decode  examples/cg-decode/cg-omci-decode.go
+	echo done
 
 ## lint and unit tests
 
